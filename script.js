@@ -2700,29 +2700,58 @@ window.onload = async () => {
     document.body.appendChild(loadingMsg);
 
     const db = firebase.firestore();
-    const snapshot = await db.collection("materials").get();
-    snapshot.forEach(doc => {
-      ManualDB[doc.id] = doc.data();
-    });
+    let snapshot = await db.collection("materials").get({ source: 'server' });
+    
+    if (snapshot.empty) {
+        console.warn("Compat SDK returned empty, falling back to REST API...");
+        const restUrl = "https://firestore.googleapis.com/v1/projects/wkwkjapan-n5/databases/(default)/documents/materials?pageSize=100";
+        const response = await fetch(restUrl);
+        const data = await response.json();
+        
+        if (data.documents) {
+            data.documents.forEach(doc => {
+                const dayKey = doc.name.split('/').pop();
+                let parsedData = { hafalan: [], materi: [], kuisExtra: [], proKuisExtra: [] };
+                
+                for (let key of ['hafalan', 'materi', 'kuisExtra', 'proKuisExtra']) {
+                    if (doc.fields[key] && doc.fields[key].arrayValue && doc.fields[key].arrayValue.values) {
+                        parsedData[key] = doc.fields[key].arrayValue.values.map(v => {
+                            let obj = {};
+                            let mapFields = v.mapValue.fields;
+                            for (let k in mapFields) {
+                                if (mapFields[k].stringValue !== undefined) obj[k] = mapFields[k].stringValue;
+                                else if (mapFields[k].booleanValue !== undefined) obj[k] = mapFields[k].booleanValue;
+                                else if (mapFields[k].integerValue !== undefined) obj[k] = parseInt(mapFields[k].integerValue);
+                                else if (mapFields[k].arrayValue && mapFields[k].arrayValue.values) {
+                                    obj[k] = mapFields[k].arrayValue.values.map(jpV => {
+                                        let jpObj = {};
+                                        for (let jpK in jpV.mapValue.fields) {
+                                            if (jpV.mapValue.fields[jpK].stringValue !== undefined) jpObj[jpK] = jpV.mapValue.fields[jpK].stringValue;
+                                            else if (jpV.mapValue.fields[jpK].booleanValue !== undefined) jpObj[jpK] = jpV.mapValue.fields[jpK].booleanValue;
+                                            else if (jpV.mapValue.fields[jpK].integerValue !== undefined) jpObj[jpK] = parseInt(jpV.mapValue.fields[jpK].integerValue);
+                                        }
+                                        return jpObj;
+                                    });
+                                }
+                            }
+                            return obj;
+                        });
+                    }
+                }
+                ManualDB[dayKey] = parsedData;
+            });
+        }
+    } else {
+        snapshot.forEach(doc => {
+            ManualDB[doc.id] = doc.data();
+        });
+    }
 
     // Hapus pesan loading
     if (document.body.contains(loadingMsg)) {
         document.body.removeChild(loadingMsg);
     }
     
-    // DEBUG OVERLAY
-    if (!ManualDB['day1']) {
-        const debugDiv = document.createElement('div');
-        debugDiv.style.position = 'fixed'; debugDiv.style.top = '0'; debugDiv.style.left = '0'; debugDiv.style.width = '100vw'; debugDiv.style.height = '100vh'; debugDiv.style.background = 'rgba(0,0,0,0.9)'; debugDiv.style.color = '#0f0'; debugDiv.style.zIndex = '999999'; debugDiv.style.padding = '20px'; debugDiv.style.overflow = 'auto';
-        debugDiv.innerHTML = `<h1>DEBUG INFO</h1>
-        <p>Snapshot Size: ${snapshot.size}</p>
-        <p>Snapshot Empty: ${snapshot.empty}</p>
-        <p>ManualDB Keys: ${Object.keys(ManualDB).join(', ')}</p>
-        <button onclick="this.parentElement.remove(); Game.checkStoredMode();" style="padding:10px; background:red; color:white; border:none; cursor:pointer;">Lanjutkan Paksa</button>`;
-        document.body.appendChild(debugDiv);
-        return; // Hentikan eksekusi Game.checkStoredMode() sampai di-klik
-    }
-
     // Jalankan game
     Game.checkStoredMode();
   } catch (error) {
