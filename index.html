@@ -3,782 +3,253 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>YOMIKATA PROJECT (Alpha)</title>
-
-<style>
-/* ===== DESIGN SYSTEM & RESET ===== */
-:root {
-  --bg-main: radial-gradient(circle at top, #1e293b, #020617);
-  --bg-sidebar: #020617;
-  --bg-card: rgba(30, 41, 59, 0.7);
-  --text-main: #f8fafc;
-  --text-muted: #94a3b8;
-  --text-sub: #cbd5e1;
-  
-  --primary: linear-gradient(135deg, #38bdf8, #2563eb);
-  --success: linear-gradient(135deg, #22c55e, #16a34a);
-  --danger: linear-gradient(135deg, #f87171, #dc2626);
-  --neutral: #334155;
-  
-  --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
-  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  --font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-}
-
-body {
-  font-family: var(--font-family);
-  background: var(--bg-main);
-  background-attachment: fixed;
-  color: var(--text-main);
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-}
-
-@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes pulse { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); } 70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); } }
-@keyframes shake { 10%, 90% { transform: translate3d(-1px, 0, 0); } 20%, 80% { transform: translate3d(2px, 0, 0); } 30%, 50%, 70% { transform: translate3d(-4px, 0, 0); } 40%, 60% { transform: translate3d(4px, 0, 0); } }
-
-.container { width: 100%; max-width: 800px; padding: 20px; padding-top: 80px; box-sizing: border-box; position: relative; }
-@media (min-width: 768px) { body { align-items: center; } .container { padding-top: 20px; } }
-
-h1.main-title { text-align: center; font-size: 2.5rem; margin-bottom: 30px; background: linear-gradient(to right, #f8fafc, #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: fadeInUp 0.5s ease; }
-
-.sidebar { position: fixed; left: 0; top: 0; width: 280px; height: 100%; background: var(--bg-sidebar); padding: 20px; box-sizing: border-box; transform: translateX(-100%); transition: var(--transition); z-index: 1000; box-shadow: 10px 0 15px rgba(0,0,0,0.5); display: flex; flex-direction: column; }
-.sidebar.active { transform: translateX(0); }
-.sidebar h3 { text-align: center; margin-top: 60px; color: var(--text-muted); border-bottom: 1px solid var(--neutral); padding-bottom: 15px; }
-#dayList { flex: 1; overflow-y: auto; padding-right: 5px; }
-#dayList::-webkit-scrollbar { width: 5px; } #dayList::-webkit-scrollbar-thumb { background: var(--neutral); border-radius: 5px; }
-
-.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); opacity: 0; pointer-events: none; transition: 0.3s; z-index: 900; backdrop-filter: blur(2px); }
-.overlay.active { opacity: 1; pointer-events: auto; }
-
-button { font-family: var(--font-family); cursor: pointer; border: none; transition: var(--transition); font-weight: 600; outline: none; }
-button:active { transform: scale(0.97); }
-
-.day-btn { display: block; width: 100%; margin: 10px 0; padding: 15px; border-radius: 12px; background: rgba(51, 65, 85, 0.5); color: var(--text-sub); text-align: left; font-size: 16px; border: 1px solid transparent; }
-.day-btn:hover { background: rgba(51, 65, 85, 1); transform: translateX(5px); color: white; }
-.day-btn.active { background: var(--success); color: white; box-shadow: 0 4px 12px rgba(22, 163, 74, 0.5); border-color: #4ade80; }
-
-.toggle-btn { position: fixed; top: 20px; left: 20px; z-index: 1100; width: 50px; height: 50px; border-radius: 15px; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(8px); color: white; font-size: 22px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.1); }
-.toggle-btn:hover { background: rgba(30, 41, 59, 1); }
-
-.mode-select { display: flex; justify-content: center; gap: 10px; margin-bottom: 25px; animation: fadeInUp 0.6s ease; flex-wrap: wrap; }
-.mode-select button { padding: 12px 20px; border-radius: 12px; color: white; font-size: 15px; opacity: 0.7; border: 2px solid transparent; }
-.mode-select button:hover, .mode-select button.active { opacity: 1; transform: translateY(-2px); box-shadow: var(--shadow-lg); }
-.learn { background: var(--primary); } .learn.active { border-color: #7dd3fc; }
-.beginner { background: var(--success); } .beginner.active { border-color: #4ade80; }
-.pro { background: var(--danger); } .pro.active { border-color: #fca5a5; }
-
-.card { background: var(--bg-card); padding: 30px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.08); box-shadow: var(--shadow-lg); backdrop-filter: blur(10px); position: relative; overflow: hidden; }
-.animate-switch { animation: fadeInUp 0.4s ease-out; }
-
-.card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); }
-.info-text { color: var(--text-muted); font-size: 14px; font-weight: 600; }
-.hearts-container { display: flex; gap: 5px; color: #ef4444; font-size: 18px; }
-.heart.lost { color: var(--neutral); opacity: 0.5; }
-
-.question-block { text-align: center; margin: 30px 0; }
-.question { font-size: 48px; font-weight: 700; margin-bottom: 10px; letter-spacing: -1px; }
-.meaning-text { font-size: 22px; color: var(--text-sub); margin-bottom: 20px; font-style: italic; min-height: 30px; }
-
-ruby.kanji { cursor: pointer; position: relative; }
-ruby rt { font-size: 14px; color: #818cf8; opacity: 0; transition: opacity 0.2s; user-select: none; }
-
-#answers { margin-top: 30px; min-height: 100px; }
-.opt-btn { display: block; width: 100%; background: rgba(51, 65, 85, 0.7); color: white; padding: 18px; margin-bottom: 12px; border-radius: 16px; font-size: 17px; text-align: left; border: 1px solid transparent; }
-.opt-btn:hover { background: rgba(71, 85, 105, 1); transform: translateX(5px); border-color: rgba(255,255,255,0.1); }
-.opt-btn.correct { background: #16a34a !important; border-color: #4ade80; animation: pulse 0.5s transparent; }
-.opt-btn.wrong { background: #dc2626 !important; border-color: #f87171; animation: shake 0.4s; }
-
-.pro-container { display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; }
-.pro-input { width: 100%; padding: 18px; border-radius: 16px; border: 2px solid var(--neutral); background: rgba(15, 23, 42, 0.6); color: white; font-size: 18px; box-sizing: border-box; transition: var(--transition); }
-.pro-input:focus { outline: none; border-color: #38bdf8; background: rgba(15, 23, 42, 1); }
-.pro-input.correct { border-color: #22c55e; background: rgba(22, 197, 94, 0.1); }
-.pro-input.wrong { border-color: #ef4444; background: rgba(239, 68, 68, 0.1); animation: shake 0.4s; }
-.pro-submit { background: var(--danger); padding: 18px; font-size: 17px; border-radius: 16px; color: white; }
-#proResult { text-align: center; font-size: 18px; font-weight: bold; margin-top: 10px; min-height: 25px; }
-
-#nextBtn { background: var(--primary); color: white; padding: 15px 30px; border-radius: 16px; font-size: 17px; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); }
-
-.progress-container { margin-top: 40px; }
-.bar { height: 8px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden; }
-.bar-fill { height: 100%; width: 0%; background: var(--success); transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 10px; }
-
-.hidden { display: none !important; }
-
-.result-screen, .cooldown-screen { position: absolute; inset: 0; background: var(--bg-sidebar); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; padding: 30px; text-align: center; animation: fadeIn 0.5s ease; }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-.result-icon, .cd-icon { font-size: 60px; margin-bottom: 20px; }
-.result-title, .cd-title { font-size: 28px; font-weight: bold; margin-bottom: 10px; }
-.result-text, .cd-text { color: var(--text-sub); margin-bottom: 30px; font-size: 16px; line-height: 1.5; }
-
-.huge-btn { padding: 20px 40px; font-size: 20px; border-radius: 20px; background: var(--success); color: white; box-shadow: 0 10px 20px rgba(22, 163, 74, 0.3); animation: pulse 2s infinite; }
-.restart-btn { padding: 12px 24px; background: var(--neutral); color: white; border-radius: 10px; font-size: 15px; }
-
-.text-danger { color: #f87171; }
-.text-success { color: #4ade80; }
-</style>
+<title>YOMIKATA V10.6</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+<div id="toast"></div>
+
+<div id="result-screen" class="hidden">
+  <div class="result-box" id="result-box">
+    <div class="result-title">MISSION CLEAR! 🎉</div>
+    <div class="result-subtitle">Hari <span id="res-day">X</span> Diselesaikan</div>
+    
+    <div class="result-stats">
+      <div class="stat-row"><span>✨ EXP Diraih:</span> <span class="stat-val" id="res-exp">0</span></div>
+      <div class="stat-row"><span>🪙 Koin Diraih:</span> <span class="stat-val" id="res-coin">0</span></div>
+      <div class="stat-row"><span>🔥 Max Combo:</span> <span class="stat-val" id="res-combo">0</span></div>
+    </div>
+    
+    <button class="btn" style="background: var(--success); color: #000; box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);" onclick="UI.nextDayFromResult()">Gass Hari Berikutnya! 🚀</button>
+    <button class="btn btn-alt" style="margin-top: 10px; margin-bottom: 0;" onclick="UI.closeModal('result-screen')">Tutup & Ulas Materi</button>
+  </div>
+</div>
+
+<div id="promotion-screen" class="hidden">
+  <div class="result-box" id="promotion-box" style="border-color: var(--primary); box-shadow: 0 0 40px rgba(56, 189, 248, 0.3);">
+    <div style="font-size: 50px; margin-bottom: 10px;">🌟</div>
+    <div class="result-title" style="color: var(--primary);">PROMOSI GELAR!</div>
+    <div class="result-subtitle">Kerja Kerasmu Terbayar</div>
+    <div style="font-size: 28px; font-weight: bold; color: var(--gold); margin: 20px 0; text-shadow: 0 0 15px rgba(251, 191, 36, 0.8);" id="promo-rank">SAMURAI</div>
+    <button class="btn" style="background: var(--primary); color: #000; box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4);" onclick="UI.closeModal('promotion-screen')">Lanjutkan Perjalanan ⚔️</button>
+  </div>
+</div>
+
+<div id="jumpscare-overlay">
+  <div style="color:var(--gold);">⚠️ KUIS DADAKAN ⚠️</div>
+  <div style="font-size:20px; font-weight:normal; margin-top:10px;">Buktikan Hafalanmu!</div>
+</div>
+
+<div id="setup-screen" class="hidden">
+  <div id="view-mode" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+    <h1 style="color:var(--primary); font-size:36px; margin-bottom:5px; text-align:center;">YOMIKATA V10.6<br><small style="font-size:16px; color:var(--warning);">Pengulangan Pembelajaran</small></h1>
+    <p style="color:var(--text-sub); margin-bottom: 30px;">Pilih Gaya Belajarmu.</p>
+    
+    <div class="mode-card" onclick="Game.init('pemula')" style="border-color: var(--primary); box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);">
+      <h3 style="color:var(--success); margin:0 0 5px 0;">🔰 Mode Pemula</h3>
+      <small style="color:var(--text-sub);">Ada Hafalan & Materi. Furigana & Hint aktif.</small>
+    </div>
+    
+    <div class="mode-card locked" onclick="alert('Mode Pro akan dikembangkan pada modul terpisah.')">
+      <h3 style="color:#94a3b8; margin:0 0 5px 0;">🔥 Mode Pro (Cerita)</h3>
+      <small style="color:var(--text-sub);">[ Modul Terpisah ]</small>
+    </div>
+  </div>
+</div>
+
+<div id="cooldown-screen" class="hidden">
+  <h2>SISTEM TERKUNCI ☠️</h2>
+  <div style="font-size: 64px; color: var(--danger); font-weight: bold; margin: 20px 0;" id="cd-timer">15:00</div>
+</div>
+
+<div id="level-modal" class="hidden">
+  <h2 style="color:var(--primary); margin-bottom:5px;">🎖️ Hierarki Kensei</h2>
+  <p style="color:var(--text-sub); margin-bottom:20px; font-size:14px; text-align:center;">Jawab kuis dengan benar untuk mendapatkan EXP.</p>
+  <div style="width:100%; max-width:350px; background:#1e293b; padding:20px; border-radius:12px; border:1px solid #334155; margin-bottom:20px;">
+    <ul class="level-list">
+      <li><span><b>Lv. 1 - 9</b></span> <span>🔰 Pemula</span></li>
+      <li><span><b>Lv. 10 - 29</b></span> <span>⚔️ Ronin</span></li>
+      <li><span><b>Lv. 30 - 59</b></span> <span>🛡️ Samurai</span></li>
+      <li><span><b>Lv. 60 - 89</b></span> <span>🏯 Daimyo</span></li>
+      <li><span><b>Lv. 90 - 149</b></span> <span>👑 Shogun</span></li>
+      <li><span><b>Lv. 150+</b></span> <span>⛩️ Kensei</span></li>
+    </ul>
+  </div>
+  <button class="btn btn-alt" style="max-width:350px;" onclick="UI.closeModal('level-modal')">Tutup Log</button>
+</div>
+
+<div id="shop-modal" class="hidden">
+  <h2 style="color:var(--gold); margin-bottom:5px;">🛒 Terminal Suplai</h2>
+  <p style="color:var(--text-sub); margin-bottom:20px;">Saldo: <span id="shop-coin-display" style="color:var(--gold); font-weight:bold;">0</span> 🪙</p>
+  
+  <div style="width: 100%; max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; scrollbar-width: none;">
+    <div class="shop-item">
+      <div><b>❤️ Nano-Repair</b><br><small style="color:var(--text-sub);">Restorasi 1 HP</small></div>
+      <button class="btn btn-shop" style="width:auto; margin:0;" onclick="RPG.buyItem('hp', 150)">150 🪙</button>
+    </div>
+
+    <div class="shop-item">
+      <div><b>🛡️ Aegis Shield</b><br><small style="color:var(--text-sub);">Anti Salah & Jaga Combo</small></div>
+      <button class="btn btn-shop" style="width:auto; margin:0;" onclick="RPG.buyItem('shield', 350)">350 🪙</button>
+    </div>
+
+    <div class="shop-item">
+      <div><b>📜 Intel Arti</b><br><small style="color:var(--text-sub);">Buka Arti (Tab Partikel)</small></div>
+      <button class="btn btn-shop" style="width:auto; margin:0;" onclick="RPG.buyItem('intel', 200)">200 🪙</button>
+    </div>
+
+    <div class="shop-item">
+      <div><b>👁️ Mata Kensei</b><br><small style="color:var(--text-sub);">Buka Teks Jepang (Tab Arti)</small></div>
+      <button class="btn btn-shop" style="width:auto; margin:0;" onclick="RPG.buyItem('mata', 500)">500 🪙</button>
+    </div>
+
+    <div class="shop-item">
+      <div><b>🗺️ Akses Peta</b><br><small style="color:var(--text-sub);">Buka Hari Berikutnya</small></div>
+      <button class="btn btn-shop" style="width:auto; margin:0;" onclick="RPG.buyUnlock(2100)">2100 🪙</button>
+    </div>
+
+    <div class="shop-item">
+      <div><b>🎁 Kotak Pandora</b><br><small style="color:var(--warning);">Gacha Nasib (100 Koin)</small></div>
+      <button class="btn btn-shop" style="width:auto; margin:0; background:var(--warning);" onclick="RPG.buyItem('pandora', 100)">100 🪙</button>
+    </div>
+    
+        <div class="shop-item">
+      <div><b>🔓 Override Admin</b><br><small style="color:var(--danger);">Bypass Soal (Dev)</small></div>
+      <button class="btn btn-shop" style="width:auto; margin:0; background:var(--danger);" onclick="RPG.adminUnlock()">Bypass</button>
+    </div>
+  </div>
+  
+  <button class="btn btn-alt" style="max-width:350px; margin-top:20px;" onclick="UI.closeModal('shop-modal')">Tutup Terminal</button>
+</div>
+
+<div id="map-modal" class="hidden">
+  <h2 style="color:var(--primary); margin-bottom:5px;">🗺️ Peta Infiltrasi</h2>
+  <p style="color:var(--text-sub); margin-bottom:10px; font-size:14px; text-align:center;">Pilih zona misi yang tersedia.</p>
+  <div id="map-progress-text" style="color:var(--gold); font-size:13px; font-weight:bold; margin-bottom: 20px; text-transform: uppercase;">Progress: 0%</div>
+  <div id="map-day-list"></div>
+  <button class="btn btn-alt" style="max-width:350px; margin-top:20px;" onclick="UI.closeModal('map-modal')">Tutup Peta</button>
+</div>
+
+<div id="kamus-modal" class="hidden">
+  <div class="kamus-header">
+    <h2 style="color:var(--primary); margin-bottom:5px;">📖 Kamus Kensei</h2>
+    <p style="color:var(--text-sub); font-size:14px; margin-bottom:15px;">Koleksi Kosakata Terbuka</p>
+    <input type="text" id="kamus-search" class="search-box" placeholder="Cari romaji atau arti..." onkeyup="UI.searchKamus()" autocomplete="off">
+  </div>
+  <div class="kamus-list" id="kamus-list"></div>
+  <button class="btn btn-alt" style="max-width:350px; margin-top:20px;" onclick="UI.closeModal('kamus-modal')">Tutup Kamus</button>
+</div>
+
+
+<div id="tips-modal" class="hidden">
+  <h2 style="color:var(--warning); margin-bottom:15px;">💡 INFO PENYANGKALAN</h2>
+  <div style="background:#1e293b; padding:20px; border-radius:12px; border:1px solid #334155; margin-bottom:20px; font-size:15px; color:var(--text-main); line-height: 1.6; text-align: left; max-width: 400px;">
+    Dalam bahasa Jepang, ada 3 tingkat kesopanan untuk mengatakan <b>"Bukan"</b>:<br><br>
+    
+    <span style="color:var(--primary); font-weight:bold;">1. ... dewa arimasen (ではありません)</span><br>
+    <span style="color:var(--text-sub); font-size:13px;">Sangat sopan dan formal. Sering dipakai di pidato, tulisan resmi, atau ke orang yang sangat dihormati.</span><br><br>
+    
+    <span style="color:var(--success); font-weight:bold;">2. ... jaa arimasen (じゃありません)</span><br>
+    <span style="color:var(--text-sub); font-size:13px;">Sopan dan standar. Paling umum dipakai dalam percakapan sehari-hari dengan orang yang belum terlalu akrab.</span><br><br>
+    
+    <span style="color:var(--danger); font-weight:bold;">3. ... jaa nai (じゃない)</span><br>
+    <span style="color:var(--text-sub); font-size:13px;">Bentuk kasual/santai. Hanya dipakai ke teman akrab, keluarga, atau orang yang statusnya di bawah kita.</span><br><br>
+    
+    <i style="color:var(--gold); font-size:13px;">Catatan: Fokus kita di kuis nanti adalah bentuk sopan (dewa/jaa arimasen) ya! Bentuk kasual hanya untuk pengetahuan tambahan saat belajar pola.</i>
+  </div>
+  <button class="btn btn-alt" style="max-width:400px;" onclick="UI.closeModal('tips-modal')">Tutup Info</button>
+</div>
 
 <div class="sidebar" id="sidebar">
-  <h3>Pilih Hari</h3>
-  <div id="dayList"></div>
-</div>
-
-<div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
-
-<div class="container">
-<h1 class="main-title">KATA SIFAT</h1>
-
-<div class="mode-select" id="modeSelector">
-  <button id="btn-learn" class="learn" onclick="setMode('learn')">📖 Belajar</button>
-  <button id="btn-beginner" class="beginner" onclick="setMode('beginner')">🔰 Pemula</button>
-  <button id="btn-pro" class="pro" onclick="setMode('pro')">🔥 Pro</button>
-</div>
-
-<div class="card-stack">
-  <div id="panel-menu" class="card text-center animate-switch">
-    <div style="margin: 40px 0;">
-      <h2 style="font-size: 24px;">Selamat Datang di Yomikata</h2>
-      <p style="color: var(--text-sub); margin-bottom: 30px;">Silakan pilih Hari di samping, atau langsung mulai hari terakhir.</p>
-      <button class="huge-btn" onclick="startQuiz()">Mulai Belajar →</button>
-    </div>
+  <div class="sidebar-header">
+    <h3 style="color:var(--text-main); margin:0 0 5px 0;">Peta Navigasi</h3>
   </div>
+  
+  <div style="text-align:center; margin-bottom: 20px;">
+    <button class="btn btn-alt" style="font-size:13px; padding:10px; border:1px solid var(--primary); width: 100%; box-sizing: border-box; margin-bottom:10px;" onclick="UI.toggleSidebar(); document.getElementById('main-app').classList.add('hidden'); document.getElementById('setup-screen').classList.remove('hidden');">⚙️ Menu Awal</button>
+    <button class="btn btn-alt" id="btn-hardcore" style="font-size:13px; padding:10px; border:1px solid var(--danger); width: 100%; box-sizing: border-box; margin-bottom:10px;" onclick="UI.toggleHardcore()">🥷 Mode Hardcore</button>
+    <button class="btn btn-alt" style="font-size:13px; padding:10px; border:1px solid var(--success); width: 100%; box-sizing: border-box;" onclick="UI.toggleSidebar(); UI.openKamus();">📖 Kamus Kensei</button>
+    <button class="btn btn-alt" style="font-size:13px; padding:10px; border:1px solid var(--warning); width: 100%; box-sizing: border-box; margin-top:10px;" onclick="Game.startDungeon()">🏰 Dungeon Ingatan</button>
 
-  <div id="panel-cooldown" class="card hidden cooldown-screen">
-    <div class="cd-icon">⏳</div>
-    <div class="cd-title">Sistem Terkunci</div>
-    <div class="cd-text">
-      Kamu telah salah sebanyak 3 kali.<br>
-      Silakan istirahat dan kembali ke <span class="text-success">Mode Belajar</span> dulu.<br>
-      Dapat diakses kembali dalam: <b id="cd-timer" class="text-danger">--:--</b>
-    </div>
-    <button class="restart-btn" onclick="forceLearnMode()">Ke Mode Belajar Sekarang</button>
-  </div>
-
-  <div id="panel-quiz" class="card hidden">
-    <div id="quiz-result-screen" class="result-screen hidden">
-      <div class="result-icon" id="res-icon">🎉</div>
-      <div class="result-title" id="res-title">Luar Biasa!</div>
-      <div class="result-text" id="res-text">Kamu telah menyelesaikan materi hari ini.</div>
-      <div style="display:flex; gap:10px;">
-          <button class="restart-btn" onclick="backToMenu()">Kembali</button>
-          <button id="res-next-day-btn" class="day-btn active hidden" style="text-align:center;" onclick="loadNextDay()">Lanjut Hari Berikutnya →</button>
-      </div>
-    </div>
-
-    <div class="card-header">
-      <div class="info-text" id="prog-text">Hari 1 - Materi 1/20</div>
-      <div class="hearts-container hidden" id="hearts-box">
-        <span class="heart" id="h1">❤</span>
-        <span class="heart" id="h2">❤</span>
-        <span class="heart" id="h3">❤</span>
-      </div>
-    </div>
-
-    <div class="question-block animate-switch" id="q-block">
-      <div class="question" id="question"></div>
-      <div class="meaning-text" id="meaning"></div>
-    </div>
+    <div style="border-top: 1px dashed rgba(148, 163, 184, 0.5); margin: 20px 0 15px 0;"></div>
+    <div style="font-size:11px; color:var(--text-sub); margin-bottom:10px; font-weight:bold; letter-spacing:1px; text-transform:uppercase;">📚 Referensi Buku Saku</div>
     
-    <div id="answers"></div>
-
-    <div id="learnNextWrap" class="hidden" style="text-align:center; margin-top:30px;">
-      <button id="nextBtn" onclick="nextQuestion()">Lanjut →</button>
-    </div>
-
-    <div class="progress-container">
-      <div class="bar"><div class="bar-fill" id="barFill"></div></div>
-    </div>
+    <button class="btn btn-alt" style="font-size:13px; padding:10px; border:1px solid var(--primary); background: rgba(56, 189, 248, 0.05); width: 100%; box-sizing: border-box; margin-bottom:10px; cursor:pointer;" onclick="window.location.href='kanji.html'">🪧 Kanji N5</button>
+    <button class="btn btn-alt" style="font-size:13px; padding:10px; border:1px solid var(--primary); background: rgba(56, 189, 248, 0.05); width: 100%; box-sizing: border-box; margin-bottom:10px; cursor:pointer;" onclick="window.location.href='kata sifat.html'">🪧 Kata Sifat</button>
+    <button class="btn btn-alt" style="font-size:13px; padding:10px; border:1px solid var(--primary); background: rgba(56, 189, 248, 0.05); width: 100%; box-sizing: border-box; margin-bottom:10px; cursor:pointer;" onclick="window.location.href='kata kerja.html'">🏃🏻‍♂️ Kata Kerja</button>
+    <button class="btn btn-alt" style="font-size:13px; padding:10px; border:1px solid var(--primary); background: rgba(56, 189, 248, 0.05); width: 100%; box-sizing: border-box; margin-bottom:10px; cursor:pointer;" onclick="window.location.href='nomor.html'">🔢 Angka & Waktu</button>
+    <button class="btn btn-alt" style="font-size:13px; padding:10px; border:1px solid var(--success); background: rgba(34, 197, 94, 0.05); width: 100%; box-sizing: border-box; cursor:pointer;" onclick="window.location.href='tanggal.html'">📅 Kalender & Ket. Waktu</button>
   </div>
 </div>
+
+</div>
+<div class="overlay" id="overlay" onclick="UI.toggleSidebar()"></div>
+
+<button id="btn-tips" class="hidden" onclick="UI.openModal('tips-modal')">💡 Tips</button>
+<div id="tips-bubble" class="hidden">Ada info baru, nih! ✨</div>
+<div class="container hidden" id="main-app">
+  
+  <div class="rpg-bar animate-slide">
+    <div class="rpg-left-group">
+      <button class="toggle-btn" onclick="UI.toggleSidebar()">☰</button>
+      <div class="level-badge" id="ui-lvl" title="Klik untuk info Gelar" onclick="UI.openModal('level-modal')">Lv.1 Ronin</div>
+    </div>
+    
+    <div class="rpg-stats" style="flex-grow: 1; justify-content: center; gap: 10px;">
+      <div class="stat-item exp" title="Experience"><span id="ui-exp">0</span> ✨ <span class="combo-text hidden" id="ui-combo">x2</span></div>
+      <div class="stat-item gold" title="Koin"><span id="ui-coin">0</span> 🪙</div>
+    </div>
+    
+    <button class="btn-shop" onclick="UI.openModal('shop-modal')">🛒 Toko</button>
+  </div>
+
+  <div class="header-bar animate-slide" style="animation-delay: 0.1s; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 0 5px;">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <button id="ui-day" onclick="UI.openModal('map-modal')" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: var(--text-main); font-weight: bold; font-size: 14px; padding: 5px 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 5px; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.3);">🗺️ Hari 1 <span style="font-size:10px;">▼</span></button>
+      <div id="ui-zone" class="zone-badge zone-aman" style="font-size: 10px; padding: 3px 8px;">🟢 ZONA AMAN</div>
+    </div>
+    <div class="hp-container" id="ui-hp" style="font-size: 20px;"></div>
+  </div>
+
+  <div class="nav-tabs animate-slide" style="animation-delay: 0.2s;">
+    <button class="tab-btn active" id="tab-hafalan" onclick="UI.switchTab('hafalan')">📖 Hafalan</button>
+    <button class="tab-btn" id="tab-belajar" onclick="UI.switchTab('belajar')">📚 Pola</button>
+    <button class="tab-btn locked" id="tab-partikel" onclick="UI.switchTab('partikel')">🧩 Partikel</button>
+    <button class="tab-btn locked" id="tab-arti" onclick="UI.switchTab('arti')">🇮🇩 Arti</button>
+  </div>
+
+  <div class="progress-container animate-slide" style="animation-delay: 0.3s;">
+    <div class="progress-fill" id="ui-progress"></div>
+  </div>
+
+  <div class="card animate-slide" style="animation-delay: 0.4s;" id="card-main">
+    <div class="card-content-wrapper" id="card-content">
+      <div id="stage-indicator"></div>
+      
+      <div class="jp-text" id="ui-jp"></div>
+      <div class="arti-text" id="ui-arti" onclick="this.classList.toggle('revealed')"></div>
+      <div id="input-area" style="width:100%;"></div>
+      <div class="feedback" id="ui-feedback"></div>
+      <button class="btn btn-alt hidden" id="btn-next" style="margin-top:20px;">Lanjut →</button>
+    </div>
+  </div>
 </div>
 
-<script>
-/* ===== SAFE STORAGE WRAPPER (ANTI CRASH LOKAL) ===== */
-function saveLocal(key, value) {
-  try { localStorage.setItem(key, value); } catch (e) { console.warn("Penyimpanan lokal diblokir."); }
-}
-function getLocal(key, defaultVal) {
-  try { return localStorage.getItem(key) || defaultVal; } catch (e) { return defaultVal; }
-}
-function removeLocal(key) {
-  try { localStorage.removeItem(key); } catch (e) {}
-}
-
-/* ===== DATA ===== */
-const rawData = [
-  /* ===== KATA SIFAT - I ===== */
-  {kanji:"大きい", reading:"おおきい", arti:"besar"},
-  {kanji:"小さい", reading:"ちいさい", arti:"kecil"},
-  {kanji:"長い", reading:"ながい", arti:"panjang"},
-  {kanji:"短い", reading:"みじかい", arti:"pendek"},
-  {kanji:"多い", reading:"おおい", arti:"banyak"},
-  {kanji:"少ない", reading:"すくない", arti:"sedikit"},
-  {kanji:"太い", reading:"ふとい", arti:"gemuk, tebal"},
-  {kanji:"細い", reading:"ほそい", arti:"ramping, tipis"},
-  {kanji:"厚い", reading:"あつい", arti:"tebal"},
-  {kanji:"薄い", reading:"うすい", arti:"tipis"},
-  {kanji:"固い", reading:"かたい", arti:"keras"},
-  {kanji:"柔かい", reading:"やわらかい", arti:"lunak"},
-  {kanji:"広い", reading:"ひろい", arti:"luas"},
-  {kanji:"狭い", reading:"せまい", arti:"sempit"},
-  {kanji:"細かい", reading:"こまかい", arti:"kecil (uang)"},
-  {kanji:"粗い", reading:"あらい", arti:"kasar"},
-  {kanji:"新しい", reading:"あたらしい", arti:"baru"},
-  {kanji:"古い", reading:"ふるい", arti:"lama, tua"},
-  {kanji:"高い", reading:"たかい", arti:"mahal"},
-  {kanji:"安い", reading:"やすい", arti:"murah"},
-  {kanji:"早い", reading:"はやい", arti:"cepat (awal waktu)"},
-  {kanji:"速い", reading:"はやい", arti:"cepat (kelajuan)"},
-  {kanji:"遅い", reading:"おそい", arti:"lambat"},
-  {kanji:"遠い", reading:"とおい", arti:"jauh"},
-  {kanji:"近い", reading:"ちかい", arti:"dekat"},
-  {kanji:"強い", reading:"つよい", arti:"kuat"},
-  {kanji:"弱い", reading:"よわい", arti:"lemah"},
-  {kanji:"高い", reading:"たかい", arti:"tinggi, mahal"},
-  {kanji:"低い", reading:"ひくい", arti:"rendah"},
-  {kanji:"熱い", reading:"あつい", arti:"panas (benda)"},
-  {kanji:"冷たい", reading:"つめたい", arti:"dingin (benda)"},
-  {kanji:"温かい", reading:"あたたかい", arti:"hangat (benda)"},
-  {kanji:"ぬるい", reading:"ぬるい", arti:"kurang panas (air)"},
-  {kanji:"青い", reading:"あおい", arti:"biru"},
-  {kanji:"赤い", reading:"あかい", arti:"merah"},
-  {kanji:"黄色い", reading:"きいろい", arti:"kuning"},
-  {kanji:"黒い", reading:"くろい", arti:"hitam"},
-  {kanji:"白い", reading:"しろい", arti:"putih"},
-  {kanji:"茶色い", reading:"ちゃいろい", arti:"coklat"},
-  {kanji:"丸い", reading:"まるい", arti:"bundar, bulat"},
-  {kanji:"甘い", reading:"あまい", arti:"manis"},
-  {kanji:"辛い", reading:"からい", arti:"pedas"},
-  {kanji:"すっぱい", reading:"すっぱい", arti:"asam"},
-  {kanji:"塩辛い", reading:"しおからい", arti:"asin"},
-  {kanji:"苦い", reading:"にがい", arti:"pahit"},
-  {kanji:"濃い", reading:"こい", arti:"pekat"},
-  {kanji:"薄い", reading:"うすい", arti:"tipis, encer"},
-  {kanji:"おいしい", reading:"おいしい", arti:"enak"},
-  {kanji:"まずい", reading:"まずい", arti:"tidak enak"},
-  {kanji:"暑い", reading:"あつい", arti:"panas (suhu)"},
-  {kanji:"寒い", reading:"さむい", arti:"dingin (suhu)"},
-  {kanji:"暖かい", reading:"あたたかい", arti:"hangat (suhu)"},
-  {kanji:"涼しい", reading:"すずしい", arti:"sejuk (suhu)"},
-  {kanji:"蒸暑い", reading:"むしあつい", arti:"panas gerah"},
-  {kanji:"明るい", reading:"あかるい", arti:"terang, riang"},
-  {kanji:"暗い", reading:"くらい", arti:"gelap, suram"},
-  {kanji:"汚い", reading:"きたない", arti:"kotor"},
-  {kanji:"重い", reading:"おもい", arti:"berat"},
-  {kanji:"軽い", reading:"かるい", arti:"ringan"},
-  {kanji:"詳しい", reading:"くわしい", arti:"detail"},
-  {kanji:"難しい", reading:"むずかしい", arti:"sulit"},
-  {kanji:"易しい", reading:"やさしい", arti:"mudah"},
-  {kanji:"珍しい", reading:"めずらしい", arti:"langka"},
-  {kanji:"おかしい", reading:"おかしい", arti:"aneh, lucu"},
-  {kanji:"危ない", reading:"あぶない", arti:"berbahaya"},
-  {kanji:"うまい", reading:"うまい", arti:"enak, pandai"},
-  {kanji:"いい", reading:"いい", arti:"bagus"},
-  {kanji:"悪い", reading:"わるい", arti:"jelek"},
-  {kanji:"ひどい", reading:"ひどい", arti:"kejam"},
-  {kanji:"うるさい", reading:"うるさい", arti:"berisik"},
-  {kanji:"忙しい", reading:"いそがしい", arti:"sibuk"},
-  {kanji:"正しい", reading:"ただしい", arti:"benar"},
-  {kanji:"すごい", reading:"すごい", arti:"hebat"},
-  {kanji:"素晴らしい", reading:"すばらしい", arti:"luar biasa"},
-  {kanji:"かっこいい", reading:"かっこいい", arti:"keren"},
-  {kanji:"えらい", reading:"えらい", arti:"pintar, hebat"},
-  {kanji:"仲がいい", reading:"なかがいい", arti:"rukun, akrab"},
-  {kanji:"親しい", reading:"したしい", arti:"akrab"},
-  {kanji:"優しい", reading:"やさしい", arti:"baik hati, ramah"},
-  {kanji:"かわいい", reading:"かわいい", arti:"cantik, lucu, imut"},
-  {kanji:"美しい", reading:"うつくしい", arti:"indah, cantik"},
-  {kanji:"厳しい", reading:"きびしい", arti:"tegas"},
-  {kanji:"大人しい", reading:"おとなしい", arti:"lemah lembut, pendiam"},
-  {kanji:"楽しい", reading:"たのしい", arti:"menyenangkan"},
-  {kanji:"面白い", reading:"おもしろい", arti:"menarik, lucu"},
-  {kanji:"つまらない", reading:"つまらない", arti:"membosankan"},
-  {kanji:"うれしい", reading:"うれしい", arti:"gembira, senang"},
-  {kanji:"寂しい", reading:"さびしい", arti:"merasa sepi"},
-  {kanji:"怖い", reading:"こわい", arti:"takut"},
-  {kanji:"悲しい", reading:"かなしい", arti:"sedih"},
-  {kanji:"恥かしい", reading:"はずかしい", arti:"malu"},
-  {kanji:"羨ましい", reading:"うらやましい", arti:"iri hati"},
-  {kanji:"懐かしい", reading:"なつかしい", arti:"terkenang, rindu"},
-  {kanji:"眠い", reading:"ねむい", arti:"mengantuk"},
-  {kanji:"痛い", reading:"いたい", arti:"merasa nyeri, sakit"},
-  {kanji:"欲しい", reading:"ほしい", arti:"ingin, mau"},
-  {kanji:"無い", reading:"ない", arti:"tidak ada"},
-
-  /* ===== KATA SIFAT - NA ===== */
-  {kanji:"残念", reading:"ざんねん", arti:"menyayangkan"},
-  {kanji:"心配", reading:"しんぱい", arti:"khawatir"},
-  {kanji:"不安", reading:"ふあん", arti:"cemas"},
-  {kanji:"好き", reading:"すき", arti:"suka"},
-  {kanji:"嫌い", reading:"きらい", arti:"tidak suka, benci"},
-  {kanji:"大好き", reading:"だいすき", arti:"suka sekali"},
-  {kanji:"大嫌い", reading:"だいきらい", arti:"benci sekali"},
-  {kanji:"きれい", reading:"きれい", arti:"cantik, bersih"},
-  {kanji:"にぎやか", reading:"にぎやか", arti:"ramai"},
-  {kanji:"静か", reading:"しずか", arti:"tenang"},
-  {kanji:"複雑", reading:"ふくざつ", arti:"rumit"},
-  {kanji:"簡単", reading:"かんたん", arti:"mudah"},
-  {kanji:"便利", reading:"べんり", arti:"praktis"},
-  {kanji:"不便", reading:"ふべん", arti:"tidak praktis"},
-  {kanji:"幸せ", reading:"しあわせ", arti:"bahagia"},
-  {kanji:"素敵", reading:"すてき", arti:"bagus, terpesona"},
-  {kanji:"有名", reading:"ゆうめい", arti:"terkenal"},
-  {kanji:"安全", reading:"あんぜん", arti:"aman"},
-  {kanji:"危険", reading:"きけん", arti:"berbahaya"},
-  {kanji:"色々", reading:"いろいろ", arti:"bermacam-macam"},
-  {kanji:"大丈夫", reading:"だいじょうぶ", arti:"tidak apa-apa"},
-  {kanji:"大事", reading:"だいじ", arti:"penting"},
-  {kanji:"大切", reading:"たいせつ", arti:"penting"},
-  {kanji:"駄目", reading:"だめ", arti:"tidak boleh"},
-  {kanji:"変", reading:"へん", arti:"aneh"},
-  {kanji:"無駄", reading:"むだ", arti:"sia-sia"},
-  {kanji:"急", reading:"きゅう", arti:"mendadak"},
-  {kanji:"上手", reading:"じょうず", arti:"pandai"},
-  {kanji:"下手", reading:"へた", arti:"tidak pandai"},
-  {kanji:"得意", reading:"とくい", arti:"pandai, jago"},
-  {kanji:"苦手", reading:"にがて", arti:"lemah, tidak pandai"},
-  {kanji:"暇", reading:"ひま", arti:"senggang"},
-  {kanji:"かわいそう", reading:"かわいそう", arti:"kasihan"},
-  {kanji:"立派", reading:"りっぱ", arti:"megah, hebat"},
-  {kanji:"大変", reading:"たいへん", arti:"berat (hal/peristiwa)"},
-  {kanji:"楽", reading:"らく", arti:"enteng, mudah"},
-  {kanji:"無理", reading:"むり", arti:"mustahil"},
-  {kanji:"おしゃれ", reading:"おしゃれ", arti:"modis"},
-  {kanji:"丁寧", reading:"ていねい", arti:"sopan, ramah, teliti"},
-  {kanji:"親切", reading:"しんせつ", arti:"baik hati, ramah"},
-  {kanji:"ハンサム", reading:"はんさむ", arti:"ganteng"},
-  {kanji:"真面目", reading:"まじめ", arti:"rajin, serius, jujur"},
-  {kanji:"不真面目", reading:"ふまじめ", arti:"tidak serius, tidak jujur"},
-  {kanji:"嫌", reading:"いや", arti:"tidak suka, benci"},
-  {kanji:"一生懸命", reading:"いっしょうけんめい", arti:"sungguh-sungguh"},
-  {kanji:"盛ん", reading:"さかん", arti:"aktif, ramai, populer"},
-  {kanji:"邪魔", reading:"じゃま", arti:"mengganggu"},
-  {kanji:"十分", reading:"じゅうぶん", arti:"cukup"},
-  {kanji:"丈夫", reading:"じょうぶ", arti:"kuat"},
-  {kanji:"適当", reading:"てきとう", arti:"tepat, sesuai"},
-  {kanji:"特別", reading:"とくべつ", arti:"khusus, spesial"},
-  {kanji:"自由", reading:"じゆう", arti:"bebas"},
-  {kanji:"まっすぐ", reading:"まっすぐ", arti:"lurus"},
-  {kanji:"熱心", reading:"ねっしん", arti:"sungguh hati, rajin"},
-  {kanji:"必要", reading:"ひつよう", arti:"perlu"},
-  {kanji:"別", reading:"べつ", arti:"lain, beda"},
-  {kanji:"不思議", reading:"ふしぎ", arti:"ajaib"},
-  {kanji:"豪華", reading:"ごうか", arti:"mewah"},
-  {kanji:"同じ", reading:"おなじ", arti:"sama"},
-  {kanji:"伝統的", reading:"でんとうてき", arti:"tradisional"},
-  {kanji:"活発", reading:"かっぱつ", arti:"aktif"},
-  {kanji:"誠実", reading:"せいじつ", arti:"tulus hati, setia"},
-  {kanji:"わがまま", reading:"わがまま", arti:"egois"},
-  {kanji:"頑固", reading:"がんこ", arti:"keras kepala"},
-  {kanji:"素直", reading:"すなお", arti:"patuh, polos"},
-  {kanji:"意地悪", reading:"いじわる", arti:"tega, jahat"},
-  {kanji:"勝ち気", reading:"かちき", arti:"tidak mau kalah"},
-  {kanji:"神経質", reading:"しんけいしつ", arti:"sensitif, khawatir berlebihan"}
-];
-
-/* ===== STATE MANAGEMENT ===== */
-const perDay = 20;
-let daysData = [];
-let currentSessionQuestions = [];
-
-let mode = getLocal('yomikata_mode', 'learn');
-let currentDayIndex = parseInt(getLocal('yomikata_day', '0'));
-let questionIndex = 0;
-let lives = 3;
-let lockAnswer = false;
-let cooldownInterval = null;
-
-const panels = { menu: 'panel-menu', quiz: 'panel-quiz', cd: 'panel-cooldown' };
-const qBlock = document.getElementById('q-block');
-
-/* ===== FIX: FISHER-YATES SHUFFLE YANG AMAN ===== */
-function shuffle(array) {
-  let arr = [...array];
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    let temp = arr[i];
-    arr[i] = arr[j];
-    arr[j] = temp;
-  }
-  return arr;
-}
-
-function showPanel(panelId) {
-  Object.values(panels).forEach(id => document.getElementById(id).classList.add('hidden'));
-  document.getElementById(panelId).classList.remove('hidden');
-}
-
-/* ===== INIT & SIDEBAR ===== */
-function init() {
-  for(let i=0; i<rawData.length; i+=perDay){
-    daysData.push(rawData.slice(i, i+perDay));
-  }
-  
-  const dayList = document.getElementById("dayList");
-  dayList.innerHTML = '';
-  daysData.forEach((_, i) => {
-    const btn = document.createElement('button');
-    btn.className = `day-btn ${i === currentDayIndex ? 'active' : ''}`;
-    btn.innerHTML = `<b>Hari ${i+1}</b> <span>(${i*perDay+1}-${(i+1)*perDay})</span>`;
-    btn.onclick = () => selectDay(i);
-    dayList.appendChild(btn);
-  });
-
-  document.querySelectorAll('.mode-select button').forEach(b => b.classList.remove('active'));
-  document.getElementById(`btn-${mode}`).classList.add('active');
-
-  checkCooldown();
-}
-
-function toggleSidebar(){
-  document.getElementById("sidebar").classList.toggle("active");
-  document.getElementById("overlay").classList.toggle("active");
-}
-function closeSidebar(){
-  document.getElementById("sidebar").classList.remove("active");
-  document.getElementById("overlay").classList.remove("active");
-}
-
-/* ===== MODE & SESSION LOGIC ===== */
-function setMode(m){
-  if(lockAnswer) return;
-  mode = m;
-  saveLocal('yomikata_mode', m);
-  
-  document.querySelectorAll('.mode-select button').forEach(b => b.classList.remove('active'));
-  document.getElementById(`btn-${mode}`).classList.add('active');
-  
-  if(!document.getElementById(panels.quiz).classList.contains('hidden')){
-    startQuiz();
-  }
-}
-
-function selectDay(dayIdx){
-  currentDayIndex = dayIdx;
-  saveLocal('yomikata_day', dayIdx);
-  
-  document.querySelectorAll(".day-btn").forEach((btn, i) => {
-    i === dayIdx ? btn.classList.add("active") : btn.classList.remove("active");
-  });
-  
-  closeSidebar();
-  startQuiz();
-}
-
-function startQuiz(){
-  if(checkCooldown()) return;
-
-  questionIndex = 0;
-  lives = 3;
-  lockAnswer = false;
-  
-  qBlock.classList.remove('animate-switch');
-  void qBlock.offsetWidth;
-  qBlock.classList.add('animate-switch');
-
-  currentSessionQuestions = shuffle(daysData[currentDayIndex]);
-  
-  updateHeartsUI();
-  document.getElementById('hearts-box').classList.toggle('hidden', mode === 'learn');
-  document.getElementById('quiz-result-screen').classList.add('hidden');
-  
-  showPanel(panels.quiz);
-  loadQuestion();
-}
-
-/* ===== CORE QUIZ ENGINE ===== */
-function loadQuestion(){
-  lockAnswer = false;
-  const q = currentSessionQuestions[questionIndex];
-  const total = currentSessionQuestions.length;
-
-  qBlock.classList.remove('animate-switch');
-  void qBlock.offsetWidth; 
-  qBlock.classList.add('animate-switch');
-
-  const labelKuis = (mode === 'learn') ? 'Materi' : 'Soal';
-  document.getElementById("prog-text").innerText = `Hari ${currentDayIndex+1} - ${labelKuis} ${questionIndex+1}/${total}`;
-  document.getElementById("barFill").style.width = ((questionIndex)/total*100)+"%";
-
-  const showFuriganaByDefault = (mode === 'learn');
-  document.getElementById("question").innerHTML = splitKanjiKana(q.kanji, q.reading, showFuriganaByDefault);
-
-  const meaningEl = document.getElementById("meaning");
-  const answersEl = document.getElementById("answers");
-  const nextWrap = document.getElementById("learnNextWrap");
-
-  meaningEl.classList.add("hidden");
-  meaningEl.innerText = "";
-  nextWrap.classList.add("hidden");
-  answersEl.innerHTML = "";
-  answersEl.className = "";
-
-  if(mode === 'learn'){
-    meaningEl.innerText = q.arti;
-    meaningEl.classList.remove("hidden");
-    nextWrap.classList.remove("hidden");
-  } else if(mode === 'beginner'){
-    renderBeginnerOptions(q);
-  } else if(mode === 'pro'){
-    renderProInput(q);
-  }
-}
-
-function renderBeginnerOptions(currentQ){
-  const answersEl = document.getElementById("answers");
-  let options = [currentQ.arti];
-  while(options.length < 4){
-    let randWord = rawData[Math.floor(Math.random() * rawData.length)];
-    if(!options.includes(randWord.arti) && randWord.reading !== currentQ.reading) {
-      options.push(randWord.arti);
-    }
-  }
-  options = shuffle(options);
-  
-  options.forEach(opt => {
-    const btn = document.createElement('button');
-    btn.className = 'opt-btn animate-switch';
-    btn.innerText = opt;
-    btn.onclick = () => checkBeginner(btn, opt, currentQ.arti);
-    answersEl.appendChild(btn);
-  });
-}
-
-function checkBeginner(btn, selected, correct){
-  if(lockAnswer) return;
-  lockAnswer = true;
-  
-  const allBtns = document.querySelectorAll(".opt-btn");
-  allBtns.forEach(b => b.disabled = true);
-
-  if(selected === correct){
-    btn.classList.add("correct");
-    showAllFurigana();
-    setTimeout(nextQuestion, 1200); 
-  } else {
-    btn.classList.add("wrong");
-    allBtns.forEach(b => {
-      if(b.innerText === correct) b.classList.add("correct");
-    });
-    showAllFurigana();
-    document.getElementById("meaning").innerText = `Arti: ${correct}`;
-    document.getElementById("meaning").classList.remove('hidden');
-    handleWrongAnswer();
-  }
-}
-
-/* 🔴 MODE PRO - TEBAK ARTI */
-function renderProInput(q){
-  const answersEl = document.getElementById("answers");
-  answersEl.innerHTML = `
-    <div class="pro-container animate-switch">
-      <input type="text" id="proInput" class="pro-input" placeholder="Ketik arti bahasa Indonesianya..." autocomplete="off" spellcheck="false">
-      <button class="pro-submit" onclick="checkPro()">Cek Jawaban</button>
-      <div id="proResult"></div>
-    </div>
-  `;
-  const input = document.getElementById("proInput");
-  input.focus();
-  input.addEventListener("keypress", (e) => {
-    if (e.key === "Enter") checkPro();
-  });
-}
-
-function checkPro(){
-  if(lockAnswer) return;
-  
-  const inputEl = document.getElementById("proInput");
-  const resEl = document.getElementById("proResult");
-  const q = currentSessionQuestions[questionIndex];
-  
-  let val = inputEl.value.trim().toLowerCase();
-  if(!val) return; 
-  lockAnswer = true;
-  inputEl.disabled = true;
-
-  // Memecah arti jika ada koma (misal: "bundar, bulat")
-  const validAnswers = q.arti.toLowerCase().split(',').map(s => s.trim());
-  const isCorrect = validAnswers.includes(val);
-
-  if(isCorrect){
-    inputEl.classList.add("correct");
-    resEl.innerText = "Benar! ✅";
-    resEl.className = "text-success";
-    showAllFurigana();
-    setTimeout(nextQuestion, 1200);
-  } else {
-    inputEl.classList.add("wrong");
-    resEl.innerHTML = `Salah! ❌ Kunci: <b class="text-success">${q.arti}</b>`;
-    showAllFurigana();
-    
-    // Tampilkan cara baca
-    const meaningEl = document.getElementById("meaning");
-    meaningEl.innerText = `Cara baca: ${q.reading}`;
-    meaningEl.classList.remove("hidden");
-    
-    handleWrongAnswer();
-  }
-}
-
-function nextQuestion(){
-  questionIndex++;
-  if(questionIndex < currentSessionQuestions.length){
-    loadQuestion();
-  } else {
-    showCompletionScreen();
-  }
-}
-
-function handleWrongAnswer(){
-  lives--;
-  updateHeartsUI();
-  if(lives <= 0){
-    setTimeout(() => { triggerCooldown(); }, 1500);
-  } else {
-    setTimeout(nextQuestion, 2500);
-  }
-}
-
-function updateHeartsUI(){
-  for(let i=1; i<=3; i++){
-    const heart = document.getElementById(`h${i}`);
-    if(i <= lives){ heart.classList.remove('lost'); }
-    else { heart.classList.add('lost'); }
-  }
-}
-
-function showCompletionScreen(){
-  lockAnswer = true;
-  document.getElementById("barFill").style.width = "100%";
-  
-  const resScreen = document.getElementById('quiz-result-screen');
-  const nextDayBtn = document.getElementById('res-next-day-btn');
-  const title = document.getElementById('res-title');
-  const text = document.getElementById('res-text');
-  const icon = document.getElementById('res-icon');
-
-  if(mode !== 'learn'){
-    icon.innerText = "🏆";
-    title.innerText = "Hari Selesai!";
-    text.innerHTML = `Kamu menyelesaikan Hari ${currentDayIndex+1} dalam Mode ${mode.charAt(0).toUpperCase() + mode.slice(1)}.<br>Nyawa tersisa: ${lives}/3`;
-  } else {
-    icon.innerText = "🎉";
-    title.innerText = "Materi Dibaca!";
-    text.innerText = `Bagus! Kamu sudah meninjau semua materi untuk Hari ${currentDayIndex+1}.`;
-  }
-
-  if(currentDayIndex < daysData.length - 1){ nextDayBtn.classList.remove('hidden'); }
-  else { nextDayBtn.classList.add('hidden'); }
-
-  resScreen.classList.remove('hidden');
-}
-
-function loadNextDay(){
-  if(currentDayIndex < daysData.length - 1){ selectDay(currentDayIndex + 1); }
-  else { backToMenu(); }
-}
-
-function backToMenu(){
-  showPanel(panels.menu);
-}
-
-/* ⏳ COOLDOWN SYSTEM */
-function triggerCooldown(){
-  const cdTime = Date.now() + (15 * 60 * 1000);
-  saveLocal('yomikata_cd_time', cdTime.toString());
-  saveLocal('yomikata_cd_mode', mode);
-
-  if(mode === 'pro'){
-    currentDayIndex = 0;
-    saveLocal('yomikata_day', '0');
-    init(); 
-  }
-  checkCooldown();
-}
-
-function checkCooldown(){
-  const endTime = getLocal('yomikata_cd_time', null);
-  if(!endTime) return false;
-
-  const remaining = parseInt(endTime) - Date.now();
-  if(remaining > 0){
-    showPanel(panels.cd);
-    startCDTimer(remaining);
-    return true;
-  } else {
-    removeLocal('yomikata_cd_time');
-    removeLocal('yomikata_cd_mode');
-    if(cooldownInterval) clearInterval(cooldownInterval);
-    return false;
-  }
-}
-
-function startCDTimer(duration){
-  const timerEl = document.getElementById('cd-timer');
-  if(cooldownInterval) clearInterval(cooldownInterval);
-
-  function updateDOM(ms){
-    if(ms <= 0){
-      timerEl.innerText = "Selesai!";
-      setTimeout(()=> location.reload(), 1000);
-      return;
-    }
-    const minutes = Math.floor(ms / 60000);
-    const seconds = Math.floor((ms % 60000) / 1000);
-    timerEl.innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-  }
-  updateDOM(duration);
-
-  cooldownInterval = setInterval(() => {
-    const rem = parseInt(getLocal('yomikata_cd_time', '0')) - Date.now();
-    updateDOM(rem);
-    if(rem <= 0) clearInterval(cooldownInterval);
-  }, 1000);
-}
-
-function forceLearnMode(){
-  setMode('learn');
-  showPanel(panels.menu);
-}
-
-/* ===== FURIGANA ENGINE ===== */
-function splitKanjiKana(kanji, reading, showByDefault = false){
-  if(kanji === reading) return kanji;
-  let k = kanji.length - 1; let r = reading.length - 1;
-  while(k >= 0 && r >= 0 && kanji[k] === reading[r]){ k--; r--; }
-  let start = 0; let startR = 0;
-  while(start <= k && startR <= r && kanji[start] === reading[startR]){ start++; startR++; }
-  let prefix = kanji.slice(0, start); let suffix = kanji.slice(k + 1);
-  let kanjiBase = kanji.slice(start, k + 1); let furiganaBase = reading.slice(startR, r + 1);
-
-  const opacity = showByDefault ? 1 : 0;
-  if(kanjiBase.length > 0){
-    return `${prefix}<ruby class="kanji" onclick="toggleFurigana(this)">${kanjiBase}<rt class="js-rt" style="opacity:${opacity}">${furiganaBase}</rt></ruby>${suffix}`;
-  } else { return kanji; }
-}
-
-function toggleFurigana(el){
-  if(mode === 'pro' && !lockAnswer) return; 
-  const rt = el.querySelector("rt");
-  rt.style.opacity = rt.style.opacity == 1 ? 0 : 1;
-}
-function showAllFurigana(){
-  document.querySelectorAll(".js-rt").forEach(rt => rt.style.opacity = 1);
-}
-
-init();
-
-</script>
+    <!-- Firebase Compat SDKs (Cocok untuk Vanilla JS dan GitHub Pages) -->
+    <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore-compat.js"></script>
+    <script>
+        const firebaseConfig = {
+          apiKey: "AIzaSyA0AoLYt8EADO9q6Xh2gYTNJxkjQuVED68",
+          authDomain: "wkwkjapan-n5.firebaseapp.com",
+          projectId: "wkwkjapan-n5",
+          storageBucket: "wkwkjapan-n5.firebasestorage.app",
+          messagingSenderId: "473863267447",
+          appId: "1:473863267447:web:81c3a6bbebf5bc7fe35272"
+        };
+        firebase.initializeApp(firebaseConfig);
+    </script>
+    <script src="script.js"></script>
 </body>
 </html>

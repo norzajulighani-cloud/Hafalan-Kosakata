@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Modul Angka & Waktu - YOMIKATA</title>
+<style>
+  :root { 
+    --bg-main: #0b1120;
+    --card-bg: #1e293b;
+    --primary: #38bdf8; 
+    --success: #22c55e; 
+    --danger: #ef4444; 
+    --warning: #eab308;
+    --gold: #fbbf24;
+    --text-main: #f8fafc; 
+    --text-sub: #94a3b8;
+  }
+  
+  body { font-family: 'Segoe UI', sans-serif; background: var(--bg-main); color: var(--text-main); margin: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 15px 10px 80px 10px; overflow-x: hidden; }
+  .container { width: 100%; max-width: 550px; position: relative; }
+  button, input { touch-action: manipulation; font-family: inherit; }
+  .hidden { display: none !important; }
+
+  /* HEADER MINIMALIS */
+  .top-header { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 20px; }
+  .btn-header { background: #1e293b; color: white; border: 1px solid #334155; width: 42px; height: 42px; border-radius: 12px; font-size: 20px; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); -webkit-tap-highlight-color: transparent; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+  .btn-header:active { transform: scale(0.85); box-shadow: 0 2px 3px rgba(0,0,0,0.3); }
+  .btn-header.spin-anim { transform: rotate(180deg) scale(0.5); opacity: 0; }
+  .header-title { font-weight: 800; font-size: 18px; color: var(--gold); letter-spacing: 2px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+
+  /* BOTTOM NAVIGATION BAR */
+  .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); border-top: 1px solid #334155; display: flex; padding: 8px 0 15px 0; z-index: 100; justify-content: space-around; box-shadow: 0 -5px 15px rgba(0,0,0,0.5); }
+  .b-nav-btn { flex: 1; background: transparent; border: none; color: var(--text-sub); font-size: 11px; font-weight: bold; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); -webkit-tap-highlight-color: transparent; }
+  .b-nav-icon { font-size: 24px; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); filter: grayscale(100%); opacity: 0.5; }
+  .b-nav-btn:active { transform: scale(0.92); }
+  .b-nav-btn.active#btn-mode-angka { color: var(--primary); }
+  .b-nav-btn.active#btn-mode-angka .b-nav-icon { filter: none; opacity: 1; transform: translateY(-4px) scale(1.15); }
+  .b-nav-btn.active#btn-mode-waktu { color: var(--success); }
+  .b-nav-btn.active#btn-mode-waktu .b-nav-icon { filter: none; opacity: 1; transform: translateY(-4px) scale(1.15); }
+
+  .nav-tabs { display: flex; gap: 5px; margin-bottom: 10px; justify-content: center; background: transparent;}
+  .tab-btn { background: #1e293b; color: var(--text-sub); border: 1px solid #334155; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 13px; flex-grow: 1; transition: all 0.3s ease; text-align: center; }
+  .tab-btn.active { color: var(--gold); border: 1px solid var(--gold); background: rgba(251, 191, 36, 0.1); box-shadow: 0 4px 12px rgba(251, 191, 36, 0.15); transform: translateY(-2px); }
+
+  .sub-nav { display: flex; gap: 5px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 5px; scrollbar-width: none; transition: opacity 0.3s ease; }
+  .sub-nav::-webkit-scrollbar { display: none; }
+  .sub-btn { background: rgba(255,255,255,0.05); color: var(--text-sub); border: 1px solid rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; cursor: pointer; white-space: nowrap; transition: all 0.3s ease; }
+  .sub-btn.active { background: var(--primary); color: #000; border-color: var(--primary); box-shadow: 0 0 10px rgba(56, 189, 248, 0.4); }
+
+  /* Animasi Transisi */
+  .fade-in-up { animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+  .fade-out-down { animation: fadeOutDown 0.25s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards; }
+  .pop-in { animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+  .slide-in-right { animation: slideInRight 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+  .slide-out-left { animation: slideOutLeft 0.25s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards; }
+  .slide-in-left { animation: slideInLeft 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+  .slide-out-right { animation: slideOutRight 0.25s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards; }
+  
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+   @keyframes fadeOutDown { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(20px); } }
+ @keyframes popIn { 0% { opacity: 0; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1); } }
+  @keyframes slideInRight { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: translateX(0); } }
+  @keyframes slideOutLeft { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(-50px); } }
+  @keyframes slideInLeft { from { opacity: 0; transform: translateX(-50px); } to { opacity: 1; transform: translateX(0); } }
+  @keyframes slideOutRight { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(50px); } }
+
+  /* Area Konten Umum */
+  .content-section { background: var(--card-bg); border-radius: 20px; padding: 25px 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); min-height: 400px; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid rgba(255,255,255,0.05); overflow: hidden; position: relative; }
+  .progress-text { font-size: 14px; font-weight: bold; letter-spacing: 1px; margin-bottom: 15px; text-transform: uppercase; }
+
+  /* Flashcard UI */
+  .content-hafalan { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; position: relative; padding-top: 30px; }
+  
+  .kanji-text { 
+    font-size: clamp(35px, 8vw, 55px); /* Dinamis: Min 35px, Max 55px */
+    font-weight: bold; 
+    margin: 5px 0 15px 0; 
+    color: var(--text-main); 
+    text-shadow: 0 4px 10px rgba(0,0,0,0.5); 
+    cursor: pointer; 
+    transition: all 0.3s ease; 
+    -webkit-tap-highlight-color: transparent;
+    line-height: 1.2; /* Menjaga jarak antar baris kalau terpaksa turun */
+  }
+  .hira-text { 
+    font-size: clamp(14px, 4vw, 18px); /* Sedikit diperkecil */
+    color: var(--warning); 
+    margin-bottom: 5px; 
+    font-weight: bold; 
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+  }
+  .arti-text { 
+    font-size: clamp(15px, 4.5vw, 20px); /* Sedikit diperkecil */
+    color: var(--text-sub); 
+    font-style: italic; 
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+  }
+
+  
+  .blur-hide { filter: blur(8px); opacity: 0; transform: translateY(10px); pointer-events: none; }
+  .blur-show { filter: blur(0); opacity: 1; transform: translateY(0); pointer-events: auto; }
+  
+  .fc-revealed { animation: popKanji 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; color: var(--gold); }
+  .hira-hide { opacity: 0; transform: translateY(15px) scale(0.5); pointer-events: none; }
+  .hira-show { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+
+  .pulse-hint { animation: pulseHint 2s infinite; }
+  @keyframes pulseHint { 0%, 100% { transform: scale(1); color: var(--text-main); } 50% { transform: scale(1.05); color: var(--primary); } }
+
+  /* Floating Bubble UI SMOOTH */
+  .btn-bubble { position: absolute; right: 0px; top: -15px; width: 35px; height: 35px; border-radius: 50%; background: rgba(34, 197, 94, 0.2); border: 1px solid var(--success); color: white; font-size: 18px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 10; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); -webkit-tap-highlight-color: transparent;}
+  .btn-bubble:hover { background: rgba(34, 197, 94, 0.4); transform: scale(1.1); }
+  .btn-bubble:active { transform: scale(0.9); }
+  
+  .bubble-popup { 
+    position: absolute; top: 30px; right: 0px; background: rgba(15, 23, 42, 0.95); 
+    border: 2px solid var(--success); padding: 15px; border-radius: 12px; width: 250px; 
+    text-align: left; font-size: 13px; color: var(--text-main); z-index: 11; 
+    box-shadow: 0 10px 25px rgba(0,0,0,0.7); backdrop-filter: blur(5px); line-height: 1.5;
+    opacity: 0; visibility: hidden; transform: translateY(-15px) scale(0.9);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform-origin: top right;
+  }
+  .bubble-popup.show-popup { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+
+  /* Buku Waktu / Tabel UI */
+  .book-container { flex-grow: 1; display: flex; flex-direction: column; width: 100%; height: 100%; text-align: left; }
+  .book-page { flex-grow: 1; overflow-y: auto; overflow-x: hidden; padding-right: 5px; scrollbar-width: thin; scrollbar-color: var(--success) transparent; }
+  .book-title { color: var(--success); font-size: 20px; font-weight: bold; margin-bottom: 10px; border-bottom: 2px dashed rgba(34, 197, 94, 0.3); padding-bottom: 8px;}
+  .book-narrative { font-size: 14px; line-height: 1.6; color: var(--text-main); margin-bottom: 20px; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 12px; border-left: 4px solid var(--success); }
+  
+  .tabel-waktu { width: 100%; border-collapse: collapse; font-size: 16px; margin-bottom: 10px; background: rgba(255,255,255,0.02); border-radius: 8px; table-layout: auto; }
+  .tabel-waktu th { background: rgba(34, 197, 94, 0.15); color: var(--success); padding: 12px; border-bottom: 2px solid var(--success); text-align: left; position: sticky; top: 0; backdrop-filter: blur(5px); z-index: 5;}
+  .tabel-waktu td { padding: 12px; border-bottom: 1px dashed rgba(255,255,255,0.05); vertical-align: middle; word-break: break-word;}
+  .tabel-waktu tr:last-child td { border-bottom: none; }
+  
+  /* FURIGANA STYLES & ANIMASI SUPER HALUS */
+  ruby { line-height: 1.5; white-space: nowrap; }
+  .ruby-item { font-weight: bold; color: var(--text-main); font-size: 20px; cursor: pointer; display: inline-block; padding: 4px 8px; border-radius: 8px; transition: background 0.3s, color 0.3s; -webkit-tap-highlight-color: transparent; border: 1px solid transparent; }
+  .ruby-item:active { opacity: 0.7; transform: scale(0.95); }
+  
+  .furi-anim { opacity: 0; transform: translateY(10px) scale(0.5); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); color: var(--warning); font-size: 11px; font-weight: bold; pointer-events: none; }
+  
+  .ruby-item.revealed { animation: popKanji 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; background: rgba(251, 191, 36, 0.15); border-color: rgba(251, 191, 36, 0.3); color: var(--gold); }
+  .ruby-item.revealed .furi-anim { opacity: 1; transform: translateY(0) scale(1); }
+  
+  .show-all-furi .ruby-item { background: rgba(251, 191, 36, 0.15); border-color: rgba(251, 191, 36, 0.3); color: var(--gold); }
+  .show-all-furi .ruby-item .furi-anim { opacity: 1 !important; transform: translateY(0) scale(1) !important; }
+  
+  @keyframes popKanji { 
+    0% { transform: scale(1); } 
+    50% { transform: scale(1.15); } 
+    100% { transform: scale(1); } 
+  }
+  
+  .t-arti { color: var(--text-sub); font-size: 15px; display: block; }
+  
+  .btn-sensor { background: #334155; color: white; border: 1px solid #475569; padding: 10px; border-radius: 8px; font-weight: bold; font-size: 13px; cursor: pointer; width: 100%; margin-bottom: 15px; transition: all 0.3s; -webkit-tap-highlight-color: transparent; }
+  .btn-sensor.active { background: rgba(56, 189, 248, 0.2); color: var(--primary); border-color: var(--primary); }
+
+  .book-nav { display: flex; justify-content: space-between; align-items: center; background: #0f172a; padding: 10px 15px; border-radius: 12px; border: 1px solid #334155; margin-top: 15px; }
+  .book-nav-btn { background: var(--success); color: #000; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; -webkit-tap-highlight-color: transparent; }
+  .book-nav-btn:disabled { background: #334155; color: var(--text-sub); cursor: not-allowed; }
+  .book-nav-btn:not(:disabled):hover { filter: brightness(1.2); transform: scale(1.05); }
+  .book-nav-btn:not(:disabled):active { transform: scale(0.95); }
+  .book-page-text { font-size: 13px; font-weight: bold; color: var(--text-sub); letter-spacing: 1px; }
+
+  /* Info & Evaluasi */
+  .note-box { font-size: 14px; color: var(--success); margin-top: 15px; background: rgba(34, 197, 94, 0.1); padding: 10px; border-radius: 8px; border: 1px dashed var(--success); width: 90%; text-align: left; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+  .alert-box { background: rgba(239, 68, 68, 0.15); border: 1px solid var(--danger); color: #fca5a5; padding: 10px; border-radius: 10px; font-size: 14px; margin-top: 15px; width: 90%; text-align: left; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+  .eval-box { background: rgba(0,0,0,0.3); padding: 20px; border-radius: 15px; margin-top: 20px; text-align: center; line-height: 1.6; border: 1px solid rgba(255,255,255,0.1); }
+
+  .btn-next { background: #334155; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: bold; font-size: 18px; cursor: pointer; width: 100%; margin-top: 20px; transition: all 0.2s; -webkit-tap-highlight-color: transparent; }
+  .btn-next:hover { background: #475569; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+  .btn-next:active { transform: scale(0.96) translateY(0); box-shadow: none; }
+
+  /* Kuis UI */
+  .kuis-q { font-size: 20px; font-weight: bold; margin-bottom: 25px; line-height: 1.4; color: var(--text-main); }
+  .pg-grid { display: grid; grid-template-columns: 1fr; gap: 10px; width: 100%; }
+  .btn-opt { background: #0f172a; color: white; border: 2px solid #334155; padding: 15px; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; transition: all 0.2s ease; -webkit-tap-highlight-color: transparent; }
+  .btn-opt:not(:disabled):hover { border-color: var(--primary); transform: translateY(-2px); }
+  .btn-opt:not(:disabled):active { transform: scale(0.97); }
+  .btn-opt.correct { background: rgba(34, 197, 94, 0.2); border-color: var(--success); color: var(--success); transform: scale(1.02); }
+  .btn-opt.wrong { background: rgba(239, 68, 68, 0.2); border-color: var(--danger); color: var(--danger); animation: shake 0.4s ease; }
+  @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+
+  .input-box { width: 100%; padding: 15px; border-radius: 12px; border: 2px solid #475569; background: #0f172a; color: white; font-size: 18px; text-align: center; margin-bottom: 15px; box-sizing: border-box; transition: all 0.3s ease; }
+  .input-box:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 15px rgba(56, 189, 248, 0.2); transform: scale(1.02); }
+  .btn-submit { background: var(--primary); color: #000; border: none; padding: 14px; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; width: 100%; transition: all 0.2s ease; -webkit-tap-highlight-color: transparent; }
+  .btn-submit:hover { filter: brightness(1.1); transform: translateY(-2px); }
+  .btn-submit:active { transform: scale(0.96); }
+  .feedback { font-size: 18px; font-weight: bold; min-height: 25px; margin-top: 15px; opacity: 0; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="top-header">
+    <button class="btn-header" onclick="window.location.href='index.html'">⬅️</button>
+    <div class="header-title">YOMIKATA</div>
+    <button class="btn-header" id="btn-toggle-view" onclick="Modul.toggleView()">📋</button>
+  </div>
+  
+  <div class="nav-tabs">
+    <button class="tab-btn active" id="btn-tab-hafalan" onclick="Modul.switchTab('hafalan')">📖 Hafalan</button>
+    <button class="tab-btn" id="btn-tab-pg" onclick="Modul.switchTab('pg')">🎯 Pilgan</button>
+    <button class="tab-btn" id="btn-tab-isian" onclick="Modul.switchTab('isian')">✍️ Isian</button>
+  </div>
+
+  <div class="sub-nav fade-in-up" id="sub-nav-angka">
+    <button class="sub-btn active" id="btn-sub-1" onclick="Modul.switchSesi(1)">Sesi 1: 0~10</button>
+    <button class="sub-btn" id="btn-sub-2" onclick="Modul.switchSesi(2)">Sesi 2: 11~99</button>
+    <button class="sub-btn" id="btn-sub-3" onclick="Modul.switchSesi(3)">Sesi 3: Ratusan</button>
+    <button class="sub-btn" id="btn-sub-4" onclick="Modul.switchSesi(4)">Sesi 4: Ribuan</button>
+    <button class="sub-btn" id="btn-sub-5" onclick="Modul.switchSesi(5)">Sesi 5: ++ Ribuan</button>
+  </div>
+
+  <div class="sub-nav fade-in-up hidden" id="sub-nav-waktu">
+    <button class="sub-btn active" id="btn-sub-w1" onclick="Modul.switchSesiWaktu(0)">Bab 1: Jam</button>
+    <button class="sub-btn" id="btn-sub-w2" onclick="Modul.switchSesiWaktu(1)">Bab 2: Menit</button>
+    <button class="sub-btn" id="btn-sub-w3" onclick="Modul.switchSesiWaktu(2)">Bab 3: Detik</button>
+    <button class="sub-btn" id="btn-sub-w4" onclick="Modul.switchSesiWaktu(3)">Bab 4: Kombinasi</button>
+  </div>
+
+  <div id="sec-hafalan" class="content-section fade-in-up"></div>
+
+  <div id="sec-pg" class="content-section hidden fade-in-up">
+    <div class="progress-text" id="pg-progress" style="color:var(--gold);">KUIS PILGAN: 1 / 20</div>
+    <div class="content-hafalan" style="justify-content: flex-start; width: 100%;">
+      <div id="pg-content-wrapper" style="width: 100%;">
+        <div class="kuis-q" id="pg-q">Memuat soal...</div>
+        <div class="pg-grid" id="pg-opts"></div>
+      </div>
+      <div class="feedback" id="pg-feedback"></div>
+    </div>
+  </div>
+
+  <div id="sec-isian" class="content-section hidden fade-in-up">
+    <div class="progress-text" id="isian-progress" style="color:var(--gold);">KUIS ISIAN: 1 / 20</div>
+    <div class="content-hafalan" style="justify-content: center; width: 100%;">
+      <div id="isian-content-wrapper" style="width: 100%;">
+        <div class="kuis-q" id="isian-q">Memuat soal...</div>
+        <div style="font-size:12px; color:var(--text-sub); margin-top:-15px; margin-bottom:15px;" id="isian-hint-teks">(Gunakan keyboard Jepang untuk Hiragana)</div>
+        <input type="text" id="isian-input" class="input-box" placeholder="Ketik jawabanmu..." autocomplete="off" onkeypress="if(event.key==='Enter') Modul.checkIsian()">
+        <button class="btn-submit" id="btn-submit-isian" onclick="Modul.checkIsian()">Kirim Jawaban</button>
+      </div>
+      <div class="feedback" id="isian-feedback"></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="bottom-nav">
+  <button class="b-nav-btn active" id="btn-mode-angka" onclick="Modul.switchMode('angka')">
+    <span class="b-nav-icon">🔢</span>
+    <span>Angka</span>
+  </button>
+  <button class="b-nav-btn" id="btn-mode-waktu" onclick="Modul.switchMode('waktu')">
+    <span class="b-nav-icon">⏰</span>
+    <span>Waktu</span>
+  </button>
+</div>
+
+<script>
+// ==========================================
+// DATABASE MATERI (FULL 100% LENGKAP DENGAN ALT)
+// ==========================================
+const DatabaseMateri = {
+  angka: {
+    1: [
+      { k: "零", r: "ゼロ", alt: "れい", a: "0 (Nol)", note: "Bisa juga dibaca れい (rei)." }, 
+      { k: "一", r: "いち", a: "1" },
+      { k: "二", r: "に", a: "2" }, 
+      { k: "三", r: "さん", a: "3" },
+      { k: "四", r: "よん", alt: "し", a: "4", note: "Bisa juga dibaca し (shi)." }, 
+      { k: "五", r: "ご", a: "5" },
+      { k: "六", r: "ろく", a: "6" }, 
+      { k: "七", r: "なな", alt: "しち", a: "7", note: "Bisa juga dibaca しち (shichi)." },
+      { k: "八", r: "はち", a: "8" }, 
+      { k: "九", r: "きゅう", alt: "く", a: "9", note: "Bisa juga dibaca く (ku)." },
+      { k: "十", r: "じゅう", a: "10" }
+    ],
+    2: [
+      { k: "十一", r: "じゅういち", a: "11", note: "10 (じゅう) + 1 (いち)" },
+      { k: "十二", r: "じゅうに", a: "12" }, 
+      { k: "十三", r: "じゅうさん", a: "13" },
+      { k: "十四", r: "じゅうよん", alt: "じゅうし", a: "14", alert: "Penyebutan 4 menggunakan 'yon'", note: "Bisa juga dibaca じゅうし." }, 
+      { k: "十五", r: "じゅうご", a: "15" },
+      { k: "十六", r: "じゅうろく", a: "16" }, 
+      { k: "十七", r: "じゅうなな", alt: "じゅうしち", a: "17", note: "Bisa juga dibaca じゅうしち." },
+      { k: "十八", r: "じゅうはち", a: "18" }, 
+      { k: "十九", r: "じゅうきゅう", alt: "じゅうく", a: "19", note: "Bisa juga dibaca じゅうく." },
+      { k: "二十", r: "にじゅう", a: "20", note: "2 (に) × 10 (じゅう)" },
+      { k: "二十一", r: "にじゅういち", a: "21" }, 
+      { k: "二十二", r: "にじゅうに", a: "22" },
+      { k: "二十五", r: "にじゅうご", a: "25" }, 
+      { k: "三十", r: "さんじゅう", a: "30" },
+      { k: "三十一", r: "さんじゅういち", a: "31" }, 
+      { k: "三十二", r: "さんじゅうに", a: "32" },
+      { k: "三十五", r: "さんじゅうご", a: "35" }, 
+      { k: "四十", r: "よんじゅう", alt: "しじゅう", a: "40", alert: "Penyebutan 40 menggunakan 'yon-juu'", note: "Bisa juga dibaca しじゅう." },
+      { k: "五十", r: "ごじゅう", a: "50" }, 
+      { k: "六十", r: "ろくじゅう", a: "60" },
+      { k: "七十", r: "ななじゅう", alt: "しちじゅう", a: "70", note: "Bisa juga dibaca しちじゅう." }, 
+      { k: "八十", r: "はちじゅう", a: "80" },
+      { k: "九十", r: "きゅうじゅう", a: "90" }, 
+      { k: "九十九", r: "きゅうじゅうきゅう", alt: "くじゅうく", a: "99", note: "Bisa juga dibaca くじゅうく." }
+    ],
+    3: [
+      { k: "百", r: "ひゃく", a: "100" }, 
+      { k: "百一", r: "ひゃくいち", a: "101" },
+      { k: "百十一", r: "ひゃくじゅういち", a: "111" }, 
+      { k: "二百", r: "にひゃく", a: "200" },
+      { k: "二百一", r: "にひゃくいち", a: "201" }, 
+      { k: "二百十一", r: "にひゃくじゅういち", a: "211" },
+      { k: "二百四十五", r: "にひゃくよんじゅうご", a: "245" }, 
+      { k: "三百", r: "さんびゃく", a: "300", alert: "AWAS! Bunyinya berubah (byaku)!" },
+      { k: "三百一", r: "さんびゃくいち", a: "301" }, 
+      { k: "三百十一", r: "さんびゃくじゅういち", a: "311" },
+      { k: "三百四十五", r: "さんびゃくよんじゅうご", a: "345" },
+      { k: "四百", r: "よんひゃく", a: "400" }, 
+      { k: "五百", r: "ごひゃく", a: "500" },
+      { k: "六百", r: "ろっぴゃく", a: "600", alert: "AWAS! Bunyinya berubah (pyaku)!" },
+      { k: "七百", r: "ななひゃく", a: "700" }, 
+      { k: "八百", r: "はっぴゃく", a: "800", alert: "AWAS! Bunyinya berubah (pyaku)!" },
+      { k: "九百", r: "きゅうひゃく", a: "900" }, 
+      { k: "九百九十九", r: "きゅうひゃくきゅうじゅうきゅう", a: "999" }
+    ],
+    4: [
+      { k: "千", r: "せん", a: "1.000" }, 
+      { k: "二千", r: "にせん", a: "2.000" },
+      { k: "三千", r: "さんぜん", a: "3.000", alert: "AWAS! Bunyinya berubah (zen)!" },
+      { k: "四千", r: "よんせん", a: "4.000" }, 
+      { k: "五千", r: "ごせん", a: "5.000" },
+      { k: "六千", r: "ろくせん", a: "6.000" }, 
+      { k: "七千", r: "ななせん", a: "7.000" },
+      { k: "八千", r: "はっせん", a: "8.000", alert: "AWAS! Bunyinya berubah (has-sen)!" },
+      { k: "九千", r: "きゅうせん", a: "9.000" }
+    ],
+    5: [
+      { k: "一万", r: "いちまん", a: "10.000", note: "Jepang menghitung per 4 digit (0000)." }, 
+      { k: "一万 一千", r: "いちまん いっせん", a: "11.000", note: "Sen menjadi issen!" },
+      { k: "一万 一千 百", r: "いちまん いっせん ひゃく", a: "11.100" }, 
+      { k: "二万", r: "にまん", a: "20.000" },
+      { k: "十万", r: "じゅうまん", a: "100.000", note: "Artinya: 10 + (0000)" }, 
+      { k: "十万 一千", r: "じゅうまん いっせん", a: "101.000" },
+      { k: "二十万", r: "にじゅうまん", a: "200.000" }, 
+      { k: "百万", r: "ひゃくまん", a: "1 Juta", note: "Artinya: 100 + (0000)" },
+      { k: "二百万", r: "にひゃくまん", a: "2 Juta" }, 
+      { k: "一千万", r: "いっせんまん", a: "10 Juta" },
+      { k: "二千万", r: "にせんまん", a: "20 Juta" }, 
+      { k: "一億", r: "いちおく", a: "100 Juta" },
+      { k: "二億", r: "におく", a: "200 Juta" }, 
+      { k: "十億", r: "じゅうおく", a: "1 Miliar" },
+      { k: "二十億", r: "にじゅうおく", a: "20 Miliar" }, 
+      { k: "百億", r: "ひゃくおく", a: "10 Miliar" },
+      { k: "二百億", r: "にひゃくおく", a: "20 Miliar" }, 
+      { k: "一千億", r: "いっせんおく", a: "100 Miliar" },
+      { k: "二千億", r: "にせんおく", a: "200 Miliar" }, 
+      { k: "一兆", r: "いっちょう", a: "1 Triliun" }
+    ]
+  },
+  waktu: [
+    // BAB 1: JAM
+    { k: "何時", r: "なんじ", a: "Jam berapa?", grp: "jam" }, 
+    { k: "一時", r: "いちじ", a: "Jam 1", grp: "jam" },
+    { k: "二時", r: "にじ", a: "Jam 2", grp: "jam" }, 
+    { k: "三時", r: "さんじ", a: "Jam 3", grp: "jam" },
+    { k: "四時", r: "よじ", a: "Jam 4", grp: "jam", alert: "AWAS! Dibaca Yo-ji (Bukan Yon-ji)!" },
+    { k: "五時", r: "ごじ", a: "Jam 5", grp: "jam" }, 
+    { k: "六時", r: "ろくじ", a: "Jam 6", grp: "jam" },
+    { k: "七時", r: "しちじ", a: "Jam 7", grp: "jam", alert: "AWAS! Dibaca Shichi-ji (Bukan Nana-ji)!" },
+    { k: "八時", r: "はちじ", a: "Jam 8", grp: "jam" }, 
+    { k: "九時", r: "くじ", a: "Jam 9", grp: "jam", alert: "AWAS! Dibaca Ku-ji (Bukan Kyuu-ji)!" },
+    { k: "十時", r: "じゅうじ", a: "Jam 10", grp: "jam" }, 
+    { k: "十一時", r: "じゅういちじ", a: "Jam 11", grp: "jam" },
+    { k: "十二時", r: "じゅうにじ", a: "Jam 12", grp: "jam" },
+    { k: "午前", r: "ごぜん", a: "A.M (Pagi)", grp: "jam", note: "Diletakkan di depan." }, 
+    { k: "午後", r: "ごご", a: "P.M (Sore)", grp: "jam" },
+    { k: "午前 十時", r: "ごぜん じゅうじ", a: "Jam 10 pagi", grp: "jam" }, 
+    { k: "午後 一時", r: "ごご いちじ", a: "Jam 1 siang", grp: "jam" },
+    
+    // BAB 2: MENIT
+    { k: "何分", r: "なんぷん", a: "Berapa menit?", grp: "menit" },
+    { k: "一分", r: "いっぷん", a: "1 Menit", grp: "menit", alert: "Berubah bunyi (pun)!" },
+    { k: "二分", r: "にふん", a: "2 Menit", grp: "menit" }, 
+    { k: "三分", r: "さんぷん", a: "3 Menit", grp: "menit", alert: "Berubah bunyi (pun)!" },
+    { k: "四分", r: "よんぷん", a: "4 Menit", grp: "menit", alert: "Berubah bunyi (pun)!" },
+    { k: "五分", r: "ごふん", a: "5 Menit", grp: "menit" }, 
+    { k: "六分", r: "ろっぷん", a: "6 Menit", grp: "menit", alert: "Berubah bunyi (pun)!" },
+    { k: "七分", r: "ななふん", a: "7 Menit", grp: "menit" }, 
+    { k: "八分", r: "はっぷん", a: "8 Menit", grp: "menit", alert: "Berubah bunyi (pun)!" },
+    { k: "九分", r: "きゅうふん", a: "9 Menit", grp: "menit" }, 
+    { k: "十分", r: "じゅっぷん", alt: "じっぷん", a: "10 Menit", grp: "menit", alert: "Berubah bunyi (pun)!", note: "Bisa juga dibaca じっぷん (jippun)." },
+    { k: "十一分", r: "じゅういっぷん", a: "11 Menit", grp: "menit" }, 
+    { k: "十五分", r: "じゅうごふん", a: "15 Menit", grp: "menit" },
+    { k: "二十分", r: "にじゅっぷん", a: "20 Menit", grp: "menit" }, 
+    { k: "二十五分", r: "にじゅうごふん", a: "25 Menit", grp: "menit" },
+    { k: "三十分", r: "さんじゅっぷん", a: "30 Menit", grp: "menit" }, 
+    { k: "四十分", r: "よんじゅっぷん", a: "40 Menit", grp: "menit" },
+    { k: "五十分", r: "ごじゅっぷん", a: "50 Menit", grp: "menit" }, 
+    { k: "六十分", r: "ろくじゅっぷん", a: "60 Menit", grp: "menit" },
+    { k: "半", r: "はん", a: "Setengah / 30 Mnt", grp: "menit" },
+    { k: "十時 半", r: "じゅうじ はん", a: "Jam 10:30", grp: "menit" }, 
+    { k: "十二時 半", r: "じゅうにじ はん", a: "Jam 12:30", grp: "menit" },
+    
+    // BAB 3: DETIK
+    { k: "何秒", r: "なんびょう", a: "Berapa detik?", grp: "detik" }, 
+    { k: "一秒", r: "いちびょう", a: "1 Detik", grp: "detik" },
+    { k: "二秒", r: "にびょう", a: "2 Detik", grp: "detik" }, 
+    { k: "三秒", r: "さんびょう", a: "3 Detik", grp: "detik" },
+    { k: "四秒", r: "よんびょう", a: "4 Detik", grp: "detik" }, 
+    { k: "五秒", r: "ごびょう", a: "5 Detik", grp: "detik" },
+    { k: "六秒", r: "ろくびょう", a: "6 Detik", grp: "detik" }, 
+    { k: "七秒", r: "ななびょう", alt: "しちびょう", a: "7 Detik", grp: "detik", note: "Bisa juga dibaca しちびょう." },
+    { k: "八秒", r: "はちびょう", a: "8 Detik", grp: "detik" }, 
+    { k: "九秒", r: "きゅうびょう", a: "9 Detik", grp: "detik" },
+    { k: "十秒", r: "じゅうびょう", a: "10 Detik", grp: "detik" }, 
+    { k: "十一秒", r: "じゅういちびょう", a: "11 Detik", grp: "detik" },
+    
+    // BAB 4: KOMBINASI
+    { k: "十二時 三十二分 七秒", r: "じゅうにじ さんじゅうにふん ななびょう", a: "Jam 12 lewat 32 menit 7 detik", grp: "komb", note: "Pola: Jam + Menit + Detik" },
+    { k: "午後 四時 十五分 三十秒", r: "ごご よじ じゅうごふん さんじゅうびょう", a: "Jam 04:15:30 PM (Sore)", grp: "komb" },
+    { k: "午前 九時 八分 一秒", r: "ごぜん くじ はっぷん いちびょう", a: "Jam 09:08:01 AM (Pagi)", grp: "komb" },
+    { k: "午後 八時 四十五分", r: "ごご はちじ よんじゅうごふん", a: "Jam 08:45 PM (Malam)", grp: "komb" },
+    { k: "午前 七時 二十分", r: "ごぜん しちじ にじゅっぷん", a: "Jam 07:20 AM (Pagi)", grp: "komb" },
+    { k: "十一時 五十九分 五十九秒", r: "じゅういちじ ごじゅうきゅうふん ごじゅうきゅうびょう", a: "Jam 11:59:59", grp: "komb", alert: "Ayo eja pelan-pelan!" },
+    { k: "午前 一時 五分", r: "ごぜん いちじ ごふん", a: "Jam 01:05 AM (Pagi)", grp: "komb" },
+    { k: "午後 二時 十分", r: "ごご にじ じゅっぷん", a: "Jam 02:10 PM (Siang)", grp: "komb" },
+    { k: "三時 半", r: "さんじ はん", a: "Jam 03:30", grp: "komb" },
+    { k: "四時 四十四分 四十四秒", r: "よじ よんじゅうよんぷん よんじゅうよんびょう", a: "Jam 04:44:44", grp: "komb", alert: "Awas: Angka 4 dibaca yo/yon!" },
+    { k: "午前 五時 五十五分", r: "ごぜん ごじ ごじゅうごふん", a: "Jam 05:55 AM (Pagi)", grp: "komb" },
+    { k: "午後 六時 一分", r: "ごご ろくじ いっぷん", a: "Jam 06:01 PM (Sore)", grp: "komb", alert: "1 Menit = Ippun" },
+    { k: "七時 七分 七秒", r: "しちじ ななふん ななびょう", a: "Jam 07:07:07", grp: "komb" },
+    { k: "八時 二十分 十五秒", r: "はちじ にじゅっぷん じゅうごびょう", a: "Jam 08:20:15", grp: "komb" },
+    { k: "午前 九時 三十分", r: "ごぜん くじ さんじゅっぷん", a: "Jam 09:30 AM (Pagi)", grp: "komb", alert: "9 = ku-ji!" },
+    { k: "十時 十分 十秒", r: "じゅうじ じゅっぷん じゅうびょう", a: "Jam 10:10:10", grp: "komb" },
+    { k: "午後 十一時 十一分", r: "ごご じゅういちじ じゅういっぷん", a: "Jam 11:11 PM (Malam)", grp: "komb" },
+    { k: "午前 六時 半", r: "ごぜん ろくじ はん", a: "Jam 06:30 AM (Pagi)", grp: "komb" },
+    { k: "午後 七時 四十五分", r: "ごご しちじ よんじゅうごふん", a: "Jam 07:45 PM (Malam)", grp: "komb" },
+    { k: "八時 五十分", r: "はちじ ごじゅっぷん", a: "Jam 08:50", grp: "komb" },
+    { k: "九時 五分 二秒", r: "くじ ごふん にびょう", a: "Jam 09:05:02", grp: "komb" },
+    { k: "十時 二十五分", r: "じゅうじ にじゅうごふん", a: "Jam 10:25", grp: "komb" },
+    { k: "午後 三時 十五分", r: "ごご さんじ じゅうごふん", a: "Jam 03:15 PM (Sore)", grp: "komb" },
+    { k: "午前 四時 二十分", r: "ごぜん よじ にじゅっぷん", a: "Jam 04:20 AM (Pagi)", grp: "komb" },
+    { k: "五時 三十五分", r: "ごじ さんじゅうごふん", a: "Jam 05:35", grp: "komb" },
+    { k: "午後 九時 四十分", r: "ごご くじ よんじゅっぷん", a: "Jam 09:40 PM (Malam)", grp: "komb" },
+    { k: "十一時 五分", r: "じゅういちじ ごふん", a: "Jam 11:05", grp: "komb" },
+    { k: "午後 十時 半", r: "ごご じゅうじ はん", a: "Jam 10:30 PM (Malam)", grp: "komb" },
+    { k: "午前 八時 四分", r: "ごぜん はちじ よんぷん", a: "Jam 08:04 AM (Pagi)", grp: "komb" },
+    { k: "六時 三分", r: "ろくじ さんぷん", a: "Jam 06:03", grp: "komb", alert: "3 Menit = San-pun" },
+    { k: "七時 六分", r: "しちじ ろっぷん", a: "Jam 07:06", grp: "komb", alert: "6 Menit = Rop-pun" },
+    { k: "午後 一時 二分", r: "ごご いちじ にふん", a: "Jam 01:02 PM (Siang)", grp: "komb" },
+    { k: "午前 二時 九分", r: "ごぜん にじ きゅうふん", a: "Jam 02:09 AM (Pagi)", grp: "komb" },
+    { k: "四時 零分", r: "よじ ぜろふん", a: "Jam 04:00 Pas", grp: "komb" },
+    { k: "十二時 一分", r: "じゅうにじ いっぷん", a: "Jam 12:01", grp: "komb" }
+  ]
+};
+
+// ==========================================
+// BANK SOAL SESI 2 (FULL 11 - 99) UNTUK KUIS
+// ==========================================
+const BankSoalSesi2 = [
+  {k:"十一", r:"じゅういち", a:"11"}, {k:"十二", r:"じゅうに", a:"12"}, {k:"十三", r:"じゅうさん", a:"13"}, {k:"十四", r:"じゅうよん", alt:"じゅうし", a:"14"}, {k:"十五", r:"じゅうご", a:"15"}, {k:"十六", r:"じゅうろく", a:"16"}, {k:"十七", r:"じゅうなな", alt:"じゅうしち", a:"17"}, {k:"十八", r:"じゅうはち", a:"18"}, {k:"十九", r:"じゅうきゅう", alt:"じゅうく", a:"19"},
+  {k:"二十", r:"にじゅう", a:"20"}, {k:"二十一", r:"にじゅういち", a:"21"}, {k:"二十二", r:"にじゅうに", a:"22"}, {k:"二十三", r:"にじゅうさん", a:"23"}, {k:"二十四", r:"にじゅうよん", alt:"にじゅうし", a:"24"}, {k:"二十五", r:"にじゅうご", a:"25"}, {k:"二十六", r:"にじゅうろく", a:"26"}, {k:"二十七", r:"にじゅうなな", alt:"にじゅうしち", a:"27"}, {k:"二十八", r:"にじゅうはち", a:"28"}, {k:"二十九", r:"にじゅうきゅう", alt:"にじゅうく", a:"29"},
+  {k:"三十", r:"さんじゅう", a:"30"}, {k:"三十一", r:"さんじゅういち", a:"31"}, {k:"三十二", r:"さんじゅうに", a:"32"}, {k:"三十三", r:"さんじゅうさん", a:"33"}, {k:"三十四", r:"さんじゅうよん", alt:"さんじゅうし", a:"34"}, {k:"三十五", r:"さんじゅうご", a:"35"}, {k:"三十六", r:"さんじゅうろく", a:"36"}, {k:"三十七", r:"さんじゅうなな", alt:"さんじゅうしち", a:"37"}, {k:"三十八", r:"さんじゅうはち", a:"38"}, {k:"三十九", r:"さんじゅうきゅう", alt:"さんじゅうく", a:"39"},
+  {k:"四十", r:"よんじゅう", alt:"しじゅう", a:"40"}, {k:"四十一", r:"よんじゅういち", alt:"しじゅういち", a:"41"}, {k:"四十二", r:"よんじゅうに", alt:"しじゅうに", a:"42"}, {k:"四十三", r:"よんじゅうさん", alt:"しじゅうさん", a:"43"}, {k:"四十四", r:"よんじゅうよん", alt:"しじゅうし", a:"44"}, {k:"四十五", r:"よんじゅうご", alt:"しじゅうご", a:"45"}, {k:"四十六", r:"よんじゅうろく", alt:"しじゅうろく", a:"46"}, {k:"四十七", r:"よんじゅうなな", alt:"しじゅうしち", a:"47"}, {k:"四十八", r:"よんじゅうはち", alt:"しじゅうはち", a:"48"}, {k:"四十九", r:"よんじゅうきゅう", alt:"しじゅうく", a:"49"},
+  {k:"五十", r:"ごじゅう", a:"50"}, {k:"五十一", r:"ごじゅういち", a:"51"}, {k:"五十二", r:"ごじゅうに", a:"52"}, {k:"五十三", r:"ごじゅうさん", a:"53"}, {k:"五十四", r:"ごじゅうよん", alt:"ごじゅうし", a:"54"}, {k:"五十五", r:"ごじゅうご", a:"55"}, {k:"五十六", r:"ごじゅうろく", a:"56"}, {k:"五十七", r:"ごじゅうなな", alt:"ごじゅうしち", a:"57"}, {k:"五十八", r:"ごじゅうはち", a:"58"}, {k:"五十九", r:"ごじゅうきゅう", alt:"ごじゅうく", a:"59"},
+  {k:"六十", r:"ろくじゅう", a:"60"}, {k:"六十一", r:"ろくじゅういち", a:"61"}, {k:"六十二", r:"ろくじゅうに", a:"62"}, {k:"六十三", r:"ろくじゅうさん", a:"63"}, {k:"六十四", r:"ろくじゅうよん", alt:"ろくじゅうし", a:"64"}, {k:"六十五", r:"ろくじゅうご", a:"65"}, {k:"六十六", r:"ろくじゅうろく", a:"66"}, {k:"六十七", r:"ろくじゅうなな", alt:"ろくじゅうしち", a:"67"}, {k:"六十八", r:"ろくじゅうはち", a:"68"}, {k:"六十九", r:"ろくじゅうきゅう", alt:"ろくじゅうく", a:"69"},
+  {k:"七十", r:"ななじゅう", alt:"しちじゅう", a:"70"}, {k:"七十一", r:"ななじゅういち", alt:"しちじゅういち", a:"71"}, {k:"七十二", r:"ななじゅうに", alt:"しちじゅうに", a:"72"}, {k:"七十三", r:"ななじゅうさん", alt:"しちじゅうさん", a:"73"}, {k:"七十四", r:"ななじゅうよん", alt:"しちじゅうし", a:"74"}, {k:"七十五", r:"ななじゅうご", alt:"しちじゅうご", a:"75"}, {k:"七十六", r:"ななじゅうろく", alt:"しちじゅうろく", a:"76"}, {k:"七十七", r:"ななじゅうなな", alt:"しちじゅうしち", a:"77"}, {k:"七十八", r:"ななじゅうはち", alt:"しちじゅうはち", a:"78"}, {k:"七十九", r:"ななじゅうきゅう", alt:"しちじゅうく", a:"79"},
+  {k:"八十", r:"はちじゅう", a:"80"}, {k:"八十一", r:"はちじゅういち", a:"81"}, {k:"八十二", r:"はちじゅうに", a:"82"}, {k:"八十三", r:"はちじゅうさん", a:"83"}, {k:"八十四", r:"はちじゅうよん", alt:"はちじゅうし", a:"84"}, {k:"八十五", r:"はちじゅうご", a:"85"}, {k:"八十六", r:"はちじゅうろく", a:"86"}, {k:"八十七", r:"はちじゅうなな", alt:"はちじゅうしち", a:"87"}, {k:"八十八", r:"はちじゅうはち", a:"88"}, {k:"八十九", r:"はちじゅうきゅう", alt:"はちじゅうく", a:"89"},
+  {k:"九十", r:"きゅうじゅう", a:"90"}, {k:"九十一", r:"きゅうじゅういち", a:"91"}, {k:"九十二", r:"きゅうじゅうに", a:"92"}, {k:"九十三", r:"きゅうじゅうさん", a:"93"}, {k:"九十四", r:"きゅうじゅうよん", alt:"きゅうじゅうし", a:"94"}, {k:"九十五", r:"きゅうじゅうご", a:"95"}, {k:"九十六", r:"きゅうじゅうろく", a:"96"}, {k:"九十七", r:"きゅうじゅうなな", alt:"きゅうじゅうしち", a:"97"}, {k:"九十八", r:"きゅうじゅうはち", a:"98"}, {k:"九十九", r:"きゅうじゅうきゅう", alt:"くじゅうく", a:"99"}
+];
+
+// DATA BUKU WAKTU DENGAN 4 HALAMAN
+const BookPages = [
+  {
+    title: "BAB 1: Pukul / Jam (〜時)",
+    narasi: "Untuk menyatakan jam, gunakan akhiran <b style='color:var(--gold)'>〜時 (ji)</b>. Perhatikan angka 4 (よじ), 7 (しちじ), dan 9 (くじ) karena bacanya berbeda! <br><br>Gunakan <b style='color:var(--primary)'>午前 (ごぜん)</b> untuk A.M (Pagi) atau <b style='color:var(--success)'>午後 (ごご)</b> untuk P.M (Sore/Malam) <b>di depan</b> angka jam.",
+    groups: ["jam"]
+  },
+  {
+    title: "BAB 2: Menit (〜分)",
+    narasi: "💡 <b>Trik PIN 2579:</b> Angka <b>2, 5, 7, 9</b> dibaca lembut memakai <b style='color:var(--primary)'>〜ふん (fun)</b>. <br><br>Sisa angkanya (1, 3, 4, 6, 8, 10, dan 'Berapa') memakai <b style='color:var(--danger)'>〜ぷん (pun)</b>. Untuk 30 menit, gunakan <b style='color:var(--success)'>半 (はん)</b>.",
+    groups: ["menit"]
+  },
+  {
+    title: "BAB 3: Detik (〜秒)",
+    narasi: "Penyebutan detik sangat mudah. Cukup tambahkan akhiran <b style='color:var(--gold)'>〜秒 (byou)</b> setelah angka biasa. Tidak ada anomali atau perubahan bunyi yang rumit di sini.",
+    groups: ["detik"]
+  },
+  {
+    title: "BAB 4: Kombinasi Waktu",
+    narasi: "Mari gabungkan semuanya! Pola pengucapannya selalu berurutan: <b style='color:var(--primary)'>(AM/PM) + Jam + Menit + Detik</b>.<br><br><i>*Ketuk kanji di bawah jika kamu lupa cara bacanya!</i>",
+    groups: ["komb"]
+  }
+];
+
+// MANUAL KUIS
+const QuizPG = {
+  angka: [
+    { q: "Cara baca <b>四</b>?", opts: ["よん", "さん", "よ", "ご"], ans: "よん" },
+    { q: "Cara baca <b>三百</b>?", opts: ["さんひゃく", "さんびゃく", "さんぴゃく", "みひゃく"], ans: "さんびゃく" },
+    { q: "Cara baca <b>八千</b>?", opts: ["はちせん", "はっぴゃく", "はっせん", "はちまん"], ans: "はっせん" },
+    { q: "Cara baca <b>一億</b>?", opts: ["いちおく", "じゅうおく", "ひゃくまん", "いっちょう"], ans: "いちおく" },
+    { q: "Cara baca <b>九十九</b>?", opts: ["きゅうじゅうきゅう", "きゅうく", "くじゅうく", "きゅうじゅう"], ans: "きゅうじゅうきゅう" },
+    { q: "Cara baca <b>六百</b>?", opts: ["ろくひゃく", "ろっぴゃく", "ろくびゃく", "ろっひゃく"], ans: "ろっぴゃく" },
+    { q: "Cara baca <b>一万</b>?", opts: ["いちまん", "じゅうまん", "ひゃくまん", "まん"], ans: "いちまん" },
+    { q: "Cara baca <b>七十</b>?", opts: ["ななじゅう", "しちじゅう", "なな", "ななせん"], ans: "ななじゅう" },
+    { q: "Cara baca <b>九百</b>?", opts: ["きゅうひゃく", "くひゃく", "きゅうびゃく", "きゅうせん"], ans: "きゅうひゃく" },
+    { q: "Cara baca <b>三千</b>?", opts: ["さんせん", "さんぜん", "みせん", "さんひゃく"], ans: "さんぜん" }
+  ],
+  waktu: [
+    { q: "Jam 4 sore?", opts: ["ごご よんじ", "ごぜん よじ", "ごご よじ", "ごぜん よんじ"], ans: "ごご よじ" },
+    { q: "Cara baca <b>十分</b>?", opts: ["じゅうふん", "じゅっぷん", "じゅうぷん", "じゅふん"], ans: "じゅっぷん" },
+    { q: "Cara baca <b>九時</b>?", opts: ["きゅうじ", "くじ", "きゅうふん", "くふん"], ans: "くじ" },
+    { q: "Jam 7 pagi?", opts: ["ごぜん しちじ", "ごご しちじ", "ごぜん ななじ", "ごご ななじ"], ans: "ごぜん しちじ" },
+    { q: "Cara baca <b>三分</b>?", opts: ["さんふん", "さんぷん", "さんびょう", "みふん"], ans: "さんぷん" },
+    { q: "Cara baca <b>何時</b>?", opts: ["なんじ", "なんぷん", "なにじ", "なんびょう"], ans: "なんじ" },
+    { q: "Setengah / 30 Menit?", opts: ["はん", "さんじゅっぷん", "さんじゅう", "はんぷん"], ans: "はん" },
+    { q: "P.M (Sore/Malam)?", opts: ["ごご", "ごぜん", "あさ", "よる"], ans: "ごご" },
+    { q: "Cara baca <b>一分</b>?", opts: ["いちふん", "いっぷん", "いちぷん", "いっふん"], ans: "いっぷん" },
+    { q: "Cara baca <b>五秒</b>?", opts: ["ごふん", "ごびょう", "ごじ", "ごぷん"], ans: "ごびょう" }
+  ]
+};
+
+const QuizIsian = {
+  angka: [
+    { q: "Hiragana/Romaji dari <b>三百</b>:", ans: ["さんびゃく", "sanbyaku", "san-byaku"] },
+    { q: "Hiragana/Romaji dari <b>一万</b>:", ans: ["いちまん", "ichiman", "ichi-man"] },
+    { q: "Hiragana/Romaji dari <b>八百</b>:", ans: ["はっぴゃく", "happyaku", "hap-pyaku"] },
+    { q: "Hiragana/Romaji dari <b>二十</b>:", ans: ["にじゅう", "nijuu", "ni-juu"] },
+    { q: "Hiragana/Romaji dari <b>六百</b>:", ans: ["ろっぴゃく", "roppyaku", "rop-pyaku"] },
+    { q: "Hiragana/Romaji dari <b>三千</b>:", ans: ["さんぜん", "sanzen", "san-zen"] },
+    { q: "Hiragana/Romaji dari <b>一兆</b>:", ans: ["いっちょう", "icchoo", "iccho"] },
+    { q: "Hiragana/Romaji dari <b>八千</b>:", ans: ["はっせん", "hassen", "has-sen"] },
+    { q: "Hiragana/Romaji dari <b>四十</b>:", ans: ["よんじゅう", "yonjuu", "yon-juu", "shijuu", "shi-juu"] },
+    { q: "Hiragana/Romaji dari <b>一億</b>:", ans: ["いちおく", "ichioku", "ichi-oku"] }
+  ],
+  waktu: [
+    { q: "Hiragana/Romaji dari <b>一分</b>:", ans: ["いっぷん", "ippun", "ip-pun"] },
+    { q: "Hiragana/Romaji dari <b>四時</b>:", ans: ["よじ", "yoji", "yo-ji"] },
+    { q: "Arti dari <b>半</b>:", ans: ["setengah", "30 menit", "tiga puluh menit"] },
+    { q: "Hiragana/Romaji dari <b>何時</b>:", ans: ["なんじ", "nanji", "nan-ji"] },
+    { q: "Hiragana/Romaji dari <b>三分</b>:", ans: ["さんぷん", "sanpun", "san-pun"] },
+    { q: "Hiragana/Romaji dari <b>七時</b>:", ans: ["しちじ", "shichiji", "shichi-ji"] },
+    { q: "Hiragana/Romaji dari <b>九時</b>:", ans: ["くじ", "kuji", "ku-ji"] },
+    { q: "Hiragana/Romaji dari <b>十分</b>:", ans: ["じゅっぷん", "じっぷん", "juppun", "jup-pun", "jippun", "jip-pun"] },
+    { q: "Hiragana/Romaji dari <b>午前</b>:", ans: ["ごぜん", "gozen"] },
+    { q: "Hiragana/Romaji dari <b>十秒</b>:", ans: ["じゅうびょう", "juubyoo", "juu-byoo", "juubyou"] }
+  ]
+};
+
+// ==========================================
+// BANK SOAL GENERATOR
+// ==========================================
+const BankSoalSesi3 = []; // Ratusan (100 - 999)
+const BankSoalSesi4 = []; // Ribuan (1000 - 9999)
+const BankSoalMenit = []; // 1 - 59
+const BankSoalDetik = []; // 1 - 59
+
+const ModulGenerator = {
+  init: function() {
+    for (let i = 100; i <= 999; i++) BankSoalSesi3.push(this.getAngka(i));
+    for (let i = 1000; i <= 9999; i++) BankSoalSesi4.push(this.getAngka(i));
+    for (let i = 1; i <= 59; i++) BankSoalMenit.push(this.getMenit(i));
+    for (let i = 1; i <= 59; i++) BankSoalDetik.push(this.getDetik(i));
+  },
+
+  getAngka: function(num) {
+    const kJ = ["", "一", "二", "三", "四", "五", "六", "七", "八", "九"];
+    const hJ = ["", "いち", "に", "さん", "よん", "ご", "ろく", "なな", "はち", "きゅう"];
+    
+    let ribuan = Math.floor(num / 1000);
+    let ratusan = Math.floor((num % 1000) / 100);
+    let puluhan = Math.floor((num % 100) / 10);
+    let satuan = num % 10;
+    
+    let k = "", r = "";
+    if (ribuan > 0) {
+        if (ribuan === 3) { k += "三千"; r += "さんぜん"; }
+        else if (ribuan === 8) { k += "八千"; r += "はっせん"; }
+        else if (ribuan === 1) { k += "千"; r += "せん"; }
+        else { k += kJ[ribuan] + "千"; r += hJ[ribuan] + "せん"; }
+    }
+    if (ratusan > 0) {
+        if (ratusan === 3) { k += "三百"; r += "さんびゃく"; }
+        else if (ratusan === 6) { k += "六百"; r += "ろっぴゃく"; }
+        else if (ratusan === 8) { k += "八百"; r += "はっぴゃく"; }
+        else if (ratusan === 1) { k += "百"; r += "ひゃく"; }
+        else { k += kJ[ratusan] + "百"; r += hJ[ratusan] + "ひゃく"; }
+    }
+    if (puluhan > 0) {
+        if (puluhan === 1) { k += "十"; r += "じゅう"; }
+        else { k += kJ[puluhan] + "十"; r += hJ[puluhan] + "じゅう"; }
+    }
+    if (satuan > 0) { k += kJ[satuan]; r += hJ[satuan]; }
+    return { k: k, r: r, a: num.toString() };
+  },
+
+  getMenit: function(i) {
+    const kJ = ["", "一", "二", "三", "四", "五", "六", "七", "八", "九"];
+    const hJ = ["", "いち", "に", "さん", "よん", "ご", "ろく", "なな", "はち", "きゅう"];
+    const sMenitK = ["", "一分", "二分", "三分", "四分", "五分", "六分", "七分", "八分", "九分"];
+    const sMenitR = ["", "いっぷん", "にふん", "さんぷん", "よんぷん", "ごふん", "ろっぷん", "ななふん", "はっぷん", "きゅうふん"];
+
+    let puluhan = Math.floor(i / 10);
+    let satuan = i % 10;
+    let k = "", r = "";
+
+    if (puluhan === 0) { k = sMenitK[satuan]; r = sMenitR[satuan]; } 
+    else {
+        let k_pul = (puluhan === 1 ? "十" : kJ[puluhan] + "十");
+        let r_pul = (puluhan === 1 ? "じゅっぷん" : hJ[puluhan] + "じゅっぷん");
+
+        if (satuan === 0) { k = k_pul + "分"; r = r_pul; } 
+        else {
+            let r_pul_awal = (puluhan === 1 ? "じゅう" : hJ[puluhan] + "じゅう");
+            k = k_pul + sMenitK[satuan]; r = r_pul_awal + sMenitR[satuan];
+        }
+    }
+    return { k: k, r: r, a: `${i} Menit`, grp: 'menit' };
+  },
+
+  getDetik: function(i) {
+    const kJ = ["", "一", "二", "三", "四", "五", "六", "七", "八", "九"];
+    const hJ = ["", "いち", "に", "さん", "よん", "ご", "ろく", "なな", "はち", "きゅう"];
+
+    let puluhan = Math.floor(i / 10);
+    let satuan = i % 10;
+    let k = "", r = "";
+
+    if (puluhan === 0) { k = kJ[satuan] + "秒"; r = hJ[satuan] + "びょう"; } 
+    else {
+        let k_pul = (puluhan === 1 ? "十" : kJ[puluhan] + "十");
+        let r_pul = (puluhan === 1 ? "じゅう" : hJ[puluhan] + "じゅう");
+
+        if (satuan === 0) { k = k_pul + "秒"; r = r_pul + "びょう"; } 
+        else { k = k_pul + kJ[satuan] + "秒"; r = r_pul + hJ[satuan] + "びょう"; }
+    }
+    return { k: k, r: r, a: `${i} Detik`, grp: 'detik' };
+  }
+};
+
+
+// ==========================================
+// ENGINE MODUL UTAMA
+// ==========================================
+const Modul = {
+  activeMode: 'angka', activeTab: 'hafalan', viewMode: 'flashcard', 
+  activeSesi: 1, activeSesiWaktu: 0,
+  cardIdx: 0, idxPG: 0, scorePG: 0, idxIsian: 0, scoreIsian: 0,
+  activeArray: [], activePGData: [], activeIsianData: [],
+
+  init: function() { this.switchMode('angka'); },
+
+    triggerAnimation: function(elementId, animClass) {
+    const el = document.getElementById(elementId);
+    if(!el) return;
+    
+    // Tambahkan 'fade-out-down' di dalam daftar remove ini!
+    el.classList.remove('slide-in-right', 'slide-out-left', 'slide-in-left', 'slide-out-right', 'pop-in', 'fade-in-up', 'fade-out-down');
+    
+    void el.offsetWidth;
+    el.classList.add(animClass);
+  },
+
+  switchMode: function(mode) {
+    this.activeMode = mode;
+    this.cardIdx = 0; // Reset index
+    document.getElementById('btn-mode-angka').classList.toggle('active', mode === 'angka');
+    document.getElementById('btn-mode-waktu').classList.toggle('active', mode === 'waktu');
+    
+    let col = (mode === 'angka') ? 'var(--primary)' : 'var(--success)';
+    document.getElementById('btn-submit-isian').style.background = col;
+    
+    if (mode === 'angka') {
+        document.getElementById('sub-nav-angka').classList.remove('hidden');
+        document.getElementById('sub-nav-waktu').classList.add('hidden');
+    } else {
+        document.getElementById('sub-nav-angka').classList.add('hidden');
+        document.getElementById('sub-nav-waktu').classList.remove('hidden');
+    }
+    this.switchTab('hafalan');
+  },
+
+    toggleView: function() {
+    const btn = document.getElementById('btn-toggle-view');
+    if(btn) btn.classList.add('spin-anim'); // Mulai animasi putar ikon
+    
+    // Tarik konten ke bawah/hilang sebelum diganti
+    this.triggerAnimation('sec-hafalan', 'fade-out-down');
+
+    setTimeout(() => {
+        this.viewMode = (this.viewMode === 'flashcard') ? 'tabel' : 'flashcard';
+        this.cardIdx = 0;
+        if(btn) {
+            btn.innerHTML = (this.viewMode === 'flashcard') ? '📋' : '🎴';
+            btn.classList.remove('spin-anim'); // Ikon selesai berputar
+        }
+        
+        if (this.activeTab === 'hafalan') {
+            this.renderHafalan(false); // Render HTML baru tanpa slide
+            this.triggerAnimation('sec-hafalan', 'fade-in-up'); // Munculkan ke atas
+        }
+    }, 250);
+  },
+
+  switchTab: function(tab) {
+    this.activeTab = tab;
+    ['hafalan', 'pg', 'isian'].forEach(t => {
+      document.getElementById('btn-tab-'+t).classList.remove('active');
+      document.getElementById('sec-'+t).classList.add('hidden');
+    });
+    
+    document.getElementById('btn-tab-'+tab).classList.add('active');
+    
+    // Tampilkan tombol toggle mini di header hanya pada tab hafalan
+    const toggleBtn = document.getElementById('btn-toggle-view');
+    if(toggleBtn) toggleBtn.style.visibility = (tab === 'hafalan') ? 'visible' : 'hidden';
+    
+    if (tab === 'hafalan') { 
+      document.getElementById('sec-hafalan').classList.remove('hidden');
+      this.triggerAnimation('sec-hafalan', 'fade-in-up');
+      
+      if(this.activeMode === 'angka') this.switchSesi(this.activeSesi);
+      else this.switchSesiWaktu(this.activeSesiWaktu);
+    } 
+    else if (tab === 'pg') { 
+      document.getElementById('sec-pg').classList.remove('hidden');
+      this.triggerAnimation('sec-pg', 'fade-in-up');
+      this.activePGData = this.generatePG();
+      this.idxPG = 0; this.scorePG = 0; this.renderPG(false); 
+    }
+    else if (tab === 'isian') { 
+      document.getElementById('sec-isian').classList.remove('hidden');
+      this.triggerAnimation('sec-isian', 'fade-in-up');
+      this.activeIsianData = this.generateIsian();
+      this.idxIsian = 0; this.scoreIsian = 0; this.renderIsian(false); 
+    }
+  },
+
+  switchSesi: function(s) {
+    this.activeSesi = s;
+    [1,2,3,4,5].forEach(i => document.getElementById('btn-sub-'+i).classList.remove('active'));
+    document.getElementById('btn-sub-'+s).classList.add('active');
+    
+    this.activeArray = DatabaseMateri.angka[s];
+    this.cardIdx = 0;
+
+    if (this.activeTab === 'hafalan') this.renderHafalan(false);
+    else if (this.activeTab === 'pg') { this.activePGData = this.generatePG(); this.idxPG = 0; this.scorePG = 0; this.renderPG(false); } 
+    else if (this.activeTab === 'isian') { this.activeIsianData = this.generateIsian(); this.idxIsian = 0; this.scoreIsian = 0; this.renderIsian(false); }
+  },
+
+  switchSesiWaktu: function(idx) {
+    this.activeSesiWaktu = idx;
+    [1,2,3,4].forEach(i => document.getElementById('btn-sub-w'+i).classList.remove('active'));
+    document.getElementById('btn-sub-w'+(idx+1)).classList.add('active');
+
+    // Filter array berdasarkan grup waktu untuk digunakan bersama oleh FC dan Tabel
+    let grps = BookPages[idx].groups;
+    this.activeArray = DatabaseMateri.waktu.filter(x => grps.includes(x.grp));
+    this.cardIdx = 0;
+
+    if (this.activeTab === 'hafalan') this.renderHafalan(false);
+    else if (this.activeTab === 'pg') { this.activePGData = this.generatePG(); this.idxPG = 0; this.scorePG = 0; this.renderPG(false); } 
+    else if (this.activeTab === 'isian') { this.activeIsianData = this.generateIsian(); this.idxIsian = 0; this.scoreIsian = 0; this.renderIsian(false); }
+  },
+
+  renderHafalan: function(useSlideAnim = true) {
+    if (this.viewMode === 'flashcard') this.renderFC(useSlideAnim);
+    else this.renderBook(useSlideAnim ? 'right' : 'none');
+  },
+
+  generatePG: function() {
+    let baseMateri, part1, part2;
+    let generated = [];
+    let manualPG = QuizPG[this.activeMode] || [];
+    
+    if (this.activeMode === 'angka') {
+        if (this.activeSesi === 2) baseMateri = BankSoalSesi2;
+        else if (this.activeSesi === 3) baseMateri = BankSoalSesi3; 
+        else if (this.activeSesi === 4) baseMateri = BankSoalSesi4; 
+        else baseMateri = DatabaseMateri.angka[this.activeSesi];
+    } else {
+        let activeGroup = BookPages[this.activeSesiWaktu].groups[0];
+        if (activeGroup === 'menit') baseMateri = BankSoalMenit; 
+        else if (activeGroup === 'detik') baseMateri = BankSoalDetik; 
+        else baseMateri = DatabaseMateri.waktu.filter(item => item.grp === activeGroup);
+    }
+    
+    let fullPool = baseMateri;
+    let shuffled = [...baseMateri].sort(() => Math.random() - 0.5);
+    
+    if (shuffled.length >= 20) { part1 = shuffled.slice(0, 10); part2 = shuffled.slice(10, 20); } 
+    else if (shuffled.length >= 10) { part1 = [...shuffled].slice(0, 10); part2 = [...shuffled].sort(() => Math.random() - 0.5).slice(0, 10); } 
+    else {
+        const fill10 = () => { let res = []; while(res.length < 10) { res.push(...[...shuffled].slice(0, 10 - res.length)); } return res; };
+        part1 = fill10(); part2 = fill10();
+    }
+
+    part1.forEach(item => {
+        let manualQ = manualPG.find(q => q.q.includes(`<b>${item.k}</b>`) || q.ans === item.r.replace(/[\s]/g, ''));
+        if(manualQ) { generated.push({ q: manualQ.q, opts: [...manualQ.opts].sort(() => Math.random() - 0.5), ans: manualQ.ans }); } 
+        else {
+            let opts = [item.r.replace(/[\s]/g, '')];
+            while(opts.length < Math.min(4, fullPool.length)) {
+                let rText = fullPool[Math.floor(Math.random() * fullPool.length)].r.replace(/[\s]/g, '');
+                if(!opts.includes(rText)) opts.push(rText);
+            }
+            generated.push({ q: `Apa cara baca (Hiragana) dari <b>${item.k}</b>?`, opts: opts.sort(() => Math.random() - 0.5), ans: item.r.replace(/[\s]/g, '') });
+        }
+    });
+
+    part2.forEach(item => {
+        let opts = [item.k.replace(/[\s]/g, '')];
+        while(opts.length < Math.min(4, fullPool.length)) {
+            let kText = fullPool[Math.floor(Math.random() * fullPool.length)].k.replace(/[\s]/g, '');
+            if(!opts.includes(kText)) opts.push(kText);
+        }
+        generated.push({ q: `Apa bentuk kanji/angka dari <b>${item.r}</b>?`, opts: opts.sort(() => Math.random() - 0.5), ans: item.k.replace(/[\s]/g, '') });
+    });
+
+    return generated;
+  },
+
+  generateIsian: function() {
+    let baseMateri, part1, part2;
+    let generated = [];
+    let manualIsian = QuizIsian[this.activeMode] || [];
+
+    if (this.activeMode === 'angka') {
+        if (this.activeSesi === 2) baseMateri = BankSoalSesi2;
+        else if (this.activeSesi === 3) baseMateri = BankSoalSesi3;
+        else if (this.activeSesi === 4) baseMateri = BankSoalSesi4;
+        else baseMateri = DatabaseMateri.angka[this.activeSesi];
+    } else {
+        let activeGroup = BookPages[this.activeSesiWaktu].groups[0];
+        if (activeGroup === 'menit') baseMateri = BankSoalMenit;
+        else if (activeGroup === 'detik') baseMateri = BankSoalDetik;
+        else baseMateri = DatabaseMateri.waktu.filter(item => item.grp === activeGroup);
+    }
+
+    let shuffled = [...baseMateri].sort(() => Math.random() - 0.5);
+    
+    if (shuffled.length >= 20) { part1 = shuffled.slice(0, 10); part2 = shuffled.slice(10, 20); } 
+    else if (shuffled.length >= 10) { part1 = [...shuffled].slice(0, 10); part2 = [...shuffled].sort(() => Math.random() - 0.5).slice(0, 10); } 
+    else {
+        const fill10 = () => { let res = []; while(res.length < 10) { res.push(...[...shuffled].slice(0, 10 - res.length)); } return res; };
+        part1 = fill10(); part2 = fill10();
+    }
+
+    part1.forEach(item => {
+        let manualQ = manualIsian.find(q => q.q.includes(`<b>${item.k}</b>`));
+        if (manualQ) { generated.push({ q: manualQ.q, ans: manualQ.ans }); } 
+        else {
+            let ansArray = [item.r.replace(/[\s]/g, '')];
+            if (item.alt) ansArray.push(item.alt.replace(/[\s]/g, ''));
+            generated.push({ q: `Ketik hiragana dari:<br><span style="font-size:35px; color:var(--text-main);">${item.k}</span>`, ans: ansArray});
+        }
+    });
+
+    part2.forEach(item => {
+        if (this.activeMode === 'angka') {
+            let ansArray = []; let cleanA = item.a.toLowerCase();
+            ansArray.push(cleanA.replace(/[\s]/g, '')); ansArray.push(cleanA.replace(/[\s.]/g, '')); 
+            if (cleanA.includes("nol")) ansArray.push("0", "nol");
+            if (cleanA.includes("juta")) { let num = cleanA.replace(/[^\d]/g, ''); if(num) ansArray.push(num + "000000"); }
+            if (cleanA.includes("miliar")) { let num = cleanA.replace(/[^\d]/g, ''); if(num) ansArray.push(num + "000000000"); }
+            if (cleanA.includes("triliun")) { let num = cleanA.replace(/[^\d]/g, ''); if(num) ansArray.push(num + "000000000000"); }
+            generated.push({ q: `Ketik angka dari:<br><span style="font-size:35px; color:var(--warning);">${item.k}</span>`, ans: ansArray });
+        } else {
+            let ansArray = []; let cleanA = item.a.toLowerCase();
+            let cleanNoBracket = cleanA.replace(/\([^)]*\)/g, '').replace(/[?]/g, '').trim();
+            ansArray.push(cleanNoBracket.replace(/[\s-]/g, '')); 
+            if (cleanNoBracket.includes("jam")) ansArray.push(cleanNoBracket.replace(/jam/g, "pukul").replace(/[\s-]/g, ''));
+            let noDot = cleanNoBracket.replace(/\./g, '');
+            ansArray.push(noDot.replace(/[\s-]/g, ''));
+            if (noDot.includes("jam")) ansArray.push(noDot.replace(/jam/g, "pukul").replace(/[\s-]/g, ''));
+            let fullText = cleanA.replace(/[?()]/g, '').trim();
+            ansArray.push(fullText.replace(/[\s-]/g, ''));
+            if (fullText.includes("jam")) ansArray.push(fullText.replace(/jam/g, "pukul").replace(/[\s-]/g, ''));
+
+            if (item.grp === 'komb') {
+                let nums = item.a.match(/\d+/g);
+                if (nums) {
+                    let h = nums[0], m = nums[1] || "00", s = nums[2];
+                    ansArray.push(`${h}:${m}`, `${h}.${m}`, `${h.padStart(2,'0')}:${m.padStart(2,'0')}`, `${h.padStart(2,'0')}.${m.padStart(2,'0')}`);
+                    if(s) {
+                        ansArray.push(`${h}:${m}:${s}`, `${h}.${m}.${s}`, `${h.padStart(2,'0')}:${m.padStart(2,'0')}:${s.padStart(2,'0')}`, `${h.padStart(2,'0')}.${m.padStart(2,'0')}.${s.padStart(2,'0')}`);
+                        ansArray.push(`jam${h}lewat${m}menit${s}detik`, `jam${h}${m}menit${s}detik`, `pukul${h}lewat${m}menit${s}detik`, `pukul${h}${m}menit${s}detik`);
+                    } else {
+                        ansArray.push(`jam${h}lewat${m}menit`, `jam${h}${m}menit`, `pukul${h}lewat${m}menit`, `pukul${h}${m}menit`);
+                    }
+                }
+            }
+
+            if(item.k === "半") ansArray.push("setengah", "30menit", "tigapuluhmenit");
+            if(item.a === "A.M (Pagi)") ansArray.push("pagi", "am", "ampagi");
+            if(item.a === "P.M (Sore)") ansArray.push("sore", "pm", "malam", "pmsore");
+            generated.push({ q: `Apa arti dari kanji:<br><span style="font-size:35px; color:var(--warning);">${item.k}</span>`, ans: ansArray });
+        }
+    });
+
+    return generated;
+  },
+
+  getEvaluasiHTML: function(mode, sesi, score, total) {
+    let pct = score / total;
+    if (pct === 1) return `<div class="eval-box">🌟 <b>SEMPURNA!</b><br>Luar biasa, Sensei bangga padamu! Pertahankan hafalan tajammu ini!</div>`;
+    
+    let tip = "";
+    if (mode === 'angka') {
+        if (sesi === 1) tip = "💡 <b>TIPS:</b> Fokus kuasai angka 4 (よん/し), 7 (なな/しち), dan 9 (きゅう/く) karena bacanya bisa berubah!";
+        else if (sesi === 2) tip = "💡 <b>TIPS:</b> Ingat rumus Puluhan (Angka+十) dan Belasan (十+Angka). Hati-hati, 40 itu よんじゅう, bukan しじゅう!";
+        else if (sesi === 3) tip = "💡 <b>TIPS:</b> Awas Anomali Ratusan! 300(さんびゃく), 600(ろっぴゃく), 800(はっぴゃく).";
+        else if (sesi === 4) tip = "💡 <b>TIPS:</b> Awas Anomali Ribuan! 3000(さんぜん), 8000(はっせん).";
+        else tip = "💡 <b>TIPS:</b> Jepang menghitung per 4 nol (万/man). 100 ribu = 十万 (10 + man). Ingat itu ya!";
+    } else {
+        tip = "💡 <b>TIPS:</b> Ingat PIN 2579! Angka 2, 5, 7, 9 memakai 〜ふん (fun). Sisa angkanya pasti memakai 〜ぷん (pun).";
+    }
+    return `<div class="eval-box">💪 <b>TETAP SEMANGAT!</b><br>Jangan menyerah, coba ulangi lagi.<br><br><span style="color:var(--gold);">${tip}</span></div>`;
+  },
+
+  renderFC: function(useSlideAnim = true) {
+    const sec = document.getElementById('sec-hafalan');
+    sec.style.padding = "25px 20px";
+    
+    if (this.cardIdx >= this.activeArray.length) {
+      sec.innerHTML = `<div class="content-hafalan"><div class="kanji-text" style="cursor:default;">🎉 Tuntas!</div></div>
+      <button class="btn-next" onclick="Modul.cardIdx=0; Modul.renderFC(true)">Ulangi Hafalan</button>`;
+      if(useSlideAnim) this.triggerAnimation('sec-hafalan', 'slide-in-right');
+      return;
+    }
+
+    const item = this.activeArray[this.cardIdx];
+    let pageTitle = (this.activeMode === 'angka') ? `SESI ${this.activeSesi}` : `BAB ${this.activeSesiWaktu + 1}`;
+    
+    // Fitur Gelembung Narasi khusus Mode Waktu
+    let bubbleHTML = '';
+    if (this.activeMode === 'waktu' && BookPages[this.activeSesiWaktu].narasi) {
+        bubbleHTML = `
+            <button class="btn-bubble" onclick="document.getElementById('fc-popup-narasi').classList.toggle('show-popup')">💡</button>
+            <div id="fc-popup-narasi" class="bubble-popup">${BookPages[this.activeSesiWaktu].narasi}</div>
+        `;
+    }
+    
+    sec.innerHTML = `
+      <div class="progress-text" style="color:var(--primary);">HAFALAN (${pageTitle}): ${this.cardIdx+1} / ${this.activeArray.length}</div>
+      <div id="fc-content" class="content-hafalan">
+        ${bubbleHTML}
+        <div class="hira-text hira-hide" id="fc-hira">${item.r}</div>
+        <div class="kanji-text pulse-hint" id="fc-kanji" onclick="Modul.revealCard()">${item.k}</div>
+        <div id="fc-hint" style="font-size:12px; color:var(--text-sub); margin-top:-10px; margin-bottom:10px;">(Sentuh Kanji untuk membuka)</div>
+        <div class="arti-text blur-hide" id="fc-arti">${item.a}</div>
+        ${item.note ? `<div class="note-box blur-hide" id="fc-note">💡 ${item.note}</div>` : ''}
+        ${item.alert ? `<div class="alert-box blur-hide" id="fc-alert">⚠️ ${item.alert}</div>` : ''}
+      </div>
+      <button class="btn-next" onclick="Modul.nextCard()">Selanjutnya →</button>
+    `;
+    
+    if(useSlideAnim) this.triggerAnimation('fc-content', 'slide-in-right');
+  },
+
+  revealCard: function() {
+    document.getElementById('fc-hira').classList.replace('hira-hide', 'hira-show');
+    document.getElementById('fc-arti').classList.replace('blur-hide', 'blur-show');
+    document.getElementById('fc-kanji').classList.remove('pulse-hint');
+    document.getElementById('fc-kanji').classList.add('fc-revealed');
+    document.getElementById('fc-hint').style.display = 'none';
+    if(document.getElementById('fc-note')) document.getElementById('fc-note').classList.replace('blur-hide', 'blur-show');
+    if(document.getElementById('fc-alert')) document.getElementById('fc-alert').classList.replace('blur-hide', 'blur-show');
+    if(document.getElementById('fc-popup-narasi')) document.getElementById('fc-popup-narasi').classList.remove('show-popup');
+  },
+
+  nextCard: function() { 
+    this.triggerAnimation('fc-content', 'slide-out-left');
+    setTimeout(() => { this.cardIdx++; this.renderFC(true); }, 250);
+  },
+
+  renderBook: function(dir = 'right') {
+    const sec = document.getElementById('sec-hafalan');
+    sec.style.padding = "15px 15px 5px 15px"; 
+    
+    let title = "", narasi = "";
+    
+    if (this.activeMode === 'angka') {
+        title = `Bab Angka - Sesi ${this.activeSesi}`;
+        narasi = ""; // Dikosongkan sesuai permintaan
+    } else {
+        title = BookPages[this.activeSesiWaktu].title;
+        narasi = BookPages[this.activeSesiWaktu].narasi;
+    }
+
+    let html = `<div class="book-container" id="book-wrapper">`;
+    html += `<div class="book-page" id="book-page">`;
+    html += `<div class="book-title">${title}</div>`;
+    
+    if (narasi) {
+        html += `<div class="book-narrative">${narasi}</div>`;
+    }
+    
+    html += `<button id="btn-sensor" class="btn-sensor" onclick="Modul.toggleFurigana()">👁️ Tampilkan Semua Furigana</button>
+             <div id="waktu-table-container">`;
+
+    html += `<table class="tabel-waktu"><tr><th>Kanji / Teks</th><th>Arti</th></tr>`;
+    
+    this.activeArray.forEach(item => {
+        let rubyHTML = '';
+        let k_arr = item.k.split(' ');
+        let r_arr = item.r.split(' ');
+        
+        // Logika cadangan akan aman membungkus array angka yang tidak berspasi
+        if(k_arr.length > 1 && k_arr.length === r_arr.length) {
+            k_arr.forEach((kanji, i) => { rubyHTML += `<ruby style="margin-right:4px;">${kanji}<rt class="furi-anim">${r_arr[i]}</rt></ruby>`; });
+        } else {
+            rubyHTML = `<ruby>${item.k}<rt class="furi-anim">${item.r}</rt></ruby>`;
+        }
+
+        html += `<tr>
+            <td style="max-width: 50%;">
+                <span class="ruby-item" onclick="this.classList.toggle('revealed')">${rubyHTML}</span>
+            </td>
+            <td style="max-width: 50%;">
+                <span class="t-arti">${item.a}</span>
+                ${item.note ? `<div style="color:var(--success); font-size:11px; margin-top:3px;">💡 ${item.note}</div>` : ''}
+                ${item.alert ? `<div style="color:var(--danger); font-size:11px; margin-top:3px;">⚠️ ${item.alert}</div>` : ''}
+            </td>
+        </tr>`;
+    });
+    html += `</table></div></div>`;
+
+    // Navigasi Bawah
+    let maxPage = (this.activeMode === 'angka') ? 5 : BookPages.length;
+    let currPage = (this.activeMode === 'angka') ? this.activeSesi : (this.activeSesiWaktu + 1);
+    
+    let prevDis = (currPage === 1) ? 'disabled' : '';
+    let nextDis = (currPage === maxPage) ? 'disabled' : '';
+    
+    html += `
+      <div class="book-nav">
+        <button class="book-nav-btn" ${prevDis} onclick="Modul.turnPage(-1)">◀ Prev</button>
+        <span class="book-page-text">Hal ${currPage} dari ${maxPage}</span>
+        <button class="book-nav-btn" ${nextDis} onclick="Modul.turnPage(1)">Next ▶</button>
+      </div>
+    </div>`;
+
+    sec.innerHTML = html;
+
+    if (dir === 'right') this.triggerAnimation('book-page', 'slide-in-right');
+    else if (dir === 'left') this.triggerAnimation('book-page', 'slide-in-left');
+    else if (dir !== 'none') this.triggerAnimation('book-wrapper', 'fade-in-up');
+  },
+
+  turnPage: function(step) {
+    let maxPage = (this.activeMode === 'angka') ? 5 : BookPages.length;
+    let currPage = (this.activeMode === 'angka') ? this.activeSesi : (this.activeSesiWaktu + 1);
+    let targetPage = currPage + step;
+
+    if (targetPage >= 1 && targetPage <= maxPage) {
+        let animOut = (step === 1) ? 'slide-out-left' : 'slide-out-right';
+        this.triggerAnimation('book-page', animOut);
+        
+        setTimeout(() => {
+            if (this.activeMode === 'angka') {
+                this.switchSesi(targetPage);
+            } else {
+                this.switchSesiWaktu(targetPage - 1);
+            }
+        }, 250);
+    }
+  },
+
+  toggleFurigana: function() {
+    const container = document.getElementById('waktu-table-container');
+    const btn = document.getElementById('btn-sensor');
+    const isHidden = !container.classList.contains('show-all-furi');
+    
+    if (isHidden) {
+        container.classList.add('show-all-furi');
+        btn.innerHTML = "🙈 Sembunyikan Semua Furigana";
+        btn.classList.add('active');
+    } else {
+        container.classList.remove('show-all-furi');
+        btn.innerHTML = "👁️ Tampilkan Semua Furigana";
+        btn.classList.remove('active');
+    }
+  },
+
+  renderPG: function(useSlideAnim = true) {
+    const fb = document.getElementById('pg-feedback'); fb.innerHTML = ""; fb.style.opacity = "0";
+    const pool = this.activePGData;
+    
+    if (this.idxPG >= pool.length) {
+      document.getElementById('pg-q').innerHTML = `🎉 Kuis Selesai!<br>Skor: ${this.scorePG} / ${pool.length}`;
+      let evalHTML = this.getEvaluasiHTML(this.activeMode, this.activeSesi, this.scorePG, pool.length);
+      document.getElementById('pg-opts').innerHTML = evalHTML + `<button class="btn-next" onclick="Modul.switchTab('pg')">Acak & Ulangi Kuis</button>`;
+      if(useSlideAnim) this.triggerAnimation('pg-content-wrapper', 'slide-in-right');
+      return;
+    }
+
+    const target = pool[this.idxPG];
+    let title = (this.activeMode === 'angka') ? `KUIS PILGAN (SESI ${this.activeSesi})` : `KUIS PILGAN (BAB ${this.activeSesiWaktu + 1})`;
+    document.getElementById('pg-progress').innerText = `${title}: ${this.idxPG+1} / ${pool.length}`;
+    document.getElementById('pg-q').innerHTML = target.q;
+    
+    let optsHTML = target.opts.map(o => `<button class="btn-opt" onclick="Modul.checkPG(this,'${o}','${target.ans}')">${o}</button>`).join('');
+    document.getElementById('pg-opts').innerHTML = optsHTML;
+
+    if(useSlideAnim) this.triggerAnimation('pg-content-wrapper', 'slide-in-right');
+  },
+
+  checkPG: function(btn, sel, cor) {
+    const fb = document.getElementById('pg-feedback');
+    document.querySelectorAll('.btn-opt').forEach(b => b.disabled = true);
+    
+    fb.style.opacity = "1"; this.triggerAnimation('pg-feedback', 'pop-in');
+
+    if(sel === cor) { btn.classList.add('correct'); fb.innerHTML = "BENAR! ✅"; fb.style.color = "var(--success)"; this.scorePG++; } 
+    else { btn.classList.add('wrong'); fb.innerHTML = "SALAH! ❌"; fb.style.color = "var(--danger)"; }
+
+    setTimeout(() => { 
+      this.triggerAnimation('pg-content-wrapper', 'slide-out-left');
+      setTimeout(() => { this.idxPG++; this.renderPG(true); }, 1200);
+    }, 1200);
+  },
+
+  renderIsian: function(useSlideAnim = true) {
+    const fb = document.getElementById('isian-feedback'); fb.innerHTML = ""; fb.style.opacity = "0";
+    const input = document.getElementById('isian-input'); input.value = ""; input.disabled = false;
+    document.getElementById('btn-submit-isian').classList.remove('hidden');
+    
+    const pool = this.activeIsianData;
+
+    if (this.idxIsian >= pool.length) {
+      document.getElementById('isian-q').innerHTML = `🎉 Latihan Tuntas!<br>Skor: ${this.scoreIsian} / ${pool.length}`;
+      input.classList.add('hidden'); document.getElementById('btn-submit-isian').classList.add('hidden');
+      document.getElementById('isian-hint-teks').classList.add('hidden');
+      
+      let evalHTML = this.getEvaluasiHTML(this.activeMode, this.activeSesi, this.scoreIsian, pool.length);
+      fb.style.opacity = "1";
+      fb.innerHTML = evalHTML + `<button class="btn-next" onclick="Modul.switchTab('isian')">Acak & Ulangi Kuis</button>`;
+      
+      if(useSlideAnim) this.triggerAnimation('isian-content-wrapper', 'slide-in-right');
+      return;
+    }
+
+    const target = pool[this.idxIsian];
+    let title = (this.activeMode === 'angka') ? `KUIS ISIAN (SESI ${this.activeSesi})` : `KUIS ISIAN (BAB ${this.activeSesiWaktu + 1})`;
+    document.getElementById('isian-progress').innerText = `${title}: ${this.idxIsian+1} / ${pool.length}`;
+    document.getElementById('isian-q').innerHTML = target.q;
+    
+    let hintTeks = document.getElementById('isian-hint-teks');
+    hintTeks.classList.remove('hidden');
+    
+    if (target.q.includes("Ketik angka")) { hintTeks.innerText = "(Ketik menggunakan angka biasa, misal: 100)"; input.type = "tel"; } 
+    else if (target.q.includes("Apa arti dari")) { hintTeks.innerText = "(Ketik terjemahannya, misal: jam 6)"; input.type = "text"; } 
+    else { hintTeks.innerText = "(Gunakan keyboard Jepang untuk Hiragana/Kanji)"; input.type = "text"; }
+
+    input.classList.remove('hidden'); input.focus();
+    if(useSlideAnim) this.triggerAnimation('isian-content-wrapper', 'slide-in-right');
+  },
+
+  checkIsian: function() {
+    const fb = document.getElementById('isian-feedback');
+    const input = document.getElementById('isian-input');
+    const answer = input.value.toLowerCase().replace(/[\s-]/g, '');
+    if(!answer) return;
+
+    input.disabled = true; document.getElementById('btn-submit-isian').classList.add('hidden');
+    const target = this.activeIsianData[this.idxIsian];
+    const correctAns = target.ans.map(a => a.toLowerCase().replace(/[\s-]/g, ''));
+
+    fb.style.opacity = "1"; this.triggerAnimation('isian-feedback', 'pop-in');
+
+    if(correctAns.includes(answer)) { fb.innerHTML = "BENAR! ✅"; fb.style.color = "var(--success)"; this.scoreIsian++; } 
+    else { fb.innerHTML = `SALAH! ❌<br><span style="font-size:14px; color:var(--text-sub);">Kunci: ${target.ans[0]}</span>`; fb.style.color = "var(--danger)"; }
+
+    setTimeout(() => { 
+      this.triggerAnimation('isian-content-wrapper', 'slide-out-left');
+      setTimeout(() => { this.idxIsian++; this.renderIsian(true); }, 250);
+    }, 1500);
+  }
+};
+
+window.onload = () => {
+    ModulGenerator.init(); 
+    Modul.init();          
+};
+</script>
+</body>
+</html>

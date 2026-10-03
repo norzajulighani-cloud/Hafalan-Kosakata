@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Modul Kata Sifat - YOMIKATA</title>
+<style>
+  :root { 
+    --bg-main: #0b1120;
+    --card-bg: #1e293b;
+    --primary: #38bdf8; 
+    --success: #22c55e; 
+    --danger: #ef4444; 
+    --warning: #eab308;
+    --gold: #fbbf24;
+    --text-main: #f8fafc; 
+    --text-sub: #94a3b8;
+  }
+  
+  body { font-family: 'Segoe UI', sans-serif; background: var(--bg-main); color: var(--text-main); margin: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 15px 10px 80px 10px; overflow-x: hidden; }
+  .container { width: 100%; max-width: 550px; position: relative; }
+  button, input { touch-action: manipulation; font-family: inherit; }
+  .hidden { display: none !important; }
+
+  /* HEADER MINIMALIS */
+  .top-header { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 20px; }
+  .btn-header { background: #1e293b; color: white; border: 1px solid #334155; width: 42px; height: 42px; border-radius: 12px; font-size: 20px; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); -webkit-tap-highlight-color: transparent; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+  .btn-header:active { transform: scale(0.85); box-shadow: 0 2px 3px rgba(0,0,0,0.3); }
+  .btn-header.spin-anim { transform: rotate(180deg) scale(0.5); opacity: 0; }
+  .header-title { font-weight: 800; font-size: 18px; color: var(--gold); letter-spacing: 2px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+
+  /* BOTTOM NAVIGATION BAR */
+  .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); border-top: 1px solid #334155; display: flex; padding: 8px 0 15px 0; z-index: 100; justify-content: space-around; box-shadow: 0 -5px 15px rgba(0,0,0,0.5); }
+  .b-nav-btn { flex: 1; background: transparent; border: none; color: var(--text-sub); font-size: 11px; font-weight: bold; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); -webkit-tap-highlight-color: transparent; }
+  .b-nav-icon { font-size: 24px; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); filter: grayscale(100%); opacity: 0.5; }
+  .b-nav-btn:active { transform: scale(0.92); }
+  .b-nav-btn.active#btn-mode-sifati { color: var(--primary); }
+  .b-nav-btn.active#btn-mode-sifati .b-nav-icon { filter: none; opacity: 1; transform: translateY(-4px) scale(1.15); }
+  .b-nav-btn.active#btn-mode-sifatna { color: var(--success); }
+  .b-nav-btn.active#btn-mode-sifatna .b-nav-icon { filter: none; opacity: 1; transform: translateY(-4px) scale(1.15); }
+
+  /* Tab Menu Utama */
+  .nav-tabs { display: flex; gap: 5px; margin-bottom: 10px; justify-content: center; background: transparent;}
+  .tab-btn { background: #1e293b; color: var(--text-sub); border: 1px solid #334155; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 13px; flex-grow: 1; transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); text-align: center; -webkit-tap-highlight-color: transparent; }
+  .tab-btn:active { transform: scale(0.95); }
+  .tab-btn.active { color: var(--gold); border: 1px solid var(--gold); background: rgba(251, 191, 36, 0.1); box-shadow: 0 4px 12px rgba(251, 191, 36, 0.15); transform: translateY(-2px); }
+
+  /* Sub Navigasi Sesi */
+  .sub-nav { display: flex; gap: 5px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 5px; scrollbar-width: none; transition: opacity 0.3s ease; }
+  .sub-nav::-webkit-scrollbar { display: none; }
+  .sub-btn { background: rgba(255,255,255,0.05); color: var(--text-sub); border: 1px solid rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; cursor: pointer; white-space: nowrap; transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); -webkit-tap-highlight-color: transparent; }
+  .sub-btn:active { transform: scale(0.92); }
+  .sub-btn.active { background: var(--primary); color: #000; border-color: var(--primary); box-shadow: 0 0 10px rgba(56, 189, 248, 0.4); transform: translateY(-2px); }
+
+  /* Animasi Transisi Mulus */
+  .fade-in-up { animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+  .fade-out-down { animation: fadeOutDown 0.25s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards; }
+  .pop-in { animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+  .slide-in-right { animation: slideInRight 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+  .slide-out-left { animation: slideOutLeft 0.25s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards; }
+  .slide-in-left { animation: slideInLeft 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+  .slide-out-right { animation: slideOutRight 0.25s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards; }
+  
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeOutDown { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(20px); } }
+  @keyframes popIn { 0% { opacity: 0; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1); } }
+  @keyframes slideInRight { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: translateX(0); } }
+  @keyframes slideOutLeft { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(-50px); } }
+  @keyframes slideInLeft { from { opacity: 0; transform: translateX(-50px); } to { opacity: 1; transform: translateX(0); } }
+  @keyframes slideOutRight { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(50px); } }
+
+  /* Area Konten Umum */
+  .content-section { background: var(--card-bg); border-radius: 20px; padding: 25px 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); min-height: 400px; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid rgba(255,255,255,0.05); overflow: hidden; position: relative; }
+  .progress-text { font-size: 14px; font-weight: bold; letter-spacing: 1px; margin-bottom: 15px; text-transform: uppercase; }
+
+  /* Flashcard UI */
+  .content-hafalan { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; position: relative; padding-top: 30px; }
+  .kanji-text { font-size: clamp(35px, 8vw, 55px); font-weight: bold; margin: 5px 0 15px 0; color: var(--text-main); text-shadow: 0 4px 10px rgba(0,0,0,0.5); cursor: pointer; transition: all 0.3s ease; -webkit-tap-highlight-color: transparent; line-height: 1.2; }
+  .hira-text { font-size: clamp(14px, 4vw, 18px); color: var(--warning); margin-bottom: 5px; font-weight: bold; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+  .arti-text { font-size: clamp(15px, 4.5vw, 20px); color: var(--text-sub); font-style: italic; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+  
+  .blur-hide { filter: blur(8px); opacity: 0; transform: translateY(10px); pointer-events: none; }
+  .blur-show { filter: blur(0); opacity: 1; transform: translateY(0); pointer-events: auto; }
+  .fc-revealed { animation: popKanji 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; color: var(--gold); }
+  .hira-hide { opacity: 0; transform: translateY(15px) scale(0.5); pointer-events: none; }
+  .hira-show { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+
+  .pulse-hint { animation: pulseHint 2s infinite; }
+  @keyframes pulseHint { 0%, 100% { transform: scale(1); color: var(--text-main); } 50% { transform: scale(1.05); color: var(--primary); } }
+
+  /* Floating Bubble UI */
+  .btn-bubble { position: absolute; right: 0px; top: -15px; width: 35px; height: 35px; border-radius: 50%; background: rgba(34, 197, 94, 0.2); border: 1px solid var(--success); color: white; font-size: 18px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 10; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); -webkit-tap-highlight-color: transparent;}
+  .btn-bubble:hover { background: rgba(34, 197, 94, 0.4); transform: scale(1.1); }
+  .btn-bubble:active { transform: scale(0.9); }
+  
+  .bubble-popup { 
+    position: absolute; top: 30px; right: 0px; background: rgba(15, 23, 42, 0.95); 
+    border: 2px solid var(--success); padding: 15px; border-radius: 12px; width: 250px; 
+    text-align: left; font-size: 13px; color: var(--text-main); z-index: 11; 
+    box-shadow: 0 10px 25px rgba(0,0,0,0.7); backdrop-filter: blur(5px); line-height: 1.5;
+    opacity: 0; visibility: hidden; transform: translateY(-15px) scale(0.9);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform-origin: top right;
+  }
+  .bubble-popup.show-popup { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+
+  /* Buku Tabel UI */
+  .book-container { flex-grow: 1; display: flex; flex-direction: column; width: 100%; height: 100%; text-align: left; }
+  .book-page { flex-grow: 1; overflow-y: auto; overflow-x: hidden; padding-right: 5px; scrollbar-width: thin; scrollbar-color: var(--success) transparent; }
+  .book-title { color: var(--success); font-size: 20px; font-weight: bold; margin-bottom: 10px; border-bottom: 2px dashed rgba(34, 197, 94, 0.3); padding-bottom: 8px;}
+  .book-narrative { font-size: 14px; line-height: 1.6; color: var(--text-main); margin-bottom: 20px; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 12px; border-left: 4px solid var(--success); }
+  
+  .tabel-waktu { width: 100%; border-collapse: collapse; font-size: 16px; margin-bottom: 10px; background: rgba(255,255,255,0.02); border-radius: 8px; table-layout: auto; }
+  .tabel-waktu th { background: rgba(34, 197, 94, 0.15); color: var(--success); padding: 12px; border-bottom: 2px solid var(--success); text-align: left; position: sticky; top: 0; backdrop-filter: blur(5px); z-index: 5;}
+  .tabel-waktu td { padding: 12px; border-bottom: 1px dashed rgba(255,255,255,0.05); vertical-align: middle; word-break: break-word;}
+  .tabel-waktu tr:last-child td { border-bottom: none; }
+  
+  /* FURIGANA STYLES */
+  ruby { line-height: 1.5; white-space: nowrap; }
+  .ruby-item { font-weight: bold; color: var(--text-main); font-size: 20px; cursor: pointer; display: inline-block; padding: 4px 8px; border-radius: 8px; transition: background 0.3s, color 0.3s; -webkit-tap-highlight-color: transparent; border: 1px solid transparent; }
+  .ruby-item:active { opacity: 0.7; transform: scale(0.95); }
+  .furi-anim { opacity: 0; transform: translateY(10px) scale(0.5); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); color: var(--warning); font-size: 11px; font-weight: bold; pointer-events: none; }
+  .ruby-item.revealed { animation: popKanji 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; background: rgba(251, 191, 36, 0.15); border-color: rgba(251, 191, 36, 0.3); color: var(--gold); }
+  .ruby-item.revealed .furi-anim { opacity: 1; transform: translateY(0) scale(1); }
+  .show-all-furi .ruby-item { background: rgba(251, 191, 36, 0.15); border-color: rgba(251, 191, 36, 0.3); color: var(--gold); }
+  .show-all-furi .ruby-item .furi-anim { opacity: 1 !important; transform: translateY(0) scale(1) !important; }
+  
+  @keyframes popKanji { 0% { transform: scale(1); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
+  
+  .t-arti { color: var(--text-main); font-size: 16px; font-weight: bold; display: block; margin-bottom: 4px;}
+  .contoh-box { background: rgba(56, 189, 248, 0.1); border-left: 3px solid var(--primary); padding: 8px 10px; border-radius: 4px; font-size: 13px; color: var(--text-main); margin-top: 8px; font-style: italic; }
+  .note-inline { color: var(--success); font-size: 12px; margin-top: 5px; }
+  .alert-inline { color: var(--danger); font-size: 12px; margin-top: 5px; }
+  
+  .btn-sensor { background: #334155; color: white; border: 1px solid #475569; padding: 10px; border-radius: 8px; font-weight: bold; font-size: 13px; cursor: pointer; width: 100%; margin-bottom: 15px; transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); -webkit-tap-highlight-color: transparent; }
+  .btn-sensor:active { transform: scale(0.95); }
+  .btn-sensor.active { background: rgba(56, 189, 248, 0.2); color: var(--primary); border-color: var(--primary); }
+
+  .book-nav { display: flex; justify-content: space-between; align-items: center; background: #0f172a; padding: 10px 15px; border-radius: 12px; border: 1px solid #334155; margin-top: 15px; }
+  .book-nav-btn { background: var(--success); color: #000; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); -webkit-tap-highlight-color: transparent; }
+  .book-nav-btn:disabled { background: #334155; color: var(--text-sub); cursor: not-allowed; }
+  .book-nav-btn:not(:disabled):hover { filter: brightness(1.2); transform: translateY(-2px); }
+  .book-nav-btn:not(:disabled):active { transform: scale(0.92) translateY(2px); box-shadow: none; }
+  .book-page-text { font-size: 13px; font-weight: bold; color: var(--text-sub); letter-spacing: 1px; }
+
+  /* Info & Evaluasi */
+  .eval-box { background: rgba(0,0,0,0.3); padding: 20px; border-radius: 15px; margin-top: 20px; text-align: center; line-height: 1.6; border: 1px solid rgba(255,255,255,0.1); }
+  .btn-next { background: #334155; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: bold; font-size: 18px; cursor: pointer; width: 100%; margin-top: 20px; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); -webkit-tap-highlight-color: transparent; }
+  .btn-next:hover { background: #475569; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+  .btn-next:active { transform: scale(0.94) translateY(2px); box-shadow: none; }
+
+  /* Kuis UI */
+  .kuis-q { font-size: 20px; font-weight: bold; margin-bottom: 25px; line-height: 1.4; color: var(--text-main); }
+  .pg-grid { display: grid; grid-template-columns: 1fr; gap: 10px; width: 100%; }
+  .btn-opt { background: #0f172a; color: white; border: 2px solid #334155; padding: 15px; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); -webkit-tap-highlight-color: transparent; }
+  .btn-opt:not(:disabled):hover { border-color: var(--primary); transform: translateY(-2px); }
+  .btn-opt:not(:disabled):active { transform: scale(0.94) translateY(2px); }
+  .btn-opt.correct { background: rgba(34, 197, 94, 0.2); border-color: var(--success); color: var(--success); transform: scale(1.02); }
+  .btn-opt.wrong { background: rgba(239, 68, 68, 0.2); border-color: var(--danger); color: var(--danger); animation: shake 0.4s ease; }
+  @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+
+  .input-box { width: 100%; padding: 15px; border-radius: 12px; border: 2px solid #475569; background: #0f172a; color: white; font-size: 18px; text-align: center; margin-bottom: 15px; box-sizing: border-box; transition: all 0.3s ease; }
+  .input-box:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 15px rgba(56, 189, 248, 0.2); transform: scale(1.02); }
+  .btn-submit { background: var(--primary); color: #000; border: none; padding: 14px; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; width: 100%; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); -webkit-tap-highlight-color: transparent; }
+  .btn-submit:hover { filter: brightness(1.1); transform: translateY(-2px); }
+  .btn-submit:active { transform: scale(0.94) translateY(2px); }
+  .feedback { font-size: 18px; font-weight: bold; min-height: 25px; margin-top: 15px; opacity: 0; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  
+  <div class="top-header">
+    <button class="btn-header" onclick="window.location.href='index.html'">⬅️</button>
+    <div class="header-title">YOMIKATA</div>
+    <button class="btn-header" id="btn-toggle-view" onclick="Modul.toggleView()">📋</button>
+  </div>
+
+  <div class="nav-tabs">
+    <button class="tab-btn active" id="btn-tab-hafalan" onclick="Modul.switchTab('hafalan')">📖 Hafalan</button>
+    <button class="tab-btn" id="btn-tab-pg" onclick="Modul.switchTab('pg')">🎯 Pilgan</button>
+    <button class="tab-btn" id="btn-tab-isian" onclick="Modul.switchTab('isian')">✍️ Isian</button>
+  </div>
+
+  <div class="sub-nav fade-in-up" id="sub-nav-sifati">
+    <button class="sub-btn active" id="btn-i-0" onclick="Modul.switchSesi(0)">Sesi 1: 1-20</button>
+    <button class="sub-btn" id="btn-i-1" onclick="Modul.switchSesi(1)">Sesi 2: 21-40</button>
+    <button class="sub-btn" id="btn-i-2" onclick="Modul.switchSesi(2)">Sesi 3: 41-60</button>
+    <button class="sub-btn" id="btn-i-3" onclick="Modul.switchSesi(3)">Sesi 4: 61-80</button>
+    <button class="sub-btn" id="btn-i-4" onclick="Modul.switchSesi(4)">Sesi 5: 81-97</button>
+  </div>
+
+  <div class="sub-nav fade-in-up hidden" id="sub-nav-sifatna">
+    <button class="sub-btn active" id="btn-na-0" onclick="Modul.switchSesi(0)">Sesi 1: 1-17</button>
+    <button class="sub-btn" id="btn-na-1" onclick="Modul.switchSesi(1)">Sesi 2: 18-34</button>
+    <button class="sub-btn" id="btn-na-2" onclick="Modul.switchSesi(2)">Sesi 3: 35-51</button>
+    <button class="sub-btn" id="btn-na-3" onclick="Modul.switchSesi(3)">Sesi 4: 52-68</button>
+  </div>
+
+  <div id="sec-hafalan" class="content-section fade-in-up"></div>
+
+  <div id="sec-pg" class="content-section hidden fade-in-up">
+    <div class="progress-text" id="pg-progress" style="color:var(--gold);">KUIS PILGAN: 1 / 20</div>
+    <div class="content-hafalan" style="justify-content: flex-start; width: 100%;">
+      <div id="pg-content-wrapper" style="width: 100%;">
+        <div class="kuis-q" id="pg-q">Memuat soal...</div>
+        <div class="pg-grid" id="pg-opts"></div>
+      </div>
+      <div class="feedback" id="pg-feedback"></div>
+    </div>
+  </div>
+
+  <div id="sec-isian" class="content-section hidden fade-in-up">
+    <div class="progress-text" id="isian-progress" style="color:var(--gold);">KUIS ISIAN: 1 / 20</div>
+    <div class="content-hafalan" style="justify-content: center; width: 100%;">
+      <div id="isian-content-wrapper" style="width: 100%;">
+        <div class="kuis-q" id="isian-q">Memuat soal...</div>
+        <div style="font-size:12px; color:var(--text-sub); margin-top:-15px; margin-bottom:15px;" id="isian-hint-teks">(Gunakan keyboard Jepang untuk Hiragana)</div>
+        <input type="text" id="isian-input" class="input-box" placeholder="Ketik jawabanmu..." autocomplete="off" onkeypress="if(event.key==='Enter') Modul.checkIsian()">
+        <button class="btn-submit" id="btn-submit-isian" onclick="Modul.checkIsian()">Kirim Jawaban</button>
+      </div>
+      <div class="feedback" id="isian-feedback"></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="bottom-nav">
+  <button class="b-nav-btn active" id="btn-mode-sifati" onclick="Modul.switchMode('sifati')">
+    <span class="b-nav-icon">い</span>
+    <span>Sifat-i</span>
+  </button>
+  <button class="b-nav-btn" id="btn-mode-sifatna" onclick="Modul.switchMode('sifatna')">
+    <span class="b-nav-icon">な</span>
+    <span>Sifat-na</span>
+  </button>
+</div>
+
+<script>
+// ==========================================
+// DATABASE MATERI KATA SIFAT (Diperkaya dengan Kanji)
+// ==========================================
+const DB_I_Adj = [
+  { k: "大きい", r: "おおきい", a: "besar", grp: 0 },
+  { k: "小さい", r: "ちいさい", a: "kecil", grp: 0 },
+  { k: "長い", r: "ながい", a: "panjang", grp: 0 },
+  { k: "短い", r: "みじかい", a: "pendek", grp: 0 },
+  { k: "多い", r: "おおい", a: "banyak", grp: 0 },
+  { k: "少ない", r: "すくない", a: "sedikit", grp: 0 },
+  { k: "太い", r: "ふとい", a: "gemuk, tebal", grp: 0 },
+  { k: "細い", r: "ほそい", a: "ramping, tipis", grp: 0 },
+  { k: "厚い", r: "あつい", a: "tebal", grp: 0 },
+  { k: "薄い", r: "うすい", a: "tipis", grp: 0 },
+  { k: "固い", r: "かたい", a: "keras", grp: 0 },
+  { k: "柔かい", r: "やわらかい", a: "lunak", grp: 0 },
+  { k: "広い", r: "ひろい", a: "luas", grp: 0 },
+  { k: "狭い", r: "せまい", a: "sempit", grp: 0 },
+  { k: "細かい", r: "こまかい", a: "kecil (uang)", grp: 0 },
+  { k: "粗い", r: "あらい", a: "kasar", grp: 0 },
+  { k: "新しい", r: "あたらしい", a: "baru", grp: 0 },
+  { k: "古い", r: "ふるい", a: "lama, tua", grp: 0 },
+  { k: "高い", r: "たかい", a: "mahal", grp: 0 },
+  { k: "安い", r: "やすい", a: "murah", grp: 0 },
+
+  { k: "早い", r: "はやい", a: "cepat (awal waktu)", grp: 1 },
+  { k: "速い", r: "はやい", a: "cepat (kelajuan)", grp: 1 },
+  { k: "遅い", r: "おそい", a: "lambat", grp: 1 },
+  { k: "遠い", r: "とおい", a: "jauh", grp: 1 },
+  { k: "近い", r: "ちかい", a: "dekat", grp: 1 },
+  { k: "強い", r: "つよい", a: "kuat", grp: 1 },
+  { k: "弱い", r: "よわい", a: "lemah", grp: 1 },
+  { k: "高い", r: "たかい", a: "tinggi, mahal", grp: 1 },
+  { k: "低い", r: "ひくい", a: "rendah", grp: 1 },
+  { k: "熱い", r: "あつい", a: "pananas (benda/air)", grp: 1 },
+  { k: "冷たい", r: "つめたい", a: "dingin (benda/air)", grp: 1 },
+  { k: "温かい", r: "あたたかい", a: "hangat (benda/air)", grp: 1 },
+  { k: "温い", r: "ぬるい", a: "kurang panas", note: "Biasa ditulis Hiragana: ぬるい", grp: 1 },
+  { k: "青い", r: "あおい", a: "biru", grp: 1 },
+  { k: "赤い", r: "あかい", a: "merah", grp: 1 },
+  { k: "黄色い", r: "きいろい", a: "kuning", grp: 1 },
+  { k: "黒い", r: "くろい", a: "hitam", grp: 1 },
+  { k: "白い", r: "しろい", a: "putih", grp: 1 },
+  { k: "茶色い", r: "ちゃいろい", a: "coklat", grp: 1 },
+  { k: "丸い", r: "まるい", a: "bundar, bulat", grp: 1 },
+
+  { k: "甘い", r: "あまい", a: "manis", grp: 2 },
+  { k: "辛い", r: "からい", a: "pedas", grp: 2 },
+  { k: "酸っぱい", r: "すっぱい", a: "asam", note: "Biasa ditulis Hiragana: すっぱい", grp: 2 },
+  { k: "塩辛い", r: "しおからい", a: "asin", grp: 2 },
+  { k: "苦い", r: "にがい", a: "pahit", grp: 2 },
+  { k: "濃い", r: "こい", a: "pekat", grp: 2 },
+  { k: "薄い", r: "うすい", a: "tipis, encer (rasa)", grp: 2 },
+  { k: "美味しい", r: "おいしい", a: "enak", note: "Biasa ditulis Hiragana: おいしい", grp: 2 },
+  { k: "不味い", r: "まずい", a: "tidak enak", note: "Biasa ditulis Hiragana: まずい", grp: 2 },
+  { k: "暑い", r: "あつい", a: "panas (suhu)", grp: 2 },
+  { k: "寒い", r: "さむい", a: "dingin (suhu)", grp: 2 },
+  { k: "暖かい", r: "あたたかい", a: "hangat (suhu)", grp: 2 },
+  { k: "涼しい", r: "すずしい", a: "sejuk (suhu)", grp: 2 },
+  { k: "蒸暑い", r: "むしあつい", a: "panas gerah", grp: 2 },
+  { k: "明るい", r: "あかるい", a: "terang, riang", grp: 2 },
+  { k: "暗い", r: "くらい", a: "gelap, suram", grp: 2 },
+  { k: "汚い", r: "きたない", a: "kotor", grp: 2 },
+  { k: "重い", r: "おもい", a: "berat", grp: 2 },
+  { k: "軽い", r: "かるい", a: "ringan", grp: 2 },
+  { k: "詳しい", r: "くわしい", a: "detail", grp: 2 },
+
+  { k: "難しい", r: "むずかしい", a: "sulit", grp: 3 },
+  { k: "易しい", r: "やさしい", a: "mudah", grp: 3 },
+  { k: "珍しい", r: "めずらしい", a: "langka", grp: 3 },
+  { k: "可笑しい", r: "おかしい", a: "aneh, lucu", note: "Biasa ditulis Hiragana: おかしい", grp: 3 },
+  { k: "危ない", r: "あぶない", a: "berbahaya", grp: 3 },
+  { k: "上手い", r: "うまい", a: "enak, pandai", note: "Biasa ditulis Hiragana: うまい", grp: 3 },
+  { k: "良い", r: "いい", a: "bagus", note: "Perubahan asalnya dari よい (yoi)", grp: 3 },
+  { k: "悪い", r: "わるい", a: "jelek", grp: 3 },
+  { k: "酷い", r: "ひどい", a: "kejam", note: "Biasa ditulis Hiragana: ひどい", grp: 3 },
+  { k: "煩い", r: "うるさい", a: "berisik", note: "Biasa ditulis Hiragana: うるさい", grp: 3 },
+  { k: "忙しい", r: "いそがしい", a: "sibuk", grp: 3 },
+  { k: "正しい", r: "ただしい", a: "benar", grp: 3 },
+  { k: "凄い", r: "すごい", a: "hebat", note: "Biasa ditulis Hiragana: すごい", grp: 3 },
+  { k: "素晴らしい", r: "すばらしい", a: "luar biasa", grp: 3 },
+  { k: "格好いい", r: "かっこいい", a: "keren, bagus", note: "Biasa ditulis Hiragana: かっこいい", grp: 3 },
+  { k: "偉い", r: "えらい", a: "pintar, hebat", note: "Biasa ditulis Hiragana: えらい", grp: 3 },
+  { k: "仲が良い", r: "なかがいい", a: "rukun, akrab", note: "Frasa kata sifat", grp: 3 },
+  { k: "親しい", r: "したしい", a: "akrab", grp: 3 },
+  { k: "優しい", r: "やさしい", a: "baik hati, ramah", grp: 3 },
+  { k: "可愛い", r: "かわいい", a: "cantik, lucu, imut", note: "Biasa ditulis Hiragana: かわいい", grp: 3 },
+
+  { k: "美しい", r: "うつくしい", a: "indah, cantik", grp: 4 },
+  { k: "厳しい", r: "きびしい", a: "tegas", grp: 4 },
+  { k: "大人しい", r: "おとなしい", a: "lemah lembut, pendiam", grp: 4 },
+  { k: "楽しい", r: "たのしい", a: "menyenangkan, senang", grp: 4 },
+  { k: "面白い", r: "おもしろい", a: "menarik, lucu", grp: 4 },
+  { k: "詰まらない", r: "つまらない", a: "membosankan", note: "Biasa ditulis Hiragana: つまらない", grp: 4 },
+  { k: "嬉しい", r: "うれしい", a: "gembira, senang", note: "Biasa ditulis Hiragana: うれしい", grp: 4 },
+  { k: "寂しい", r: "さびしい", a: "merasa sepi", grp: 4 },
+  { k: "怖い", r: "こわい", a: "takut", grp: 4 },
+  { k: "悲しい", r: "かなしい", a: "sedih", grp: 4 },
+  { k: "恥かしい", r: "はずかしい", a: "malu", grp: 4 },
+  { k: "羨ましい", r: "うらやましい", a: "iri hati", grp: 4 },
+  { k: "懐かしい", r: "なつかしい", a: "terkenang, rindu", grp: 4 },
+  { k: "眠い", r: "ねむい", a: "mengantuk", grp: 4 },
+  { k: "痛い", r: "いたい", a: "merasa nyeri, sakit", grp: 4 },
+  { k: "欲しい", r: "ほしい", a: "ingin mendapatkan, mau", grp: 4 },
+  { k: "無い", r: "ない", a: "tidak ada", grp: 4 }
+];
+
+const DB_Na_Adj = [
+  { k: "残念", r: "ざんねん", a: "menyayangkan", grp: 0 },
+  { k: "心配", r: "しんぱい", a: "khawatir", grp: 0 },
+  { k: "不安", r: "ふあん", a: "cemas", grp: 0 },
+  { k: "好き", r: "すき", a: "suka", grp: 0 },
+  { k: "嫌い", r: "きらい", a: "tidak suka, benci", grp: 0 },
+  { k: "大好き", r: "だいすき", a: "suka sekali", grp: 0 },
+  { k: "大嫌い", r: "だいきらい", a: "benci sekali", grp: 0 },
+  { k: "綺麗", r: "きれい", a: "cantik, bersih", note: "Biasa ditulis Hiragana: きれい", grp: 0 },
+  { k: "賑やか", r: "にぎやか", a: "ramai", note: "Biasa ditulis Hiragana: にぎやか", grp: 0 },
+  { k: "静か", r: "しずか", a: "tenang", grp: 0 },
+  { k: "複雑", r: "ふくざつ", a: "rumit", grp: 0 },
+  { k: "簡単", r: "かんたん", a: "mudah", grp: 0 },
+  { k: "便利", r: "べんり", a: "praktis", grp: 0 },
+  { k: "不便", r: "ふべん", a: "tidak praktis", grp: 0 },
+  { k: "幸せ", r: "しあわせ", a: "bahagia", grp: 0 },
+  { k: "素敵", r: "すてき", a: "bagus, terpesona", grp: 0 },
+  { k: "有名", r: "ゆうめい", a: "terkenal", grp: 0 },
+
+  { k: "安全", r: "あんぜん", a: "aman", grp: 1 },
+  { k: "危険", r: "きけん", a: "berbahaya", grp: 1 },
+  { k: "色々", r: "いろいろ", a: "bermacam-macam", grp: 1 },
+  { k: "大丈夫", r: "だいじょうぶ", a: "tidak apa-apa", grp: 1 },
+  { k: "大事", r: "だいじ", a: "penting", grp: 1 },
+  { k: "大切", r: "たいせつ", a: "penting", grp: 1 },
+  { k: "駄目", r: "だめ", a: "tidak boleh", grp: 1 },
+  { k: "変", r: "へん", a: "aneh", grp: 1 },
+  { k: "無駄", r: "むだ", a: "sia-sia", grp: 1 },
+  { k: "急", r: "きゅう", a: "mendadak", grp: 1 },
+  { k: "上手", r: "じょうず", a: "pandai", grp: 1 },
+  { k: "下手", r: "へた", a: "tidak pandai", grp: 1 },
+  { k: "得意", r: "とくい", a: "pandai, jago", grp: 1 },
+  { k: "苦手", r: "にがて", a: "lemah, tidak pandai", grp: 1 },
+  { k: "暇", r: "ひま", a: "senggang", grp: 1 },
+  { k: "可哀想", r: "かわいそう", a: "kasihan", note: "Biasa ditulis Hiragana: かわいそう", grp: 1 },
+  { k: "立派", r: "りっぱ", a: "megah, layak dihormati", grp: 1 },
+
+  { k: "大変", r: "たいへん", a: "berat (kasus/peristiwa)", grp: 2 },
+  { k: "楽", r: "らく", a: "enteng, mudah", grp: 2 },
+  { k: "無理", r: "むり", a: "mustahil", grp: 2 },
+  { k: "お洒落", r: "おしゃれ", a: "modis", note: "Biasa ditulis Hiragana: おしゃれ", grp: 2 },
+  { k: "丁寧", r: "ていねい", a: "sopan, ramah", grp: 2 },
+  { k: "親切", r: "しんせつ", a: "baik hati, ramah", grp: 2 },
+  { k: "ハンサム", r: "はんさむ", a: "ganteng", note: "Kata serapan (Katakana)", grp: 2 },
+  { k: "真面目", r: "まじめ", a: "rajin, serius", grp: 2 },
+  { k: "不真面目", r: "ふまじめ", a: "tidak serius", grp: 2 },
+  { k: "嫌", r: "いや", a: "tidak suka, benci", grp: 2 },
+  { k: "一生懸命", r: "いっしょうけんめい", a: "sungguh-sungguh", alt: "いっしょけんめい", grp: 2 },
+  { k: "盛ん", r: "さかん", a: "aktif, ramai, populer", grp: 2 },
+  { k: "邪魔", r: "じゃま", a: "mengganggu", grp: 2 },
+  { k: "十分", r: "じゅうぶん", a: "cukup", grp: 2 },
+  { k: "丈夫", r: "じょうぶ", a: "kuat", grp: 2 },
+  { k: "適当", r: "てきとう", a: "tepat, sesuai", grp: 2 },
+  { k: "特別", r: "とくべつ", a: "khusus, spesial", grp: 2 },
+
+  { k: "自由", r: "じゆう", a: "bebas", grp: 3 },
+  { k: "真っ直ぐ", r: "まっすぐ", a: "lurus", note: "Biasa ditulis Hiragana: まっすぐ", grp: 3 },
+  { k: "熱心", r: "ねっしん", a: "sungguh hati, rajin", grp: 3 },
+  { k: "必要", r: "ひつよう", a: "perlu", grp: 3 },
+  { k: "別", r: "べつ", a: "lain, beda", grp: 3 },
+  { k: "不思議", r: "ふしぎ", a: "ajaib", grp: 3 },
+  { k: "豪華", r: "ごうか", a: "mewah", grp: 3 },
+  { k: "同じ", r: "おなじ", a: "sama", grp: 3 },
+  { k: "伝統的", r: "でんとうてき", a: "tradisional", grp: 3 },
+  { k: "活発", r: "かっぱつ", a: "aktif", grp: 3 },
+  { k: "誠実", r: "せいじつ", a: "tulus hati, setia", grp: 3 },
+  { k: "我儘", r: "わがまま", a: "egois", note: "Biasa ditulis Hiragana: わがまま", grp: 3 },
+  { k: "頑固", r: "がんこ", a: "keras kepala", grp: 3 },
+  { k: "素直", r: "すなお", a: "patuh, polos", grp: 3 },
+  { k: "意地悪", r: "いじわる", a: "tega, jahat", grp: 3 },
+  { k: "勝ち気", r: "かちき", a: "tidak mau kalah", grp: 3 },
+  { k: "神経質", r: "しんけいしつ", a: "sensitif, khawatir", grp: 3 }
+];
+
+const Pages_I = [
+  { title: "Sifat-i (1-20)", narasi: "Kata sifat-i selalu berakhiran dengan hiragana <b style='color:var(--primary)'>い (i)</b>. Saat digabung dengan kata benda, huruf 'i' di belakangnya tetap dipertahankan.", groups: [0] },
+  { title: "Sifat-i (21-40)", narasi: "Hati-hati dengan kanji yang bacanya sama! <b>早い (hayai)</b> untuk waktu yang cepat, sedangkan <b>速い (hayai)</b> untuk kelajuan/kecepatan.", groups: [1] },
+  { title: "Sifat-i (41-60)", narasi: "Kata sifat untuk rasa dan suhu banyak ditemukan di sini. <b>熱い (atsui)</b> untuk benda panas, sedangkan <b>暑い (atsui)</b> untuk cuaca panas.", groups: [2] },
+  { title: "Sifat-i (61-80)", narasi: "Pengecualian Emas: <b>いい (ii)</b> yang berarti 'bagus' berasal dari kata <b>よい (yoi)</b>. Saat diubah ke bentuk negatif, ia menjadi <b>よくない (yokunai)</b>, bukan iikunai!", groups: [3] },
+  { title: "Sifat-i (81-97)", narasi: "Banyak kata sifat yang menggambarkan perasaan manusia ada di sesi ini. Ingat, bentuk negatif kata sifat-i selalu membuang 'i' terakhir dan menggantinya dengan <b style='color:var(--danger)'>くない (kunai)</b>.", groups: [4] }
+];
+
+const Pages_Na = [
+  { title: "Sifat-na (1-17)", narasi: "Kata sifat-na memerlukan partikel <b style='color:var(--success)'>な (na)</b> jika diletakkan persis sebelum kata benda. Contoh: <b>きれいな花 (kirei na hana)</b>.", groups: [0] },
+  { title: "Sifat-na (18-34)", narasi: "Sebagian besar kata sifat-na terdiri dari dua kanji tanpa diikuti hiragana tambahan di belakangnya (kecuali hiragana okurigana khusus).", groups: [1] },
+  { title: "Sifat-na (35-51)", narasi: "Bentuk negatif kata sifat-na sangat mudah! Cukup tambahkan <b style='color:var(--danger)'>じゃありません (ja arimasen)</b> atau <b style='color:var(--danger)'>ではない (dewa nai)</b> di belakangnya.", groups: [2] },
+  { title: "Sifat-na (52-68)", narasi: "Kata-kata serapan dari bahasa asing (Katakana) seperti <b>ハンサム (hansamu)</b> selalu dikategorikan sebagai kata sifat-na.", groups: [3] }
+];
+
+
+// ==========================================
+// ENGINE MODUL
+// ==========================================
+const Modul = {
+  activeMode: 'sifati', activeTab: 'hafalan', viewMode: 'flashcard',
+  activeSesi: 0, cardIdx: 0, 
+  idxPG: 0, scorePG: 0, idxIsian: 0, scoreIsian: 0,
+  activeArray: [], activePGData: [], activeIsianData: [],
+
+  init: function() { this.switchMode('sifati'); },
+
+  triggerAnimation: function(elementId, animClass) {
+    const el = document.getElementById(elementId);
+    if(!el) return;
+    el.classList.remove('slide-in-right', 'slide-out-left', 'slide-in-left', 'slide-out-right', 'pop-in', 'fade-in-up', 'fade-out-down');
+    void el.offsetWidth;
+    el.classList.add(animClass);
+  },
+
+  switchMode: function(mode) {
+    this.activeMode = mode;
+    this.cardIdx = 0; 
+    
+    document.getElementById('btn-mode-sifati').classList.toggle('active', mode === 'sifati');
+    document.getElementById('btn-mode-sifatna').classList.toggle('active', mode === 'sifatna');
+    
+    let col = (mode === 'sifati') ? 'var(--primary)' : 'var(--success)';
+    document.getElementById('btn-submit-isian').style.background = col;
+    
+    if (mode === 'sifati') {
+        document.getElementById('sub-nav-sifati').classList.remove('hidden');
+        document.getElementById('sub-nav-sifatna').classList.add('hidden');
+    } else {
+        document.getElementById('sub-nav-sifati').classList.add('hidden');
+        document.getElementById('sub-nav-sifatna').classList.remove('hidden');
+    }
+    
+    this.activeSesi = 0;
+    this.switchTab('hafalan');
+  },
+
+  toggleView: function() {
+    const btn = document.getElementById('btn-toggle-view');
+    btn.classList.add('spin-anim'); 
+    
+    this.triggerAnimation('sec-hafalan', 'fade-out-down');
+
+    setTimeout(() => {
+        this.viewMode = (this.viewMode === 'flashcard') ? 'tabel' : 'flashcard';
+        this.cardIdx = 0;
+        btn.innerHTML = (this.viewMode === 'flashcard') ? '📋' : '🎴';
+        btn.classList.remove('spin-anim'); 
+        
+        if (this.activeTab === 'hafalan') {
+            this.renderHafalan(false); 
+            this.triggerAnimation('sec-hafalan', 'fade-in-up'); 
+        }
+    }, 250); 
+  },
+
+  switchTab: function(tab) {
+    this.activeTab = tab;
+    ['hafalan', 'pg', 'isian'].forEach(t => {
+      document.getElementById('btn-tab-'+t).classList.remove('active');
+      document.getElementById('sec-'+t).classList.add('hidden');
+    });
+    
+    document.getElementById('btn-tab-'+tab).classList.add('active');
+    
+    document.getElementById('btn-toggle-view').style.visibility = (tab === 'hafalan') ? 'visible' : 'hidden';
+    
+    if (tab === 'hafalan') { 
+      document.getElementById('sec-hafalan').classList.remove('hidden');
+      this.triggerAnimation('sec-hafalan', 'fade-in-up');
+      this.switchSesi(this.activeSesi);
+    } 
+    else if (tab === 'pg') { 
+      document.getElementById('sec-pg').classList.remove('hidden');
+      this.triggerAnimation('sec-pg', 'fade-in-up');
+      this.activePGData = this.generatePG();
+      this.idxPG = 0; this.scorePG = 0; this.renderPG(false); 
+    }
+    else if (tab === 'isian') { 
+      document.getElementById('sec-isian').classList.remove('hidden');
+      this.triggerAnimation('sec-isian', 'fade-in-up');
+      this.activeIsianData = this.generateIsian();
+      this.idxIsian = 0; this.scoreIsian = 0; this.renderIsian(false); 
+    }
+  },
+
+  switchSesi: function(s) {
+    this.activeSesi = s;
+    let prefix = this.activeMode === 'sifati' ? 'btn-i-' : 'btn-na-';
+    let pages = (this.activeMode === 'sifati') ? Pages_I : Pages_Na;
+    
+    for(let i = 0; i < pages.length; i++) {
+        let btn = document.getElementById(prefix + i);
+        if(btn) btn.classList.remove('active');
+    }
+    let activeBtn = document.getElementById(prefix + s);
+    if(activeBtn) activeBtn.classList.add('active');
+    
+    let db = (this.activeMode === 'sifati') ? DB_I_Adj : DB_Na_Adj;
+    let grps = pages[s].groups;
+    this.activeArray = db.filter(item => grps.includes(item.grp));
+    this.cardIdx = 0;
+
+    if (this.activeTab === 'hafalan') this.renderHafalan(false);
+    else if (this.activeTab === 'pg') { this.activePGData = this.generatePG(); this.idxPG = 0; this.scorePG = 0; this.renderPG(false); } 
+    else if (this.activeTab === 'isian') { this.activeIsianData = this.generateIsian(); this.idxIsian = 0; this.scoreIsian = 0; this.renderIsian(false); }
+  },
+
+  renderHafalan: function(useSlideAnim = true) {
+    if (this.viewMode === 'flashcard') this.renderFC(useSlideAnim);
+    else this.renderBook(useSlideAnim ? 'right' : 'none');
+  },
+
+  renderFC: function(useSlideAnim = true) {
+    const sec = document.getElementById('sec-hafalan');
+    sec.style.padding = "25px 20px";
+    
+    if (this.cardIdx >= this.activeArray.length) {
+      sec.innerHTML = `<div class="content-hafalan"><div class="kanji-text" style="cursor:default;">🎉 Tuntas!</div></div>
+      <button class="btn-next" onclick="Modul.cardIdx=0; Modul.renderFC(true)">Ulangi Hafalan</button>`;
+      if(useSlideAnim) this.triggerAnimation('sec-hafalan', 'slide-in-right');
+      return;
+    }
+
+    const item = this.activeArray[this.cardIdx];
+    let pages = (this.activeMode === 'sifati') ? Pages_I : Pages_Na;
+    let pageTitle = pages[this.activeSesi].title.split(':')[0];
+    let narasi = pages[this.activeSesi].narasi;
+    
+    let bubbleHTML = '';
+    if (narasi) {
+        bubbleHTML = `
+            <button class="btn-bubble" onclick="document.getElementById('fc-popup-narasi').classList.toggle('show-popup')">💡</button>
+            <div id="fc-popup-narasi" class="bubble-popup">${narasi}</div>
+        `;
+    }
+    
+    sec.innerHTML = `
+      <div class="progress-text" style="color:var(--primary);">HAFALAN (${pageTitle}): ${this.cardIdx+1} / ${this.activeArray.length}</div>
+      <div id="fc-content" class="content-hafalan">
+        ${bubbleHTML}
+        <div class="hira-text hira-hide" id="fc-hira">${item.r}</div>
+        <div class="kanji-text pulse-hint" id="fc-kanji" onclick="Modul.revealCard()">${item.k}</div>
+        <div id="fc-hint" style="font-size:12px; color:var(--text-sub); margin-top:-10px; margin-bottom:10px;">(Sentuh Kanji untuk membuka)</div>
+        <div class="arti-text blur-hide" id="fc-arti">${item.a}</div>
+        ${item.note ? `<div class="note-box blur-hide" id="fc-note">💡 ${item.note}</div>` : ''}
+      </div>
+      <button class="btn-next" onclick="Modul.nextCard()">Selanjutnya →</button>
+    `;
+    
+    if(useSlideAnim) this.triggerAnimation('fc-content', 'slide-in-right');
+  },
+
+  revealCard: function() {
+    document.getElementById('fc-hira').classList.replace('hira-hide', 'hira-show');
+    document.getElementById('fc-arti').classList.replace('blur-hide', 'blur-show');
+    document.getElementById('fc-kanji').classList.remove('pulse-hint');
+    document.getElementById('fc-kanji').classList.add('fc-revealed');
+    document.getElementById('fc-hint').style.display = 'none';
+    if(document.getElementById('fc-note')) document.getElementById('fc-note').classList.replace('blur-hide', 'blur-show');
+    
+    let popup = document.getElementById('fc-popup-narasi');
+    if(popup) popup.classList.remove('show-popup');
+  },
+
+  nextCard: function() { 
+    this.triggerAnimation('fc-content', 'slide-out-left');
+    setTimeout(() => { this.cardIdx++; this.renderFC(true); }, 250);
+  },
+
+  renderBook: function(dir = 'right') {
+    const sec = document.getElementById('sec-hafalan');
+    sec.style.padding = "15px 15px 5px 15px"; 
+    
+    let pages = (this.activeMode === 'sifati') ? Pages_I : Pages_Na;
+    const pageData = pages[this.activeSesi];
+    
+    let html = `<div class="book-container" id="book-wrapper">`;
+    html += `<div class="book-page" id="book-page">`;
+    html += `<div class="book-title">${pageData.title}</div>`;
+    html += `<div class="book-narrative">${pageData.narasi}</div>`;
+    
+    html += `<button id="btn-sensor" class="btn-sensor" onclick="Modul.toggleFurigana()">👁️ Tampilkan Semua Furigana</button>
+             <div id="waktu-table-container">`;
+
+    html += `<table class="tabel-waktu"><tr><th>Kanji</th><th>Arti & Catatan</th></tr>`;
+    
+    this.activeArray.forEach(item => {
+        let rubyHTML = '';
+        let k_arr = item.k.split(' ');
+        let r_arr = item.r.split(' ');
+        if(k_arr.length > 1 && k_arr.length === r_arr.length) {
+            k_arr.forEach((kanji, i) => { rubyHTML += `<ruby style="margin-right:4px;">${kanji}<rt class="furi-anim">${r_arr[i]}</rt></ruby>`; });
+        } else {
+            rubyHTML = `<ruby>${item.k}<rt class="furi-anim">${item.r}</rt></ruby>`;
+        }
+
+        html += `<tr>
+            <td style="max-width: 45%; vertical-align:top;">
+                <span class="ruby-item" onclick="this.classList.toggle('revealed')">${rubyHTML}</span>
+            </td>
+            <td style="max-width: 55%; vertical-align:top;">
+                <span class="t-arti">${item.a}</span>
+                ${item.note ? `<div class="note-inline">💡 ${item.note}</div>` : ''}
+            </td>
+        </tr>`;
+    });
+    
+    html += `</table></div></div>`;
+
+    let prevDis = (this.activeSesi === 0) ? 'disabled' : '';
+    let nextDis = (this.activeSesi === pages.length - 1) ? 'disabled' : '';
+    html += `
+      <div class="book-nav">
+        <button class="book-nav-btn" ${prevDis} onclick="Modul.turnPage(-1)">◀ Prev</button>
+        <span class="book-page-text">Hal ${this.activeSesi + 1} dari ${pages.length}</span>
+        <button class="book-nav-btn" ${nextDis} onclick="Modul.turnPage(1)">Next ▶</button>
+      </div>
+    </div>`;
+
+    sec.innerHTML = html;
+
+    if (dir === 'right') this.triggerAnimation('book-page', 'slide-in-right');
+    else if (dir === 'left') this.triggerAnimation('book-page', 'slide-in-left');
+    else if (dir !== 'none') this.triggerAnimation('book-wrapper', 'fade-in-up');
+  },
+
+  turnPage: function(step) {
+    let pages = (this.activeMode === 'sifati') ? Pages_I : Pages_Na;
+    let targetSesi = this.activeSesi + step;
+    
+    if (targetSesi >= 0 && targetSesi < pages.length) {
+        let animOut = (step === 1) ? 'slide-out-left' : 'slide-out-right';
+        this.triggerAnimation('book-page', animOut);
+        
+        setTimeout(() => {
+            this.switchSesi(targetSesi);
+        }, 250);
+    }
+  },
+
+  toggleFurigana: function() {
+    const container = document.getElementById('waktu-table-container');
+    const btn = document.getElementById('btn-sensor');
+    const isHidden = !container.classList.contains('show-all-furi');
+    
+    if (isHidden) {
+        container.classList.add('show-all-furi');
+        btn.innerHTML = "🙈 Sembunyikan Semua Furigana";
+        btn.classList.add('active');
+    } else {
+        container.classList.remove('show-all-furi');
+        btn.innerHTML = "👁️ Tampilkan Semua Furigana";
+        btn.classList.remove('active');
+    }
+  },
+
+  generatePG: function() {
+    let db = (this.activeMode === 'sifati') ? DB_I_Adj : DB_Na_Adj;
+    let pages = (this.activeMode === 'sifati') ? Pages_I : Pages_Na;
+    let groups = pages[this.activeSesi].groups; 
+    
+    let pool = db.filter(item => groups.includes(item.grp));
+    let limit = Math.min(10, pool.length);
+    let part1 = [...pool].sort(() => Math.random() - 0.5).slice(0, limit); 
+    let part2 = [...pool].sort(() => Math.random() - 0.5).slice(0, limit); 
+    let generated = [];
+
+    part1.forEach(item => {
+        let ans = item.r.replace(/[\s]/g, ''); let opts = [ans]; 
+        let distractors = [...pool].sort(() => Math.random() - 0.5);
+        for(let d of distractors) {
+            let dText = d.r.replace(/[\s]/g, '');
+            if(!opts.includes(dText)) opts.push(dText);
+            if(opts.length === 4) break;
+        }
+        generated.push({ q: `Apa cara baca (Hiragana) dari <b>${item.k}</b>?`, opts: opts.sort(() => Math.random() - 0.5), ans: ans });
+    });
+
+    part2.forEach(item => {
+        let ans = item.k.replace(/[\s]/g, ''); let opts = [ans];
+        let distractors = [...pool].sort(() => Math.random() - 0.5);
+        for(let d of distractors) {
+            let dText = d.k.replace(/[\s]/g, '');
+            if(!opts.includes(dText)) opts.push(dText);
+            if(opts.length === 4) break;
+        }
+        generated.push({ q: `Apa bentuk tulisan Kanji dari <b>${item.r}</b>?`, opts: opts.sort(() => Math.random() - 0.5), ans: ans });
+    });
+
+    return generated;
+  },
+
+  generateIsian: function() {
+    let db = (this.activeMode === 'sifati') ? DB_I_Adj : DB_Na_Adj;
+    let pages = (this.activeMode === 'sifati') ? Pages_I : Pages_Na;
+    let groups = pages[this.activeSesi].groups; 
+    
+    let pool = db.filter(item => groups.includes(item.grp));
+    let limit = Math.min(10, pool.length);
+    let part1 = [...pool].sort(() => Math.random() - 0.5).slice(0, limit); 
+    let part2 = [...pool].sort(() => Math.random() - 0.5).slice(0, limit); 
+    let generated = [];
+
+    // Part 1: Kanji -> Hiragana
+    part1.forEach(item => {
+        let ansArray = [item.r.replace(/[\s]/g, '')];
+        if (item.alt) ansArray.push(item.alt.replace(/[\s]/g, ''));
+        generated.push({ q: `Ketik hiragana dari:<br><span style="font-size:35px; color:var(--text-main);">${item.k}</span>`, ans: ansArray});
+    });
+
+    // Part 2: Kanji -> Arti (DENGAN TOLERANSI PINTAR)
+    part2.forEach(item => {
+        let cleanA = item.a.toLowerCase();
+        let ansArray = [];
+
+        // 1. Masukkan jawaban asli (hapus spasi, strip, dan kurung penjelas)
+        ansArray.push(cleanA.replace(/[\s-]/g, '').replace(/\([^)]*\)/g, ''));
+
+        // 2. Pecah kata berdasarkan koma (contoh: "indah, cantik" -> "indah", "cantik")
+        let parts = cleanA.split(',');
+        parts.forEach(p => {
+            let cleanP = p.replace(/\([^)]*\)/g, '').replace(/[\s-]/g, '');
+            if(cleanP && !ansArray.includes(cleanP)) ansArray.push(cleanP);
+        });
+
+        // 3. Masukkan variasi utuh tanpa tanda kurung
+        let noBracket = cleanA.replace(/\([^)]*\)/g, '').replace(/[\s-]/g, '');
+        if (noBracket && !ansArray.includes(noBracket)) ansArray.push(noBracket);
+
+        generated.push({ 
+            q: `Apa arti dari kanji:<br><span style="font-size:35px; color:var(--warning);">${item.k}</span>`, 
+            ans: ansArray 
+        });
+    });
+
+    return generated;
+  },
+
+  getEvaluasiHTML: function(mode, sesi, score, total) {
+    let pct = score / total;
+    if (pct === 1) return `<div class="eval-box">🌟 <b>SEMPURNA!</b><br>Luar biasa, perbendaharaan kosa kata Sensei sangat hebat!</div>`;
+    
+    let tip = "";
+    if (mode === 'sifati') {
+        tip = "💡 TIPS: Ingat, kata sifat-i selalu diakhiri 'i'. Saat diubah ke negatif, buang 'i' terakhir lalu ganti jadi ~kunai.";
+    } else {
+        tip = "💡 TIPS: Beberapa kata sifat-na terasa seperti -i (misal: きれい, 嫌い), jangan terkecoh! Hafalkan pengecualiannya.";
+    }
+    return `<div class="eval-box">💪 <b>TETAP SEMANGAT!</b><br>Perbanyak membaca untuk membiasakan diri.<br><br><span style="color:var(--gold);">${tip}</span></div>`;
+  },
+
+  renderPG: function(useSlideAnim = true) {
+    const fb = document.getElementById('pg-feedback'); fb.innerHTML = ""; fb.style.opacity = "0";
+    const pool = this.activePGData;
+    
+    if (this.idxPG >= pool.length) {
+      document.getElementById('pg-q').innerHTML = `🎉 Kuis Selesai!<br>Skor: ${this.scorePG} / ${pool.length}`;
+      let evalHTML = this.getEvaluasiHTML(this.activeMode, this.activeSesi, this.scorePG, pool.length);
+      document.getElementById('pg-opts').innerHTML = evalHTML + `<button class="btn-next" onclick="Modul.switchTab('pg')">Acak & Ulangi Kuis</button>`;
+      if(useSlideAnim) this.triggerAnimation('pg-content-wrapper', 'slide-in-right');
+      return;
+    }
+
+    const target = pool[this.idxPG];
+    document.getElementById('pg-progress').innerText = `KUIS PILGAN: ${this.idxPG+1} / ${pool.length}`;
+    document.getElementById('pg-q').innerHTML = target.q;
+    
+    let optsHTML = target.opts.map(o => `<button class="btn-opt" onclick="Modul.checkPG(this,'${o}','${target.ans}')">${o}</button>`).join('');
+    document.getElementById('pg-opts').innerHTML = optsHTML;
+
+    if(useSlideAnim) this.triggerAnimation('pg-content-wrapper', 'slide-in-right');
+  },
+
+  checkPG: function(btn, sel, cor) {
+    const fb = document.getElementById('pg-feedback');
+    document.querySelectorAll('.btn-opt').forEach(b => b.disabled = true);
+    fb.style.opacity = "1"; this.triggerAnimation('pg-feedback', 'pop-in');
+
+    if(sel === cor) { btn.classList.add('correct'); fb.innerHTML = "BENAR! ✅"; fb.style.color = "var(--success)"; this.scorePG++; } 
+    else { btn.classList.add('wrong'); fb.innerHTML = "SALAH! ❌"; fb.style.color = "var(--danger)"; }
+    
+    setTimeout(() => { 
+      this.triggerAnimation('pg-content-wrapper', 'slide-out-left');
+      setTimeout(() => { this.idxPG++; this.renderPG(true); }, 1200);
+    }, 1200);
+  },
+
+  renderIsian: function(useSlideAnim = true) {
+    const fb = document.getElementById('isian-feedback'); fb.innerHTML = ""; fb.style.opacity = "0";
+    const input = document.getElementById('isian-input'); input.value = ""; input.disabled = false;
+    document.getElementById('btn-submit-isian').classList.remove('hidden');
+    
+    const pool = this.activeIsianData;
+
+    if (this.idxIsian >= pool.length) {
+      document.getElementById('isian-q').innerHTML = `🎉 Latihan Tuntas!<br>Skor: ${this.scoreIsian} / ${pool.length}`;
+      input.classList.add('hidden'); document.getElementById('btn-submit-isian').classList.add('hidden');
+      
+      let evalHTML = this.getEvaluasiHTML(this.activeMode, this.activeSesi, this.scoreIsian, pool.length);
+      fb.style.opacity = "1";
+      fb.innerHTML = evalHTML + `<button class="btn-next" onclick="Modul.switchTab('isian')">Acak & Ulangi Kuis</button>`;
+      
+      if(useSlideAnim) this.triggerAnimation('isian-content-wrapper', 'slide-in-right');
+      return;
+    }
+
+    const target = pool[this.idxIsian];
+    document.getElementById('isian-progress').innerText = `KUIS ISIAN: ${this.idxIsian+1} / ${pool.length}`;
+    document.getElementById('isian-q').innerHTML = target.q;
+    
+    let hintTeks = document.getElementById('isian-hint-teks');
+    if (hintTeks) {
+        hintTeks.classList.remove('hidden');
+        if (target.q.includes("Apa arti")) { 
+            hintTeks.innerText = "(Ketik terjemahannya, misal: besar / ramah)"; 
+        } else { 
+            hintTeks.innerText = "(Gunakan keyboard Jepang untuk Hiragana)"; 
+        }
+    }
+    input.classList.remove('hidden'); input.focus();
+    if(useSlideAnim) this.triggerAnimation('isian-content-wrapper', 'slide-in-right');
+  },
+
+  checkIsian: function() {
+    const fb = document.getElementById('isian-feedback');
+    const input = document.getElementById('isian-input');
+    const answer = input.value.toLowerCase().replace(/[\s-]/g, '');
+    if(!answer) return;
+
+    input.disabled = true; document.getElementById('btn-submit-isian').classList.add('hidden');
+    
+    const target = this.activeIsianData[this.idxIsian];
+    const correctAns = target.ans.map(a => a.toLowerCase().replace(/[\s-]/g, ''));
+
+    fb.style.opacity = "1"; this.triggerAnimation('isian-feedback', 'pop-in');
+
+    if(correctAns.includes(answer)) { fb.innerHTML = "BENAR! ✅"; fb.style.color = "var(--success)"; this.scoreIsian++; } 
+    else { fb.innerHTML = `SALAH! ❌<br><span style="font-size:14px; color:var(--text-sub);">Kunci: ${target.ans[0]}</span>`; fb.style.color = "var(--danger)"; }
+    
+    setTimeout(() => { 
+      this.triggerAnimation('isian-content-wrapper', 'slide-out-left');
+      setTimeout(() => { this.idxIsian++; this.renderIsian(true); }, 1500);
+    }, 1500);
+  }
+};
+
+window.onload = () => Modul.init();
+</script>
+</body>
+</html>
