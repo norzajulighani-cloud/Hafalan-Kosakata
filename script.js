@@ -2699,7 +2699,6 @@ window.onload = async () => {
     loadingMsg.innerText = "Mengunduh materi dari database...";
     document.body.appendChild(loadingMsg);
 
-    // Fetch data from Firestore menggunakan Compat SDK
     const db = firebase.firestore();
     const snapshot = await db.collection("materials").get();
     snapshot.forEach(doc => {
@@ -2711,6 +2710,19 @@ window.onload = async () => {
         document.body.removeChild(loadingMsg);
     }
     
+    // DEBUG OVERLAY
+    if (!ManualDB['day1']) {
+        const debugDiv = document.createElement('div');
+        debugDiv.style.position = 'fixed'; debugDiv.style.top = '0'; debugDiv.style.left = '0'; debugDiv.style.width = '100vw'; debugDiv.style.height = '100vh'; debugDiv.style.background = 'rgba(0,0,0,0.9)'; debugDiv.style.color = '#0f0'; debugDiv.style.zIndex = '999999'; debugDiv.style.padding = '20px'; debugDiv.style.overflow = 'auto';
+        debugDiv.innerHTML = `<h1>DEBUG INFO</h1>
+        <p>Snapshot Size: ${snapshot.size}</p>
+        <p>Snapshot Empty: ${snapshot.empty}</p>
+        <p>ManualDB Keys: ${Object.keys(ManualDB).join(', ')}</p>
+        <button onclick="this.parentElement.remove(); Game.checkStoredMode();" style="padding:10px; background:red; color:white; border:none; cursor:pointer;">Lanjutkan Paksa</button>`;
+        document.body.appendChild(debugDiv);
+        return; // Hentikan eksekusi Game.checkStoredMode() sampai di-klik
+    }
+
     // Jalankan game
     Game.checkStoredMode();
   } catch (error) {
