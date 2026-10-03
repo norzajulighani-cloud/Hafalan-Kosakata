@@ -2699,29 +2699,31 @@ window.onload = async () => {
             const dayKey = doc.name.split('/').pop();
             let parsedData = { hafalan: [], materi: [], kuisExtra: [], proKuisExtra: [] };
             
-            for (let key of ['hafalan', 'materi', 'kuisExtra', 'proKuisExtra']) {
-                if (doc.fields[key] && doc.fields[key].arrayValue && doc.fields[key].arrayValue.values) {
-                    parsedData[key] = doc.fields[key].arrayValue.values.map(v => {
-                        let obj = {};
-                        let mapFields = v.mapValue.fields;
-                        for (let k in mapFields) {
-                            if (mapFields[k].stringValue !== undefined) obj[k] = mapFields[k].stringValue;
-                            else if (mapFields[k].booleanValue !== undefined) obj[k] = mapFields[k].booleanValue;
-                            else if (mapFields[k].integerValue !== undefined) obj[k] = parseInt(mapFields[k].integerValue);
-                            else if (mapFields[k].arrayValue && mapFields[k].arrayValue.values) {
-                                obj[k] = mapFields[k].arrayValue.values.map(jpV => {
-                                    let jpObj = {};
-                                    for (let jpK in jpV.mapValue.fields) {
-                                        if (jpV.mapValue.fields[jpK].stringValue !== undefined) jpObj[jpK] = jpV.mapValue.fields[jpK].stringValue;
-                                        else if (jpV.mapValue.fields[jpK].booleanValue !== undefined) jpObj[jpK] = jpV.mapValue.fields[jpK].booleanValue;
-                                        else if (jpV.mapValue.fields[jpK].integerValue !== undefined) jpObj[jpK] = parseInt(jpV.mapValue.fields[jpK].integerValue);
-                                    }
-                                    return jpObj;
-                                });
+            if (doc.fields) {
+                for (let key of ['hafalan', 'materi', 'kuisExtra', 'proKuisExtra']) {
+                    if (doc.fields[key] && doc.fields[key].arrayValue && doc.fields[key].arrayValue.values) {
+                        parsedData[key] = doc.fields[key].arrayValue.values.map(v => {
+                            let obj = {};
+                            let mapFields = v.mapValue.fields;
+                            for (let k in mapFields) {
+                                if (mapFields[k].stringValue !== undefined) obj[k] = mapFields[k].stringValue;
+                                else if (mapFields[k].booleanValue !== undefined) obj[k] = mapFields[k].booleanValue;
+                                else if (mapFields[k].integerValue !== undefined) obj[k] = parseInt(mapFields[k].integerValue);
+                                else if (mapFields[k].arrayValue && mapFields[k].arrayValue.values) {
+                                    obj[k] = mapFields[k].arrayValue.values.map(jpV => {
+                                        let jpObj = {};
+                                        for (let jpK in jpV.mapValue.fields) {
+                                            if (jpV.mapValue.fields[jpK].stringValue !== undefined) jpObj[jpK] = jpV.mapValue.fields[jpK].stringValue;
+                                            else if (jpV.mapValue.fields[jpK].booleanValue !== undefined) jpObj[jpK] = jpV.mapValue.fields[jpK].booleanValue;
+                                            else if (jpV.mapValue.fields[jpK].integerValue !== undefined) jpObj[jpK] = parseInt(jpV.mapValue.fields[jpK].integerValue);
+                                        }
+                                        return jpObj;
+                                    });
+                                }
                             }
-                        }
-                        return obj;
-                    });
+                            return obj;
+                        });
+                    }
                 }
             }
             ManualDB[dayKey] = parsedData;
