@@ -2711,13 +2711,18 @@ window.onload = async () => {
                                 else if (mapFields[k].integerValue !== undefined) obj[k] = parseInt(mapFields[k].integerValue);
                                 else if (mapFields[k].arrayValue && mapFields[k].arrayValue.values) {
                                     obj[k] = mapFields[k].arrayValue.values.map(jpV => {
-                                        let jpObj = {};
-                                        for (let jpK in jpV.mapValue.fields) {
-                                            if (jpV.mapValue.fields[jpK].stringValue !== undefined) jpObj[jpK] = jpV.mapValue.fields[jpK].stringValue;
-                                            else if (jpV.mapValue.fields[jpK].booleanValue !== undefined) jpObj[jpK] = jpV.mapValue.fields[jpK].booleanValue;
-                                            else if (jpV.mapValue.fields[jpK].integerValue !== undefined) jpObj[jpK] = parseInt(jpV.mapValue.fields[jpK].integerValue);
+                                        if (jpV.stringValue !== undefined) return jpV.stringValue;
+                                        if (jpV.integerValue !== undefined) return parseInt(jpV.integerValue);
+                                        if (jpV.mapValue && jpV.mapValue.fields) {
+                                            let jpObj = {};
+                                            for (let jpK in jpV.mapValue.fields) {
+                                                if (jpV.mapValue.fields[jpK].stringValue !== undefined) jpObj[jpK] = jpV.mapValue.fields[jpK].stringValue;
+                                                else if (jpV.mapValue.fields[jpK].booleanValue !== undefined) jpObj[jpK] = jpV.mapValue.fields[jpK].booleanValue;
+                                                else if (jpV.mapValue.fields[jpK].integerValue !== undefined) jpObj[jpK] = parseInt(jpV.mapValue.fields[jpK].integerValue);
+                                            }
+                                            return jpObj;
                                         }
-                                        return jpObj;
+                                        return null;
                                     });
                                 }
                             }
