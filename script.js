@@ -2684,78 +2684,53 @@ const Cooldown = {
 };
 window.onload = async () => {
   try {
-    // Tampilkan notifikasi loading (menggunakan fungsi bawaan UI jika ada, atau buat element sementara)
     const loadingMsg = document.createElement("div");
-    loadingMsg.style.position = "fixed";
-    loadingMsg.style.top = "50%";
-    loadingMsg.style.left = "50%";
-    loadingMsg.style.transform = "translate(-50%, -50%)";
-    loadingMsg.style.background = "rgba(30, 41, 59, 0.9)";
-    loadingMsg.style.color = "white";
-    loadingMsg.style.padding = "20px 40px";
-    loadingMsg.style.borderRadius = "10px";
-    loadingMsg.style.zIndex = "9999";
-    loadingMsg.style.fontWeight = "bold";
+    loadingMsg.style.position = "fixed"; loadingMsg.style.top = "50%"; loadingMsg.style.left = "50%"; loadingMsg.style.transform = "translate(-50%, -50%)"; loadingMsg.style.background = "rgba(30, 41, 59, 0.9)"; loadingMsg.style.color = "white"; loadingMsg.style.padding = "20px 40px"; loadingMsg.style.borderRadius = "10px"; loadingMsg.style.zIndex = "9999"; loadingMsg.style.fontWeight = "bold";
     loadingMsg.innerText = "Mengunduh materi dari database...";
     document.body.appendChild(loadingMsg);
 
-    const db = firebase.firestore();
-    let snapshot = await db.collection("materials").get({ source: 'server' });
+    const restUrl = "https://firestore.googleapis.com/v1/projects/wkwkjapan-n5/databases/(default)/documents/materials?pageSize=100";
+    const response = await fetch(restUrl);
+    if (!response.ok) throw new Error("HTTP error " + response.status);
     
-    if (snapshot.empty) {
-        console.warn("Compat SDK returned empty, falling back to REST API...");
-        const restUrl = "https://firestore.googleapis.com/v1/projects/wkwkjapan-n5/databases/(default)/documents/materials?pageSize=100";
-        const response = await fetch(restUrl);
-        const data = await response.json();
-        
-        if (data.documents) {
-            data.documents.forEach(doc => {
-                const dayKey = doc.name.split('/').pop();
-                let parsedData = { hafalan: [], materi: [], kuisExtra: [], proKuisExtra: [] };
-                
-                for (let key of ['hafalan', 'materi', 'kuisExtra', 'proKuisExtra']) {
-                    if (doc.fields[key] && doc.fields[key].arrayValue && doc.fields[key].arrayValue.values) {
-                        parsedData[key] = doc.fields[key].arrayValue.values.map(v => {
-                            let obj = {};
-                            let mapFields = v.mapValue.fields;
-                            for (let k in mapFields) {
-                                if (mapFields[k].stringValue !== undefined) obj[k] = mapFields[k].stringValue;
-                                else if (mapFields[k].booleanValue !== undefined) obj[k] = mapFields[k].booleanValue;
-                                else if (mapFields[k].integerValue !== undefined) obj[k] = parseInt(mapFields[k].integerValue);
-                                else if (mapFields[k].arrayValue && mapFields[k].arrayValue.values) {
-                                    obj[k] = mapFields[k].arrayValue.values.map(jpV => {
-                                        let jpObj = {};
-                                        for (let jpK in jpV.mapValue.fields) {
-                                            if (jpV.mapValue.fields[jpK].stringValue !== undefined) jpObj[jpK] = jpV.mapValue.fields[jpK].stringValue;
-                                            else if (jpV.mapValue.fields[jpK].booleanValue !== undefined) jpObj[jpK] = jpV.mapValue.fields[jpK].booleanValue;
-                                            else if (jpV.mapValue.fields[jpK].integerValue !== undefined) jpObj[jpK] = parseInt(jpV.mapValue.fields[jpK].integerValue);
-                                        }
-                                        return jpObj;
-                                    });
-                                }
+    const data = await response.json();
+    if (data.documents) {
+        data.documents.forEach(doc => {
+            const dayKey = doc.name.split('/').pop();
+            let parsedData = { hafalan: [], materi: [], kuisExtra: [], proKuisExtra: [] };
+            
+            for (let key of ['hafalan', 'materi', 'kuisExtra', 'proKuisExtra']) {
+                if (doc.fields[key] && doc.fields[key].arrayValue && doc.fields[key].arrayValue.values) {
+                    parsedData[key] = doc.fields[key].arrayValue.values.map(v => {
+                        let obj = {};
+                        let mapFields = v.mapValue.fields;
+                        for (let k in mapFields) {
+                            if (mapFields[k].stringValue !== undefined) obj[k] = mapFields[k].stringValue;
+                            else if (mapFields[k].booleanValue !== undefined) obj[k] = mapFields[k].booleanValue;
+                            else if (mapFields[k].integerValue !== undefined) obj[k] = parseInt(mapFields[k].integerValue);
+                            else if (mapFields[k].arrayValue && mapFields[k].arrayValue.values) {
+                                obj[k] = mapFields[k].arrayValue.values.map(jpV => {
+                                    let jpObj = {};
+                                    for (let jpK in jpV.mapValue.fields) {
+                                        if (jpV.mapValue.fields[jpK].stringValue !== undefined) jpObj[jpK] = jpV.mapValue.fields[jpK].stringValue;
+                                        else if (jpV.mapValue.fields[jpK].booleanValue !== undefined) jpObj[jpK] = jpV.mapValue.fields[jpK].booleanValue;
+                                        else if (jpV.mapValue.fields[jpK].integerValue !== undefined) jpObj[jpK] = parseInt(jpV.mapValue.fields[jpK].integerValue);
+                                    }
+                                    return jpObj;
+                                });
                             }
-                            return obj;
-                        });
-                    }
+                        }
+                        return obj;
+                    });
                 }
-                ManualDB[dayKey] = parsedData;
-            });
-        }
-    } else {
-        snapshot.forEach(doc => {
-            ManualDB[doc.id] = doc.data();
+            }
+            ManualDB[dayKey] = parsedData;
         });
     }
 
-    // Hapus pesan loading
-    if (document.body.contains(loadingMsg)) {
-        document.body.removeChild(loadingMsg);
-    }
-    
-    // Jalankan game
+    if (document.body.contains(loadingMsg)) document.body.removeChild(loadingMsg);
     Game.checkStoredMode();
   } catch (error) {
-    console.error("Gagal mengunduh data:", error);
-    alert("Gagal terhubung ke database. Pastikan koneksi internet stabil.");
+    alert("Gagal mengunduh: " + error.message);
   }
 };
