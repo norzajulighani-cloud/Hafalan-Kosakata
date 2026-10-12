@@ -439,6 +439,7 @@ const Game = {
   sessionData: { hafalan: [], pengayaan: [], belajar: [], partikel: [], arti: [] },
   tabProgress: { hafalan: 0, belajar: 0, partikel: 0, arti: 0 }, 
   dungeonPool: [], dungeonScore: 0,
+  dungeonRecord: parseInt(localStorage.getItem('yk_dungeon_record') || '0', 10),
   
   startDungeon: () => {
     if(Game.hp <= 0) { UI.showToast("HP habis! Pulihkan diri atau tunggu cooldown.", "error"); return; }
@@ -456,7 +457,18 @@ const Game = {
     badge.className = "zone-badge zone-tempur"; badge.innerText = "☠️ SURVIVAL MODE";
     
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    const card = document.getElementById('card-main');
+    if (card) card.classList.remove('hazard-battle-active');
     UI.loadStep();
+  },
+
+  retreatDungeon: () => {
+    if (confirm(`Apakah kamu ingin mundur terhormat di Gelombang ke-${Game.dungeonScore + 1}? EXP dan Koin yang kamu raih akan tetap aman.`)) {
+      UI.showToast(`🏳️ Mundur ke markas dengan selamat! Skor bertahan: ${Game.dungeonScore}`, 'success');
+      Game.currentTab = 'hafalan';
+      Game.loadDayData();
+      UI.switchTab('hafalan');
+    }
   },
   dailyStats: { exp: 0, coin: 0, maxCombo: 0 },
 
@@ -766,6 +778,8 @@ nextDayFromResult: () => {
   },
   switchTab: (tId) => {
     if((tId === 'partikel' || tId === 'arti') && Game.hp <= 0) return;
+    const card = document.getElementById('card-main');
+    if (card) card.classList.remove('hazard-battle-active');
     if(Game.currentTab) Game.tabProgress[Game.currentTab] = Game.currentIndex;
     Game.currentTab = tId; Game.currentIndex = Game.tabProgress[tId]; 
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); document.getElementById(`tab-${tId}`).classList.add('active');
@@ -2753,30 +2767,76 @@ if (tipsBubble) tipsBubble.classList.add('hidden');
 
     } else { btnTips.classList.add('hidden'); }
     if (t === 'dungeon') {
-        document.getElementById('stage-indicator').innerText = `🔥 SKOR SURVIVAL: ${Game.dungeonScore}`;
+        const cardEl = document.getElementById('card-main');
+        if (cardEl) cardEl.classList.remove('hazard-battle-active');
+        const currentWave = Game.dungeonScore + 1;
+        const isBossWave = (currentWave % 5 === 0);
+        document.getElementById('stage-indicator').innerHTML = "";
         document.getElementById('ui-progress').style.width = `100%`;
 
         // Ambil 1 kata acak dari seluruh pool
         let pool = Game.dungeonPool;
         let target = pool[Math.floor(Math.random() * pool.length)];
+        let rubyHtml = Engine.buildRubyFormat(target.k, target.r, null, false);
         
-        document.getElementById('ui-jp').innerHTML = Engine.buildRubyFormat(target.k, target.r, null, false);
+        document.getElementById('ui-jp').innerHTML = `
+          <div class="dungeon-showcase animate-slide">
+            <div class="dungeon-header">
+              <span class="dungeon-wave-badge ${isBossWave ? 'boss-wave' : ''}">
+                ${isBossWave ? '👑 GELOMBANG BOS ELIT' : `🏰 GELOMBANG KE-${currentWave}`}
+              </span>
+              <span class="dungeon-record-badge">🏆 REKOR: <b>${Game.dungeonRecord}</b></span>
+            </div>
+
+            <div class="dungeon-target-body">
+              <span class="dungeon-prompt-label">${isBossWave ? '⚡ TANTANGAN BOS: APA ARTI KATA INI?' : 'TAKLUKKAN DENGAN ARTI YANG TEPAT:'}</span>
+              <div class="dungeon-word-display">${rubyHtml}</div>
+            </div>
+          </div>
+        `;
 
         // Bikin 3 opsi pengecoh dari pool yang sama
         let opts = [target.a];
         let wrongPool = Engine.shuffle([...pool].filter(x => x.a !== target.a));
-        opts.push(wrongPool[0].a, wrongPool[1].a, wrongPool[2].a);
+        if (wrongPool[0]) opts.push(wrongPool[0].a);
+        if (wrongPool[1]) opts.push(wrongPool[1].a);
+        if (wrongPool[2]) opts.push(wrongPool[2].a);
         opts = Engine.shuffle(opts);
 
-        document.getElementById('input-area').innerHTML = opts.map(o => `<button class="btn btn-alt" style="margin-bottom:8px;" onclick="Action.checkDungeon('${o.replace(/'/g, "\\'")}', '${target.a.replace(/'/g, "\\'")}', event)">${o}</button>`).join('');
+        const letters = ['A', 'B', 'C', 'D'];
+        document.getElementById('input-area').innerHTML = `
+          <div class="dungeon-options-grid animate-slide">
+            ${opts.map((o, idx) => `
+              <button class="dungeon-choice-btn ${isBossWave ? 'boss-choice' : ''}" onclick="Action.checkDungeon('${o.replace(/'/g, "\\'")}', '${target.a.replace(/'/g, "\\'")}', event)">
+                <span class="dungeon-choice-pill">${letters[idx] || '⚔️'}</span>
+                <span class="dungeon-choice-text">${o}</span>
+              </button>
+            `).join('')}
+          </div>
+          <div class="dungeon-footer-row">
+            <button type="button" class="btn-dungeon-retreat" onclick="Game.retreatDungeon()">🏳️ Mundur Terhormat (Amankan Progres)</button>
+          </div>
+        `;
         return; // Setop fungsi di sini agar tidak menjalankan kuis reguler
     }
     
     if (t === 'hafalan') {
       if(Game.sessionData.hafalan[0].k === "WIP") { document.getElementById('ui-jp').innerHTML = "UNDER CONSTRUCTION"; return; }
       const tHaf = Game.sessionData.hafalan.length; const tPeng = Game.sessionData.pengayaan.length; UI.updateProgress(i, tHaf + tPeng);
-      if (i === tHaf && !Game.jumpscareTriggered) { Game.jumpscareTriggered = true; const js = document.getElementById('jumpscare-overlay'); js.classList.add('show'); setTimeout(() => { js.classList.remove('show'); UI.loadStep(); }, 1000); return; }
+      if (i === tHaf && !Game.jumpscareTriggered) { 
+        Game.jumpscareTriggered = true; 
+        const js = document.getElementById('jumpscare-overlay'); 
+        js.classList.add('show'); 
+        if (navigator.vibrate) try { navigator.vibrate([70, 50, 90]); } catch(_) {}
+        setTimeout(() => { 
+          js.classList.remove('show'); 
+          UI.loadStep(); 
+        }, 1200); 
+        return; 
+      }
       if (i < tHaf) {
+        const cardEl = document.getElementById('card-main');
+        if (cardEl) cardEl.classList.remove('hazard-battle-active');
         const itm = Game.sessionData.hafalan[i]; 
         
         let isKanji = itm.k && /[\u4e00-\u9faf]/.test(itm.k);
@@ -2830,6 +2890,8 @@ if (tipsBubble) tipsBubble.classList.add('hidden');
 
         UI.makeNextBtn("Hafal →");
       } else if (i < tHaf + tPeng) {
+        const cardEl = document.getElementById('card-main');
+        if (cardEl) cardEl.classList.add('hazard-battle-active');
         const pIdx = i - tHaf;
         const itm = Game.sessionData.pengayaan[pIdx];
         const perc = Math.round(((pIdx + 1) / tPeng) * 100);
@@ -2842,7 +2904,10 @@ if (tipsBubble) tipsBubble.classList.add('hidden');
         document.getElementById('ui-jp').innerHTML = `
           <div class="quiz-showcase animate-slide">
             <div class="quiz-header">
-              <span class="quiz-badge">🚨 KUIS DADAKAN</span>
+              <div style="display:flex; align-items:center; gap:6px;">
+                <span class="quiz-badge">🚨 KUIS DADAKAN</span>
+                <span class="quiz-bonus-tag">⚡ 2X HADIAH</span>
+              </div>
               <div class="vocab-counter-group">
                 <span class="vocab-counter-text">DRILL <b>${pIdx + 1}</b> / ${tPeng}</span>
                 <div class="vocab-mini-track">
@@ -3257,8 +3322,8 @@ const Action = {
       const btn = evt ? evt.currentTarget : null;
       if(sel === cor) { 
           if (btn) btn.classList.add('choice-correct');
-          RPG.addReward(2, 1, evt); 
-          if (navigator.vibrate) try { navigator.vibrate(25); } catch(_) {}
+          RPG.addReward(10, 3, evt); // ⚡ 2X DOUBLE REWARD!
+          if (navigator.vibrate) try { navigator.vibrate(30); } catch(_) {}
           setTimeout(() => {
               UI.triggerNextAnim(() => { Game.currentIndex++; UI.loadStep(); }); 
           }, 180);
@@ -3267,22 +3332,43 @@ const Action = {
               btn.classList.add('choice-wrong');
               setTimeout(() => btn.classList.remove('choice-wrong'), 500);
           }
-          document.getElementById('ui-feedback').innerHTML = "Jawaban Kurang Tepat! ❌ Coba lagi!"; 
+          document.getElementById('ui-feedback').innerHTML = "Pertahanan Terbobol! ❌ Coba lagi!"; 
           document.getElementById('ui-feedback').style.color = "var(--danger)"; 
-          if (navigator.vibrate) try { navigator.vibrate([40, 40, 40]); } catch(_) {}
+          if (navigator.vibrate) try { navigator.vibrate([50, 40, 50]); } catch(_) {}
           RPG.combo = 0; RPG.updateUI(); 
       } 
   },
 
   checkDungeon: (sel, cor, evt) => {
+      const isBossWave = ((Game.dungeonScore + 1) % 5 === 0);
       if(sel === cor) {
           Game.dungeonScore++; RPG.combo++;
           if(RPG.combo > Game.dailyStats.maxCombo) Game.dailyStats.maxCombo = RPG.combo;
-          RPG.addReward(5, 2, evt); 
+          
+          // High Score Tracking
+          if(Game.dungeonScore > Game.dungeonRecord) {
+              Game.dungeonRecord = Game.dungeonScore;
+              localStorage.setItem('yk_dungeon_record', Game.dungeonRecord);
+          }
+
+          if(isBossWave) {
+              // Boss wave bonus: +25 EXP, +50 Coins, +1 HP recovery if needed!
+              RPG.addReward(25, 50, evt);
+              if(Game.hp < 3) {
+                  Game.hp++;
+                  UI.renderHP();
+                  UI.showToast(`👑 BOS ELIT DITAKLUKKAN! Bonus +50 Koin & Restorasi +1 HP! 🛡️`, 'success');
+              } else {
+                  UI.showToast(`👑 BOS ELIT DITAKLUKKAN! Bonus +50 Koin! 🪙`, 'success');
+              }
+          } else {
+              RPG.addReward(6, 3, evt);
+          }
           
           const card = document.getElementById('card-main');
           card.classList.remove('shake-hard'); card.classList.add('card-correct');
           setTimeout(()=>card.classList.remove('card-correct'), 500);
+          if (navigator.vibrate) try { navigator.vibrate(30); } catch(_) {}
           
           UI.triggerNextAnim(() => { UI.loadStep(); }); 
       } else {
@@ -3291,13 +3377,39 @@ const Action = {
           
           const card = document.getElementById('card-main');
           card.classList.add('shake-hard'); setTimeout(()=>card.classList.remove('shake-hard'), 500);
+          if (navigator.vibrate) try { navigator.vibrate([60, 40, 60]); } catch(_) {}
           
           Game.decreaseHP(evt);
           
           if(Game.hp > 0) {
-              document.getElementById('input-area').innerHTML = `<button class="btn" onclick="UI.triggerNextAnim(() => { UI.loadStep(); })">Lanjut Bertahan →</button>`;
+              document.getElementById('input-area').innerHTML = `<button class="btn" onclick="UI.triggerNextAnim(() => { UI.loadStep(); })">⚔️ Lanjut Bertahan (Sisa HP: ${Game.hp})</button>`;
           } else {
-              document.getElementById('input-area').innerHTML = `<button class="btn" style="background:var(--danger); color:white;" onclick="Game.init(Game.mode)">💀 KEMBALI KE LOBI</button>`;
+              // Heroic Game Over Screen
+              const isNewRecord = (Game.dungeonScore === Game.dungeonRecord && Game.dungeonScore > 0);
+              document.getElementById('ui-jp').innerHTML = `
+                <div class="dungeon-gameover-card animate-slide">
+                  <div class="dungeon-gameover-icon">💀</div>
+                  <div class="dungeon-gameover-title">PERTAHANAN GUGUR!</div>
+                  <div style="font-size:13px; color:var(--text-sub);">Kamu telah berjuang gigih di Dungeon Ingatan.</div>
+                  <div class="dungeon-stats-box">
+                    <div class="dungeon-stat-row">
+                      <span>Gelombang Bertahan:</span>
+                      <span style="font-weight:800; color:var(--primary);">${Game.dungeonScore} Gelombang</span>
+                    </div>
+                    <div class="dungeon-stat-row">
+                      <span>Rekor Terbaik:</span>
+                      <span style="font-weight:800; color:var(--gold);">${Game.dungeonRecord} Gelombang</span>
+                    </div>
+                    ${isNewRecord ? `<div style="color:var(--success); font-weight:800; font-size:12px; margin-top:8px;">🎉 REKOR TERBARU TERCIPTA!</div>` : ''}
+                  </div>
+                </div>
+              `;
+              document.getElementById('input-area').innerHTML = `
+                <div style="display:flex; flex-direction:column; gap:8px; width:100%; max-width:480px; margin:0 auto;">
+                  <button class="btn" onclick="Game.startDungeon()">🔄 Coba Lagi Survival</button>
+                  <button class="btn btn-alt" onclick="Game.init(Game.mode)">🏠 Kembali ke Markas</button>
+                </div>
+              `;
           }
       }
   },
