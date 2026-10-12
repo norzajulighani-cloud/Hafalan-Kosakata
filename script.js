@@ -583,7 +583,7 @@ const Game = {
 
   checkStoredMode: () => {
     let saved = localStorage.getItem('yk_mode');
-    if (saved === 'pemula') { Game.init(saved); } else { document.getElementById('setup-screen').classList.remove('hidden'); }
+    if (saved === 'pemula') { Game.init(saved); } else { UI.openSetupScreen(); }
   },
   init: (mode) => {
     if(Cooldown.check()) return;
@@ -840,6 +840,47 @@ nextDayFromResult: () => {
     UI.showToast(isHC ? "Mode Hardcore Aktif! Insting Ninja." : "Furigana Kembali", "success");
     UI.toggleSidebar();
   },
+
+  openSetupScreen: () => {
+    const setup = document.getElementById('setup-screen');
+    const mainApp = document.getElementById('main-app');
+    if (!setup) return;
+    
+    // Update live telemetry in setup portal
+    const rankEl = document.getElementById('setup-player-rank');
+    const expEl = document.getElementById('setup-player-exp');
+    const coinsEl = document.getElementById('setup-player-coins');
+    const dayEl = document.getElementById('setup-player-day');
+    const returnBtnWrap = document.getElementById('setup-return-btn-wrap');
+
+    if (rankEl && typeof RPG !== 'undefined') {
+      const parts = RPG.getTitleParts();
+      rankEl.textContent = `${parts.title} Lv.${RPG.level}`;
+    }
+    if (expEl && typeof RPG !== 'undefined') {
+      expEl.textContent = `${RPG.exp} ✨`;
+    }
+    if (coinsEl && typeof RPG !== 'undefined') {
+      coinsEl.textContent = `${RPG.coins} 🪙`;
+    }
+    if (dayEl && typeof Game !== 'undefined') {
+      dayEl.textContent = `Hari ${Game.currentDay || 1}/30`;
+    }
+    if (returnBtnWrap) {
+      returnBtnWrap.style.display = (typeof Game !== 'undefined' && Game.dayData && Game.dayData.length > 0) ? 'block' : 'none';
+    }
+
+    if (mainApp) mainApp.classList.add('hidden');
+    setup.classList.remove('hidden');
+  },
+
+  closeSetupScreen: () => {
+    const setup = document.getElementById('setup-screen');
+    const mainApp = document.getElementById('main-app');
+    if (setup) setup.classList.add('hidden');
+    if (mainApp) mainApp.classList.remove('hidden');
+  },
+
   showKanaModuleNotice: () => {
     UI.showToast("🔤 Modul Penguasaan Huruf Kana sedang disiapkan dalam rilis ekspansi berikutnya!", "warning");
   },

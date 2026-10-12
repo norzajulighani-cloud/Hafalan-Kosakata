@@ -43,69 +43,134 @@
 </div>
 
 <div id="setup-screen" class="hidden">
+  <!-- Atmospheric Torii & Kanji Watermark Backdrop -->
+  <div class="setup-torii-watermark" aria-hidden="true">道</div>
+  <div class="setup-ambient-glow" aria-hidden="true"></div>
+
   <div class="setup-canvas">
-    <!-- Clean Branding Header -->
+    <!-- Grand Header -->
     <div class="setup-header-area">
-      <div class="setup-top-tag">
-        <span class="setup-kanji-sub">日本語学習プラットフォーム</span>
-        <span class="setup-ver-pill">v10.6</span>
+      <div class="setup-portal-badge">
+        <span class="portal-badge-icon">⛩️</span>
+        <span class="portal-badge-text">KENSEI EXPEDITION PORTAL</span>
+        <span class="portal-ver-pill">v10.6</span>
       </div>
       <h1 class="setup-hero-title">YOMIKATA</h1>
-      <p class="setup-hero-sub">Pilih modul pembelajaran untuk memulai petualanganmu</p>
+      <p class="setup-hero-sub">読み方 • Jalan Pedang Penguasaan Bahasa Jepang</p>
+
+      <!-- Player Live Telemetry Strip -->
+      <div class="setup-player-telemetry" id="setup-telemetry">
+        <div class="telemetry-item">
+          <span class="telemetry-label">PENDEKAR</span>
+          <span class="telemetry-val" id="setup-player-rank">Kensei Lv.1</span>
+        </div>
+        <div class="telemetry-divider">•</div>
+        <div class="telemetry-item">
+          <span class="telemetry-label">EXP</span>
+          <span class="telemetry-val" id="setup-player-exp">0 ✨</span>
+        </div>
+        <div class="telemetry-divider">•</div>
+        <div class="telemetry-item">
+          <span class="telemetry-label">TABUNGAN</span>
+          <span class="telemetry-val" id="setup-player-coins">0 🪙</span>
+        </div>
+        <div class="telemetry-divider">•</div>
+        <div class="telemetry-item">
+          <span class="telemetry-label">SEKTOR</span>
+          <span class="telemetry-val" id="setup-player-day">Hari 1/30</span>
+        </div>
+      </div>
     </div>
 
-    <!-- Borderless, Clean Module Tracks -->
-    <div class="setup-tracks-list">
-      <!-- Track 1: Kana (Sebelum N5) -->
-      <div class="module-track track-kana" onclick="UI.showKanaModuleNotice()">
-        <div class="track-indicator indicator-kana"></div>
-        <div class="track-icon-wrap">🔤</div>
-        <div class="track-info">
-          <div class="track-meta-row">
-            <span class="track-stage-name">TAHAP 0 • FONDASI DASAR</span>
-            <span class="track-status-pill status-soon">● Segera Hadir</span>
-          </div>
-          <h2 class="track-title">Penguasaan Huruf Kana</h2>
-          <p class="track-desc">Hiragana & Katakana dasar, dakuten, handakuten, serta kombinasi bunyi yoon.</p>
+    <!-- The Torii Pathway (Vertical Energy Conduit connecting Kana -> N5 -> N4) -->
+    <div class="torii-pathway">
+      <div class="pathway-conduit-line"></div>
+
+      <!-- Node 0: Kana (Fondasi) -->
+      <div class="pathway-node node-kana" onclick="UI.showKanaModuleNotice()">
+        <div class="node-marker marker-kana">
+          <span class="node-num">00</span>
+          <div class="node-pulse"></div>
         </div>
-        <div class="track-action-wrap">
-          <span class="track-action-hint">Segera ›</span>
+        <div class="node-body">
+          <div class="node-meta">
+            <span class="node-stage-tag">TAHAP 0 • FONDASI DASAR</span>
+            <span class="node-status-pill status-dev">● SEGERA DIBUKA</span>
+          </div>
+          <div class="node-title-row">
+            <h2 class="node-title">Penguasaan Huruf Kana</h2>
+            <span class="node-kanji-glyph">仮名</span>
+          </div>
+          <p class="node-desc">Hiragana & Katakana dasar, dakuten, handakuten, serta kombinasi bunyi yoon.</p>
         </div>
       </div>
 
-      <!-- Track 2: N5 (Aktif) -->
-      <div class="module-track track-n5 active-playable" onclick="Game.init('pemula')">
-        <div class="track-indicator indicator-n5"></div>
-        <div class="track-icon-wrap">⛩️</div>
-        <div class="track-info">
-          <div class="track-meta-row">
-            <span class="track-stage-name accent-n5">KURIKULUM UTAMA</span>
-            <span class="track-status-pill status-ready">● Siap Dimainkan</span>
-          </div>
-          <h2 class="track-title">Modul JLPT N5 (Dasar & Pola)</h2>
-          <p class="track-desc">Silabus 30 hari: 400+ kosakata, tata bahasa, partikel, peta ekspedisi & survival dungeon.</p>
+      <!-- Node 1: HERO GATE - JLPT N5 (Aktif) -->
+      <div class="pathway-node node-hero-n5" onclick="Game.init('pemula')">
+        <div class="node-marker marker-n5 active">
+          <span class="node-num">01</span>
+          <div class="node-pulse-active"></div>
         </div>
-        <div class="track-action-wrap">
-          <button type="button" class="btn-track-play">Mulai ➔</button>
+        <div class="node-body hero-body">
+          <!-- Ambient Watermark Glyph inside N5 Gate -->
+          <div class="hero-gate-watermark">伍</div>
+          
+          <div class="hero-gate-top">
+            <span class="hero-gate-badge">⛩️ GERBANG UTAMA • EKSPEDISI AKTIF</span>
+            <span class="hero-status-pill">● SIAP DIMASUKI</span>
+          </div>
+
+          <div class="hero-title-row">
+            <h2 class="hero-title">Ekspedisi Silabus JLPT N5</h2>
+            <span class="hero-kanji-sub">五級 • 初級</span>
+          </div>
+          
+          <p class="hero-desc">
+            Kurikulum lengkap 30 hari: 400+ kosakata bertingkat, pola tata bahasa, kuis partikel interaktif, serta pertarungan survival di Dungeon Ingatan.
+          </p>
+
+          <div class="hero-specs-grid">
+            <div class="spec-pill"><span>🗡️</span> 400+ Kosakata</div>
+            <div class="spec-pill"><span>📜</span> 30 Sektor Misi</div>
+            <div class="spec-pill"><span>🏰</span> Dungeon Ingatan</div>
+            <div class="spec-pill"><span>⚡</span> Ambush Battle</div>
+          </div>
+
+          <div class="hero-cta-row">
+            <button type="button" class="btn-torii-enter" onclick="event.stopPropagation(); Game.init('pemula');">
+              <span class="cta-jp">進入</span>
+              <span class="cta-main">MASUKI GERBANG N5</span>
+              <span class="cta-arrow">➔</span>
+            </button>
+          </div>
         </div>
       </div>
 
-      <!-- Track 3: N4 (Di bawah N5) -->
-      <div class="module-track track-n4 locked" onclick="UI.showN4ModuleNotice()">
-        <div class="track-indicator indicator-n4"></div>
-        <div class="track-icon-wrap">🏯</div>
-        <div class="track-info">
-          <div class="track-meta-row">
-            <span class="track-stage-name">TAHAP 2 • MENENGAH</span>
-            <span class="track-status-pill status-locked">● Terkunci</span>
-          </div>
-          <h2 class="track-title">Modul JLPT N4 (Menengah Bawah)</h2>
-          <p class="track-desc">Bentuk pasif, kausatif, syarat (tara/ba/to), konjugasi lanjutan & ekspedisi N4.</p>
+      <!-- Node 2: N4 (Terkunci) -->
+      <div class="pathway-node node-n4 locked" onclick="UI.showN4ModuleNotice()">
+        <div class="node-marker marker-n4">
+          <span class="node-num">02</span>
+          <div class="node-lock-icon">🔒</div>
         </div>
-        <div class="track-action-wrap">
-          <span class="track-action-hint">🔒 Terkunci</span>
+        <div class="node-body">
+          <div class="node-meta">
+            <span class="node-stage-tag">TAHAP 2 • MENENGAH BAWAH</span>
+            <span class="node-status-pill status-locked">🔒 TERKUNCI</span>
+          </div>
+          <div class="node-title-row">
+            <h2 class="node-title">Modul JLPT N4</h2>
+            <span class="node-kanji-glyph">四級</span>
+          </div>
+          <p class="node-desc">Konjugasi lanjutan, bentuk pasif, kausatif, syarat (tara/ba/to) & ekspedisi N4.</p>
         </div>
       </div>
+    </div>
+
+    <!-- Back to Battle Zone Option (if returning from active game) -->
+    <div class="setup-bottom-nav" id="setup-return-btn-wrap" style="display: none;">
+      <button type="button" class="btn-setup-back" onclick="UI.closeSetupScreen()">
+        « Kembali ke Zona Tempur Saat Ini
+      </button>
     </div>
   </div>
 </div>
@@ -420,7 +485,7 @@
     <div class="sidebar-group">
       <div class="sidebar-group-label">🎮 MODE & FITUR UTAMA</div>
       
-      <div class="sidebar-tile" onclick="UI.toggleSidebar(); document.getElementById('main-app').classList.add('hidden'); document.getElementById('setup-screen').classList.remove('hidden');">
+      <div class="sidebar-tile" onclick="UI.toggleSidebar(); UI.openSetupScreen();">
         <div class="sidebar-tile-icon icon-cyan">⚙️</div>
         <div class="sidebar-tile-info">
           <div class="sidebar-tile-title">Menu Awal</div>
@@ -510,8 +575,10 @@
 
   <div class="sidebar-footer">
     <div class="sidebar-footer-info">
-      <span>YOMIKATA • JLPT N5 ENGINE</span>
-      <span class="sidebar-footer-status">ONLINE 🟢</span>
+      <div class="sidebar-footer-engine">
+        <span>YOMIKATA // JLPT ENGINE</span>
+      </div>
+      <span class="sidebar-footer-status"><span class="radar-dot"></span> ONLINE</span>
     </div>
   </div>
 </div>
