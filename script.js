@@ -119,6 +119,24 @@ const RPG = {
     return { hp: 1, shield: 0, intel: 0, mata: 0, pandora: 0 };
   })(),
 
+  relics: (() => {
+    try {
+      let saved = localStorage.getItem('yk_relics');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {}
+    return { muramasa: false, omamori: false, scouter: false };
+  })(),
+
+  hasRelic: function(key) {
+    return !!(this.relics && this.relics[key]);
+  },
+
+  saveRelics: function() {
+    try {
+      localStorage.setItem('yk_relics', JSON.stringify(this.relics));
+    } catch (e) {}
+  },
+
   getInvCount: function(key) {
     return (this.inventory && typeof this.inventory[key] === 'number') ? this.inventory[key] : 0;
   },
@@ -274,6 +292,26 @@ const RPG = {
       if (el) el.innerText = `Tas: ${this.getInvCount(key)}`;
     });
 
+    // --- SHOP RELIC OWNED BUTTONS ---
+    ['muramasa', 'omamori', 'scouter'].forEach(key => {
+      let btn = document.getElementById(`btn-buy-relic-${key}`);
+      if (btn) {
+        if (this.hasRelic(key)) {
+          btn.innerText = "TERPASANG ✅";
+          btn.className = "btn-buy btn-relic-owned";
+          btn.disabled = true;
+        } else {
+          let perks = this.getRankPerks();
+          let baseCosts = { muramasa: 600, omamori: 750, scouter: 500 };
+          let disc = perks.shopDiscount || 0;
+          let actualCost = Math.round((baseCosts[key] || 500) * (1 - disc));
+          btn.innerText = `${actualCost} 🪙`;
+          btn.className = "btn-buy btn-relic";
+          btn.disabled = false;
+        }
+      }
+    });
+
     const cUI = document.getElementById('ui-combo');
     if (cUI) {
       if(this.combo >= 2) { 
@@ -291,6 +329,12 @@ const RPG = {
     let multi = this.combo >= 2 ? Math.min(this.combo, 15) : 1; 
     let earnedExp = Math.round(baseExp * multi * (1 + perks.expBonus)); 
     let earnedCoin = Math.round(baseCoin * multi * (1 + perks.coinBonus));
+
+    // Relik Pedang Muramasa (+10% EXP Permanen)
+    if (this.hasRelic('muramasa')) {
+      let muramasaBonus = Math.max(1, Math.round(earnedExp * 0.10));
+      earnedExp += muramasaBonus;
+    }
 
     // Bonus koin combo perk
     if (perks.comboBonusCoin && this.combo >= 5) {
@@ -356,6 +400,161 @@ const RPG = {
     } else {
       UI.showToast("Kredit koin tidak memadai.", "error");
     }
+  },
+
+  buyRelic: function(type, cost) {
+    if (this.hasRelic(type)) {
+      UI.showToast("Relik ini sudah Anda miliki secara permanen!", "warning");
+      return;
+    }
+    let perks = this.getRankPerks();
+    let discount = perks.shopDiscount || 0;
+    let actualCost = Math.round(cost * (1 - discount));
+    let hasAccess = Game.adminMode || this.coins >= actualCost;
+    if (hasAccess) {
+      if (!Game.adminMode) this.coins -= actualCost;
+      if (!this.relics) this.relics = { muramasa: false, omamori: false, scouter: false };
+      this.relics[type] = true;
+      this.saveRelics();
+      this.save();
+      this.updateUI();
+      if (typeof UI.renderShop === 'function') UI.renderShop();
+      if (typeof UI.renderInventory === 'function') UI.renderInventory();
+
+      const relicNames = {
+        muramasa: "🗡️ Pedang Muramasa (+10% EXP)",
+        omamori: "📿 Jimat Omamori (10% Kebal Error)",
+        scouter: "👓 Lensa Scouter (Radar Partikel)"
+      };
+      let name = relicNames[type] || type;
+      let discountMsg = discount > 0 ? ` (Diskon ${Math.round(discount * 100)}% Gelar)` : "";
+      UI.showToast(`Relik Terbuka: ${name}!${discountMsg} ✨`, "success");
+    } else {
+      UI.showToast("Kredit koin tidak mencukupi untuk Relik ini.", "error");
+    }
+  },
+
+  rollPandoraGacha: function() {
+    let count = this.getInvCount('pandora');
+    if (count <= 0 && !Game.adminMode) {
+      UI.showToast("Kamu tidak memiliki Kotak Pandora di dalam tas!", "error");
+      return;
+    }
+    if (!Game.adminMode) this.inventory.pandora--;
+
+    let rand = Math.random();
+    let result = null;
+
+    if (rand < 0.05) {
+      // 5% LEGENDARY TIER
+      let unownedRelics = ['muramasa', 'omamori', 'scouter'].filter(r => !this.hasRelic(r));
+      if (unownedRelics.length > 0 && Math.random() < 0.5) {
+        let wonRelic = unownedRelics[Math.floor(Math.random() * unownedRelics.length)];
+        this.relics[wonRelic] = true;
+        this.saveRelics();
+        const relicNames = { muramasa: 'Pedang Muramasa 🗡️', omamori: 'Jimat Omamori 📿', scouter: 'Lensa Scouter 👓' };
+        result = {
+          tier: 'legendary',
+          tierName: 'LEGENDARY JACKPOT 🟡',
+          name: relicNames[wonRelic],
+          desc: 'Mahakarya Langka! Relik permanen berhasil diperoleh secara GRATIS!',
+          icon: wonRelic === 'muramasa' ? '🗡️' : (wonRelic === 'omamori' ? '📿' : '👓'),
+          rewardType: 'relic'
+        };
+      } else {
+        this.coins += 350;
+        Game.hp = 3;
+        localStorage.setItem('yk_hp', Game.hp);
+        UI.renderHP();
+        result = {
+          tier: 'legendary',
+          tierName: 'LEGENDARY JACKPOT 🟡',
+          name: 'Restorasi Suci + 350 🪙',
+          desc: 'HP pulih maksimal (3/3) & pundi-pundi koin bertambah drastis!',
+          icon: '👑',
+          rewardType: 'jackpot'
+        };
+      }
+    } else if (rand < 0.25) {
+      // 20% EPIC TIER
+      let epicRoll = Math.random();
+      if (epicRoll < 0.5) {
+        this.inventory.mata = (this.inventory.mata || 0) + 1;
+        result = {
+          tier: 'epic',
+          tierName: 'EPIC REWARD 🟣',
+          name: '1x Mata Kensei 👁️',
+          desc: 'Item langka pembuka arti bahasa Jepang pada kuis Tab Arti!',
+          icon: '👁️',
+          rewardType: 'item'
+        };
+      } else {
+        let coinBonus = 200;
+        this.coins += coinBonus;
+        result = {
+          tier: 'epic',
+          tierName: 'EPIC REWARD 🟣',
+          name: `Peti Harta +${coinBonus} 🪙`,
+          desc: 'Peti dipenuhi keping emas berkilau bernilai tinggi!',
+          icon: '💰',
+          rewardType: 'coins'
+        };
+      }
+    } else if (rand < 0.60) {
+      // 35% RARE TIER
+      let rareRoll = Math.random();
+      if (rareRoll < 0.5) {
+        this.inventory.shield = (this.inventory.shield || 0) + 1;
+        result = {
+          tier: 'rare',
+          tierName: 'RARE REWARD 🔵',
+          name: '1x Aegis Shield 🛡️',
+          desc: 'Pelindung 1x kesalahan kuis disimpan langsung ke dalam tasmu.',
+          icon: '🛡️',
+          rewardType: 'item'
+        };
+      } else {
+        this.inventory.intel = (this.inventory.intel || 0) + 1;
+        result = {
+          tier: 'rare',
+          tierName: 'RARE REWARD 🔵',
+          name: '1x Gulungan Intel 📜',
+          desc: 'Item bocoran arti kalimat Tab Partikel berhasil diamankan.',
+          icon: '📜',
+          rewardType: 'item'
+        };
+      }
+    } else {
+      // 40% COMMON TIER
+      let commonRoll = Math.random();
+      if (commonRoll < 0.5) {
+        this.inventory.hp = (this.inventory.hp || 0) + 1;
+        result = {
+          tier: 'common',
+          tierName: 'COMMON REWARD ⚪',
+          name: '1x Nano-Repair (+1 HP) ❤️',
+          desc: 'Kapsul medis pemulih kesehatan darurat disimpan ke dalam tas.',
+          icon: '❤️',
+          rewardType: 'item'
+        };
+      } else {
+        let coinBack = 45;
+        this.coins += coinBack;
+        result = {
+          tier: 'common',
+          tierName: 'COMMON REWARD ⚪',
+          name: `Cashback +${coinBack} 🪙`,
+          desc: 'Mendapatkan uang kembali dari kotak suvenir kenang-kenangan.',
+          icon: '🪙',
+          rewardType: 'coins'
+        };
+      }
+    }
+
+    this.save();
+    this.updateUI();
+    if (typeof UI.renderInventory === 'function') UI.renderInventory();
+    UI.playGachaAnimation(result);
   },
 
   useItem: function(type) {
@@ -444,30 +643,8 @@ const RPG = {
       UI.showToast("Mata Kensei Aktif! Teks Jepang terungkap.", "success");
       UI.closeModal('inventory-modal');
     } else if (type === 'pandora') {
-      if (!Game.adminMode) this.inventory.pandora--;
-      let rng = Math.random();
-      if (rng < 0.15) {
-        Game.hp = 3;
-        localStorage.setItem('yk_hp', Game.hp);
-        UI.renderHP();
-        document.body.classList.remove('danger-mode');
-        UI.showToast("JACKPOT PANDORA! HP Pulih Sepenuhnya! ❤️❤️❤️", "success");
-      } else if (rng < 0.45) {
-        if (!Game.hasShield) {
-          Game.hasShield = true;
-          const cardEl = document.getElementById('card-main');
-          if (cardEl) cardEl.classList.add('shield-active');
-          UI.showToast("Beruntung! Aegis Shield Aktif 🛡️", "success");
-        } else {
-          this.coins += 100;
-          UI.showToast("Sudah ada Shield! Cashback 100 🪙", "warning");
-        }
-      } else if (rng < 0.8) {
-        UI.showToast("ZONK! Kotak Pandora kosong melompong wkwk.", "warning");
-      } else {
-        UI.showToast("JEBAKAN PANDORA! Gas Beracun -1 HP ☠️", "error");
-        Game.decreaseHP(null);
-      }
+      this.rollPandoraGacha();
+      return;
     }
 
     this.save();
@@ -605,6 +782,7 @@ const Game = {
     
     Game.tabProgress = { hafalan: 0, belajar: 0, partikel: 0, arti: 0 }; Game.jumpscareTriggered = false;
     Game.dailyStats = { exp: 0, coin: 0, maxCombo: 0 }; 
+    Game.scouterUsedToday = false; 
 
     if(!dayData) {
        document.getElementById('ui-day').innerHTML = `🗺️ Hari ${Game.currentDay} (WIP) <span style="font-size:10px;">▼</span>`;
@@ -636,6 +814,12 @@ const Game = {
     if (perks.resistChance > 0 && Math.random() < perks.resistChance) {
       RPG.spawnFloatingText("🛡️ TANGKIS GELAR!", "var(--success)", evt);
       UI.showToast(`🛡️ Refleks Gelar ${perks.name}! Serangan musuh berhasil ditangkis, HP & Combo aman!`, 'success');
+      return;
+    }
+    // Relik Jimat Omamori (10% Peluang Kebal dari Kesalahan)
+    if (RPG.hasRelic('omamori') && Math.random() < 0.10) {
+      RPG.spawnFloatingText("📿 BERKAH OMAMORI!", "var(--gold)", evt);
+      UI.showToast("📿 Berkah Jimat Omamori menyelamatkanmu dari kesalahan! HP & Combo aman.", "success");
       return;
     }
     Game.hpLostThisTurn = true; Game.hp--; RPG.combo = 0; RPG.updateUI(); localStorage.setItem('yk_hp', Game.hp); UI.renderHP();
@@ -780,6 +964,115 @@ const UI = {
         </div>
       `;
     }).join('');
+
+    // Render Relik Aktif
+    const relicContainer = document.getElementById('inv-relic-container');
+    if (relicContainer) {
+      const relicsConfig = [
+        {
+          id: 'muramasa',
+          name: 'Pedang Muramasa',
+          icon: '🗡️',
+          desc: 'Pasif: +10% EXP setiap kuis dijawab benar.'
+        },
+        {
+          id: 'omamori',
+          name: 'Jimat Omamori',
+          icon: '📿',
+          desc: 'Pasif: 10% peluang kebal dari kesalahan kuis.'
+        },
+        {
+          id: 'scouter',
+          name: 'Lensa Scouter',
+          icon: '👓',
+          desc: 'Pasif: Radar partikel target 1x per hari.'
+        }
+      ];
+
+      let ownedRelics = relicsConfig.filter(r => RPG.hasRelic(r.id));
+      if (ownedRelics.length === 0) {
+        relicContainer.innerHTML = `
+          <div class="inv-relic-empty">
+            <span class="relic-empty-icon">⛩️</span>
+            <span>Belum ada relik permanen terpasang. Kunjungi Toko untuk membeli perlengkapan legendaris!</span>
+          </div>
+        `;
+      } else {
+        relicContainer.innerHTML = ownedRelics.map(r => `
+          <div class="inv-relic-card">
+            <div class="inv-relic-icon">${r.icon}</div>
+            <div class="inv-relic-info">
+              <div class="inv-relic-name">${r.name} <span class="relic-active-badge">AKTIF</span></div>
+              <div class="inv-relic-desc">${r.desc}</div>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+  },
+
+  playGachaAnimation: (result) => {
+    UI.closeModal('inventory-modal');
+    UI.closeModal('shop-modal');
+
+    const modal = document.getElementById('gacha-modal');
+    const chestWrap = document.getElementById('gacha-chest-wrap');
+    const resultCard = document.getElementById('gacha-result-card');
+    const statusText = document.getElementById('gacha-status-text');
+    const chestIcon = document.getElementById('gacha-chest-icon');
+
+    if (!modal) return;
+    modal.classList.remove('hidden');
+
+    // Reset visual state
+    chestWrap.classList.remove('hidden', 'gacha-burst');
+    chestWrap.classList.add('gacha-rattle');
+    resultCard.classList.add('hidden');
+    resultCard.className = `gacha-result-card hidden tier-${result.tier}`;
+    chestIcon.textContent = '🎁';
+    statusText.textContent = 'MEMBUKA SEGEL PANDORA...';
+
+    // Phase 1: Chest Rattle (1.2 detik)
+    setTimeout(() => {
+      chestWrap.classList.remove('gacha-rattle');
+      chestWrap.classList.add('gacha-burst');
+      chestIcon.textContent = '✨';
+      statusText.textContent = 'SEGEL TERBUKA!';
+
+      // Phase 2: Burst of Light & Reveal Card (500ms)
+      setTimeout(() => {
+        chestWrap.classList.add('hidden');
+        resultCard.classList.remove('hidden');
+        resultCard.classList.add('animate-reveal');
+
+        document.getElementById('gacha-rarity-banner').textContent = result.tierName;
+        document.getElementById('gacha-item-icon').textContent = result.icon;
+        document.getElementById('gacha-item-title').textContent = result.name;
+        document.getElementById('gacha-item-desc').textContent = result.desc;
+
+        // Floating celebratory alert
+        if (result.tier === 'legendary') {
+          RPG.spawnFloatingText("🌟 JACKPOT LEGENDARIS!", "var(--gold)", null, 0, -60);
+        } else if (result.tier === 'epic') {
+          RPG.spawnFloatingText("🟣 REWARD EPIC!", "#c084fc", null, 0, -60);
+        }
+      }, 500);
+    }, 1200);
+  },
+
+  claimGachaReward: () => {
+    const modal = document.getElementById('gacha-modal');
+    if (modal) modal.classList.add('hidden');
+    UI.showToast(`Hadiah Pandora Berhasil Diklaim! 🎁✨`, 'success');
+    RPG.updateUI();
+    if (typeof UI.renderInventory === 'function') UI.renderInventory();
+  },
+
+  closeGachaModal: () => {
+    const modal = document.getElementById('gacha-modal');
+    if (modal) modal.classList.add('hidden');
+    RPG.updateUI();
+    if (typeof UI.renderInventory === 'function') UI.renderInventory();
   },
 
   renderShop: () => {
@@ -3508,9 +3801,21 @@ if (tipsBubble) tipsBubble.classList.add('hidden');
             if (p && !defaultOpts.includes(p)) defaultOpts.push(p);
         });
 
+        // Relik Lensa Scouter: sorot partikel benar otomatis 1x per sesi harian
+        let isScouterActive = RPG.hasRelic('scouter') && !Game.scouterUsedToday && targetArr.length > 0;
+        if (isScouterActive) {
+            Game.scouterUsedToday = true;
+            setTimeout(() => {
+                UI.showToast("👓 Radar Lensa Scouter aktif! Mendeteksi partikel target.", "warning");
+            }, 300);
+        }
+
         let optsHtml = '<div class="particle-chips-grid">';
         defaultOpts.forEach(p => { 
-            optsHtml += `<button type="button" class="particle-chip-btn" onclick="Action.fillMulti('${p}')">${p}</button>`; 
+            let isTarget = isScouterActive && targetArr.includes(p);
+            let scouterClass = isTarget ? 'scouter-detected' : '';
+            let scouterBadge = isTarget ? '<span class="scouter-tag">👓 RADAR</span>' : '';
+            optsHtml += `<button type="button" class="particle-chip-btn ${scouterClass}" onclick="Action.fillMulti('${p}')">${p}${scouterBadge}</button>`; 
         });
         optsHtml += '</div>'; 
         

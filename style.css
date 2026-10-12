@@ -2334,7 +2334,7 @@ ruby.show .arti-hint { display: none !important; }
   border-bottom: none;
 }
 
-#map-modal, #setup-screen, #cooldown-screen, #shop-modal, #level-modal, #tips-modal, #inventory-modal, #kamus-modal { 
+#map-modal, #setup-screen, #cooldown-screen, #shop-modal, #level-modal, #tips-modal, #inventory-modal, #kamus-modal, #gacha-modal { 
   position: fixed; 
   inset: 0; 
   display: flex; 
@@ -3146,6 +3146,413 @@ ruby.show .arti-hint { display: none !important; }
 }
 
 
+
+/* ==========================================
+   RELIK PERMANEN KENSEI (EQUIPMENT)
+   ========================================== */
+.shop-section-divider {
+  margin: 12px 0 4px;
+  padding: 8px 12px;
+  background: linear-gradient(90deg, rgba(251, 191, 36, 0.12) 0%, transparent 100%);
+  border-left: 3px solid var(--gold);
+  border-radius: 0 8px 8px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.shop-section-label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  color: var(--gold);
+  text-transform: uppercase;
+}
+.shop-section-sub {
+  font-size: 10px;
+  color: var(--text-sub);
+}
+
+.shop-card.relic-card {
+  border-color: rgba(251, 191, 36, 0.25);
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%);
+}
+.shop-card.relic-card:hover {
+  border-color: var(--gold);
+  box-shadow: 0 4px 20px rgba(251, 191, 36, 0.2);
+}
+.icon-relic {
+  border-color: rgba(251, 191, 36, 0.4);
+  background: rgba(251, 191, 36, 0.08);
+  filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.4));
+}
+.badge-relic {
+  background: rgba(251, 191, 36, 0.12) !important;
+  color: var(--gold) !important;
+  border-color: rgba(251, 191, 36, 0.3) !important;
+}
+.btn-relic {
+  background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+  color: #000;
+}
+.btn-relic-owned {
+  background: rgba(34, 197, 94, 0.2) !important;
+  color: #4ade80 !important;
+  border: 1px solid rgba(34, 197, 94, 0.4) !important;
+  cursor: default !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Active Relics in Inventory */
+.inv-relic-section {
+  padding: 10px 16px;
+  background: rgba(2, 6, 23, 0.6);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+}
+.inv-relic-header {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  color: var(--primary);
+  margin-bottom: 6px;
+}
+.inv-relic-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 125px;
+  overflow-y: auto;
+}
+.inv-relic-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 8px;
+}
+.inv-relic-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.inv-relic-info {
+  flex: 1;
+  min-width: 0;
+}
+.inv-relic-name {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.relic-active-badge {
+  font-size: 8.5px;
+  font-weight: 800;
+  color: #4ade80;
+  background: rgba(34, 197, 94, 0.15);
+  padding: 1px 5px;
+  border-radius: 3px;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+.inv-relic-desc {
+  font-size: 10px;
+  color: var(--text-sub);
+}
+.inv-relic-empty {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: #64748b;
+  padding: 4px 0;
+}
+.relic-empty-icon {
+  font-size: 16px;
+  opacity: 0.6;
+}
+
+/* Scouter Radar Detection on Particle Quiz */
+.particle-chip-btn.scouter-detected {
+  border: 2px solid var(--gold) !important;
+  box-shadow: 0 0 15px rgba(251, 191, 36, 0.7), inset 0 0 10px rgba(251, 191, 36, 0.2) !important;
+  animation: scouterPulse 1.5s infinite ease-in-out;
+  position: relative;
+}
+.scouter-tag {
+  display: block;
+  font-size: 8.5px;
+  font-weight: 900;
+  color: var(--gold);
+  letter-spacing: 0.5px;
+  margin-top: 1px;
+}
+@keyframes scouterPulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 12px rgba(251, 191, 36, 0.6); }
+  50% { transform: scale(1.05); box-shadow: 0 0 22px rgba(251, 191, 36, 0.95); }
+}
+
+/* ==========================================
+   GACHA PANDORA PORTAL MODAL & ANIMATIONS
+   ========================================== */
+.gacha-modal-card {
+  width: 92%;
+  max-width: 440px;
+  background: radial-gradient(circle at center, #0e1726 0%, #020617 100%);
+  border: 1.5px solid rgba(251, 191, 36, 0.4);
+  border-radius: 20px;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.95), 0 0 40px rgba(251, 191, 36, 0.2);
+  overflow: hidden;
+  box-sizing: border-box;
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.gacha-header {
+  padding: 16px 20px 12px;
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.7) 0%, transparent 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.gacha-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.gacha-badge {
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 1.2px;
+  color: var(--gold);
+  background: rgba(251, 191, 36, 0.12);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+.gacha-close-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-sub);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+}
+.gacha-close-btn:hover {
+  background: rgba(239, 68, 68, 0.25);
+  color: var(--danger);
+  border-color: var(--danger);
+}
+.gacha-title {
+  color: #fff;
+  font-size: 19px;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: 0.4px;
+}
+.gacha-subtitle {
+  color: var(--text-sub);
+  font-size: 11.5px;
+  margin: 2px 0 0;
+}
+
+.gacha-stage-canvas {
+  padding: 30px 20px;
+  min-height: 270px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Chest Animation Wrap */
+.gacha-chest-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  position: relative;
+  z-index: 2;
+}
+
+.gacha-chest-icon {
+  font-size: 76px;
+  filter: drop-shadow(0 0 25px rgba(251, 191, 36, 0.6));
+  transition: transform 0.2s ease;
+}
+
+.gacha-ambient-halo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.35) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: -1;
+  animation: pulseGold 2s infinite ease-in-out;
+}
+
+.gacha-status-text {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: var(--gold);
+  text-transform: uppercase;
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+}
+
+/* Animations */
+@keyframes chestRattle {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  20% { transform: scale(1.08) rotate(-6deg); }
+  40% { transform: scale(1.08) rotate(6deg); }
+  60% { transform: scale(1.12) rotate(-4deg); }
+  80% { transform: scale(1.12) rotate(4deg); }
+}
+
+.gacha-rattle .gacha-chest-icon {
+  animation: chestRattle 0.35s infinite ease-in-out;
+}
+
+@keyframes gachaBurstAnim {
+  0% { transform: scale(1); filter: brightness(1); }
+  50% { transform: scale(1.4); filter: brightness(3); }
+  100% { transform: scale(1); filter: brightness(1.5); }
+}
+
+.gacha-burst .gacha-chest-icon {
+  animation: gachaBurstAnim 0.5s ease-out forwards;
+}
+
+/* Result Reveal Card */
+.gacha-result-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  box-sizing: border-box;
+}
+
+@keyframes popReveal {
+  from { opacity: 0; transform: scale(0.7) translateY(20px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+.animate-reveal {
+  animation: popReveal 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.gacha-rarity-banner {
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 3px 12px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+}
+
+.gacha-item-icon {
+  font-size: 56px;
+  margin-bottom: 10px;
+  filter: drop-shadow(0 0 16px currentColor);
+}
+
+.gacha-item-title {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 800;
+  margin: 0 0 6px;
+}
+
+.gacha-item-desc {
+  color: var(--text-sub);
+  font-size: 12px;
+  margin: 0 0 16px;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.gacha-action-row {
+  width: 100%;
+}
+.btn-gacha-claim {
+  width: 100%;
+  background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+  color: #020617;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  padding: 12px 20px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-gacha-claim:hover {
+  background: linear-gradient(135deg, #fde047 0%, #fbbf24 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(251, 191, 36, 0.8);
+}
+
+/* Rarity Tiers */
+.tier-common .gacha-rarity-banner {
+  color: #cbd5e1;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+.tier-common {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.tier-rare .gacha-rarity-banner {
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+}
+.tier-rare {
+  border-color: rgba(56, 189, 248, 0.4);
+  box-shadow: 0 0 25px rgba(56, 189, 248, 0.15);
+}
+
+.tier-epic .gacha-rarity-banner {
+  color: #c084fc;
+  background: rgba(192, 132, 252, 0.18);
+  border: 1px solid rgba(192, 132, 252, 0.5);
+  box-shadow: 0 0 20px rgba(192, 132, 252, 0.5);
+}
+.tier-epic {
+  border-color: rgba(192, 132, 252, 0.45);
+  box-shadow: 0 0 30px rgba(192, 132, 252, 0.2);
+}
+
+.tier-legendary .gacha-rarity-banner {
+  color: var(--gold);
+  background: rgba(251, 191, 36, 0.22);
+  border: 1px solid var(--gold);
+  box-shadow: 0 0 25px rgba(251, 191, 36, 0.8);
+}
+.tier-legendary {
+  border-color: var(--gold);
+  box-shadow: 0 0 40px rgba(251, 191, 36, 0.35);
+  background: radial-gradient(circle at center, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%) !important;
+}
 
 .shop-item { background: #1e293b; padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 350px; margin-bottom: 10px; border: 1px solid #334155; box-sizing: border-box; }
 /* ==========================================

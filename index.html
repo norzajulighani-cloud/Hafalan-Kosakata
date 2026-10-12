@@ -316,6 +316,57 @@
         </div>
       </div>
 
+      <!-- Section Divider: Relik Permanen -->
+      <div class="shop-section-divider">
+        <span class="shop-section-label">⚔️ RELIK PERMANEN KENSEI (EQUIPMENT)</span>
+        <span class="shop-section-sub">Pasif abadi yang melekat selamanya pada pendekar</span>
+      </div>
+
+      <!-- Relik 1: Pedang Muramasa -->
+      <div class="shop-card relic-card">
+        <div class="shop-card-icon icon-relic">🗡️</div>
+        <div class="shop-card-info">
+          <div class="shop-card-title-row">
+            <span class="shop-card-name">Pedang Muramasa</span>
+            <span class="shop-card-owned badge-relic">Relik Pasif</span>
+          </div>
+          <div class="shop-card-desc">Bonus permanen <b>+10% EXP</b> setiap kali kuis dijawab dengan benar.</div>
+        </div>
+        <div class="shop-card-action">
+          <button class="btn-buy btn-relic" id="btn-buy-relic-muramasa" onclick="RPG.buyRelic('muramasa', 600)">600 🪙</button>
+        </div>
+      </div>
+
+      <!-- Relik 2: Jimat Omamori -->
+      <div class="shop-card relic-card">
+        <div class="shop-card-icon icon-relic">📿</div>
+        <div class="shop-card-info">
+          <div class="shop-card-title-row">
+            <span class="shop-card-name">Jimat Omamori</span>
+            <span class="shop-card-owned badge-relic">Relik Pasif</span>
+          </div>
+          <div class="shop-card-desc">Peluang <b>10% kebal kesalahan</b> di Zona Tempur (HP & combo aman).</div>
+        </div>
+        <div class="shop-card-action">
+          <button class="btn-buy btn-relic" id="btn-buy-relic-omamori" onclick="RPG.buyRelic('omamori', 750)">750 🪙</button>
+        </div>
+      </div>
+
+      <!-- Relik 3: Lensa Scouter -->
+      <div class="shop-card relic-card">
+        <div class="shop-card-icon icon-relic">👓</div>
+        <div class="shop-card-info">
+          <div class="shop-card-title-row">
+            <span class="shop-card-name">Lensa Scouter</span>
+            <span class="shop-card-owned badge-relic">Relik Pasif</span>
+          </div>
+          <div class="shop-card-desc">Mendeteksi & menyorot <b>partikel benar</b> otomatis 1x setiap sesi harian.</div>
+        </div>
+        <div class="shop-card-action">
+          <button class="btn-buy btn-relic" id="btn-buy-relic-scouter" onclick="RPG.buyRelic('scouter', 500)">500 🪙</button>
+        </div>
+      </div>
+
       <!-- Dev Override Item -->
       <div class="shop-card dev-card">
         <div class="shop-card-icon">🔓</div>
@@ -363,9 +414,53 @@
       <!-- Generated dynamically by UI.renderInventory() -->
     </div>
 
+    <!-- Active Relics Panel -->
+    <div class="inv-relic-section">
+      <div class="inv-relic-header">
+        <span>⚔️ RELIK AKTIF (PASIF PERMANEN)</span>
+      </div>
+      <div class="inv-relic-grid" id="inv-relic-container">
+        <!-- Rendered dynamically by UI.renderInventory() -->
+      </div>
+    </div>
+
     <div class="inv-modal-footer">
       <button type="button" class="btn btn-shop-link" onclick="UI.closeModal('inventory-modal'); UI.openModal('shop-modal');">🛒 Beli Suplai (Ke Toko)</button>
       <button type="button" class="btn btn-alt" style="max-width:200px; margin:0;" onclick="UI.closeModal('inventory-modal')">Tutup Tas</button>
+    </div>
+  </div>
+</div>
+
+<!-- Gacha Pandora Portal Modal -->
+<div id="gacha-modal" class="hidden">
+  <div class="gacha-modal-card">
+    <div class="gacha-header">
+      <div class="gacha-header-top">
+        <span class="gacha-badge">🎁 KOTAK PANDORA • GACHA PORTAL</span>
+        <button type="button" class="gacha-close-btn" onclick="UI.closeGachaModal()" title="Tutup">✕</button>
+      </div>
+      <h2 class="gacha-title">Portal Pemanggilan Takdir</h2>
+      <p class="gacha-subtitle">Buka segel kuno untuk memperoleh berkah harta legendaris</p>
+    </div>
+
+    <div class="gacha-stage-canvas" id="gacha-canvas">
+      <!-- Stage 1: Chest Animation -->
+      <div class="gacha-chest-wrap" id="gacha-chest-wrap">
+        <div class="gacha-ambient-halo"></div>
+        <div class="gacha-chest-icon" id="gacha-chest-icon">🎁</div>
+        <div class="gacha-status-text" id="gacha-status-text">MEMBUKA SEGEL PANDORA...</div>
+      </div>
+
+      <!-- Stage 2: Reveal Card (hidden initially) -->
+      <div class="gacha-result-card hidden" id="gacha-result-card">
+        <div class="gacha-rarity-banner" id="gacha-rarity-banner">LEGENDARY 🟡</div>
+        <div class="gacha-item-icon" id="gacha-item-icon">👑</div>
+        <h3 class="gacha-item-title" id="gacha-item-title">Hadiah Pandora</h3>
+        <p class="gacha-item-desc" id="gacha-item-desc">Deskripsi hadiah</p>
+        <div class="gacha-action-row">
+          <button type="button" class="btn-gacha-claim" id="btn-gacha-claim" onclick="UI.claimGachaReward()">KLAIM HADIAH ➔</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
