@@ -141,6 +141,93 @@ const RPG = {
     return { icon, name };
   },
 
+  getRankPerks: function() {
+    if (this.level >= 150) {
+      return {
+        id: 'kensei',
+        name: "Kensei",
+        icon: "⛩️",
+        minLvl: 150,
+        expBonus: 0.40,
+        coinBonus: 0.40,
+        shopDiscount: 0.20,
+        resistChance: 0.15,
+        comboBonusCoin: true,
+        doubleRewardChance: 0.25,
+        desc: "+40% EXP & Koin, Diskon 20% Toko, 15% Tangkis Salah, 25% Critical Double Reward"
+      };
+    } else if (this.level >= 90) {
+      return {
+        id: 'shogun',
+        name: "Shogun",
+        icon: "👑",
+        minLvl: 90,
+        expBonus: 0.25,
+        coinBonus: 0.25,
+        shopDiscount: 0.15,
+        resistChance: 0.10,
+        comboBonusCoin: true,
+        doubleRewardChance: 0.20,
+        desc: "+25% EXP & Koin, Diskon 15% Toko, 10% Tangkis Salah, 20% Critical Double Reward"
+      };
+    } else if (this.level >= 60) {
+      return {
+        id: 'daimyo',
+        name: "Daimyo",
+        icon: "🏯",
+        minLvl: 60,
+        expBonus: 0.15,
+        coinBonus: 0.15,
+        shopDiscount: 0.10,
+        resistChance: 0.05,
+        comboBonusCoin: true,
+        doubleRewardChance: 0,
+        desc: "+15% EXP & Koin, Diskon 10% Toko, +1 Koin Ekstra saat Combo ≥ 5"
+      };
+    } else if (this.level >= 30) {
+      return {
+        id: 'samurai',
+        name: "Samurai",
+        icon: "🛡️",
+        minLvl: 30,
+        expBonus: 0.10,
+        coinBonus: 0.05,
+        shopDiscount: 0.05,
+        resistChance: 0.05,
+        comboBonusCoin: false,
+        doubleRewardChance: 0,
+        desc: "+10% EXP, +5% Koin, Diskon 5% Toko, 5% Peluang Tangkis Salah"
+      };
+    } else if (this.level >= 10) {
+      return {
+        id: 'ronin',
+        name: "Ronin",
+        icon: "⚔️",
+        minLvl: 10,
+        expBonus: 0.05,
+        coinBonus: 0,
+        shopDiscount: 0.05,
+        resistChance: 0,
+        comboBonusCoin: false,
+        doubleRewardChance: 0,
+        desc: "+5% EXP Kuis, Diskon 5% di Toko Suplai"
+      };
+    }
+    return {
+      id: 'pemula',
+      name: "Pemula",
+      icon: "🔰",
+      minLvl: 1,
+      expBonus: 0,
+      coinBonus: 0,
+      shopDiscount: 0,
+      resistChance: 0,
+      comboBonusCoin: false,
+      doubleRewardChance: 0,
+      desc: "Pelatihan Dasar (Belum ada bonus pasif)"
+    };
+  },
+
   getExpRequirement: function() {
     let multiplier = 2; 
     if (this.level >= 150) multiplier = 20;
@@ -200,8 +287,26 @@ const RPG = {
   },
   
   addReward: function(baseExp, baseCoin, evt) {
+    let perks = this.getRankPerks();
     let multi = this.combo >= 2 ? Math.min(this.combo, 15) : 1; 
-    let earnedExp = baseExp * multi; let earnedCoin = baseCoin * multi;
+    let earnedExp = Math.round(baseExp * multi * (1 + perks.expBonus)); 
+    let earnedCoin = Math.round(baseCoin * multi * (1 + perks.coinBonus));
+
+    // Bonus koin combo perk
+    if (perks.comboBonusCoin && this.combo >= 5) {
+      earnedCoin += 1;
+    }
+
+    // Critical Double Reward Perk (Shogun / Kensei)
+    let isCrit = perks.doubleRewardChance > 0 && Math.random() < perks.doubleRewardChance;
+    if (isCrit) {
+      earnedExp *= 2;
+      earnedCoin *= 2;
+      setTimeout(() => {
+        this.spawnFloatingText("💥 CRITICAL 2X!", "var(--gold)", evt, 0, -40);
+      }, 250);
+    }
+
     this.exp += earnedExp; this.coins += earnedCoin;
     Game.dailyStats.exp += earnedExp;
     Game.dailyStats.coin += earnedCoin;
@@ -225,9 +330,12 @@ const RPG = {
   },
 
   buyToInventory: function(type, cost) {
-    let hasAccess = Game.adminMode || this.coins >= cost;
+    let perks = this.getRankPerks();
+    let discount = perks.shopDiscount || 0;
+    let actualCost = Math.round(cost * (1 - discount));
+    let hasAccess = Game.adminMode || this.coins >= actualCost;
     if (hasAccess) {
-      if (!Game.adminMode) this.coins -= cost;
+      if (!Game.adminMode) this.coins -= actualCost;
       if (!this.inventory) this.inventory = { hp: 0, shield: 0, intel: 0, mata: 0, pandora: 0 };
       if (typeof this.inventory[type] !== 'number') this.inventory[type] = 0;
       this.inventory[type]++;
@@ -243,7 +351,8 @@ const RPG = {
         pandora: "Kotak Pandora"
       };
       let name = itemNames[type] || type;
-      UI.showToast(`Berhasil beli ${name}! Disimpan di Tas 🎒`, "success");
+      let discountMsg = discount > 0 ? ` (Diskon ${Math.round(discount * 100)}% Gelar)` : "";
+      UI.showToast(`Berhasil beli ${name}!${discountMsg} Disimpan di Tas 🎒`, "success");
     } else {
       UI.showToast("Kredit koin tidak memadai.", "error");
     }
@@ -523,6 +632,12 @@ const Game = {
     UI.switchTab('hafalan');
   },
     decreaseHP: (evt) => {
+    let perks = RPG.getRankPerks();
+    if (perks.resistChance > 0 && Math.random() < perks.resistChance) {
+      RPG.spawnFloatingText("🛡️ TANGKIS GELAR!", "var(--success)", evt);
+      UI.showToast(`🛡️ Refleks Gelar ${perks.name}! Serangan musuh berhasil ditangkis, HP & Combo aman!`, 'success');
+      return;
+    }
     Game.hpLostThisTurn = true; Game.hp--; RPG.combo = 0; RPG.updateUI(); localStorage.setItem('yk_hp', Game.hp); UI.renderHP();
     RPG.spawnFloatingText("-1 HP 🩸", "var(--danger)", evt); // Memunculkan teks damage
     if(Game.hp <= 0) setTimeout(() => Cooldown.triggerDeath(Game.mode), 1000);
@@ -548,6 +663,8 @@ const UI = {
     if (id === 'map-modal') UI.renderMap();
     if (id === 'inventory-modal') UI.renderInventory();
     if (id === 'shop-modal') UI.renderShop();
+    if (id === 'level-modal') UI.renderHierarchyModal();
+    if (id === 'kamus-modal') UI.openKamus();
     const m = document.getElementById(id); 
     if (!m) return;
     m.classList.remove('hidden', 'modal-close'); 
@@ -720,18 +837,275 @@ nextDayFromResult: () => {
     UI.showToast(isHC ? "Mode Hardcore Aktif! Insting Ninja." : "Furigana Kembali", "success");
     UI.toggleSidebar();
   },
-    openKamus: () => { document.getElementById('kamus-search').value = ""; UI.renderKamusList(""); UI.openModal('kamus-modal'); },    
-  searchKamus: () => { let query = document.getElementById('kamus-search').value.toLowerCase(); UI.renderKamusList(query); },
-  renderKamusList: (query) => {
-    const list = document.getElementById('kamus-list'); list.innerHTML = ""; let words = [];
-    for(let i=1; i<=Game.unlockedDay; i++) { if(ManualDB['day'+i] && ManualDB['day'+i].hafalan) words = words.concat(ManualDB['day'+i].hafalan); }
-    let uniqueWords = Array.from(new Set(words.map(a => a.k))).map(k => { return words.find(a => a.k === k) });
-    if(query) uniqueWords = uniqueWords.filter(w => w.k.toLowerCase().includes(query) || (w.r && w.r.toLowerCase().includes(query)) || (w.a && w.a.toLowerCase().includes(query)));
-    if(uniqueWords.length === 0) { list.innerHTML = `<div style="text-align:center; padding:20px; color:var(--text-sub);">Tidak ditemukan.</div>`; return; }
-    uniqueWords.forEach(w => {
-        let romajiText = w.r && w.k !== w.r ? ` (${w.r})` : "";
-        list.innerHTML += `<div class="kamus-item"><div class="kamus-jp">${w.k}<span style="font-size:12px; color:var(--warning); font-weight:normal;">${romajiText}</span></div><div class="kamus-id">${w.a}</div></div>`;
+  showKanaModuleNotice: () => {
+    UI.showToast("🔤 Modul Penguasaan Huruf Kana sedang disiapkan dalam rilis ekspansi berikutnya!", "warning");
+  },
+
+  showN4ModuleNotice: () => {
+    if (Game.unlockedDay <= 30) {
+      UI.showToast("🔒 Modul N4 akan terbuka setelah menuntaskan seluruh 30 Sektor Ekspedisi N5!", "warning");
+    } else {
+      UI.showToast("🏯 Kurikulum N4 sedang dalam tahap integrasi akhir. Bersiaplah!", "success");
+    }
+  },
+
+  renderHierarchyModal: () => {
+    const playerCard = document.getElementById('hierarchy-player-card');
+    const tiersContainer = document.getElementById('hierarchy-tiers-container');
+    if (!playerCard || !tiersContainer) return;
+
+    const rank = RPG.getTitleParts();
+    const perks = RPG.getRankPerks();
+    const curLvl = RPG.level;
+
+    // Next threshold
+    let nextTierName = "";
+    let nextLvlReq = 0;
+    if (curLvl < 10) { nextTierName = "Ronin"; nextLvlReq = 10; }
+    else if (curLvl < 30) { nextTierName = "Samurai"; nextLvlReq = 30; }
+    else if (curLvl < 60) { nextTierName = "Daimyo"; nextLvlReq = 60; }
+    else if (curLvl < 90) { nextTierName = "Shogun"; nextLvlReq = 90; }
+    else if (curLvl < 150) { nextTierName = "Kensei"; nextLvlReq = 150; }
+
+    let thresholdText = nextLvlReq > 0 
+      ? `Lv. ${curLvl} / ${nextLvlReq} Menuju Gelar <b>${nextTierName}</b>`
+      : `Tingkat Tertinggi Kensei Legendaris! 🌟`;
+
+    // Active perks pills
+    let pillsHtml = '';
+    if (perks.expBonus > 0) pillsHtml += `<span class="perk-pill">✨ +${Math.round(perks.expBonus * 100)}% EXP</span>`;
+    if (perks.coinBonus > 0) pillsHtml += `<span class="perk-pill gold">🪙 +${Math.round(perks.coinBonus * 100)}% Koin</span>`;
+    if (perks.shopDiscount > 0) pillsHtml += `<span class="perk-pill gold">🏷️ Diskon ${Math.round(perks.shopDiscount * 100)}% Toko</span>`;
+    if (perks.resistChance > 0) pillsHtml += `<span class="perk-pill green">🛡️ ${Math.round(perks.resistChance * 100)}% Tangkis HP</span>`;
+    if (perks.comboBonusCoin) pillsHtml += `<span class="perk-pill gold">🔥 +1 Koin saat Combo ≥ 5</span>`;
+    if (perks.doubleRewardChance > 0) pillsHtml += `<span class="perk-pill">💥 ${Math.round(perks.doubleRewardChance * 100)}% Crit 2x</span>`;
+    if (!pillsHtml) pillsHtml = `<span class="perk-pill">🔰 Status Pemula (Tingkatkan level untuk bonus pasif)</span>`;
+
+    playerCard.innerHTML = `
+      <div class="player-rank-top">
+        <div class="player-rank-avatar">${rank.icon}</div>
+        <div class="player-rank-info">
+          <div class="player-rank-tag">PANGKAT PENDEKAR ANDA</div>
+          <div class="player-rank-title">${rank.icon} ${rank.name} <span style="font-size:14px; color:var(--primary);">(Lv.${curLvl})</span></div>
+          <div class="player-rank-threshold">${thresholdText}</div>
+        </div>
+      </div>
+      <div class="player-perks-pills">
+        ${pillsHtml}
+      </div>
+    `;
+
+    const tiers = [
+      { name: "Pemula", icon: "🔰", min: 1, max: 9, rangeText: "Lv. 1 - 9", desc: "Akses dasar kurikulum, panduan furigana & pelatihan dasar." },
+      { name: "Ronin", icon: "⚔️", min: 10, max: 29, rangeText: "Lv. 10 - 29", desc: "Pasif: +5% EXP kuis & Diskon 5% di Toko Suplai Pasar Gelap." },
+      { name: "Samurai", icon: "🛡️", min: 30, max: 59, rangeText: "Lv. 30 - 59", desc: "Pasif: +10% EXP, +5% Koin, Diskon 5% Toko, dan 5% Peluang Tangkis Salah (Kebal -1 HP)." },
+      { name: "Daimyo", icon: "🏯", min: 60, max: 89, rangeText: "Lv. 60 - 89", desc: "Pasif: +15% EXP & Koin, Diskon 10% Toko, dan +1 Koin Ekstra saat Combo ≥ 5." },
+      { name: "Shogun", icon: "👑", min: 90, max: 149, rangeText: "Lv. 90 - 149", desc: "Pasif: +25% EXP & Koin, Diskon 15% Toko, 10% Tangkis Salah, dan 20% Peluang Hadiah Ganda (Critical 2x)!" },
+      { name: "Kensei", icon: "⛩️", min: 150, max: 9999, rangeText: "Lv. 150+", desc: "Pasif: +40% EXP & Koin, Diskon 20% Toko, 15% Tangkis Salah, dan 25% Peluang Hadiah Ganda. Mahkota Legenda!" }
+    ];
+
+    tiersContainer.innerHTML = tiers.map(t => {
+      let isCurrent = (curLvl >= t.min && (curLvl <= t.max || t.max === 9999));
+      let isUnlocked = curLvl > t.max;
+      let statusClass = isCurrent ? 'tier-active' : (isUnlocked ? 'tier-unlocked' : 'tier-locked');
+      let statusBadge = isCurrent 
+        ? `<span class="tier-status-badge tier-status-active">PANGKAT ANDA</span>`
+        : (isUnlocked 
+          ? `<span class="tier-status-badge tier-status-unlocked">✓ TERLEWATI</span>` 
+          : `<span class="tier-status-badge tier-status-locked">🔒 TERKUNCI</span>`);
+
+      return `
+        <div class="hierarchy-tier-card ${statusClass}">
+          <div class="tier-icon-box">${t.icon}</div>
+          <div class="tier-info">
+            <div class="tier-title-row">
+              <span class="tier-name">${t.name}</span>
+              <span class="tier-range">${t.rangeText}</span>
+            </div>
+            <div class="tier-desc">${t.desc}</div>
+          </div>
+          ${statusBadge}
+        </div>
+      `;
+    }).join('');
+  },
+
+  currentKamusFilter: 'unlocked',
+
+  openKamus: () => { 
+    const input = document.getElementById('kamus-search'); 
+    if (input) input.value = ""; 
+    const clearBtn = document.getElementById('kamus-search-clear');
+    if (clearBtn) clearBtn.classList.add('hidden');
+    UI.setKamusFilter('unlocked');
+    UI.openModal('kamus-modal'); 
+  },    
+
+  searchKamus: () => { 
+    const input = document.getElementById('kamus-search');
+    const clearBtn = document.getElementById('kamus-search-clear');
+    let query = input ? input.value.trim().toLowerCase() : "";
+    if (clearBtn) {
+      if (query.length > 0) clearBtn.classList.remove('hidden');
+      else clearBtn.classList.add('hidden');
+    }
+    UI.renderKamusList(query); 
+  },
+
+  clearKamusSearch: () => {
+    const input = document.getElementById('kamus-search');
+    const clearBtn = document.getElementById('kamus-search-clear');
+    if (input) {
+      input.value = "";
+      input.focus();
+    }
+    if (clearBtn) clearBtn.classList.add('hidden');
+    UI.renderKamusList("");
+  },
+
+  setKamusFilter: (filterKey) => {
+    UI.currentKamusFilter = filterKey;
+    ['unlocked', 'today', 'all', 'kanji'].forEach(k => {
+      const chip = document.getElementById(`kchip-${k}`);
+      if (chip) {
+        if (k === filterKey) chip.classList.add('active');
+        else chip.classList.remove('active');
+      }
     });
+    const input = document.getElementById('kamus-search');
+    let query = input ? input.value.trim().toLowerCase() : "";
+    UI.renderKamusList(query);
+  },
+
+  copyKamusWord: (kanji, romaji, arti) => {
+    let copyText = romaji && romaji !== kanji ? `${kanji} (${romaji}) - ${arti}` : `${kanji} - ${arti}`;
+    if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(copyText).then(() => {
+        UI.showToast(`📋 Tersalin: ${kanji}`, 'success');
+      }).catch(() => {
+        UI.showToast(`📋 ${kanji}: ${arti}`, 'success');
+      });
+    } else {
+      UI.showToast(`📋 ${kanji}: ${arti}`, 'success');
+    }
+  },
+
+  renderKamusList: (query = "") => {
+    const list = document.getElementById('kamus-list');
+    if (!list) return;
+
+    // Kumpulkan seluruh data kosakata N5 dari ManualDB (Day 1 - 30)
+    let allWordsWithDay = [];
+    let unlockedWordsWithDay = [];
+    let todayWordsWithDay = [];
+
+    const totalDays = 30;
+    for (let i = 1; i <= totalDays; i++) {
+      let dayData = ManualDB['day' + i];
+      if (dayData && dayData.hafalan && Array.isArray(dayData.hafalan)) {
+        dayData.hafalan.forEach(w => {
+          let item = { ...w, day: i };
+          allWordsWithDay.push(item);
+          if (i <= Game.unlockedDay) {
+            unlockedWordsWithDay.push(item);
+          }
+          if (i === Game.currentDay) {
+            todayWordsWithDay.push(item);
+          }
+        });
+      }
+    }
+
+    // Deduplikasi berdasarkan kata kanji/kana unik
+    const deduplicate = (arr) => {
+      let seen = new Set();
+      let res = [];
+      arr.forEach(item => {
+        if (!seen.has(item.k)) {
+          seen.add(item.k);
+          res.push(item);
+        }
+      });
+      return res;
+    };
+
+    let dedupUnlocked = deduplicate(unlockedWordsWithDay);
+    let dedupToday = deduplicate(todayWordsWithDay);
+    let dedupAll = deduplicate(allWordsWithDay);
+    let dedupKanjiOnly = dedupAll.filter(w => /[\u4e00-\u9faf]/.test(w.k));
+
+    // Update Counter Badges
+    const badgeCountEl = document.getElementById('kamus-count-badge');
+    if (badgeCountEl) {
+      badgeCountEl.innerText = `${dedupUnlocked.length} / ${dedupAll.length} Terbuka`;
+    }
+
+    const chipUnlockedCount = document.getElementById('kchip-unlocked-count');
+    if (chipUnlockedCount) chipUnlockedCount.innerText = dedupUnlocked.length;
+
+    const chipTodayCount = document.getElementById('kchip-today-count');
+    if (chipTodayCount) chipTodayCount.innerText = dedupToday.length;
+
+    const chipAllCount = document.getElementById('kchip-all-count');
+    if (chipAllCount) chipAllCount.innerText = dedupAll.length;
+
+    // Filter berdasarkan tab aktif
+    let sourcePool = dedupUnlocked;
+    if (UI.currentKamusFilter === 'today') {
+      sourcePool = dedupToday;
+    } else if (UI.currentKamusFilter === 'all') {
+      sourcePool = dedupAll;
+    } else if (UI.currentKamusFilter === 'kanji') {
+      sourcePool = dedupKanjiOnly;
+    }
+
+    // Filter berdasarkan query pencarian
+    let filtered = sourcePool;
+    if (query) {
+      filtered = filtered.filter(w => 
+        (w.k && w.k.toLowerCase().includes(query)) || 
+        (w.r && w.r.toLowerCase().includes(query)) || 
+        (w.a && w.a.toLowerCase().includes(query))
+      );
+    }
+
+    if (filtered.length === 0) {
+      let emptyMsg = query 
+        ? `Tidak ditemukan kosakata yang cocok dengan "<b>${query}</b>".`
+        : `Belum ada kosakata yang terbuka untuk kategori ini. Taklukkan ekspedisi untuk membuka koleksi kata!`;
+
+      list.innerHTML = `
+        <div class="kamus-empty-state">
+          <div class="kamus-empty-icon">🔍</div>
+          <div class="kamus-empty-title">Kosakata Tidak Ditemukan</div>
+          <div class="kamus-empty-desc">${emptyMsg}</div>
+        </div>
+      `;
+      return;
+    }
+
+    list.innerHTML = filtered.map(w => {
+      let romajiDisplay = w.r && w.k !== w.r ? w.r : "";
+      let safeK = (w.k || "").replace(/'/g, "\\'");
+      let safeR = (w.r || "").replace(/'/g, "\\'");
+      let safeA = (w.a || "").replace(/'/g, "\\'");
+
+      return `
+        <div class="kamus-card" onclick="UI.copyKamusWord('${safeK}', '${safeR}', '${safeA}')" title="Klik untuk salin kosakata">
+          <div class="kamus-card-left">
+            <div class="kamus-card-jp-row">
+              <span class="kamus-card-kanji">${w.k}</span>
+              ${romajiDisplay ? `<span class="kamus-card-romaji">${romajiDisplay}</span>` : ''}
+            </div>
+            <div class="kamus-card-arti">• ${w.a}</div>
+          </div>
+          <div class="kamus-card-right">
+            <span class="kamus-day-tag">Hari ${w.day || 1}</span>
+            <button type="button" class="kamus-copy-btn" onclick="event.stopPropagation(); UI.copyKamusWord('${safeK}', '${safeR}', '${safeA}')" title="Salin kata">📋</button>
+          </div>
+        </div>
+      `;
+    }).join('');
   },
   renderMap: () => {
     const list = document.getElementById('map-day-list'); 

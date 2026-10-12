@@ -43,18 +43,58 @@
 </div>
 
 <div id="setup-screen" class="hidden">
-  <div id="view-mode" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
-    <h1 style="color:var(--primary); font-size:36px; margin-bottom:5px; text-align:center;">YOMIKATA V10.6<br><small style="font-size:16px; color:var(--warning);">Pengulangan Pembelajaran</small></h1>
-    <p style="color:var(--text-sub); margin-bottom: 30px;">Pilih Gaya Belajarmu.</p>
-    
-    <div class="mode-card" onclick="Game.init('pemula')" style="border-color: var(--primary); box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);">
-      <h3 style="color:var(--success); margin:0 0 5px 0;">🔰 Mode Pemula</h3>
-      <small style="color:var(--text-sub);">Ada Hafalan & Materi. Furigana & Hint aktif.</small>
+  <div class="setup-portal-card">
+    <div class="setup-portal-header">
+      <div class="setup-badge-row">
+        <span class="setup-header-badge">⛩️ YOMIKATA JAPANESE SUITE</span>
+        <span class="setup-version-tag">v10.6</span>
+      </div>
+      <h1 class="setup-title">PILIH MODUL PEMBELAJARAN</h1>
+      <p class="setup-subtitle">Pilih jenjang modul untuk memulai pelatihan & petualangan bahasa Jepang</p>
     </div>
-    
-    <div class="mode-card locked" onclick="alert('Mode Pro akan dikembangkan pada modul terpisah.')">
-      <h3 style="color:#94a3b8; margin:0 0 5px 0;">🔥 Mode Pro (Cerita)</h3>
-      <small style="color:var(--text-sub);">[ Modul Terpisah ]</small>
+
+    <div class="setup-modules-list">
+      <!-- Modul 1: Huruf Kana (Sebelum N5) -->
+      <div class="module-card module-card-kana" onclick="UI.showKanaModuleNotice()">
+        <div class="module-card-icon icon-kana">🔤</div>
+        <div class="module-card-content">
+          <div class="module-card-top">
+            <span class="module-stage-badge">TAHAP 0 • FONDASI</span>
+            <span class="module-status-badge status-soon">🚧 SEGERA HADIR</span>
+          </div>
+          <h3 class="module-card-title">Penguasaan Huruf Kana</h3>
+          <p class="module-card-desc">Hiragana & Katakana dasar, dakuten, handakuten, serta yoon (kombinasi bunyi).</p>
+        </div>
+        <div class="module-card-arrow">›</div>
+      </div>
+
+      <!-- Modul 2: JLPT N5 (Aktif) -->
+      <div class="module-card module-card-n5 active-playable" onclick="Game.init('pemula')">
+        <div class="module-card-icon icon-n5">⛩️</div>
+        <div class="module-card-content">
+          <div class="module-card-top">
+            <span class="module-stage-badge stage-n5">KURIKULUM UTAMA</span>
+            <span class="module-status-badge status-ready">⚡ SIAP DIMAINKAN</span>
+          </div>
+          <h3 class="module-card-title">Modul JLPT N5 (Dasar & Pola)</h3>
+          <p class="module-card-desc">Silabus 30 hari: 400+ kosakata, partikel, tata bahasa, peta ekspedisi & survival dungeon.</p>
+        </div>
+        <div class="module-card-arrow arrow-ready">▶</div>
+      </div>
+
+      <!-- Modul 3: JLPT N4 (Di bawah N5) -->
+      <div class="module-card module-card-n4 module-locked" onclick="UI.showN4ModuleNotice()">
+        <div class="module-card-icon icon-n4">🏯</div>
+        <div class="module-card-content">
+          <div class="module-card-top">
+            <span class="module-stage-badge stage-n4">TAHAP 2 • MENENGAH</span>
+            <span class="module-status-badge status-locked">🔒 TERKUNCI</span>
+          </div>
+          <h3 class="module-card-title">Modul JLPT N4 (Menengah Bawah)</h3>
+          <p class="module-card-desc">Bentuk pasif, kausatif, syarat (tara/ba/to), konjugasi lanjutan & kosakata N4.</p>
+        </div>
+        <div class="module-card-arrow">🔒</div>
+      </div>
     </div>
   </div>
 </div>
@@ -65,19 +105,29 @@
 </div>
 
 <div id="level-modal" class="hidden">
-  <h2 style="color:var(--primary); margin-bottom:5px;">🎖️ Hierarki Kensei</h2>
-  <p style="color:var(--text-sub); margin-bottom:20px; font-size:14px; text-align:center;">Jawab kuis dengan benar untuk mendapatkan EXP.</p>
-  <div style="width:100%; max-width:350px; background:#1e293b; padding:20px; border-radius:12px; border:1px solid #334155; margin-bottom:20px;">
-    <ul class="level-list">
-      <li><span><b>Lv. 1 - 9</b></span> <span>🔰 Pemula</span></li>
-      <li><span><b>Lv. 10 - 29</b></span> <span>⚔️ Ronin</span></li>
-      <li><span><b>Lv. 30 - 59</b></span> <span>🛡️ Samurai</span></li>
-      <li><span><b>Lv. 60 - 89</b></span> <span>🏯 Daimyo</span></li>
-      <li><span><b>Lv. 90 - 149</b></span> <span>👑 Shogun</span></li>
-      <li><span><b>Lv. 150+</b></span> <span>⛩️ Kensei</span></li>
-    </ul>
+  <div class="level-modal-card">
+    <div class="level-modal-header">
+      <div class="level-header-top">
+        <span class="level-header-badge">🎖️ REPUTASI & PERK HIERARKI</span>
+        <button type="button" class="level-close-btn" onclick="UI.closeModal('level-modal')" title="Tutup Log">✕</button>
+      </div>
+      <h2 class="level-modal-title">Hierarki Pendekar Kensei</h2>
+      <p class="level-modal-subtitle">Capai level baru untuk membuka gelar prestisius & bonus pasif permanen</p>
+    </div>
+
+    <div class="level-modal-content">
+      <!-- Player Rank Summary Dashboard -->
+      <div class="player-rank-dashboard" id="hierarchy-player-card"></div>
+
+      <!-- Rank Tier List Section -->
+      <div class="hierarchy-section-label">⚡ DAFTAR TIER GELAR & BONUS PASIF</div>
+      <div class="hierarchy-tiers-container" id="hierarchy-tiers-container"></div>
+    </div>
+
+    <div class="level-modal-footer">
+      <button type="button" class="btn btn-alt" style="max-width:240px; margin:0;" onclick="UI.closeModal('level-modal')">Tutup Log Hierarki</button>
+    </div>
   </div>
-  <button class="btn btn-alt" style="max-width:350px;" onclick="UI.closeModal('level-modal')">Tutup Log</button>
 </div>
 
 <div id="shop-modal" class="hidden">
@@ -284,13 +334,41 @@
 </div>
 
 <div id="kamus-modal" class="hidden">
-  <div class="kamus-header">
-    <h2 style="color:var(--primary); margin-bottom:5px;">📖 Kamus Kensei</h2>
-    <p style="color:var(--text-sub); font-size:14px; margin-bottom:15px;">Koleksi Kosakata Terbuka</p>
-    <input type="text" id="kamus-search" class="search-box" placeholder="Cari romaji atau arti..." onkeyup="UI.searchKamus()" autocomplete="off">
+  <div class="kamus-modal-card">
+    <div class="kamus-modal-header">
+      <div class="kamus-header-top">
+        <div class="kamus-badge-row">
+          <span class="kamus-header-badge">📖 ARSIP KOSAKATA KENSEI</span>
+          <span class="kamus-count-badge" id="kamus-count-badge">0 Terbuka</span>
+        </div>
+        <button type="button" class="kamus-close-btn" onclick="UI.closeModal('kamus-modal')" title="Tutup Kamus">✕</button>
+      </div>
+      <h2 class="kamus-modal-title">Kamus Kensei N5</h2>
+      <p class="kamus-modal-subtitle">Gudang perbendaharaan kata Jepang dari seluruh ekspedisi yang telah Anda taklukkan</p>
+
+      <!-- Search & Filters -->
+      <div class="kamus-search-bar">
+        <span class="kamus-search-icon">🔍</span>
+        <input type="text" id="kamus-search" class="kamus-search-input" placeholder="Cari kanji, romaji, atau terjemahan..." oninput="UI.searchKamus()" autocomplete="off">
+        <button type="button" id="kamus-search-clear" class="kamus-clear-btn hidden" onclick="UI.clearKamusSearch()">✕</button>
+      </div>
+
+      <div class="kamus-filter-chips">
+        <button type="button" class="kamus-chip active" id="kchip-unlocked" onclick="UI.setKamusFilter('unlocked')">Terbuka (<span id="kchip-unlocked-count">0</span>)</button>
+        <button type="button" class="kamus-chip" id="kchip-today" onclick="UI.setKamusFilter('today')">Hari Ini (<span id="kchip-today-count">0</span>)</button>
+        <button type="button" class="kamus-chip" id="kchip-all" onclick="UI.setKamusFilter('all')">Semua N5 (<span id="kchip-all-count">0</span>)</button>
+        <button type="button" class="kamus-chip" id="kchip-kanji" onclick="UI.setKamusFilter('kanji')">Hanya Kanji</button>
+      </div>
+    </div>
+
+    <!-- Cards Container -->
+    <div class="kamus-list-container" id="kamus-list"></div>
+
+    <div class="kamus-modal-footer">
+      <span class="kamus-footer-tip">💡 Ketuk kartu untuk menyalin kosakata ke papan klip</span>
+      <button type="button" class="btn btn-alt kamus-bottom-close" onclick="UI.closeModal('kamus-modal')">Tutup Kamus</button>
+    </div>
   </div>
-  <div class="kamus-list" id="kamus-list"></div>
-  <button class="btn btn-alt" style="max-width:350px; margin-top:20px;" onclick="UI.closeModal('kamus-modal')">Tutup Kamus</button>
 </div>
 
 

@@ -2279,12 +2279,257 @@ ruby.show .arti-hint { display: none !important; }
   border-bottom: none;
 }
 
-#map-modal, #setup-screen, #cooldown-screen, #shop-modal, #level-modal, #tips-modal, #inventory-modal { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; z-index: 2000; background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(10px); }
-#setup-screen { background: var(--bg-main); }
-.mode-card { background: rgba(255,255,255,0.05); padding: 15px 20px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px; text-align: left; cursor: pointer; transition: 0.2s; width: 100%; max-width: 400px; box-sizing: border-box; }
-.mode-card:hover { background: rgba(56, 189, 248, 0.1); border-color: var(--primary); transform: scale(1.02); }
-.mode-card.locked { opacity: 0.5; filter: grayscale(1); cursor: not-allowed; }
-.mode-card.locked:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); transform: none; }
+#map-modal, #setup-screen, #cooldown-screen, #shop-modal, #level-modal, #tips-modal, #inventory-modal, #kamus-modal { 
+  position: fixed; 
+  inset: 0; 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  justify-content: center; 
+  padding: 16px; 
+  z-index: 2000; 
+  background: rgba(2, 6, 23, 0.95); 
+  backdrop-filter: blur(12px); 
+}
+
+/* ==========================================
+   SETUP SCREEN / PORTAL MODUL SELECTION
+   ========================================== */
+#setup-screen {
+  background: radial-gradient(circle at 50% 25%, rgba(15, 23, 42, 0.98) 0%, rgba(2, 6, 23, 0.99) 100%);
+  overflow-y: auto;
+}
+
+.setup-portal-card {
+  width: 100%;
+  max-width: 520px;
+  background: rgba(8, 13, 26, 0.96);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 20px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 35px rgba(56, 189, 248, 0.12);
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  box-sizing: border-box;
+  animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.setup-portal-header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.setup-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+
+.setup-header-badge {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  color: var(--primary);
+  background: rgba(56, 189, 248, 0.12);
+  padding: 3px 9px;
+  border-radius: 6px;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.setup-version-tag {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-sub);
+}
+
+.setup-title {
+  color: #fff;
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  margin: 0;
+  text-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+}
+
+.setup-subtitle {
+  color: var(--text-sub);
+  font-size: 12px;
+  margin: 0;
+  line-height: 1.4;
+  max-width: 420px;
+}
+
+.setup-modules-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.module-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 13px 15px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+  color: inherit;
+  box-sizing: border-box;
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.module-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.module-card-icon {
+  width: 46px;
+  height: 46px;
+  min-width: 46px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+}
+
+.icon-kana {
+  background: rgba(244, 63, 94, 0.12);
+  border-color: rgba(244, 63, 94, 0.3);
+}
+
+.icon-n5 {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: rgba(56, 189, 248, 0.4);
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
+}
+
+.icon-n4 {
+  background: rgba(168, 85, 247, 0.12);
+  border-color: rgba(168, 85, 247, 0.3);
+}
+
+.module-card-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.module-card-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.module-stage-badge {
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: var(--text-sub);
+  text-transform: uppercase;
+}
+
+.stage-n5 {
+  color: var(--primary);
+}
+
+.stage-n4 {
+  color: #c084fc;
+}
+
+.module-status-badge {
+  font-size: 9px;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+.status-ready {
+  background: rgba(34, 197, 94, 0.18);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.3);
+}
+
+.status-soon {
+  background: rgba(234, 179, 8, 0.15);
+  color: #facc15;
+  border: 1px solid rgba(234, 179, 8, 0.3);
+}
+
+.status-locked {
+  background: rgba(100, 116, 139, 0.2);
+  color: #94a3b8;
+  border: 1px solid rgba(100, 116, 139, 0.3);
+}
+
+.module-card-title {
+  font-size: 14.5px;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+  line-height: 1.25;
+}
+
+.module-card-desc {
+  font-size: 11px;
+  color: var(--text-sub);
+  margin: 0;
+  line-height: 1.35;
+}
+
+.module-card-arrow {
+  color: var(--text-sub);
+  font-size: 18px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+}
+
+/* Modul N5 Highlighted Playable */
+.module-card.active-playable {
+  border-color: rgba(56, 189, 248, 0.45);
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(8, 47, 73, 0.3) 100%);
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.15);
+}
+
+.module-card.active-playable:hover {
+  border-color: var(--primary);
+  box-shadow: 0 0 30px rgba(56, 189, 248, 0.35);
+  transform: translateY(-2px) scale(1.01);
+}
+
+.arrow-ready {
+  color: var(--primary);
+  font-size: 14px;
+}
+
+.module-card.module-locked {
+  opacity: 0.75;
+}
+.module-card.module-locked:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+}
 
 /* ==========================================
    MODERN SHOP & INVENTORY MODALS
@@ -2605,9 +2850,320 @@ ruby.show .arti-hint { display: none !important; }
 
 
 .shop-item { background: #1e293b; padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 350px; margin-bottom: 10px; border: 1px solid #334155; box-sizing: border-box; }
-.level-list { list-style: none; padding: 0; margin: 0; line-height: 2.0; color: var(--text-sub); }
-.level-list li { border-bottom: 1px dashed rgba(255,255,255,0.1); padding: 5px 0; display: flex; justify-content: space-between;}
-.level-list li:last-child { border: none; }
+/* ==========================================
+   HIERARKI KENSEI MODAL & PERKS SYSTEM
+   ========================================== */
+.level-modal-card {
+  width: 95%;
+  max-width: 580px;
+  height: 85vh;
+  max-height: 720px;
+  display: flex;
+  flex-direction: column;
+  background: rgba(8, 13, 26, 0.98);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 18px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 35px rgba(56, 189, 248, 0.15);
+  overflow: hidden;
+  box-sizing: border-box;
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.level-modal-header {
+  padding: 14px 18px 12px;
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.3) 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.level-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.level-header-badge {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  color: var(--primary);
+  background: rgba(56, 189, 248, 0.12);
+  padding: 2px 7px;
+  border-radius: 5px;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.level-close-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-sub);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+}
+.level-close-btn:hover {
+  background: rgba(239, 68, 68, 0.25);
+  color: var(--danger);
+  border-color: var(--danger);
+  transform: rotate(90deg);
+}
+
+.level-modal-title {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 800;
+  margin: 3px 0 2px;
+}
+
+.level-modal-subtitle {
+  color: var(--text-sub);
+  font-size: 11.5px;
+  margin: 0;
+}
+
+.level-modal-content {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56, 189, 248, 0.3) rgba(255, 255, 255, 0.02);
+}
+.level-modal-content::-webkit-scrollbar {
+  width: 5px;
+}
+.level-modal-content::-webkit-scrollbar-thumb {
+  background: rgba(56, 189, 248, 0.3);
+  border-radius: 6px;
+}
+
+/* Player Rank Summary Dashboard */
+.player-rank-dashboard {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.5) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 14px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-sizing: border-box;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.player-rank-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.player-rank-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 14px;
+  background: rgba(56, 189, 248, 0.15);
+  border: 2px solid var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+  flex-shrink: 0;
+}
+
+.player-rank-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.player-rank-tag {
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--primary);
+  letter-spacing: 1px;
+}
+
+.player-rank-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #fff;
+  margin: 1px 0;
+}
+
+.player-rank-threshold {
+  font-size: 11px;
+  color: var(--text-sub);
+}
+
+.player-perks-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.perk-pill {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  color: #7dd3fc;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.perk-pill.gold {
+  background: rgba(251, 191, 36, 0.12);
+  border-color: rgba(251, 191, 36, 0.3);
+  color: #fde047;
+}
+
+.perk-pill.green {
+  background: rgba(34, 197, 94, 0.12);
+  border-color: rgba(34, 197, 94, 0.3);
+  color: #86efac;
+}
+
+/* Tier List Cards */
+.hierarchy-section-label {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: var(--text-sub);
+  text-transform: uppercase;
+}
+
+.hierarchy-tiers-container {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.hierarchy-tier-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 10px 12px;
+  box-sizing: border-box;
+  transition: 0.2s;
+  position: relative;
+}
+
+.hierarchy-tier-card.tier-active {
+  border-color: var(--primary);
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(8, 47, 73, 0.35) 100%);
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.2);
+}
+
+.hierarchy-tier-card.tier-unlocked {
+  border-color: rgba(34, 197, 94, 0.25);
+  opacity: 0.9;
+}
+
+.hierarchy-tier-card.tier-locked {
+  opacity: 0.65;
+}
+
+.tier-icon-box {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+}
+
+.tier-active .tier-icon-box {
+  background: rgba(56, 189, 248, 0.2);
+  border-color: var(--primary);
+}
+
+.tier-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.tier-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2px;
+}
+
+.tier-name {
+  font-size: 13px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.tier-range {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+.tier-desc {
+  font-size: 11px;
+  color: var(--text-sub);
+  line-height: 1.35;
+}
+
+.tier-status-badge {
+  font-size: 9px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 5px;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+
+.tier-status-active {
+  background: rgba(56, 189, 248, 0.2);
+  color: var(--primary);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+}
+
+.tier-status-unlocked {
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.tier-status-locked {
+  background: rgba(255, 255, 255, 0.05);
+  color: #64748b;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.level-modal-footer {
+  padding: 10px 16px;
+  background: rgba(8, 13, 26, 0.98);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  justify-content: center;
+  flex-shrink: 0;
+}
 
 #btn-tips { position: fixed; bottom: 25px; right: 25px; z-index: 1000; background: var(--warning); color: #000; padding: 12px 18px; border-radius: 50px; font-weight: bold; cursor: pointer; border: none; box-shadow: 0 4px 15px rgba(234, 179, 8, 0.4); transition: 0.3s; font-size: 14px;}
 #btn-tips:hover { transform: scale(1.1); filter: brightness(1.1); }
@@ -2637,15 +3193,343 @@ ruby.show .arti-hint { display: none !important; }
 .intel-box { margin-top: 10px; padding: 10px; background: rgba(56, 189, 248, 0.1); border-radius: 8px; border: 1px dashed var(--primary); font-size: 14px; color: var(--primary); font-style: italic; animation: slideUp 0.3s ease; text-align: left; line-height: 1.5; }
 .shop-item b { color: var(--text-main); }
 
-#kamus-modal { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 20px; z-index: 2500; background: rgba(2, 6, 23, 0.98); backdrop-filter: blur(10px); }
-.kamus-header { width: 100%; max-width: 500px; text-align: center; margin-bottom: 15px; }
-.search-box { width: 100%; padding: 12px 15px; border-radius: 8px; border: 1px solid var(--primary); background: #0f172a; color: white; font-size: 16px; margin-bottom: 15px; box-sizing: border-box; }
-.search-box:focus { outline: none; box-shadow: 0 0 10px rgba(56, 189, 248, 0.5); }
-.kamus-list { width: 100%; max-width: 500px; max-height: 60vh; overflow-y: auto; background: #1e293b; border-radius: 12px; border: 1px solid #334155; padding: 10px; box-sizing: border-box; scrollbar-width: none; }
-.kamus-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px dashed rgba(255,255,255,0.1); }
-.kamus-item:last-child { border-bottom: none; }
-.kamus-jp { font-size: 18px; font-weight: bold; color: var(--primary); }
-.kamus-id { font-size: 14px; color: var(--text-sub); font-style: italic; text-align: right; }
+/* ==========================================
+   KAMUS KENSEI MODAL & DICTIONARY SYSTEM
+   ========================================== */
+.kamus-modal-card {
+  width: 95%;
+  max-width: 600px;
+  height: 85vh;
+  max-height: 740px;
+  display: flex;
+  flex-direction: column;
+  background: rgba(8, 13, 26, 0.98);
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  border-radius: 18px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 35px rgba(34, 197, 94, 0.12);
+  overflow: hidden;
+  box-sizing: border-box;
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.kamus-modal-header {
+  padding: 14px 18px 12px;
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.3) 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-sizing: border-box;
+}
+
+.kamus-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.kamus-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.kamus-header-badge {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  color: var(--success);
+  background: rgba(34, 197, 94, 0.12);
+  padding: 2px 7px;
+  border-radius: 5px;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.kamus-count-badge {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+.kamus-close-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-sub);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+}
+.kamus-close-btn:hover {
+  background: rgba(239, 68, 68, 0.25);
+  color: var(--danger);
+  border-color: var(--danger);
+  transform: rotate(90deg);
+}
+
+.kamus-modal-title {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 800;
+  margin: 0;
+}
+
+.kamus-modal-subtitle {
+  color: var(--text-sub);
+  font-size: 11.5px;
+  margin: 0;
+}
+
+/* Modern Kamus Search Bar */
+.kamus-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(2, 6, 23, 0.85);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 10px;
+  padding: 7px 12px;
+  box-sizing: border-box;
+  transition: 0.2s;
+}
+.kamus-search-bar:focus-within {
+  border-color: var(--primary);
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.3);
+}
+
+.kamus-search-icon {
+  font-size: 14px;
+  color: var(--text-sub);
+}
+
+.kamus-search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-size: 13px;
+  font-family: inherit;
+}
+.kamus-search-input::placeholder {
+  color: #64748b;
+  font-size: 12px;
+}
+
+.kamus-clear-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-sub);
+  cursor: pointer;
+  font-size: 13px;
+  padding: 0 4px;
+  transition: 0.2s;
+}
+.kamus-clear-btn:hover {
+  color: var(--danger);
+}
+
+/* Kamus Filter Chips */
+.kamus-filter-chips {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  scrollbar-width: none;
+}
+.kamus-filter-chips::-webkit-scrollbar {
+  display: none;
+}
+
+.kamus-chip {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-sub);
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: 0.2s;
+}
+.kamus-chip:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+.kamus-chip.active {
+  background: rgba(34, 197, 94, 0.18);
+  border-color: rgba(34, 197, 94, 0.45);
+  color: #4ade80;
+}
+
+/* Kamus Cards Container */
+.kamus-list-container {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(34, 197, 94, 0.3) rgba(255, 255, 255, 0.02);
+}
+.kamus-list-container::-webkit-scrollbar {
+  width: 5px;
+}
+.kamus-list-container::-webkit-scrollbar-thumb {
+  background: rgba(34, 197, 94, 0.3);
+  border-radius: 6px;
+}
+
+/* Rich Kamus Card */
+.kamus-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 10px 14px;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+.kamus-card:hover {
+  background: rgba(30, 41, 59, 0.95);
+  border-color: rgba(34, 197, 94, 0.35);
+  transform: translateX(3px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+}
+
+.kamus-card-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.kamus-card-jp-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.kamus-card-kanji {
+  font-size: 17px;
+  font-weight: 800;
+  color: #38bdf8;
+  letter-spacing: 0.5px;
+}
+
+.kamus-card-romaji {
+  font-size: 11.5px;
+  color: var(--gold);
+  font-weight: 600;
+}
+
+.kamus-card-arti {
+  font-size: 12.5px;
+  color: #cbd5e1;
+  line-height: 1.35;
+}
+
+.kamus-card-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  margin-left: 10px;
+}
+
+.kamus-day-tag {
+  font-size: 9.5px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #94a3b8;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.kamus-copy-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-sub);
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.kamus-copy-btn:hover {
+  background: rgba(56, 189, 248, 0.2);
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+.kamus-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 30px 20px;
+  color: var(--text-sub);
+  gap: 8px;
+}
+.kamus-empty-icon {
+  font-size: 36px;
+  margin-bottom: 4px;
+}
+.kamus-empty-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: #e2e8f0;
+}
+.kamus-empty-desc {
+  font-size: 11.5px;
+  color: #64748b;
+  max-width: 320px;
+}
+
+.kamus-modal-footer {
+  padding: 10px 16px;
+  background: rgba(8, 13, 26, 0.98);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.kamus-footer-tip {
+  font-size: 10.5px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.kamus-bottom-close {
+  max-width: 160px;
+  margin: 0;
+  font-size: 12.5px;
+  padding: 8px 14px;
+}
 
 #result-screen, #promotion-screen { position: fixed; inset: 0; background: rgba(2, 6, 23, 0.95); z-index: 4000; display: flex; flex-direction: column; justify-content: center; align-items: center; backdrop-filter: blur(10px); }
 .result-box { background: #1e293b; padding: 40px 30px; border-radius: 20px; border: 2px solid var(--success); box-shadow: 0 0 40px rgba(34, 197, 94, 0.3); text-align: center; max-width: 90%; width: 350px; box-sizing: border-box; }
@@ -2867,23 +3751,23 @@ body.danger-mode { animation: pulseDanger 1.5s infinite; }
     padding: 8px;
   }
 
-  /* Shop & Inventory Modals Mobile Optimization */
+  /* Shop, Inventory, Level & Kamus Modals Mobile Optimization */
   #shop-modal, #inventory-modal, #level-modal, #kamus-modal {
     padding: 8px 6px;
   }
-  .shop-modal-card, .inv-modal-card {
+  .shop-modal-card, .inv-modal-card, .level-modal-card, .kamus-modal-card {
     width: 100%;
-    max-height: 86vh;
+    max-height: 88vh;
     border-radius: 16px;
   }
-  .shop-modal-header, .inv-modal-header {
+  .shop-modal-header, .inv-modal-header, .level-modal-header, .kamus-modal-header {
     padding: 10px 12px 8px;
   }
-  .shop-title, .inv-title {
+  .shop-title, .inv-title, .level-modal-title, .kamus-modal-title {
     font-size: 16px;
     margin-bottom: 2px;
   }
-  .shop-subtitle, .inv-subtitle {
+  .shop-subtitle, .inv-subtitle, .level-modal-subtitle, .kamus-modal-subtitle {
     font-size: 11px;
     margin-bottom: 8px;
   }
@@ -2920,7 +3804,7 @@ body.danger-mode { animation: pulseDanger 1.5s infinite; }
     padding: 6px 10px;
     font-size: 11px;
   }
-  .shop-modal-footer, .inv-modal-footer {
+  .shop-modal-footer, .inv-modal-footer, .level-modal-footer, .kamus-modal-footer {
     padding: 8px 12px;
   }
 
@@ -3002,11 +3886,16 @@ body.danger-mode { animation: pulseDanger 1.5s infinite; }
     box-shadow: 0 0 50px rgba(0,0,0,0.5);
   }
   #tips-modal > div, 
-  .result-box, 
-  #level-modal > div, 
-  #shop-modal > div, 
-  #setup-screen > div {
+  .result-box {
     transform: scale(1.15) !important;
+  }
+  .setup-portal-card,
+  .level-modal-card,
+  .kamus-modal-card,
+  .shop-modal-card,
+  .inv-modal-card,
+  .map-modal-card {
+    transform: none !important;
   }
 }
 /* Batas kotak tips */
