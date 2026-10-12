@@ -3,6 +3,53 @@
 // ==========================================
 
 let ManualDB = {};
+
+// SILABUS RESMI MATERI WKWKJAPAN N5 (DAY 1 - 30)
+const SYLLABUS = [
+    "Kb1 wa KB2 desu", // Day 1
+    "Kb1 mo KB2 desu", // Day 2
+    "KB1 wa kb2 dewa/jaa arimasen/nai", // Day 3
+    "Kalimat tanya \"ka\"", // Day 4
+    "Jawaban dari kalimat tanya ka, yaitu hai sou desu dan iie chigaimasu", // Day 5
+    "Partikel no", // Day 6
+    "Partikel no", // Day 7
+    "Kata tunjuk KOSOADO", // Day 8
+    "Kata tunjuk KOSOADO", // Day 9
+    "Kata sifat (keiyoshi)-i dan -na", // Day 10
+    "Kata sifat -i dan -na + lampau dan negatif", // Day 11
+    "Perkenalan partikel ni (sbg penanda lokasi) dan ga, imasu dan arimasu, dan kata tunjuk arah (seperti atas, bawah, kiri, kanan, samping, sebelah dll)", // Day 12
+    "Materi Angka, tanggal, dan jam", // Day 13
+    "Partikel ni (sbg penanda waktu), kata kerja masu-shimasu + lampau dan negatif, dan sedikit bocoran perihal partikel o (を)", // Day 14
+    "Perkenalan partikel ni (sbg tujuan perpindahan, alias \"ke\"), partikel de (sbg alat/cara/transportasi), dan partikel to (sbg penanda keberadaan partner)", // Day 15
+    "Kalimat tanya donna, tempat ni dare/nani ga imasu/arimasu ka, kalimat tanya partikel de, to, dan ni", // Day 16
+    "Partikel O (を)", // Day 17
+    "Perbandingan seri pertama, perbandingan antara dua kata benda + kata sifat (KB1 wa KB2 yori KS desu, KB1 to KB2 to dochira no hoo ga KS desu ka, KB no hoo ga KS desu)", // Day 18
+    "Perbandingan seri kedua, perbandingan paling —KS— di antara tiga pilihan/kelompok, dan bentuk negatif/persamaan perbandingan", // Day 19
+    "Kakujoshi: Edisi Partikel de (で) part 1 (penunjuk tempat beraktivitas dan penunjuk cara, bahan, alat)", // Day 20
+    "Kakujoshi: Edisi Partikel de (で) part 2 (penunjuk alasan/penyebab dan penunjuk batasan dari jumlah atau waktu)", // Day 21
+    "Kakujoshi: Edisi Partikel ni (に) (penunjuk tempat keberadaan eksistensi, penunjuk waktu, dan penunjuk titik akhir)", // Day 22
+    "Kakujoshi: Edisi Partikel ni (に) (penunjuk tujuan dan penunjuk arah/tempat tujuan)", // Day 23
+    "Kakujoshi: Edisi Partikel to (と) (penunjuk lawan interaksi berpasangan maupun tidak berpasangan)", // Day 24
+    "Kakujoshi: Edisi Partikel o (を) (penunjuk objek, penunjuk titik awal, dan penunjuk tempat yang dilewati)", // Day 25
+    "Kakujoshi: Edisi Partikel e (へ) (penunjuk arah/titik akhir)", // Day 26
+    "Kakujoshi: Edisi Partikel ga (が) (penunjuk subjek dan penunjuk objek)", // Day 27
+    "Bunpo N5: Edisi KK (bentuk kamus) + koto/no", // Day 28
+    "Bunpo N5: Edisi KK (bentuk kamus) + koto + ga dekimasu", // Day 29
+    "Ajakan KK (bentuk Masu) + masen ka (Bagaimana kalau kita... / Pertanyaan sopan)" // Day 30
+];
+
+const getMissionCategory = (day) => {
+    if (day <= 3) return '🔰 DASAR TATA BAHASA';
+    if (day <= 5) return '💬 INTEROGATIF & RESPON';
+    if (day <= 7) return '🔗 KEPEMILIKAN (PARTIKEL の)';
+    if (day <= 9) return '🧭 SISTEM KOSOADO';
+    if (day <= 11) return '✨ KATA SIFAT (KEIYOUSHI)';
+    if (day <= 13) return '⏳ WAKTU, ANGKA & TANGGAL';
+    if (day <= 17) return '⚔️ VERBA & PARTIKEL DASAR';
+    if (day <= 19) return '⚖️ POLA PERBANDINGAN';
+    if (day <= 27) return '🛡️ MASTERI KAKUJOSHI';
+    return '👑 BUNPO LANJUTAN N5';
+};
 const Engine = {
   buildRubyFormat: (k, r, a, isPro) => {
     if(!k) return "";
@@ -304,7 +351,7 @@ const Game = {
     RPG.updateUI(); UI.renderHP(); Game.loadDayData(); UI.renderMap();
   },
     loadDayData: () => {
-    document.getElementById('ui-day').innerText = `Hari ${Game.currentDay}`; 
+    document.getElementById('ui-day').innerHTML = `🗺️ Hari ${Game.currentDay} <span style="font-size:10px;">▼</span>`; 
     let dbKey = `day${Game.currentDay}`; let dayData = ManualDB[dbKey];
     
     Game.currentTab = null; 
@@ -314,7 +361,7 @@ const Game = {
     Game.dailyStats = { exp: 0, coin: 0, maxCombo: 0 }; 
 
     if(!dayData) {
-       document.getElementById('ui-day').innerText = `Hari ${Game.currentDay} (WIP)`;
+       document.getElementById('ui-day').innerHTML = `🗺️ Hari ${Game.currentDay} (WIP) <span style="font-size:10px;">▼</span>`;
        Game.sessionData = { hafalan: [{k:"WIP"}], pengayaan: [], belajar: [{a:"WIP"}], partikel: [{a:"WIP"}], arti: [{a:"WIP"}] };
        UI.switchTab('hafalan'); return;
     }
@@ -360,10 +407,39 @@ const Game = {
 };
 
 const UI = {
-  openModal: (id) => { const m = document.getElementById(id); m.classList.remove('hidden', 'modal-close'); m.classList.add('modal-open'); },
+  openModal: (id) => { 
+    if (id === 'map-modal') UI.renderMap();
+    const m = document.getElementById(id); 
+    m.classList.remove('hidden', 'modal-close'); 
+    m.classList.add('modal-open'); 
+    if (id === 'map-modal') {
+      setTimeout(() => UI.scrollToCurrentMission(), 100);
+    }
+  },
   closeModal: (id) => { const m = document.getElementById(id); m.classList.remove('modal-open'); m.classList.add('modal-close'); setTimeout(() => { m.classList.add('hidden'); m.classList.remove('modal-close'); }, 200); },
   showToast: (msg, type='success') => { const t = document.getElementById('toast'); t.innerText = msg; t.className = `show ${type}`; setTimeout(()=> t.className = '', 2500); },
   toggleSidebar: () => { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); },
+
+  selectMission: (day) => {
+    if (day <= Game.unlockedDay) {
+      Game.currentDay = day;
+      Game.loadDayData();
+      UI.closeModal('map-modal');
+      UI.showToast(`🎯 Memasuki Zona Hari ${day}`, 'success');
+    } else {
+      UI.showToast(`🔒 Zona Hari ${day} masih terkunci! Selesaikan Hari ${Game.unlockedDay} dahulu.`, 'error');
+    }
+  },
+
+  scrollToCurrentMission: () => {
+    const list = document.getElementById('map-day-list');
+    if (!list) return;
+    const target = list.querySelector('.mission-card.current') || list.querySelector('.mission-card.viewing') || list.querySelector('.mission-card');
+    if (target) {
+      const targetOffset = target.offsetTop - list.offsetTop - (list.clientHeight / 2) + (target.clientHeight / 2);
+      list.scrollTo({ top: Math.max(0, targetOffset), behavior: 'smooth' });
+    }
+  },
   
 nextDayFromResult: () => {
   document.getElementById('result-box').classList.remove('show');
@@ -396,27 +472,65 @@ nextDayFromResult: () => {
     });
   },
   renderMap: () => {
-    const list = document.getElementById('map-day-list'); list.innerHTML = ''; 
-    const totalDays = 30; // <-- 30 hari sesuai silabus kurikulum N5
-    let perc = Math.round(((Game.unlockedDay - 1) / totalDays) * 100); 
-    document.getElementById('map-progress-text').innerText = `Progress: ${perc}%`;
-    
-    for (let i = 1; i <= Math.max(Game.unlockedDay, totalDays); i++) {
-      const btn = document.createElement('button');
+    const list = document.getElementById('map-day-list'); 
+    if (!list) return;
+    list.innerHTML = ''; 
+    const totalDays = 30; // 30 hari sesuai silabus kurikulum N5
+    let progressDays = Math.min(Math.max(Game.unlockedDay - 1, 0), totalDays);
+    let perc = Math.round((progressDays / totalDays) * 100);
+    if (Game.unlockedDay > totalDays) perc = 100;
+
+    const progressTextEl = document.getElementById('map-progress-text');
+    if (progressTextEl) progressTextEl.innerText = `${perc}% SELESAI`;
+
+    const progressFillEl = document.getElementById('map-progress-fill');
+    if (progressFillEl) progressFillEl.style.width = `${perc}%`;
+
+    const progressDetailEl = document.getElementById('map-progress-detail');
+    if (progressDetailEl) {
+      const activeDisplay = Math.min(Game.unlockedDay, totalDays);
+      progressDetailEl.innerText = `Zona Terbuka: Hari ${activeDisplay} / ${totalDays}`;
+    }
+
+    const displayDays = Math.max(30, Game.unlockedDay > 30 ? Game.unlockedDay : 30);
+
+    for (let i = 1; i <= displayDays; i++) {
       let stat = i < Game.unlockedDay ? 'completed' : (i === Game.unlockedDay ? 'current' : 'locked');
-      let wave = Math.sin((i - 1) * 1.5) * 45; 
-      btn.className = `day-btn ${stat}`; 
-      btn.innerText = `HARI ${i}`; 
-      btn.style.transform = `translateX(${wave}px)`;
-      
-      if (i <= Game.unlockedDay) {
-          btn.onclick = () => { 
-              Game.currentDay = i; 
-              Game.loadDayData(); 
-              UI.closeModal('map-modal'); // Tutup peta saat hari diklik
-          };
+      let isViewing = (i === Game.currentDay);
+      let topic = (typeof SYLLABUS !== 'undefined' && SYLLABUS[i - 1]) ? SYLLABUS[i - 1] : `Materi Ekspedisi Hari ${i}`;
+      let category = (typeof getMissionCategory === 'function') ? getMissionCategory(i) : `SEKTOR ${i}`;
+
+      let icon = stat === 'completed' ? '⭐' : (stat === 'current' ? '⚔️' : '🔒');
+      let badgeText = stat === 'completed' ? 'SELESAI' : (stat === 'current' ? 'MISI AKTIF' : 'TERKUNCI');
+      let actionText = stat === 'completed' ? 'Kaji Ulang ➜' : (stat === 'current' ? 'MASUK ➜' : '🔒');
+
+      if (isViewing && stat === 'completed') {
+        badgeText = 'SEDANG AKTIF';
       }
-      list.appendChild(btn);
+
+      const card = document.createElement('div');
+      card.className = `mission-card ${stat} ${isViewing ? 'viewing' : ''}`;
+      card.title = `Hari ${i}: ${topic}`;
+      card.onclick = () => UI.selectMission(i);
+
+      card.innerHTML = `
+        <div class="mission-left">
+          <div class="mission-icon">${icon}</div>
+          <div class="mission-day-num">D-${i < 10 ? '0' + i : i}</div>
+        </div>
+        <div class="mission-body">
+          <div class="mission-meta-line">
+            <span class="mission-category">${category}</span>
+            <span class="mission-badge badge-${stat}">${badgeText}</span>
+          </div>
+          <div class="mission-title">${topic}</div>
+        </div>
+        <div class="mission-action">
+          <span class="mission-action-pill">${actionText}</span>
+        </div>
+      `;
+
+      list.appendChild(card);
     }
   },
   switchTab: (tId) => {
