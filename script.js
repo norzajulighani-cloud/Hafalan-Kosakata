@@ -2747,35 +2747,59 @@ if (tipsBubble) tipsBubble.classList.add('hidden');
       if (i === tHaf && !Game.jumpscareTriggered) { Game.jumpscareTriggered = true; const js = document.getElementById('jumpscare-overlay'); js.classList.add('show'); setTimeout(() => { js.classList.remove('show'); UI.loadStep(); }, 1000); return; }
       if (i < tHaf) {
         const itm = Game.sessionData.hafalan[i]; 
-        document.getElementById('stage-indicator').innerText = `KOSAKATA : ${i + 1} / ${tHaf}`;
         
-        let hasKanji = itm.k && itm.r && itm.k !== itm.r;
-        let readingHtml = hasKanji ? `<div class="flashcard-reading">${itm.r}</div>` : '';
-        let backDetail = hasKanji ? `<div class="flashcard-sub-info">${itm.k} (${itm.r})</div>` : '';
+        let isKanji = itm.k && /[\u4e00-\u9faf]/.test(itm.k);
+        let isKatakana = itm.k && /^[\u30a0-\u30ff\sー・]+$/.test(itm.k);
+
+        let badgeClass = "badge-hiragana";
+        let badgeText = "🌸 かな HIRAGANA";
+        let tipText = "";
+
+        if (isKanji) {
+          badgeClass = "badge-kanji";
+          badgeText = "🔰 漢字 KANJI";
+          tipText = `<div class="vocab-tap-tip">👆 Sentuh kanji untuk melihat furigana</div>`;
+        } else if (isKatakana) {
+          badgeClass = "badge-katakana";
+          badgeText = "🌐 カナ KATAKANA";
+        }
+
+        let rubyHtml = Engine.buildRubyFormat(itm.k, itm.r, null, false);
+        let perc = Math.round(((i + 1) / tHaf) * 100);
+
+        document.getElementById('stage-indicator').innerHTML = ""; 
+        document.getElementById('ui-arti').innerHTML = ""; 
 
         document.getElementById('ui-jp').innerHTML = `
-          <div class="flashcard-scene" onclick="this.classList.toggle('flipped')" title="Klik untuk membalik kartu">
-            <div class="flashcard-3d">
-              <div class="flashcard-face flashcard-front">
-                <span class="flashcard-badge">Kanji & Bacaan</span>
-                <div class="flashcard-center-content">
-                  <div class="flashcard-kanji">${itm.k}</div>
-                  ${readingHtml}
+          <div class="vocab-showcase animate-slide">
+            <div class="vocab-header">
+              <span class="vocab-type-badge ${badgeClass}">${badgeText}</span>
+              <div class="vocab-counter-group">
+                <span class="vocab-counter-text">KOSAKATA <b>${i + 1}</b> / ${tHaf}</span>
+                <div class="vocab-mini-track">
+                  <div class="vocab-mini-fill" style="width: ${perc}%;"></div>
                 </div>
-                <div class="flashcard-tap-hint">👆 Sentuh kartu untuk lihat terjemahan</div>
               </div>
-              <div class="flashcard-face flashcard-back">
-                <span class="flashcard-badge badge-back">Terjemahan Indonesia</span>
-                <div class="flashcard-center-content">
-                  <div class="flashcard-arti">${itm.a}</div>
-                  ${backDetail}
-                </div>
-                <div class="flashcard-tap-hint">🔄 Sentuh lagi untuk membalik</div>
-              </div>
+            </div>
+
+            <div class="vocab-body">
+              <div class="vocab-word-display">${rubyHtml}</div>
+              ${tipText}
+            </div>
+
+            <div class="vocab-divider">
+              <span class="vocab-divider-line"></span>
+              <span class="vocab-divider-icon">❖</span>
+              <span class="vocab-divider-line"></span>
+            </div>
+
+            <div class="vocab-meaning-box">
+              <span class="vocab-meaning-label">ARTI BAHASA INDONESIA</span>
+              <div class="vocab-meaning-text">${itm.a}</div>
             </div>
           </div>
         `;
-        document.getElementById('ui-arti').innerHTML = ''; 
+
         UI.makeNextBtn("Hafal →");
       } else if (i < tHaf + tPeng) {
         const pIdx = i - tHaf; const itm = Game.sessionData.pengayaan[pIdx]; document.getElementById('stage-indicator').innerText = `🚨 KUIS DADAKAN : ${pIdx + 1} / ${tPeng}`;
@@ -3102,12 +3126,27 @@ const Action = {
   }
 };
 document.addEventListener('keydown', (e) => { 
-  if(e.key === 'Enter') { 
+  const isInputActive = ['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName);
+
+  if (e.key === 'Enter' || (e.code === 'Space' && !isInputActive)) { 
+    if (e.code === 'Space' && !isInputActive) e.preventDefault();
     const bs = document.getElementById('btn-submit'); 
     const bn = document.getElementById('btn-next'); 
-    if(bs && !bs.classList.contains('hidden')) bs.click(); 
-    else if(bn && !bn.classList.contains('hidden')) bn.click(); 
-  } 
+    if (bs && !bs.classList.contains('hidden')) bs.click(); 
+    else if (bn && !bn.classList.contains('hidden')) bn.click(); 
+  } else if ((e.key === 'ArrowUp' || e.key === 'f' || e.key === 'F') && !isInputActive) {
+    if (Game.currentTab === 'hafalan') {
+      const rubies = document.querySelectorAll('#ui-jp ruby');
+      rubies.forEach(r => r.classList.toggle('show'));
+    }
+  }
+});
+
+document.addEventListener('click', (e) => {
+  const rubyEl = e.target.closest('ruby');
+  if (rubyEl && navigator.vibrate) {
+    try { navigator.vibrate(20); } catch(_) {}
+  }
 });
 const Cooldown = {
   triggerDeath: (m) => { 
