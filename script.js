@@ -2865,7 +2865,25 @@ if (tipsBubble) tipsBubble.classList.add('hidden');
     } else {
       const dL = Game.sessionData[t]; UI.updateProgress(i, dL.length); 
       if (i >= dL.length) { 
-          document.getElementById('stage-indicator').innerText = ""; document.getElementById('ui-jp').innerHTML = "🎉 Sesi Tuntas!"; 
+          document.getElementById('stage-indicator').innerText = ""; 
+          if (t === 'belajar') {
+              document.getElementById('ui-jp').innerHTML = `
+                <div class="drill-complete-box animate-slide">
+                  <div class="drill-complete-icon">🎉</div>
+                  <div class="drill-complete-title">Pola Kalimat Tuntas!</div>
+                  <div class="drill-complete-desc">Hebat! Seluruh contoh pola kalimat hari ini telah kamu pelajari. Tab Partikel & Tab Arti sekarang telah terbuka di Zona Tempur untuk menguji pemahamanmu!</div>
+                </div>
+              `;
+              document.getElementById('ui-arti').innerHTML = "";
+              document.getElementById('input-area').innerHTML = `
+                <div style="display:flex; flex-direction:column; gap:10px; width:100%; max-width:480px; margin:0 auto;">
+                  <button class="btn" style="background:var(--success); color:#000; font-weight:800;" onclick="UI.switchTab('partikel')">Tantang Kuis Partikel →</button>
+                  <button class="btn btn-alt" onclick="Action.resetTab()">🔄 Ulas Kembali Pola Kalimat</button>
+                </div>
+              `;
+              return;
+          }
+          document.getElementById('ui-jp').innerHTML = "🎉 Sesi Tuntas!"; 
           let reviewBtn = `<button class="btn btn-alt" style="margin-bottom:10px;" onclick="Action.resetTab()">🔄 Ulas Kembali Sesi Ini</button>`;
          
           if(t === 'arti') {
@@ -2879,7 +2897,59 @@ if (tipsBubble) tipsBubble.classList.add('hidden');
       if(itm.a === 'WIP') { document.getElementById('ui-jp').innerHTML = "Under Construction"; return; }
 
       if (t === 'belajar') {
-        document.getElementById('ui-jp').innerHTML = Engine.renderSentence(itm.jp, false, false, false, false); document.getElementById('ui-arti').innerHTML = itm.a; UI.makeNextBtn("Paham →");
+        const perc = Math.round(((i + 1) / dL.length) * 100);
+        document.getElementById('stage-indicator').innerHTML = ""; 
+        document.getElementById('ui-arti').innerHTML = ""; 
+
+        let sentenceHtml = Engine.renderSentence(itm.jp, false, false, false, false);
+
+        // Periksa apakah ada tips materi untuk langkah/hari ini
+        let hasTip = false;
+        const curDayData = ManualDB['day' + Game.currentDay];
+        if (curDayData && curDayData.tips && curDayData.tips.length > 0) hasTip = true;
+        else if (Game.currentDay === 2 && (i === 7 || i === 11 || i === 14)) hasTip = true;
+        else if (Game.currentDay === 3) hasTip = true;
+        else if (Game.currentDay === 4 && i < 9) hasTip = true;
+
+        let tipBtnHtml = hasTip ? `
+          <button type="button" class="pola-tip-btn" onclick="UI.openModal('tips-modal')">
+            <span class="pola-tip-icon">💡</span>
+            <span class="pola-tip-text">Buka Catatan & Tips Materi</span>
+          </button>
+        ` : '';
+
+        document.getElementById('ui-jp').innerHTML = `
+          <div class="pola-showcase animate-slide">
+            <div class="pola-header">
+              <span class="pola-badge">📚 POLA KALIMAT</span>
+              <div class="vocab-counter-group">
+                <span class="vocab-counter-text">KALIMAT <b>${i + 1}</b> / ${dL.length}</span>
+                <div class="vocab-mini-track">
+                  <div class="vocab-mini-fill pola-fill" style="width: ${perc}%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="pola-body">
+              <div class="pola-sentence-display">${sentenceHtml}</div>
+            </div>
+
+            <div class="vocab-divider">
+              <span class="vocab-divider-line"></span>
+              <span class="vocab-divider-icon">❖</span>
+              <span class="vocab-divider-line"></span>
+            </div>
+
+            <div class="pola-meaning-box">
+              <span class="pola-meaning-label">TERJEMAHAN BAHASA INDONESIA</span>
+              <div class="pola-meaning-text" onclick="this.classList.toggle('revealed')">${itm.a}</div>
+            </div>
+
+            ${tipBtnHtml}
+          </div>
+        `;
+
+        UI.makeNextBtn("Paham →");
       } else if (t === 'partikel') {
         document.getElementById('ui-jp').innerHTML = Engine.renderSentence(itm.jp, isPro, true, false, true); 
         

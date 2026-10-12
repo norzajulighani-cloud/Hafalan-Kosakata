@@ -713,24 +713,27 @@ button, .btn, .tab-btn, ruby, .multi-blank { touch-action: manipulation; }
   max-width: 100%;
   word-wrap: break-word;
 }
-#card-main[data-tab="hafalan"] {
+#card-main[data-tab="hafalan"],
+#card-main[data-tab="belajar"] {
   padding: 24px 22px 20px 22px;
   background: linear-gradient(165deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.92) 100%);
   border: 1px solid rgba(56, 189, 248, 0.25);
   border-radius: 20px;
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(56, 189, 248, 0.08);
 }
-#card-main[data-tab="hafalan"] .jp-text {
+#card-main[data-tab="hafalan"] .jp-text,
+#card-main[data-tab="belajar"] .jp-text {
   font-size: initial;
   line-height: normal;
   margin: 0 auto;
   text-align: center;
   width: 100%;
-  max-width: 480px;
+  max-width: 520px;
   display: block;
 }
-#card-main[data-tab="hafalan"] #btn-next {
-  max-width: 480px;
+#card-main[data-tab="hafalan"] #btn-next,
+#card-main[data-tab="belajar"] #btn-next {
+  max-width: 520px;
   margin: 16px auto 0 auto;
 }
 
@@ -1136,6 +1139,155 @@ button, .btn, .tab-btn, ruby, .multi-blank { touch-action: manipulation; }
   color: var(--text-sub);
   line-height: 1.6;
 }
+
+/* ==========================================
+   POLA KALIMAT SHOWCASE (TAB BELAJAR - BORDERLESS)
+   ========================================== */
+.pola-showcase {
+  width: 100%;
+  max-width: 520px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+  box-sizing: border-box;
+  margin: 0 auto;
+  position: relative;
+}
+
+.pola-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 20px;
+}
+
+.pola-badge {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(56, 189, 248, 0.15);
+  color: var(--primary);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+}
+
+.pola-fill {
+  background: linear-gradient(90deg, var(--primary), #34d399) !important;
+  box-shadow: 0 0 6px rgba(56, 189, 248, 0.6) !important;
+}
+
+/* Pola Sentence Display Centerpiece */
+.pola-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 0 18px 0;
+  min-height: 90px;
+}
+
+.pola-sentence-display {
+  font-size: 30px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 2.5;
+  text-align: center;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  user-select: none;
+  word-wrap: break-word;
+  max-width: 100%;
+}
+
+@media (max-width: 480px) {
+  .pola-sentence-display {
+    font-size: 24px;
+    line-height: 2.3;
+  }
+}
+
+/* Ruby Interaction in Sentence Showcase */
+.pola-sentence-display ruby {
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+  margin: 0 2px;
+  transition: all 0.22s ease;
+  border-bottom: 2px dashed rgba(56, 189, 248, 0.4);
+  padding-bottom: 2px;
+}
+.pola-sentence-display ruby:hover {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+.pola-sentence-display ruby.show {
+  border-bottom-style: solid;
+  border-bottom-color: var(--warning);
+}
+
+/* Meaning Section for Pola */
+.pola-meaning-box {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 4px 0 6px 0;
+  text-align: center;
+}
+.pola-meaning-label {
+  display: block;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: var(--text-sub);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+.pola-meaning-text {
+  font-size: 20px;
+  font-weight: 600;
+  color: #f1f5f9;
+  line-height: 1.45;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+@media (max-width: 480px) {
+  .pola-meaning-text {
+    font-size: 17px;
+  }
+}
+
+/* Inline Tip Pill Button */
+.pola-tip-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 14px auto 0 auto;
+  padding: 8px 16px;
+  background: rgba(234, 179, 8, 0.12);
+  border: 1px solid rgba(234, 179, 8, 0.35);
+  border-radius: 20px;
+  color: var(--warning);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+.pola-tip-btn:hover {
+  background: rgba(234, 179, 8, 0.22);
+  border-color: var(--warning);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(234, 179, 8, 0.25);
+}
+
 @media (max-width: 400px) {
   .jp-text { font-size: 24px; line-height: 2.4; } /* <-- Untuk layar HP disesuaikan */
 }
@@ -1530,17 +1682,20 @@ ruby.show .arti-hint { opacity: 1; transform: translateX(-50%) translateY(5px); 
 
 .hardcore-mode rt { display: none !important; }
 .hardcore-mode .arti-hint { display: none !important; }
-.hardcore-mode .arti-text {
+.hardcore-mode .arti-text,
+.hardcore-mode .pola-meaning-text {
   filter: blur(6px);
   opacity: 0.5;
   cursor: pointer;
   user-select: none;
   transition: all 0.3s ease;
 }
-.hardcore-mode .arti-text:hover {
+.hardcore-mode .arti-text:hover,
+.hardcore-mode .pola-meaning-text:hover {
   opacity: 0.8; 
 }
-.hardcore-mode .arti-text.revealed {
+.hardcore-mode .arti-text.revealed,
+.hardcore-mode .pola-meaning-text.revealed {
   filter: blur(0);
   opacity: 1;
 }
