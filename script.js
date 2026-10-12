@@ -2753,12 +2753,10 @@ if (tipsBubble) tipsBubble.classList.add('hidden');
 
         let badgeClass = "badge-hiragana";
         let badgeText = "🌸 かな HIRAGANA";
-        let tipText = "";
 
         if (isKanji) {
           badgeClass = "badge-kanji";
           badgeText = "🔰 漢字 KANJI";
-          tipText = `<div class="vocab-tap-tip">👆 Sentuh kanji untuk melihat furigana</div>`;
         } else if (isKatakana) {
           badgeClass = "badge-katakana";
           badgeText = "🌐 カナ KATAKANA";
@@ -2784,7 +2782,6 @@ if (tipsBubble) tipsBubble.classList.add('hidden');
 
             <div class="vocab-body">
               <div class="vocab-word-display">${rubyHtml}</div>
-              ${tipText}
             </div>
 
             <div class="vocab-divider">
@@ -2802,13 +2799,68 @@ if (tipsBubble) tipsBubble.classList.add('hidden');
 
         UI.makeNextBtn("Hafal →");
       } else if (i < tHaf + tPeng) {
-        const pIdx = i - tHaf; const itm = Game.sessionData.pengayaan[pIdx]; document.getElementById('stage-indicator').innerText = `🚨 KUIS DADAKAN : ${pIdx + 1} / ${tPeng}`;
-        document.getElementById('ui-jp').innerHTML = Engine.buildRubyFormat(itm.k, itm.r, null, false);
-        let opts = [itm.a]; let pool = Game.sessionData.hafalan.filter(x => x.a !== itm.a); Engine.shuffle(pool); opts.push(pool[0].a); opts.push(pool[1].a); Engine.shuffle(opts);
-        document.getElementById('input-area').innerHTML = opts.map(o => `<button class="btn btn-alt" onclick="Action.checkPengayaan('${o}', '${itm.a}', event)">${o}</button>`).join('');
+        const pIdx = i - tHaf;
+        const itm = Game.sessionData.pengayaan[pIdx];
+        const perc = Math.round(((pIdx + 1) / tPeng) * 100);
+
+        document.getElementById('stage-indicator').innerHTML = "";
+        document.getElementById('ui-arti').innerHTML = "";
+
+        let rubyHtml = Engine.buildRubyFormat(itm.k, itm.r, null, false);
+
+        document.getElementById('ui-jp').innerHTML = `
+          <div class="quiz-showcase animate-slide">
+            <div class="quiz-header">
+              <span class="quiz-badge">🚨 KUIS DADAKAN</span>
+              <div class="vocab-counter-group">
+                <span class="vocab-counter-text">DRILL <b>${pIdx + 1}</b> / ${tPeng}</span>
+                <div class="vocab-mini-track">
+                  <div class="vocab-mini-fill quiz-fill" style="width: ${perc}%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="quiz-question-body">
+              <span class="quiz-prompt-label">APA ARTI KATA INI?</span>
+              <div class="quiz-word-display">${rubyHtml}</div>
+            </div>
+          </div>
+        `;
+
+        let opts = [itm.a];
+        let pool = Game.sessionData.hafalan.filter(x => x.a !== itm.a);
+        Engine.shuffle(pool);
+        if (pool[0]) opts.push(pool[0].a);
+        if (pool[1]) opts.push(pool[1].a);
+        Engine.shuffle(opts);
+
+        const letters = ['A', 'B', 'C'];
+        document.getElementById('input-area').innerHTML = `
+          <div class="quiz-options-grid animate-slide">
+            ${opts.map((o, idx) => `
+              <button class="quiz-choice-btn" onclick="Action.checkPengayaan('${o.replace(/'/g, "\\'")}', '${itm.a.replace(/'/g, "\\'")}', event)">
+                <span class="quiz-choice-pill">${letters[idx] || '◆'}</span>
+                <span class="quiz-choice-text">${o}</span>
+              </button>
+            `).join('')}
+          </div>
+        `;
       } else {
-        document.getElementById('stage-indicator').innerText = ""; document.getElementById('ui-jp').innerHTML = "🎉 Pemanasan Selesai!"; document.getElementById('ui-arti').innerHTML = "Akses tab Pola.";
-        document.getElementById('input-area').innerHTML = `<button class="btn btn-alt" onclick="Action.resetTab()">🔄 Ulas Kembali Sesi Hafalan</button>`;
+        document.getElementById('stage-indicator').innerText = "";
+        document.getElementById('ui-jp').innerHTML = `
+          <div class="drill-complete-box animate-slide">
+            <div class="drill-complete-icon">🎖️</div>
+            <div class="drill-complete-title">Pemanasan Tuntas!</div>
+            <div class="drill-complete-desc">Hebat! Seluruh kosakata hafalan dan kuis dadakan telah dikuasai. Sekarang kamu siap mempelajari tab Pola kalimat.</div>
+          </div>
+        `;
+        document.getElementById('ui-arti').innerHTML = "";
+        document.getElementById('input-area').innerHTML = `
+          <div style="display:flex; flex-direction:column; gap:10px; width:100%; max-width:480px; margin:0 auto;">
+            <button class="btn" style="background:var(--primary); color:#0f172a; font-weight:800;" onclick="UI.switchTab('belajar')">Lanjut ke Tab Pola →</button>
+            <button class="btn btn-alt" onclick="Action.resetTab()">🔄 Ulas Kembali Sesi Hafalan</button>
+          </div>
+        `;
       }
     } else {
       const dL = Game.sessionData[t]; UI.updateProgress(i, dL.length); 
@@ -3048,12 +3100,22 @@ const Action = {
   },
 
   checkPengayaan: (sel, cor, evt) => { 
+      const btn = evt ? evt.currentTarget : null;
       if(sel === cor) { 
+          if (btn) btn.classList.add('choice-correct');
           RPG.addReward(2, 1, evt); 
-          UI.triggerNextAnim(() => { Game.currentIndex++; UI.loadStep(); }); 
+          if (navigator.vibrate) try { navigator.vibrate(25); } catch(_) {}
+          setTimeout(() => {
+              UI.triggerNextAnim(() => { Game.currentIndex++; UI.loadStep(); }); 
+          }, 180);
       } else { 
-          document.getElementById('ui-feedback').innerHTML = "Salah! ❌"; 
-          document.getElementById('ui-feedback').style.color = "var(--warning)"; 
+          if (btn) {
+              btn.classList.add('choice-wrong');
+              setTimeout(() => btn.classList.remove('choice-wrong'), 500);
+          }
+          document.getElementById('ui-feedback').innerHTML = "Jawaban Kurang Tepat! ❌ Coba lagi!"; 
+          document.getElementById('ui-feedback').style.color = "var(--danger)"; 
+          if (navigator.vibrate) try { navigator.vibrate([40, 40, 40]); } catch(_) {}
           RPG.combo = 0; RPG.updateUI(); 
       } 
   },
@@ -3138,6 +3200,13 @@ document.addEventListener('keydown', (e) => {
     if (Game.currentTab === 'hafalan') {
       const rubies = document.querySelectorAll('#ui-jp ruby');
       rubies.forEach(r => r.classList.toggle('show'));
+    }
+  } else if (!isInputActive && ['1', '2', '3', 'a', 'b', 'c', 'A', 'B', 'C'].includes(e.key)) {
+    const keyMap = { '1': 0, '2': 1, '3': 2, 'a': 0, 'b': 1, 'c': 2, 'A': 0, 'B': 1, 'C': 2 };
+    const idx = keyMap[e.key];
+    const choices = document.querySelectorAll('.quiz-choice-btn');
+    if (choices && choices[idx]) {
+      choices[idx].click();
     }
   }
 });
