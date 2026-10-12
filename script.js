@@ -2749,23 +2749,28 @@ if (tipsBubble) tipsBubble.classList.add('hidden');
         const itm = Game.sessionData.hafalan[i]; 
         document.getElementById('stage-indicator').innerText = `KOSAKATA : ${i + 1} / ${tHaf}`;
         
-        let subRomaji = (itm.r && itm.k !== itm.r) ? `<div class="flashcard-sub-reading">${itm.r}</div>` : '';
-        let kanjiRuby = Engine.buildRubyFormat(itm.k, itm.r, null, false);
-        
+        let hasKanji = itm.k && itm.r && itm.k !== itm.r;
+        let readingHtml = hasKanji ? `<div class="flashcard-reading">${itm.r}</div>` : '';
+        let backDetail = hasKanji ? `<div class="flashcard-sub-info">${itm.k} (${itm.r})</div>` : '';
+
         document.getElementById('ui-jp').innerHTML = `
           <div class="flashcard-scene" onclick="this.classList.toggle('flipped')" title="Klik untuk membalik kartu">
             <div class="flashcard-3d">
               <div class="flashcard-face flashcard-front">
                 <span class="flashcard-badge">Kanji & Bacaan</span>
-                <div class="flashcard-main-word">${kanjiRuby}</div>
-                ${subRomaji}
-                <div class="flashcard-hint">👆 Sentuh kartu untuk lihat terjemahan</div>
+                <div class="flashcard-center-content">
+                  <div class="flashcard-kanji">${itm.k}</div>
+                  ${readingHtml}
+                </div>
+                <div class="flashcard-tap-hint">👆 Sentuh kartu untuk lihat terjemahan</div>
               </div>
               <div class="flashcard-face flashcard-back">
-                <span class="flashcard-badge" style="background:rgba(245, 158, 11, 0.15); color:var(--gold);">Terjemahan Indonesia</span>
-                <div class="flashcard-arti">${itm.a}</div>
-                <div class="flashcard-sub-reading" style="opacity:0.85;">${itm.k} ${itm.r && itm.r !== itm.k ? `(${itm.r})` : ''}</div>
-                <div class="flashcard-hint">🔄 Sentuh lagi untuk membalik</div>
+                <span class="flashcard-badge badge-back">Terjemahan Indonesia</span>
+                <div class="flashcard-center-content">
+                  <div class="flashcard-arti">${itm.a}</div>
+                  ${backDetail}
+                </div>
+                <div class="flashcard-tap-hint">🔄 Sentuh lagi untuk membalik</div>
               </div>
             </div>
           </div>
