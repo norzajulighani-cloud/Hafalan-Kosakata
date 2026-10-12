@@ -502,7 +502,7 @@ nextDayFromResult: () => {
 
       let icon = stat === 'completed' ? '⭐' : (stat === 'current' ? '⚔️' : '🔒');
       let badgeText = stat === 'completed' ? 'SELESAI' : (stat === 'current' ? 'MISI AKTIF' : 'TERKUNCI');
-      let actionText = stat === 'completed' ? 'Kaji Ulang ➜' : (stat === 'current' ? 'MASUK ➜' : '🔒');
+      let actionText = stat === 'completed' ? 'Kaji Ulang ↺' : (stat === 'current' ? 'MASUK ▶' : '🔒');
 
       if (isViewing && stat === 'completed') {
         badgeText = 'SEDANG AKTIF';

@@ -61,105 +61,140 @@ button, .btn, .tab-btn, ruby, .multi-blank { touch-action: manipulation; }
    RPG MISSION CARDS & EXPEDITION MAP MODAL
    ========================================== */
 #map-modal {
-  padding: 15px;
+  padding: 12px;
   box-sizing: border-box;
 }
 
 .map-modal-card {
-  width: 100%;
-  max-width: 540px;
-  max-height: 88vh;
+  width: 95%;
+  max-width: 600px;
+  height: 85vh;
+  max-height: 720px;
   display: flex;
   flex-direction: column;
-  background: rgba(10, 15, 29, 0.96);
-  border: 1px solid rgba(56, 189, 248, 0.28);
-  border-radius: 20px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(56, 189, 248, 0.15);
+  background: rgba(8, 13, 26, 0.98);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 18px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 35px rgba(56, 189, 248, 0.18);
   overflow: hidden;
   position: relative;
+  box-sizing: border-box;
   animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .map-modal-header {
-  padding: 16px 18px 12px;
-  background: linear-gradient(180deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.2) 100%);
+  padding: 14px 18px 12px;
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.3) 100%);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   flex-shrink: 0;
+  box-sizing: border-box;
 }
 
 .map-header-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 4px;
+  margin-bottom: 10px;
+}
+
+.map-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.map-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .map-header-badge {
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 800;
-  letter-spacing: 1.5px;
+  letter-spacing: 1.2px;
   color: var(--primary);
   background: rgba(56, 189, 248, 0.12);
-  padding: 3px 8px;
-  border-radius: 6px;
-  border: 1px solid rgba(56, 189, 248, 0.25);
+  padding: 2px 7px;
+  border-radius: 5px;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.map-level-badge {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--text-sub);
+}
+
+.map-title {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: 0.3px;
 }
 
 .map-close-btn {
   background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   color: var(--text-sub);
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  font-size: 13px;
+  font-size: 14px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: 0.2s;
+  flex-shrink: 0;
 }
 .map-close-btn:hover {
-  background: rgba(239, 68, 68, 0.2);
+  background: rgba(239, 68, 68, 0.25);
   color: var(--danger);
   border-color: var(--danger);
   transform: rotate(90deg);
 }
 
-.map-title {
-  color: #fff;
-  font-size: 19px;
-  font-weight: 800;
-  margin: 3px 0 2px;
-  letter-spacing: 0.5px;
-}
-
-.map-subtitle {
-  color: var(--text-sub);
-  font-size: 12px;
-  margin: 0 0 10px 0;
-}
-
-/* Progress Panel */
+/* Compact Progress Dashboard */
 .map-progress-panel {
-  background: rgba(2, 6, 23, 0.75);
+  background: rgba(2, 6, 23, 0.85);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
-  padding: 10px 12px;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
-.map-progress-row-top {
+.map-progress-top-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 6px;
+}
+
+.map-progress-info-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .map-progress-tag {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--text-sub);
+  font-size: 10.5px;
+  font-weight: 800;
+  color: var(--primary);
   letter-spacing: 0.8px;
+}
+
+.map-progress-info {
+  font-size: 11px;
+  color: var(--text-sub);
+}
+
+.map-progress-info-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .map-progress-pct {
@@ -168,41 +203,12 @@ button, .btn, .tab-btn, ruby, .multi-blank { touch-action: manipulation; }
   color: var(--gold);
 }
 
-.map-progress-track {
-  width: 100%;
-  height: 8px;
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: 10px;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.map-progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--primary) 0%, var(--gold) 60%, var(--success) 100%);
-  border-radius: 10px;
-  transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
-}
-
-.map-progress-row-bottom {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 6px;
-}
-
-.map-progress-info {
-  font-size: 11px;
-  color: var(--text-sub);
-}
-
 .map-btn-jump {
   background: rgba(56, 189, 248, 0.15);
   border: 1px solid rgba(56, 189, 248, 0.35);
   color: var(--primary);
-  font-size: 11px;
-  font-weight: bold;
+  font-size: 10.5px;
+  font-weight: 800;
   padding: 3px 8px;
   border-radius: 6px;
   cursor: pointer;
@@ -213,17 +219,35 @@ button, .btn, .tab-btn, ruby, .multi-blank { touch-action: manipulation; }
   color: #000;
 }
 
+.map-progress-track {
+  width: 100%;
+  height: 7px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.map-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary) 0%, var(--gold) 60%, var(--success) 100%);
+  border-radius: 10px;
+  transition: width 0.4s ease;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+}
+
 /* Mission List Container */
 #map-day-list.map-cards-container {
   flex: 1;
+  min-height: 0; /* CRITICAL: Enables flex child to scroll properly! */
   overflow-y: auto;
-  padding: 12px 14px;
+  padding: 14px 16px;
   display: flex;
   flex-direction: column;
   gap: 10px;
   box-sizing: border-box;
   scrollbar-width: thin;
-  scrollbar-color: rgba(56, 189, 248, 0.3) rgba(255, 255, 255, 0.03);
+  scrollbar-color: rgba(56, 189, 248, 0.4) rgba(255, 255, 255, 0.03);
 }
 
 #map-day-list.map-cards-container::-webkit-scrollbar {
@@ -233,7 +257,7 @@ button, .btn, .tab-btn, ruby, .multi-blank { touch-action: manipulation; }
   background: rgba(255, 255, 255, 0.02);
 }
 #map-day-list.map-cards-container::-webkit-scrollbar-thumb {
-  background: rgba(56, 189, 248, 0.3);
+  background: rgba(56, 189, 248, 0.4);
   border-radius: 6px;
 }
 #map-day-list.map-cards-container::-webkit-scrollbar-thumb:hover {
@@ -245,58 +269,61 @@ button, .btn, .tab-btn, ruby, .multi-blank { touch-action: manipulation; }
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 11px 13px;
+  padding: 12px 14px;
+  min-height: 70px; /* CRITICAL: Fixed minimum height */
   border-radius: 14px;
-  background: rgba(15, 23, 42, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.2s ease;
   user-select: none;
   position: relative;
-  overflow: hidden;
+  flex-shrink: 0 !important; /* CRITICAL: Prevents flexbox squishing */
+  box-sizing: border-box;
 }
 
 /* Card States */
 .mission-card.completed {
-  border-color: rgba(34, 197, 94, 0.3);
-  background: linear-gradient(90deg, rgba(34, 197, 94, 0.08) 0%, rgba(15, 23, 42, 0.85) 100%);
+  border-color: rgba(34, 197, 94, 0.4);
+  background: linear-gradient(90deg, rgba(34, 197, 94, 0.1) 0%, rgba(15, 23, 42, 0.9) 100%);
 }
 .mission-card.completed:hover {
   border-color: var(--success);
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(34, 197, 94, 0.2);
+  box-shadow: 0 6px 18px rgba(34, 197, 94, 0.25);
 }
 
 .mission-card.current {
   border: 2px solid var(--primary);
-  background: linear-gradient(90deg, rgba(56, 189, 248, 0.16) 0%, rgba(15, 23, 42, 0.95) 100%);
-  box-shadow: 0 0 20px rgba(56, 189, 248, 0.35);
+  background: linear-gradient(90deg, rgba(56, 189, 248, 0.18) 0%, rgba(15, 23, 42, 0.95) 100%);
+  box-shadow: 0 0 22px rgba(56, 189, 248, 0.38);
   animation: pulseActiveCard 2.5s infinite ease-in-out;
 }
 @keyframes pulseActiveCard {
   0%, 100% {
-    box-shadow: 0 0 14px rgba(56, 189, 248, 0.25);
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
     border-color: var(--primary);
   }
   50% {
-    box-shadow: 0 0 24px rgba(56, 189, 248, 0.55);
+    box-shadow: 0 0 28px rgba(56, 189, 248, 0.6);
     border-color: #7dd3fc;
   }
 }
 .mission-card.current:hover {
-  transform: translateY(-2px) scale(1.01);
-  box-shadow: 0 0 25px rgba(56, 189, 248, 0.5);
+  transform: translateY(-2px) scale(1.005);
+  box-shadow: 0 0 28px rgba(56, 189, 248, 0.55);
 }
 
 .mission-card.locked {
-  opacity: 0.5;
-  filter: grayscale(0.85);
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   cursor: not-allowed;
-  background: rgba(10, 15, 28, 0.5);
-  border-color: rgba(255, 255, 255, 0.03);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 .mission-card.locked:hover {
-  opacity: 0.65;
+  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(20, 30, 52, 0.85);
 }
 
 /* Active viewing card (if user reviews a past day) */
@@ -311,24 +338,31 @@ button, .btn, .tab-btn, ruby, .multi-blank { touch-action: manipulation; }
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-width: 46px;
-  height: 46px;
-  border-radius: 12px;
-  background: rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  width: 48px;
+  min-width: 48px;
+  height: 48px;
+  border-radius: 11px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   flex-shrink: 0;
+  box-sizing: border-box;
 }
 .mission-card.completed .mission-left {
   background: rgba(34, 197, 94, 0.15);
-  border-color: rgba(34, 197, 94, 0.35);
+  border-color: rgba(34, 197, 94, 0.4);
 }
 .mission-card.current .mission-left {
   background: rgba(56, 189, 248, 0.2);
   border-color: var(--primary);
 }
+.mission-card.locked .mission-left {
+  background: rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.05);
+  color: #64748b;
+}
 
 .mission-icon {
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1;
 }
 
@@ -336,7 +370,7 @@ button, .btn, .tab-btn, ruby, .multi-blank { touch-action: manipulation; }
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.5px;
-  margin-top: 2px;
+  margin-top: 3px;
   color: var(--text-sub);
 }
 .mission-card.completed .mission-day-num {
@@ -345,6 +379,9 @@ button, .btn, .tab-btn, ruby, .multi-blank { touch-action: manipulation; }
 .mission-card.current .mission-day-num {
   color: #7dd3fc;
 }
+.mission-card.locked .mission-day-num {
+  color: #64748b;
+}
 
 /* Card Body Section */
 .mission-body {
@@ -352,7 +389,8 @@ button, .btn, .tab-btn, ruby, .multi-blank { touch-action: manipulation; }
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  justify-content: center;
+  gap: 4px;
 }
 
 .mission-meta-line {
@@ -363,7 +401,7 @@ button, .btn, .tab-btn, ruby, .multi-blank { touch-action: manipulation; }
 }
 
 .mission-category {
-  font-size: 9.5px;
+  font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.8px;
   color: var(--text-sub);
@@ -374,6 +412,9 @@ button, .btn, .tab-btn, ruby, .multi-blank { touch-action: manipulation; }
 }
 .mission-card.current .mission-category {
   color: var(--primary);
+}
+.mission-card.locked .mission-category {
+  color: #64748b;
 }
 
 .mission-badge {
@@ -386,32 +427,28 @@ button, .btn, .tab-btn, ruby, .multi-blank { touch-action: manipulation; }
   white-space: nowrap;
 }
 .badge-completed {
-  background: rgba(34, 197, 94, 0.15);
+  background: rgba(34, 197, 94, 0.18);
   color: #86efac;
-  border: 1px solid rgba(34, 197, 94, 0.3);
+  border: 1px solid rgba(34, 197, 94, 0.35);
 }
 .badge-current {
   background: rgba(56, 189, 248, 0.25);
   color: #bae6fd;
   border: 1px solid var(--primary);
-  animation: pulseGold 2s infinite;
 }
 .badge-locked {
   background: rgba(255, 255, 255, 0.05);
   color: #64748b;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .mission-title {
-  font-size: 12.5px;
+  font-size: 13px;
   font-weight: 700;
   color: #f1f5f9;
-  line-height: 1.35;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  line-height: 1.4;
+  white-space: normal;
+  word-break: break-word;
 }
 .mission-card.locked .mission-title {
   color: #94a3b8;
@@ -426,9 +463,9 @@ button, .btn, .tab-btn, ruby, .multi-blank { touch-action: manipulation; }
 }
 
 .mission-action-pill {
-  font-size: 11px;
-  font-weight: bold;
-  padding: 5px 9px;
+  font-size: 11.5px;
+  font-weight: 800;
+  padding: 6px 12px;
   border-radius: 8px;
   transition: 0.2s;
   display: flex;
@@ -437,9 +474,9 @@ button, .btn, .tab-btn, ruby, .multi-blank { touch-action: manipulation; }
   white-space: nowrap;
 }
 .mission-card.completed .mission-action-pill {
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--text-sub);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 .mission-card.completed:hover .mission-action-pill {
   background: rgba(34, 197, 94, 0.2);
@@ -455,20 +492,22 @@ button, .btn, .tab-btn, ruby, .multi-blank { touch-action: manipulation; }
 }
 
 .mission-card.locked .mission-action-pill {
-  color: #475569;
-  font-size: 13px;
+  color: #64748b;
+  font-size: 14px;
 }
 
 .map-modal-footer {
-  padding: 10px 16px 14px;
-  background: rgba(10, 15, 29, 0.95);
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 10px 16px;
+  background: rgba(8, 13, 26, 0.98);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
   flex-shrink: 0;
   display: flex;
   justify-content: center;
+  box-sizing: border-box;
 }
+
 .map-bottom-close {
-  max-width: 280px;
+  max-width: 260px;
   margin: 0;
   padding: 9px;
   font-size: 13.5px;

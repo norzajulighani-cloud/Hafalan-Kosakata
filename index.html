@@ -127,24 +127,30 @@
   <div class="map-modal-card">
     <div class="map-modal-header">
       <div class="map-header-top">
-        <span class="map-header-badge">🗺️ EXPEDITION MAP</span>
+        <div class="map-title-group">
+          <div class="map-badge-row">
+            <span class="map-header-badge">🗺️ EXPEDITION MAP</span>
+            <span class="map-level-badge">SEKTOR 1 - 30</span>
+          </div>
+          <h2 class="map-title">Peta Infiltrasi Sektor</h2>
+        </div>
         <button type="button" class="map-close-btn" onclick="UI.closeModal('map-modal')" title="Tutup Peta">✕</button>
       </div>
-      <h2 class="map-title">Peta Infiltrasi Sektor</h2>
-      <p class="map-subtitle">Pilih zona misi untuk latihan, kaji ulang, atau pertempuran</p>
 
-      <!-- RPG Mission Progress Dashboard -->
+      <!-- Compact RPG Mission Progress Dashboard -->
       <div class="map-progress-panel">
-        <div class="map-progress-row-top">
-          <span class="map-progress-tag">⚡ PROGRESS INFILTRASI</span>
-          <span id="map-progress-text" class="map-progress-pct">0% SELESAI</span>
+        <div class="map-progress-top-row">
+          <div class="map-progress-info-left">
+            <span class="map-progress-tag">⚡ PROGRESS</span>
+            <span id="map-progress-detail" class="map-progress-info">Zona Terbuka: Hari 1 / 30</span>
+          </div>
+          <div class="map-progress-info-right">
+            <span id="map-progress-text" class="map-progress-pct">0% SELESAI</span>
+            <button type="button" class="map-btn-jump" onclick="UI.scrollToCurrentMission()">🎯 Fokus Misi</button>
+          </div>
         </div>
         <div class="map-progress-track">
           <div id="map-progress-fill" class="map-progress-fill" style="width: 0%;"></div>
-        </div>
-        <div class="map-progress-row-bottom">
-          <span id="map-progress-detail" class="map-progress-info">Zona Terbuka: Hari 1 / 30</span>
-          <button type="button" class="map-btn-jump" onclick="UI.scrollToCurrentMission()">🎯 Fokus Hari Aktif</button>
         </div>
       </div>
     </div>
