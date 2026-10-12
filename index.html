@@ -315,26 +315,116 @@
 
 <div class="sidebar" id="sidebar">
   <div class="sidebar-header">
-    <h3 style="color:var(--text-main); margin:0 0 5px 0;">Peta Navigasi</h3>
+    <div class="sidebar-header-top">
+      <div class="sidebar-brand">
+        <span class="sidebar-badge">⛩️ KENSEI TERMINAL</span>
+        <span class="sidebar-version">v10.6</span>
+      </div>
+      <button type="button" class="sidebar-close-btn" onclick="UI.toggleSidebar()" title="Tutup Navigasi">✕</button>
+    </div>
+    <h2 class="sidebar-title">Peta Navigasi & Saku</h2>
+    <p class="sidebar-subtitle">Pusat kendali mode belajar & referensi intel N5</p>
   </div>
-  
-  <div style="text-align:center; margin-bottom: 20px;">
-    <button class="btn btn-alt" style="font-size:13px; padding:10px; border:1px solid var(--primary); width: 100%; box-sizing: border-box; margin-bottom:10px;" onclick="UI.toggleSidebar(); document.getElementById('main-app').classList.add('hidden'); document.getElementById('setup-screen').classList.remove('hidden');">⚙️ Menu Awal</button>
-    <button class="btn btn-alt" id="btn-hardcore" style="font-size:13px; padding:10px; border:1px solid var(--danger); width: 100%; box-sizing: border-box; margin-bottom:10px;" onclick="UI.toggleHardcore()">🥷 Mode Hardcore</button>
-    <button class="btn btn-alt" style="font-size:13px; padding:10px; border:1px solid var(--success); width: 100%; box-sizing: border-box;" onclick="UI.toggleSidebar(); UI.openKamus();">📖 Kamus Kensei</button>
-    <button class="btn btn-alt" style="font-size:13px; padding:10px; border:1px solid var(--warning); width: 100%; box-sizing: border-box; margin-top:10px;" onclick="Game.startDungeon()">🏰 Dungeon Ingatan</button>
 
-    <div style="border-top: 1px dashed rgba(148, 163, 184, 0.5); margin: 20px 0 15px 0;"></div>
-    <div style="font-size:11px; color:var(--text-sub); margin-bottom:10px; font-weight:bold; letter-spacing:1px; text-transform:uppercase;">📚 Referensi Buku Saku</div>
-    
-    <button class="btn btn-alt" style="font-size:13px; padding:10px; border:1px solid var(--primary); background: rgba(56, 189, 248, 0.05); width: 100%; box-sizing: border-box; margin-bottom:10px; cursor:pointer;" onclick="window.location.href='kanji.html'">🪧 Kanji N5</button>
-    <button class="btn btn-alt" style="font-size:13px; padding:10px; border:1px solid var(--primary); background: rgba(56, 189, 248, 0.05); width: 100%; box-sizing: border-box; margin-bottom:10px; cursor:pointer;" onclick="window.location.href='kata sifat.html'">🪧 Kata Sifat</button>
-    <button class="btn btn-alt" style="font-size:13px; padding:10px; border:1px solid var(--primary); background: rgba(56, 189, 248, 0.05); width: 100%; box-sizing: border-box; margin-bottom:10px; cursor:pointer;" onclick="window.location.href='kata kerja.html'">🏃🏻‍♂️ Kata Kerja</button>
-    <button class="btn btn-alt" style="font-size:13px; padding:10px; border:1px solid var(--primary); background: rgba(56, 189, 248, 0.05); width: 100%; box-sizing: border-box; margin-bottom:10px; cursor:pointer;" onclick="window.location.href='nomor.html'">🔢 Angka & Waktu</button>
-    <button class="btn btn-alt" style="font-size:13px; padding:10px; border:1px solid var(--success); background: rgba(34, 197, 94, 0.05); width: 100%; box-sizing: border-box; cursor:pointer;" onclick="window.location.href='tanggal.html'">📅 Kalender & Ket. Waktu</button>
+  <div class="sidebar-content">
+    <!-- Group 1: Sistem & Petualangan -->
+    <div class="sidebar-group">
+      <div class="sidebar-group-label">🎮 MODE & FITUR UTAMA</div>
+      
+      <div class="sidebar-tile" onclick="UI.toggleSidebar(); document.getElementById('main-app').classList.add('hidden'); document.getElementById('setup-screen').classList.remove('hidden');">
+        <div class="sidebar-tile-icon icon-cyan">⚙️</div>
+        <div class="sidebar-tile-info">
+          <div class="sidebar-tile-title">Menu Awal</div>
+          <div class="sidebar-tile-desc">Ganti gaya & mode pembelajaran</div>
+        </div>
+        <div class="sidebar-tile-arrow">›</div>
+      </div>
+
+      <div class="sidebar-tile" id="btn-hardcore" onclick="UI.toggleHardcore()">
+        <div class="sidebar-tile-icon icon-red">🥷</div>
+        <div class="sidebar-tile-info">
+          <div class="sidebar-tile-title">Mode Hardcore</div>
+          <div class="sidebar-tile-desc">Sembunyikan furigana kanji</div>
+        </div>
+        <span class="sidebar-tile-status status-off" id="hardcore-badge">OFF</span>
+      </div>
+
+      <div class="sidebar-tile" onclick="UI.toggleSidebar(); UI.openKamus();">
+        <div class="sidebar-tile-icon icon-green">📖</div>
+        <div class="sidebar-tile-info">
+          <div class="sidebar-tile-title">Kamus Kensei</div>
+          <div class="sidebar-tile-desc">Koleksi kosakata yang sudah terbuka</div>
+        </div>
+        <div class="sidebar-tile-arrow">›</div>
+      </div>
+
+      <div class="sidebar-tile" onclick="Game.startDungeon()">
+        <div class="sidebar-tile-icon icon-gold">🏰</div>
+        <div class="sidebar-tile-info">
+          <div class="sidebar-tile-title">Dungeon Ingatan</div>
+          <div class="sidebar-tile-desc">Mode survival kosakata tanpa batas</div>
+        </div>
+        <div class="sidebar-tile-arrow">›</div>
+      </div>
+    </div>
+
+    <!-- Group 2: Buku Saku Referensi -->
+    <div class="sidebar-group">
+      <div class="sidebar-group-label">📚 REFERENSI BUKU SAKU N5</div>
+
+      <a class="sidebar-tile" href="kanji.html">
+        <div class="sidebar-tile-icon icon-cyan">🪧</div>
+        <div class="sidebar-tile-info">
+          <div class="sidebar-tile-title">Kanji N5</div>
+          <div class="sidebar-tile-desc">Daftar kanji dasar & cara baca</div>
+        </div>
+        <div class="sidebar-tile-arrow">›</div>
+      </a>
+
+      <a class="sidebar-tile" href="kata sifat.html">
+        <div class="sidebar-tile-icon icon-cyan">🏷️</div>
+        <div class="sidebar-tile-info">
+          <div class="sidebar-tile-title">Kata Sifat</div>
+          <div class="sidebar-tile-desc">I-Keiyoushi & Na-Keiyoushi</div>
+        </div>
+        <div class="sidebar-tile-arrow">›</div>
+      </a>
+
+      <a class="sidebar-tile" href="kata kerja.html">
+        <div class="sidebar-tile-icon icon-cyan">🏃🏻‍♂️</div>
+        <div class="sidebar-tile-info">
+          <div class="sidebar-tile-title">Kata Kerja</div>
+          <div class="sidebar-tile-desc">Bentuk kamus, masu & aturan grup</div>
+        </div>
+        <div class="sidebar-tile-arrow">›</div>
+      </a>
+
+      <a class="sidebar-tile" href="nomor.html">
+        <div class="sidebar-tile-icon icon-cyan">🔢</div>
+        <div class="sidebar-tile-info">
+          <div class="sidebar-tile-title">Angka & Waktu</div>
+          <div class="sidebar-tile-desc">Bilangan, jam, menit & hitungan</div>
+        </div>
+        <div class="sidebar-tile-arrow">›</div>
+      </a>
+
+      <a class="sidebar-tile" href="tanggal.html">
+        <div class="sidebar-tile-icon icon-green">📅</div>
+        <div class="sidebar-tile-info">
+          <div class="sidebar-tile-title">Kalender & Waktu</div>
+          <div class="sidebar-tile-desc">Hari, bulan, tanggal & keterangan</div>
+        </div>
+        <div class="sidebar-tile-arrow">›</div>
+      </a>
+    </div>
   </div>
-</div>
 
+  <div class="sidebar-footer">
+    <div class="sidebar-footer-info">
+      <span>YOMIKATA • JLPT N5 ENGINE</span>
+      <span class="sidebar-footer-status">ONLINE 🟢</span>
+    </div>
+  </div>
 </div>
 <div class="overlay" id="overlay" onclick="UI.toggleSidebar()"></div>
 

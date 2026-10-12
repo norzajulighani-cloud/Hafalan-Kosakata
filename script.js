@@ -703,9 +703,22 @@ nextDayFromResult: () => {
 },
 
   toggleHardcore: () => {
-    document.body.classList.toggle('hardcore-mode'); let isHC = document.body.classList.contains('hardcore-mode');
-    document.getElementById('btn-hardcore').innerText = isHC ? "👁️ Tampilkan Furigana" : "🥷 Mode Hardcore";
-    UI.showToast(isHC ? "Mode Hardcore Aktif! Insting Ninja." : "Furigana Kembali", "success"); UI.toggleSidebar();
+    document.body.classList.toggle('hardcore-mode');
+    let isHC = document.body.classList.contains('hardcore-mode');
+    const badge = document.getElementById('hardcore-badge');
+    const btnTile = document.getElementById('btn-hardcore');
+    if (badge) {
+      badge.textContent = isHC ? "AKTIF" : "OFF";
+      badge.className = `sidebar-tile-status ${isHC ? 'status-active' : 'status-off'}`;
+    }
+    if (btnTile) {
+      const title = btnTile.querySelector('.sidebar-tile-title');
+      const desc = btnTile.querySelector('.sidebar-tile-desc');
+      if (title) title.textContent = isHC ? "Mode Hardcore (Aktif)" : "Mode Hardcore";
+      if (desc) desc.textContent = isHC ? "Furigana disembunyikan" : "Sembunyikan furigana kanji";
+    }
+    UI.showToast(isHC ? "Mode Hardcore Aktif! Insting Ninja." : "Furigana Kembali", "success");
+    UI.toggleSidebar();
   },
     openKamus: () => { document.getElementById('kamus-search').value = ""; UI.renderKamusList(""); UI.openModal('kamus-modal'); },    
   searchKamus: () => { let query = document.getElementById('kamus-search').value.toLowerCase(); UI.renderKamusList(query); },

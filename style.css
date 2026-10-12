@@ -169,11 +169,293 @@ button, .btn, .tab-btn, ruby, .multi-blank { touch-action: manipulation; }
   flex-shrink: 0; 
 }
 .toggle-btn:hover { color: var(--primary); transform: scale(1.1); }
-.sidebar { position: fixed; left: 0; top: 0; width: 320px; height: 100%; background: #020617; padding: 70px 20px 20px; transform: translateX(-100%); transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1000; overflow-y: auto; box-sizing: border-box; border-right: 1px solid rgba(255,255,255,0.05); scrollbar-width: thin; scrollbar-color: var(--primary) transparent; }
-.sidebar.active { transform: translateX(0); }
-.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); opacity: 0; pointer-events: none; transition: 0.3s; z-index: 900; backdrop-filter: blur(2px); }
-.overlay.active { opacity: 1; pointer-events: auto; }
-.sidebar-header { border-bottom: 1px dashed rgba(255,255,255,0.15); padding-bottom: 15px; margin-bottom: 15px; text-align: center; }
+/* ==========================================
+   CYBER RPG SIDEBAR NAVIGATION
+   ========================================== */
+.sidebar { 
+  position: fixed; 
+  left: 0; 
+  top: 0; 
+  width: 320px; 
+  max-width: 85vw;
+  height: 100%; 
+  background: rgba(8, 13, 26, 0.98); 
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  padding: 0; 
+  transform: translateX(-100%); 
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1); 
+  z-index: 1000; 
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box; 
+  border-right: 1px solid rgba(56, 189, 248, 0.25); 
+  box-shadow: 10px 0 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(56, 189, 248, 0.1);
+}
+.sidebar.active { 
+  transform: translateX(0); 
+}
+
+.overlay { 
+  position: fixed; 
+  inset: 0; 
+  background: rgba(0,0,0,0.65); 
+  opacity: 0; 
+  pointer-events: none; 
+  transition: 0.3s; 
+  z-index: 900; 
+  backdrop-filter: blur(3px); 
+}
+.overlay.active { 
+  opacity: 1; 
+  pointer-events: auto; 
+}
+
+/* Sidebar Custom Thin Scrollbar */
+.sidebar-content {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 16px 16px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56, 189, 248, 0.3) rgba(255, 255, 255, 0.02);
+}
+.sidebar-content::-webkit-scrollbar {
+  width: 5px;
+}
+.sidebar-content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+}
+.sidebar-content::-webkit-scrollbar-thumb {
+  background: rgba(56, 189, 248, 0.3);
+  border-radius: 6px;
+}
+.sidebar-content::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* Sidebar Header */
+.sidebar-header { 
+  padding: 18px 18px 14px;
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.4) 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08); 
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+.sidebar-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.sidebar-badge {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: var(--primary);
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  padding: 2px 7px;
+  border-radius: 5px;
+}
+.sidebar-version {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-sub);
+}
+.sidebar-close-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-sub);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+}
+.sidebar-close-btn:hover {
+  background: rgba(239, 68, 68, 0.25);
+  color: var(--danger);
+  border-color: var(--danger);
+  transform: rotate(90deg);
+}
+
+.sidebar-title {
+  color: #fff;
+  font-size: 17px;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: 0.3px;
+}
+.sidebar-subtitle {
+  color: var(--text-sub);
+  font-size: 11px;
+  margin: 3px 0 0 0;
+  line-height: 1.35;
+}
+
+/* Sidebar Groups */
+.sidebar-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.sidebar-group-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  color: var(--text-sub);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+  padding-left: 2px;
+}
+
+/* Sidebar Menu Tiles */
+.sidebar-tile {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 9px 12px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+  color: inherit;
+  box-sizing: border-box;
+  user-select: none;
+}
+.sidebar-tile:hover {
+  background: rgba(30, 41, 59, 0.95);
+  border-color: rgba(56, 189, 248, 0.35);
+  transform: translateX(4px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+}
+.sidebar-tile:active {
+  transform: translateX(2px) scale(0.99);
+}
+
+.sidebar-tile-icon {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+}
+.icon-cyan {
+  background: rgba(56, 189, 248, 0.12);
+  border-color: rgba(56, 189, 248, 0.3);
+}
+.icon-red {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+.icon-green {
+  background: rgba(34, 197, 94, 0.12);
+  border-color: rgba(34, 197, 94, 0.3);
+}
+.icon-gold {
+  background: rgba(251, 191, 36, 0.12);
+  border-color: rgba(251, 191, 36, 0.3);
+}
+
+.sidebar-tile-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.sidebar-tile-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #f1f5f9;
+  line-height: 1.2;
+}
+.sidebar-tile:hover .sidebar-tile-title {
+  color: var(--primary);
+}
+.sidebar-tile-desc {
+  font-size: 10.5px;
+  color: var(--text-sub);
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-tile-arrow {
+  color: #475569;
+  font-size: 16px;
+  font-weight: 800;
+  transition: 0.2s;
+}
+.sidebar-tile:hover .sidebar-tile-arrow {
+  color: var(--primary);
+  transform: translateX(2px);
+}
+
+.sidebar-tile-status {
+  font-size: 9.5px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 10px;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+.status-off {
+  background: rgba(255, 255, 255, 0.08);
+  color: #64748b;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.status-active {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
+}
+
+/* Sidebar Footer */
+.sidebar-footer {
+  padding: 10px 16px;
+  background: rgba(8, 13, 26, 0.98);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
+}
+.sidebar-footer-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.5px;
+}
+.sidebar-footer-status {
+  color: #4ade80;
+  font-weight: 800;
+}
+
 
 /* ==========================================
    RPG MISSION CARDS & EXPEDITION MAP MODAL
