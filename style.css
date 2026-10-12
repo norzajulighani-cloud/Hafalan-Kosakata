@@ -33,18 +33,78 @@ button, .btn, .tab-btn, ruby, .multi-blank { touch-action: manipulation; }
 #toast.success { background: var(--success); color: #000; border: 2px solid #16a34a; }
 #toast.error { background: var(--danger); color: #fff; border: 2px solid #b91c1c; }
 
+/* ==========================================
+   KINETIC DECK SLIDE & SHEEN TRANSITION
+   ========================================== */
+#card-main {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Light Sheen Sweep across Card Canvas */
+#card-main::after {
+  content: '';
+  position: absolute;
+  top: -60%;
+  left: -130%;
+  width: 90%;
+  height: 220%;
+  background: linear-gradient(
+    105deg,
+    transparent 20%,
+    rgba(56, 189, 248, 0.2) 45%,
+    rgba(251, 191, 36, 0.25) 50%,
+    rgba(56, 189, 248, 0.2) 55%,
+    transparent 80%
+  );
+  transform: rotate(25deg);
+  pointer-events: none;
+  opacity: 0;
+  z-index: 50;
+}
+
+#card-main.sheen-active::after {
+  animation: sheenSweep 0.52s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes sheenSweep {
+  0% {
+    left: -130%;
+    opacity: 0.9;
+  }
+  100% {
+    left: 170%;
+    opacity: 0;
+  }
+}
+
+/* Card Content Wrapper Kinetic Slide States */
 .card-content-wrapper { 
   opacity: 1; 
-  transform: translateX(0) scale(1); 
-  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateX(0) scale(1) rotate(0deg); 
+  transition: opacity 0.28s ease, transform 0.35s cubic-bezier(0.2, 1.25, 0.4, 1);
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
+  will-change: transform, opacity;
 }
-.card-content-wrapper.fade-out { opacity: 0; transform: translateX(-15px) scale(0.98); }
+
+/* Slide Out (Exit to Left with Momentum) */
+.card-content-wrapper.slide-exit-left { 
+  opacity: 0; 
+  transform: translateX(-40px) scale(0.95) rotate(-1.2deg); 
+  transition: transform 0.2s cubic-bezier(0.4, 0, 1, 1), opacity 0.18s ease-out;
+}
+
+/* Slide Enter from Right (Prepared before spring) */
+.card-content-wrapper.slide-enter-right { 
+  opacity: 0; 
+  transform: translateX(45px) scale(0.96) rotate(1deg); 
+  transition: none !important;
+}
 
 .toggle-btn { 
   background: none; 
@@ -1336,11 +1396,279 @@ ruby.show {
 
 ruby.pro-locked:hover { color: inherit; }
 ruby.pro-locked:hover rt { opacity: 0; }
-ruby .arti-hint { position: absolute; bottom: -30px; left: 50%; transform: translateX(-50%); background-color: rgba(15, 23, 42, 0.95); color: var(--primary); padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: bold; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 100; border: 1px solid var(--primary); box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
-ruby.show .arti-hint { opacity: 1; transform: translateX(-50%) translateY(5px); } /* Efek turun sedikit pada tooltip */
+.arti-hint { display: none !important; }
+ruby .arti-hint { display: none !important; }
+ruby.show .arti-hint { display: none !important; }
 .u-line { border-bottom: 3px dashed var(--warning); padding-bottom: 4px; }
-.multi-blank { display: inline-block; min-width: 35px; border-bottom: 3px dashed var(--primary); color: var(--gold); text-align: center; cursor: pointer; padding: 0 5px; margin: 0 5px; transition: 0.2s; }
-.multi-blank:hover { border-color: var(--gold); }
+
+/* Tactical Multi-Blank Slot for Tab Partikel */
+.multi-blank {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  height: 38px;
+  padding: 0 8px;
+  margin: 0 5px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 2px dashed rgba(56, 189, 248, 0.5);
+  border-radius: 8px;
+  color: var(--gold);
+  font-weight: 800;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  vertical-align: middle;
+}
+.multi-blank:hover {
+  border-color: var(--primary);
+  background: rgba(56, 189, 248, 0.15);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.35);
+}
+.multi-blank.filled {
+  border-style: solid;
+  border-color: var(--gold);
+  background: rgba(251, 191, 36, 0.15);
+  box-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
+}
+
+/* ==========================================
+   TAB PARTIKEL SHOWCASE (ZONA TEMPUR)
+   ========================================== */
+.partikel-showcase {
+  width: 100%;
+  max-width: 520px;
+  background: transparent;
+  margin: 0 auto;
+}
+
+.partikel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 20px;
+}
+
+.partikel-badge {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(168, 85, 247, 0.15);
+  color: #c084fc;
+  border: 1px solid rgba(168, 85, 247, 0.4);
+}
+
+.partikel-fill {
+  background: linear-gradient(90deg, #c084fc, var(--primary)) !important;
+  box-shadow: 0 0 8px rgba(192, 132, 252, 0.6) !important;
+}
+
+.partikel-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0 18px 0;
+}
+
+.partikel-prompt-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: var(--text-sub);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.partikel-sentence-display {
+  font-size: 28px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 2.5;
+  text-align: center;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  user-select: none;
+  word-wrap: break-word;
+  max-width: 100%;
+}
+
+@media (max-width: 480px) {
+  .partikel-sentence-display {
+    font-size: 23px;
+    line-height: 2.3;
+  }
+}
+
+.partikel-action-area {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.particle-chips-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  width: 100%;
+}
+
+.particle-chip-btn {
+  background: rgba(30, 41, 59, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  font-size: 19px;
+  font-weight: 800;
+  padding: 10px 18px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  font-family: inherit;
+}
+
+.particle-chip-btn:hover {
+  background: rgba(56, 189, 248, 0.2);
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(56, 189, 248, 0.35);
+}
+
+.particle-chip-btn:active {
+  transform: translateY(0) scale(0.96);
+}
+
+/* ==========================================
+   TAB ARTI SHOWCASE (ZONA TEMPUR TERJEMAHAN)
+   ========================================== */
+.arti-quiz-showcase {
+  width: 100%;
+  max-width: 520px;
+  background: transparent;
+  margin: 0 auto;
+}
+
+.arti-quiz-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 20px;
+}
+
+.arti-quiz-badge {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(251, 191, 36, 0.15);
+  color: var(--gold);
+  border: 1px solid rgba(251, 191, 36, 0.4);
+}
+
+.arti-quiz-fill {
+  background: linear-gradient(90deg, var(--gold), #f97316) !important;
+  box-shadow: 0 0 8px rgba(251, 191, 36, 0.6) !important;
+}
+
+.arti-quiz-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 0 16px 0;
+  text-align: center;
+}
+
+.arti-quiz-prompt-label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  color: var(--warning);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+
+.arti-quiz-sentence {
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.5;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+  word-wrap: break-word;
+  max-width: 100%;
+}
+
+@media (max-width: 480px) {
+  .arti-quiz-sentence {
+    font-size: 19px;
+  }
+}
+
+.arti-input-container {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cyber-input {
+  width: 100%;
+  max-width: 520px;
+  padding: 16px;
+  border-radius: 14px;
+  border: 2px solid rgba(56, 189, 248, 0.35);
+  background: rgba(15, 23, 42, 0.85);
+  color: #ffffff;
+  font-size: 20px;
+  text-align: center;
+  margin-bottom: 14px;
+  box-sizing: border-box;
+  transition: all 0.25s ease;
+  font-family: inherit;
+}
+
+.cyber-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  background: rgba(15, 23, 42, 0.95);
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.35);
+}
+
+.btn-primary-gold {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%) !important;
+  color: #0f172a !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.5px;
+  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4) !important;
+}
+
+.btn-primary-gold:hover {
+  filter: brightness(1.1) !important;
+  box-shadow: 0 8px 25px rgba(251, 191, 36, 0.6) !important;
+  transform: translateY(-2px) !important;
+}
 .input-box { width: 100%; padding: 15px; border-radius: 12px; border: 2px solid #475569; background: #0f172a; color: white; font-size: 18px; text-align: center; margin-bottom: 15px; box-sizing: border-box; transition: 0.2s; }
 .input-box:focus { outline: none; border-color: var(--primary); }
 .btn { background: var(--primary); color: #000; border: none; padding: 14px; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; transition: 0.2s; width: 100%; margin-bottom: 10px; }

@@ -76,7 +76,7 @@ const Engine = {
      let pIdx = 0;
      arr.forEach(item => {
         let chunkHtml = "";
-        if(item.k) chunkHtml = Engine.buildRubyFormat(item.k, item.r, item.a, isPro);
+        if(item.k) chunkHtml = Engine.buildRubyFormat(item.k, item.r, null, isPro);
         else if(item.text) {
             if(maskParticle && item.p) {
                 if (isMulti) {
@@ -770,7 +770,32 @@ nextDayFromResult: () => {
   },
   triggerNextAnim: (callback) => {
     const w = document.getElementById('card-content');
-    w.classList.add('fade-out'); setTimeout(() => { callback(); w.classList.remove('fade-out'); }, 250);
+    const card = document.getElementById('card-main');
+    
+    // 1. Geser keluar ke kiri dengan momentum
+    w.classList.remove('slide-enter-right');
+    w.classList.add('slide-exit-left');
+
+    setTimeout(() => {
+      // 2. Eksekusi perpindahan data langkah
+      callback();
+
+      // 3. Posisikan konten baru di kanan secara instan
+      w.classList.remove('slide-exit-left');
+      w.classList.add('slide-enter-right');
+      w.offsetHeight; // Paksa Reflow browser
+
+      // 4. Masuk dengan efek pegas kinetik (Spring Easing)
+      w.classList.remove('slide-enter-right');
+
+      // 5. Picu kilatan cahaya halus di permukaan kartu
+      if (card) {
+        card.classList.remove('sheen-active');
+        card.offsetHeight; // Reflow
+        card.classList.add('sheen-active');
+        setTimeout(() => card.classList.remove('sheen-active'), 550);
+      }
+    }, 200);
   },
     loadStep: () => {
     const t = Game.currentTab; const i = Game.currentIndex;
@@ -2951,7 +2976,11 @@ if (tipsBubble) tipsBubble.classList.add('hidden');
 
         UI.makeNextBtn("Paham →");
       } else if (t === 'partikel') {
-        document.getElementById('ui-jp').innerHTML = Engine.renderSentence(itm.jp, isPro, true, false, true); 
+        const perc = Math.round(((i + 1) / dL.length) * 100);
+        document.getElementById('stage-indicator').innerHTML = ""; 
+        document.getElementById('ui-arti').innerHTML = ""; 
+
+        let sentenceHtml = Engine.renderSentence(itm.jp, isPro, true, false, true); 
         
         let targetArr = [];
         if (Array.isArray(itm.ansP)) {
@@ -2977,27 +3006,73 @@ if (tipsBubble) tipsBubble.classList.add('hidden');
             if (p && !defaultOpts.includes(p)) defaultOpts.push(p);
         });
 
-        let optsHtml = '<div style="margin-bottom:15px;">';
+        let optsHtml = '<div class="particle-chips-grid">';
         defaultOpts.forEach(p => { 
-            optsHtml += `<button class="btn btn-alt" style="display:inline-block; width:auto; margin:4px; padding:10px 15px; font-size:18px;" onclick="Action.fillMulti('${p}')">${p}</button>`; 
+            optsHtml += `<button type="button" class="particle-chip-btn" onclick="Action.fillMulti('${p}')">${p}</button>`; 
         });
         optsHtml += '</div>'; 
         
-        document.getElementById('input-area').innerHTML = `${optsHtml}<button class="btn hidden" id="btn-submit" onclick="Action.checkMulti(event)">EKSEKUSI</button>`;
+        document.getElementById('ui-jp').innerHTML = `
+          <div class="partikel-showcase animate-slide">
+            <div class="partikel-header">
+              <span class="partikel-badge">🧩 KUIS PARTIKEL</span>
+              <div class="vocab-counter-group">
+                <span class="vocab-counter-text">SOAL <b>${i + 1}</b> / ${dL.length}</span>
+                <div class="vocab-mini-track">
+                  <div class="vocab-mini-fill partikel-fill" style="width: ${perc}%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="partikel-body">
+              <span class="partikel-prompt-label">LENGKAPI PARTIKEL YANG TEPAT:</span>
+              <div class="partikel-sentence-display">${sentenceHtml}</div>
+            </div>
+          </div>
+        `;
+
+        document.getElementById('input-area').innerHTML = `
+          <div class="partikel-action-area animate-slide">
+            ${optsHtml}
+            <button class="btn hidden" id="btn-submit" onclick="Action.checkMulti(event)">EKSEKUSI JAWABAN</button>
+          </div>
+        `;
 
         if (Game.intelActive) {
             let intelBox = `<div class="intel-box" style="margin-bottom:15px;"><b>Intel Arti:</b> ${itm.a}</div>`;
             document.getElementById('input-area').insertAdjacentHTML('afterbegin', intelBox);
         }
       } else if (t === 'arti') {
+        const perc = Math.round(((i + 1) / dL.length) * 100);
+        document.getElementById('stage-indicator').innerHTML = ""; 
+        document.getElementById('ui-arti').innerHTML = ""; 
+
         let displayA = itm.a;
         if (itm.qA && itm.qA.toLowerCase().includes("garis bawah") && itm.ansA) {
             let safeAnsA = itm.ansA.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
             let regex = new RegExp(`(${safeAnsA})`, "i");
             displayA = displayA.replace(regex, `<u style="text-decoration: underline; text-decoration-style: dashed; text-decoration-color: var(--primary); text-underline-offset: 4px;">$1</u>`);
         }
-        let qText = itm.qA ? `${displayA}<br><br><span style="font-size:14px; color:var(--warning);">${itm.qA.replace("Terjemahkanlah kalimat bergaris bawah!", "Tulis bagian bergaris bawah dalam bhs Jepang!").replace("Terjemahkanlah jawaban A!", "Tulis jawaban A dalam bhs Jepang!").replace("Terjemahkan keseluruhan kalimat!", "Terjemahkan ke bahasa Jepang!")}</span>` : displayA;
-        document.getElementById('ui-jp').innerHTML = `<div style="font-size:20px; line-height:1.5;">${qText}</div>`; 
+        let qSub = itm.qA ? itm.qA.replace("Terjemahkanlah kalimat bergaris bawah!", "Tulis bagian bergaris bawah dalam bhs Jepang:").replace("Terjemahkanlah jawaban A!", "Tulis jawaban A dalam bhs Jepang:").replace("Terjemahkan keseluruhan kalimat!", "Terjemahkan kalimat ke bhs Jepang:") : "Terjemahkan kalimat ini ke bahasa Jepang:";
+
+        document.getElementById('ui-jp').innerHTML = `
+          <div class="arti-quiz-showcase animate-slide">
+            <div class="arti-quiz-header">
+              <span class="arti-quiz-badge">⚔️ KUIS TERJEMAHAN</span>
+              <div class="vocab-counter-group">
+                <span class="vocab-counter-text">SOAL <b>${i + 1}</b> / ${dL.length}</span>
+                <div class="vocab-mini-track">
+                  <div class="vocab-mini-fill arti-fill" style="width: ${perc}%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="arti-quiz-body">
+              <span class="arti-quiz-prompt-label">${qSub}</span>
+              <div class="arti-quiz-sentence">${displayA}</div>
+            </div>
+          </div>
+        `;
         
         let targetArr = itm.jp.some(x => x.u) ? itm.jp.filter(x => x.u) : itm.jp;
         let aK = "", aH = "";
@@ -3012,10 +3087,14 @@ if (tipsBubble) tipsBubble.classList.add('hidden');
         Game.displayKanji = displayStr(aK);
         Game.displayHiragana = displayStr(aH);
         
-        document.getElementById('input-area').innerHTML = `<input type="text" id="answer-box" class="input-box" placeholder="Ketik Hiragana / Kanji..." autocomplete="off"><button class="btn" id="btn-submit">EKSEKUSI</button>`;
+        document.getElementById('input-area').innerHTML = `
+          <div class="arti-input-container animate-slide">
+            <input type="text" id="answer-box" class="input-box cyber-input" placeholder="Ketik Hiragana / Kanji di sini..." autocomplete="off">
+            <button class="btn btn-primary-gold" id="btn-submit">EKSEKUSI JAWABAN</button>
+          </div>
+        `;
         setTimeout(() => { document.getElementById('answer-box').focus(); document.getElementById('btn-submit').onclick = Action.checkInput; }, 100);
         
-        // --- TAMBAHKAN KODE INI DI SINI ---
         if (Game.mataActive) {
             let jpText = Game.displayKanji !== Game.displayHiragana ? 
                          `${Game.displayKanji} (${Game.displayHiragana})` : 
@@ -3023,7 +3102,6 @@ if (tipsBubble) tipsBubble.classList.add('hidden');
             let mataBox = `<div class="intel-box" style="margin-bottom:15px; border-color:var(--gold); color:var(--gold);"><b>Mata Kensei:</b> ${jpText}</div>`;
             document.getElementById('input-area').insertAdjacentHTML('afterbegin', mataBox);
         }
-        // ----------------------------
       }
       
       if (Game.adminMode && t !== 'dungeon') {
@@ -3228,6 +3306,7 @@ const Action = {
         const b = document.getElementById(`mblank-${idx}`);
         if(b) {
             b.innerText = p; 
+            b.classList.add('filled');
             b.style.color = "var(--primary)"; 
             b.style.borderBottomStyle = "solid";
         }
@@ -3247,9 +3326,12 @@ const Action = {
   clearMulti: (idx) => {
     Game.currentMultiAns[idx] = null;
     const b = document.getElementById(`mblank-${idx}`);
-    b.innerText = "_"; 
-    b.style.color = "var(--gold)"; 
-    b.style.borderBottomStyle = "dashed";
+    if(b) {
+        b.innerText = "_"; 
+        b.classList.remove('filled');
+        b.style.color = "var(--gold)"; 
+        b.style.borderBottomStyle = "dashed";
+    }
     document.getElementById('btn-submit').classList.add('hidden');
   },
   checkMulti: (evt) => {
@@ -3287,6 +3369,33 @@ document.addEventListener('click', (e) => {
     try { navigator.vibrate(20); } catch(_) {}
   }
 });
+
+// Touch Gesture Swipe (Mobile swipe left to advance slide)
+let touchStartX = 0;
+let touchStartY = 0;
+document.addEventListener('touchstart', (e) => {
+  if (e.touches && e.touches[0]) {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }
+}, { passive: true });
+
+document.addEventListener('touchend', (e) => {
+  if (!e.changedTouches || !e.changedTouches[0]) return;
+  const diffX = e.changedTouches[0].clientX - touchStartX;
+  const diffY = e.changedTouches[0].clientY - touchStartY;
+
+  // Pastikan swipe horizontal dominan dan minimal 60px
+  if (Math.abs(diffX) > 60 && Math.abs(diffX) > Math.abs(diffY) * 1.5) {
+    if (diffX < 0) {
+      // Swipe kiri -> Klik Lanjut/Hafal/Paham
+      const bn = document.getElementById('btn-next');
+      if (bn && !bn.classList.contains('hidden')) {
+        bn.click();
+      }
+    }
+  }
+}, { passive: true });
 const Cooldown = {
   triggerDeath: (m) => { 
     localStorage.setItem('yk_lock', Date.now() + (15 * 60 * 1000)); 
