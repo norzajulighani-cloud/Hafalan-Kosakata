@@ -105,14 +105,35 @@ const Engine = {
 };
 
 const RPG = {
-  level: parseInt(localStorage.getItem('yk_lvl')) || 1, exp: parseInt(localStorage.getItem('yk_exp')) || 0,
-  coins: parseInt(localStorage.getItem('yk_coins')) || 0, combo: 0,
-  hasShield: false, intelActive: false,
+  level: parseInt(localStorage.getItem('yk_lvl')) || 1, 
+  exp: parseInt(localStorage.getItem('yk_exp')) || 0,
+  coins: parseInt(localStorage.getItem('yk_coins')) || 0, 
+  combo: 0,
+  hasShield: false, 
+  intelActive: false,
+  inventory: (() => {
+    try {
+      let saved = localStorage.getItem('yk_inventory');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {}
+    return { hp: 1, shield: 0, intel: 0, mata: 0, pandora: 0 };
+  })(),
+
+  getInvCount: function(key) {
+    return (this.inventory && typeof this.inventory[key] === 'number') ? this.inventory[key] : 0;
+  },
+
+  getTotalBagCount: function() {
+    if (!this.inventory) return 0;
+    return Object.values(this.inventory).reduce((acc, v) => acc + (typeof v === 'number' ? v : 0), 0);
+  },
+
   getTitle: function() { 
     if(this.level >= 150) return "⛩️ Kensei"; if(this.level >= 90) return "👑 Shogun";
     if(this.level >= 60) return "🏯 Daimyo"; if(this.level >= 30) return "🛡️ Samurai";
     if(this.level >= 10) return "⚔️ Ronin"; return "🔰 Pemula";
   },
+
   getExpRequirement: function() {
     let multiplier = 2; 
     if (this.level >= 150) multiplier = 20;
@@ -122,27 +143,50 @@ const RPG = {
     else if (this.level >= 10) multiplier = 3;
     return this.level * 100 * multiplier;
   },
+
   updateUI: function() {
     document.getElementById('ui-lvl').innerText = `Lv.${this.level} ${this.getTitle()}`;
     document.getElementById('ui-exp').innerText = this.exp; 
-    
+
+    // --- EXP BAR PROGRESS ---
+    let nextLvlExp = this.getExpRequirement();
+    let expPerc = Math.min(100, Math.max(0, Math.round((this.exp / nextLvlExp) * 100)));
+    const expFillEl = document.getElementById('ui-exp-fill');
+    if (expFillEl) expFillEl.style.width = `${expPerc}%`;
+
     // --- MODE ADMIN: KOIN INFINITY ---
     let displayCoin = Game.adminMode ? "∞" : this.coins;
     document.getElementById('ui-coin').innerText = displayCoin; 
-    document.getElementById('shop-coin-display').innerText = displayCoin;
+    const shopCoinEl = document.getElementById('shop-coin-display');
+    if (shopCoinEl) shopCoinEl.innerText = displayCoin;
     // ---------------------------------
 
+    // --- HUD BAG ITEM COUNTER PILL ---
+    const bagBadge = document.getElementById('ui-bag-count');
+    if (bagBadge) {
+      let totalItems = this.getTotalBagCount();
+      bagBadge.innerText = totalItems;
+      bagBadge.style.display = totalItems > 0 ? 'inline-block' : 'none';
+    }
+
+    // --- SHOP OWNED BADGES ---
+    ['hp', 'shield', 'intel', 'mata', 'pandora'].forEach(key => {
+      let el = document.getElementById(`owned-${key}`);
+      if (el) el.innerText = `Tas: ${this.getInvCount(key)}`;
+    });
+
     const cUI = document.getElementById('ui-combo');
-    if(this.combo >= 2) { 
-        let dispCombo = Math.min(this.combo, 15);
-        let maxText = this.combo >= 15 ? " (MAX)" : "";
-        cUI.innerText = `🔥 x${dispCombo}${maxText}`; 
-        if(this.combo >= 15) cUI.style.color = "var(--danger)"; else cUI.style.color = "#f97316";
-        cUI.classList.remove('hidden'); cUI.classList.add('active'); 
-    } else { cUI.classList.add('hidden'); cUI.classList.remove('active'); }
+    if (cUI) {
+      if(this.combo >= 2) { 
+          let dispCombo = Math.min(this.combo, 15);
+          let maxText = this.combo >= 15 ? " (MAX)" : "";
+          cUI.innerText = `🔥 x${dispCombo}${maxText}`; 
+          if(this.combo >= 15) cUI.style.color = "var(--danger)"; else cUI.style.color = "#f97316";
+          cUI.classList.remove('hidden'); cUI.classList.add('active'); 
+      } else { cUI.classList.add('hidden'); cUI.classList.remove('active'); }
+    }
   },
   
-  // 👇 INI FUNGSI YANG KEMARIN TIDAK SENGAJA TERHAPUS WKWK
   addReward: function(baseExp, baseCoin, evt) {
     let multi = this.combo >= 2 ? Math.min(this.combo, 15) : 1; 
     let earnedExp = baseExp * multi; let earnedCoin = baseCoin * multi;
@@ -167,87 +211,151 @@ const RPG = {
     } 
     this.save(); this.updateUI();
   },
-  
-  buyItem: function(type, cost) {
+
+  buyToInventory: function(type, cost) {
     let hasAccess = Game.adminMode || this.coins >= cost;
+    if (hasAccess) {
+      if (!Game.adminMode) this.coins -= cost;
+      if (!this.inventory) this.inventory = { hp: 0, shield: 0, intel: 0, mata: 0, pandora: 0 };
+      if (typeof this.inventory[type] !== 'number') this.inventory[type] = 0;
+      this.inventory[type]++;
+      this.save();
+      this.updateUI();
+      if (typeof UI.renderInventory === 'function') UI.renderInventory();
 
-    if(hasAccess) {
-      if(type === 'hp' && Game.hp < 3) { 
-          if(!Game.adminMode) this.coins -= cost; 
-          Game.hp++; localStorage.setItem('yk_hp', Game.hp); UI.renderHP(); UI.showToast("Nano-Repair Diaktifkan! +1 HP", "success"); 
-          if (Game.hp > 1) document.body.classList.remove('danger-mode');
-      } else if (type === 'shield') {
-          let t = Game.currentTab;
-          if(t === 'partikel' || t === 'arti') {
-              if(!Game.hasShield) {
-                  if(!Game.adminMode) this.coins -= cost; 
-                  Game.hasShield = true;
-                  document.getElementById('card-main').classList.add('shield-active');
-                  UI.showToast("Aegis Shield Aktif! Melindungi 1x kesalahan.", "success");
-              } else { UI.showToast("Shield sudah aktif!", "error"); return; }
-          } else { UI.showToast("Sinyal Ditolak: Hanya untuk Zona Tempur.", "error"); return; }
-      } else if (type === 'intel') {
-          let t = Game.currentTab;
-          if(t === 'partikel') {
-              if(!Game.intelActive) {
-                  if(!Game.adminMode) this.coins -= cost; 
-                  Game.intelActive = true;
-                  let itm = Game.sessionData[t][Game.currentIndex];
-                  let intelBox = document.createElement('div');
-                  intelBox.className = 'intel-box'; intelBox.innerHTML = `<b>Intel Arti:</b> ${itm.a}`;
-                  document.getElementById('input-area').prepend(intelBox);
-                  UI.showToast("Intel Terjemahan Berhasil Diretas!", "success");
-              } else { UI.showToast("Intel sudah terbuka!", "error"); return; }
-          } else { UI.showToast("Sinyal Ditolak: Hanya untuk Tab Partikel.", "error"); return; }
-        } else if (type === 'pandora') {
-          if(!Game.adminMode) this.coins -= cost;
-          let rng = Math.random();
-          if (rng < 0.1) { 
-              Game.hp = 3; localStorage.setItem('yk_hp', Game.hp); UI.renderHP();
-              UI.showToast("JACKPOT! HP Pulih Sepenuhnya!", "success");
-              document.body.classList.remove('danger-mode');
-          } else if (rng < 0.4) { 
-              if(!Game.hasShield) {
-                  Game.hasShield = true; document.getElementById('card-main').classList.add('shield-active');
-                  UI.showToast("Beruntung! Aegis Shield Aktif.", "success");
-              } else {
-                  this.coins += 50; 
-                  UI.showToast("Sudah punya Shield! Cashback 50 Koin.", "warning");
-              }
-          } else if (rng < 0.8) { 
-              UI.showToast("ZONK! Kotaknya kosong melompong wkwkwk.", "warning");
-          } else { 
-              UI.showToast("JEBAKAN BATMAN! Terkena Racun -1 HP!", "error");
-              Game.decreaseHP(null); 
-          }
-      } else if (type === 'mata') {
-          let t = Game.currentTab;
-          if(t === 'arti') {
-              if(!Game.mataActive) {
-                  if(!Game.adminMode) this.coins -= cost; 
-                  Game.mataActive = true;
-                  
-                  // Tarik kunci jawaban yang sudah disiapkan di UI.loadStep
-                  let jpText = Game.displayKanji !== Game.displayHiragana ? 
-                               `${Game.displayKanji} (${Game.displayHiragana})` : 
-                               Game.displayKanji;
+      const itemNames = {
+        hp: "Nano-Repair (+1 HP)",
+        shield: "Aegis Shield",
+        intel: "Gulungan Intel",
+        mata: "Mata Kensei",
+        pandora: "Kotak Pandora"
+      };
+      let name = itemNames[type] || type;
+      UI.showToast(`Berhasil beli ${name}! Disimpan di Tas 🎒`, "success");
+    } else {
+      UI.showToast("Kredit koin tidak memadai.", "error");
+    }
+  },
 
-                  let mataBox = document.createElement('div');
-                  mataBox.className = 'intel-box'; 
-                  // Berikan warna emas agar berbeda dengan Intel Arti
-                  mataBox.style.borderColor = 'var(--gold)'; 
-                  mataBox.style.color = 'var(--gold)';
-                  mataBox.innerHTML = `<b>Mata Kensei:</b> ${jpText}`;
-                  
-                  document.getElementById('input-area').prepend(mataBox);
-                  UI.showToast("Mata Kensei Aktif! Teks Jepang terungkap.", "success");
-                  UI.closeModal('shop-modal'); // Tutup modal otomatis agar langsung terlihat
-              } else { UI.showToast("Mata Kensei sudah aktif!", "error"); return; }
-          } else { UI.showToast("Sinyal Ditolak: Hanya untuk Tab Arti.", "error"); return; }
-      } // <--- INI DIA KURUNG KURAWAL YANG TADI HILANG!
+  useItem: function(type) {
+    let count = this.getInvCount(type);
+    if (count <= 0 && !Game.adminMode) {
+      UI.showToast("Item tidak tersedia di dalam tas!", "error");
+      return;
+    }
 
-      this.save(); this.updateUI();
-    } else UI.showToast("Kredit tidak memadai.", "error");
+    if (type === 'hp') {
+      if (Game.hp >= 3) {
+        UI.showToast("HP sudah penuh (3/3)!", "warning");
+        return;
+      }
+      if (!Game.adminMode) this.inventory.hp--;
+      Game.hp = Math.min(3, Game.hp + 1);
+      localStorage.setItem('yk_hp', Game.hp);
+      UI.renderHP();
+      if (Game.hp > 1) document.body.classList.remove('danger-mode');
+      UI.showToast("Nano-Repair Digunakan! +1 HP ❤️", "success");
+    } else if (type === 'shield') {
+      let t = Game.currentTab;
+      if (t !== 'partikel' && t !== 'arti' && t !== 'dungeon') {
+        UI.showToast("Aegis Shield hanya untuk Zona Tempur!", "error");
+        return;
+      }
+      if (Game.hasShield) {
+        UI.showToast("Aegis Shield sudah aktif!", "warning");
+        return;
+      }
+      if (!Game.adminMode) this.inventory.shield--;
+      Game.hasShield = true;
+      const cardEl = document.getElementById('card-main');
+      if (cardEl) cardEl.classList.add('shield-active');
+      UI.showToast("Aegis Shield Aktif! Melindungi 1x kesalahan.", "success");
+    } else if (type === 'intel') {
+      let t = Game.currentTab;
+      if (t !== 'partikel') {
+        UI.showToast("Gulungan Intel hanya berfungsi di Tab Partikel!", "error");
+        return;
+      }
+      if (Game.intelActive) {
+        UI.showToast("Intel sudah terbuka untuk soal ini!", "warning");
+        return;
+      }
+      let itm = Game.sessionData && Game.sessionData[t] ? Game.sessionData[t][Game.currentIndex] : null;
+      if (!itm || !itm.a) {
+        UI.showToast("Tidak ada data intel pada soal ini.", "warning");
+        return;
+      }
+      if (!Game.adminMode) this.inventory.intel--;
+      Game.intelActive = true;
+      let inputArea = document.getElementById('input-area');
+      if (inputArea) {
+        let intelBox = document.createElement('div');
+        intelBox.className = 'intel-box';
+        intelBox.innerHTML = `<b>Intel Arti:</b> ${itm.a}`;
+        inputArea.prepend(intelBox);
+      }
+      UI.showToast("Intel Arti Berhasil Diretas!", "success");
+      UI.closeModal('inventory-modal');
+    } else if (type === 'mata') {
+      let t = Game.currentTab;
+      if (t !== 'arti') {
+        UI.showToast("Mata Kensei hanya berfungsi di Tab Arti!", "error");
+        return;
+      }
+      if (Game.mataActive) {
+        UI.showToast("Mata Kensei sudah aktif untuk soal ini!", "warning");
+        return;
+      }
+      if (!Game.adminMode) this.inventory.mata--;
+      Game.mataActive = true;
+      let jpText = Game.displayKanji !== Game.displayHiragana ? 
+                   `${Game.displayKanji} (${Game.displayHiragana})` : 
+                   Game.displayKanji;
+      let inputArea = document.getElementById('input-area');
+      if (inputArea) {
+        let mataBox = document.createElement('div');
+        mataBox.className = 'intel-box';
+        mataBox.style.borderColor = 'var(--gold)';
+        mataBox.style.color = 'var(--gold)';
+        mataBox.innerHTML = `<b>Mata Kensei:</b> ${jpText}`;
+        inputArea.prepend(mataBox);
+      }
+      UI.showToast("Mata Kensei Aktif! Teks Jepang terungkap.", "success");
+      UI.closeModal('inventory-modal');
+    } else if (type === 'pandora') {
+      if (!Game.adminMode) this.inventory.pandora--;
+      let rng = Math.random();
+      if (rng < 0.15) {
+        Game.hp = 3;
+        localStorage.setItem('yk_hp', Game.hp);
+        UI.renderHP();
+        document.body.classList.remove('danger-mode');
+        UI.showToast("JACKPOT PANDORA! HP Pulih Sepenuhnya! ❤️❤️❤️", "success");
+      } else if (rng < 0.45) {
+        if (!Game.hasShield) {
+          Game.hasShield = true;
+          const cardEl = document.getElementById('card-main');
+          if (cardEl) cardEl.classList.add('shield-active');
+          UI.showToast("Beruntung! Aegis Shield Aktif 🛡️", "success");
+        } else {
+          this.coins += 100;
+          UI.showToast("Sudah ada Shield! Cashback 100 🪙", "warning");
+        }
+      } else if (rng < 0.8) {
+        UI.showToast("ZONK! Kotak Pandora kosong melompong wkwk.", "warning");
+      } else {
+        UI.showToast("JEBAKAN PANDORA! Gas Beracun -1 HP ☠️", "error");
+        Game.decreaseHP(null);
+      }
+    }
+
+    this.save();
+    this.updateUI();
+    if (typeof UI.renderInventory === 'function') UI.renderInventory();
+  },
+
+  buyItem: function(type, cost) {
+    this.buyToInventory(type, cost);
   },
 
   buyUnlock: function(cost) {
@@ -302,7 +410,12 @@ const RPG = {
     document.body.appendChild(el); 
     setTimeout(() => el.remove(), 1000);
   },
-  save: function() { localStorage.setItem('yk_lvl', this.level); localStorage.setItem('yk_exp', this.exp); localStorage.setItem('yk_coins', this.coins); }
+  save: function() { 
+    localStorage.setItem('yk_lvl', this.level); 
+    localStorage.setItem('yk_exp', this.exp); 
+    localStorage.setItem('yk_coins', this.coins); 
+    localStorage.setItem('yk_inventory', JSON.stringify(this.inventory));
+  }
 };
 
 
@@ -409,14 +522,126 @@ const Game = {
 const UI = {
   openModal: (id) => { 
     if (id === 'map-modal') UI.renderMap();
+    if (id === 'inventory-modal') UI.renderInventory();
+    if (id === 'shop-modal') UI.renderShop();
     const m = document.getElementById(id); 
+    if (!m) return;
     m.classList.remove('hidden', 'modal-close'); 
     m.classList.add('modal-open'); 
     if (id === 'map-modal') {
       setTimeout(() => UI.scrollToCurrentMission(), 100);
     }
   },
-  closeModal: (id) => { const m = document.getElementById(id); m.classList.remove('modal-open'); m.classList.add('modal-close'); setTimeout(() => { m.classList.add('hidden'); m.classList.remove('modal-close'); }, 200); },
+  closeModal: (id) => { const m = document.getElementById(id); if (m) { m.classList.remove('modal-open'); m.classList.add('modal-close'); setTimeout(() => { m.classList.add('hidden'); m.classList.remove('modal-close'); }, 200); } },
+  
+  renderInventory: () => {
+    const container = document.getElementById('inv-grid-container');
+    if (!container) return;
+
+    // Sinkronisasi status HP
+    const hpEl = document.getElementById('inv-hp-display');
+    if (hpEl) {
+      let hearts = '';
+      for (let i = 0; i < 3; i++) {
+        hearts += i < Game.hp ? '❤️' : '🖤';
+      }
+      hpEl.innerText = hearts;
+    }
+
+    // Sinkronisasi status Shield
+    const shieldEl = document.getElementById('inv-buff-shield');
+    if (shieldEl) {
+      if (Game.hasShield) {
+        shieldEl.innerText = "AKTIF 🛡️";
+        shieldEl.className = "inv-buff-badge active";
+      } else {
+        shieldEl.innerText = "TIDAK AKTIF";
+        shieldEl.className = "inv-buff-badge";
+      }
+    }
+
+    const itemsConfig = [
+      {
+        id: 'hp',
+        name: 'Nano-Repair',
+        icon: '❤️',
+        desc: 'Memulihkan 1 poin HP yang hilang seketika.',
+        canUse: Game.hp < 3,
+        contextMsg: Game.hp >= 3 ? 'HP Penuh' : 'Gunakan (+1 HP)'
+      },
+      {
+        id: 'shield',
+        name: 'Aegis Shield',
+        icon: '🛡️',
+        desc: 'Melindungi 1x dari kehilangan HP & pecah combo di Zona Tempur.',
+        canUse: !Game.hasShield && (Game.currentTab === 'partikel' || Game.currentTab === 'arti' || Game.currentTab === 'dungeon'),
+        contextMsg: Game.hasShield ? 'Shield Aktif' : ((Game.currentTab === 'partikel' || Game.currentTab === 'arti' || Game.currentTab === 'dungeon') ? 'Aktifkan Shield' : 'Hanya di Tempur')
+      },
+      {
+        id: 'intel',
+        name: 'Gulungan Intel',
+        icon: '📜',
+        desc: 'Bocorkan arti kalimat Indonesia untuk soal Tab Partikel.',
+        canUse: !Game.intelActive && Game.currentTab === 'partikel',
+        contextMsg: Game.intelActive ? 'Sudah Terbuka' : (Game.currentTab === 'partikel' ? 'Buka Intel' : 'Hanya di Partikel')
+      },
+      {
+        id: 'mata',
+        name: 'Mata Kensei',
+        icon: '👁️',
+        desc: 'Ungkap kalimat Jepang asli untuk soal kuis Tab Arti.',
+        canUse: !Game.mataActive && Game.currentTab === 'arti',
+        contextMsg: Game.mataActive ? 'Sudah Terbuka' : (Game.currentTab === 'arti' ? 'Buka Kunci' : 'Hanya di Tab Arti')
+      },
+      {
+        id: 'pandora',
+        name: 'Kotak Pandora',
+        icon: '🎁',
+        desc: 'Buka langsung: Peluang dapat Full HP, Shield, Koin Cashback, atau Zonk!',
+        canUse: true,
+        contextMsg: 'Buka Kotak (Gacha)'
+      }
+    ];
+
+    let totalItems = RPG.getTotalBagCount();
+    if (totalItems === 0) {
+      container.innerHTML = `
+        <div class="inv-empty-state">
+          <div class="inv-empty-icon">🎒</div>
+          <div class="inv-empty-title">Tas Kamu Masih Kosong</div>
+          <div class="inv-empty-desc">Kunjungi Terminal Cyber-Market untuk membeli persediaan item sebelum masuk ke Zona Tempur!</div>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = itemsConfig.map(item => {
+      let count = RPG.getInvCount(item.id);
+      let isDisabled = count <= 0 || !item.canUse;
+      let btnText = count <= 0 ? 'Habis (0)' : item.contextMsg;
+
+      return `
+        <div class="inv-card ${count <= 0 ? 'empty-card' : ''}">
+          <div class="inv-card-icon">${item.icon}</div>
+          <div class="inv-card-info">
+            <div class="inv-card-title-row">
+              <span class="inv-card-name">${item.name}</span>
+              <span class="inv-card-badge">x${count}</span>
+            </div>
+            <div class="inv-card-desc">${item.desc}</div>
+          </div>
+          <div class="inv-card-action">
+            <button class="btn-use-item" ${isDisabled ? 'disabled' : ''} onclick="RPG.useItem('${item.id}')">${btnText}</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  },
+
+  renderShop: () => {
+    RPG.updateUI();
+  },
+
   showToast: (msg, type='success') => { const t = document.getElementById('toast'); t.innerText = msg; t.className = `show ${type}`; setTimeout(()=> t.className = '', 2500); },
   toggleSidebar: () => { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); },
 
@@ -2521,8 +2746,32 @@ if (tipsBubble) tipsBubble.classList.add('hidden');
       const tHaf = Game.sessionData.hafalan.length; const tPeng = Game.sessionData.pengayaan.length; UI.updateProgress(i, tHaf + tPeng);
       if (i === tHaf && !Game.jumpscareTriggered) { Game.jumpscareTriggered = true; const js = document.getElementById('jumpscare-overlay'); js.classList.add('show'); setTimeout(() => { js.classList.remove('show'); UI.loadStep(); }, 1000); return; }
       if (i < tHaf) {
-        const itm = Game.sessionData.hafalan[i]; document.getElementById('stage-indicator').innerText = `KOSAKATA : ${i + 1} / ${tHaf}`;
-        document.getElementById('ui-jp').innerHTML = Engine.buildRubyFormat(itm.k, itm.r, null, false); document.getElementById('ui-arti').innerHTML = itm.a; UI.makeNextBtn("Hafal →");
+        const itm = Game.sessionData.hafalan[i]; 
+        document.getElementById('stage-indicator').innerText = `KOSAKATA : ${i + 1} / ${tHaf}`;
+        
+        let subRomaji = (itm.r && itm.k !== itm.r) ? `<div class="flashcard-sub-reading">${itm.r}</div>` : '';
+        let kanjiRuby = Engine.buildRubyFormat(itm.k, itm.r, null, false);
+        
+        document.getElementById('ui-jp').innerHTML = `
+          <div class="flashcard-scene" onclick="this.classList.toggle('flipped')" title="Klik untuk membalik kartu">
+            <div class="flashcard-3d">
+              <div class="flashcard-face flashcard-front">
+                <span class="flashcard-badge">Kanji & Bacaan</span>
+                <div class="flashcard-main-word">${kanjiRuby}</div>
+                ${subRomaji}
+                <div class="flashcard-hint">👆 Sentuh kartu untuk lihat terjemahan</div>
+              </div>
+              <div class="flashcard-face flashcard-back">
+                <span class="flashcard-badge" style="background:rgba(245, 158, 11, 0.15); color:var(--gold);">Terjemahan Indonesia</span>
+                <div class="flashcard-arti">${itm.a}</div>
+                <div class="flashcard-sub-reading" style="opacity:0.85;">${itm.k} ${itm.r && itm.r !== itm.k ? `(${itm.r})` : ''}</div>
+                <div class="flashcard-hint">🔄 Sentuh lagi untuk membalik</div>
+              </div>
+            </div>
+          </div>
+        `;
+        document.getElementById('ui-arti').innerHTML = ''; 
+        UI.makeNextBtn("Hafal →");
       } else if (i < tHaf + tPeng) {
         const pIdx = i - tHaf; const itm = Game.sessionData.pengayaan[pIdx]; document.getElementById('stage-indicator').innerText = `🚨 KUIS DADAKAN : ${pIdx + 1} / ${tPeng}`;
         document.getElementById('ui-jp').innerHTML = Engine.buildRubyFormat(itm.k, itm.r, null, false);
@@ -2670,10 +2919,17 @@ if (tipsBubble) tipsBubble.classList.add('hidden');
     }); 
   },
   renderHP: () => {
-    document.getElementById('ui-hp').innerHTML = Array(3).fill(0).map((_,i) => {
-      let isL = i >= Game.hp; let animC = (isL && i === Game.hp && Game.hpLostThisTurn) ? 'bleed' : '';
-      return `<span class="heart ${isL ? 'lost' : ''} ${animC}">❤</span>`;
-    }).join('');
+    const uiHp = document.getElementById('ui-hp');
+    if (uiHp) {
+      uiHp.innerHTML = Array(3).fill(0).map((_,i) => {
+        let isL = i >= Game.hp; let animC = (isL && i === Game.hp && Game.hpLostThisTurn) ? 'bleed' : '';
+        return `<span class="heart ${isL ? 'lost' : ''} ${animC}">❤</span>`;
+      }).join('');
+    }
+    const invHp = document.getElementById('inv-hp-display');
+    if (invHp) {
+      invHp.innerHTML = Array(3).fill(0).map((_,i) => i < Game.hp ? '❤️' : '🖤').join('');
+    }
     Game.hpLostThisTurn = false;
   },
       showResult: (isC, key, evt, isSkip = false) => {

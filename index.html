@@ -80,47 +80,167 @@
 </div>
 
 <div id="shop-modal" class="hidden">
-  <h2 style="color:var(--gold); margin-bottom:5px;">🛒 Terminal Suplai</h2>
-  <p style="color:var(--text-sub); margin-bottom:20px;">Saldo: <span id="shop-coin-display" style="color:var(--gold); font-weight:bold;">0</span> 🪙</p>
-  
-  <div style="width: 100%; max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; scrollbar-width: none;">
-    <div class="shop-item">
-      <div><b>❤️ Nano-Repair</b><br><small style="color:var(--text-sub);">Restorasi 1 HP</small></div>
-      <button class="btn btn-shop" style="width:auto; margin:0;" onclick="RPG.buyItem('hp', 150)">150 🪙</button>
+  <div class="shop-modal-card">
+    <div class="shop-modal-header">
+      <div class="shop-header-top">
+        <span class="shop-header-badge">🛒 CYBER-MARKET</span>
+        <button type="button" class="shop-close-btn" onclick="UI.closeModal('shop-modal')" title="Tutup Toko">✕</button>
+      </div>
+      <h2 class="shop-title">Terminal Suplai Pasar Gelap</h2>
+      <p class="shop-subtitle">Beli suplai infiltrasi & simpan di tas perlengkapan</p>
+
+      <div class="shop-balance-bar">
+        <div class="shop-balance-info">
+          <span class="shop-balance-label">KREDIT TERSEDIA:</span>
+          <span class="shop-balance-amount"><span id="shop-coin-display">0</span> 🪙</span>
+        </div>
+        <button type="button" class="shop-btn-bag" onclick="UI.closeModal('shop-modal'); UI.openModal('inventory-modal');">🎒 Buka Tas</button>
+      </div>
     </div>
 
-    <div class="shop-item">
-      <div><b>🛡️ Aegis Shield</b><br><small style="color:var(--text-sub);">Anti Salah & Jaga Combo</small></div>
-      <button class="btn btn-shop" style="width:auto; margin:0;" onclick="RPG.buyItem('shield', 350)">350 🪙</button>
+    <!-- Scrollable Shop Catalog Grid -->
+    <div class="shop-catalog-grid">
+      <!-- Item 1: Nano-Repair -->
+      <div class="shop-card">
+        <div class="shop-card-icon">❤️</div>
+        <div class="shop-card-info">
+          <div class="shop-card-title-row">
+            <span class="shop-card-name">Nano-Repair</span>
+            <span class="shop-card-owned" id="owned-hp">Tas: 0</span>
+          </div>
+          <div class="shop-card-desc">Restorasi 1 HP yang hilang. Beli untuk disimpan ke tas.</div>
+        </div>
+        <div class="shop-card-action">
+          <button class="btn-buy" onclick="RPG.buyToInventory('hp', 150)">150 🪙</button>
+        </div>
+      </div>
+
+      <!-- Item 2: Aegis Shield -->
+      <div class="shop-card">
+        <div class="shop-card-icon">🛡️</div>
+        <div class="shop-card-info">
+          <div class="shop-card-title-row">
+            <span class="shop-card-name">Aegis Shield</span>
+            <span class="shop-card-owned" id="owned-shield">Tas: 0</span>
+          </div>
+          <div class="shop-card-desc">Proteksi 1x kesalahan kuis & cegah combo pecah di Zona Tempur.</div>
+        </div>
+        <div class="shop-card-action">
+          <button class="btn-buy" onclick="RPG.buyToInventory('shield', 350)">350 🪙</button>
+        </div>
+      </div>
+
+      <!-- Item 3: Gulungan Intel -->
+      <div class="shop-card">
+        <div class="shop-card-icon">📜</div>
+        <div class="shop-card-info">
+          <div class="shop-card-title-row">
+            <span class="shop-card-name">Gulungan Intel</span>
+            <span class="shop-card-owned" id="owned-intel">Tas: 0</span>
+          </div>
+          <div class="shop-card-desc">Bocorkan arti kalimat bahasa Indonesia pada Tab Partikel.</div>
+        </div>
+        <div class="shop-card-action">
+          <button class="btn-buy" onclick="RPG.buyToInventory('intel', 200)">200 🪙</button>
+        </div>
+      </div>
+
+      <!-- Item 4: Mata Kensei -->
+      <div class="shop-card">
+        <div class="shop-card-icon">👁️</div>
+        <div class="shop-card-info">
+          <div class="shop-card-title-row">
+            <span class="shop-card-name">Mata Kensei</span>
+            <span class="shop-card-owned" id="owned-mata">Tas: 0</span>
+          </div>
+          <div class="shop-card-desc">Ungkap teks kalimat Jepang asli pada Tab Arti.</div>
+        </div>
+        <div class="shop-card-action">
+          <button class="btn-buy" onclick="RPG.buyToInventory('mata', 500)">500 🪙</button>
+        </div>
+      </div>
+
+      <!-- Item 5: Akses Peta -->
+      <div class="shop-card">
+        <div class="shop-card-icon">🗺️</div>
+        <div class="shop-card-info">
+          <div class="shop-card-title-row">
+            <span class="shop-card-name">Bypass Sektor Peta</span>
+          </div>
+          <div class="shop-card-desc">Buka akses sektor infiltrasi hari berikutnya secara instan.</div>
+        </div>
+        <div class="shop-card-action">
+          <button class="btn-buy btn-unlock" onclick="RPG.buyUnlock(2100)">2100 🪙</button>
+        </div>
+      </div>
+
+      <!-- Item 6: Kotak Pandora -->
+      <div class="shop-card gacha-card">
+        <div class="shop-card-icon">🎁</div>
+        <div class="shop-card-info">
+          <div class="shop-card-title-row">
+            <span class="shop-card-name" style="color:var(--warning);">Kotak Pandora (Gacha)</span>
+            <span class="shop-card-owned" id="owned-pandora">Tas: 0</span>
+          </div>
+          <div class="shop-card-desc">Uji nasib: Peluang dapat Full HP, Shield, Koin Cashback, atau Zonk!</div>
+        </div>
+        <div class="shop-card-action">
+          <button class="btn-buy btn-gacha" onclick="RPG.buyToInventory('pandora', 100)">100 🪙</button>
+        </div>
+      </div>
+
+      <!-- Dev Override Item -->
+      <div class="shop-card dev-card">
+        <div class="shop-card-icon">🔓</div>
+        <div class="shop-card-info">
+          <div class="shop-card-name" style="color:var(--danger);">Override Admin</div>
+          <div class="shop-card-desc">Bypass sandi dev koin & level tak terbatas.</div>
+        </div>
+        <div class="shop-card-action">
+          <button class="btn-buy btn-danger" onclick="RPG.adminUnlock()">Bypass</button>
+        </div>
+      </div>
     </div>
 
-    <div class="shop-item">
-      <div><b>📜 Intel Arti</b><br><small style="color:var(--text-sub);">Buka Arti (Tab Partikel)</small></div>
-      <button class="btn btn-shop" style="width:auto; margin:0;" onclick="RPG.buyItem('intel', 200)">200 🪙</button>
-    </div>
-
-    <div class="shop-item">
-      <div><b>👁️ Mata Kensei</b><br><small style="color:var(--text-sub);">Buka Teks Jepang (Tab Arti)</small></div>
-      <button class="btn btn-shop" style="width:auto; margin:0;" onclick="RPG.buyItem('mata', 500)">500 🪙</button>
-    </div>
-
-    <div class="shop-item">
-      <div><b>🗺️ Akses Peta</b><br><small style="color:var(--text-sub);">Buka Hari Berikutnya</small></div>
-      <button class="btn btn-shop" style="width:auto; margin:0;" onclick="RPG.buyUnlock(2100)">2100 🪙</button>
-    </div>
-
-    <div class="shop-item">
-      <div><b>🎁 Kotak Pandora</b><br><small style="color:var(--warning);">Gacha Nasib (100 Koin)</small></div>
-      <button class="btn btn-shop" style="width:auto; margin:0; background:var(--warning);" onclick="RPG.buyItem('pandora', 100)">100 🪙</button>
-    </div>
-    
-        <div class="shop-item">
-      <div><b>🔓 Override Admin</b><br><small style="color:var(--danger);">Bypass Soal (Dev)</small></div>
-      <button class="btn btn-shop" style="width:auto; margin:0; background:var(--danger);" onclick="RPG.adminUnlock()">Bypass</button>
+    <div class="shop-modal-footer">
+      <button type="button" class="btn btn-alt" style="max-width:260px; margin:0;" onclick="UI.closeModal('shop-modal')">Tutup Terminal</button>
     </div>
   </div>
-  
-  <button class="btn btn-alt" style="max-width:350px; margin-top:20px;" onclick="UI.closeModal('shop-modal')">Tutup Terminal</button>
+</div>
+
+<div id="inventory-modal" class="hidden">
+  <div class="inv-modal-card">
+    <div class="inv-modal-header">
+      <div class="inv-header-top">
+        <span class="inv-badge">🎒 PERLENGKAPAN NINJA</span>
+        <button type="button" class="inv-close-btn" onclick="UI.closeModal('inventory-modal')" title="Tutup Tas">✕</button>
+      </div>
+      <h2 class="inv-title">Tas Inventori Suplai</h2>
+      <p class="inv-subtitle">Gunakan item suplai saat situasi genting di zona tempur</p>
+
+      <!-- Live Status Indicators -->
+      <div class="inv-status-panel">
+        <div class="inv-status-box">
+          <span class="inv-status-label">KESEHATAN (HP):</span>
+          <div class="inv-hp-row" id="inv-hp-display">❤️❤️❤️</div>
+        </div>
+        <div class="inv-status-box">
+          <span class="inv-status-label">AEGIS SHIELD:</span>
+          <span class="inv-buff-badge" id="inv-buff-shield">TIDAK AKTIF</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Inventory Grid -->
+    <div class="inv-grid-container" id="inv-grid-container">
+      <!-- Generated dynamically by UI.renderInventory() -->
+    </div>
+
+    <div class="inv-modal-footer">
+      <button type="button" class="btn btn-shop-link" onclick="UI.closeModal('inventory-modal'); UI.openModal('shop-modal');">🛒 Beli Suplai (Ke Toko)</button>
+      <button type="button" class="btn btn-alt" style="max-width:200px; margin:0;" onclick="UI.closeModal('inventory-modal')">Tutup Tas</button>
+    </div>
+  </div>
 </div>
 
 <div id="map-modal" class="hidden">
@@ -229,12 +349,24 @@
       <div class="level-badge" id="ui-lvl" title="Klik untuk info Gelar" onclick="UI.openModal('level-modal')">Lv.1 Ronin</div>
     </div>
     
-    <div class="rpg-stats" style="flex-grow: 1; justify-content: center; gap: 10px;">
-      <div class="stat-item exp" title="Experience"><span id="ui-exp">0</span> ✨ <span class="combo-text hidden" id="ui-combo">x2</span></div>
+    <div class="rpg-stats">
+      <!-- EXP Meter -->
+      <div class="stat-exp-container" title="Progress Menuju Level Berikutnya">
+        <div class="exp-track">
+          <div class="exp-fill" id="ui-exp-fill" style="width: 0%;"></div>
+        </div>
+        <span class="exp-text"><span id="ui-exp">0</span> ✨</span>
+      </div>
+      <!-- Gold -->
       <div class="stat-item gold" title="Koin"><span id="ui-coin">0</span> 🪙</div>
+      <!-- Combo -->
+      <span class="combo-text hidden" id="ui-combo">x2</span>
     </div>
     
-    <button class="btn-shop" onclick="UI.openModal('shop-modal')">🛒 Toko</button>
+    <div class="rpg-right-actions">
+      <button class="btn-hud-bag" onclick="UI.openModal('inventory-modal')" title="Buka Tas Perlengkapan">🎒 <span class="bag-pill" id="ui-bag-count">0</span></button>
+      <button class="btn-shop" onclick="UI.openModal('shop-modal')">🛒 Toko</button>
+    </div>
   </div>
 
   <div class="header-bar animate-slide" style="animation-delay: 0.1s; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 0 5px;">
