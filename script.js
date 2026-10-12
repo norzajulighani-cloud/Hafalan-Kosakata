@@ -134,6 +134,13 @@ const RPG = {
     if(this.level >= 10) return "⚔️ Ronin"; return "🔰 Pemula";
   },
 
+  getTitleParts: function() {
+    let t = this.getTitle().trim().split(' ');
+    let icon = t[0] || '🔰';
+    let name = t.slice(1).join(' ') || 'Pemula';
+    return { icon, name };
+  },
+
   getExpRequirement: function() {
     let multiplier = 2; 
     if (this.level >= 150) multiplier = 20;
@@ -145,7 +152,12 @@ const RPG = {
   },
 
   updateUI: function() {
-    document.getElementById('ui-lvl').innerText = `Lv.${this.level} ${this.getTitle()}`;
+    const rank = this.getTitleParts();
+    const lvlEl = document.getElementById('ui-lvl');
+    if (lvlEl) {
+      lvlEl.innerHTML = `<span class="lvl-num">Lv.${this.level}</span> <span class="lvl-icon">${rank.icon}</span> <span class="lvl-name">${rank.name}</span>`;
+      lvlEl.title = `Level ${this.level} (${rank.icon} ${rank.name}) - Klik untuk info Gelar`;
+    }
     document.getElementById('ui-exp').innerText = this.exp; 
 
     // --- EXP BAR PROGRESS ---
@@ -726,12 +738,7 @@ nextDayFromResult: () => {
       let category = (typeof getMissionCategory === 'function') ? getMissionCategory(i) : `SEKTOR ${i}`;
 
       let icon = stat === 'completed' ? '⭐' : (stat === 'current' ? '⚔️' : '🔒');
-      let badgeText = stat === 'completed' ? 'SELESAI' : (stat === 'current' ? 'MISI AKTIF' : 'TERKUNCI');
-      let actionText = stat === 'completed' ? 'Kaji Ulang ↺' : (stat === 'current' ? 'MASUK ▶' : '🔒');
-
-      if (isViewing && stat === 'completed') {
-        badgeText = 'SEDANG AKTIF';
-      }
+      let actionText = stat === 'completed' ? (isViewing ? 'SEDANG DIBUKA' : 'Kaji Ulang ↺') : (stat === 'current' ? 'MASUK ▶' : '🔒');
 
       const card = document.createElement('div');
       card.className = `mission-card ${stat} ${isViewing ? 'viewing' : ''}`;
@@ -746,12 +753,11 @@ nextDayFromResult: () => {
         <div class="mission-body">
           <div class="mission-meta-line">
             <span class="mission-category">${category}</span>
-            <span class="mission-badge badge-${stat}">${badgeText}</span>
           </div>
           <div class="mission-title">${topic}</div>
         </div>
         <div class="mission-action">
-          <span class="mission-action-pill">${actionText}</span>
+          <span class="mission-action-pill ${stat === 'current' ? 'action-active' : (stat === 'completed' ? 'action-review' : 'action-locked')}">${actionText}</span>
         </div>
       `;
 
