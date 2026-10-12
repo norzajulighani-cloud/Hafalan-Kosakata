@@ -397,7 +397,7 @@ nextDayFromResult: () => {
   },
   renderMap: () => {
     const list = document.getElementById('map-day-list'); list.innerHTML = ''; 
-    const totalDays = 11; // <-- Dibatasi 11 hari sesuai kurikulummu
+    const totalDays = 30; // <-- 30 hari sesuai silabus kurikulum N5
     let perc = Math.round(((Game.unlockedDay - 1) / totalDays) * 100); 
     document.getElementById('map-progress-text').innerText = `Progress: ${perc}%`;
     
@@ -460,7 +460,35 @@ const tipsH2 = tipsModal.querySelector('h2'); const tipsContent = tipsModal.quer
 const tipsBubble = document.getElementById('tips-bubble'); 
 btnTips.innerHTML = "💡 Tips"; // Reset nama tombol ke default
 if (tipsBubble) tipsBubble.classList.add('hidden'); 
-          if (Game.currentDay === 2 && t === 'belajar' && (i === 7 || i === 11 || i === 14)) {
+          const curDayData = ManualDB['day' + Game.currentDay];
+          if (t === 'belajar' && curDayData && curDayData.tips && curDayData.tips.length > 0) {
+              btnTips.classList.remove('hidden');
+              btnTips.onclick = () => {
+                  const formatTipText = (txt) => {
+                      if (!txt) return '';
+                      if (/<[a-z][\s\S]*>/i.test(txt)) return txt.replace(/\n/g, '<br>');
+                      return txt
+                          .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+                          .replace(/\*\*(.*?)\*\*/g, '<b style="color:white;">$1</b>')
+                          .replace(/\*(.*?)\*/g, '<i>$1</i>')
+                          .replace(/\n/g, '<br>');
+                  };
+                  if (curDayData.tips.length === 1) {
+                      const tip = curDayData.tips[0];
+                      tipsH2.innerHTML = tip.title || "💡 TIPS MATERI";
+                      tipsContent.innerHTML = formatTipText(tip.content);
+                  } else {
+                      tipsH2.innerHTML = "💡 TIPS MATERI HARI INI";
+                      tipsContent.innerHTML = curDayData.tips.map((tip, idx) => `
+                          <div style="${idx > 0 ? 'margin-top:16px; padding-top:16px; border-top:1px dashed rgba(255,255,255,0.2);' : ''}">
+                              <div style="color:var(--warning); font-weight:bold; font-size:15px; margin-bottom:8px;">${tip.title || `Tips #${idx + 1}`}</div>
+                              <div style="font-size:14px; line-height:1.6; color:var(--text-main);">${formatTipText(tip.content)}</div>
+                          </div>
+                      `).join('');
+                  }
+                  UI.openModal('tips-modal');
+              };
+          } else if (Game.currentDay === 2 && t === 'belajar' && (i === 7 || i === 11 || i === 14)) {
       btnTips.classList.remove('hidden');
       btnTips.onclick = () => {
           tipsH2.innerHTML = "💡 INFO BUDAYA & KONTEKS";
@@ -2409,17 +2437,40 @@ if (tipsBubble) tipsBubble.classList.add('hidden');
       if (t === 'belajar') {
         document.getElementById('ui-jp').innerHTML = Engine.renderSentence(itm.jp, false, false, false, false); document.getElementById('ui-arti').innerHTML = itm.a; UI.makeNextBtn("Paham →");
       } else if (t === 'partikel') {
-        if (itm.isMulti) {
-           document.getElementById('ui-jp').innerHTML = Engine.renderSentence(itm.jp, isPro, true, false, true); 
-           Game.targetMultiAns = itm.ansP; Game.currentMultiAns = new Array(itm.ansP.length).fill(null);
-           let defaultOpts = itm.opts || ['は', 'の', 'も', 'と', 'で', 'に', 'を', 'では']; let optsHtml = '<div style="margin-bottom:15px;">';
-           defaultOpts.forEach(p => { optsHtml += `<button class="btn btn-alt" style="display:inline-block; width:auto; margin:4px; padding:10px 15px; font-size:18px;" onclick="Action.fillMulti('${p}')">${p}</button>`; });
-           optsHtml += '</div>'; document.getElementById('input-area').innerHTML = `${optsHtml}<button class="btn hidden" id="btn-submit" onclick="Action.checkMulti(event)">EKSEKUSI</button>`;
-        } else {
-           document.getElementById('ui-jp').innerHTML = Engine.renderSentence(itm.jp, isPro, true, false, false); Game.currentAns = itm.ansP;
-           document.getElementById('input-area').innerHTML = `<input type="text" id="answer-box" class="input-box" placeholder="Ketik partikel" autocomplete="off"><button class="btn" id="btn-submit">EKSEKUSI</button>`;
-           setTimeout(() => { document.getElementById('answer-box').focus(); document.getElementById('btn-submit').onclick = Action.checkInput; }, 100);
+        document.getElementById('ui-jp').innerHTML = Engine.renderSentence(itm.jp, isPro, true, false, true); 
+        
+        let targetArr = [];
+        if (Array.isArray(itm.ansP)) {
+            targetArr = itm.ansP;
+        } else if (typeof itm.ansP === 'string' && itm.ansP.includes(',')) {
+            targetArr = itm.ansP.split(',').map(s => s.trim()).filter(Boolean);
+        } else if (itm.ansP) {
+            targetArr = [String(itm.ansP).trim()];
+        } else if (Array.isArray(itm.jp)) {
+            targetArr = itm.jp.filter(s => s.p).map(s => (s.text || s.k || '').trim()).filter(Boolean);
         }
+
+        let pSegments = (itm.jp || []).filter(s => s.p);
+        if (pSegments.length > targetArr.length) {
+            targetArr = pSegments.map(s => (s.text || s.k || '').trim()).filter(Boolean);
+        }
+
+        Game.targetMultiAns = targetArr;
+        Game.currentMultiAns = new Array(targetArr.length).fill(null);
+        
+        let defaultOpts = itm.opts ? [...itm.opts] : ['は', 'の', 'も', 'と', 'で', 'に', 'を', 'では'];
+        targetArr.forEach(p => {
+            if (p && !defaultOpts.includes(p)) defaultOpts.push(p);
+        });
+
+        let optsHtml = '<div style="margin-bottom:15px;">';
+        defaultOpts.forEach(p => { 
+            optsHtml += `<button class="btn btn-alt" style="display:inline-block; width:auto; margin:4px; padding:10px 15px; font-size:18px;" onclick="Action.fillMulti('${p}')">${p}</button>`; 
+        });
+        optsHtml += '</div>'; 
+        
+        document.getElementById('input-area').innerHTML = `${optsHtml}<button class="btn hidden" id="btn-submit" onclick="Action.checkMulti(event)">EKSEKUSI</button>`;
+
         if (Game.intelActive) {
             let intelBox = `<div class="intel-box" style="margin-bottom:15px;"><b>Intel Arti:</b> ${itm.a}</div>`;
             document.getElementById('input-area').insertAdjacentHTML('afterbegin', intelBox);
@@ -2466,11 +2517,7 @@ if (tipsBubble) tipsBubble.classList.add('hidden');
 
           // Tentukan jawaban berdasarkan tab yang sedang aktif
           if (t === 'partikel') {
-              if (itm.isMulti) {
-                  cheatAnswer = Game.targetMultiAns.join(" & ");
-              } else {
-                  cheatAnswer = Game.currentAns;
-              }
+              cheatAnswer = Game.targetMultiAns ? Game.targetMultiAns.join(" & ") : "";
           } else if (t === 'arti') {
               cheatAnswer = `${Game.displayKanji} / ${Game.displayHiragana}`;
           } else if (t === 'hafalan') {
@@ -2543,6 +2590,18 @@ if (tipsBubble) tipsBubble.classList.add('hidden');
           UI.showToast("Aegis Shield Hancur! Kesalahan dimaafkan.", "warning");
           fb.innerHTML = "DITAHAN SHIELD 🛡️ Coba lagi!"; fb.style.color = "var(--primary)"; 
           if(inp) { inp.disabled = false; inp.value = ""; inp.focus(); document.getElementById('btn-submit').classList.remove('hidden'); }
+          if(Game.currentTab === 'partikel') {
+              Game.currentMultiAns.fill(null);
+              Game.targetMultiAns.forEach((_, mIdx) => {
+                  const b = document.getElementById(`mblank-${mIdx}`);
+                  if(b) {
+                      b.innerText = "_";
+                      b.style.color = "var(--gold)";
+                      b.style.borderBottomStyle = "dashed";
+                  }
+              });
+              document.getElementById('btn-submit').classList.add('hidden');
+          }
       } else {
           fb.innerHTML = `SALAH ❌<br><span style="font-size:14px; color:var(--text-sub);">Kunci: ${key}</span>`; fb.style.color = "var(--danger)"; 
           card.classList.add('shake-hard'); setTimeout(()=>card.classList.remove('shake-hard'), 500); 
@@ -2630,20 +2689,27 @@ const Action = {
   
   fillMulti: (p) => {
     let idx = Game.currentMultiAns.indexOf(null);
+    if(idx === -1 && Game.currentMultiAns.length === 1) {
+        idx = 0;
+    }
     if(idx !== -1) {
         Game.currentMultiAns[idx] = p;
         const b = document.getElementById(`mblank-${idx}`);
-        b.innerText = p; 
-        b.style.color = "var(--primary)"; 
-        b.style.borderBottomStyle = "solid";
+        if(b) {
+            b.innerText = p; 
+            b.style.color = "var(--primary)"; 
+            b.style.borderBottomStyle = "solid";
+        }
 
         if(!Game.currentMultiAns.includes(null)) {
             document.getElementById('btn-submit').classList.remove('hidden');
         }
     } else {
         const btnSubmit = document.getElementById('btn-submit');
-        btnSubmit.classList.add('shake-hard');
-        setTimeout(() => btnSubmit.classList.remove('shake-hard'), 300);
+        if(btnSubmit) {
+            btnSubmit.classList.add('shake-hard');
+            setTimeout(() => btnSubmit.classList.remove('shake-hard'), 300);
+        }
         UI.showToast("Slot penuh! Klik partikel pada kalimat di atas untuk mengubahnya.", "error");
     }
   },
@@ -2697,10 +2763,10 @@ window.onload = async () => {
     if (data.documents) {
         data.documents.forEach(doc => {
             const dayKey = doc.name.split('/').pop();
-            let parsedData = { hafalan: [], materi: [], kuisExtra: [], proKuisExtra: [] };
+            let parsedData = { hafalan: [], materi: [], kuisExtra: [], proKuisExtra: [], tips: [] };
             
             if (doc.fields) {
-                for (let key of ['hafalan', 'materi', 'kuisExtra', 'proKuisExtra']) {
+                for (let key of ['hafalan', 'materi', 'kuisExtra', 'proKuisExtra', 'tips']) {
                     if (doc.fields[key] && doc.fields[key].arrayValue && doc.fields[key].arrayValue.values) {
                         parsedData[key] = doc.fields[key].arrayValue.values.map(v => {
                             let obj = {};
