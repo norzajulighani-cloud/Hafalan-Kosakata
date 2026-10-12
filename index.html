@@ -43,57 +43,68 @@
 </div>
 
 <div id="setup-screen" class="hidden">
-  <div class="setup-portal-card">
-    <div class="setup-portal-header">
-      <div class="setup-badge-row">
-        <span class="setup-header-badge">⛩️ YOMIKATA JAPANESE SUITE</span>
-        <span class="setup-version-tag">v10.6</span>
+  <div class="setup-canvas">
+    <!-- Clean Branding Header -->
+    <div class="setup-header-area">
+      <div class="setup-top-tag">
+        <span class="setup-kanji-sub">日本語学習プラットフォーム</span>
+        <span class="setup-ver-pill">v10.6</span>
       </div>
-      <h1 class="setup-title">PILIH MODUL PEMBELAJARAN</h1>
-      <p class="setup-subtitle">Pilih jenjang modul untuk memulai pelatihan & petualangan bahasa Jepang</p>
+      <h1 class="setup-hero-title">YOMIKATA</h1>
+      <p class="setup-hero-sub">Pilih modul pembelajaran untuk memulai petualanganmu</p>
     </div>
 
-    <div class="setup-modules-list">
-      <!-- Modul 1: Huruf Kana (Sebelum N5) -->
-      <div class="module-card module-card-kana" onclick="UI.showKanaModuleNotice()">
-        <div class="module-card-icon icon-kana">🔤</div>
-        <div class="module-card-content">
-          <div class="module-card-top">
-            <span class="module-stage-badge">TAHAP 0 • FONDASI</span>
-            <span class="module-status-badge status-soon">🚧 SEGERA HADIR</span>
+    <!-- Borderless, Clean Module Tracks -->
+    <div class="setup-tracks-list">
+      <!-- Track 1: Kana (Sebelum N5) -->
+      <div class="module-track track-kana" onclick="UI.showKanaModuleNotice()">
+        <div class="track-indicator indicator-kana"></div>
+        <div class="track-icon-wrap">🔤</div>
+        <div class="track-info">
+          <div class="track-meta-row">
+            <span class="track-stage-name">TAHAP 0 • FONDASI DASAR</span>
+            <span class="track-status-pill status-soon">● Segera Hadir</span>
           </div>
-          <h3 class="module-card-title">Penguasaan Huruf Kana</h3>
-          <p class="module-card-desc">Hiragana & Katakana dasar, dakuten, handakuten, serta yoon (kombinasi bunyi).</p>
+          <h2 class="track-title">Penguasaan Huruf Kana</h2>
+          <p class="track-desc">Hiragana & Katakana dasar, dakuten, handakuten, serta kombinasi bunyi yoon.</p>
         </div>
-        <div class="module-card-arrow">›</div>
+        <div class="track-action-wrap">
+          <span class="track-action-hint">Segera ›</span>
+        </div>
       </div>
 
-      <!-- Modul 2: JLPT N5 (Aktif) -->
-      <div class="module-card module-card-n5 active-playable" onclick="Game.init('pemula')">
-        <div class="module-card-icon icon-n5">⛩️</div>
-        <div class="module-card-content">
-          <div class="module-card-top">
-            <span class="module-stage-badge stage-n5">KURIKULUM UTAMA</span>
-            <span class="module-status-badge status-ready">⚡ SIAP DIMAINKAN</span>
+      <!-- Track 2: N5 (Aktif) -->
+      <div class="module-track track-n5 active-playable" onclick="Game.init('pemula')">
+        <div class="track-indicator indicator-n5"></div>
+        <div class="track-icon-wrap">⛩️</div>
+        <div class="track-info">
+          <div class="track-meta-row">
+            <span class="track-stage-name accent-n5">KURIKULUM UTAMA</span>
+            <span class="track-status-pill status-ready">● Siap Dimainkan</span>
           </div>
-          <h3 class="module-card-title">Modul JLPT N5 (Dasar & Pola)</h3>
-          <p class="module-card-desc">Silabus 30 hari: 400+ kosakata, partikel, tata bahasa, peta ekspedisi & survival dungeon.</p>
+          <h2 class="track-title">Modul JLPT N5 (Dasar & Pola)</h2>
+          <p class="track-desc">Silabus 30 hari: 400+ kosakata, tata bahasa, partikel, peta ekspedisi & survival dungeon.</p>
         </div>
-        <div class="module-card-arrow arrow-ready">▶</div>
+        <div class="track-action-wrap">
+          <button type="button" class="btn-track-play">Mulai ➔</button>
+        </div>
       </div>
 
-      <!-- Modul 3: JLPT N4 (Di bawah N5) -->
-      <div class="module-card module-card-n4 module-locked" onclick="UI.showN4ModuleNotice()">
-        <div class="module-card-icon icon-n4">🏯</div>
-        <div class="module-card-content">
-          <div class="module-card-top">
-            <span class="module-stage-badge stage-n4">TAHAP 2 • MENENGAH</span>
-            <span class="module-status-badge status-locked">🔒 TERKUNCI</span>
+      <!-- Track 3: N4 (Di bawah N5) -->
+      <div class="module-track track-n4 locked" onclick="UI.showN4ModuleNotice()">
+        <div class="track-indicator indicator-n4"></div>
+        <div class="track-icon-wrap">🏯</div>
+        <div class="track-info">
+          <div class="track-meta-row">
+            <span class="track-stage-name">TAHAP 2 • MENENGAH</span>
+            <span class="track-status-pill status-locked">● Terkunci</span>
           </div>
-          <h3 class="module-card-title">Modul JLPT N4 (Menengah Bawah)</h3>
-          <p class="module-card-desc">Bentuk pasif, kausatif, syarat (tara/ba/to), konjugasi lanjutan & kosakata N4.</p>
+          <h2 class="track-title">Modul JLPT N4 (Menengah Bawah)</h2>
+          <p class="track-desc">Bentuk pasif, kausatif, syarat (tara/ba/to), konjugasi lanjutan & ekspedisi N4.</p>
         </div>
-        <div class="module-card-arrow">🔒</div>
+        <div class="track-action-wrap">
+          <span class="track-action-hint">🔒 Terkunci</span>
+        </div>
       </div>
     </div>
   </div>

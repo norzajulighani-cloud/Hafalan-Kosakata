@@ -664,7 +664,10 @@ const UI = {
     if (id === 'inventory-modal') UI.renderInventory();
     if (id === 'shop-modal') UI.renderShop();
     if (id === 'level-modal') UI.renderHierarchyModal();
-    if (id === 'kamus-modal') UI.openKamus();
+    if (id === 'kamus-modal') {
+      const list = document.getElementById('kamus-list');
+      if (list && list.children.length === 0) UI.renderKamusList();
+    }
     const m = document.getElementById(id); 
     if (!m) return;
     m.classList.remove('hidden', 'modal-close'); 
