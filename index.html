@@ -938,40 +938,56 @@
 <div id="tips-bubble" class="hidden">Ada info baru, nih! ✨</div>
 <div class="container hidden" id="main-app">
   
-  <div class="rpg-bar animate-slide">
-    <div class="rpg-left-group">
-      <button class="toggle-btn" onclick="UI.toggleSidebar()">☰</button>
-      <div class="level-badge" id="ui-lvl" title="Klik untuk info Gelar" onclick="UI.openModal('level-modal')"><span class="lvl-num">Lv.1</span> <span class="lvl-icon">🔰</span> <span class="lvl-name">Pemula</span></div>
-    </div>
-    
-    <div class="rpg-stats">
-      <!-- EXP Meter -->
-      <div class="stat-exp-container" title="Progress Menuju Level Berikutnya">
-        <div class="exp-track">
-          <div class="exp-fill" id="ui-exp-fill" style="width: 0%;"></div>
-        </div>
-        <span class="exp-text"><span id="ui-exp">0</span> ✨</span>
+  <!-- MASTER TOP HUD (Unified Sleek Single-Row JRPG Bar) -->
+  <div class="master-hud animate-slide">
+    <div class="hud-content-row">
+      <!-- Left Cluster: Hamburger, Day Selector, Zone Status -->
+      <div class="hud-cluster-left">
+        <button type="button" class="hud-btn-toggle" onclick="UI.toggleSidebar()" title="Menu Utama" aria-label="Menu">☰</button>
+        <button type="button" id="ui-day" class="hud-btn-day" onclick="UI.openModal('map-modal')" title="Peta & Sektor Ekspedisi">🗺️ Hari 1 ▾</button>
+        <div id="ui-zone" class="zone-badge zone-aman" title="Status Zona">🟢 ZONA AMAN</div>
       </div>
-      <!-- Gold -->
-      <div class="stat-item gold" title="Koin"><span id="ui-coin">0</span> 🪙</div>
-      <!-- Streak Flame -->
-      <div class="stat-item streak" id="ui-streak-hud" onclick="Streak.openModal()" title="Absensi Ninja / Daily Streak"><span class="flame-icon">🔥</span> <span id="ui-streak">1</span></div>
-      <!-- Combo -->
-      <span class="combo-text hidden" id="ui-combo">x2</span>
-    </div>
-    
-    <div class="rpg-right-actions">
-      <button class="btn-hud-bag" onclick="UI.openModal('inventory-modal')" title="Buka Tas Perlengkapan">🎒 <span class="bag-pill" id="ui-bag-count">0</span></button>
-      <button class="btn-shop" onclick="UI.openModal('shop-modal')">🛒 Toko</button>
-    </div>
-  </div>
 
-  <div class="header-bar animate-slide" style="animation-delay: 0.1s; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 0 5px;">
-    <div style="display: flex; align-items: center; gap: 10px;">
-      <button id="ui-day" onclick="UI.openModal('map-modal')" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: var(--text-main); font-weight: bold; font-size: 14px; padding: 5px 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 5px; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.3);">🗺️ Hari 1 <span style="font-size:10px;">▼</span></button>
-      <div id="ui-zone" class="zone-badge zone-aman" style="font-size: 10px; padding: 3px 8px;">🟢 ZONA AMAN</div>
+      <!-- Right Cluster: Streak, Coins (Shop), Bag, Level, HP -->
+      <div class="hud-cluster-right">
+        <!-- Daily Streak Flame -->
+        <button type="button" class="hud-pill hud-pill-streak" id="ui-streak-hud" onclick="Streak.openModal()" title="Absensi Ninja / Daily Streak">
+          <span class="hud-pill-icon">🔥</span>
+          <span id="ui-streak" class="hud-pill-val">1</span>
+        </button>
+
+        <!-- Coins (Opens Shop on click!) -->
+        <button type="button" class="hud-pill hud-pill-coin" onclick="UI.openModal('shop-modal')" title="Saldo Koin • Buka Terminal Suplai Pasar Gelap">
+          <span class="hud-pill-icon">🪙</span>
+          <span id="ui-coin" class="hud-pill-val">0</span>
+        </button>
+
+        <!-- Inventory Bag -->
+        <button type="button" class="hud-pill hud-pill-bag" onclick="UI.openModal('inventory-modal')" title="Tas Perlengkapan Ninja">
+          <span class="hud-pill-icon">🎒</span>
+          <span class="bag-pill" id="ui-bag-count">0</span>
+        </button>
+
+        <!-- Level Badge -->
+        <button type="button" class="hud-pill hud-pill-lvl" id="ui-lvl" onclick="UI.openModal('level-modal')" title="Hierarki Gelar Pendekar">
+          <span class="lvl-num">Lv.1</span>
+          <span class="lvl-icon">🔰</span>
+          <span class="lvl-name">Pemula</span>
+        </button>
+
+        <!-- Player HP Hearts -->
+        <div class="hp-container hud-hp-container" id="ui-hp" title="Sisa Nyawa (HP)"></div>
+      </div>
     </div>
-    <div class="hp-container" id="ui-hp" style="font-size: 20px;"></div>
+
+    <!-- Hidden elements for JS reference compatibility -->
+    <span id="ui-exp" class="hidden">0</span>
+    <span class="combo-text hidden" id="ui-combo">x2</span>
+
+    <!-- Hairline Laser EXP Progress Bar along the bottom border of Master HUD -->
+    <div class="hud-exp-track" title="Progress Menuju Level Berikutnya">
+      <div class="hud-exp-fill" id="ui-exp-fill" style="width: 0%;"></div>
+    </div>
   </div>
 
   <div class="nav-tabs animate-slide" style="animation-delay: 0.2s;">
