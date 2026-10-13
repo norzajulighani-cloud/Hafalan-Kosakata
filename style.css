@@ -4630,6 +4630,33 @@ body.danger-mode { animation: pulseDanger 1.5s infinite; }
     font-size: 14px;
     gap: 9px;
   }
+
+  /* Boss Battle Mobile Optimization */
+  .boss-warning-avatar {
+    font-size: 46px;
+  }
+  .boss-warning-name {
+    font-size: 18px;
+  }
+  .boss-avatar-frame {
+    width: 38px;
+    height: 38px;
+  }
+  .boss-avatar-icon {
+    font-size: 20px;
+  }
+  .boss-name {
+    font-size: 13.5px;
+  }
+  .boss-word-display {
+    font-size: 28px;
+  }
+  .boss-victory-avatar {
+    font-size: 50px;
+  }
+  .boss-victory-title {
+    font-size: 17px;
+  }
 }
 
 @media (max-width: 360px) {
@@ -5334,3 +5361,812 @@ body.danger-mode { animation: pulseDanger 1.5s infinite; }
   margin-left: 4px;
 }
 
+/* ==========================================
+   BOSS BATTLE SYSTEM (PILAR 4 - FITUR 2)
+   Modern Unboxed JRPG Boss Battle Aesthetics
+   ========================================== */
+
+/* 1. Boss Warning Climax Alert */
+.boss-warning-showcase {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  padding: 16px 12px 10px;
+  position: relative;
+}
+
+@keyframes bossWarningGlow {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(244, 63, 94, 0.25), inset 0 0 10px rgba(244, 63, 94, 0.1);
+    border-color: rgba(244, 63, 94, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(244, 63, 94, 0.6), inset 0 0 20px rgba(244, 63, 94, 0.25);
+    border-color: rgba(244, 63, 94, 0.8);
+  }
+}
+
+.boss-warning-badge {
+  font-size: 10.5px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  color: #fff;
+  background: linear-gradient(135deg, #e11d48, #9f1239);
+  padding: 4px 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  text-transform: uppercase;
+  animation: bossWarningGlow 2s infinite ease-in-out;
+}
+
+@keyframes bossBreathe {
+  0%, 100% { transform: translateY(0) scale(1); filter: drop-shadow(0 0 16px rgba(244, 63, 94, 0.4)); }
+  50% { transform: translateY(-6px) scale(1.06); filter: drop-shadow(0 0 28px rgba(244, 63, 94, 0.75)); }
+}
+
+.boss-warning-avatar {
+  font-size: 60px;
+  line-height: 1;
+  margin: 4px 0;
+  animation: bossBreathe 3s infinite ease-in-out;
+  cursor: default;
+}
+
+.boss-warning-title {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #fb7185;
+  text-transform: uppercase;
+}
+
+.boss-warning-name {
+  font-size: 22px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.boss-warning-jp {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fde047;
+  background: rgba(251, 191, 36, 0.12);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  padding: 2px 7px;
+  border-radius: 5px;
+}
+
+.boss-warning-subtitle {
+  font-size: 12px;
+  color: #94a3b8;
+  font-weight: 600;
+  max-width: 380px;
+  line-height: 1.4;
+}
+
+.boss-warning-quote {
+  font-size: 12.5px;
+  font-style: italic;
+  color: #e2e8f0;
+  background: rgba(2, 6, 23, 0.6);
+  border-left: 3px solid #f43f5e;
+  padding: 8px 14px;
+  border-radius: 0 8px 8px 0;
+  margin-top: 4px;
+  max-width: 400px;
+  line-height: 1.45;
+}
+
+.btn-boss-engage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #e11d48 0%, #be123c 60%, #881337 100%) !important;
+  color: #fff !important;
+  font-weight: 800 !important;
+  font-size: 13.5px !important;
+  padding: 13px 20px !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(251, 113, 133, 0.5) !important;
+  box-shadow: 0 4px 22px rgba(225, 29, 72, 0.5) !important;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  letter-spacing: 0.5px;
+}
+.btn-boss-engage:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 30px rgba(244, 63, 94, 0.7) !important;
+  border-color: #fca5a5 !important;
+}
+
+.boss-btn-jp {
+  font-size: 15px;
+  font-weight: 900;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 2px 7px;
+  border-radius: 6px;
+  color: #fecdd3;
+  letter-spacing: 1px;
+}
+
+.boss-btn-arrow {
+  font-size: 15px;
+  transition: transform 0.2s ease;
+}
+.btn-boss-engage:hover .boss-btn-arrow {
+  transform: scale(1.25) rotate(15deg);
+}
+
+/* 2. Unboxed JRPG Boss Battle Arena HUD */
+.boss-arena-hud {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.boss-hud-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.boss-avatar-frame {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: radial-gradient(circle, rgba(244, 63, 94, 0.25) 0%, rgba(15, 23, 42, 0.9) 100%);
+  border: 1.5px solid rgba(244, 63, 94, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 0 14px rgba(244, 63, 94, 0.3);
+  transition: all 0.2s ease;
+}
+
+.boss-avatar-icon {
+  font-size: 24px;
+  line-height: 1;
+}
+
+@keyframes bossDamagedPulse {
+  0% { transform: scale(1) translate(0); filter: brightness(1); }
+  20% { transform: scale(1.2) translate(-5px, 2px); filter: brightness(2) drop-shadow(0 0 25px #ef4444); }
+  40% { transform: scale(0.9) translate(4px, -3px); filter: brightness(2.5) drop-shadow(0 0 30px #ef4444); }
+  60% { transform: scale(1.1) translate(-2px, 1px); filter: brightness(1.8) drop-shadow(0 0 20px #ef4444); }
+  80% { transform: scale(0.98) translate(1px, -1px); filter: brightness(1.2); }
+  100% { transform: scale(1) translate(0); filter: brightness(1); }
+}
+
+.boss-avatar-frame.boss-avatar-damaged {
+  animation: bossDamagedPulse 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  border-color: #ef4444 !important;
+  background: radial-gradient(circle, rgba(239, 68, 68, 0.6) 0%, rgba(15, 23, 42, 0.95) 100%) !important;
+}
+
+.boss-hud-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.boss-name-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.boss-name {
+  font-size: 15px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.boss-kanji {
+  font-size: 11px;
+  color: #fde047;
+  font-weight: 700;
+}
+
+.boss-title {
+  font-size: 10.5px;
+  color: #94a3b8;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.boss-hp-numeric {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #fb7185;
+  background: rgba(244, 63, 94, 0.12);
+  border: 1px solid rgba(244, 63, 94, 0.3);
+  padding: 4px 8px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.boss-hp-numeric b {
+  font-size: 13px;
+  color: #fff;
+}
+
+/* High-tech Unboxed Boss HP Track */
+.boss-hp-track {
+  width: 100%;
+  height: 9px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+.boss-hp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #f43f5e 0%, #e11d48 50%, #fb7185 100%);
+  border-radius: 5px;
+  transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s;
+  box-shadow: 0 0 12px rgba(244, 63, 94, 0.6);
+}
+
+.boss-hp-fill.fill-warning {
+  background: linear-gradient(90deg, #d97706 0%, #f59e0b 50%, #fcd34d 100%);
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.6);
+}
+
+.boss-hp-fill.fill-danger {
+  background: linear-gradient(90deg, #991b1b 0%, #dc2626 50%, #ef4444 100%);
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.8);
+  animation: pulseDanger 1s infinite alternate;
+}
+
+/* Minimalist Unboxed Boss Speech Strip */
+.boss-quote-bubble {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(2, 6, 23, 0.55);
+  border-radius: 8px;
+  padding: 5px 10px;
+  border-left: 2px solid rgba(244, 63, 94, 0.6);
+}
+
+.boss-quote-icon {
+  font-size: 11px;
+  opacity: 0.8;
+  flex-shrink: 0;
+}
+
+.boss-quote-text {
+  font-size: 11.5px;
+  font-style: italic;
+  color: #cbd5e1;
+  line-height: 1.35;
+}
+
+/* 3. Boss Battle Prompt & Word Displays */
+.boss-showcase {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.boss-prompt-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+}
+
+.boss-prompt-tag {
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  padding: 2px 9px;
+  border-radius: 4px;
+}
+.boss-prompt-tag.tag-vocab {
+  color: #fb7185;
+  background: rgba(244, 63, 94, 0.15);
+  border: 1px solid rgba(244, 63, 94, 0.35);
+}
+.boss-prompt-tag.tag-partikel {
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+}
+.boss-prompt-tag.tag-arti {
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.15);
+  border: 1px solid rgba(251, 191, 36, 0.35);
+}
+
+.boss-prompt-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+
+.boss-word-display {
+  font-size: 34px;
+  font-weight: 800;
+  color: #fff;
+  text-align: center;
+  letter-spacing: 1px;
+  padding: 6px 0;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+}
+
+/* Strike & Choice Buttons */
+.btn-boss-choice {
+  border-color: rgba(244, 63, 94, 0.3) !important;
+}
+.btn-boss-choice:hover {
+  border-color: #fb7185 !important;
+  background: rgba(244, 63, 94, 0.18) !important;
+  box-shadow: 0 4px 14px rgba(244, 63, 94, 0.25) !important;
+}
+
+.chip-boss {
+  border-color: rgba(244, 63, 94, 0.35) !important;
+  color: #ffe4e6 !important;
+}
+.chip-boss:hover {
+  background: rgba(244, 63, 94, 0.25) !important;
+  border-color: #f43f5e !important;
+  color: #fff !important;
+  box-shadow: 0 0 12px rgba(244, 63, 94, 0.4) !important;
+}
+
+.btn-boss-strike {
+  background: linear-gradient(135deg, #e11d48 0%, #be123c 100%) !important;
+  color: #fff !important;
+  font-weight: 900 !important;
+  font-size: 13.5px !important;
+  letter-spacing: 0.8px;
+  border: 1px solid rgba(251, 113, 133, 0.5) !important;
+  box-shadow: 0 4px 18px rgba(225, 29, 72, 0.5) !important;
+  border-radius: 10px !important;
+  padding: 11px 18px !important;
+  transition: all 0.2s ease;
+}
+.btn-boss-strike:hover {
+  background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%) !important;
+  box-shadow: 0 6px 24px rgba(244, 63, 94, 0.7) !important;
+  transform: translateY(-1px);
+}
+
+.boss-retreat-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.btn-boss-retreat {
+  background: transparent;
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  color: #94a3b8;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 5px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn-boss-retreat:hover {
+  border-color: rgba(244, 63, 94, 0.5);
+  color: #fb7185;
+  background: rgba(244, 63, 94, 0.08);
+}
+
+/* 4. Boss Victory Climax Showcase */
+.boss-victory-showcase {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  padding: 16px 12px 10px;
+}
+
+.boss-victory-badge {
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  color: #000;
+  background: linear-gradient(135deg, #fde047 0%, #f59e0b 100%);
+  padding: 4px 14px;
+  border-radius: 20px;
+  box-shadow: 0 0 18px rgba(251, 191, 36, 0.5);
+}
+
+.boss-victory-avatar {
+  font-size: 64px;
+  line-height: 1;
+  margin: 6px 0;
+  filter: drop-shadow(0 0 25px rgba(251, 191, 36, 0.6));
+  animation: floatBounce 2.5s infinite ease-in-out;
+}
+
+.boss-victory-title {
+  font-size: 20px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: 0.8px;
+  text-shadow: 0 0 15px rgba(251, 191, 36, 0.4);
+}
+
+.boss-victory-desc {
+  font-size: 12.5px;
+  color: #cbd5e1;
+  max-width: 380px;
+  line-height: 1.45;
+}
+
+.boss-reward-strip {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.boss-reward-pill {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 12.5px;
+  color: #f1f5f9;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.boss-reward-pill b {
+  color: #fde047;
+  font-size: 14px;
+}
+
+.btn-gold-victory {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+  color: #000 !important;
+  font-weight: 900 !important;
+  font-size: 14px !important;
+  padding: 13px 20px !important;
+  border-radius: 12px !important;
+  border: 1px solid #fde047 !important;
+  box-shadow: 0 4px 22px rgba(245, 158, 11, 0.5) !important;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn-gold-victory:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 28px rgba(251, 191, 36, 0.7) !important;
+}
+
+/* 5. Expedition Map Modal - Sector Boss Card Highlight */
+@keyframes bossCardPulseGlow {
+  0%, 100% {
+    box-shadow: 0 4px 18px rgba(245, 158, 11, 0.15);
+    border-color: rgba(245, 158, 11, 0.4);
+  }
+  50% {
+    box-shadow: 0 6px 26px rgba(244, 63, 94, 0.35);
+    border-color: rgba(244, 63, 94, 0.7);
+  }
+}
+
+.mission-card.is-boss-card {
+  background: linear-gradient(135deg, rgba(35, 15, 38, 0.85) 0%, rgba(15, 23, 42, 0.9) 100%) !important;
+  border: 1.5px solid rgba(245, 158, 11, 0.45) !important;
+  box-shadow: 0 4px 18px rgba(245, 158, 11, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.mission-card.is-boss-card::after {
+  content: 'SECTOR GUARDIAN';
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  font-size: 7.5px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  color: #fb7185;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.mission-card.is-boss-card:hover {
+  border-color: #fbbf24 !important;
+  transform: translateX(4px);
+  box-shadow: 0 6px 24px rgba(251, 191, 36, 0.3) !important;
+}
+
+.mission-card.is-boss-card.current {
+  animation: bossCardPulseGlow 2.5s infinite ease-in-out;
+}
+
+.mission-card.is-boss-card .mission-category {
+  color: #fbbf24 !important;
+  font-weight: 800 !important;
+}
+
+/* ==========================================
+   SENTENCE JUMBLE / BUILDER (PILAR 4 - FITUR 3)
+   Modern Unboxed Japanese Word Tiles Assembly
+   ========================================== */
+
+.jumble-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+/* Minimalist Unboxed Mode Switcher */
+.jumble-mode-toggle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 2px;
+}
+
+.jumble-toggle-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-sub);
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+.jumble-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+.jumble-toggle-btn.active {
+  background: rgba(56, 189, 248, 0.18);
+  border-color: var(--primary);
+  color: #38bdf8;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+}
+
+/* Assembly Shelf / Track (Unboxed Floating Drop Zone) */
+.jumble-track-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.jumble-track-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2px;
+}
+
+.jumble-track-title {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.jumble-btn-reset {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+.jumble-btn-reset:hover {
+  color: #f87171;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.jumble-assembly-track {
+  min-height: 56px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: rgba(2, 6, 23, 0.6);
+  border-bottom: 2px dashed rgba(56, 189, 248, 0.45);
+  border-radius: 12px 12px 0 0;
+  box-sizing: border-box;
+  transition: all 0.25s ease;
+}
+.jumble-assembly-track:focus-within,
+.jumble-assembly-track:hover {
+  border-bottom-color: var(--primary);
+  box-shadow: 0 6px 20px rgba(56, 189, 248, 0.12);
+}
+
+.jumble-placeholder-hint {
+  font-size: 12px;
+  color: #64748b;
+  font-style: italic;
+  width: 100%;
+  text-align: center;
+  user-select: none;
+}
+
+/* Word Pool Grid */
+.jumble-pool-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.jumble-pool-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: #64748b;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.jumble-pool-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  padding: 4px 0 6px;
+  min-height: 48px;
+}
+
+/* Tactile Interactive Word Chips */
+@keyframes jumblePop {
+  0% { transform: scale(0.85); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.jumble-chip {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
+  user-select: none;
+  line-height: 1.2;
+}
+
+.jumble-chip rt {
+  font-size: 9.5px;
+  color: #7dd3fc;
+  font-weight: 600;
+}
+
+.jumble-chip.is-particle {
+  border-color: rgba(56, 189, 248, 0.35);
+  color: #38bdf8;
+}
+
+.jumble-chip:hover:not(:disabled) {
+  transform: translateY(-2px);
+  border-color: var(--primary);
+  background: rgba(30, 41, 59, 0.95);
+  box-shadow: 0 6px 18px rgba(56, 189, 248, 0.35);
+}
+
+.jumble-chip:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+/* Used State (dimmed in pool) */
+.jumble-chip.is-used {
+  opacity: 0.2;
+  filter: grayscale(0.8);
+  cursor: not-allowed;
+  pointer-events: none;
+  border-style: dashed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Slotted State (inside assembly track) */
+.jumble-chip.is-slotted {
+  animation: jumblePop 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  background: rgba(8, 47, 73, 0.8);
+  border-color: var(--primary);
+  color: #fff;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+  position: relative;
+}
+.jumble-chip.is-slotted:hover {
+  border-color: #f87171;
+  background: rgba(153, 27, 27, 0.4);
+  transform: translateY(-1px);
+}
+
+.jumble-remove-cross {
+  font-size: 13px;
+  color: #94a3b8;
+  font-weight: 800;
+  margin-left: 2px;
+  transition: color 0.2s;
+}
+.jumble-chip.is-slotted:hover .jumble-remove-cross {
+  color: #fca5a5;
+}
+
+/* Verification States */
+.jumble-chip.chip-correct {
+  background: rgba(22, 101, 52, 0.85) !important;
+  border-color: #4ade80 !important;
+  color: #fff !important;
+  box-shadow: 0 0 16px rgba(74, 222, 128, 0.6) !important;
+  animation: perfectStrike 0.4s ease;
+}
+
+.jumble-chip.chip-wrong {
+  background: rgba(153, 27, 27, 0.85) !important;
+  border-color: #f87171 !important;
+  color: #fff !important;
+  box-shadow: 0 0 16px rgba(248, 113, 113, 0.6) !important;
+}
+
+/* Responsive Mobile Jumble */
+@media (max-width: 480px) {
+  .jumble-chip {
+    font-size: 13.5px;
+    padding: 7px 11px;
+    gap: 4px;
+    border-radius: 8px;
+  }
+  .jumble-assembly-track {
+    min-height: 50px;
+    padding: 8px 10px;
+    gap: 6px;
+  }
+  .jumble-pool-grid {
+    gap: 6px;
+  }
+}

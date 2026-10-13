@@ -48,7 +48,9 @@ const getMissionCategory = (day) => {
     if (day <= 17) return '⚔️ VERBA & PARTIKEL DASAR';
     if (day <= 19) return '⚖️ POLA PERBANDINGAN';
     if (day <= 27) return '🛡️ MASTERI KAKUJOSHI';
-    return '👑 BUNPO LANJUTAN N5';
+    if (day <= 30) return '👑 AJAKAN & TATA BAHASA SOPAN';
+    let s = Math.ceil(day / 5);
+    return `⚡ EKSPEDISI SEKTOR ${s}`;
 };
 const Engine = {
   buildRubyFormat: (k, r, a, isPro) => {
@@ -1263,6 +1265,638 @@ const Dojo = {
   }
 };
 
+const Boss = {
+  list: {
+    5: {
+      id: 'boss_5',
+      day: 5,
+      sector: 1,
+      name: "Ronin Partikel",
+      kanjiName: "助詞の浪人",
+      title: "Penjaga Gerbang Awal • Ronin Tanpa Tuan",
+      avatar: "🥷",
+      maxHp: 5,
+      quote: "Partikel は, の, dan も adalah nafasku. Buktikan kamu layak melangkah lebih jauh!",
+      desc: "Bos Sektor 1 yang menguji penguasaan partikel dasar dan kata benda perkenalan.",
+      expReward: 100,
+      coinReward: 50
+    },
+    10: {
+      id: 'boss_10',
+      day: 10,
+      sector: 2,
+      name: "Oni Keiyoushi",
+      kanjiName: "形容詞の鬼",
+      title: "Iblis Dua Wujud • Penguasa Sifat I & Na",
+      avatar: "👺",
+      maxHp: 6,
+      quote: "Panas, dingin, indah, atau benci? Bedakan perubahan bentuk sifatku sebelum tebasan ini tiba!",
+      desc: "Bos Sektor 2 yang menguji kecepatan konjugasi kata sifat I dan Na.",
+      expReward: 140,
+      coinReward: 70
+    },
+    15: {
+      id: 'boss_15',
+      day: 15,
+      sector: 3,
+      name: "Samurai Doushi",
+      kanjiName: "動詞の侍",
+      title: "Pendekar Tiga Aliran • Penguasa Bentuk Masu & Kamus",
+      avatar: "🏯",
+      maxHp: 7,
+      quote: "Pedangku bergerak mengikuti irama grup kata kerja 1, 2, dan 3. Tangkis jika mampu!",
+      desc: "Bos Sektor 3 yang menguji ketepatan golongan kata kerja dan perubahan bentuk.",
+      expReward: 180,
+      coinReward: 90
+    },
+    20: {
+      id: 'boss_20',
+      day: 20,
+      sector: 4,
+      name: "Kunoichi Kaimono",
+      kanjiName: "買物のくのいち",
+      title: "Bayangan Pasar • Ahli Bilangan, Waktu & Lokasi",
+      avatar: "🌪️",
+      maxHp: 8,
+      quote: "Menghitung menit, tanggal, dan arah mata angin dalam kegelapan adalah keahlian mutlakku!",
+      desc: "Bos Sektor 4 yang menguji pemahaman angka, jam, hari, dan penunjuk arah/tempat.",
+      expReward: 220,
+      coinReward: 110
+    },
+    25: {
+      id: 'boss_25',
+      day: 25,
+      sector: 5,
+      name: "Shogun Bunpo",
+      kanjiName: "文法の将軍",
+      title: "Panglima Benteng • Master Pola Kalimat N5",
+      avatar: "👑",
+      maxHp: 9,
+      quote: "Bentuk negatif, lampau, ajakan, dan permohonan bersatu di bawah komandoku. Bersujudlah!",
+      desc: "Bos Sektor 5 yang menguji susunan tata bahasa dan kalimat kompleks.",
+      expReward: 260,
+      coinReward: 130
+    },
+    30: {
+      id: 'boss_30',
+      day: 30,
+      sector: 6,
+      name: "Pendekar Sasoi",
+      kanjiName: "勧誘の剣士",
+      title: "Penjaga Sektor 6 • Penguasa Ajakan & Pertanyaan Sopan",
+      avatar: "🎎",
+      maxHp: 10,
+      quote: "Issho ni ikimasen ka? Sebelum menembus sektor selanjutnya, buktikan kehalusan bahasa ajakanmu!",
+      desc: "Bos Sektor 6 yang menguji kemahiran pola kalimat ajakan dan pertanyaan sopan.",
+      expReward: 300,
+      coinReward: 150
+    },
+    35: {
+      id: 'boss_35',
+      day: 35,
+      sector: 7,
+      name: "Monk Renketsu",
+      kanjiName: "連結の僧侶",
+      title: "Penjaga Sektor 7 • Penguasa Rantai Bentuk Te & Permohonan",
+      avatar: "📿",
+      maxHp: 10,
+      quote: "Bentuk -te mengalir menyambungkan tindakan demi tindakan. Putuskan rantai ini jika mampu!",
+      desc: "Bos Sektor 7 yang menguji keluwesan konjugasi bentuk Te dan kalimat penghubung.",
+      expReward: 330,
+      coinReward: 165
+    },
+    40: {
+      id: 'boss_40',
+      day: 40,
+      sector: 8,
+      name: "Hayate Hitei",
+      kanjiName: "否定の疾風",
+      title: "Penjaga Sektor 8 • Penguasa Bentuk Nai & Larangan",
+      avatar: "🦅",
+      maxHp: 11,
+      quote: "Jangan lakukan, tidak boleh masuk! Tembus dinding sangkalan ini tanpa ragu!",
+      desc: "Bos Sektor 8 yang menguji konjugasi bentuk negatif kasual Nai dan aturan keharusan.",
+      expReward: 360,
+      coinReward: 180
+    },
+    45: {
+      id: 'boss_45',
+      day: 45,
+      sector: 9,
+      name: "Kensei Jisho",
+      kanjiName: "辞書の剣聖",
+      title: "Penjaga Sektor 9 • Master Bentuk Kamus & Potensi Dekiru",
+      avatar: "🐺",
+      maxHp: 11,
+      quote: "Bentuk kamus adalah akar dari segala kata kerja. Tunjukkan seberapa dalam pemahaman dasarmu!",
+      desc: "Bos Sektor 9 yang menguji bentuk kamus orisinal dan pola kemampuan koto ga dekimasu.",
+      expReward: 390,
+      coinReward: 195
+    },
+    50: {
+      id: 'boss_50',
+      day: 50,
+      sector: 10,
+      name: "Ryu Bunkei",
+      kanjiName: "複文の龍",
+      title: "Penjaga Sektor 10 • Naga Kalimat Majemuk & Sebab-Akibat",
+      avatar: "🐲",
+      maxHp: 12,
+      quote: "Kara dan Node adalah sayapku! Buktikan alasanmu berdiri tegak di hadapanku!",
+      desc: "Bos Sektor 10 yang menguji susunan klausa majemuk dan hubungan sebab-akibat.",
+      expReward: 420,
+      coinReward: 210
+    },
+    55: {
+      id: 'boss_55',
+      day: 55,
+      sector: 11,
+      name: "Hagane Sonkei",
+      kanjiName: "尊敬の鋼",
+      title: "Penjaga Sektor 11 • Penguasa Bahasa Hormat & Kesopanan",
+      avatar: "🛡️",
+      maxHp: 12,
+      quote: "Kekuatan tanpa rasa hormat hanyalah amarah hampa. Tundukkan egomu dengan tata krama!",
+      desc: "Bos Sektor 11 yang menguji pemahaman derajat kesopanan dan ekspresi sopan N5.",
+      expReward: 450,
+      coinReward: 225
+    },
+    60: {
+      id: 'boss_60',
+      day: 60,
+      sector: 12,
+      name: "Raijin Goukei",
+      kanjiName: "雷神の合算",
+      title: "Penjaga Sektor 12 • Dewa Penguji Konvergensi Tata Bahasa",
+      avatar: "⚡",
+      maxHp: 13,
+      quote: "Kilat menyatukan partikel, kata sifat, dan seluruh ragam kata kerja. Sambut ujian badai ini!",
+      desc: "Bos Sektor 12 yang menguji konvergensi tata bahasa tingkat lanjut N5.",
+      expReward: 480,
+      coinReward: 240
+    }
+  },
+
+  currentBoss: null,
+  currentHp: 0,
+  maxHp: 0,
+  questionQueue: [],
+  questionIndex: 0,
+  bossDefeated: false,
+
+  getBossForDay: function(day) {
+    if (this.list[day]) return this.list[day];
+    let sector = Math.ceil(day / 5);
+    let nearest = Math.floor(day / 5) * 5;
+    if (this.list[nearest]) return this.list[nearest];
+
+    // Procedural Boss Generator dinamis untuk sektor tak terhingga di atas Hari 60
+    let bossTitles = [
+      { name: "Yomikata Shinobi", kanji: "読方の忍", avatar: "🥷", title: "Bayangan Penguji Sektor" },
+      { name: "Kensei Gakusha", kanji: "剣聖の学者", avatar: "📜", title: "Cendekiawan Pendekar Sektor" },
+      { name: "Shogun Senryaku", kanji: "戦略の将軍", avatar: "🏯", title: "Panglima Taktik Bahasa" },
+      { name: "Kojin Seiryu", kanji: "青竜の古人", avatar: "🐉", title: "Penjaga Sektor Legendaris" },
+      { name: "Senshi Fudou", kanji: "不動の戦士", avatar: "🗿", title: "Batu Karang Pertahanan Bahasa" }
+    ];
+    let pick = bossTitles[(sector - 1) % bossTitles.length];
+    let calculatedHp = Math.min(15, 8 + Math.floor(sector * 0.4));
+    return {
+      id: 'boss_' + day,
+      day: day,
+      sector: sector,
+      name: `${pick.name} Sektor ${sector}`,
+      kanjiName: pick.kanji,
+      title: `${pick.title} • Penjaga Hari ${day}`,
+      avatar: pick.avatar,
+      maxHp: calculatedHp,
+      quote: `Kekuatanmu telah membawamu ke Sektor ${sector}. Tunjukkan bahwa penguasaanmu terus berkembang!`,
+      desc: `Penjaga Sektor ${sector} yang menguji materi komprehensif hingga Hari ${day}.`,
+      expReward: 200 + (sector * 25),
+      coinReward: 100 + (sector * 12)
+    };
+  },
+
+  isBossDay: function(day) {
+    return (day % 5 === 0);
+  },
+
+  startBattle: function(day) {
+    if (Game.hp <= 0) {
+      UI.showToast("HP habis! Pulihkan diri sebelum menghadapi Bos.", "error");
+      return;
+    }
+
+    let b = this.getBossForDay(day);
+    this.currentBoss = b;
+    this.currentHp = b.maxHp;
+    this.maxHp = b.maxHp;
+    this.bossDefeated = false;
+
+    // Kumpulkan bank soal komprehensif dari sektor ini (5 hari terakhir)
+    let minDay = Math.max(1, day - 4);
+    let maxDay = day;
+
+    let partikelPool = [];
+    let artiPool = [];
+    let vocabPool = [];
+
+    for (let d = minDay; d <= maxDay; d++) {
+      let dData = ManualDB['day' + d];
+      if (dData) {
+        if (dData.hafalan) vocabPool = vocabPool.concat(dData.hafalan.map(x => ({ ...x, _day: d, _type: 'hafalan' })));
+        if (dData.materi) {
+          partikelPool = partikelPool.concat(dData.materi.filter(x => x.jp).map(x => ({ ...x, _day: d, _type: 'partikel' })));
+          artiPool = artiPool.concat(dData.materi.filter(x => x.a).map(x => ({ ...x, _day: d, _type: 'arti' })));
+        }
+        if (dData.kuisExtra) {
+          partikelPool = partikelPool.concat(dData.kuisExtra.filter(x => x.jp).map(x => ({ ...x, _day: d, _type: 'partikel' })));
+          artiPool = artiPool.concat(dData.kuisExtra.filter(x => x.a).map(x => ({ ...x, _day: d, _type: 'arti' })));
+        }
+      }
+    }
+
+    if (partikelPool.length === 0 && Game.sessionData.partikel) {
+      partikelPool = Game.sessionData.partikel.map(x => ({ ...x, _type: 'partikel' }));
+    }
+    if (artiPool.length === 0 && Game.sessionData.arti) {
+      artiPool = Game.sessionData.arti.map(x => ({ ...x, _type: 'arti' }));
+    }
+    if (vocabPool.length === 0 && Game.sessionData.hafalan) {
+      vocabPool = Game.sessionData.hafalan.map(x => ({ ...x, _type: 'hafalan' }));
+    }
+
+    Engine.shuffle(partikelPool);
+    Engine.shuffle(artiPool);
+    Engine.shuffle(vocabPool);
+
+    let queue = [];
+    let totalNeeded = b.maxHp * 3;
+    let pIdx = 0, aIdx = 0, vIdx = 0;
+
+    for (let k = 0; k < totalNeeded; k++) {
+      let mod = k % 3;
+      if (mod === 0 && partikelPool.length > 0) {
+        queue.push(partikelPool[pIdx++ % partikelPool.length]);
+      } else if (mod === 1 && artiPool.length > 0) {
+        queue.push(artiPool[aIdx++ % artiPool.length]);
+      } else if (vocabPool.length > 0) {
+        queue.push(vocabPool[vIdx++ % vocabPool.length]);
+      } else if (partikelPool.length > 0) {
+        queue.push(partikelPool[pIdx++ % partikelPool.length]);
+      }
+    }
+
+    this.questionQueue = queue;
+    this.questionIndex = 0;
+
+    Game.currentTab = 'boss';
+    document.getElementById('ui-day').innerText = `👑 BOS SEKTOR ${b.sector}`;
+    const badge = document.getElementById('ui-zone');
+    if (badge) {
+      badge.className = "zone-badge zone-tempur";
+      badge.innerText = "☠️ PERTARUNGAN BOS";
+    }
+
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    const card = document.getElementById('card-main');
+    if (card) card.classList.add('hazard-battle-active');
+
+    UI.showToast(`🚨 MEMASUKI ARENA BOS: ${b.name}! Bersiaplah!`, "warning");
+    UI.loadStep();
+  },
+
+  retreatBattle: function() {
+    if (confirm("Ingin mundur dari pertarungan Bos? Posisi HP Bos akan direset jika kamu kembali nanti.")) {
+      UI.showToast("Mundur dari arena Bos ke markas.", "info");
+      Game.init(Game.mode);
+    }
+  },
+
+  claimVictory: function() {
+    let b = this.currentBoss || this.getBossForDay(Game.currentDay);
+    RPG.addReward(b.expReward, b.coinReward, null);
+    UI.showToast(`👑 Sektor ${b.sector} Tuntas! Menaklukkan ${b.name}!`, "success");
+    Game.completeDay();
+  },
+
+  checkHafalan: function(sel, cor, evt) {
+    const btn = evt ? evt.currentTarget : null;
+    let isCorrect = (sel === cor);
+    if (isCorrect) {
+      if (btn) btn.classList.add('choice-correct');
+      if (navigator.vibrate) try { navigator.vibrate(40); } catch(_) {}
+    } else {
+      if (btn) {
+        btn.classList.add('choice-wrong');
+        setTimeout(() => btn.classList.remove('choice-wrong'), 500);
+      }
+      if (navigator.vibrate) try { navigator.vibrate([60, 40, 60]); } catch(_) {}
+    }
+    Boss.handleResult(isCorrect, cor, evt);
+  },
+
+  checkPartikel: function(evt) {
+    let isCorrect = JSON.stringify(Game.currentMultiAns) === JSON.stringify(Game.targetMultiAns);
+    Boss.handleResult(isCorrect, Game.targetMultiAns.join(" & "), evt);
+  },
+
+  checkArti: function(evt) {
+    let rawVal = document.getElementById('answer-box').value;
+    if (!rawVal) return;
+    let cleanVal = rawVal.replace(/[。、！？,\?\s]/g, '');
+    let isCorrect = (cleanVal === Game.currentAnsKanji) || (cleanVal === Game.currentAnsHiragana);
+    let displayKey = Game.displayKanji !== Game.displayHiragana ? `${Game.displayKanji} / ${Game.displayHiragana}` : Game.displayKanji;
+    Boss.handleResult(isCorrect, displayKey, evt);
+  },
+
+  handleResult: function(isCorrect, key, evt) {
+    const fb = document.getElementById('ui-feedback');
+    const inp = document.getElementById('answer-box');
+    const card = document.getElementById('card-main');
+    if (inp) inp.disabled = true;
+    const btnSubmit = document.getElementById('btn-submit');
+    if (btnSubmit) btnSubmit.classList.add('hidden');
+
+    let b = this.currentBoss;
+    let cur = this.questionQueue[this.questionIndex];
+
+    if (isCorrect) {
+      this.currentHp--;
+      RPG.combo++;
+      if (RPG.combo > Game.dailyStats.maxCombo) Game.dailyStats.maxCombo = RPG.combo;
+      RPG.addReward(12, 6, evt);
+
+      // Flash HP bar & avatar damaged
+      const hpFill = document.getElementById('boss-hp-fill');
+      const hpNum = document.getElementById('boss-hp-num');
+      const avatarEl = document.querySelector('.boss-avatar-frame');
+      const quoteEl = document.getElementById('boss-quote-text');
+
+      if (hpFill) {
+        let perc = Math.max(0, Math.round((this.currentHp / this.maxHp) * 100));
+        hpFill.style.width = `${perc}%`;
+        if (perc <= 30) hpFill.className = 'boss-hp-fill fill-danger';
+        else if (perc <= 60) hpFill.className = 'boss-hp-fill fill-warning';
+      }
+      if (hpNum) hpNum.innerText = Math.max(0, this.currentHp);
+
+      if (avatarEl) {
+        avatarEl.classList.add('boss-avatar-damaged');
+        setTimeout(() => avatarEl.classList.remove('boss-avatar-damaged'), 600);
+      }
+
+      RPG.spawnFloatingText("⚔️ -1 HP CRITICAL!", "#f43f5e", evt, 0, -40);
+
+      if (card) {
+        card.classList.remove('shake-hard');
+        card.classList.add('card-correct');
+        setTimeout(() => card.classList.remove('card-correct'), 500);
+      }
+
+      if (this.currentHp <= 0) {
+        this.bossDefeated = true;
+        if (fb) {
+          fb.innerHTML = `👑 TEBASAN AKHIR MENGENAI BOS! ${b.name.toUpperCase()} TUMBANG!`;
+          fb.style.color = "var(--gold)";
+        }
+        if (quoteEl) quoteEl.innerText = `"Mustahil... teknikmu melampaui dugaanku...!"`;
+        UI.makeNextBtn("Lihat Hasil Kemenangan Sektor 🏆");
+        const bn = document.getElementById('btn-next');
+        if (bn) bn.onclick = () => UI.triggerNextAnim(() => { UI.loadStep(); });
+      } else {
+        if (fb) {
+          fb.innerHTML = `SERANGAN BERHASIL! ⚔️ Sisa HP Bos: ${this.currentHp}`;
+          fb.style.color = "var(--success)";
+        }
+        if (quoteEl) {
+          if (this.currentHp <= 2) quoteEl.innerText = `"N-Nani?! Pertahananku mulai retak?!"`;
+          else quoteEl.innerText = `"Tebasan yang tajam! Tapi tekadku belum runtuh!"`;
+        }
+        UI.makeNextBtn("Lanjut Menyerang ⚔️");
+        const bn = document.getElementById('btn-next');
+        if (bn) {
+          bn.onclick = () => UI.triggerNextAnim(() => {
+            Boss.questionIndex++;
+            UI.loadStep();
+          });
+        }
+      }
+    } else {
+      if (fb) {
+        fb.innerHTML = `SERANGAN DITANGKIS BOS! ❌<br><span style="font-size:14px; color:var(--text-sub);">Kunci: ${key}</span>`;
+        fb.style.color = "var(--danger)";
+      }
+      if (card) {
+        card.classList.add('shake-hard');
+        setTimeout(() => card.classList.remove('shake-hard'), 500);
+      }
+
+      RPG.spawnFloatingText("💥 TANGKISAN BOS!", "var(--danger)", evt, 0, -40);
+      Game.decreaseHP(evt);
+
+      if (cur && typeof Dojo !== 'undefined') {
+        Dojo.recordMistake(cur._type, cur, Game.currentDay, key);
+      }
+
+      const quoteEl = document.getElementById('boss-quote-text');
+      if (quoteEl) quoteEl.innerText = `"Fokusmu melemah! Rasakan serangan balikku!"`;
+
+      if (Game.hp > 0) {
+        UI.makeNextBtn("Bangkit & Serang Lagi ➔");
+        const bn = document.getElementById('btn-next');
+        if (bn) {
+          bn.onclick = () => UI.triggerNextAnim(() => {
+            Boss.questionIndex++;
+            UI.loadStep();
+          });
+        }
+      }
+    }
+  }
+};
+
+const Jumble = {
+  mode: localStorage.getItem('yk_arti_mode') || 'jumble',
+  targetTokens: [],
+  assembled: [],
+  pool: [],
+  submitted: false,
+
+  setMode: function(m) {
+    this.mode = m;
+    try { localStorage.setItem('yk_arti_mode', m); } catch(_) {}
+    UI.loadStep();
+  },
+
+  setup: function(itm) {
+    this.submitted = false;
+    let targetArr = itm.jp.some(x => x.u) ? itm.jp.filter(x => x.u) : itm.jp;
+    let tokens = [];
+
+    (targetArr || []).forEach((seg, idx) => {
+      let t = (seg.k || seg.text || '').trim();
+      let r = (seg.r || '').trim();
+      // Lewati tanda baca murni (titik, koma, tanda tanya, seru)
+      if (!t || /^[。、！？,\?\s]+$/.test(t)) return;
+      tokens.push({
+        id: 'tok_' + idx + '_' + Math.random().toString(36).substr(2, 4),
+        text: t,
+        furigana: r,
+        isParticle: !!seg.p,
+        raw: seg
+      });
+    });
+
+    this.targetTokens = tokens;
+
+    let poolTokens = tokens.map((t, idx) => ({
+      id: 'pool_' + idx + '_' + Math.random().toString(36).substr(2, 4),
+      text: t.text,
+      furigana: t.furigana,
+      isParticle: t.isParticle,
+      used: false
+    }));
+
+    // Generate 1-2 kata pengecoh (distractor chips)
+    let usedTexts = new Set(poolTokens.map(p => p.text));
+    const candParticles = ['は', 'が', 'を', 'に', 'で', 'と', 'の', 'も', 'へ', 'から'];
+    let availParticles = candParticles.filter(p => !usedTexts.has(p));
+    if (availParticles.length > 0) {
+      let randP = availParticles[Math.floor(Math.random() * availParticles.length)];
+      poolTokens.push({
+        id: 'dist_p_' + Math.random().toString(36).substr(2, 4),
+        text: randP,
+        furigana: '',
+        isParticle: true,
+        isDistractor: true,
+        used: false
+      });
+    }
+
+    if (poolTokens.length <= 4) {
+      const extraWords = ['ではありません', 'でした', 'ません', 'です', 'じゃない'];
+      let availWords = extraWords.filter(w => !usedTexts.has(w));
+      if (availWords.length > 0) {
+        let randW = availWords[Math.floor(Math.random() * availWords.length)];
+        poolTokens.push({
+          id: 'dist_w_' + Math.random().toString(36).substr(2, 4),
+          text: randW,
+          furigana: '',
+          isParticle: false,
+          isDistractor: true,
+          used: false
+        });
+      }
+    }
+
+    Engine.shuffle(poolTokens);
+    this.pool = poolTokens;
+    this.assembled = [];
+  },
+
+  pick: function(poolId) {
+    if (this.submitted) return;
+    let item = this.pool.find(p => p.id === poolId);
+    if (!item || item.used) return;
+
+    item.used = true;
+    this.assembled.push({
+      poolId: item.id,
+      text: item.text,
+      furigana: item.furigana,
+      isParticle: item.isParticle
+    });
+
+    if (navigator.vibrate) try { navigator.vibrate(20); } catch(_) {}
+    this.render();
+  },
+
+  remove: function(index) {
+    if (this.submitted) return;
+    if (index < 0 || index >= this.assembled.length) return;
+    let removed = this.assembled.splice(index, 1)[0];
+    let poolItem = this.pool.find(p => p.id === removed.poolId);
+    if (poolItem) poolItem.used = false;
+
+    if (navigator.vibrate) try { navigator.vibrate(15); } catch(_) {}
+    this.render();
+  },
+
+  clear: function() {
+    if (this.submitted) return;
+    this.assembled = [];
+    this.pool.forEach(p => p.used = false);
+    this.render();
+  },
+
+  check: function(evt) {
+    if (this.submitted || this.assembled.length === 0) return;
+
+    let assembledKanji = this.assembled.map(x => x.text).join('').replace(/[。、！？,\?\s]/g, '');
+    let assembledFurigana = this.assembled.map(x => (x.furigana || x.text)).join('').replace(/[。、！？,\?\s]/g, '');
+    
+    let isCorrect = (assembledKanji === Game.currentAnsKanji) || 
+                    (assembledFurigana === Game.currentAnsHiragana) || 
+                    (assembledKanji === Game.currentAnsHiragana);
+
+    let displayKey = Game.displayKanji !== Game.displayHiragana ? `${Game.displayKanji} / ${Game.displayHiragana}` : Game.displayKanji;
+
+    this.submitted = true;
+
+    // Visual feedback pada balok tersusun
+    const trackEl = document.getElementById('jumble-track');
+    if (trackEl) {
+      if (isCorrect) {
+        trackEl.querySelectorAll('.jumble-chip').forEach(c => c.classList.add('chip-correct'));
+      } else {
+        trackEl.querySelectorAll('.jumble-chip').forEach(c => c.classList.add('chip-wrong'));
+      }
+    }
+
+    if (Game.currentTab === 'boss') {
+      Boss.handleResult(isCorrect, displayKey, evt);
+    } else if (Game.currentTab === 'dojo') {
+      Dojo.handleResult(isCorrect, displayKey, evt);
+    } else {
+      UI.showResult(isCorrect, displayKey, evt);
+    }
+  },
+
+  render: function() {
+    const trackEl = document.getElementById('jumble-track');
+    const poolEl = document.getElementById('jumble-pool');
+    const submitBtn = document.getElementById('btn-submit');
+
+    if (!trackEl || !poolEl) return;
+
+    if (this.assembled.length === 0) {
+      trackEl.innerHTML = `<span class="jumble-placeholder-hint">Ketuk balok kata di bawah untuk menyusun kalimat...</span>`;
+    } else {
+      trackEl.innerHTML = this.assembled.map((tok, idx) => `
+        <button type="button" class="jumble-chip is-slotted animate-pop" onclick="Jumble.remove(${idx})" title="Ketuk untuk membatalkan">
+          ${tok.furigana ? `<ruby>${tok.text}<rt>${tok.furigana}</rt></ruby>` : `<span>${tok.text}</span>`}
+          <span class="jumble-remove-cross">×</span>
+        </button>
+      `).join('');
+    }
+
+    poolEl.innerHTML = this.pool.map(tok => `
+      <button type="button" class="jumble-chip ${tok.used ? 'is-used' : ''} ${tok.isParticle ? 'is-particle' : ''}" 
+              ${tok.used ? 'disabled' : ''} 
+              onclick="Jumble.pick('${tok.id}')">
+        ${tok.furigana ? `<ruby>${tok.text}<rt>${tok.furigana}</rt></ruby>` : `<span>${tok.text}</span>`}
+      </button>
+    `).join('');
+
+    if (submitBtn) {
+      if (this.assembled.length > 0 && !this.submitted) {
+        submitBtn.classList.remove('hidden');
+      } else {
+        submitBtn.classList.add('hidden');
+      }
+    }
+  }
+};
 
 const Game = {
   adminMode: false, 
@@ -1304,6 +1938,23 @@ const Game = {
     }
   },
   dailyStats: { exp: 0, coin: 0, maxCombo: 0 },
+
+  getMaxCurriculumDays: () => {
+    let maxD = 30;
+    if (typeof ManualDB === 'object') {
+      Object.keys(ManualDB).forEach(k => {
+        let m = k.match(/^day(\d+)$/);
+        if (m) {
+          let n = parseInt(m[1], 10);
+          if (n > maxD) maxD = n;
+        }
+      });
+    }
+    if (typeof SYLLABUS !== 'undefined' && SYLLABUS.length > maxD) {
+      maxD = SYLLABUS.length;
+    }
+    return Math.max(maxD, Game.unlockedDay || 1);
+  },
 
   checkStoredMode: () => {
     let saved = localStorage.getItem('yk_mode');
@@ -1705,7 +2356,8 @@ nextDayFromResult: () => {
       coinsEl.textContent = `${RPG.coins} 🪙`;
     }
     if (dayEl && typeof Game !== 'undefined') {
-      dayEl.textContent = `Hari ${Game.currentDay || 1}/30`;
+      let maxDays = typeof Game.getMaxCurriculumDays === 'function' ? Game.getMaxCurriculumDays() : 30;
+      dayEl.textContent = `Hari ${Game.currentDay || 1} / ${maxDays}`;
     }
     if (returnBtnWrap) {
       returnBtnWrap.style.display = (typeof Game !== 'undefined' && Game.dayData && Game.dayData.length > 0) ? 'block' : 'none';
@@ -1727,8 +2379,9 @@ nextDayFromResult: () => {
   },
 
   showN4ModuleNotice: () => {
-    if (Game.unlockedDay <= 30) {
-      UI.showToast("🔒 Modul N4 akan terbuka setelah menuntaskan seluruh 30 Sektor Ekspedisi N5!", "warning");
+    let maxDays = typeof Game.getMaxCurriculumDays === 'function' ? Game.getMaxCurriculumDays() : 30;
+    if (Game.unlockedDay <= maxDays) {
+      UI.showToast(`🔒 Modul N4 akan terbuka setelah menuntaskan seluruh materi Ekspedisi N5!`, "warning");
     } else {
       UI.showToast("🏯 Kurikulum N4 sedang dalam tahap integrasi akhir. Bersiaplah!", "success");
     }
@@ -1879,12 +2532,12 @@ nextDayFromResult: () => {
     const list = document.getElementById('kamus-list');
     if (!list) return;
 
-    // Kumpulkan seluruh data kosakata N5 dari ManualDB (Day 1 - 30)
+    // Kumpulkan seluruh data kosakata N5 dari ManualDB secara dinamis
     let allWordsWithDay = [];
     let unlockedWordsWithDay = [];
     let todayWordsWithDay = [];
 
-    const totalDays = 30;
+    const totalDays = typeof Game.getMaxCurriculumDays === 'function' ? Game.getMaxCurriculumDays() : 30;
     for (let i = 1; i <= totalDays; i++) {
       let dayData = ManualDB['day' + i];
       if (dayData && dayData.hafalan && Array.isArray(dayData.hafalan)) {
@@ -1996,7 +2649,7 @@ nextDayFromResult: () => {
     const list = document.getElementById('map-day-list'); 
     if (!list) return;
     list.innerHTML = ''; 
-    const totalDays = 30; // 30 hari sesuai silabus kurikulum N5
+    const totalDays = typeof Game.getMaxCurriculumDays === 'function' ? Game.getMaxCurriculumDays() : 30;
     let progressDays = Math.min(Math.max(Game.unlockedDay - 1, 0), totalDays);
     let perc = Math.round((progressDays / totalDays) * 100);
     if (Game.unlockedDay > totalDays) perc = 100;
@@ -2013,7 +2666,7 @@ nextDayFromResult: () => {
       progressDetailEl.innerText = `Zona Terbuka: Hari ${activeDisplay} / ${totalDays}`;
     }
 
-    const displayDays = Math.max(30, Game.unlockedDay > 30 ? Game.unlockedDay : 30);
+    const displayDays = totalDays;
 
     for (let i = 1; i <= displayDays; i++) {
       let stat = i < Game.unlockedDay ? 'completed' : (i === Game.unlockedDay ? 'current' : 'locked');
@@ -2021,11 +2674,17 @@ nextDayFromResult: () => {
       let topic = (typeof SYLLABUS !== 'undefined' && SYLLABUS[i - 1]) ? SYLLABUS[i - 1] : `Materi Ekspedisi Hari ${i}`;
       let category = (typeof getMissionCategory === 'function') ? getMissionCategory(i) : `SEKTOR ${i}`;
 
-      let icon = stat === 'completed' ? '⭐' : (stat === 'current' ? '⚔️' : '🔒');
-      let actionText = stat === 'completed' ? (isViewing ? 'SEDANG DIBUKA' : 'Kaji Ulang ↺') : (stat === 'current' ? 'MASUK ▶' : '🔒');
+      let isBossDay = (i % 5 === 0);
+      let bossData = isBossDay && typeof Boss !== 'undefined' ? Boss.getBossForDay(i) : null;
+      if (isBossDay && bossData) {
+        category = `👑 SEKTOR ${i / 5} • BOS: ${bossData.name.toUpperCase()}`;
+      }
+
+      let icon = stat === 'completed' ? (isBossDay ? '👑' : '⭐') : (stat === 'current' ? (isBossDay ? '⚔️' : '⚔️') : '🔒');
+      let actionText = stat === 'completed' ? (isViewing ? 'SEDANG DIBUKA' : (isBossDay ? 'BOS DITAKLUKKAN' : 'Kaji Ulang ↺')) : (stat === 'current' ? (isBossDay ? 'TANTANG BOS 👑' : 'MASUK ▶') : '🔒');
 
       const card = document.createElement('div');
-      card.className = `mission-card ${stat} ${isViewing ? 'viewing' : ''}`;
+      card.className = `mission-card ${stat} ${isViewing ? 'viewing' : ''} ${isBossDay ? 'is-boss-card' : ''}`;
       card.title = `Hari ${i}: ${topic}`;
       card.onclick = () => UI.selectMission(i);
 
@@ -4159,11 +4818,11 @@ if (tipsBubble) tipsBubble.classList.add('hidden');
             // Bikin 3 opsi pengecoh
             let opts = [itm.a];
             let pool = [];
-            for (let d = 1; d <= 30; d++) {
-                if (ManualDB['day' + d] && ManualDB['day' + d].hafalan) {
-                    pool = pool.concat(ManualDB['day' + d].hafalan);
+            Object.keys(ManualDB).forEach(k => {
+                if (ManualDB[k] && ManualDB[k].hafalan) {
+                    pool = pool.concat(ManualDB[k].hafalan);
                 }
-            }
+            });
             let wrongPool = Engine.shuffle(pool.filter(x => x && x.a && x.a !== itm.a));
             if (wrongPool[0]) opts.push(wrongPool[0].a);
             if (wrongPool[1]) opts.push(wrongPool[1].a);
@@ -4282,21 +4941,296 @@ if (tipsBubble) tipsBubble.classList.add('hidden');
             Game.displayKanji = displayStr(aK);
             Game.displayHiragana = displayStr(aH);
 
-            document.getElementById('input-area').innerHTML = `
-              <div class="arti-input-container animate-slide">
-                <input type="text" id="answer-box" class="input-box cyber-input" placeholder="Ketik Hiragana / Kanji di sini..." autocomplete="off">
-                <button class="btn btn-primary-gold" id="btn-submit">EKSEKUSI JAWABAN</button>
-              </div>
-              <div class="dojo-retreat-row">
-                <button type="button" class="btn-dojo-retreat" onclick="Dojo.retreatSession()">🏳️ Mundur ke Markas</button>
+            let modeToggleHtml = `
+              <div class="jumble-mode-toggle">
+                <button type="button" class="jumble-toggle-btn ${Jumble.mode === 'jumble' ? 'active' : ''}" onclick="Jumble.setMode('jumble')">🧩 Susun Balok</button>
+                <button type="button" class="jumble-toggle-btn ${Jumble.mode === 'typing' ? 'active' : ''}" onclick="Jumble.setMode('typing')">⌨️ Ketik Manual</button>
               </div>
             `;
-            setTimeout(() => {
-              const inp = document.getElementById('answer-box');
-              if (inp) inp.focus();
-              const sub = document.getElementById('btn-submit');
-              if (sub) sub.onclick = Dojo.checkArti;
-            }, 100);
+
+            if (Jumble.mode === 'jumble') {
+                Jumble.setup(itm);
+                document.getElementById('input-area').innerHTML = `
+                  <div class="jumble-container animate-slide">
+                    ${modeToggleHtml}
+                    <div class="jumble-track-wrapper">
+                      <div class="jumble-track-header">
+                        <span class="jumble-track-title">PITA REMEDIAL TERJEMAHAN:</span>
+                        <button type="button" class="jumble-btn-reset" onclick="Jumble.clear()">↺ Kosongkan</button>
+                      </div>
+                      <div class="jumble-assembly-track" id="jumble-track"></div>
+                    </div>
+                    <div class="jumble-pool-wrapper">
+                      <span class="jumble-pool-label">PILIH BALOK KATA BERIKUT:</span>
+                      <div class="jumble-pool-grid" id="jumble-pool"></div>
+                    </div>
+                    <button class="btn btn-primary-gold hidden" id="btn-submit" onclick="Jumble.check(event)">💥 EKSEKUSI JAWABAN</button>
+                  </div>
+                  <div class="dojo-retreat-row">
+                    <button type="button" class="btn-dojo-retreat" onclick="Dojo.retreatSession()">🏳️ Mundur ke Markas</button>
+                  </div>
+                `;
+                Jumble.render();
+            } else {
+                document.getElementById('input-area').innerHTML = `
+                  <div class="arti-input-container animate-slide">
+                    ${modeToggleHtml}
+                    <input type="text" id="answer-box" class="input-box cyber-input" placeholder="Ketik Hiragana / Kanji di sini..." autocomplete="off">
+                    <button class="btn btn-primary-gold" id="btn-submit">EKSEKUSI JAWABAN</button>
+                  </div>
+                  <div class="dojo-retreat-row">
+                    <button type="button" class="btn-dojo-retreat" onclick="Dojo.retreatSession()">🏳️ Mundur ke Markas</button>
+                  </div>
+                `;
+                setTimeout(() => {
+                  const inp = document.getElementById('answer-box');
+                  if (inp) inp.focus();
+                  const sub = document.getElementById('btn-submit');
+                  if (sub) sub.onclick = Dojo.checkArti;
+                }, 100);
+            }
+            return;
+        }
+    }
+    
+    if (t === 'boss') {
+        const cardEl = document.getElementById('card-main');
+        if (cardEl) cardEl.classList.remove('hazard-battle-active');
+
+        let b = Boss.currentBoss || Boss.getBossForDay(Game.currentDay);
+
+        // Jika Bos sudah dikalahkan (HP <= 0)
+        if (Boss.bossDefeated || Boss.currentHp <= 0) {
+            document.getElementById('stage-indicator').innerHTML = "";
+            document.getElementById('ui-progress').style.width = `100%`;
+
+            document.getElementById('ui-jp').innerHTML = `
+              <div class="boss-victory-showcase animate-slide">
+                <div class="boss-victory-badge">🏆 KEMENANGAN SEKTOR MUTLAK</div>
+                <div class="boss-victory-avatar">${b.avatar}</div>
+                <div class="boss-victory-title">BOS ${b.name.toUpperCase()} DITAKLUKKAN!</div>
+                <div class="boss-victory-desc">Luar biasa! Seluruh pertahanan ${b.name} berhasil kamu runtuhkan. Sektor ${b.sector} (Hari ${b.day}) resmi dibebaskan dengan kehormatan tertinggi!</div>
+                <div class="boss-reward-strip">
+                  <div class="boss-reward-pill"><span>✨ EXP Sektor:</span> <b>+${b.expReward}</b></div>
+                  <div class="boss-reward-pill"><span>🪙 Koin Rampasan:</span> <b>+${b.coinReward}</b></div>
+                </div>
+              </div>
+            `;
+            document.getElementById('ui-arti').innerHTML = "";
+            document.getElementById('input-area').innerHTML = `
+              <div style="display:flex; flex-direction:column; gap:8px; width:100%; max-width:480px; margin:0 auto;">
+                <button class="btn btn-gold-victory" onclick="Boss.claimVictory()">Amankan Kemenangan Sektor 🏆</button>
+              </div>
+            `;
+            return;
+        }
+
+        let cur = Boss.questionQueue[Boss.questionIndex];
+        if (!cur) {
+          Boss.questionIndex = 0;
+          cur = Boss.questionQueue[0];
+        }
+
+        document.getElementById('stage-indicator').innerHTML = "";
+        document.getElementById('ui-arti').innerHTML = "";
+        let hpPerc = Math.max(0, Math.round((Boss.currentHp / Boss.maxHp) * 100));
+        document.getElementById('ui-progress').style.width = `${hpPerc}%`;
+
+        // Render Boss Arena HUD
+        let bossHudHtml = `
+          <div class="boss-arena-hud">
+            <div class="boss-hud-top">
+              <div class="boss-avatar-frame">
+                <span class="boss-avatar-icon">${b.avatar}</span>
+              </div>
+              <div class="boss-hud-info">
+                <div class="boss-name-row">
+                  <span class="boss-name">${b.name}</span>
+                  <span class="boss-kanji">${b.kanjiName}</span>
+                </div>
+                <div class="boss-title">${b.title}</div>
+              </div>
+              <div class="boss-hp-numeric">
+                HP BOS: <b id="boss-hp-num">${Boss.currentHp}</b> / ${Boss.maxHp}
+              </div>
+            </div>
+            <div class="boss-hp-track">
+              <div class="boss-hp-fill ${hpPerc <= 30 ? 'fill-danger' : (hpPerc <= 60 ? 'fill-warning' : '')}" id="boss-hp-fill" style="width: ${hpPerc}%;"></div>
+            </div>
+            <div class="boss-quote-bubble">
+              <span class="boss-quote-icon">💬</span>
+              <span class="boss-quote-text" id="boss-quote-text">"${b.quote}"</span>
+            </div>
+          </div>
+        `;
+
+        if (cur._type === 'hafalan') {
+            let itm = cur;
+            let rubyHtml = Engine.buildRubyFormat(itm.k, itm.r, null, false);
+            document.getElementById('ui-jp').innerHTML = `
+              <div class="boss-showcase animate-slide">
+                ${bossHudHtml}
+                <div class="boss-prompt-row">
+                  <span class="boss-prompt-tag tag-vocab">⚔️ SERANGAN KOSAKATA</span>
+                  <span class="boss-prompt-label">APA ARTI KATA INI UNTUK MENYERANG BOS?</span>
+                </div>
+                <div class="boss-word-display">${rubyHtml}</div>
+              </div>
+            `;
+
+            let opts = [itm.a];
+            let pool = [];
+            Object.keys(ManualDB).forEach(k => {
+                if (ManualDB[k] && ManualDB[k].hafalan) {
+                    pool = pool.concat(ManualDB[k].hafalan);
+                }
+            });
+            let wrongPool = Engine.shuffle(pool.filter(x => x && x.a && x.a !== itm.a));
+            if (wrongPool[0]) opts.push(wrongPool[0].a);
+            if (wrongPool[1]) opts.push(wrongPool[1].a);
+            opts = Engine.shuffle(opts);
+
+            const letters = ['A', 'B', 'C'];
+            document.getElementById('input-area').innerHTML = `
+              <div class="quiz-options-grid animate-slide">
+                ${opts.map((o, idx) => `
+                  <button class="quiz-choice-btn btn-boss-choice" onclick="Boss.checkHafalan('${o.replace(/'/g, "\\'")}', '${itm.a.replace(/'/g, "\\'")}', event)">
+                    <span class="quiz-choice-pill">${letters[idx] || '⚔️'}</span>
+                    <span class="quiz-choice-text">${o}</span>
+                  </button>
+                `).join('')}
+              </div>
+              <div class="boss-retreat-row">
+                <button type="button" class="btn-boss-retreat" onclick="Boss.retreatBattle()">🏳️ Mundur Sementara</button>
+              </div>
+            `;
+            return;
+        } else if (cur._type === 'partikel') {
+            let itm = cur;
+            let sentenceHtml = Engine.renderSentence(itm.jp, false, true, false, true);
+
+            let targetArr = [];
+            if (Array.isArray(itm.ansP)) {
+                targetArr = itm.ansP;
+            } else if (typeof itm.ansP === 'string' && itm.ansP.includes(',')) {
+                targetArr = itm.ansP.split(',').map(s => s.trim()).filter(Boolean);
+            } else if (itm.ansP) {
+                targetArr = [String(itm.ansP).trim()];
+            } else if (Array.isArray(itm.jp)) {
+                targetArr = itm.jp.filter(s => s.p).map(s => (s.text || s.k || '').trim()).filter(Boolean);
+            }
+            let pSegments = (itm.jp || []).filter(s => s.p);
+            if (pSegments.length > targetArr.length) {
+                targetArr = pSegments.map(s => (s.text || s.k || '').trim()).filter(Boolean);
+            }
+
+            Game.targetMultiAns = targetArr;
+            Game.currentMultiAns = new Array(targetArr.length).fill(null);
+
+            let defaultOpts = itm.opts ? [...itm.opts] : ['は', 'の', 'も', 'と', 'で', 'に', 'を', 'では'];
+            targetArr.forEach(p => {
+                if (p && !defaultOpts.includes(p)) defaultOpts.push(p);
+            });
+
+            let optsHtml = '<div class="particle-chips-grid">';
+            defaultOpts.forEach(p => {
+                optsHtml += `<button type="button" class="particle-chip-btn chip-boss" onclick="Action.fillMulti('${p}')">${p}</button>`;
+            });
+            optsHtml += '</div>';
+
+            document.getElementById('ui-jp').innerHTML = `
+              <div class="boss-showcase animate-slide">
+                ${bossHudHtml}
+                <div class="boss-prompt-row">
+                  <span class="boss-prompt-tag tag-partikel">🧩 SERANGAN PARTIKEL</span>
+                  <span class="boss-prompt-label">LENGKAPI PARTIKEL UNTUK MENEMBUS PERTAHANAN BOS:</span>
+                </div>
+                <div class="partikel-sentence-display">${sentenceHtml}</div>
+              </div>
+            `;
+
+            document.getElementById('input-area').innerHTML = `
+              <div class="partikel-action-area animate-slide">
+                ${optsHtml}
+                <button class="btn hidden btn-boss-strike" id="btn-submit" onclick="Boss.checkPartikel(event)">💥 HANTAM BOS</button>
+              </div>
+              <div class="boss-retreat-row">
+                <button type="button" class="btn-boss-retreat" onclick="Boss.retreatBattle()">🏳️ Mundur Sementara</button>
+              </div>
+            `;
+            return;
+        } else if (cur._type === 'arti') {
+            let itm = cur;
+            let targetArr = itm.jp.some(x => x.u) ? itm.jp.filter(x => x.u) : itm.jp;
+            let aK = "", aH = "";
+            targetArr.forEach(x => { aK += (x.k || x.text); aH += (x.r || x.text); });
+            const cleanStr = (s) => s.replace(/<[^>]*>?/gm, '').replace(/[。、！？,\?\sQ:A:]/g, '');
+            const displayStr = (s) => s.replace(/<[^>]*>?/gm, '').replace(/(<b>Q:<\/b>|<b>A:<\/b>|Q:|A:)/g, '').trim();
+
+            Game.currentAnsKanji = cleanStr(aK);
+            Game.currentAnsHiragana = cleanStr(aH);
+            Game.displayKanji = displayStr(aK);
+            Game.displayHiragana = displayStr(aH);
+
+            document.getElementById('ui-jp').innerHTML = `
+              <div class="boss-showcase animate-slide">
+                ${bossHudHtml}
+                <div class="boss-prompt-row">
+                  <span class="boss-prompt-tag tag-arti">⚔️ SERANGAN TERJEMAHAN</span>
+                  <span class="boss-prompt-label">${itm.qA || 'TERJEMAHKAN KALIMAT INI UNTUK MENYERANG BOS:'}</span>
+                </div>
+                <div class="arti-quiz-sentence" style="font-size:16px;">${itm.a}</div>
+              </div>
+            `;
+
+            let modeToggleHtml = `
+              <div class="jumble-mode-toggle">
+                <button type="button" class="jumble-toggle-btn ${Jumble.mode === 'jumble' ? 'active' : ''}" onclick="Jumble.setMode('jumble')">🧩 Susun Balok</button>
+                <button type="button" class="jumble-toggle-btn ${Jumble.mode === 'typing' ? 'active' : ''}" onclick="Jumble.setMode('typing')">⌨️ Ketik Manual</button>
+              </div>
+            `;
+
+            if (Jumble.mode === 'jumble') {
+                Jumble.setup(itm);
+                document.getElementById('input-area').innerHTML = `
+                  <div class="jumble-container animate-slide">
+                    ${modeToggleHtml}
+                    <div class="jumble-track-wrapper">
+                      <div class="jumble-track-header">
+                        <span class="jumble-track-title">PITA SERANGAN TERJEMAHAN:</span>
+                        <button type="button" class="jumble-btn-reset" onclick="Jumble.clear()">↺ Kosongkan</button>
+                      </div>
+                      <div class="jumble-assembly-track" id="jumble-track"></div>
+                    </div>
+                    <div class="jumble-pool-wrapper">
+                      <span class="jumble-pool-label">PILIH BALOK UNTUK MENYERANG BOS:</span>
+                      <div class="jumble-pool-grid" id="jumble-pool"></div>
+                    </div>
+                    <button class="btn btn-primary-gold btn-boss-strike hidden" id="btn-submit" onclick="Jumble.check(event)">💥 HANTAM BOS</button>
+                  </div>
+                  <div class="boss-retreat-row">
+                    <button type="button" class="btn-boss-retreat" onclick="Boss.retreatBattle()">🏳️ Mundur Sementara</button>
+                  </div>
+                `;
+                Jumble.render();
+            } else {
+                document.getElementById('input-area').innerHTML = `
+                  <div class="arti-input-container animate-slide">
+                    ${modeToggleHtml}
+                    <input type="text" id="answer-box" class="input-box cyber-input" placeholder="Ketik Hiragana / Kanji di sini..." autocomplete="off">
+                    <button class="btn btn-primary-gold btn-boss-strike" id="btn-submit">💥 HANTAM BOS</button>
+                  </div>
+                  <div class="boss-retreat-row">
+                    <button type="button" class="btn-boss-retreat" onclick="Boss.retreatBattle()">🏳️ Mundur Sementara</button>
+                  </div>
+                `;
+                setTimeout(() => {
+                  const inp = document.getElementById('answer-box');
+                  if (inp) inp.focus();
+                  const sub = document.getElementById('btn-submit');
+                  if (sub) sub.onclick = Boss.checkArti;
+                }, 100);
+            }
             return;
         }
     }
@@ -4460,12 +5394,37 @@ if (tipsBubble) tipsBubble.classList.add('hidden');
               `;
               return;
           }
-          document.getElementById('ui-jp').innerHTML = "🎉 Sesi Tuntas!"; 
           let reviewBtn = `<button class="btn btn-alt" style="margin-bottom:10px;" onclick="Action.resetTab()">🔄 Ulas Kembali Sesi Ini</button>`;
          
           if(t === 'arti') {
-              document.getElementById('input-area').innerHTML = `${reviewBtn}<button class="btn" style="background:var(--gold); color:#000; box-shadow: 0 0 15px rgba(251, 191, 36, 0.4);" onclick="Game.completeDay()">Selesaikan Misi 🏆</button>`; 
+              if (Game.currentDay % 5 === 0) {
+                  let b = Boss.getBossForDay(Game.currentDay);
+                  document.getElementById('ui-jp').innerHTML = `
+                    <div class="boss-warning-showcase animate-slide">
+                      <div class="boss-warning-badge">🚨 PERINGATAN DARURAT SEKTOR ${b.sector}</div>
+                      <div class="boss-warning-avatar">${b.avatar}</div>
+                      <div class="boss-warning-title">PENJAGA GERBANG MUNCUL!</div>
+                      <div class="boss-warning-name">${b.name} <span class="boss-warning-jp">${b.kanjiName}</span></div>
+                      <div class="boss-warning-subtitle">${b.title}</div>
+                      <div class="boss-warning-quote">"${b.quote}"</div>
+                    </div>
+                  `;
+                  document.getElementById('input-area').innerHTML = `
+                    <div style="display:flex; flex-direction:column; gap:10px; width:100%; max-width:480px; margin:0 auto;">
+                      <button class="btn btn-boss-engage" onclick="Boss.startBattle(${Game.currentDay})">
+                        <span class="boss-btn-jp">決戦</span>
+                        <span>HADAPI BOS: ${b.name.toUpperCase()} (HP ${b.maxHp})</span>
+                        <span class="boss-btn-arrow">⚔️</span>
+                      </button>
+                      ${reviewBtn}
+                    </div>
+                  `;
+              } else {
+                  document.getElementById('ui-jp').innerHTML = "🎉 Sesi Tuntas!"; 
+                  document.getElementById('input-area').innerHTML = `${reviewBtn}<button class="btn" style="background:var(--gold); color:#000; box-shadow: 0 0 15px rgba(251, 191, 36, 0.4);" onclick="Game.completeDay()">Selesaikan Misi 🏆</button>`; 
+              }
           } else {
+              document.getElementById('ui-jp').innerHTML = "🎉 Sesi Tuntas!"; 
               document.getElementById('input-area').innerHTML = reviewBtn; 
           }
           return; 
@@ -4651,13 +5610,51 @@ if (tipsBubble) tipsBubble.classList.add('hidden');
         Game.displayKanji = displayStr(aK);
         Game.displayHiragana = displayStr(aH);
         
-        document.getElementById('input-area').innerHTML = `
-          <div class="arti-input-container animate-slide">
-            <input type="text" id="answer-box" class="input-box cyber-input" placeholder="Ketik Hiragana / Kanji di sini..." autocomplete="off">
-            <button class="btn btn-primary-gold" id="btn-submit">EKSEKUSI JAWABAN</button>
+        let modeToggleHtml = `
+          <div class="jumble-mode-toggle">
+            <button type="button" class="jumble-toggle-btn ${Jumble.mode === 'jumble' ? 'active' : ''}" onclick="Jumble.setMode('jumble')">🧩 Susun Balok</button>
+            <button type="button" class="jumble-toggle-btn ${Jumble.mode === 'typing' ? 'active' : ''}" onclick="Jumble.setMode('typing')">⌨️ Ketik Manual</button>
           </div>
         `;
-        setTimeout(() => { document.getElementById('answer-box').focus(); document.getElementById('btn-submit').onclick = Action.checkInput; }, 100);
+
+        if (Jumble.mode === 'jumble') {
+            Jumble.setup(itm);
+            document.getElementById('input-area').innerHTML = `
+              <div class="jumble-container animate-slide">
+                ${modeToggleHtml}
+                
+                <div class="jumble-track-wrapper">
+                  <div class="jumble-track-header">
+                    <span class="jumble-track-title">PITA SUSUNAN KALIMAT:</span>
+                    <button type="button" class="jumble-btn-reset" onclick="Jumble.clear()">↺ Kosongkan</button>
+                  </div>
+                  <div class="jumble-assembly-track" id="jumble-track"></div>
+                </div>
+
+                <div class="jumble-pool-wrapper">
+                  <span class="jumble-pool-label">PILIH BALOK KATA BERIKUT:</span>
+                  <div class="jumble-pool-grid" id="jumble-pool"></div>
+                </div>
+
+                <button class="btn btn-primary-gold hidden" id="btn-submit" onclick="Jumble.check(event)">💥 EKSEKUSI JAWABAN</button>
+              </div>
+            `;
+            Jumble.render();
+        } else {
+            document.getElementById('input-area').innerHTML = `
+              <div class="arti-input-container animate-slide">
+                ${modeToggleHtml}
+                <input type="text" id="answer-box" class="input-box cyber-input" placeholder="Ketik Hiragana / Kanji di sini..." autocomplete="off">
+                <button class="btn btn-primary-gold" id="btn-submit">EKSEKUSI JAWABAN</button>
+              </div>
+            `;
+            setTimeout(() => { 
+                const box = document.getElementById('answer-box');
+                if (box) box.focus(); 
+                const sub = document.getElementById('btn-submit');
+                if (sub) sub.onclick = Action.checkInput; 
+            }, 100);
+        }
         
         if (Game.mataActive) {
             let jpText = Game.displayKanji !== Game.displayHiragana ? 
