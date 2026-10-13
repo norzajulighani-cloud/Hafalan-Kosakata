@@ -316,6 +316,21 @@
         </div>
       </div>
 
+      <!-- Item: Ekspansi Tas Ninja -->
+      <div class="shop-card bag-expand-card">
+        <div class="shop-card-icon icon-bag">🎒</div>
+        <div class="shop-card-info">
+          <div class="shop-card-title-row">
+            <span class="shop-card-name">Ekspansi Tas Ninja (+3 Slot)</span>
+            <span class="shop-card-owned" id="shop-bag-cap-status">Kapasitas: 6 Slot</span>
+          </div>
+          <div class="shop-card-desc">Tingkatkan kapasitas penyimpanan suplai obat, perisai, dan intel di zona tempur.</div>
+        </div>
+        <div class="shop-card-action">
+          <button class="btn-buy btn-bag-upgrade" id="btn-buy-bag-expand" onclick="RPG.upgradeBagCapacity()">250 🪙</button>
+        </div>
+      </div>
+
       <!-- Section Divider: Relik Permanen -->
       <div class="shop-section-divider">
         <span class="shop-section-label">⚔️ RELIK PERMANEN KENSEI (EQUIPMENT)</span>
@@ -405,6 +420,17 @@
         <div class="inv-status-box">
           <span class="inv-status-label">AEGIS SHIELD:</span>
           <span class="inv-buff-badge" id="inv-buff-shield">TIDAK AKTIF</span>
+        </div>
+      </div>
+
+      <!-- Bag Capacity Meter -->
+      <div class="inv-capacity-panel">
+        <div class="inv-capacity-header">
+          <span class="inv-capacity-label">🎒 KAPASITAS TAS: <b id="inv-capacity-text">0 / 6 Slot</b></span>
+          <button type="button" class="btn-upgrade-bag" id="btn-upgrade-bag-inv" onclick="RPG.upgradeBagCapacity()">+ Upgrade Slot (250 🪙)</button>
+        </div>
+        <div class="inv-capacity-bar">
+          <div class="inv-capacity-fill" id="inv-capacity-fill" style="width: 0%;"></div>
         </div>
       </div>
     </div>
@@ -543,6 +569,68 @@
 </div>
 
 
+<div id="dojo-modal" class="hidden">
+  <div class="dojo-modal-card">
+    <div class="dojo-modal-header">
+      <div class="dojo-header-top">
+        <div class="dojo-badge-row">
+          <span class="dojo-header-badge">🥋 DOJO KENSEI • BANK KESALAHAN</span>
+          <span class="dojo-count-badge" id="dojo-pending-badge">0 Perlu Dilatih</span>
+        </div>
+        <button type="button" class="dojo-close-btn" onclick="UI.closeModal('dojo-modal')" title="Tutup Dojo">✕</button>
+      </div>
+      <h2 class="dojo-modal-title">Dojo Remedial</h2>
+      <p class="dojo-modal-subtitle">Pertajam refleks dan tempa materi yang pernah keliru melalui repetisi spasi hingga akurasi 100%</p>
+
+      <!-- Unboxed Metrics Bar -->
+      <div class="dojo-metrics-bar">
+        <div class="dojo-metric-item">
+          <span class="dojo-metric-val" id="dojo-stat-total">0</span>
+          <span class="dojo-metric-lbl">TOTAL KESALAHAN</span>
+        </div>
+        <div class="dojo-metric-divider"></div>
+        <div class="dojo-metric-item">
+          <span class="dojo-metric-val text-amber" id="dojo-stat-pending">0</span>
+          <span class="dojo-metric-lbl">BELUM LULUS</span>
+        </div>
+        <div class="dojo-metric-divider"></div>
+        <div class="dojo-metric-item">
+          <span class="dojo-metric-val text-emerald" id="dojo-stat-mastered">0</span>
+          <span class="dojo-metric-lbl">DIKUASAI (LULUS)</span>
+        </div>
+      </div>
+
+      <!-- Action Hero Row -->
+      <div class="dojo-action-row">
+        <button type="button" class="btn-dojo-start" id="btn-dojo-start" onclick="Dojo.startSession()">
+          <span class="dojo-btn-jp">修練</span>
+          <span class="dojo-btn-text" id="btn-dojo-start-text">MULAI LATIHAN REMEDIAL</span>
+          <span class="dojo-btn-arrow">➔</span>
+        </button>
+        <button type="button" class="btn-dojo-clean" onclick="Dojo.clearMastered()" title="Bersihkan soal yang sudah lulus 100%">
+          🧹 Bersihkan Lulus
+        </button>
+      </div>
+
+      <!-- Filter Chips -->
+      <div class="dojo-filter-chips">
+        <button type="button" class="dojo-chip active" id="dchip-all" onclick="Dojo.setFilter('all')">Semua (<span id="dchip-all-count">0</span>)</button>
+        <button type="button" class="dojo-chip" id="dchip-partikel" onclick="Dojo.setFilter('partikel')">Partikel (<span id="dchip-partikel-count">0</span>)</button>
+        <button type="button" class="dojo-chip" id="dchip-arti" onclick="Dojo.setFilter('arti')">Arti (<span id="dchip-arti-count">0</span>)</button>
+        <button type="button" class="dojo-chip" id="dchip-hafalan" onclick="Dojo.setFilter('hafalan')">Kosakata (<span id="dchip-hafalan-count">0</span>)</button>
+      </div>
+    </div>
+
+    <!-- Cards Container -->
+    <div class="dojo-list-container" id="dojo-list"></div>
+
+    <div class="dojo-modal-footer">
+      <span class="dojo-footer-tip">💡 Soal dianggap lulus setelah dijawab benar 2 kali beruntun</span>
+      <button type="button" class="btn btn-alt dojo-bottom-close" onclick="UI.closeModal('dojo-modal')">Tutup Dojo</button>
+    </div>
+  </div>
+</div>
+
 <div id="tips-modal" class="hidden">
   <h2 style="color:var(--warning); margin-bottom:15px;">💡 INFO PENYANGKALAN</h2>
   <div style="background:#1e293b; padding:20px; border-radius:12px; border:1px solid #334155; margin-bottom:20px; font-size:15px; color:var(--text-main); line-height: 1.6; text-align: left; max-width: 400px; max-height: 65vh; overflow-y: auto;">
@@ -614,6 +702,15 @@
           <div class="sidebar-tile-desc">Mode survival kosakata tanpa batas</div>
         </div>
         <div class="sidebar-tile-arrow">›</div>
+      </div>
+
+      <div class="sidebar-tile" onclick="UI.toggleSidebar(); Dojo.openModal();">
+        <div class="sidebar-tile-icon icon-crimson">🥋</div>
+        <div class="sidebar-tile-info">
+          <div class="sidebar-tile-title">Dojo Remedial</div>
+          <div class="sidebar-tile-desc">Bank kesalahan & repetisi spasi</div>
+        </div>
+        <span class="sidebar-tile-status status-count" id="dojo-badge">0 Soal</span>
       </div>
     </div>
 

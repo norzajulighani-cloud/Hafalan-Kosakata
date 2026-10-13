@@ -146,6 +146,47 @@ const RPG = {
     return Object.values(this.inventory).reduce((acc, v) => acc + (typeof v === 'number' ? v : 0), 0);
   },
 
+  bagCapacity: parseInt(localStorage.getItem('yk_bag_cap')) || 6,
+
+  getBagCapacity: function() {
+    return this.bagCapacity || 6;
+  },
+
+  getBagUpgradeCost: function() {
+    let cap = this.getBagCapacity();
+    if (cap >= 18) return null; // Tingkat Maksimal
+    if (cap <= 6) return 250;
+    if (cap <= 9) return 500;
+    if (cap <= 12) return 850;
+    return 1300;
+  },
+
+  upgradeBagCapacity: function() {
+    let cost = this.getBagUpgradeCost();
+    if (cost === null) {
+      UI.showToast("Kapasitas tas sudah maksimal (18 Slot)! 🎒", "warning");
+      return;
+    }
+
+    let perks = this.getRankPerks();
+    let discount = perks.shopDiscount || 0;
+    let actualCost = Math.round(cost * (1 - discount));
+
+    if (Game.adminMode || this.coins >= actualCost) {
+      if (!Game.adminMode) this.coins -= actualCost;
+      this.bagCapacity = this.getBagCapacity() + 3;
+      this.save();
+      this.updateUI();
+      if (typeof UI.renderShop === 'function') UI.renderShop();
+      if (typeof UI.renderInventory === 'function') UI.renderInventory();
+
+      let discountMsg = discount > 0 ? ` (Diskon ${Math.round(discount * 100)}% Gelar)` : "";
+      UI.showToast(`Ekspansi Berhasil! Kapasitas Tas bertambah menjadi ${this.bagCapacity} Slot!${discountMsg} 🎒✨`, "success");
+    } else {
+      UI.showToast("Kredit koin tidak mencukupi untuk ekspansi tas.", "error");
+    }
+  },
+
   getTitle: function() { 
     if(this.level >= 150) return "⛩️ Kensei"; if(this.level >= 90) return "👑 Shogun";
     if(this.level >= 60) return "🏯 Daimyo"; if(this.level >= 30) return "🛡️ Samurai";
@@ -280,10 +321,67 @@ const RPG = {
 
     // --- HUD BAG ITEM COUNTER PILL ---
     const bagBadge = document.getElementById('ui-bag-count');
+    let totalItems = this.getTotalBagCount();
+    let cap = this.getBagCapacity();
     if (bagBadge) {
-      let totalItems = this.getTotalBagCount();
-      bagBadge.innerText = totalItems;
+      bagBadge.innerText = `${totalItems}/${cap}`;
       bagBadge.style.display = totalItems > 0 ? 'inline-block' : 'none';
+      if (totalItems >= cap) {
+        bagBadge.classList.add('bag-full');
+      } else {
+        bagBadge.classList.remove('bag-full');
+      }
+    }
+
+    // --- BAG CAPACITY PANEL IN INVENTORY ---
+    const capText = document.getElementById('inv-capacity-text');
+    const capFill = document.getElementById('inv-capacity-fill');
+    const upgradeInvBtn = document.getElementById('btn-upgrade-bag-inv');
+    let upCost = this.getBagUpgradeCost();
+    let perks = this.getRankPerks();
+    let disc = perks.shopDiscount || 0;
+    let actualUpCost = upCost !== null ? Math.round(upCost * (1 - disc)) : null;
+
+    if (capText) {
+      capText.innerText = `${totalItems} / ${cap} Slot`;
+    }
+    if (capFill) {
+      let perc = Math.min(100, Math.round((totalItems / cap) * 100));
+      capFill.style.width = `${perc}%`;
+      if (perc >= 100) {
+        capFill.className = 'inv-capacity-fill fill-danger';
+      } else if (perc >= 75) {
+        capFill.className = 'inv-capacity-fill fill-warning';
+      } else {
+        capFill.className = 'inv-capacity-fill';
+      }
+    }
+    if (upgradeInvBtn) {
+      if (actualUpCost === null) {
+        upgradeInvBtn.innerText = "MAX (18 Slot) ✅";
+        upgradeInvBtn.disabled = true;
+      } else {
+        upgradeInvBtn.innerText = `+ Upgrade Slot (${actualUpCost} 🪙)`;
+        upgradeInvBtn.disabled = false;
+      }
+    }
+
+    // --- SHOP BAG EXPANSION CARD ---
+    const shopBagStatus = document.getElementById('shop-bag-cap-status');
+    const shopBagBtn = document.getElementById('btn-buy-bag-expand');
+    if (shopBagStatus) {
+      shopBagStatus.innerText = `Kapasitas: ${cap} Slot`;
+    }
+    if (shopBagBtn) {
+      if (actualUpCost === null) {
+        shopBagBtn.innerText = "MAX SLOT (18) ✅";
+        shopBagBtn.disabled = true;
+        shopBagBtn.className = "btn-buy btn-relic-owned";
+      } else {
+        shopBagBtn.innerText = `${actualUpCost} 🪙`;
+        shopBagBtn.disabled = false;
+        shopBagBtn.className = "btn-buy btn-bag-upgrade";
+      }
     }
 
     // --- SHOP OWNED BADGES ---
@@ -377,6 +475,13 @@ const RPG = {
     let perks = this.getRankPerks();
     let discount = perks.shopDiscount || 0;
     let actualCost = Math.round(cost * (1 - discount));
+
+    // Cek Batas Kapasitas Tas
+    if (!Game.adminMode && this.getTotalBagCount() >= this.getBagCapacity()) {
+      UI.showToast(`🎒 Tas Penuh (${this.getTotalBagCount()}/${this.getBagCapacity()})! Tingkatkan kapasitas tas di Toko.`, "warning");
+      return;
+    }
+
     let hasAccess = Game.adminMode || this.coins >= actualCost;
     if (hasAccess) {
       if (!Game.adminMode) this.coins -= actualCost;
@@ -713,6 +818,448 @@ const RPG = {
     localStorage.setItem('yk_exp', this.exp); 
     localStorage.setItem('yk_coins', this.coins); 
     localStorage.setItem('yk_inventory', JSON.stringify(this.inventory));
+    localStorage.setItem('yk_bag_cap', this.getBagCapacity());
+  }
+};
+
+const Dojo = {
+  mistakes: [],
+  currentFilter: 'all',
+  sessionList: [],
+  sessionIndex: 0,
+  sessionCorrectCount: 0,
+
+  init: function() {
+    try {
+      this.mistakes = JSON.parse(localStorage.getItem('yk_mistakes') || '[]');
+      if (!Array.isArray(this.mistakes)) this.mistakes = [];
+    } catch(e) {
+      this.mistakes = [];
+    }
+    this.updateBadge();
+  },
+
+  save: function() {
+    localStorage.setItem('yk_mistakes', JSON.stringify(this.mistakes));
+    this.updateBadge();
+  },
+
+  updateBadge: function() {
+    const badge = document.getElementById('dojo-badge');
+    if (!badge) return;
+    const count = this.getPendingCount();
+    badge.innerText = `${count} Soal`;
+    if (count > 0) {
+      badge.className = 'sidebar-tile-status status-count has-mistakes';
+    } else {
+      badge.className = 'sidebar-tile-status status-count';
+    }
+  },
+
+  getPendingCount: function() {
+    return this.mistakes.filter(m => (m.mastery || 0) < 2).length;
+  },
+
+  recordMistake: function(type, item, day, correctKey) {
+    if (!item) return;
+    this.init(); // pastikan data termutakhir
+
+    // Signature unik penanda soal
+    let signature = "";
+    if (type === 'hafalan') {
+      signature = `haf_${(item.k || '').trim()}_${(item.a || '').trim()}`;
+    } else if (type === 'partikel') {
+      let jpStr = Array.isArray(item.jp) ? item.jp.map(x => x.text || x.k || '').join('') : (item.a || '');
+      signature = `part_${day}_${jpStr.slice(0, 30)}`;
+    } else if (type === 'arti') {
+      signature = `arti_${day}_${(item.a || '').slice(0, 30)}`;
+    } else {
+      signature = `misc_${Date.now()}`;
+    }
+
+    let existing = this.mistakes.find(m => m.id === signature);
+    if (existing) {
+      existing.failCount = (existing.failCount || 1) + 1;
+      existing.mastery = 0; // reset streak jika gagal lagi
+      existing.lastFailed = Date.now();
+      if (correctKey) existing.correctKey = correctKey;
+    } else {
+      this.mistakes.unshift({
+        id: signature,
+        type: type, // 'hafalan' | 'partikel' | 'arti'
+        day: day || Game.currentDay || 1,
+        item: JSON.parse(JSON.stringify(item)),
+        correctKey: correctKey || "",
+        failCount: 1,
+        mastery: 0, // 0 = belum, 1 = 50%, 2 = 100% (lulus)
+        lastFailed: Date.now()
+      });
+    }
+
+    // Batasi kapasitas bank kesalahan max 150 soal agar memori tetap optimal
+    if (this.mistakes.length > 150) {
+      this.mistakes = this.mistakes.slice(0, 150);
+    }
+
+    this.save();
+  },
+
+  clearMastered: function() {
+    let before = this.mistakes.length;
+    this.mistakes = this.mistakes.filter(m => (m.mastery || 0) < 2);
+    let removed = before - this.mistakes.length;
+    this.save();
+    this.renderModal();
+    if (removed > 0) {
+      UI.showToast(`Dojo diperbarui! ${removed} soal yang sudah dikuasai dibersihkan. ✨`, 'success');
+    } else {
+      UI.showToast('Belum ada soal lulus yang perlu dibersihkan.', 'info');
+    }
+  },
+
+  removeMistake: function(id) {
+    this.mistakes = this.mistakes.filter(m => m.id !== id);
+    this.save();
+    this.renderModal();
+    UI.showToast("Soal dihapus dari Bank Kesalahan. 🗑️", "success");
+  },
+
+  setFilter: function(f) {
+    this.currentFilter = f;
+    ['all', 'partikel', 'arti', 'hafalan'].forEach(k => {
+      const chip = document.getElementById(`dchip-${k}`);
+      if (chip) {
+        if (k === f) chip.classList.add('active');
+        else chip.classList.remove('active');
+      }
+    });
+    this.renderModal();
+  },
+
+  openModal: function() {
+    UI.openModal('dojo-modal');
+  },
+
+  renderModal: function() {
+    const list = document.getElementById('dojo-list');
+    if (!list) return;
+
+    this.init(); // Sinkronisasi storage
+    let total = this.mistakes.length;
+    let pending = this.getPendingCount();
+    let mastered = total - pending;
+
+    // Filter counts
+    let partikelCount = this.mistakes.filter(m => m.type === 'partikel').length;
+    let artiCount = this.mistakes.filter(m => m.type === 'arti').length;
+    let hafalanCount = this.mistakes.filter(m => m.type === 'hafalan').length;
+
+    // Update UI Badges & Metrics
+    const badgePending = document.getElementById('dojo-pending-badge');
+    if (badgePending) badgePending.innerText = `${pending} Perlu Dilatih`;
+
+    const statTotal = document.getElementById('dojo-stat-total');
+    if (statTotal) statTotal.innerText = total;
+
+    const statPending = document.getElementById('dojo-stat-pending');
+    if (statPending) statPending.innerText = pending;
+
+    const statMastered = document.getElementById('dojo-stat-mastered');
+    if (statMastered) statMastered.innerText = mastered;
+
+    const chipAll = document.getElementById('dchip-all-count');
+    if (chipAll) chipAll.innerText = total;
+
+    const chipP = document.getElementById('dchip-partikel-count');
+    if (chipP) chipP.innerText = partikelCount;
+
+    const chipA = document.getElementById('dchip-arti-count');
+    if (chipA) chipA.innerText = artiCount;
+
+    const chipH = document.getElementById('dchip-hafalan-count');
+    if (chipH) chipH.innerText = hafalanCount;
+
+    // Tombol Mulai Latihan
+    const btnStart = document.getElementById('btn-dojo-start');
+    const btnStartText = document.getElementById('btn-dojo-start-text');
+    if (btnStart) {
+      if (pending === 0) {
+        btnStart.disabled = true;
+        if (btnStartText) btnStartText.innerText = "SEMUA SOAL TELAH DIKUASAI ✅";
+      } else {
+        btnStart.disabled = false;
+        if (btnStartText) btnStartText.innerText = `MULAI LATIHAN REMEDIAL (${pending} SOAL)`;
+      }
+    }
+
+    // Filtered list
+    let filtered = this.mistakes;
+    if (this.currentFilter !== 'all') {
+      filtered = this.mistakes.filter(m => m.type === this.currentFilter);
+    }
+
+    if (filtered.length === 0) {
+      if (total === 0) {
+        list.innerHTML = `
+          <div class="dojo-zen-empty">
+            <span class="dojo-zen-icon">⛩️</span>
+            <div class="dojo-zen-title">Pikiran Kensei Tenang</div>
+            <p class="dojo-zen-desc">Belum ada catatan kesalahan! Kamu telah menaklukkan seluruh kuis dengan sempurna. Pertahankan refleksmu di Zona Tempur!</p>
+          </div>
+        `;
+      } else {
+        list.innerHTML = `
+          <div class="dojo-zen-empty">
+            <span class="dojo-zen-icon">✨</span>
+            <div class="dojo-zen-title">Kategori Ini Bersih</div>
+            <p class="dojo-zen-desc">Tidak ada soal yang keliru pada kategori ini. Pilih kategori lain atau latih seluruh materi.</p>
+          </div>
+        `;
+      }
+      return;
+    }
+
+    list.innerHTML = filtered.map(m => {
+      let isMastered = (m.mastery || 0) >= 2;
+      let glyph = '🥋';
+      let typeLabel = 'SOAL';
+      let tagClass = 'tag-partikel';
+
+      if (m.type === 'partikel') {
+        glyph = '🧩';
+        typeLabel = 'PARTIKEL';
+        tagClass = 'tag-partikel';
+      } else if (m.type === 'arti') {
+        glyph = '⚔️';
+        typeLabel = 'TERJEMAHAN';
+        tagClass = 'tag-arti';
+      } else if (m.type === 'hafalan') {
+        glyph = '🚨';
+        typeLabel = 'KOSAKATA';
+        tagClass = 'tag-hafalan';
+      }
+
+      // Format pertanyaan & kunci
+      let qText = "";
+      let keyText = m.correctKey || "";
+      if (m.type === 'hafalan') {
+        let romaji = (m.item.r && m.item.r !== m.item.k) ? ` (${m.item.r})` : '';
+        qText = `${m.item.k || ''}${romaji} ➔ ${m.item.a || ''}`;
+      } else if (m.type === 'partikel') {
+        let sentencePlain = Array.isArray(m.item.jp) ? m.item.jp.map(x => x.text || x.k || '').join('') : (m.item.a || '');
+        qText = sentencePlain;
+      } else if (m.type === 'arti') {
+        qText = m.item.a || '';
+      }
+
+      let masteryBadge = '';
+      if (isMastered) {
+        masteryBadge = '<span class="dojo-mastery-pill mastered">✅ Lulus 100%</span>';
+      } else if (m.mastery === 1) {
+        masteryBadge = '<span class="dojo-mastery-pill half">⭐ 1/2 Refleks</span>';
+      } else {
+        masteryBadge = '<span class="dojo-mastery-pill none">⏳ Belum Lulus</span>';
+      }
+
+      return `
+        <div class="dojo-item-row ${isMastered ? 'is-mastered' : ''}">
+          <div class="dojo-item-glyph">${glyph}</div>
+          <div class="dojo-item-main">
+            <div class="dojo-item-top">
+              <span class="dojo-tag ${tagClass}">${typeLabel}</span>
+              <span class="dojo-day-pill">Hari ${m.day || 1}</span>
+              <span class="dojo-fail-pill">🔥 ${m.failCount || 1}x Gagal</span>
+              ${masteryBadge}
+            </div>
+            <div class="dojo-item-q">${qText}</div>
+            ${keyText ? `<div class="dojo-item-ans"><span class="dojo-ans-label">Kunci:</span> ${keyText}</div>` : ''}
+          </div>
+          <div class="dojo-item-action">
+            <button type="button" class="btn-dojo-row-drill" onclick="Dojo.drillSingle('${m.id}')" title="Latih soal ini saja">Latih ➔</button>
+            <button type="button" class="btn-dojo-row-del" onclick="Dojo.removeMistake('${m.id}')" title="Hapus dari daftar">✕</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  },
+
+  startSession: function(filterType) {
+    this.init();
+    let list = this.mistakes.filter(m => (m.mastery || 0) < 2);
+    if (filterType && filterType !== 'all') {
+      list = list.filter(m => m.type === filterType);
+    }
+    if (list.length === 0) {
+      UI.showToast("Semua soal di Dojo telah kamu kuasai dengan sempurna! 🥋✨", "info");
+      return;
+    }
+
+    this.sessionList = Engine.shuffle([...list]);
+    this.sessionIndex = 0;
+    this.sessionCorrectCount = 0;
+
+    UI.closeModal('dojo-modal');
+    Game.currentTab = 'dojo';
+
+    document.getElementById('ui-day').innerText = "🥋 DOJO REMEDIAL";
+    const badge = document.getElementById('ui-zone');
+    if (badge) {
+      badge.className = "zone-badge zone-tempur";
+      badge.innerText = "🥋 REPETISI SPASI";
+    }
+
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    const card = document.getElementById('card-main');
+    if (card) card.classList.remove('hazard-battle-active');
+
+    UI.loadStep();
+  },
+
+  drillSingle: function(id) {
+    this.init();
+    let found = this.mistakes.find(m => m.id === id);
+    if (!found) {
+      UI.showToast("Soal tidak ditemukan.", "error");
+      return;
+    }
+
+    this.sessionList = [found];
+    this.sessionIndex = 0;
+    this.sessionCorrectCount = 0;
+
+    UI.closeModal('dojo-modal');
+    Game.currentTab = 'dojo';
+
+    document.getElementById('ui-day').innerText = "🥋 DOJO REMEDIAL";
+    const badge = document.getElementById('ui-zone');
+    if (badge) {
+      badge.className = "zone-badge zone-tempur";
+      badge.innerText = "🥋 FOKUS KILAT";
+    }
+
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    const card = document.getElementById('card-main');
+    if (card) card.classList.remove('hazard-battle-active');
+
+    UI.loadStep();
+  },
+
+  retreatSession: function() {
+    if (confirm("Ingin mengakhiri sesi latihan Dojo dan kembali ke Markas? EXP yang diraih tetap tersimpan.")) {
+      UI.showToast("Kembali ke Markas. Istirahatlah sejenak!", "info");
+      Game.init(Game.mode);
+    }
+  },
+
+  checkHafalan: function(sel, cor, evt) {
+    const btn = evt ? evt.currentTarget : null;
+    let isCorrect = (sel === cor);
+    if (isCorrect) {
+      if (btn) btn.classList.add('choice-correct');
+      if (navigator.vibrate) try { navigator.vibrate(30); } catch(_) {}
+    } else {
+      if (btn) {
+        btn.classList.add('choice-wrong');
+        setTimeout(() => btn.classList.remove('choice-wrong'), 500);
+      }
+      if (navigator.vibrate) try { navigator.vibrate([50, 40, 50]); } catch(_) {}
+    }
+    Dojo.handleDojoResult(isCorrect, cor, evt);
+  },
+
+  checkPartikel: function(evt) {
+    let isCorrect = JSON.stringify(Game.currentMultiAns) === JSON.stringify(Game.targetMultiAns);
+    Dojo.handleDojoResult(isCorrect, Game.targetMultiAns.join(" & "), evt);
+  },
+
+  checkArti: function(evt) {
+    let rawVal = document.getElementById('answer-box').value;
+    if (!rawVal) return;
+    let cleanVal = rawVal.replace(/[。、！？,\?\s]/g, '');
+    let isCorrect = (cleanVal === Game.currentAnsKanji) || (cleanVal === Game.currentAnsHiragana);
+    let displayKey = Game.displayKanji !== Game.displayHiragana ? `${Game.displayKanji} / ${Game.displayHiragana}` : Game.displayKanji;
+    Dojo.handleDojoResult(isCorrect, displayKey, evt);
+  },
+
+  handleDojoResult: function(isCorrect, key, evt) {
+    const fb = document.getElementById('ui-feedback');
+    const inp = document.getElementById('answer-box');
+    const card = document.getElementById('card-main');
+    if (inp) inp.disabled = true;
+    const btnSubmit = document.getElementById('btn-submit');
+    if (btnSubmit) btnSubmit.classList.add('hidden');
+
+    let cur = Dojo.sessionList[Dojo.sessionIndex];
+
+    if (isCorrect) {
+      Dojo.sessionCorrectCount++;
+      if (fb) {
+        fb.innerHTML = "BENAR! REFLEKS BERTAMBAH ⭐";
+        fb.style.color = "var(--success)";
+      }
+      if (card) {
+        card.classList.remove('shake-hard');
+        card.classList.add('card-correct');
+        setTimeout(() => card.classList.remove('card-correct'), 500);
+      }
+
+      // Update streak in active session & global mistakes
+      if (cur) {
+        cur.mastery = (cur.mastery || 0) + 1;
+        cur.lastFailed = Date.now();
+        let orig = Dojo.mistakes.find(m => m.id === cur.id);
+        if (orig) {
+          orig.mastery = cur.mastery;
+          orig.lastFailed = cur.lastFailed;
+        }
+
+        if (cur.mastery >= 2) {
+          UI.showToast("🎓 TUNTAS! Soal ini resmi lulus dari Dojo (100% Akurasi)!", "success");
+        } else {
+          UI.showToast("⭐ Refleks Meningkat! Tinggal 1x benar lagi untuk lulus 100%.", "success");
+        }
+      }
+      Dojo.save();
+      RPG.addReward(8, 2, evt);
+
+      UI.makeNextBtn("Lanjut Drill →");
+      const bn = document.getElementById('btn-next');
+      if (bn) {
+        bn.onclick = () => UI.triggerNextAnim(() => {
+          Dojo.sessionIndex++;
+          UI.loadStep();
+        });
+      }
+    } else {
+      if (fb) {
+        fb.innerHTML = `SALAH ❌<br><span style="font-size:14px; color:var(--text-sub);">Kunci: ${key}</span>`;
+        fb.style.color = "var(--danger)";
+      }
+      if (card) {
+        card.classList.add('shake-hard');
+        setTimeout(() => card.classList.remove('shake-hard'), 500);
+      }
+
+      if (cur) {
+        cur.mastery = 0; // reset streak agar butuh pengulangan
+        cur.failCount = (cur.failCount || 1) + 1;
+        let orig = Dojo.mistakes.find(m => m.id === cur.id);
+        if (orig) {
+          orig.mastery = 0;
+          orig.failCount = cur.failCount;
+        }
+      }
+      Dojo.save();
+
+      UI.makeNextBtn("Lanjut Drill →");
+      const bn = document.getElementById('btn-next');
+      if (bn) {
+        bn.onclick = () => UI.triggerNextAnim(() => {
+          Dojo.sessionIndex++;
+          UI.loadStep();
+        });
+      }
+    }
   }
 };
 
@@ -771,7 +1318,7 @@ const Game = {
     Game.hp = parseInt(localStorage.getItem('yk_hp')) || 3; if(Game.hp<=0) Game.hp=3; 
     document.getElementById('main-app').classList.remove('hidden'); 
     Game.currentDay = Game.unlockedDay > 1 ? Game.unlockedDay : 1; 
-    RPG.updateUI(); UI.renderHP(); Game.loadDayData(); UI.renderMap();
+    RPG.updateUI(); UI.renderHP(); Game.loadDayData(); UI.renderMap(); Dojo.updateBadge();
   },
     loadDayData: () => {
     document.getElementById('ui-day').innerHTML = `🗺️ Hari ${Game.currentDay} <span style="font-size:10px;">▼</span>`; 
@@ -852,6 +1399,7 @@ const UI = {
       const list = document.getElementById('kamus-list');
       if (list && list.children.length === 0) UI.renderKamusList();
     }
+    if (id === 'dojo-modal') Dojo.renderModal();
     const m = document.getElementById(id); 
     if (!m) return;
     m.classList.remove('hidden', 'modal-close'); 
@@ -3544,6 +4092,215 @@ if (tipsBubble) tipsBubble.classList.add('hidden');
         return; // Setop fungsi di sini agar tidak menjalankan kuis reguler
     }
     
+    if (t === 'dojo') {
+        const cardEl = document.getElementById('card-main');
+        if (cardEl) cardEl.classList.remove('hazard-battle-active');
+
+        // Jika seluruh soal dalam sesi latihan selesai
+        if (Dojo.sessionIndex >= Dojo.sessionList.length) {
+            document.getElementById('stage-indicator').innerHTML = "";
+            document.getElementById('ui-progress').style.width = `100%`;
+            let total = Dojo.sessionList.length;
+            let acc = total > 0 ? Math.round((Dojo.sessionCorrectCount / total) * 100) : 0;
+            let earnedExp = Dojo.sessionCorrectCount * 8;
+
+            document.getElementById('ui-jp').innerHTML = `
+              <div class="dojo-finish-card animate-slide">
+                <div class="dojo-finish-icon">🏆</div>
+                <div class="dojo-finish-title">LATIHAN DOJO TUNTAS!</div>
+                <div class="dojo-finish-desc">Hebat! Kamu telah menyelesaikan ${total} soal drill remedial. Kelemahanmu kini telah ditempa menjadi refleks baru yang kokoh!</div>
+                <div class="dojo-finish-stats">
+                  <div class="dstat-pill">🎯 Akurasi: <b>${acc}%</b></div>
+                  <div class="dstat-pill">✨ EXP Diraih: <b>+${earnedExp}</b></div>
+                </div>
+              </div>
+            `;
+            document.getElementById('ui-arti').innerHTML = "";
+            document.getElementById('input-area').innerHTML = `
+              <div style="display:flex; flex-direction:column; gap:8px; width:100%; max-width:480px; margin:0 auto;">
+                <button class="btn" style="background:var(--success); color:#000; font-weight:800;" onclick="Game.init(Game.mode)">🏠 Kembali ke Markas</button>
+                <button class="btn btn-alt" onclick="Dojo.openModal()">🥋 Buka Bank Kesalahan</button>
+              </div>
+            `;
+            return;
+        }
+
+        let cur = Dojo.sessionList[Dojo.sessionIndex];
+        let total = Dojo.sessionList.length;
+        let perc = Math.round(((Dojo.sessionIndex + 1) / total) * 100);
+        document.getElementById('stage-indicator').innerHTML = "";
+        document.getElementById('ui-arti').innerHTML = "";
+        document.getElementById('ui-progress').style.width = `${perc}%`;
+
+        if (cur.type === 'hafalan') {
+            let itm = cur.item;
+            let rubyHtml = Engine.buildRubyFormat(itm.k, itm.r, null, false);
+            document.getElementById('ui-jp').innerHTML = `
+              <div class="dojo-drill-showcase animate-slide">
+                <div class="dojo-drill-header">
+                  <div style="display:flex; align-items:center; gap:6px;">
+                    <span class="dojo-badge-pill">🥋 DRILL KOSAKATA</span>
+                    <span class="dojo-refleks-tag">Refleks: ${cur.mastery || 0}/2 ⭐</span>
+                  </div>
+                  <div class="vocab-counter-group">
+                    <span class="vocab-counter-text">DRILL <b>${Dojo.sessionIndex + 1}</b> / ${total}</span>
+                    <div class="vocab-mini-track">
+                      <div class="vocab-mini-fill dojo-fill" style="width: ${perc}%;"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="dojo-drill-body">
+                  <span class="dojo-prompt-label">TEMPA REFLEKS: APA ARTI KATA INI?</span>
+                  <div class="dojo-word-display">${rubyHtml}</div>
+                </div>
+              </div>
+            `;
+
+            // Bikin 3 opsi pengecoh
+            let opts = [itm.a];
+            let pool = [];
+            for (let d = 1; d <= 30; d++) {
+                if (ManualDB['day' + d] && ManualDB['day' + d].hafalan) {
+                    pool = pool.concat(ManualDB['day' + d].hafalan);
+                }
+            }
+            let wrongPool = Engine.shuffle(pool.filter(x => x && x.a && x.a !== itm.a));
+            if (wrongPool[0]) opts.push(wrongPool[0].a);
+            if (wrongPool[1]) opts.push(wrongPool[1].a);
+            opts = Engine.shuffle(opts);
+
+            const letters = ['A', 'B', 'C'];
+            document.getElementById('input-area').innerHTML = `
+              <div class="quiz-options-grid animate-slide">
+                ${opts.map((o, idx) => `
+                  <button class="quiz-choice-btn" onclick="Dojo.checkHafalan('${o.replace(/'/g, "\\'")}', '${itm.a.replace(/'/g, "\\'")}', event)">
+                    <span class="quiz-choice-pill">${letters[idx] || '◆'}</span>
+                    <span class="quiz-choice-text">${o}</span>
+                  </button>
+                `).join('')}
+              </div>
+              <div class="dojo-retreat-row">
+                <button type="button" class="btn-dojo-retreat" onclick="Dojo.retreatSession()">🏳️ Mundur ke Markas</button>
+              </div>
+            `;
+            return;
+        } else if (cur.type === 'partikel') {
+            let itm = cur.item;
+            let sentenceHtml = Engine.renderSentence(itm.jp, false, true, false, true);
+
+            let targetArr = [];
+            if (Array.isArray(itm.ansP)) {
+                targetArr = itm.ansP;
+            } else if (typeof itm.ansP === 'string' && itm.ansP.includes(',')) {
+                targetArr = itm.ansP.split(',').map(s => s.trim()).filter(Boolean);
+            } else if (itm.ansP) {
+                targetArr = [String(itm.ansP).trim()];
+            } else if (Array.isArray(itm.jp)) {
+                targetArr = itm.jp.filter(s => s.p).map(s => (s.text || s.k || '').trim()).filter(Boolean);
+            }
+            let pSegments = (itm.jp || []).filter(s => s.p);
+            if (pSegments.length > targetArr.length) {
+                targetArr = pSegments.map(s => (s.text || s.k || '').trim()).filter(Boolean);
+            }
+
+            Game.targetMultiAns = targetArr;
+            Game.currentMultiAns = new Array(targetArr.length).fill(null);
+
+            let defaultOpts = itm.opts ? [...itm.opts] : ['は', 'の', 'も', 'と', 'で', 'に', 'を', 'では'];
+            targetArr.forEach(p => {
+                if (p && !defaultOpts.includes(p)) defaultOpts.push(p);
+            });
+
+            let optsHtml = '<div class="particle-chips-grid">';
+            defaultOpts.forEach(p => {
+                optsHtml += `<button type="button" class="particle-chip-btn" onclick="Action.fillMulti('${p}')">${p}</button>`;
+            });
+            optsHtml += '</div>';
+
+            document.getElementById('ui-jp').innerHTML = `
+              <div class="partikel-showcase animate-slide">
+                <div class="partikel-header">
+                  <div style="display:flex; align-items:center; gap:6px;">
+                    <span class="dojo-badge-pill">🧩 DRILL PARTIKEL</span>
+                    <span class="dojo-refleks-tag">Refleks: ${cur.mastery || 0}/2 ⭐</span>
+                  </div>
+                  <div class="vocab-counter-group">
+                    <span class="vocab-counter-text">DRILL <b>${Dojo.sessionIndex + 1}</b> / ${total}</span>
+                    <div class="vocab-mini-track">
+                      <div class="vocab-mini-fill dojo-fill" style="width: ${perc}%;"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="partikel-body">
+                  <span class="partikel-prompt-label">LENGKAPI PARTIKEL YANG TEPAT:</span>
+                  <div class="partikel-sentence-display">${sentenceHtml}</div>
+                </div>
+              </div>
+            `;
+
+            document.getElementById('input-area').innerHTML = `
+              <div class="partikel-action-area animate-slide">
+                ${optsHtml}
+                <button class="btn hidden" id="btn-submit" onclick="Dojo.checkPartikel(event)">EKSEKUSI JAWABAN</button>
+              </div>
+              <div class="dojo-retreat-row">
+                <button type="button" class="btn-dojo-retreat" onclick="Dojo.retreatSession()">🏳️ Mundur ke Markas</button>
+              </div>
+            `;
+            return;
+        } else if (cur.type === 'arti') {
+            let itm = cur.item;
+            document.getElementById('ui-jp').innerHTML = `
+              <div class="arti-quiz-showcase animate-slide">
+                <div class="arti-quiz-header">
+                  <div style="display:flex; align-items:center; gap:6px;">
+                    <span class="dojo-badge-pill">⚔️ DRILL TERJEMAHAN</span>
+                    <span class="dojo-refleks-tag">Refleks: ${cur.mastery || 0}/2 ⭐</span>
+                  </div>
+                  <div class="vocab-counter-group">
+                    <span class="vocab-counter-text">DRILL <b>${Dojo.sessionIndex + 1}</b> / ${total}</span>
+                    <div class="vocab-mini-track">
+                      <div class="vocab-mini-fill dojo-fill" style="width: ${perc}%;"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="arti-quiz-body">
+                  <span class="arti-quiz-prompt-label">${itm.qA || 'Terjemahkan kalimat ini ke bahasa Jepang:'}</span>
+                  <div class="arti-quiz-sentence">${itm.a}</div>
+                </div>
+              </div>
+            `;
+
+            let targetArr = itm.jp.some(x => x.u) ? itm.jp.filter(x => x.u) : itm.jp;
+            let aK = "", aH = "";
+            targetArr.forEach(x => { aK += (x.k || x.text); aH += (x.r || x.text); });
+            const cleanStr = (s) => s.replace(/<[^>]*>?/gm, '').replace(/[。、！？,\?\sQ:A:]/g, '');
+            const displayStr = (s) => s.replace(/<[^>]*>?/gm, '').replace(/(<b>Q:<\/b>|<b>A:<\/b>|Q:|A:)/g, '').trim();
+
+            Game.currentAnsKanji = cleanStr(aK);
+            Game.currentAnsHiragana = cleanStr(aH);
+            Game.displayKanji = displayStr(aK);
+            Game.displayHiragana = displayStr(aH);
+
+            document.getElementById('input-area').innerHTML = `
+              <div class="arti-input-container animate-slide">
+                <input type="text" id="answer-box" class="input-box cyber-input" placeholder="Ketik Hiragana / Kanji di sini..." autocomplete="off">
+                <button class="btn btn-primary-gold" id="btn-submit">EKSEKUSI JAWABAN</button>
+              </div>
+              <div class="dojo-retreat-row">
+                <button type="button" class="btn-dojo-retreat" onclick="Dojo.retreatSession()">🏳️ Mundur ke Markas</button>
+              </div>
+            `;
+            setTimeout(() => {
+              const inp = document.getElementById('answer-box');
+              if (inp) inp.focus();
+              const sub = document.getElementById('btn-submit');
+              if (sub) sub.onclick = Dojo.checkArti;
+            }, 100);
+            return;
+        }
+    }
+    
     if (t === 'hafalan') {
       if(Game.sessionData.hafalan[0].k === "WIP") { document.getElementById('ui-jp').innerHTML = "UNDER CONSTRUCTION"; return; }
       const tHaf = Game.sessionData.hafalan.length; const tPeng = Game.sessionData.pengayaan.length; UI.updateProgress(i, tHaf + tPeng);
@@ -3991,6 +4748,15 @@ if (tipsBubble) tipsBubble.classList.add('hidden');
           UI.makeNextBtn("Lanjut →");
       }
     } else { 
+      // Rekam Kesalahan ke Dojo Remedial Otomatis
+      if (Game.currentTab === 'partikel') {
+          const itm = Game.sessionData.partikel[Game.currentIndex];
+          if (itm) Dojo.recordMistake('partikel', itm, Game.currentDay, key);
+      } else if (Game.currentTab === 'arti') {
+          const itm = Game.sessionData.arti[Game.currentIndex];
+          if (itm) Dojo.recordMistake('arti', itm, Game.currentDay, key);
+      }
+
       if(Game.hasShield) {
           Game.hasShield = false; card.classList.remove('shield-active');
           UI.showToast("Aegis Shield Hancur! Kesalahan dimaafkan.", "warning");
@@ -4068,6 +4834,11 @@ const Action = {
               btn.classList.add('choice-wrong');
               setTimeout(() => btn.classList.remove('choice-wrong'), 500);
           }
+          // Rekam Kesalahan ke Dojo
+          const pIdx = Game.currentIndex - Game.sessionData.hafalan.length;
+          const itm = Game.sessionData.pengayaan[pIdx];
+          if (itm) Dojo.recordMistake('hafalan', itm, Game.currentDay, cor);
+
           document.getElementById('ui-feedback').innerHTML = "Pertahanan Terbobol! ❌ Coba lagi!"; 
           document.getElementById('ui-feedback').style.color = "var(--danger)"; 
           if (navigator.vibrate) try { navigator.vibrate([50, 40, 50]); } catch(_) {}
@@ -4108,6 +4879,12 @@ const Action = {
           
           UI.triggerNextAnim(() => { UI.loadStep(); }); 
       } else {
+          // Rekam Kesalahan Dungeon ke Dojo
+          if (Game.dungeonPool) {
+              const target = Game.dungeonPool.find(x => x.a === cor);
+              if (target) Dojo.recordMistake('hafalan', target, 'Dungeon', cor);
+          }
+
           document.getElementById('ui-feedback').innerHTML = `SALAH ❌<br><span style="font-size:14px; color:var(--text-sub);">Kunci: ${cor}</span>`;
           document.getElementById('ui-feedback').style.color = "var(--danger)";
           
@@ -4318,6 +5095,7 @@ window.onload = async () => {
     }
 
     if (document.body.contains(loadingMsg)) document.body.removeChild(loadingMsg);
+    Dojo.init();
     Game.checkStoredMode();
   } catch (error) {
     alert("Gagal mengunduh: " + error.message);
