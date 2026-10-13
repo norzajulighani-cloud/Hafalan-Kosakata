@@ -180,7 +180,7 @@
   <div style="font-size: 64px; color: var(--danger); font-weight: bold; margin: 20px 0;" id="cd-timer">15:00</div>
 </div>
 
-<div id="level-modal" class="hidden">
+<div id="level-modal" class="hidden" onclick="if(event.target === this) UI.closeModal('level-modal')">
   <div class="level-modal-card">
     <div class="level-modal-header">
       <div class="level-header-top">
@@ -206,7 +206,7 @@
   </div>
 </div>
 
-<div id="shop-modal" class="hidden">
+<div id="shop-modal" class="hidden" onclick="if(event.target === this) UI.closeModal('shop-modal')">
   <div class="shop-modal-card">
     <div class="shop-modal-header">
       <div class="shop-header-top">
@@ -416,7 +416,7 @@
   </div>
 </div>
 
-<div id="inventory-modal" class="hidden">
+<div id="inventory-modal" class="hidden" onclick="if(event.target === this) UI.closeModal('inventory-modal')">
   <div class="inv-modal-card">
     <div class="inv-modal-header">
       <div class="inv-header-top">
@@ -506,7 +506,7 @@
   </div>
 </div>
 
-<div id="map-modal" class="hidden">
+<div id="map-modal" class="hidden" onclick="if(event.target === this) UI.closeModal('map-modal')">
   <div class="map-modal-card">
     <div class="map-modal-header">
       <div class="map-header-top">
@@ -666,7 +666,7 @@
 </div>
 
 <!-- Pilar 5: Cloud Save & Transfer Code Modal -->
-<div id="cloud-modal" class="hidden">
+<div id="cloud-modal" class="hidden" onclick="if(event.target === this) UI.closeModal('cloud-modal')">
   <div class="cloud-modal-card">
     <div class="cloud-modal-header">
       <div class="cloud-header-top">
@@ -719,7 +719,7 @@
 </div>
 
 <!-- Pilar 5: Global Leaderboard (Hall of Fame) Modal -->
-<div id="leaderboard-modal" class="hidden">
+<div id="leaderboard-modal" class="hidden" onclick="if(event.target === this) UI.closeModal('leaderboard-modal')">
   <div class="leaderboard-modal-card">
     <div class="lb-modal-header">
       <div class="lb-header-top">
@@ -749,7 +749,7 @@
 </div>
 
 <!-- Pilar 5: Daily Streak & Absensi Ninja Modal -->
-<div id="streak-modal" class="hidden">
+<div id="streak-modal" class="hidden" onclick="if(event.target === this) UI.closeModal('streak-modal')">
   <div class="streak-modal-card">
     <div class="streak-modal-header">
       <button type="button" class="streak-close-btn" onclick="UI.closeModal('streak-modal')" title="Tutup">✕</button>

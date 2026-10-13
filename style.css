@@ -602,25 +602,31 @@ button, .btn, .tab-btn, ruby, .multi-blank { touch-action: manipulation; }
 }
 
 .map-close-btn {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: var(--text-sub);
-  width: 32px;
-  height: 32px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #e2e8f0;
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  min-height: 38px;
   border-radius: 50%;
-  font-size: 14px;
+  font-size: 16px;
+  font-weight: 800;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: 0.2s;
+  transition: all 0.2s ease;
   flex-shrink: 0;
+  z-index: 100;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
-.map-close-btn:hover {
-  background: rgba(239, 68, 68, 0.25);
-  color: var(--danger);
+.map-close-btn:hover, .map-close-btn:active {
+  background: rgba(239, 68, 68, 0.35);
+  color: #fff;
   border-color: var(--danger);
-  transform: rotate(90deg);
+  transform: scale(0.94);
 }
 
 /* Compact Progress Dashboard */
@@ -2908,24 +2914,31 @@ ruby.show .arti-hint { display: none !important; }
 }
 
 .shop-close-btn, .inv-close-btn {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: var(--text-sub);
-  width: 30px;
-  height: 30px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #e2e8f0;
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  min-height: 38px;
   border-radius: 50%;
-  font-size: 13px;
+  font-size: 16px;
+  font-weight: 800;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: 0.2s;
+  transition: all 0.2s ease;
+  z-index: 100;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
-.shop-close-btn:hover, .inv-close-btn:hover {
-  background: rgba(239, 68, 68, 0.25);
-  color: var(--danger);
+.shop-close-btn:hover, .inv-close-btn:hover,
+.shop-close-btn:active, .inv-close-btn:active {
+  background: rgba(239, 68, 68, 0.35);
+  color: #fff;
   border-color: var(--danger);
-  transform: rotate(90deg);
+  transform: scale(0.94);
 }
 
 .shop-balance-bar {
@@ -3445,23 +3458,30 @@ ruby.show .arti-hint { display: none !important; }
   border-radius: 20px;
 }
 .gacha-close-btn {
-  background: rgba(255, 255, 255, 0.08);
-  border: none;
-  color: var(--text-sub);
-  width: 32px;
-  height: 32px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #e2e8f0;
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  min-height: 38px;
   border-radius: 50%;
-  font-size: 14px;
+  font-size: 16px;
+  font-weight: 800;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: 0.2s;
+  transition: all 0.2s ease;
+  z-index: 100;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
-.gacha-close-btn:hover {
-  background: rgba(239, 68, 68, 0.3);
-  color: var(--danger);
-  transform: rotate(90deg);
+.gacha-close-btn:hover, .gacha-close-btn:active {
+  background: rgba(239, 68, 68, 0.35);
+  color: #fff;
+  border-color: var(--danger);
+  transform: scale(0.94);
 }
 .gacha-title {
   color: #fff;
@@ -3708,24 +3728,30 @@ ruby.show .arti-hint { display: none !important; }
 }
 
 .level-close-btn {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: var(--text-sub);
-  width: 30px;
-  height: 30px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #e2e8f0;
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  min-height: 38px;
   border-radius: 50%;
-  font-size: 14px;
+  font-size: 16px;
+  font-weight: 800;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: 0.2s;
+  transition: all 0.2s ease;
+  z-index: 100;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
-.level-close-btn:hover {
-  background: rgba(239, 68, 68, 0.25);
-  color: var(--danger);
+.level-close-btn:hover, .level-close-btn:active {
+  background: rgba(239, 68, 68, 0.35);
+  color: #fff;
   border-color: var(--danger);
-  transform: rotate(90deg);
+  transform: scale(0.94);
 }
 
 .level-modal-title {
@@ -4094,24 +4120,30 @@ ruby.show .arti-hint { display: none !important; }
 }
 
 .kamus-close-btn {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: var(--text-sub);
-  width: 30px;
-  height: 30px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #e2e8f0;
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  min-height: 38px;
   border-radius: 50%;
-  font-size: 14px;
+  font-size: 16px;
+  font-weight: 800;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: 0.2s;
+  transition: all 0.2s ease;
+  z-index: 100;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
-.kamus-close-btn:hover {
-  background: rgba(239, 68, 68, 0.25);
-  color: var(--danger);
+.kamus-close-btn:hover, .kamus-close-btn:active {
+  background: rgba(239, 68, 68, 0.35);
+  color: #fff;
   border-color: var(--danger);
-  transform: rotate(90deg);
+  transform: scale(0.94);
 }
 
 .kamus-modal-title {
@@ -4852,24 +4884,30 @@ body.danger-mode { animation: pulseDanger 1.5s infinite; }
 }
 
 .dojo-close-btn {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: var(--text-sub);
-  width: 28px;
-  height: 28px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #e2e8f0;
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  min-height: 38px;
   border-radius: 50%;
-  font-size: 13px;
+  font-size: 16px;
+  font-weight: 800;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: 0.2s;
+  transition: all 0.2s ease;
+  z-index: 100;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
-.dojo-close-btn:hover {
-  background: rgba(244, 63, 94, 0.25);
-  color: #fb7185;
+.dojo-close-btn:hover, .dojo-close-btn:active {
+  background: rgba(244, 63, 94, 0.35);
+  color: #fff;
   border-color: #fb7185;
-  transform: rotate(90deg);
+  transform: scale(0.94);
 }
 
 .dojo-modal-title {
@@ -6701,24 +6739,32 @@ body.danger-mode { animation: pulseDanger 1.5s infinite; }
 }
 .streak-close-btn {
   position: absolute;
-  top: 14px;
-  right: 16px;
-  background: rgba(255, 255, 255, 0.08);
-  border: none;
-  color: var(--text-sub);
-  width: 28px;
-  height: 28px;
+  top: 12px;
+  right: 14px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #e2e8f0;
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  min-height: 38px;
   border-radius: 50%;
-  font-size: 13px;
+  font-size: 16px;
+  font-weight: 800;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: 0.2s;
+  transition: all 0.2s ease;
+  z-index: 100;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
-.streak-close-btn:hover {
-  background: rgba(239, 68, 68, 0.3);
-  color: var(--danger);
+.streak-close-btn:hover, .streak-close-btn:active {
+  background: rgba(239, 68, 68, 0.35);
+  color: #fff;
+  border-color: var(--danger);
+  transform: scale(0.94);
 }
 .streak-hero-flame {
   font-size: 68px;
@@ -6746,42 +6792,75 @@ body.danger-mode { animation: pulseDanger 1.5s infinite; }
   gap: 16px;
 }
 
-/* 7-Day Flame Track */
+/* 7-Day Flame Track (Unboxed Gamified Milestone Trail) */
 .streak-timeline-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 6px;
-  padding: 8px 0;
+  gap: 4px;
+  padding: 14px 0 6px;
+  position: relative;
+}
+.streak-timeline-grid::before {
+  content: '';
+  position: absolute;
+  top: 28px;
+  left: 6%;
+  right: 6%;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.08);
+  z-index: 1;
 }
 .streak-day-node {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 8px 2px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  transition: 0.2s;
-}
-.streak-day-node.timeline-active {
-  background: rgba(239, 68, 68, 0.15);
-  border-color: rgba(239, 68, 68, 0.5);
-  box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
-  transform: translateY(-2px);
-}
-.streak-day-node.timeline-done {
-  background: rgba(34, 197, 94, 0.1);
-  border-color: rgba(34, 197, 94, 0.3);
+  padding: 2px;
+  background: transparent;
+  border: none;
+  position: relative;
+  z-index: 2;
+  transition: all 0.25s ease;
 }
 .streak-day-icon {
-  font-size: 18px;
-  margin-bottom: 2px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  background: #0b1329;
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
+  margin-bottom: 5px;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+.streak-day-node.timeline-active .streak-day-icon {
+  background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+  border-color: #fca5a5;
+  color: #fff;
+  transform: scale(1.15);
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.8);
+}
+.streak-day-node.timeline-done .streak-day-icon {
+  background: rgba(34, 197, 94, 0.15);
+  border-color: rgba(34, 197, 94, 0.6);
+  color: #4ade80;
+  font-weight: 800;
+}
+.streak-day-node.timeline-locked .streak-day-icon {
+  color: #64748b;
+  opacity: 0.5;
 }
 .streak-day-num {
-  font-size: 9.5px;
+  font-size: 10px;
   font-weight: 800;
   color: var(--text-sub);
+}
+.streak-day-node.timeline-active .streak-day-num {
+  color: #f87171;
+  font-weight: 900;
 }
 .streak-day-reward {
   font-size: 9px;

@@ -1395,13 +1395,17 @@ const Streak = {
 
     if (claimBtn) {
       if (this.data.claimedToday) {
-        claimBtn.disabled = true;
-        claimBtn.textContent = 'Sudah Diklaim Hari Ini ✓';
+        claimBtn.disabled = false;
+        claimBtn.className = "btn-streak-claim btn-streak-claimed";
+        claimBtn.textContent = 'Tutup (Sudah Diklaim Hari Ini) ✓';
+        claimBtn.onclick = () => UI.closeModal('streak-modal');
         if (statusEl) statusEl.textContent = 'Kembali lagi besok untuk mempertahankan apimu!';
       } else {
         claimBtn.disabled = false;
+        claimBtn.className = "btn-streak-claim";
         const curReward = rewards[cycleDay - 1];
         claimBtn.textContent = `KLAIM BONUS HARI ${cycleDay} (+${curReward.coin} 🪙 & +${curReward.exp} EXP) ➔`;
+        claimBtn.onclick = () => Streak.claimReward();
         if (statusEl) statusEl.textContent = 'Nyalakan apimu dengan mengklaim bonus hari ini!';
       }
     }
@@ -1715,21 +1719,6 @@ const Leaderboard = {
       players.push(myEntry);
     }
 
-    if (players.length < 8) {
-      const legends = [
-        { kenseiCode: 'BOT-1', nickname: 'Miyamoto Musashi', level: 160, title: 'Kensei', titleIcon: '⛩️', exp: 125000, maxCombo: 88, streak: 45, unlockedDay: 60 },
-        { kenseiCode: 'BOT-2', nickname: 'Hattori Hanzo', level: 120, title: 'Shogun', titleIcon: '👑', exp: 89000, maxCombo: 65, streak: 30, unlockedDay: 50 },
-        { kenseiCode: 'BOT-3', nickname: 'Tomoe Gozen', level: 95, title: 'Shogun', titleIcon: '👑', exp: 68000, maxCombo: 52, streak: 21, unlockedDay: 40 },
-        { kenseiCode: 'BOT-4', nickname: 'Sasaki Kojiro', level: 75, title: 'Daimyo', titleIcon: '🏯', exp: 45000, maxCombo: 40, streak: 15, unlockedDay: 35 },
-        { kenseiCode: 'BOT-5', nickname: 'Yukimura Sanada', level: 50, title: 'Samurai', titleIcon: '🛡️', exp: 28000, maxCombo: 31, streak: 12, unlockedDay: 25 },
-        { kenseiCode: 'BOT-6', nickname: 'Yagyu Jubei', level: 35, title: 'Samurai', titleIcon: '🛡️', exp: 16000, maxCombo: 24, streak: 8, unlockedDay: 18 },
-        { kenseiCode: 'BOT-7', nickname: 'Kato Danzo', level: 20, title: 'Ronin', titleIcon: '⚔️', exp: 7500, maxCombo: 16, streak: 5, unlockedDay: 10 }
-      ];
-      legends.forEach(l => {
-        if (!players.find(p => p.kenseiCode === l.kenseiCode)) players.push(l);
-      });
-    }
-
     this.cachedList = players;
     this.render();
   },
@@ -1751,7 +1740,16 @@ const Leaderboard = {
     const top3 = list[2] || null;
 
     const renderPodiumSlot = (p, rankNum, medal) => {
-      if (!p) return `<div class="podium-slot rank-${rankNum} empty"></div>`;
+      if (!p) {
+        return `
+          <div class="podium-slot rank-${rankNum} podium-empty">
+            <div class="podium-crown" style="opacity:0.35;">${medal}</div>
+            <div class="podium-avatar" style="opacity:0.25; filter:grayscale(1);">🥋</div>
+            <div class="podium-name" style="opacity:0.5; font-style:italic; font-size:11px;">Slot Kosong</div>
+            <div class="podium-lvl" style="opacity:0.4; font-size:9.5px;">Menanti Murid</div>
+          </div>
+        `;
+      }
       let valText = '';
       if (metric === 'exp') valText = `${(p.exp || 0).toLocaleString()} ✨`;
       else if (metric === 'streak') valText = `🔥 ${p.streak || 1} Hari`;
