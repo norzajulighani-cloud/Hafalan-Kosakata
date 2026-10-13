@@ -821,6 +821,7 @@ const RPG = {
     localStorage.setItem('yk_coins', this.coins); 
     localStorage.setItem('yk_inventory', JSON.stringify(this.inventory));
     localStorage.setItem('yk_bag_cap', this.getBagCapacity());
+    if (typeof Cloud !== 'undefined') Cloud.autoSync();
   }
 };
 
@@ -1261,6 +1262,579 @@ const Dojo = {
           UI.loadStep();
         });
       }
+    }
+  }
+};
+
+const Streak = {
+  data: {
+    count: 1,
+    lastDate: '',
+    claimedToday: false,
+    freezes: 0
+  },
+
+  init: function() {
+    try {
+      const saved = localStorage.getItem('yk_streak_data');
+      if (saved) {
+        this.data = Object.assign(this.data, JSON.parse(saved));
+      }
+    } catch(e) {}
+    this.checkDaily();
+    this.updateUI();
+  },
+
+  getTodayStr: function() {
+    const now = new Date();
+    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+  },
+
+  getYesterdayStr: function() {
+    const y = new Date(Date.now() - 86400000);
+    return `${y.getFullYear()}-${String(y.getMonth() + 1).padStart(2, '0')}-${String(y.getDate()).padStart(2, '0')}`;
+  },
+
+  checkDaily: function() {
+    const today = this.getTodayStr();
+    const yesterday = this.getYesterdayStr();
+
+    if (!this.data.lastDate) {
+      this.data.lastDate = today;
+      this.data.count = 1;
+      this.data.claimedToday = false;
+      this.save();
+      return;
+    }
+
+    if (this.data.lastDate === today) {
+      return;
+    }
+
+    if (this.data.lastDate === yesterday) {
+      this.data.lastDate = today;
+      this.data.count = (this.data.count || 1) + 1;
+      this.data.claimedToday = false;
+      this.save();
+    } else {
+      if (this.data.freezes > 0) {
+        this.data.freezes--;
+        this.data.lastDate = today;
+        this.data.claimedToday = false;
+        this.save();
+        setTimeout(() => {
+          UI.showToast(`❄️ Jimat Pembeku Api aktif! Streak ${this.data.count} hari kamu terselamatkan!`, 'success');
+        }, 1200);
+      } else {
+        this.data.count = 1;
+        this.data.lastDate = today;
+        this.data.claimedToday = false;
+        this.save();
+      }
+    }
+  },
+
+  save: function() {
+    try {
+      localStorage.setItem('yk_streak_data', JSON.stringify(this.data));
+    } catch(e) {}
+    this.updateUI();
+  },
+
+  updateUI: function() {
+    const hudBadge = document.getElementById('ui-streak');
+    if (hudBadge) hudBadge.textContent = this.data.count;
+
+    const sidebarBadge = document.getElementById('sidebar-streak-badge');
+    if (sidebarBadge) sidebarBadge.textContent = `🔥 ${this.data.count}`;
+
+    const shopFreeze = document.getElementById('owned-streak-freeze');
+    if (shopFreeze) shopFreeze.textContent = `Miliki: ${this.data.freezes} / 2`;
+  },
+
+  openModal: function() {
+    this.renderModal();
+    UI.openModal('streak-modal');
+  },
+
+  renderModal: function() {
+    const countEl = document.getElementById('streak-modal-count');
+    const statusEl = document.getElementById('streak-modal-status');
+    const claimBtn = document.getElementById('streak-claim-btn');
+    const freezeEl = document.getElementById('streak-freeze-count');
+
+    if (countEl) countEl.textContent = `${this.data.count} Hari Beruntun!`;
+    if (freezeEl) freezeEl.textContent = `${this.data.freezes} / 2 Tersedia`;
+
+    const cycleDay = ((this.data.count - 1) % 7) + 1;
+    const rewards = [
+      { day: 1, exp: 30, coin: 25, bonus: "" },
+      { day: 2, exp: 40, coin: 35, bonus: "" },
+      { day: 3, exp: 60, coin: 50, bonus: "❤️ Nano-Repair" },
+      { day: 4, exp: 70, coin: 60, bonus: "" },
+      { day: 5, exp: 90, coin: 80, bonus: "🛡️ Aegis Shield" },
+      { day: 6, exp: 110, coin: 100, bonus: "" },
+      { day: 7, exp: 200, coin: 180, bonus: "🎁 Kotak Pandora" }
+    ];
+
+    const timelineContainer = document.getElementById('streak-timeline');
+    if (timelineContainer) {
+      timelineContainer.innerHTML = rewards.map(r => {
+        const isPast = r.day < cycleDay;
+        const isCurrent = r.day === cycleDay;
+        const statusClass = isCurrent ? 'timeline-active' : (isPast ? 'timeline-done' : 'timeline-locked');
+        return `
+          <div class="streak-day-node ${statusClass}">
+            <div class="streak-day-icon">${isPast ? '✓' : (isCurrent ? '🔥' : '🔒')}</div>
+            <div class="streak-day-num">Hari ${r.day}</div>
+            <div class="streak-day-reward">+${r.coin}🪙 ${r.bonus ? `<br><small style="color:var(--text-main); font-size:8px;">${r.bonus}</small>` : ''}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    if (claimBtn) {
+      if (this.data.claimedToday) {
+        claimBtn.disabled = true;
+        claimBtn.textContent = 'Sudah Diklaim Hari Ini ✓';
+        if (statusEl) statusEl.textContent = 'Kembali lagi besok untuk mempertahankan apimu!';
+      } else {
+        claimBtn.disabled = false;
+        const curReward = rewards[cycleDay - 1];
+        claimBtn.textContent = `KLAIM BONUS HARI ${cycleDay} (+${curReward.coin} 🪙 & +${curReward.exp} EXP) ➔`;
+        if (statusEl) statusEl.textContent = 'Nyalakan apimu dengan mengklaim bonus hari ini!';
+      }
+    }
+  },
+
+  claimReward: function() {
+    if (this.data.claimedToday) return;
+    const cycleDay = ((this.data.count - 1) % 7) + 1;
+    const rewards = [
+      { exp: 30, coin: 25 },
+      { exp: 40, coin: 35 },
+      { exp: 60, coin: 50, item: 'hp' },
+      { exp: 70, coin: 60 },
+      { exp: 90, coin: 80, item: 'shield' },
+      { exp: 110, coin: 100 },
+      { exp: 200, coin: 180, item: 'pandora' }
+    ];
+    const reward = rewards[cycleDay - 1];
+
+    this.data.claimedToday = true;
+    this.save();
+
+    RPG.exp += reward.exp;
+    RPG.coins += reward.coin;
+    if (reward.item) {
+      if (!RPG.inventory) RPG.inventory = {};
+      RPG.inventory[reward.item] = (RPG.inventory[reward.item] || 0) + 1;
+    }
+    RPG.save();
+    RPG.updateUI();
+
+    RPG.spawnFloatingText(`+${reward.coin} 🪙 Bonus Absensi!`, "var(--gold)", null, 0, -50);
+    UI.showToast(`🔥 Absensi Hari ke-${this.data.count} Berhasil! Hadiah diterima.`, 'success');
+
+    this.renderModal();
+    if (typeof Cloud !== 'undefined') Cloud.autoSync();
+  },
+
+  buyFreeze: function(cost = 150) {
+    if (this.data.freezes >= 2) {
+      UI.showToast("Maksimal 2 Jimat Pembeku Api tersimpan!", "warning");
+      return;
+    }
+    if (!Game.adminMode && RPG.coins < cost) {
+      UI.showToast("Koin tidak cukup untuk membeli Jimat!", "error");
+      return;
+    }
+    if (!Game.adminMode) RPG.coins -= cost;
+    this.data.freezes++;
+    this.save();
+    RPG.save();
+    RPG.updateUI();
+    UI.showToast(`❄️ Jimat Pembeku Api dibeli! (${this.data.freezes}/2)`, 'success');
+    if (typeof UI.renderShop === 'function') UI.renderShop();
+    if (typeof Cloud !== 'undefined') Cloud.autoSync();
+  }
+};
+
+const Cloud = {
+  profile: {
+    nickname: 'Pendekar Kensei',
+    kenseiCode: '',
+    lastSynced: 0
+  },
+
+  init: function() {
+    try {
+      const saved = localStorage.getItem('yk_cloud_profile');
+      if (saved) {
+        this.profile = Object.assign(this.profile, JSON.parse(saved));
+      }
+    } catch(e) {}
+
+    if (!this.profile.kenseiCode) {
+      const chars = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
+      let code = 'YK-';
+      for (let i = 0; i < 6; i++) {
+        code += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      this.profile.kenseiCode = code;
+      this.saveProfile();
+    }
+
+    this.updateUI();
+  },
+
+  saveProfile: function() {
+    try {
+      localStorage.setItem('yk_cloud_profile', JSON.stringify(this.profile));
+    } catch(e) {}
+    this.updateUI();
+  },
+
+  updateUI: function() {
+    const codeDisplay = document.getElementById('cloud-code-display');
+    if (codeDisplay) codeDisplay.textContent = this.profile.kenseiCode;
+
+    const nameInput = document.getElementById('cloud-nickname-input');
+    if (nameInput && document.activeElement !== nameInput) {
+      nameInput.value = this.profile.nickname || 'Pendekar Kensei';
+    }
+
+    const sideBadge = document.getElementById('sidebar-cloud-badge');
+    if (sideBadge) sideBadge.textContent = this.profile.kenseiCode;
+
+    const syncStatus = document.getElementById('cloud-sync-status');
+    if (syncStatus) {
+      if (this.profile.lastSynced > 0) {
+        const timeAgo = this.formatTimeAgo(this.profile.lastSynced);
+        syncStatus.innerHTML = `<span style="color:#4ade80; font-weight:800;">● Tersinkron di Cloud</span> (${timeAgo})`;
+      } else {
+        syncStatus.innerHTML = `<span style="color:var(--warning);">○ Belum Pernah Disinkron</span>`;
+      }
+    }
+  },
+
+  formatTimeAgo: function(timestamp) {
+    const sec = Math.floor((Date.now() - timestamp) / 1000);
+    if (sec < 60) return "Baru saja";
+    if (sec < 3600) return `${Math.floor(sec/60)} mnt lalu`;
+    if (sec < 86400) return `${Math.floor(sec/3600)} jam lalu`;
+    return `${Math.floor(sec/86400)} hari lalu`;
+  },
+
+  setNickname: async function(name) {
+    name = (name || '').trim().slice(0, 16);
+    if (!name) name = 'Pendekar Kensei';
+    this.profile.nickname = name;
+    this.saveProfile();
+    UI.showToast(`Nickname diubah: "${name}"`, 'success');
+    await this.syncToCloud(false);
+  },
+
+  syncToCloud: async function(showToast = true) {
+    const db = (typeof firebase !== 'undefined' && firebase.firestore) ? firebase.firestore() : null;
+    if (!db) {
+      if (showToast) UI.showToast("Firestore tidak aktif. Data tersimpan di memori lokal.", "warning");
+      return false;
+    }
+
+    const rank = RPG.getTitleParts();
+    const payload = {
+      kenseiCode: this.profile.kenseiCode,
+      nickname: this.profile.nickname || 'Pendekar Kensei',
+      level: RPG.level,
+      title: rank.name,
+      titleIcon: rank.icon,
+      exp: RPG.exp,
+      coins: RPG.coins,
+      unlockedDay: Game.unlockedDay,
+      currentDay: Game.currentDay,
+      maxCombo: RPG.combo || 0,
+      streak: (typeof Streak !== 'undefined') ? Streak.data.count : 1,
+      freezes: (typeof Streak !== 'undefined') ? Streak.data.freezes : 0,
+      bagCapacity: RPG.getBagCapacity(),
+      inventory: RPG.inventory || {},
+      relics: RPG.relics || {},
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    };
+
+    try {
+      await db.collection('players').doc(this.profile.kenseiCode).set(payload, { merge: true });
+      this.profile.lastSynced = Date.now();
+      this.saveProfile();
+      if (showToast) UI.showToast("⚡ Sukses Sinkron ke Cloud Kensei!", "success");
+      return true;
+    } catch(err) {
+      console.warn("Cloud sync error:", err);
+      if (showToast) UI.showToast("Gagal sync ke cloud (offline / koneksi jaringan)", "error");
+      return false;
+    }
+  },
+
+  autoSync: function() {
+    if (this._syncTimer) clearTimeout(this._syncTimer);
+    this._syncTimer = setTimeout(() => {
+      this.syncToCloud(false);
+    }, 2000);
+  },
+
+  restoreFromCloud: async function(code) {
+    code = (code || '').trim().toUpperCase();
+    if (!code) {
+      UI.showToast("Masukkan Kode Kensei!", "error");
+      return;
+    }
+
+    const db = (typeof firebase !== 'undefined' && firebase.firestore) ? firebase.firestore() : null;
+    if (!db) {
+      UI.showToast("Firestore tidak aktif / koneksi terputus", "error");
+      return;
+    }
+
+    try {
+      UI.showToast("Mencari data di Cloud...", "info");
+      const doc = await db.collection('players').doc(code).get();
+      if (!doc.exists) {
+        UI.showToast(`Kode ${code} tidak ditemukan di Cloud!`, "error");
+        return;
+      }
+
+      const d = doc.data();
+      const confirmMsg = `Data Ditemukan!\n• Nickname: ${d.nickname}\n• Level: ${d.level} (${d.title})\n• Progres: Hari ke-${d.unlockedDay}\n• EXP: ${d.exp} ✨ | Koin: ${d.coins} 🪙\n\nApakah kamu yakin ingin memulihkan dan menimpa data perangkat ini?`;
+      if (!confirm(confirmMsg)) return;
+
+      this.profile.kenseiCode = d.kenseiCode || code;
+      this.profile.nickname = d.nickname || 'Pendekar Kensei';
+      this.profile.lastSynced = Date.now();
+      this.saveProfile();
+
+      RPG.level = d.level || 1;
+      RPG.exp = d.exp || 0;
+      RPG.coins = d.coins || 0;
+      RPG.bagCapacity = d.bagCapacity || 6;
+      RPG.inventory = d.inventory || {};
+      RPG.relics = d.relics || {};
+      RPG.save();
+
+      Game.unlockedDay = d.unlockedDay || 1;
+      Game.currentDay = Math.min(Game.unlockedDay, d.currentDay || 1);
+      Game.saveGame();
+
+      if (typeof Streak !== 'undefined') {
+        Streak.data.count = d.streak || 1;
+        Streak.data.freezes = d.freezes || 0;
+        Streak.save();
+      }
+
+      RPG.updateUI();
+      Game.loadDayData();
+      if (typeof UI.renderMap === 'function') UI.renderMap();
+      if (typeof UI.renderInventory === 'function') UI.renderInventory();
+
+      UI.showToast("🎉 Data Berhasil Dipulihkan dari Cloud!", "success");
+      UI.closeModal('cloud-modal');
+    } catch(err) {
+      console.error("Cloud restore error:", err);
+      UI.showToast("Gagal memulihkan: " + err.message, "error");
+    }
+  },
+
+  copyCode: function() {
+    if (!navigator.clipboard) {
+      UI.showToast(`Kode Anda: ${this.profile.kenseiCode}`, 'info');
+      return;
+    }
+    navigator.clipboard.writeText(this.profile.kenseiCode).then(() => {
+      UI.showToast(`Kode ${this.profile.kenseiCode} disalin ke clipboard! 📋`, 'success');
+    }).catch(() => {
+      UI.showToast(`Kode Anda: ${this.profile.kenseiCode}`, 'info');
+    });
+  }
+};
+
+const Leaderboard = {
+  currentTab: 'exp',
+  cachedList: [],
+
+  setTab: function(tab) {
+    this.currentTab = tab;
+    document.querySelectorAll('.lb-tab-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.tab === tab);
+    });
+    this.render();
+  },
+
+  openModal: async function() {
+    UI.openModal('leaderboard-modal');
+    await this.fetchData();
+  },
+
+  fetchData: async function() {
+    const listEl = document.getElementById('lb-list-stream');
+    if (listEl) listEl.innerHTML = `<div class="lb-loading">⚡ Mengambil data Hall of Fame Kensei...</div>`;
+
+    const db = (typeof firebase !== 'undefined' && firebase.firestore) ? firebase.firestore() : null;
+    let players = [];
+
+    if (db) {
+      try {
+        const snap = await db.collection('players').limit(60).get();
+        snap.forEach(doc => {
+          players.push(doc.data());
+        });
+      } catch(e) {
+        console.warn("Leaderboard fetch error:", e);
+      }
+    }
+
+    const myCode = (typeof Cloud !== 'undefined') ? Cloud.profile.kenseiCode : 'ME';
+    const myName = (typeof Cloud !== 'undefined') ? Cloud.profile.nickname : 'Pendekar Kensei';
+    const myRank = RPG.getTitleParts();
+    const myEntry = {
+      kenseiCode: myCode,
+      nickname: myName,
+      level: RPG.level,
+      title: myRank.name,
+      titleIcon: myRank.icon,
+      exp: RPG.exp,
+      coins: RPG.coins,
+      maxCombo: RPG.combo || 0,
+      streak: (typeof Streak !== 'undefined') ? Streak.data.count : 1,
+      unlockedDay: Game.unlockedDay,
+      isMe: true
+    };
+
+    const existingIdx = players.findIndex(p => p.kenseiCode === myCode);
+    if (existingIdx >= 0) {
+      players[existingIdx] = Object.assign(players[existingIdx], myEntry);
+    } else {
+      players.push(myEntry);
+    }
+
+    if (players.length < 8) {
+      const legends = [
+        { kenseiCode: 'BOT-1', nickname: 'Miyamoto Musashi', level: 160, title: 'Kensei', titleIcon: '⛩️', exp: 125000, maxCombo: 88, streak: 45, unlockedDay: 60 },
+        { kenseiCode: 'BOT-2', nickname: 'Hattori Hanzo', level: 120, title: 'Shogun', titleIcon: '👑', exp: 89000, maxCombo: 65, streak: 30, unlockedDay: 50 },
+        { kenseiCode: 'BOT-3', nickname: 'Tomoe Gozen', level: 95, title: 'Shogun', titleIcon: '👑', exp: 68000, maxCombo: 52, streak: 21, unlockedDay: 40 },
+        { kenseiCode: 'BOT-4', nickname: 'Sasaki Kojiro', level: 75, title: 'Daimyo', titleIcon: '🏯', exp: 45000, maxCombo: 40, streak: 15, unlockedDay: 35 },
+        { kenseiCode: 'BOT-5', nickname: 'Yukimura Sanada', level: 50, title: 'Samurai', titleIcon: '🛡️', exp: 28000, maxCombo: 31, streak: 12, unlockedDay: 25 },
+        { kenseiCode: 'BOT-6', nickname: 'Yagyu Jubei', level: 35, title: 'Samurai', titleIcon: '🛡️', exp: 16000, maxCombo: 24, streak: 8, unlockedDay: 18 },
+        { kenseiCode: 'BOT-7', nickname: 'Kato Danzo', level: 20, title: 'Ronin', titleIcon: '⚔️', exp: 7500, maxCombo: 16, streak: 5, unlockedDay: 10 }
+      ];
+      legends.forEach(l => {
+        if (!players.find(p => p.kenseiCode === l.kenseiCode)) players.push(l);
+      });
+    }
+
+    this.cachedList = players;
+    this.render();
+  },
+
+  render: function() {
+    const list = [...this.cachedList];
+    const metric = this.currentTab;
+
+    if (metric === 'exp') {
+      list.sort((a, b) => (b.exp || 0) - (a.exp || 0) || (b.level || 0) - (a.level || 0));
+    } else if (metric === 'streak') {
+      list.sort((a, b) => (b.streak || 0) - (a.streak || 0) || (b.exp || 0) - (a.exp || 0));
+    } else if (metric === 'combo') {
+      list.sort((a, b) => (b.maxCombo || 0) - (a.maxCombo || 0) || (b.exp || 0) - (a.exp || 0));
+    }
+
+    const top1 = list[0] || null;
+    const top2 = list[1] || null;
+    const top3 = list[2] || null;
+
+    const renderPodiumSlot = (p, rankNum, medal) => {
+      if (!p) return `<div class="podium-slot rank-${rankNum} empty"></div>`;
+      let valText = '';
+      if (metric === 'exp') valText = `${(p.exp || 0).toLocaleString()} ✨`;
+      else if (metric === 'streak') valText = `🔥 ${p.streak || 1} Hari`;
+      else if (metric === 'combo') valText = `⚡ ${p.maxCombo || 0}x`;
+
+      return `
+        <div class="podium-slot rank-${rankNum} ${p.isMe ? 'is-me' : ''}">
+          <div class="podium-crown">${medal}</div>
+          <div class="podium-avatar">${p.titleIcon || '🥷'}</div>
+          <div class="podium-name">${p.nickname}</div>
+          <div class="podium-lvl">Lv.${p.level || 1} • ${p.title || 'Pendekar'}</div>
+          <div class="podium-val">${valText}</div>
+        </div>
+      `;
+    };
+
+    const podiumEl = document.getElementById('lb-podium-container');
+    if (podiumEl) {
+      podiumEl.innerHTML = `
+        ${renderPodiumSlot(top2, 2, '🥈')}
+        ${renderPodiumSlot(top1, 1, '🥇')}
+        ${renderPodiumSlot(top3, 3, '🥉')}
+      `;
+    }
+
+    const streamEl = document.getElementById('lb-list-stream');
+    if (streamEl) {
+      const rest = list.slice(3, 50);
+      if (rest.length === 0) {
+        streamEl.innerHTML = `<div class="lb-empty">Belum ada ranking berikutnya. Jadilah yang pertama!</div>`;
+      } else {
+        streamEl.innerHTML = rest.map((p, idx) => {
+          const rank = idx + 4;
+          let valText = '';
+          if (metric === 'exp') valText = `${(p.exp || 0).toLocaleString()} ✨`;
+          else if (metric === 'streak') valText = `🔥 ${p.streak || 1} Hari`;
+          else if (metric === 'combo') valText = `⚡ ${p.maxCombo || 0}x Combo`;
+
+          return `
+            <div class="lb-row ${p.isMe ? 'is-me' : ''}">
+              <div class="lb-rank">#${rank}</div>
+              <div class="lb-avatar">${p.titleIcon || '🥷'}</div>
+              <div class="lb-info">
+                <div class="lb-name">${p.nickname} ${p.isMe ? '<span class="lb-me-tag">ANDA</span>' : ''}</div>
+                <div class="lb-sub">Lv.${p.level || 1} ${p.title || ''} • Hari ${p.unlockedDay || 1}</div>
+              </div>
+              <div class="lb-score">${valText}</div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    const stickyEl = document.getElementById('lb-sticky-player');
+    if (stickyEl) {
+      const myIdx = list.findIndex(p => p.isMe);
+      const myRank = myIdx >= 0 ? myIdx + 1 : list.length;
+      const me = list[myIdx] || {
+        nickname: Cloud.profile.nickname,
+        level: RPG.level,
+        title: RPG.getTitleParts().name,
+        titleIcon: RPG.getTitleParts().icon,
+        exp: RPG.exp,
+        streak: Streak.data.count,
+        maxCombo: RPG.combo || 0
+      };
+
+      let valText = '';
+      if (metric === 'exp') valText = `${(me.exp || 0).toLocaleString()} ✨`;
+      else if (metric === 'streak') valText = `🔥 ${me.streak || 1} Hari`;
+      else if (metric === 'combo') valText = `⚡ ${me.maxCombo || 0}x`;
+
+      stickyEl.innerHTML = `
+        <div class="lb-sticky-inner">
+          <div class="lb-rank" style="color:var(--primary); font-weight:900;">#${myRank}</div>
+          <div class="lb-avatar">${me.titleIcon || '🥷'}</div>
+          <div class="lb-info">
+            <div class="lb-name">${me.nickname} <span class="lb-me-tag">STATUS ANDA</span></div>
+            <div class="lb-sub">Lv.${me.level} • Sektor Hari ${Game.unlockedDay}</div>
+          </div>
+          <div class="lb-score" style="color:var(--gold); font-size:13px;">${valText}</div>
+        </div>
+      `;
     }
   }
 };
@@ -2051,6 +2625,9 @@ const UI = {
       if (list && list.children.length === 0) UI.renderKamusList();
     }
     if (id === 'dojo-modal') Dojo.renderModal();
+    if (id === 'cloud-modal') Cloud.updateUI();
+    if (id === 'leaderboard-modal') Leaderboard.openModal();
+    if (id === 'streak-modal') Streak.renderModal();
     const m = document.getElementById(id); 
     if (!m) return;
     m.classList.remove('hidden', 'modal-close'); 
@@ -2276,6 +2853,7 @@ const UI = {
 
   renderShop: () => {
     RPG.updateUI();
+    if (typeof Streak !== 'undefined') Streak.updateUI();
   },
 
   showToast: (msg, type='success') => { const t = document.getElementById('toast'); t.innerText = msg; t.className = `show ${type}`; setTimeout(()=> t.className = '', 2500); },
@@ -2446,23 +3024,24 @@ nextDayFromResult: () => {
       let isCurrent = (curLvl >= t.min && (curLvl <= t.max || t.max === 9999));
       let isUnlocked = curLvl > t.max;
       let statusClass = isCurrent ? 'tier-active' : (isUnlocked ? 'tier-unlocked' : 'tier-locked');
-      let statusBadge = isCurrent 
-        ? `<span class="tier-status-badge tier-status-active">PANGKAT ANDA</span>`
+      let statusText = isCurrent 
+        ? `<span class="tier-status-text tier-status-active">● PANGKAT ANDA</span>`
         : (isUnlocked 
-          ? `<span class="tier-status-badge tier-status-unlocked">✓ TERLEWATI</span>` 
-          : `<span class="tier-status-badge tier-status-locked">🔒 TERKUNCI</span>`);
+          ? `<span class="tier-status-text tier-status-unlocked">✓ TERLEWATI</span>` 
+          : `<span class="tier-status-text tier-status-locked">🔒 TERKUNCI</span>`);
 
       return `
         <div class="hierarchy-tier-card ${statusClass}">
-          <div class="tier-icon-box">${t.icon}</div>
+          <div class="hierarchy-tier-node"></div>
+          <div class="tier-icon-free">${t.icon}</div>
           <div class="tier-info">
             <div class="tier-title-row">
               <span class="tier-name">${t.name}</span>
               <span class="tier-range">${t.rangeText}</span>
+              ${statusText}
             </div>
             <div class="tier-desc">${t.desc}</div>
           </div>
-          ${statusBadge}
         </div>
       `;
     }).join('');
@@ -6093,8 +6672,13 @@ window.onload = async () => {
 
     if (document.body.contains(loadingMsg)) document.body.removeChild(loadingMsg);
     Dojo.init();
+    Streak.init();
+    Cloud.init();
     Game.checkStoredMode();
   } catch (error) {
+    Dojo.init();
+    Streak.init();
+    Cloud.init();
     alert("Gagal mengunduh: " + error.message);
   }
 };

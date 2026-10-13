@@ -331,6 +331,21 @@
         </div>
       </div>
 
+      <!-- Item: Jimat Pembeku Api (Streak Freeze) -->
+      <div class="shop-card freeze-card">
+        <div class="shop-card-icon icon-ice">❄️</div>
+        <div class="shop-card-info">
+          <div class="shop-card-title-row">
+            <span class="shop-card-name" style="color:#38bdf8;">Jimat Pembeku Api</span>
+            <span class="shop-card-owned" id="owned-streak-freeze">Miliki: 0 / 2</span>
+          </div>
+          <div class="shop-card-desc">Melindungi api streak kamu jika terlewat 1 hari tidak berlatih. Otomatis aktif saat dibutuhkan.</div>
+        </div>
+        <div class="shop-card-action">
+          <button class="btn-buy btn-freeze" id="btn-buy-freeze" onclick="Streak.buyFreeze(150)">150 🪙</button>
+        </div>
+      </div>
+
       <!-- Section Divider: Relik Permanen -->
       <div class="shop-section-divider">
         <span class="shop-section-label">⚔️ RELIK PERMANEN KENSEI (EQUIPMENT)</span>
@@ -650,6 +665,118 @@
   <button class="btn btn-alt" style="max-width:400px;" onclick="UI.closeModal('tips-modal')">Tutup Info</button>
 </div>
 
+<!-- Pilar 5: Cloud Save & Transfer Code Modal -->
+<div id="cloud-modal" class="hidden">
+  <div class="cloud-modal-card">
+    <div class="cloud-modal-header">
+      <div class="cloud-header-top">
+        <span class="cloud-badge">☁️ KENSEI CLOUD SAVE // FIRESTORE</span>
+        <button type="button" class="level-close-btn" onclick="UI.closeModal('cloud-modal')" title="Tutup">✕</button>
+      </div>
+      <h2 class="cloud-title">Akun & Cloud Save</h2>
+      <p class="cloud-subtitle">Simpan progres Anda ke Firebase agar tidak hilang saat berganti ponsel atau browser</p>
+    </div>
+
+    <div class="cloud-modal-content">
+      <!-- Nickname Edit Row -->
+      <div class="cloud-profile-section">
+        <label style="font-size:11px; font-weight:800; color:var(--text-sub); letter-spacing:1px; text-transform:uppercase;">NICKNAME PENDEKAR</label>
+        <div class="cloud-nickname-row">
+          <input type="text" id="cloud-nickname-input" class="cloud-input-nickname" maxlength="16" placeholder="Nama Pendekar..." />
+          <button type="button" class="btn-save-nickname" onclick="Cloud.setNickname(document.getElementById('cloud-nickname-input').value)">Simpan 💾</button>
+        </div>
+      </div>
+
+      <!-- Kensei Code Transfer Card -->
+      <div class="cloud-code-banner">
+        <div>
+          <div class="cloud-code-label">KODE TRANSFER KENSEI (ID UNIK)</div>
+          <div class="cloud-code-value" id="cloud-code-display">YK-XXXXXX</div>
+        </div>
+        <button type="button" class="btn-copy-code" onclick="Cloud.copyCode()">Salin Kode 📋</button>
+      </div>
+
+      <!-- Live Sync Action -->
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <div class="cloud-sync-status-row">
+          <span>Status Sinkronisasi:</span>
+          <span id="cloud-sync-status"><span style="color:var(--warning);">○ Belum Pernah Disinkron</span></span>
+        </div>
+        <button type="button" class="btn-sync-now" onclick="Cloud.syncToCloud(true)">⚡ SINKRONKAN PROGRES KE CLOUD</button>
+      </div>
+
+      <!-- Restore From Device Section -->
+      <div class="cloud-restore-section">
+        <div class="cloud-restore-title">PINDAH PERANGKAT? PULIHKAN DATA</div>
+        <div class="cloud-restore-row">
+          <input type="text" id="cloud-restore-input" class="cloud-input-restore" placeholder="YK-XXXXXX" maxlength="12" />
+          <button type="button" class="btn-restore-data" onclick="Cloud.restoreFromCloud(document.getElementById('cloud-restore-input').value)">Pulihkan ➔</button>
+        </div>
+        <span style="font-size:11px; color:var(--text-sub); line-height:1.4;">Masukkan kode 6 digit dari perangkat lama Anda untuk mengembalikan seluruh level, koin, relik, dan tas.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Pilar 5: Global Leaderboard (Hall of Fame) Modal -->
+<div id="leaderboard-modal" class="hidden">
+  <div class="leaderboard-modal-card">
+    <div class="lb-modal-header">
+      <div class="lb-header-top">
+        <span class="lb-header-badge">🏆 HALL OF FAME GLOBAL</span>
+        <button type="button" class="level-close-btn" onclick="UI.closeModal('leaderboard-modal')" title="Tutup">✕</button>
+      </div>
+      <h2 class="lb-modal-title">Papan Peringkat Pendekar</h2>
+      <p class="lb-modal-subtitle">Kompetisi sehat seluruh murid Kensei di dunia</p>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="lb-tabs-row">
+      <button type="button" class="lb-tab-btn active" data-tab="exp" onclick="Leaderboard.setTab('exp')">✨ Total EXP</button>
+      <button type="button" class="lb-tab-btn" data-tab="streak" onclick="Leaderboard.setTab('streak')">🔥 Daily Streak</button>
+      <button type="button" class="lb-tab-btn" data-tab="combo" onclick="Leaderboard.setTab('combo')">⚡ Rekor Combo</button>
+    </div>
+
+    <!-- Top 3 Podium (Unboxed) -->
+    <div class="lb-podium-wrap" id="lb-podium-container"></div>
+
+    <!-- Rest of Rankings Stream -->
+    <div class="lb-content-stream" id="lb-list-stream"></div>
+
+    <!-- Sticky Live Player Status Row -->
+    <div class="lb-sticky-player-bar" id="lb-sticky-player"></div>
+  </div>
+</div>
+
+<!-- Pilar 5: Daily Streak & Absensi Ninja Modal -->
+<div id="streak-modal" class="hidden">
+  <div class="streak-modal-card">
+    <div class="streak-modal-header">
+      <button type="button" class="streak-close-btn" onclick="UI.closeModal('streak-modal')" title="Tutup">✕</button>
+      <div class="streak-hero-flame">🔥</div>
+      <h2 class="streak-hero-title" id="streak-modal-count">1 Hari Beruntun!</h2>
+      <p class="streak-hero-sub" id="streak-modal-status">Nyalakan apimu dengan mengklaim bonus hari ini!</p>
+    </div>
+
+    <div class="streak-modal-content">
+      <!-- 7-Day Flame Track -->
+      <div class="streak-timeline-grid" id="streak-timeline"></div>
+
+      <!-- Streak Freeze Status -->
+      <div class="streak-status-box">
+        <div class="streak-freeze-info">
+          <span>❄️ Jimat Pembeku Api:</span>
+          <span id="streak-freeze-count" style="color:#fff;">0 / 2 Tersedia</span>
+        </div>
+        <button type="button" class="btn" style="padding:4px 10px; font-size:11px; margin:0; max-width:120px;" onclick="UI.closeModal('streak-modal'); UI.openModal('shop-modal');">Beli di Toko</button>
+      </div>
+
+      <!-- Action Button -->
+      <button type="button" class="btn-streak-claim" id="streak-claim-btn" onclick="Streak.claimReward()">KLAIM BONUS HARIAN ➔</button>
+    </div>
+  </div>
+</div>
+
 <div class="sidebar" id="sidebar">
   <div class="sidebar-header">
     <div class="sidebar-header-top">
@@ -711,6 +838,37 @@
           <div class="sidebar-tile-desc">Bank kesalahan & repetisi spasi</div>
         </div>
         <span class="sidebar-tile-status status-count" id="dojo-badge">0 Soal</span>
+      </div>
+    </div>
+
+    <!-- Group: Ekosistem Online & Kompetisi -->
+    <div class="sidebar-group">
+      <div class="sidebar-group-label">🌐 EKOSISTEM CLOUD & KOMPETISI</div>
+      <div class="sidebar-tile" onclick="UI.toggleSidebar(); Leaderboard.openModal();">
+        <div class="sidebar-tile-icon icon-gold">🏆</div>
+        <div class="sidebar-tile-info">
+          <div class="sidebar-tile-title">Hall of Fame Global</div>
+          <div class="sidebar-tile-desc">Papan peringkat pendekar Kensei</div>
+        </div>
+        <div class="sidebar-tile-arrow">›</div>
+      </div>
+
+      <div class="sidebar-tile" onclick="UI.toggleSidebar(); Streak.openModal();">
+        <div class="sidebar-tile-icon icon-red">🔥</div>
+        <div class="sidebar-tile-info">
+          <div class="sidebar-tile-title">Absensi Ninja (Streak)</div>
+          <div class="sidebar-tile-desc">Bonus login harian & api latihan</div>
+        </div>
+        <span class="sidebar-tile-status status-count" id="sidebar-streak-badge">🔥 1</span>
+      </div>
+
+      <div class="sidebar-tile" onclick="UI.toggleSidebar(); UI.openModal('cloud-modal');">
+        <div class="sidebar-tile-icon icon-cyan">☁️</div>
+        <div class="sidebar-tile-info">
+          <div class="sidebar-tile-title">Akun & Cloud Save</div>
+          <div class="sidebar-tile-desc">Sinkronisasi data & pindah perangkat</div>
+        </div>
+        <span class="sidebar-tile-status" id="sidebar-cloud-badge" style="color:var(--primary); font-size:10px;">ID: #YK-XXXX</span>
       </div>
     </div>
 
@@ -796,6 +954,8 @@
       </div>
       <!-- Gold -->
       <div class="stat-item gold" title="Koin"><span id="ui-coin">0</span> 🪙</div>
+      <!-- Streak Flame -->
+      <div class="stat-item streak" id="ui-streak-hud" onclick="Streak.openModal()" title="Absensi Ninja / Daily Streak"><span class="flame-icon">🔥</span> <span id="ui-streak">1</span></div>
       <!-- Combo -->
       <span class="combo-text hidden" id="ui-combo">x2</span>
     </div>
