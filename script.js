@@ -3285,15 +3285,31 @@ nextDayFromResult: () => {
     }
   },
   switchTab: (tId) => {
+    if (Game.currentTab === tId) return; // Tab sudah aktif, abaikan agar tidak glitch re-render
+    const tabEl = document.getElementById(`tab-${tId}`);
+    if (tabEl && tabEl.classList.contains('locked')) {
+      UI.showToast("🔒 Pelajari tab Pola terlebih dahulu untuk membuka Zona Tempur!", "warning");
+      return;
+    }
     if((tId === 'partikel' || tId === 'arti') && Game.hp <= 0) return;
     const card = document.getElementById('card-main');
     if (card) card.classList.remove('hazard-battle-active');
     if(Game.currentTab) Game.tabProgress[Game.currentTab] = Game.currentIndex;
     Game.currentTab = tId; Game.currentIndex = Game.tabProgress[tId]; 
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); document.getElementById(`tab-${tId}`).classList.add('active');
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); 
+    if (tabEl) tabEl.classList.add('active');
     const isAman = (tId === 'hafalan' || tId === 'belajar');
-    const badge = document.getElementById('ui-zone'); badge.className = `zone-badge ${isAman ? 'zone-aman' : 'zone-tempur'}`; badge.innerText = isAman ? "🟢 ZONA AMAN" : "🔴 ZONA TEMPUR";
-    if(tId === 'belajar') { document.getElementById('tab-partikel').classList.remove('locked'); document.getElementById('tab-arti').classList.remove('locked'); }
+    const badge = document.getElementById('ui-zone'); 
+    if (badge) {
+      badge.className = `zone-badge ${isAman ? 'zone-aman' : 'zone-tempur'}`; 
+      badge.innerText = isAman ? "🟢 ZONA AMAN" : "🔴 ZONA TEMPUR";
+    }
+    if(tId === 'belajar') { 
+      const pTab = document.getElementById('tab-partikel');
+      const aTab = document.getElementById('tab-arti');
+      if (pTab) pTab.classList.remove('locked'); 
+      if (aTab) aTab.classList.remove('locked'); 
+    }
     UI.loadStep();
   },
   triggerNextAnim: (callback) => {
@@ -3325,25 +3341,28 @@ nextDayFromResult: () => {
       }
     }, 200);
   },
-    loadStep: () => {
+  loadStep: () => {
     const t = Game.currentTab; const i = Game.currentIndex;
-    document.getElementById('card-main').setAttribute('data-tab', t); // <-- Tambahkan baris ini!
-    if (!Game.hasShield) { 
-        document.getElementById('card-main').classList.remove('shield-active'); 
-    } else { 
-        document.getElementById('card-main').classList.add('shield-active'); 
+    const cardMain = document.getElementById('card-main');
+    if (cardMain) {
+      cardMain.setAttribute('data-tab', t);
+      if (!Game.hasShield) { 
+        cardMain.classList.remove('shield-active'); 
+      } else { 
+        cardMain.classList.add('shield-active'); 
+      }
     }
-['ui-jp', 'ui-arti', 'ui-feedback', 'input-area'].forEach(id => document.getElementById(id).innerHTML = ''); 
+    ['ui-jp', 'ui-arti', 'ui-feedback', 'input-area'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = '';
+    }); 
 
-// --- FIX BLUR BOCOR ---
-let artiEl = document.getElementById('ui-arti');
-artiEl.style.transition = 'none'; // 1. Matikan animasi sementara
-artiEl.classList.remove('revealed'); // 2. Kembalikan ke mode Blur secara instan
-artiEl.offsetHeight; // 3. Paksa browser me-render perubahan detik ini juga (Reflow)
-artiEl.style.transition = ''; // 4. Nyalakan lagi animasinya untuk sentuhan berikutnya
-// ----------------------
+    // Reset status revealed pada arti tanpa memicu forced layout reflow
+    const artiEl = document.getElementById('ui-arti');
+    if (artiEl) artiEl.classList.remove('revealed');
 
-document.getElementById('btn-next').classList.add('hidden');
+    const btnNext = document.getElementById('btn-next');
+    if (btnNext) btnNext.classList.add('hidden');
 
 
     const isPro = (Game.mode === 'pro');
