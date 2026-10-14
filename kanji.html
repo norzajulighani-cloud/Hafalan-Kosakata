@@ -1,0 +1,7367 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Pasar & Dojo Kanji Kensei - YOMIKATA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Serif+JP:wght@600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-base: #050813;
+    --bg-surface: rgba(13, 22, 45, 0.82);
+    --bg-card: rgba(16, 26, 54, 0.75);
+    --bg-card-hover: rgba(24, 38, 76, 0.92);
+    --primary: #38bdf8;
+    --primary-glow: rgba(56, 189, 248, 0.4);
+    --success: #22c55e;
+    --success-glow: rgba(34, 197, 94, 0.4);
+    --warning: #f59e0b;
+    --gold: #fbbf24;
+    --gold-glow: rgba(251, 191, 36, 0.45);
+    --danger: #ef4444;
+    --danger-glow: rgba(239, 68, 68, 0.4);
+    --purple: #c084fc;
+    --purple-glow: rgba(192, 132, 252, 0.4);
+    --pink: #f472b6;
+    --pink-glow: rgba(244, 114, 182, 0.4);
+    --text-main: #f8fafc;
+    --text-sub: #94a3b8;
+    --text-muted: #64748b;
+    --border-glass: rgba(255, 255, 255, 0.09);
+    --border-accent: rgba(56, 189, 248, 0.35);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: var(--bg-base);
+    background-image: 
+      radial-gradient(circle at 50% 0%, rgba(30, 58, 138, 0.38) 0%, transparent 60%),
+      radial-gradient(circle at 10% 35%, rgba(192, 132, 252, 0.12) 0%, transparent 40%),
+      radial-gradient(circle at 90% 70%, rgba(56, 189, 248, 0.12) 0%, transparent 40%),
+      linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 100% 100%, 36px 36px, 36px 36px;
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 14px 12px 100px 12px;
+    overflow-x: hidden;
+  }
+
+  .container { width: 100%; max-width: 680px; position: relative; }
+  button, input, select { touch-action: manipulation; font-family: inherit; }
+  .hidden { display: none !important; }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); }
+  ::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.3); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(56, 189, 248, 0.6); }
+
+  /* ==========================================
+     1. MASTER TOP NAVIGATION & BRANDING
+     ========================================== */
+  .top-navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 6px 2px 14px 2px;
+    margin-bottom: 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: transparent;
+  }
+
+  .nav-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-back {
+    color: var(--primary);
+    font-size: 13.5px;
+    font-weight: 800;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    text-decoration: none;
+    padding: 4px 6px;
+    background: transparent;
+    border: none;
+  }
+  .btn-back:hover {
+    color: #fff;
+    transform: translateX(-2px);
+    text-shadow: 0 0 10px var(--primary-glow);
+  }
+  .btn-back:active { transform: scale(0.95); }
+
+  .nav-title-group {
+    display: flex;
+    align-items: center;
+  }
+  .nav-title {
+    font-size: 16px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    background: linear-gradient(135deg, #ffffff 40%, #bae6fd 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0;
+  }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+  }
+
+  /* ==========================================
+     2. TOP NAVBAR SIDEBAR TOGGLE & DRAWER
+     ========================================== */
+  .btn-sidebar-toggle {
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .btn-sidebar-toggle:hover {
+    background: rgba(56, 189, 248, 0.22);
+    border-color: var(--primary);
+    box-shadow: 0 0 14px var(--primary-glow);
+    transform: translateY(-1px);
+  }
+  .btn-sidebar-toggle:active { transform: scale(0.95); }
+  .sidebar-badge-count {
+    background: var(--primary);
+    color: #040813;
+    font-size: 10.5px;
+    font-weight: 900;
+    padding: 1px 6px;
+    border-radius: 10px;
+  }
+  .hamburger-bars {
+    font-size: 13px;
+    color: var(--primary);
+    margin-left: 2px;
+  }
+
+  /* BODY & HTML SCROLL LOCK WHEN DRAWER/MODAL OPEN */
+  html.drawer-open,
+  body.drawer-open {
+    overflow: hidden !important;
+    height: 100% !important;
+    overscroll-behavior: none !important;
+    touch-action: none;
+  }
+  body.drawer-open {
+    position: fixed !important;
+    width: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+  }
+
+  /* SIDEBAR DRAWER OVERLAY & PANEL */
+  .sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(3, 6, 16, 0.78);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    touch-action: none;
+    transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s;
+  }
+  .sidebar-overlay.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .dojo-sidebar-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: 380px;
+    background: linear-gradient(175deg, rgba(14, 23, 50, 0.98) 0%, rgba(6, 11, 26, 0.99) 100%);
+    border-left: 1px solid rgba(56, 189, 248, 0.35);
+    z-index: 10001;
+    transform: translateX(100%);
+    visibility: hidden;
+    pointer-events: none;
+    box-shadow: none;
+    overscroll-behavior: contain;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.35s, box-shadow 0.35s;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .dojo-sidebar-drawer.active {
+    transform: translateX(0);
+    visibility: visible;
+    pointer-events: auto;
+    box-shadow: -15px 0 50px rgba(0, 0, 0, 0.9), 0 0 30px rgba(56, 189, 248, 0.15);
+  }
+
+  .sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(10, 16, 36, 0.7);
+  }
+  .sidebar-title-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .sidebar-icon {
+    font-size: 20px;
+    width: 36px;
+    height: 36px;
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, rgba(10, 16, 36, 0.8) 100%);
+    border: 1px solid rgba(56, 189, 248, 0.45);
+    border-radius: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 12px var(--primary-glow);
+  }
+  .sidebar-title {
+    font-size: 13.5px;
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: 0.8px;
+  }
+  .sidebar-subtitle {
+    font-size: 11px;
+    color: var(--text-sub);
+  }
+  .btn-sidebar-close {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-glass);
+    color: var(--text-sub);
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .btn-sidebar-close:hover {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: var(--danger);
+    color: #fca5a5;
+  }
+
+  .sidebar-body {
+    flex: 1;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .sidebar-card {
+    background: rgba(16, 26, 56, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 14px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  }
+  .sc-label {
+    font-size: 10.5px;
+    font-weight: 900;
+    color: var(--primary);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .sidebar-select {
+    width: 100%;
+    background: rgba(6, 10, 24, 0.95);
+    border: 1px solid var(--border-accent);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 800;
+    padding: 9px 12px;
+    border-radius: 11px;
+    outline: none;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: all 0.2s;
+  }
+  .sidebar-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 14px var(--primary-glow);
+  }
+
+  .sidebar-room-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .btn-sidebar-action {
+    padding: 8px 10px;
+    border-radius: 10px;
+    font-size: 11.5px;
+    font-weight: 800;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.2s;
+  }
+  .btn-add-room {
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.2) 0%, rgba(16, 185, 129, 0.15) 100%);
+    border: 1px solid rgba(34, 197, 94, 0.45);
+    color: #86efac;
+  }
+  .btn-add-room:hover {
+    background: var(--success);
+    color: #000;
+    box-shadow: 0 0 16px var(--success-glow);
+  }
+  .btn-clear-room {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-glass);
+    color: #f1f5f9;
+  }
+  .btn-clear-room:hover {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: var(--danger);
+    color: #fca5a5;
+  }
+
+  .sidebar-stats-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .sidebar-stat-badge {
+    background: rgba(56, 189, 248, 0.12);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    color: #38bdf8;
+    padding: 8px 10px;
+    border-radius: 11px;
+    font-size: 12px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .sidebar-stat-badge.badge-gold {
+    background: rgba(251, 191, 36, 0.12);
+    border-color: rgba(251, 191, 36, 0.3);
+    color: var(--gold);
+  }
+
+  .sidebar-progress-container {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .sidebar-progress-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--text-sub);
+  }
+  .dojo-progress-track {
+    width: 100%;
+    height: 7px;
+    background: rgba(6, 10, 22, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+  }
+  .dojo-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #38bdf8 0%, #22c55e 60%, #fbbf24 100%);
+    border-radius: 10px;
+    transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
+  }
+
+  .btn-sidebar-guide {
+    width: 100%;
+    background: linear-gradient(135deg, rgba(192, 132, 252, 0.15) 0%, rgba(147, 51, 234, 0.1) 100%);
+    border: 1px solid rgba(192, 132, 252, 0.35);
+    border-radius: 12px;
+    padding: 10px 12px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+  }
+  .btn-sidebar-guide:hover {
+    background: rgba(192, 132, 252, 0.25);
+    border-color: var(--purple);
+    box-shadow: 0 0 16px var(--purple-glow);
+    transform: translateY(-1px);
+  }
+  .guide-item-icon { font-size: 20px; }
+  .guide-item-info { flex: 1; }
+  .guide-item-title { font-size: 12.5px; font-weight: 800; color: #f3e8ff; }
+  .guide-item-desc { font-size: 10.5px; color: var(--text-sub); margin-top: 1px; }
+  .guide-arrow { font-size: 12px; color: var(--purple); }
+
+  .sidebar-nav-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .sidebar-nav-item {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-glass);
+    color: #f1f5f9;
+    padding: 9px 12px;
+    border-radius: 10px;
+    font-size: 12.5px;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+  .sidebar-nav-item:hover {
+    background: rgba(56, 189, 248, 0.15);
+    border-color: var(--primary);
+    color: #fff;
+    transform: translateX(3px);
+  }
+  .sni-badge {
+    background: rgba(56, 189, 248, 0.2);
+    color: var(--primary);
+    padding: 2px 7px;
+    border-radius: 8px;
+    font-size: 10.5px;
+    font-weight: 800;
+  }
+
+  /* ==========================================
+     3. MAIN MODE TABS (Pasar vs Latihan Dojo)
+     ========================================== */
+  .main-nav-tabs {
+    display: flex;
+    background: rgba(10, 16, 34, 0.88);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    padding: 5px;
+    border-radius: 16px;
+    border: 1px solid var(--border-glass);
+    gap: 6px;
+    margin-bottom: 18px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  }
+  .tab-main-btn {
+    flex: 1;
+    background: transparent;
+    color: var(--text-sub);
+    border: 1px solid transparent;
+    padding: 10px 8px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 800;
+    font-size: 13px;
+    text-align: center;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    user-select: none;
+    white-space: nowrap;
+  }
+  .tab-main-btn:hover { color: #fff; background: rgba(255, 255, 255, 0.05); }
+  .tab-main-btn.active {
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.22) 0%, rgba(99, 102, 241, 0.2) 100%);
+    color: var(--primary);
+    border-color: rgba(56, 189, 248, 0.45);
+    box-shadow: 0 4px 16px rgba(56, 189, 248, 0.22);
+    transform: translateY(-1px);
+  }
+  .tab-badge-num {
+    background: rgba(56, 189, 248, 0.2);
+    border: 1px solid rgba(56, 189, 248, 0.4);
+    font-size: 10.5px;
+    padding: 1px 7px;
+    border-radius: 10px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  /* ==========================================
+     4. PASAR KANJI (KATALOG DENGAN KERANJANG)
+     ========================================== */
+  .market-toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .search-wrapper {
+    display: flex;
+    align-items: center;
+    background: rgba(13, 21, 44, 0.9);
+    border: 1px solid var(--border-glass);
+    border-radius: 14px;
+    padding: 3px 14px;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  }
+  .search-wrapper:focus-within {
+    border-color: var(--primary);
+    box-shadow: 0 0 18px var(--primary-glow);
+    background: rgba(16, 26, 56, 0.95);
+  }
+  .search-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: #fff;
+    padding: 10px 8px;
+    font-size: 13.5px;
+    outline: none;
+  }
+  .search-input::placeholder { color: var(--text-muted); }
+  .search-clear {
+    background: transparent;
+    border: none;
+    color: var(--text-sub);
+    font-size: 14px;
+    cursor: pointer;
+    padding: 4px;
+    transition: color 0.2s;
+  }
+  .search-clear:hover { color: #fff; }
+
+  .filter-chips-stream {
+    display: flex;
+    gap: 7px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    scrollbar-width: none;
+  }
+  .filter-chips-stream::-webkit-scrollbar { display: none; }
+  .filter-chip {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-glass);
+    color: var(--text-sub);
+    padding: 7px 14px;
+    border-radius: 20px;
+    font-size: 11.5px;
+    font-weight: 800;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .filter-chip:hover { color: #fff; background: rgba(255, 255, 255, 0.08); transform: translateY(-1px); }
+  .filter-chip.active {
+    background: rgba(56, 189, 248, 0.2);
+    border-color: var(--primary);
+    color: var(--primary);
+    box-shadow: 0 0 14px rgba(56, 189, 248, 0.3);
+  }
+  .filter-chip:active { transform: scale(0.95); }
+
+  /* Catalog Grid Cards */
+  .market-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+    gap: 10px;
+    width: 100%;
+  }
+
+  .kanji-market-card {
+    background: linear-gradient(165deg, rgba(17, 27, 54, 0.88) 0%, rgba(9, 14, 30, 0.94) 100%);
+    border: 1px solid var(--border-glass);
+    border-radius: 16px;
+    padding: 12px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    user-select: none;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+  }
+  .kanji-market-card:hover {
+    background: linear-gradient(165deg, rgba(25, 39, 78, 0.95) 0%, rgba(13, 20, 42, 0.98) 100%);
+    transform: translateY(-4px) scale(1.02);
+    border-color: var(--primary);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.65), 0 0 20px rgba(56, 189, 248, 0.25);
+    z-index: 2;
+  }
+
+  .card-top-meta {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    font-size: 9.5px;
+    font-weight: 800;
+    gap: 4px;
+  }
+  .tag-level {
+    padding: 2px 6px;
+    border-radius: 5px;
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+  }
+  .tag-n5 { background: rgba(56, 189, 248, 0.18); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4); }
+  .tag-n4 { background: rgba(192, 132, 252, 0.18); color: #c084fc; border: 1px solid rgba(192, 132, 252, 0.4); }
+
+  .card-meta-right {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 0;
+  }
+  .tag-source {
+    color: var(--gold);
+    font-size: 9.5px;
+    font-weight: 700;
+    white-space: nowrap;
+    line-height: 1;
+  }
+  .btn-card-audio {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--border-glass);
+    color: var(--text-sub);
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    font-size: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+    padding: 0;
+    line-height: 1;
+  }
+  .btn-card-audio:hover {
+    background: var(--primary);
+    color: #000;
+    transform: scale(1.15);
+  }
+  .btn-card-audio:active { transform: scale(0.9); }
+
+  .card-kanji-hero {
+    font-family: 'Noto Serif JP', 'Noto Sans JP', serif;
+    font-size: 42px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.15;
+    margin: 5px 0 2px;
+    text-shadow: 0 0 16px rgba(255, 255, 255, 0.15);
+    transition: transform 0.2s;
+  }
+  .kanji-market-card:hover .card-kanji-hero {
+    transform: scale(1.08);
+    color: #bae6fd;
+    text-shadow: 0 0 20px var(--primary-glow);
+  }
+
+  .card-arti-label {
+    font-size: 11.5px;
+    font-weight: 800;
+    color: var(--gold);
+    line-height: 1.2;
+    text-align: center;
+    margin-bottom: 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+  }
+  .card-readings-hint {
+    font-size: 10px;
+    color: var(--text-sub);
+    margin-bottom: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Cart Toggle Button */
+  .btn-cart-toggle {
+    width: 100%;
+    border-radius: 9px;
+    padding: 7px 4px;
+    font-size: 11px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+  }
+  .btn-cart-toggle.is-add {
+    background: rgba(56, 189, 248, 0.14);
+    border: 1px solid rgba(56, 189, 248, 0.4);
+    color: #38bdf8;
+  }
+  .btn-cart-toggle.is-add:hover {
+    background: var(--primary);
+    color: #000;
+    box-shadow: 0 0 14px var(--primary-glow);
+    transform: translateY(-1px);
+  }
+  .btn-cart-toggle.is-in-dojo {
+    background: rgba(34, 197, 94, 0.22);
+    border: 1px solid var(--success);
+    color: #86efac;
+    box-shadow: 0 0 10px rgba(34, 197, 94, 0.2);
+  }
+  .btn-cart-toggle.is-in-dojo:hover {
+    background: rgba(239, 68, 68, 0.25);
+    border-color: var(--danger);
+    color: #fca5a5;
+    box-shadow: 0 0 12px var(--danger-glow);
+  }
+  .btn-cart-toggle:active { transform: scale(0.95); }
+
+  /* ==========================================
+     5. RUANG DOJO LATIHAN (FLASHCARD & KUIS)
+     ========================================== */
+  .dojo-arena-card {
+    background: linear-gradient(170deg, rgba(22, 34, 68, 0.96) 0%, rgba(10, 16, 36, 0.98) 100%);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    border-radius: 24px;
+    padding: 24px 20px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75), 0 0 30px rgba(56, 189, 248, 0.12);
+    min-height: 440px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Flashcard Top Bar (Minimal, No nested tabs) */
+  .fc-header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 12px;
+    margin-bottom: 14px;
+    width: 100%;
+  }
+  .fc-room-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    padding: 4px 10px;
+    border-radius: 9px;
+    font-size: 11.5px;
+    font-weight: 800;
+    color: var(--primary);
+  }
+  .fc-counter-badge {
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--text-sub);
+    letter-spacing: 0.5px;
+  }
+
+  /* Flashcard Content */
+  .fc-body-box {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  .fc-kanji-big {
+    font-family: 'Noto Serif JP', 'Noto Sans JP', serif;
+    font-size: clamp(74px, 18vw, 100px);
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.1;
+    margin-bottom: 6px;
+    text-shadow: 0 0 35px rgba(56, 189, 248, 0.45);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    animation: floatKanji 4s ease-in-out infinite;
+  }
+  @keyframes floatKanji {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+  .fc-body-box:hover .fc-kanji-big {
+    transform: scale(1.08) translateY(-4px);
+    color: var(--gold);
+    text-shadow: 0 0 40px var(--gold-glow);
+  }
+
+  .fc-reveal-wrap {
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: all 0.3s ease;
+  }
+  .shield-blur {
+    filter: blur(12px);
+    opacity: 0.12;
+    transform: translateY(10px) scale(0.96);
+    pointer-events: none;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .shield-blur.revealed {
+    filter: blur(0);
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+
+  .fc-grid-two {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .reading-cell {
+    background: rgba(6, 10, 24, 0.78);
+    border: 1px solid var(--border-glass);
+    border-radius: 12px;
+    padding: 10px 12px;
+    text-align: left;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+    transition: border-color 0.2s;
+  }
+  .reading-cell:hover { border-color: rgba(255, 255, 255, 0.2); }
+  .rc-label {
+    font-size: 9.5px;
+    font-weight: 900;
+    letter-spacing: 0.9px;
+    margin-bottom: 3px;
+    text-transform: uppercase;
+  }
+  .rc-onyomi .rc-label { color: #f472b6; text-shadow: 0 0 8px rgba(244, 114, 182, 0.4); }
+  .rc-kunyomi .rc-label { color: #38bdf8; text-shadow: 0 0 8px rgba(56, 189, 248, 0.4); }
+  .rc-val {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #fff;
+    word-break: break-word;
+  }
+
+  .fc-meaning-banner {
+    background: linear-gradient(135deg, rgba(251, 191, 36, 0.12) 0%, rgba(245, 158, 11, 0.06) 100%);
+    border: 1px solid rgba(251, 191, 36, 0.35);
+    border-radius: 12px;
+    padding: 10px 14px;
+    text-align: center;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+  }
+  .fmb-label { font-size: 9.5px; font-weight: 800; color: var(--gold); letter-spacing: 1.2px; text-transform: uppercase; }
+  .fmb-text { font-size: 17px; font-weight: 800; color: #fff; margin-top: 2px; }
+
+  .fc-jukugo-shelf {
+    background: rgba(6, 10, 24, 0.75);
+    border: 1px solid var(--border-glass);
+    border-radius: 12px;
+    padding: 10px 12px;
+    text-align: left;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+  }
+  .fjs-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12.5px;
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  .fjs-item:last-child { border-bottom: none; }
+
+  /* Dojo Navigation Bottom Controls */
+  .dojo-nav-controls {
+    display: flex;
+    gap: 9px;
+    width: 100%;
+    margin-top: 14px;
+  }
+  .btn-dn {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-glass);
+    color: #fff;
+    font-size: 13.5px;
+    font-weight: 800;
+    padding: 11px 14px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .btn-dn:hover {
+    background: rgba(56, 189, 248, 0.2);
+    border-color: var(--primary);
+    transform: translateY(-2px);
+  }
+  .btn-dn:active { transform: scale(0.95); }
+
+  .btn-dn-next {
+    flex: 2;
+    background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+    border-color: var(--primary);
+    color: #fff;
+    box-shadow: 0 4px 18px rgba(2, 132, 199, 0.45);
+  }
+  .btn-dn-next:hover {
+    background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+    color: #000;
+    box-shadow: 0 0 24px var(--primary-glow);
+  }
+
+  .btn-mark-master {
+    background: rgba(251, 191, 36, 0.15);
+    border: 1px solid rgba(251, 191, 36, 0.4);
+    color: var(--gold);
+    font-size: 16px;
+    width: 44px;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .btn-mark-master:hover {
+    transform: translateY(-2px) scale(1.1);
+    box-shadow: 0 0 16px var(--gold-glow);
+  }
+  .btn-mark-master.is-mastered {
+    background: var(--gold);
+    color: #000;
+    box-shadow: 0 0 18px var(--gold-glow);
+  }
+
+  /* Empty Dojo State */
+  .empty-dojo-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 45px 20px;
+    color: var(--text-sub);
+    gap: 14px;
+  }
+  .empty-icon { font-size: 52px; animation: floatKanji 3s ease-in-out infinite; }
+  .empty-title { font-size: 19px; font-weight: 800; color: #fff; }
+  .empty-desc { font-size: 13.5px; max-width: 400px; line-height: 1.5; color: var(--text-sub); }
+  .btn-jump-market {
+    background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+    color: #000;
+    font-weight: 900;
+    padding: 11px 22px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 0 20px var(--primary-glow);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .btn-jump-market:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 28px var(--primary-glow);
+  }
+  .btn-jump-market:active { transform: scale(0.95); }
+
+  /* ==========================================
+     6. DOJO KUIS DRILL UI
+     ========================================== */
+  .quiz-area-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    padding: 20px 0;
+  }
+  .quiz-kanji-big {
+    font-family: 'Noto Serif JP', 'Noto Sans JP', serif;
+    font-size: 72px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 20px;
+    text-shadow: 0 0 30px var(--primary-glow);
+    animation: floatKanji 4s ease-in-out infinite;
+  }
+  .quiz-grid-choices {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    width: 100%;
+    max-width: 480px;
+  }
+  .btn-quiz-opt {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1.5px solid var(--border-glass);
+    border-radius: 14px;
+    padding: 13px 12px;
+    color: #fff;
+    font-size: 14.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+  .btn-quiz-opt:hover {
+    background: rgba(56, 189, 248, 0.18);
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.2);
+  }
+  .btn-quiz-opt:active { transform: scale(0.95); }
+  .btn-quiz-opt.correct {
+    background: rgba(34, 197, 94, 0.3) !important;
+    border-color: var(--success) !important;
+    color: #86efac !important;
+    box-shadow: 0 0 20px var(--success-glow);
+    animation: pulseGlow 0.5s ease;
+  }
+  .btn-quiz-opt.wrong {
+    background: rgba(239, 68, 68, 0.3) !important;
+    border-color: var(--danger) !important;
+    color: #fca5a5 !important;
+    animation: shake 0.4s ease;
+  }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+  }
+
+  /* Quiz Top Bar & Compact Drill Mode Selector */
+  .quiz-top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    position: relative;
+    z-index: 20;
+  }
+  .quiz-telemetry-cluster {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .quiz-stat-pill {
+    background: rgba(245, 158, 11, 0.14);
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    color: var(--gold);
+    font-size: 11px;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .quiz-stat-pill.score-pill {
+    background: rgba(34, 197, 94, 0.14);
+    border-color: rgba(34, 197, 94, 0.35);
+    color: #86efac;
+  }
+
+  /* Compact Drill Mode Dropdown */
+  .drill-mode-dropdown-wrap {
+    position: relative;
+  }
+  .btn-drill-dropdown {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  }
+  .btn-drill-dropdown:hover,
+  .btn-drill-dropdown.active {
+    background: rgba(56, 189, 248, 0.2);
+    border-color: var(--primary);
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.3);
+  }
+  .dropdown-caret {
+    font-size: 10px;
+    color: var(--primary);
+    transition: transform 0.2s;
+  }
+  .btn-drill-dropdown.active .dropdown-caret {
+    transform: rotate(180deg);
+  }
+
+  .drill-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 250px;
+    background: linear-gradient(165deg, rgba(16, 26, 56, 0.98) 0%, rgba(8, 14, 32, 0.99) 100%);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    border-radius: 16px;
+    padding: 8px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.9), 0 0 25px rgba(56, 189, 248, 0.2);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    z-index: 100;
+    animation: popDropdown 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes popDropdown {
+    from { opacity: 0; transform: translateY(-8px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .dd-header {
+    font-size: 9.5px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    color: var(--text-sub);
+    padding: 4px 8px 6px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    margin-bottom: 2px;
+  }
+  .dd-item {
+    background: transparent;
+    border: 1px solid transparent;
+    padding: 8px 10px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.18s;
+  }
+  .dd-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+  .dd-item.active {
+    background: rgba(56, 189, 248, 0.18);
+    border-color: rgba(56, 189, 248, 0.45);
+  }
+  .dd-icon {
+    font-size: 16px;
+    width: 24px;
+    text-align: center;
+  }
+  .dd-text {
+    flex: 1;
+  }
+  .dd-title {
+    font-size: 12.5px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .dd-item.active .dd-title {
+    color: var(--primary);
+  }
+  .dd-desc {
+    font-size: 10px;
+    color: var(--text-sub);
+    line-height: 1.25;
+    margin-top: 2px;
+  }
+
+  .quiz-question-type-badge {
+    font-size: 11px;
+    font-weight: 900;
+    color: var(--primary);
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  .quiz-prompt-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 110px;
+    margin-bottom: 14px;
+    text-align: center;
+    width: 100%;
+  }
+  .quiz-prompt-sub {
+    font-size: 13.5px;
+    color: var(--text-sub);
+    margin-top: 4px;
+    max-width: 440px;
+    line-height: 1.45;
+  }
+
+  .btn-quiz-opt.kanji-opt {
+    font-family: 'Noto Serif JP', 'Noto Sans JP', serif;
+    font-size: 30px;
+    font-weight: 700;
+    padding: 10px 8px;
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .quiz-grid-choices.two-columns {
+    grid-template-columns: 1fr;
+    max-width: 420px;
+  }
+
+  .quiz-feedback-box {
+    width: 100%;
+    max-width: 480px;
+    min-height: 10px;
+  }
+
+  /* Enhanced Lively Drill Feedback Card */
+  .drill-result-card {
+    border-radius: 14px;
+    padding: 12px 14px;
+    margin-top: 12px;
+    animation: feedbackSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    text-align: left;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    width: 100%;
+  }
+  @keyframes feedbackSlideUp {
+    0% { opacity: 0; transform: translateY(10px) scale(0.97); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .drill-result-card.result-success {
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.18) 0%, rgba(16, 185, 129, 0.08) 100%);
+    border-color: rgba(34, 197, 94, 0.45);
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.2);
+  }
+  .drill-result-card.result-wrong {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.18) 0%, rgba(220, 38, 38, 0.08) 100%);
+    border-color: rgba(239, 68, 68, 0.45);
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
+  }
+  .result-banner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+  }
+  .result-title {
+    font-size: 13.5px;
+    font-weight: 900;
+    color: #fff;
+  }
+  .result-body {
+    font-size: 12.5px;
+    color: #cbd5e1;
+    line-height: 1.45;
+  }
+  .result-combo-badge {
+    background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 900;
+    padding: 2px 8px;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+    animation: pulseGold 1.5s infinite;
+  }
+
+  .btn-quiz-next {
+    background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+    border: none;
+    color: #000;
+    font-size: 13.5px;
+    font-weight: 900;
+    padding: 10px 24px;
+    border-radius: 12px;
+    cursor: pointer;
+    margin-top: 12px;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 0 20px var(--primary-glow);
+  }
+  .btn-quiz-next:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 28px var(--primary-glow);
+  }
+  .btn-quiz-next:active { transform: scale(0.95); }
+
+  /* ==========================================
+     7. POPUP MODAL: PANDUAN ONYOMI & KUNYOMI
+     ========================================== */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(4, 7, 18, 0.88);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+  }
+  .guide-modal-card {
+    background: linear-gradient(165deg, rgba(16, 25, 50, 0.98) 0%, rgba(9, 14, 30, 0.99) 100%);
+    border: 1px solid rgba(192, 132, 252, 0.45);
+    border-radius: 24px;
+    width: 100%;
+    max-width: 520px;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 24px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95), 0 0 40px var(--purple-glow);
+    position: relative;
+    animation: popModal 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes popModal {
+    from { opacity: 0; transform: scale(0.92); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .guide-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 14px;
+    margin-bottom: 16px;
+  }
+  .guide-title {
+    font-size: 19px;
+    font-weight: 900;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #fff 40%, #e9d5ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .guide-sub { font-size: 12.5px; color: var(--text-sub); margin-top: 3px; }
+  .btn-modal-close {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--border-glass);
+    color: #fff;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    font-size: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .btn-modal-close:hover { background: rgba(239, 68, 68, 0.3); border-color: var(--danger); transform: scale(1.1); }
+  .btn-modal-close:active { transform: scale(0.9); }
+
+  .guide-concept-card {
+    background: rgba(6, 10, 24, 0.8);
+    border-radius: 16px;
+    padding: 15px;
+    margin-bottom: 14px;
+    border-left: 4px solid var(--primary);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  }
+  .guide-concept-card.purple-accent { border-left-color: #c084fc; }
+  .guide-concept-card.cyan-accent { border-left-color: #38bdf8; }
+
+  .gcc-title {
+    font-size: 14.5px;
+    font-weight: 800;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .gcc-badge-orig {
+    font-size: 9px;
+    font-weight: 900;
+    padding: 2px 7px;
+    border-radius: 5px;
+    background: rgba(192, 132, 252, 0.2);
+    border: 1px solid rgba(192, 132, 252, 0.4);
+    color: #c084fc;
+    letter-spacing: 0.8px;
+  }
+  .gcc-badge-orig.cyan {
+    background: rgba(56, 189, 248, 0.2);
+    border-color: rgba(56, 189, 248, 0.4);
+    color: #38bdf8;
+  }
+
+  .gcc-desc {
+    font-size: 12.5px;
+    color: var(--text-sub);
+    line-height: 1.55;
+  }
+  .gcc-example {
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-top: 10px;
+    font-size: 12.5px;
+    color: #f1f5f9;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .gcce-header { font-size: 12.5px; border-bottom: 1px solid rgba(255, 255, 255, 0.06); padding-bottom: 4px; }
+  .gcce-row { display: flex; justify-content: space-between; align-items: center; }
+  .btn-mini-audio {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--border-glass);
+    color: #fff;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    font-size: 11px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .btn-mini-audio:hover { background: var(--primary); color: #000; transform: scale(1.15); }
+  .btn-mini-audio:active { transform: scale(0.9); }
+
+  .golden-rule-banner {
+    background: linear-gradient(135deg, rgba(251, 191, 36, 0.18) 0%, rgba(245, 158, 11, 0.1) 100%);
+    border: 1px solid rgba(251, 191, 36, 0.45);
+    border-radius: 14px;
+    padding: 14px 16px;
+    text-align: center;
+    margin-top: 16px;
+    box-shadow: 0 6px 20px rgba(251, 191, 36, 0.15);
+  }
+  .grb-badge {
+    font-size: 11px;
+    font-weight: 900;
+    color: var(--gold);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .grb-text {
+    font-size: 14.5px;
+    font-weight: 800;
+    color: #fff;
+    margin-top: 6px;
+    line-height: 1.45;
+  }
+  .grb-sub {
+    font-size: 11px;
+    color: var(--text-sub);
+    margin-top: 4px;
+    font-style: italic;
+  }
+
+  /* Create Room Modal Input */
+  .input-room-name {
+    width: 100%;
+    background: rgba(6, 10, 24, 0.9);
+    border: 1px solid var(--border-accent);
+    color: #fff;
+    padding: 11px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    outline: none;
+    margin: 14px 0 18px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+    transition: border-color 0.2s;
+  }
+  .input-room-name:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 16px var(--primary-glow);
+  }
+
+  /* Toast Notification */
+  #toast {
+    position: fixed;
+    bottom: 26px;
+    left: 50%;
+    transform: translateX(-50%) translateY(40px);
+    background: rgba(10, 18, 38, 0.98);
+    border: 1px solid var(--primary);
+    color: #fff;
+    padding: 11px 24px;
+    border-radius: 30px;
+    font-size: 13.5px;
+    font-weight: 800;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.85), 0 0 24px var(--primary-glow);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 10000;
+    white-space: nowrap;
+  }
+  #toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* ==========================================
+     RESPONSIVE TUNING (MOBILE FIRST PERFECTION)
+     ========================================== */
+  .guide-btn-short { display: none; }
+  .tab-txt-mobile { display: none; }
+
+  @media (max-width: 540px) {
+    body {
+      padding: 10px 10px 90px 10px;
+    }
+
+    /* 1. Top Navbar */
+    .top-navbar {
+      padding: 4px 0 10px 0;
+      margin-bottom: 12px;
+    }
+    .nav-left { gap: 6px; }
+    .btn-back {
+      padding: 4px 2px;
+      font-size: 13px;
+      gap: 4px;
+    }
+    .nav-title {
+      font-size: 14.5px;
+      letter-spacing: 0.6px;
+    }
+    /* 2. Sidebar Toggle & Drawer Mobile */
+    .btn-sidebar-toggle {
+      padding: 6px 10px;
+      font-size: 11.5px;
+      gap: 5px;
+      border-radius: 10px;
+    }
+    .sidebar-btn-label {
+      display: none;
+    }
+    .dojo-sidebar-drawer {
+      max-width: 88vw;
+    }
+
+    /* 3. Main Nav Tabs */
+    .main-nav-tabs {
+      padding: 4px;
+      border-radius: 14px;
+      gap: 4px;
+      margin-bottom: 14px;
+    }
+    .tab-main-btn {
+      padding: 8px 4px;
+      font-size: 11.5px;
+      gap: 4px;
+      white-space: nowrap;
+    }
+    .tab-badge-num {
+      font-size: 9.5px;
+      padding: 1px 5px;
+    }
+    .drill-dropdown-menu {
+      width: 230px;
+      right: 0;
+    }
+
+    /* 4. Filter Chips & Market Grid */
+    .filter-chips-stream {
+      gap: 6px;
+      padding: 2px 2px 6px 2px;
+      scroll-padding-left: 2px;
+    }
+    .filter-chip {
+      padding: 6px 11px;
+      font-size: 11px;
+    }
+    .market-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+    .kanji-market-card {
+      padding: 10px 8px;
+      border-radius: 14px;
+    }
+    .card-kanji-hero {
+      font-size: 38px;
+      margin: 4px 0 2px;
+    }
+    .card-arti-label {
+      font-size: 11px;
+    }
+    .card-readings-hint {
+      font-size: 9.5px;
+      margin-bottom: 8px;
+    }
+
+    /* 5. Dojo Training Arena */
+    .dojo-arena-card {
+      padding: 16px 12px;
+      border-radius: 18px;
+      min-height: 400px;
+    }
+    .fc-kanji-big {
+      font-size: 76px;
+    }
+    .quiz-kanji-big {
+      font-size: 64px;
+      margin-bottom: 14px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div id="toast"></div>
+
+<!-- ==========================================
+     SIDEBAR DRAWER: PUSAT KELOLA DOJO
+     ========================================== -->
+<div id="sidebar-overlay" class="sidebar-overlay" onclick="DojoEngine.closeSidebar()"></div>
+<aside id="dojo-sidebar" class="dojo-sidebar-drawer">
+  <div class="sidebar-header">
+    <div class="sidebar-title-group">
+      <div class="sidebar-icon">⛩️</div>
+      <div>
+        <div class="sidebar-title">PUSAT KELOLA DOJO</div>
+        <div class="sidebar-subtitle">Kelola ruang, statistik & materi</div>
+      </div>
+    </div>
+    <button type="button" class="btn-sidebar-close" onclick="DojoEngine.closeSidebar()">✕</button>
+  </div>
+
+  <div class="sidebar-body">
+    <!-- Section 1: Ruang Dojo Aktif -->
+    <div class="sidebar-card">
+      <div class="sc-label">⛩️ RUANG DOJO AKTIF</div>
+      <select id="dojo-room-select" class="sidebar-select" onchange="DojoEngine.switchRoom(this.value)">
+        <!-- Options populated dynamically -->
+      </select>
+
+      <div class="sidebar-room-actions">
+        <button type="button" class="btn-sidebar-action btn-add-room" onclick="DojoEngine.openRoomModal()">
+          <span>➕ Buat Ruang</span>
+        </button>
+        <button type="button" class="btn-sidebar-action btn-clear-room" onclick="DojoEngine.clearCurrentDojo()">
+          <span>🧹 Bersihkan</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Section 2: Statistik Penguasaan Ruang Aktif -->
+    <div class="sidebar-card">
+      <div class="sc-label">📊 STATISTIK PENGUASAAN</div>
+      <div class="sidebar-stats-row">
+        <div class="sidebar-stat-badge">
+          <span class="stat-icon">🎒</span>
+          <span id="dojo-card-count">0 Kanji di Ruang Ini</span>
+        </div>
+        <div class="sidebar-stat-badge badge-gold">
+          <span class="stat-icon">⭐</span>
+          <span id="dojo-master-count">0 Dikuasai</span>
+        </div>
+      </div>
+      
+      <div class="sidebar-progress-container">
+        <div class="sidebar-progress-meta">
+          <span>Tingkat Kelulusan</span>
+          <span id="dojo-progress-text">0% Dikuasai</span>
+        </div>
+        <div class="dojo-progress-track">
+          <div class="dojo-progress-fill" id="dojo-progress-fill" style="width: 0%;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: Pusat Edukasi & Bantuan -->
+    <div class="sidebar-card">
+      <div class="sc-label">💡 PANDUAN PENTING</div>
+      <button type="button" class="btn-sidebar-guide" onclick="DojoEngine.openGuide(); DojoEngine.closeSidebar();">
+        <div class="guide-item-icon">📜</div>
+        <div class="guide-item-info">
+          <div class="guide-item-title">Rahasia Onyomi & Kunyomi</div>
+          <div class="guide-item-desc">Rumus Sakti 80/20 & tips mudah menghafal</div>
+        </div>
+        <span class="guide-arrow">➔</span>
+      </button>
+    </div>
+
+    <!-- Section 4: Navigasi Cepat -->
+    <div class="sidebar-card">
+      <div class="sc-label">🧭 NAVIGASI CEPAT</div>
+      <div class="sidebar-nav-list">
+        <button type="button" class="sidebar-nav-item" onclick="DojoEngine.switchMainTab('market'); DojoEngine.closeSidebar();">
+          <span>🛒 Pasar Belanja Kanji</span>
+          <span class="sni-badge" id="sidebar-market-count">240</span>
+        </button>
+        <button type="button" class="sidebar-nav-item" onclick="DojoEngine.switchMainTab('flashcard'); DojoEngine.closeSidebar();">
+          <span>🎴 Flashcard Dojo</span>
+          <span class="sni-badge" id="sidebar-dojo-count">4</span>
+        </button>
+        <button type="button" class="sidebar-nav-item" onclick="DojoEngine.switchMainTab('quiz'); DojoEngine.closeSidebar();">
+          <span>🎯 Kuis Drill Kanji</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- ==========================================
+     MODAL 1: PANDUAN EDUKATIF ONYOMI & KUNYOMI
+     ========================================== -->
+<div id="guide-modal" class="modal-overlay hidden" onclick="if(event.target === this) DojoEngine.closeGuide()">
+  <div class="guide-modal-card">
+    <div class="guide-header-row">
+      <div>
+        <div class="guide-title">
+          <span>💡</span>
+          <span>Rahasia Onyomi & Kunyomi</span>
+        </div>
+        <div class="guide-sub">Panduan praktis agar tidak bingung cara membaca kanji</div>
+      </div>
+      <button type="button" class="btn-modal-close" onclick="DojoEngine.closeGuide()">✕</button>
+    </div>
+
+    <!-- Onyomi Concept -->
+    <div class="guide-concept-card purple-accent">
+      <div class="gcc-title">
+        <span class="gcc-badge-orig">🇨🇳 ASAL CINA</span>
+        <span>1. Onyomi (音読み) • Cara Baca Cina</span>
+      </div>
+      <div class="gcc-desc">
+        Ditulis dengan huruf <b>Katakana</b> di kamus. Ini adalah pelafalan serapan dari bahasa Tiongkok kuno saat aksara kanji pertama kali masuk ke Jepang.
+        <br><b>Kapan digunakan?</b> Hampir selalu dipakai saat kanji <b>bergabung dengan kanji lain</b> membentuk kata majemuk (<i>Jukugo</i>).
+      </div>
+      <div class="gcc-example">
+        <div class="gcce-header"><b>Contoh Kanji 水 (Air):</b> Onyomi = <b style="color:#f472b6;">スイ (SUI)</b></div>
+        <div class="gcce-row">
+          <span>• Kata Majemuk: <b>水曜日</b> = <i>Sui-youbi</i> (Hari Rabu)</span>
+          <button type="button" class="btn-mini-audio" onclick="DojoEngine.speakText('すいようび')" title="Dengarkan Suara">🔊</button>
+        </div>
+        <div class="gcce-row">
+          <span>• Kata Majemuk: <b>水泳</b> = <i>Sui-ei</i> (Berenang)</span>
+          <button type="button" class="btn-mini-audio" onclick="DojoEngine.speakText('すいえい')" title="Dengarkan Suara">🔊</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Kunyomi Concept -->
+    <div class="guide-concept-card cyan-accent">
+      <div class="gcc-title">
+        <span class="gcc-badge-orig cyan">🇯🇵 ASLI JEPANG</span>
+        <span>2. Kunyomi (訓読み) • Cara Baca Asli Jepang</span>
+      </div>
+      <div class="gcc-desc">
+        Ditulis dengan huruf <b>Hiragana</b> di kamus. Ini adalah kata asli dari peradaban Jepang kuno yang dipasangkan maknanya ke lambang kanji.
+        <br><b>Kapan digunakan?</b> Umumnya dipakai saat kanji <b>berdiri sendirian</b> sebagai kata tunggal, atau ditemani huruf hiragana pelengkap (<i>okurigana</i>).
+      </div>
+      <div class="gcc-example">
+        <div class="gcce-header"><b>Contoh Kanji 水 (Air):</b> Kunyomi = <b style="color:#38bdf8;">みず (mizu)</b></div>
+        <div class="gcce-row">
+          <span>• Berdiri Sendiri: <b>水</b> = <i>mizu</i> (air biasa/air minum)</span>
+          <button type="button" class="btn-mini-audio" onclick="DojoEngine.speakText('みず')" title="Dengarkan Suara">🔊</button>
+        </div>
+        <div class="gcce-row">
+          <span>• Berdiri Sendiri: <b>山</b> = <i>yama</i> (gunung)</span>
+          <button type="button" class="btn-mini-audio" onclick="DojoEngine.speakText('やま')" title="Dengarkan Suara">🔊</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- The 80/20 Golden Rule -->
+    <div class="golden-rule-banner">
+      <div class="grb-badge">⚡ RUMUS SAKTI 80/20 KENSEI</div>
+      <div class="grb-text">"Sendirian = <b>Kunyomi (Hiragana)</b><br>Gandeng Dua Kanji = <b>Onyomi (Katakana)</b>"</div>
+      <div class="grb-sub">Ada sedikit pengecualian (seperti nama orang/tempat), namun rumus 80% ini menyelamatkan ingatanmu!</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================
+     MODAL 2: BUAT RUANG DOJO BARU
+     ========================================== -->
+<div id="room-modal" class="modal-overlay hidden" onclick="if(event.target === this) DojoEngine.closeRoomModal()">
+  <div class="guide-modal-card" style="max-width:400px;">
+    <div class="guide-header-row">
+      <div class="guide-title">
+        <span>⛩️</span>
+        <span>Buat Ruang Dojo Baru</span>
+      </div>
+      <button type="button" class="btn-modal-close" onclick="DojoEngine.closeRoomModal()">✕</button>
+    </div>
+    <p style="font-size:12.5px; color:var(--text-sub);">Beri nama ruang dojo untuk mengelompokkan kanji latihanmu (contoh: "Kanji Hari 1-5", "Kanji Target N5", dsb.)</p>
+    
+    <input type="text" class="input-room-name" id="new-room-input" placeholder="Nama Ruang Dojo..." maxlength="20">
+    
+    <button type="button" class="btn-jump-market" style="width:100%;" onclick="DojoEngine.createNewRoom()">+ Buat & Masuk ke Ruang</button>
+  </div>
+</div>
+
+<div class="container">
+  
+  <!-- MASTER TOP NAVBAR -->
+  <div class="top-navbar">
+    <div class="nav-left">
+      <a href="index.html" class="btn-back" title="Kembali ke Ekspedisi Yomikata">
+        <span>←</span>
+        <span>Yomikata</span>
+      </a>
+    </div>
+
+    <div class="nav-title-group">
+      <h1 class="nav-title">KANJI KENSEI</h1>
+    </div>
+
+    <div class="nav-right">
+      <button type="button" class="btn-sidebar-toggle" onclick="DojoEngine.toggleSidebar()" title="Buka Pusat Kelola Dojo">
+        <span class="torii-icon">⛩️</span>
+        <span class="sidebar-btn-label" id="nav-active-room-name">Dojo Utama</span>
+        <span class="sidebar-badge-count" id="nav-active-room-count">4</span>
+        <span class="hamburger-bars">☰</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- MAIN MODE SWITCHER (Pasar, Flashcard, Kuis Drill) -->
+  <div class="main-nav-tabs">
+    <button type="button" class="tab-main-btn active" id="tab-market" onclick="DojoEngine.switchMainTab('market')">
+      <span>🛒</span>
+      <span>Pasar Kanji</span>
+      <span class="tab-badge-num" id="market-total-badge">145</span>
+    </button>
+    <button type="button" class="tab-main-btn" id="tab-flashcard" onclick="DojoEngine.switchMainTab('flashcard')">
+      <span>🎴</span>
+      <span>Flashcard</span>
+      <span class="tab-badge-num" id="dojo-badge-num">0</span>
+    </button>
+    <button type="button" class="tab-main-btn" id="tab-quiz" onclick="DojoEngine.switchMainTab('quiz')">
+      <span>🎯</span>
+      <span>Kuis Drill</span>
+    </button>
+  </div>
+
+  <!-- ==========================================
+       TAB 1: PASAR BELANJA KANJI (KATALOG)
+       ========================================== -->
+  <div id="section-market">
+    <div class="market-toolbar">
+      <div class="search-wrapper">
+        <span>🔍</span>
+        <input type="text" class="search-input" id="market-search" placeholder="Cari kanji, arti, onyomi, atau kunyomi..." oninput="DojoEngine.onSearch(this.value)">
+        <button type="button" class="search-clear hidden" id="market-search-clear" onclick="DojoEngine.clearSearch()">✕</button>
+      </div>
+
+      <div class="filter-chips-stream">
+        <button type="button" class="filter-chip active" id="fchip-all" onclick="DojoEngine.setFilter('all')">Semua Kanji (N5 + N4)</button>
+        <button type="button" class="filter-chip" id="fchip-unlocked" onclick="DojoEngine.setFilter('unlocked')">⛩️ Dari Ekspedisi</button>
+        <button type="button" class="filter-chip" id="fchip-n5" onclick="DojoEngine.setFilter('n5')">🔰 Level N5 (Dasar)</button>
+        <button type="button" class="filter-chip" id="fchip-n4" onclick="DojoEngine.setFilter('n4')">⚔️ Level N4 (Lanjutan)</button>
+        <button type="button" class="filter-chip" id="fchip-in-dojo" onclick="DojoEngine.setFilter('in-dojo')">🎒 Di Dojo</button>
+      </div>
+    </div>
+
+    <!-- Kanji Catalog Grid -->
+    <div class="market-grid" id="market-grid-container">
+      <!-- Generated dynamically -->
+    </div>
+  </div>
+
+  <!-- ==========================================
+       TAB 2: RUANG DOJO LATIHAN (FLASHCARD & KUIS)
+       ========================================== -->
+  <div id="section-training" class="hidden">
+    <div class="dojo-arena-card">
+      <!-- Flashcard Header Bar (Minimal, No nested tabs) -->
+      <div class="fc-header-bar" id="dojo-fc-header">
+        <div class="fc-room-tag">
+          <span class="fc-tag-icon">⛩️</span>
+          <span id="fc-room-name-display">Ruang Latihan</span>
+        </div>
+        <div class="fc-counter-badge">
+          <span id="dojo-curr-index">1</span> / <span id="dojo-total-index">0</span>
+        </div>
+      </div>
+
+      <!-- State A: Flashcard Mode -->
+      <div id="dojo-fc-container" class="fc-body-box" onclick="DojoEngine.toggleFcReveal()">
+        <div class="fc-kanji-big" id="dojo-fc-kanji">一</div>
+        <div style="font-size:11.5px; color:var(--text-sub); margin-bottom:14px;" id="dojo-fc-hint">👆 Ketuk untuk membuka bacaan & arti</div>
+
+        <div class="fc-reveal-wrap shield-blur" id="dojo-fc-shield">
+          <div class="fc-grid-two">
+            <div class="reading-cell rc-onyomi">
+              <div class="rc-label">ONYOMI (Cina)</div>
+              <div class="rc-val" id="dojo-fc-on">イチ, イツ</div>
+            </div>
+            <div class="reading-cell rc-kunyomi">
+              <div class="rc-label">KUNYOMI (Jepang)</div>
+              <div class="rc-val" id="dojo-fc-kun">ひと, ひと・つ</div>
+            </div>
+          </div>
+
+          <div class="fc-meaning-banner">
+            <div class="fmb-label">ARTI BAHASA INDONESIA</div>
+            <div class="fmb-text" id="dojo-fc-arti">Satu</div>
+          </div>
+
+          <div class="fc-jukugo-shelf" id="dojo-fc-jukugo-shelf">
+            <!-- Jukugo list -->
+          </div>
+        </div>
+      </div>
+
+      <!-- State B: Quiz Drill Mode -->
+      <div id="dojo-quiz-container" class="quiz-area-container hidden">
+        <!-- Quiz Control & Telemetry Bar (Single Row, No tab bloat) -->
+        <div class="quiz-top-bar">
+          <div class="quiz-telemetry-cluster">
+            <span class="quiz-stat-pill" id="quiz-streak-pill">🔥 Combo: 0</span>
+            <span class="quiz-stat-pill score-pill" id="quiz-score-pill">⭐ Benar: 0</span>
+          </div>
+
+          <div class="drill-mode-dropdown-wrap">
+            <button type="button" class="btn-drill-dropdown" id="btn-drill-dropdown" onclick="DojoEngine.toggleDrillDropdown(event)" title="Ganti Tipe Soal">
+              <span id="drill-mode-current-label">🔀 Acak / Mix</span>
+              <span class="dropdown-caret">▾</span>
+            </button>
+            <div class="drill-dropdown-menu hidden" id="drill-dropdown-menu">
+              <div class="dd-header">PILIH VARIASI DRILL</div>
+              <button type="button" class="dd-item active" data-type="mix" onclick="DojoEngine.selectDrillType('mix')">
+                <span class="dd-icon">🔀</span>
+                <div class="dd-text">
+                  <div class="dd-title">Acak / Mix</div>
+                  <div class="dd-desc">Kombinasi semua tipe soal (Rekomendasi)</div>
+                </div>
+              </button>
+              <button type="button" class="dd-item" data-type="meaning" onclick="DojoEngine.selectDrillType('meaning')">
+                <span class="dd-icon">🎯</span>
+                <div class="dd-text">
+                  <div class="dd-title">Tebak Arti</div>
+                  <div class="dd-desc">Pilih arti bahasa Indonesia dari kanji</div>
+                </div>
+              </button>
+              <button type="button" class="dd-item" data-type="reading" onclick="DojoEngine.selectDrillType('reading')">
+                <span class="dd-icon">🗣️</span>
+                <div class="dd-text">
+                  <div class="dd-title">Tebak Bacaan</div>
+                  <div class="dd-desc">Pilih cara baca hiragana/romaji</div>
+                </div>
+              </button>
+              <button type="button" class="dd-item" data-type="kanji" onclick="DojoEngine.selectDrillType('kanji')">
+                <span class="dd-icon">🈴</span>
+                <div class="dd-text">
+                  <div class="dd-title">Tebak Bentuk</div>
+                  <div class="dd-desc">Pilih karakter kanji yang tepat</div>
+                </div>
+              </button>
+              <button type="button" class="dd-item" data-type="onkun" onclick="DojoEngine.selectDrillType('onkun')">
+                <span class="dd-icon">💡</span>
+                <div class="dd-text">
+                  <div class="dd-title">On vs Kun</div>
+                  <div class="dd-desc">Tebak Onyomi atau Kunyomi kanji</div>
+                </div>
+              </button>
+              <button type="button" class="dd-item" data-type="blitz" onclick="DojoEngine.selectDrillType('blitz')">
+                <span class="dd-icon">⚡</span>
+                <div class="dd-text">
+                  <div class="dd-title">Benar / Salah</div>
+                  <div class="dd-desc">Uji kecepatan verifikasi pasangan kanji</div>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question Type Label -->
+        <div class="quiz-question-type-badge" id="dojo-quiz-type-label">DOJO DRILL • TEBAK ARTI:</div>
+
+        <!-- Prompt Area -->
+        <div class="quiz-prompt-box" id="dojo-quiz-prompt-box">
+          <div class="quiz-kanji-big" id="dojo-quiz-kanji">一</div>
+          <div class="quiz-prompt-sub hidden" id="dojo-quiz-sub"></div>
+        </div>
+
+        <!-- Choices Grid -->
+        <div class="quiz-grid-choices" id="dojo-quiz-choices">
+          <!-- Choices rendered dynamically -->
+        </div>
+
+        <!-- Feedback & Next Action -->
+        <div id="dojo-quiz-feedback" class="quiz-feedback-box"></div>
+        <button type="button" class="btn-quiz-next hidden" id="btn-quiz-next" onclick="DojoEngine.nextQuizQuestion()">Soal Berikutnya ➔</button>
+      </div>
+
+      <!-- Dojo Navigation Bottom Strip -->
+      <div class="dojo-nav-controls" id="dojo-nav-strip">
+        <button type="button" class="btn-dn" onclick="DojoEngine.prevDojoCard()">⬅️ Sblm</button>
+        <button type="button" class="btn-mark-master" id="btn-master-toggle" onclick="DojoEngine.toggleMasterCurrent()" title="Tandai Sudah Dikuasai (⭐)">⭐</button>
+        <button type="button" class="btn-dn" onclick="DojoEngine.speakCurrent()" title="Dengarkan Suara">🔊</button>
+        <button type="button" class="btn-dn btn-dn-next" onclick="DojoEngine.nextDojoCard()">Lanjut ➔</button>
+      </div>
+
+      <!-- Empty State when 0 Kanji in Dojo -->
+      <div id="dojo-empty-state" class="empty-dojo-box hidden">
+        <div class="empty-icon">🎒</div>
+        <div class="empty-title">Ruang Dojo Masih Kosong!</div>
+        <div class="empty-desc">Ruang dojo ini belum memiliki kanji untuk dilatih. Buka <b>Pasar Belanja Kanji</b> untuk memilih kanji-kanji yang ingin kamu kuasai.</div>
+        <button type="button" class="btn-jump-market" onclick="DojoEngine.switchMainTab('market')">🛒 Pergi Belanja Kanji ➔</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ==========================================
+// MASTER DATABASE KANJI LENGKAP (N5 + N4)
+// ==========================================
+const KANJI_CATALOG = [
+  {
+    "k": "人",
+    "on": "ジン, ニン",
+    "kun": "ひと",
+    "a": "Orang, Manusia",
+    "lvl": "N5",
+    "day": 1,
+    "ex": [
+      {
+        "w": "日本人",
+        "r": "にほんじん",
+        "a": "Orang Jepang"
+      },
+      {
+        "w": "大人",
+        "r": "おとな",
+        "a": "Dewasa"
+      }
+    ]
+  },
+  {
+    "k": "先",
+    "on": "セン",
+    "kun": "さき",
+    "a": "Terdahulu, Ujung",
+    "lvl": "N5",
+    "day": 1,
+    "ex": [
+      {
+        "w": "先生",
+        "r": "せんせい",
+        "a": "Guru"
+      }
+    ]
+  },
+  {
+    "k": "出",
+    "on": "シュツ",
+    "kun": "で・る",
+    "a": "Keluar",
+    "lvl": "N5",
+    "day": 1,
+    "ex": [
+      {
+        "w": "出る",
+        "r": "でる",
+        "a": "Keluar"
+      }
+    ]
+  },
+  {
+    "k": "前",
+    "on": "ゼン",
+    "kun": "まえ",
+    "a": "Depan, Sebelum",
+    "lvl": "N5",
+    "day": 1,
+    "ex": [
+      {
+        "w": "前",
+        "r": "まえ",
+        "a": "Di depan"
+      }
+    ]
+  },
+  {
+    "k": "名",
+    "on": "メイ",
+    "kun": "な",
+    "a": "Nama",
+    "lvl": "N5",
+    "day": 1,
+    "ex": [
+      {
+        "w": "名前",
+        "r": "なまえ",
+        "a": "Nama"
+      }
+    ]
+  },
+  {
+    "k": "員",
+    "on": "イン",
+    "kun": "-",
+    "a": "Anggota, Pegawai",
+    "lvl": "N5",
+    "day": 1,
+    "ex": [
+      {
+        "w": "社員",
+        "r": "しゃいん",
+        "a": "Pegawai perusahaan"
+      },
+      {
+        "w": "店員",
+        "r": "てんいん",
+        "a": "Pegawai toko"
+      }
+    ]
+  },
+  {
+    "k": "大",
+    "on": "ダイ, タイ",
+    "kun": "おお・きい",
+    "a": "Besar",
+    "lvl": "N5",
+    "day": 1,
+    "ex": [
+      {
+        "w": "大きい",
+        "r": "おおきい",
+        "a": "Besar"
+      },
+      {
+        "w": "大学",
+        "r": "だいがく",
+        "a": "Universitas"
+      }
+    ]
+  },
+  {
+    "k": "女",
+    "on": "ジョ",
+    "kun": "おんな",
+    "a": "Perempuan",
+    "lvl": "N5",
+    "day": 1,
+    "ex": [
+      {
+        "w": "女の人",
+        "r": "おんなのひと",
+        "a": "Wanita"
+      }
+    ]
+  },
+  {
+    "k": "学",
+    "on": "ガク",
+    "kun": "まな・ぶ",
+    "a": "Belajar, Ilmu",
+    "lvl": "N5",
+    "day": 1,
+    "ex": [
+      {
+        "w": "学校",
+        "r": "がっこう",
+        "a": "Sekolah"
+      }
+    ]
+  },
+  {
+    "k": "山",
+    "on": "サン",
+    "kun": "やま",
+    "a": "Gunung",
+    "lvl": "N5",
+    "day": 1,
+    "ex": [
+      {
+        "w": "山",
+        "r": "やま",
+        "a": "Gunung"
+      }
+    ]
+  },
+  {
+    "k": "年",
+    "on": "ネン",
+    "kun": "とし",
+    "a": "Tahun",
+    "lvl": "N5",
+    "day": 1,
+    "ex": [
+      {
+        "w": "今年",
+        "r": "ことし",
+        "a": "Tahun ini"
+      }
+    ]
+  },
+  {
+    "k": "彼",
+    "on": "ヒ",
+    "kun": "かれ, かの",
+    "a": "Dia (Laki-laki)",
+    "lvl": "N5",
+    "day": 1,
+    "ex": [
+      {
+        "w": "彼",
+        "r": "かれ",
+        "a": "Dia (laki-laki)"
+      },
+      {
+        "w": "彼女",
+        "r": "かのじょ",
+        "a": "Dia (perempuan)"
+      }
+    ]
+  },
+  {
+    "k": "日",
+    "on": "ニチ, ジツ",
+    "kun": "ひ, -び, -か",
+    "a": "Hari, Matahari",
+    "lvl": "N5",
+    "day": 1,
+    "ex": [
+      {
+        "w": "日本",
+        "r": "にほん",
+        "a": "Jepang"
+      },
+      {
+        "w": "日曜日",
+        "r": "にちようび",
+        "a": "Hari Minggu"
+      }
+    ]
+  },
+  {
+    "k": "本",
+    "on": "ホン",
+    "kun": "もと",
+    "a": "Buku, Asal",
+    "lvl": "N5",
+    "day": 1,
+    "ex": [
+      {
+        "w": "本",
+        "r": "ほん",
+        "a": "Buku"
+      }
+    ]
+  },
+  {
+    "k": "歳",
+    "on": "サイ, セイ",
+    "kun": "とし",
+    "a": "Usia, Umur, Tahun",
+    "lvl": "N5",
+    "day": 1,
+    "ex": [
+      {
+        "w": "何歳",
+        "r": "なんさい",
+        "a": "Berapa usia"
+      },
+      {
+        "w": "二十歳",
+        "r": "はたち",
+        "a": "20 tahun"
+      }
+    ]
+  },
+  {
+    "k": "生",
+    "on": "セイ",
+    "kun": "い・きる, う・まれる",
+    "a": "Lahir, Hidup, Pelajar",
+    "lvl": "N5",
+    "day": 1,
+    "ex": [
+      {
+        "w": "学生",
+        "r": "がくせい",
+        "a": "Pelajar"
+      }
+    ]
+  },
+  {
+    "k": "田",
+    "on": "デン",
+    "kun": "た",
+    "a": "Sawah",
+    "lvl": "N5",
+    "day": 1,
+    "ex": [
+      {
+        "w": "田中",
+        "r": "たなか",
+        "a": "Tanaka"
+      }
+    ]
+  },
+  {
+    "k": "社",
+    "on": "シャ",
+    "kun": "やしろ",
+    "a": "Perusahaan, Kuil",
+    "lvl": "N5",
+    "day": 1,
+    "ex": [
+      {
+        "w": "会社",
+        "r": "かいしゃ",
+        "a": "Perusahaan"
+      },
+      {
+        "w": "社員",
+        "r": "しゃいん",
+        "a": "Pegawai"
+      },
+      {
+        "w": "神社",
+        "r": "じんじゃ",
+        "a": "Kuil Shinto"
+      }
+    ]
+  },
+  {
+    "k": "私",
+    "on": "シ",
+    "kun": "わたし, わたくし",
+    "a": "Saya, Aku",
+    "lvl": "N5",
+    "day": 1,
+    "ex": [
+      {
+        "w": "私",
+        "r": "わたし",
+        "a": "Saya"
+      }
+    ]
+  },
+  {
+    "k": "菜",
+    "on": "サイ",
+    "kun": "な",
+    "a": "Sayur",
+    "lvl": "N4",
+    "day": 1,
+    "ex": [
+      {
+        "w": "菜食",
+        "r": "さいしょく",
+        "a": "Vegetarian"
+      }
+    ]
+  },
+  {
+    "k": "身",
+    "on": "シン",
+    "kun": "み",
+    "a": "Badan, Diri, Asal",
+    "lvl": "N5",
+    "day": 1,
+    "ex": [
+      {
+        "w": "出身",
+        "r": "しゅっしん",
+        "a": "Asal daerah/negara"
+      },
+      {
+        "w": "自身",
+        "r": "じしん",
+        "a": "Diri sendiri"
+      }
+    ]
+  },
+  {
+    "k": "野",
+    "on": "ヤ",
+    "kun": "の",
+    "a": "Ladang, Lapangan",
+    "lvl": "N4",
+    "day": 1,
+    "ex": [
+      {
+        "w": "野菜",
+        "r": "やさい",
+        "a": "Sayuran"
+      }
+    ]
+  },
+  {
+    "k": "会",
+    "on": "カイ",
+    "kun": "あ・う",
+    "a": "Bertemu, Kumpulan",
+    "lvl": "N5",
+    "day": 2,
+    "ex": [
+      {
+        "w": "会う",
+        "r": "あう",
+        "a": "Bertemu"
+      },
+      {
+        "w": "会社",
+        "r": "かいしゃ",
+        "a": "Perusahaan"
+      }
+    ]
+  },
+  {
+    "k": "室",
+    "on": "シツ",
+    "kun": "むろ",
+    "a": "Ruangan, Kamar",
+    "lvl": "N4",
+    "day": 2,
+    "ex": [
+      {
+        "w": "教室",
+        "r": "きょうしつ",
+        "a": "Ruang kelas"
+      },
+      {
+        "w": "研究室",
+        "r": "けんきゅうしつ",
+        "a": "Lab riset"
+      }
+    ]
+  },
+  {
+    "k": "屋",
+    "on": "オク",
+    "kun": "や",
+    "a": "Toko, Atap, Rumah",
+    "lvl": "N4",
+    "day": 2,
+    "ex": [
+      {
+        "w": "本屋",
+        "r": "ほんや",
+        "a": "Toko buku"
+      },
+      {
+        "w": "部屋",
+        "r": "へや",
+        "a": "Kamar"
+      }
+    ]
+  },
+  {
+    "k": "教",
+    "on": "キョウ",
+    "kun": "おし・える",
+    "a": "Mengajar",
+    "lvl": "N4",
+    "day": 2,
+    "ex": [
+      {
+        "w": "教える",
+        "r": "おしえる",
+        "a": "Mengajar"
+      },
+      {
+        "w": "教室",
+        "r": "きょうしつ",
+        "a": "Ruang kelas"
+      }
+    ]
+  },
+  {
+    "k": "時",
+    "on": "ジ",
+    "kun": "とき",
+    "a": "Waktu, Jam",
+    "lvl": "N5",
+    "day": 2,
+    "ex": [
+      {
+        "w": "時間",
+        "r": "じかん",
+        "a": "Waktu"
+      }
+    ]
+  },
+  {
+    "k": "書",
+    "on": "ショ",
+    "kun": "か・く",
+    "a": "Menulis",
+    "lvl": "N5",
+    "day": 2,
+    "ex": [
+      {
+        "w": "書く",
+        "r": "かく",
+        "a": "Menulis"
+      }
+    ]
+  },
+  {
+    "k": "校",
+    "on": "コウ",
+    "kun": "-",
+    "a": "Sekolah",
+    "lvl": "N5",
+    "day": 2,
+    "ex": [
+      {
+        "w": "校長",
+        "r": "こうちょう",
+        "a": "Kepala sekolah"
+      }
+    ]
+  },
+  {
+    "k": "計",
+    "on": "ケイ",
+    "kun": "はか・る",
+    "a": "Mengukur, Rencana",
+    "lvl": "N4",
+    "day": 2,
+    "ex": [
+      {
+        "w": "時計",
+        "r": "とけい",
+        "a": "Jam"
+      },
+      {
+        "w": "計画",
+        "r": "けいかく",
+        "a": "Rencana"
+      }
+    ]
+  },
+  {
+    "k": "車",
+    "on": "シャ",
+    "kun": "くるま",
+    "a": "Mobil, Kendaraan",
+    "lvl": "N5",
+    "day": 2,
+    "ex": [
+      {
+        "w": "車",
+        "r": "くるま",
+        "a": "Mobil"
+      }
+    ]
+  },
+  {
+    "k": "友",
+    "on": "ユウ",
+    "kun": "とも",
+    "a": "Teman",
+    "lvl": "N5",
+    "day": 3,
+    "ex": [
+      {
+        "w": "友達",
+        "r": "ともだち",
+        "a": "Teman"
+      }
+    ]
+  },
+  {
+    "k": "国",
+    "on": "コク",
+    "kun": "くに",
+    "a": "Negara",
+    "lvl": "N5",
+    "day": 3,
+    "ex": [
+      {
+        "w": "外国",
+        "r": "がいこく",
+        "a": "Luar negeri"
+      }
+    ]
+  },
+  {
+    "k": "天",
+    "on": "テン",
+    "kun": "あま",
+    "a": "Langit, Surga",
+    "lvl": "N5",
+    "day": 3,
+    "ex": [
+      {
+        "w": "天気",
+        "r": "てんき",
+        "a": "Cuaca"
+      }
+    ]
+  },
+  {
+    "k": "子",
+    "on": "シ",
+    "kun": "こ",
+    "a": "Anak",
+    "lvl": "N5",
+    "day": 3,
+    "ex": [
+      {
+        "w": "子ども",
+        "r": "こども",
+        "a": "Anak-anak"
+      }
+    ]
+  },
+  {
+    "k": "所",
+    "on": "ショ",
+    "kun": "ところ",
+    "a": "Tempat",
+    "lvl": "N4",
+    "day": 3,
+    "ex": [
+      {
+        "w": "所",
+        "r": "ところ",
+        "a": "Tempat"
+      },
+      {
+        "w": "台所",
+        "r": "だいどころ",
+        "a": "Dapur"
+      }
+    ]
+  },
+  {
+    "k": "新",
+    "on": "シン",
+    "kun": "あたら・しい",
+    "a": "Baru",
+    "lvl": "N5",
+    "day": 3,
+    "ex": [
+      {
+        "w": "新しい",
+        "r": "あたらしい",
+        "a": "Baru"
+      },
+      {
+        "w": "新聞",
+        "r": "しんぶん",
+        "a": "Koran"
+      }
+    ]
+  },
+  {
+    "k": "服",
+    "on": "フク",
+    "kun": "-",
+    "a": "Pakaian, Baju",
+    "lvl": "N4",
+    "day": 3,
+    "ex": [
+      {
+        "w": "洋服",
+        "r": "ようふく",
+        "a": "Pakaian barat"
+      },
+      {
+        "w": "和服",
+        "r": "わふく",
+        "a": "Pakaian Jepang"
+      }
+    ]
+  },
+  {
+    "k": "海",
+    "on": "カイ",
+    "kun": "うみ",
+    "a": "Laut, Samudra",
+    "lvl": "N4",
+    "day": 3,
+    "ex": [
+      {
+        "w": "海",
+        "r": "うみ",
+        "a": "Laut"
+      },
+      {
+        "w": "海外",
+        "r": "かいがい",
+        "a": "Luar negeri"
+      }
+    ]
+  },
+  {
+    "k": "者",
+    "on": "シャ",
+    "kun": "もの",
+    "a": "Orang, Tokoh",
+    "lvl": "N4",
+    "day": 3,
+    "ex": [
+      {
+        "w": "学者",
+        "r": "がくしゃ",
+        "a": "Cendekiawan"
+      }
+    ]
+  },
+  {
+    "k": "聞",
+    "on": "ブン",
+    "kun": "き・く",
+    "a": "Mendengar",
+    "lvl": "N5",
+    "day": 3,
+    "ex": [
+      {
+        "w": "聞く",
+        "r": "きく",
+        "a": "Mendengar"
+      }
+    ]
+  },
+  {
+    "k": "長",
+    "on": "チョウ",
+    "kun": "なが・い",
+    "a": "Panjang, Ketua",
+    "lvl": "N5",
+    "day": 3,
+    "ex": [
+      {
+        "w": "長い",
+        "r": "ながい",
+        "a": "Panjang"
+      }
+    ]
+  },
+  {
+    "k": "館",
+    "on": "カン",
+    "kun": "やかた",
+    "a": "Gedung Publik",
+    "lvl": "N4",
+    "day": 3,
+    "ex": [
+      {
+        "w": "図書館",
+        "r": "としょかん",
+        "a": "Perpustakaan"
+      }
+    ]
+  },
+  {
+    "k": "駅",
+    "on": "エキ",
+    "kun": "-",
+    "a": "Stasiun",
+    "lvl": "N5",
+    "day": 3,
+    "ex": [
+      {
+        "w": "駅",
+        "r": "えき",
+        "a": "Stasiun"
+      }
+    ]
+  },
+  {
+    "k": "今",
+    "on": "コン",
+    "kun": "いま",
+    "a": "Sekarang",
+    "lvl": "N5",
+    "day": 4,
+    "ex": [
+      {
+        "w": "今",
+        "r": "いま",
+        "a": "Sekarang"
+      }
+    ]
+  },
+  {
+    "k": "休",
+    "on": "キュウ",
+    "kun": "やす・む",
+    "a": "Istirahat, Libur",
+    "lvl": "N5",
+    "day": 4,
+    "ex": [
+      {
+        "w": "休み",
+        "r": "やすみ",
+        "a": "Libur, istirahat"
+      }
+    ]
+  },
+  {
+    "k": "作",
+    "on": "サク",
+    "kun": "つく・る",
+    "a": "Membuat",
+    "lvl": "N5",
+    "day": 4,
+    "ex": [
+      {
+        "w": "作る",
+        "r": "つくる",
+        "a": "Membuat"
+      }
+    ]
+  },
+  {
+    "k": "冬",
+    "on": "トウ",
+    "kun": "ふゆ",
+    "a": "Musim Dingin",
+    "lvl": "N4",
+    "day": 4,
+    "ex": [
+      {
+        "w": "冬",
+        "r": "ふゆ",
+        "a": "Musim dingin"
+      },
+      {
+        "w": "冬休み",
+        "r": "ふゆやすみ",
+        "a": "Liburan musim dingin"
+      }
+    ]
+  },
+  {
+    "k": "夜",
+    "on": "ヤ",
+    "kun": "よる, よ",
+    "a": "Malam",
+    "lvl": "N4",
+    "day": 4,
+    "ex": [
+      {
+        "w": "夜",
+        "r": "よる",
+        "a": "Malam"
+      },
+      {
+        "w": "今夜",
+        "r": "こんや",
+        "a": "Malam ini"
+      }
+    ]
+  },
+  {
+    "k": "料",
+    "on": "リョウ",
+    "kun": "-",
+    "a": "Bahan, Biaya",
+    "lvl": "N4",
+    "day": 4,
+    "ex": [
+      {
+        "w": "料理",
+        "r": "りょうり",
+        "a": "Masakan"
+      },
+      {
+        "w": "料金",
+        "r": "りょうきん",
+        "a": "Biaya"
+      }
+    ]
+  },
+  {
+    "k": "理",
+    "on": "リ",
+    "kun": "ことわり",
+    "a": "Akal, Teori, Prinsip",
+    "lvl": "N4",
+    "day": 4,
+    "ex": [
+      {
+        "w": "料理",
+        "r": "りょうり",
+        "a": "Masakan"
+      },
+      {
+        "w": "理由",
+        "r": "りゆう",
+        "a": "Alasan"
+      }
+    ]
+  },
+  {
+    "k": "自",
+    "on": "ジ, シ",
+    "kun": "みずか・ら",
+    "a": "Diri Sendiri, Otomatis",
+    "lvl": "N4",
+    "day": 4,
+    "ex": [
+      {
+        "w": "自分",
+        "r": "じぶん",
+        "a": "Diri sendiri"
+      },
+      {
+        "w": "自由",
+        "r": "じゆう",
+        "a": "Bebas"
+      }
+    ]
+  },
+  {
+    "k": "語",
+    "on": "ゴ",
+    "kun": "かた・る",
+    "a": "Bahasa",
+    "lvl": "N5",
+    "day": 4,
+    "ex": [
+      {
+        "w": "日本語",
+        "r": "にほんご",
+        "a": "Bahasa Jepang"
+      }
+    ]
+  },
+  {
+    "k": "何",
+    "on": "カ",
+    "kun": "なに, なん",
+    "a": "Apa",
+    "lvl": "N5",
+    "day": 5,
+    "ex": [
+      {
+        "w": "何",
+        "r": "なに",
+        "a": "Apa"
+      }
+    ]
+  },
+  {
+    "k": "楽",
+    "on": "ラク, ガク",
+    "kun": "たの・しい",
+    "a": "Menyenangkan, Musik",
+    "lvl": "N4",
+    "day": 5,
+    "ex": [
+      {
+        "w": "楽しい",
+        "r": "たのしい",
+        "a": "Menyenangkan"
+      },
+      {
+        "w": "音楽",
+        "r": "おんがく",
+        "a": "Musik"
+      }
+    ]
+  },
+  {
+    "k": "水",
+    "on": "スイ",
+    "kun": "みず",
+    "a": "Air",
+    "lvl": "N5",
+    "day": 5,
+    "ex": [
+      {
+        "w": "水曜日",
+        "r": "すいようび",
+        "a": "Hari Rabu"
+      },
+      {
+        "w": "水",
+        "r": "みず",
+        "a": "Air"
+      }
+    ]
+  },
+  {
+    "k": "病",
+    "on": "ビョウ",
+    "kun": "や・む",
+    "a": "Sakit, Penyakit",
+    "lvl": "N4",
+    "day": 5,
+    "ex": [
+      {
+        "w": "病院",
+        "r": "びょういん",
+        "a": "Rumah Sakit"
+      }
+    ]
+  },
+  {
+    "k": "色",
+    "on": "ショク, シキ",
+    "kun": "いろ",
+    "a": "Warna",
+    "lvl": "N4",
+    "day": 5,
+    "ex": [
+      {
+        "w": "色",
+        "r": "いろ",
+        "a": "Warna"
+      },
+      {
+        "w": "色々",
+        "r": "いろいろ",
+        "a": "Bermacam-macam"
+      }
+    ]
+  },
+  {
+    "k": "茶",
+    "on": "チャ, サ",
+    "kun": "-",
+    "a": "Teh",
+    "lvl": "N4",
+    "day": 5,
+    "ex": [
+      {
+        "w": "お茶",
+        "r": "おちゃ",
+        "a": "Teh Jepang"
+      },
+      {
+        "w": "喫茶店",
+        "r": "きっさてん",
+        "a": "Kedai kopi"
+      }
+    ]
+  },
+  {
+    "k": "転",
+    "on": "テン",
+    "kun": "ころ・がる",
+    "a": "Berputar, Terguling",
+    "lvl": "N4",
+    "day": 5,
+    "ex": [
+      {
+        "w": "自転車",
+        "r": "じてんしゃ",
+        "a": "Sepeda"
+      },
+      {
+        "w": "運転",
+        "r": "うんてん",
+        "a": "Menyetir"
+      }
+    ]
+  },
+  {
+    "k": "音",
+    "on": "オン",
+    "kun": "おと, ね",
+    "a": "Suara, Bunyi",
+    "lvl": "N4",
+    "day": 5,
+    "ex": [
+      {
+        "w": "音",
+        "r": "おと",
+        "a": "Bunyi"
+      },
+      {
+        "w": "音楽",
+        "r": "おんがく",
+        "a": "Musik"
+      }
+    ]
+  },
+  {
+    "k": "高",
+    "on": "コウ",
+    "kun": "たか・い",
+    "a": "Tinggi, Mahal",
+    "lvl": "N5",
+    "day": 5,
+    "ex": [
+      {
+        "w": "高い",
+        "r": "たかい",
+        "a": "Mahal / Tinggi"
+      },
+      {
+        "w": "高校",
+        "r": "こうこう",
+        "a": "SMA"
+      }
+    ]
+  },
+  {
+    "k": "写",
+    "on": "シャ",
+    "kun": "うつ・す",
+    "a": "Menyalin, Memotret",
+    "lvl": "N4",
+    "day": 6,
+    "ex": [
+      {
+        "w": "写真",
+        "r": "しゃしん",
+        "a": "Foto"
+      }
+    ]
+  },
+  {
+    "k": "医",
+    "on": "イ",
+    "kun": "-",
+    "a": "Medis, Dokter",
+    "lvl": "N4",
+    "day": 6,
+    "ex": [
+      {
+        "w": "医者",
+        "r": "いしゃ",
+        "a": "Dokter"
+      }
+    ]
+  },
+  {
+    "k": "川",
+    "on": "セン",
+    "kun": "かわ",
+    "a": "Sungai",
+    "lvl": "N5",
+    "day": 6,
+    "ex": [
+      {
+        "w": "川",
+        "r": "かわ",
+        "a": "Sungai"
+      }
+    ]
+  },
+  {
+    "k": "朝",
+    "on": "チョウ",
+    "kun": "あさ",
+    "a": "Pagi",
+    "lvl": "N4",
+    "day": 6,
+    "ex": [
+      {
+        "w": "朝",
+        "r": "あさ",
+        "a": "Pagi"
+      },
+      {
+        "w": "今朝",
+        "r": "けさ",
+        "a": "Pagi ini"
+      }
+    ]
+  },
+  {
+    "k": "母",
+    "on": "ボ",
+    "kun": "はは, かあ",
+    "a": "Ibu",
+    "lvl": "N5",
+    "day": 6,
+    "ex": [
+      {
+        "w": "母",
+        "r": "はは",
+        "a": "Ibu"
+      }
+    ]
+  },
+  {
+    "k": "父",
+    "on": "フ",
+    "kun": "ちち, とう",
+    "a": "Ayah",
+    "lvl": "N5",
+    "day": 6,
+    "ex": [
+      {
+        "w": "父",
+        "r": "ちち",
+        "a": "Ayah"
+      }
+    ]
+  },
+  {
+    "k": "物",
+    "on": "ブツ, モツ",
+    "kun": "もの",
+    "a": "Benda, Barang",
+    "lvl": "N4",
+    "day": 6,
+    "ex": [
+      {
+        "w": "買い物",
+        "r": "かいもの",
+        "a": "Belanja"
+      },
+      {
+        "w": "食べ物",
+        "r": "たべもの",
+        "a": "Makanan"
+      }
+    ]
+  },
+  {
+    "k": "犬",
+    "on": "ケン",
+    "kun": "いぬ",
+    "a": "Anjing",
+    "lvl": "N4",
+    "day": 6,
+    "ex": [
+      {
+        "w": "犬",
+        "r": "いぬ",
+        "a": "Anjing"
+      },
+      {
+        "w": "子犬",
+        "r": "こいぬ",
+        "a": "Anak anjing"
+      }
+    ]
+  },
+  {
+    "k": "猫",
+    "on": "ビョウ",
+    "kun": "ねこ",
+    "a": "Kucing",
+    "lvl": "N4",
+    "day": 6,
+    "ex": [
+      {
+        "w": "猫",
+        "r": "ねこ",
+        "a": "Kucing"
+      }
+    ]
+  },
+  {
+    "k": "真",
+    "on": "シン",
+    "kun": "ま",
+    "a": "Kebenaran, Murni",
+    "lvl": "N4",
+    "day": 6,
+    "ex": [
+      {
+        "w": "写真",
+        "r": "しゃしん",
+        "a": "Foto"
+      },
+      {
+        "w": "真ん中",
+        "r": "まんなか",
+        "a": "Tepat di tengah"
+      }
+    ]
+  },
+  {
+    "k": "食",
+    "on": "ショク",
+    "kun": "た・べる",
+    "a": "Makan",
+    "lvl": "N5",
+    "day": 6,
+    "ex": [
+      {
+        "w": "食べる",
+        "r": "たべる",
+        "a": "Makan"
+      }
+    ]
+  },
+  {
+    "k": "飲",
+    "on": "イン",
+    "kun": "の・む",
+    "a": "Minum",
+    "lvl": "N5",
+    "day": 6,
+    "ex": [
+      {
+        "w": "飲む",
+        "r": "のむ",
+        "a": "Minum"
+      }
+    ]
+  },
+  {
+    "k": "魚",
+    "on": "ギョ",
+    "kun": "さかな",
+    "a": "Ikan",
+    "lvl": "N5",
+    "day": 6,
+    "ex": [
+      {
+        "w": "魚",
+        "r": "さかな",
+        "a": "Ikan"
+      }
+    ]
+  },
+  {
+    "k": "手",
+    "on": "シュ",
+    "kun": "て",
+    "a": "Tangan",
+    "lvl": "N5",
+    "day": 7,
+    "ex": [
+      {
+        "w": "手",
+        "r": "て",
+        "a": "Tangan"
+      }
+    ]
+  },
+  {
+    "k": "目",
+    "on": "モク",
+    "kun": "め",
+    "a": "Mata",
+    "lvl": "N5",
+    "day": 7,
+    "ex": [
+      {
+        "w": "目",
+        "r": "め",
+        "a": "Mata"
+      }
+    ]
+  },
+  {
+    "k": "紙",
+    "on": "シ",
+    "kun": "かみ",
+    "a": "Kertas",
+    "lvl": "N4",
+    "day": 7,
+    "ex": [
+      {
+        "w": "手紙",
+        "r": "てがみ",
+        "a": "Surat"
+      },
+      {
+        "w": "折り紙",
+        "r": "おりがみ",
+        "a": "Origami"
+      }
+    ]
+  },
+  {
+    "k": "肉",
+    "on": "ニク",
+    "kun": "-",
+    "a": "Daging",
+    "lvl": "N5",
+    "day": 7,
+    "ex": [
+      {
+        "w": "肉",
+        "r": "にく",
+        "a": "Daging"
+      }
+    ]
+  },
+  {
+    "k": "話",
+    "on": "ワ",
+    "kun": "はな・す, はなし",
+    "a": "Bicara, Cerita",
+    "lvl": "N5",
+    "day": 7,
+    "ex": [
+      {
+        "w": "話す",
+        "r": "はなす",
+        "a": "Berbicara"
+      },
+      {
+        "w": "電話",
+        "r": "でんわ",
+        "a": "Telepon"
+      }
+    ]
+  },
+  {
+    "k": "電",
+    "on": "デン",
+    "kun": "-",
+    "a": "Listrik",
+    "lvl": "N5",
+    "day": 7,
+    "ex": [
+      {
+        "w": "電車",
+        "r": "でんしゃ",
+        "a": "Kereta listrik"
+      }
+    ]
+  },
+  {
+    "k": "飯",
+    "on": "ハン",
+    "kun": "めし",
+    "a": "Nasi, Makanan",
+    "lvl": "N4",
+    "day": 7,
+    "ex": [
+      {
+        "w": "ご飯",
+        "r": "ごはん",
+        "a": "Nasi / Makanan"
+      },
+      {
+        "w": "朝ご飯",
+        "r": "あさごはん",
+        "a": "Sarapan"
+      }
+    ]
+  },
+  {
+    "k": "便",
+    "on": "ベン, ビン",
+    "kun": "たよ・り",
+    "a": "Praktis, Surat",
+    "lvl": "N4",
+    "day": 8,
+    "ex": [
+      {
+        "w": "便利",
+        "r": "べんり",
+        "a": "Praktis"
+      },
+      {
+        "w": "郵便",
+        "r": "ゆうびん",
+        "a": "Pos"
+      }
+    ]
+  },
+  {
+    "k": "外",
+    "on": "ガイ",
+    "kun": "そと",
+    "a": "Luar, Asing",
+    "lvl": "N5",
+    "day": 8,
+    "ex": [
+      {
+        "w": "外",
+        "r": "そと",
+        "a": "Luar"
+      }
+    ]
+  },
+  {
+    "k": "木",
+    "on": "モク, ボク",
+    "kun": "き",
+    "a": "Pohon, Kayu",
+    "lvl": "N5",
+    "day": 8,
+    "ex": [
+      {
+        "w": "木曜日",
+        "r": "もくようび",
+        "a": "Hari Kamis"
+      }
+    ]
+  },
+  {
+    "k": "空",
+    "on": "クウ",
+    "kun": "そら",
+    "a": "Langit",
+    "lvl": "N5",
+    "day": 8,
+    "ex": [
+      {
+        "w": "空",
+        "r": "そら",
+        "a": "Langit"
+      }
+    ]
+  },
+  {
+    "k": "行",
+    "on": "コウ, ギョウ",
+    "kun": "い・く",
+    "a": "Pergi",
+    "lvl": "N5",
+    "day": 8,
+    "ex": [
+      {
+        "w": "行く",
+        "r": "いく",
+        "a": "Pergi"
+      }
+    ]
+  },
+  {
+    "k": "銀",
+    "on": "ギン",
+    "kun": "しろがね",
+    "a": "Perak, Bank",
+    "lvl": "N4",
+    "day": 8,
+    "ex": [
+      {
+        "w": "銀行",
+        "r": "ぎんこう",
+        "a": "Bank"
+      },
+      {
+        "w": "銀色",
+        "r": "ぎんいろ",
+        "a": "Warna perak"
+      }
+    ]
+  },
+  {
+    "k": "風",
+    "on": "フウ",
+    "kun": "かぜ",
+    "a": "Angin, Gaya, Flu",
+    "lvl": "N4",
+    "day": 8,
+    "ex": [
+      {
+        "w": "風",
+        "r": "かぜ",
+        "a": "Angin"
+      },
+      {
+        "w": "風邪",
+        "r": "かぜ",
+        "a": "Masuk angin / Flu"
+      },
+      {
+        "w": "台風",
+        "r": "たいふう",
+        "a": "Topan"
+      }
+    ]
+  },
+  {
+    "k": "鳥",
+    "on": "チョウ",
+    "kun": "とり",
+    "a": "Burung",
+    "lvl": "N4",
+    "day": 8,
+    "ex": [
+      {
+        "w": "小鳥",
+        "r": "ことり",
+        "a": "Burung kecil"
+      },
+      {
+        "w": "焼き鳥",
+        "r": "やきとり",
+        "a": "Sate ayam"
+      }
+    ]
+  },
+  {
+    "k": "方",
+    "on": "ホウ",
+    "kun": "かた",
+    "a": "Arah, Cara, Orang (sopan)",
+    "lvl": "N4",
+    "day": 9,
+    "ex": [
+      {
+        "w": "夕方",
+        "r": "ゆうがた",
+        "a": "Sore"
+      },
+      {
+        "w": "読み方",
+        "r": "よみかた",
+        "a": "Cara baca"
+      }
+    ]
+  },
+  {
+    "k": "不",
+    "on": "フ, ブ",
+    "kun": "-",
+    "a": "Tidak, Bukan",
+    "lvl": "N4",
+    "day": 10,
+    "ex": [
+      {
+        "w": "不便",
+        "r": "ふべん",
+        "a": "Tidak praktis"
+      },
+      {
+        "w": "不安",
+        "r": "ふあん",
+        "a": "Cemas"
+      }
+    ]
+  },
+  {
+    "k": "中",
+    "on": "チュウ",
+    "kun": "なか",
+    "a": "Dalam, Tengah",
+    "lvl": "N5",
+    "day": 10,
+    "ex": [
+      {
+        "w": "中",
+        "r": "なか",
+        "a": "Di dalam"
+      }
+    ]
+  },
+  {
+    "k": "利",
+    "on": "リ",
+    "kun": "き・く",
+    "a": "Untung, Manfaat",
+    "lvl": "N4",
+    "day": 10,
+    "ex": [
+      {
+        "w": "便利",
+        "r": "べんり",
+        "a": "Praktis"
+      },
+      {
+        "w": "利用",
+        "r": "りよう",
+        "a": "Penggunaan"
+      }
+    ]
+  },
+  {
+    "k": "古",
+    "on": "コ",
+    "kun": "ふる・い",
+    "a": "Lama, Usang",
+    "lvl": "N5",
+    "day": 10,
+    "ex": [
+      {
+        "w": "古い",
+        "r": "ふるい",
+        "a": "Lama"
+      }
+    ]
+  },
+  {
+    "k": "安",
+    "on": "アン",
+    "kun": "やす・い",
+    "a": "Murah, Tenang",
+    "lvl": "N5",
+    "day": 10,
+    "ex": [
+      {
+        "w": "安い",
+        "r": "やすい",
+        "a": "Murah"
+      }
+    ]
+  },
+  {
+    "k": "有",
+    "on": "ユウ, ウ",
+    "kun": "あ・る",
+    "a": "Ada, Memiliki",
+    "lvl": "N4",
+    "day": 10,
+    "ex": [
+      {
+        "w": "有名",
+        "r": "ゆうめい",
+        "a": "Terkenal"
+      },
+      {
+        "w": "有料",
+        "r": "ゆうりょう",
+        "a": "Berbayar"
+      }
+    ]
+  },
+  {
+    "k": "映",
+    "on": "エイ",
+    "kun": "うつ・る",
+    "a": "Memantul, Proyeksi",
+    "lvl": "N4",
+    "day": 11,
+    "ex": [
+      {
+        "w": "映画",
+        "r": "えいが",
+        "a": "Film"
+      },
+      {
+        "w": "映画館",
+        "r": "えいがかん",
+        "a": "Bioskop"
+      }
+    ]
+  },
+  {
+    "k": "画",
+    "on": "ガ, カク",
+    "kun": "-",
+    "a": "Gambar, Coretan",
+    "lvl": "N4",
+    "day": 11,
+    "ex": [
+      {
+        "w": "映画",
+        "r": "えいが",
+        "a": "Film"
+      },
+      {
+        "w": "計画",
+        "r": "けいかく",
+        "a": "Rencana"
+      }
+    ]
+  },
+  {
+    "k": "白",
+    "on": "ハク",
+    "kun": "しろ・い",
+    "a": "Putih",
+    "lvl": "N5",
+    "day": 11,
+    "ex": [
+      {
+        "w": "白い",
+        "r": "しろい",
+        "a": "Putih"
+      }
+    ]
+  },
+  {
+    "k": "上",
+    "on": "ジョウ",
+    "kun": "うえ, あ・がる",
+    "a": "Atas, Naik",
+    "lvl": "N5",
+    "day": 12,
+    "ex": [
+      {
+        "w": "上",
+        "r": "うえ",
+        "a": "Atas"
+      },
+      {
+        "w": "上手",
+        "r": "じょうず",
+        "a": "Pintar"
+      }
+    ]
+  },
+  {
+    "k": "下",
+    "on": "カ, ゲ",
+    "kun": "した, さ・がる",
+    "a": "Bawah, Turun",
+    "lvl": "N5",
+    "day": 12,
+    "ex": [
+      {
+        "w": "下",
+        "r": "した",
+        "a": "Bawah"
+      },
+      {
+        "w": "下手",
+        "r": "へた",
+        "a": "Kurang pandai"
+      }
+    ]
+  },
+  {
+    "k": "元",
+    "on": "ゲン, ガン",
+    "kun": "もと",
+    "a": "Asal, Awal, Dasar",
+    "lvl": "N4",
+    "day": 12,
+    "ex": [
+      {
+        "w": "元気",
+        "r": "げんき",
+        "a": "Sehat"
+      },
+      {
+        "w": "元日",
+        "r": "がんじつ",
+        "a": "Tahun Baru"
+      }
+    ]
+  },
+  {
+    "k": "八",
+    "on": "ハチ",
+    "kun": "や, やっ・つ, よう",
+    "a": "Delapan",
+    "lvl": "N5",
+    "day": 12,
+    "ex": [
+      {
+        "w": "八つ",
+        "r": "やっつ",
+        "a": "Delapan buah"
+      },
+      {
+        "w": "八日",
+        "r": "ようか",
+        "a": "Tanggal 8"
+      }
+    ]
+  },
+  {
+    "k": "右",
+    "on": "ウ, ユウ",
+    "kun": "みぎ",
+    "a": "Kanan",
+    "lvl": "N5",
+    "day": 12,
+    "ex": [
+      {
+        "w": "右手",
+        "r": "みぎて",
+        "a": "Tangan kanan"
+      }
+    ]
+  },
+  {
+    "k": "堂",
+    "on": "ドウ",
+    "kun": "-",
+    "a": "Gedung, Aula",
+    "lvl": "N4",
+    "day": 12,
+    "ex": [
+      {
+        "w": "食堂",
+        "r": "しょくどう",
+        "a": "Kantin"
+      }
+    ]
+  },
+  {
+    "k": "左",
+    "on": "サ",
+    "kun": "ひだり",
+    "a": "Kiri",
+    "lvl": "N5",
+    "day": 12,
+    "ex": [
+      {
+        "w": "左手",
+        "r": "ひだりて",
+        "a": "Tangan kiri"
+      }
+    ]
+  },
+  {
+    "k": "後",
+    "on": "ゴ, コウ",
+    "kun": "うし・ろ, あと",
+    "a": "Belakang, Setelah",
+    "lvl": "N5",
+    "day": 12,
+    "ex": [
+      {
+        "w": "後ろ",
+        "r": "うしろ",
+        "a": "Belakang"
+      }
+    ]
+  },
+  {
+    "k": "気",
+    "on": "キ",
+    "kun": "-",
+    "a": "Energi, Udara",
+    "lvl": "N5",
+    "day": 12,
+    "ex": [
+      {
+        "w": "元気",
+        "r": "げんき",
+        "a": "Sehat"
+      }
+    ]
+  },
+  {
+    "k": "牛",
+    "on": "ギュウ",
+    "kun": "うし",
+    "a": "Sapi, Lembu",
+    "lvl": "N4",
+    "day": 12,
+    "ex": [
+      {
+        "w": "牛",
+        "r": "うし",
+        "a": "Sapi"
+      },
+      {
+        "w": "牛乳",
+        "r": "ぎゅうにゅう",
+        "a": "Susu sapi"
+      },
+      {
+        "w": "牛肉",
+        "r": "ぎゅうにく",
+        "a": "Daging sapi"
+      }
+    ]
+  },
+  {
+    "k": "百",
+    "on": "ヒャク",
+    "kun": "もも",
+    "a": "Ratus, Seratus",
+    "lvl": "N5",
+    "day": 12,
+    "ex": [
+      {
+        "w": "三百",
+        "r": "さんびゃく",
+        "a": "Tiga ratus"
+      }
+    ]
+  },
+  {
+    "k": "近",
+    "on": "キン",
+    "kun": "ちか・い",
+    "a": "Dekat",
+    "lvl": "N4",
+    "day": 12,
+    "ex": [
+      {
+        "w": "近い",
+        "r": "ちかい",
+        "a": "Dekat"
+      },
+      {
+        "w": "近所",
+        "r": "きんじょ",
+        "a": "Tetangga sekitar"
+      }
+    ]
+  },
+  {
+    "k": "間",
+    "on": "カン",
+    "kun": "あいだ",
+    "a": "Antara, Jeda Waktu",
+    "lvl": "N5",
+    "day": 12,
+    "ex": [
+      {
+        "w": "時間",
+        "r": "じかん",
+        "a": "Waktu"
+      }
+    ]
+  },
+  {
+    "k": "一",
+    "on": "イチ, イツ",
+    "kun": "ひと, ひと・つ",
+    "a": "Satu",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "一つ",
+        "r": "ひとつ",
+        "a": "Satu buah"
+      },
+      {
+        "w": "一人",
+        "r": "ひとり",
+        "a": "Satu orang"
+      }
+    ]
+  },
+  {
+    "k": "七",
+    "on": "シチ",
+    "kun": "なな, なな・つ, なの",
+    "a": "Tujuh",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "七つ",
+        "r": "ななつ",
+        "a": "Tujuh buah"
+      },
+      {
+        "w": "七日",
+        "r": "なのか",
+        "a": "Tanggal 7"
+      }
+    ]
+  },
+  {
+    "k": "三",
+    "on": "サン",
+    "kun": "み, みっ・つ",
+    "a": "Tiga",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "三つ",
+        "r": "みっつ",
+        "a": "Tiga buah"
+      },
+      {
+        "w": "三日",
+        "r": "みっか",
+        "a": "Tanggal 3"
+      }
+    ]
+  },
+  {
+    "k": "九",
+    "on": "キュウ, ク",
+    "kun": "ここの, ここの・つ",
+    "a": "Sembilan",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "九つ",
+        "r": "ここのつ",
+        "a": "Sembilan buah"
+      },
+      {
+        "w": "九月",
+        "r": "くがつ",
+        "a": "Bulan September"
+      }
+    ]
+  },
+  {
+    "k": "事",
+    "on": "ジ",
+    "kun": "こと",
+    "a": "Hal, Perkara, Urusan",
+    "lvl": "N4",
+    "day": 13,
+    "ex": [
+      {
+        "w": "仕事",
+        "r": "しごと",
+        "a": "Pekerjaan"
+      },
+      {
+        "w": "大事",
+        "r": "だいじ",
+        "a": "Penting"
+      }
+    ]
+  },
+  {
+    "k": "二",
+    "on": "ニ",
+    "kun": "ふた, ふた・つ",
+    "a": "Dua",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "二つ",
+        "r": "ふたつ",
+        "a": "Dua buah"
+      },
+      {
+        "w": "二人",
+        "r": "ふたり",
+        "a": "Dua orang"
+      }
+    ]
+  },
+  {
+    "k": "五",
+    "on": "ゴ",
+    "kun": "いつ, いつ・つ",
+    "a": "Lima",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "五つ",
+        "r": "いつつ",
+        "a": "Lima buah"
+      },
+      {
+        "w": "五日",
+        "r": "いつか",
+        "a": "Tanggal 5"
+      }
+    ]
+  },
+  {
+    "k": "仕",
+    "on": "シ",
+    "kun": "つか・える",
+    "a": "Melayani, Bekerja",
+    "lvl": "N4",
+    "day": 13,
+    "ex": [
+      {
+        "w": "仕事",
+        "r": "しごと",
+        "a": "Pekerjaan"
+      },
+      {
+        "w": "仕方",
+        "r": "しかた",
+        "a": "Cara"
+      }
+    ]
+  },
+  {
+    "k": "六",
+    "on": "ロク",
+    "kun": "む, むっ・つ, むい",
+    "a": "Enam",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "六つ",
+        "r": "むっつ",
+        "a": "Enam buah"
+      },
+      {
+        "w": "六日",
+        "r": "むいか",
+        "a": "Tanggal 6"
+      }
+    ]
+  },
+  {
+    "k": "分",
+    "on": "ブン, フン",
+    "kun": "わ・かる",
+    "a": "Menit, Mengerti",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "五分",
+        "r": "ごふん",
+        "a": "5 Menit"
+      }
+    ]
+  },
+  {
+    "k": "十",
+    "on": "ジュウ, ジッ",
+    "kun": "とお, と",
+    "a": "Sepuluh",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "十",
+        "r": "とお",
+        "a": "Sepuluh buah"
+      },
+      {
+        "w": "十日",
+        "r": "とおか",
+        "a": "Tanggal 10"
+      }
+    ]
+  },
+  {
+    "k": "千",
+    "on": "セン",
+    "kun": "ち",
+    "a": "Ribu, Seribu",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "千円",
+        "r": "せんえん",
+        "a": "Seribu yen"
+      }
+    ]
+  },
+  {
+    "k": "午",
+    "on": "ゴ",
+    "kun": "-",
+    "a": "Siang",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "午前",
+        "r": "ごぜん",
+        "a": "Pagi (AM)"
+      },
+      {
+        "w": "午後",
+        "r": "ごご",
+        "a": "Siang (PM)"
+      }
+    ]
+  },
+  {
+    "k": "半",
+    "on": "ハン",
+    "kun": "なか・ば",
+    "a": "Setengah, Separuh",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "三時半",
+        "r": "さんじはん",
+        "a": "Jam 3:30"
+      }
+    ]
+  },
+  {
+    "k": "四",
+    "on": "シ",
+    "kun": "よ, よ・つ, よっ・つ, よん",
+    "a": "Empat",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "四つ",
+        "r": "よっつ",
+        "a": "Empat buah"
+      },
+      {
+        "w": "四月",
+        "r": "しがつ",
+        "a": "Bulan April"
+      }
+    ]
+  },
+  {
+    "k": "土",
+    "on": "ド, ト",
+    "kun": "つち",
+    "a": "Tanah",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "土曜日",
+        "r": "どようび",
+        "a": "Hari Sabtu"
+      }
+    ]
+  },
+  {
+    "k": "夏",
+    "on": "カ",
+    "kun": "なつ",
+    "a": "Musim Panas",
+    "lvl": "N4",
+    "day": 13,
+    "ex": [
+      {
+        "w": "夏",
+        "r": "なつ",
+        "a": "Musim panas"
+      },
+      {
+        "w": "夏休み",
+        "r": "なつやすみ",
+        "a": "Liburan musim panas"
+      }
+    ]
+  },
+  {
+    "k": "旅",
+    "on": "リョ",
+    "kun": "たび",
+    "a": "Perjalanan, Wisata",
+    "lvl": "N4",
+    "day": 13,
+    "ex": [
+      {
+        "w": "旅行",
+        "r": "りょこう",
+        "a": "Wisata"
+      },
+      {
+        "w": "旅館",
+        "r": "りょかん",
+        "a": "Penginapan Jepang"
+      }
+    ]
+  },
+  {
+    "k": "月",
+    "on": "ゲツ, ガツ",
+    "kun": "つき",
+    "a": "Bulan",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "月曜日",
+        "r": "げつようび",
+        "a": "Hari Senin"
+      }
+    ]
+  },
+  {
+    "k": "来",
+    "on": "ライ",
+    "kun": "く・る",
+    "a": "Datang",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "来る",
+        "r": "くる",
+        "a": "Datang"
+      }
+    ]
+  },
+  {
+    "k": "東",
+    "on": "トウ",
+    "kun": "ひがし",
+    "a": "Timur",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "東京",
+        "r": "とうきょう",
+        "a": "Tokyo"
+      }
+    ]
+  },
+  {
+    "k": "毎",
+    "on": "マイ",
+    "kun": "-",
+    "a": "Setiap",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "毎日",
+        "r": "まいにち",
+        "a": "Setiap hari"
+      }
+    ]
+  },
+  {
+    "k": "火",
+    "on": "カ",
+    "kun": "ひ, -び",
+    "a": "Api",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "火曜日",
+        "r": "かようび",
+        "a": "Hari Selasa"
+      }
+    ]
+  },
+  {
+    "k": "週",
+    "on": "シュウ",
+    "kun": "-",
+    "a": "Pekan, Minggu",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "今週",
+        "r": "こんしゅう",
+        "a": "Minggu ini"
+      }
+    ]
+  },
+  {
+    "k": "金",
+    "on": "キン, コン",
+    "kun": "かね",
+    "a": "Emas, Uang",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "金曜日",
+        "r": "きんようび",
+        "a": "Hari Jumat"
+      },
+      {
+        "w": "お金",
+        "r": "おかね",
+        "a": "Uang"
+      }
+    ]
+  },
+  {
+    "k": "勉",
+    "on": "ベン",
+    "kun": "-",
+    "a": "Berusaha Keras",
+    "lvl": "N4",
+    "day": 14,
+    "ex": [
+      {
+        "w": "勉強",
+        "r": "べんきょう",
+        "a": "Belajar"
+      }
+    ]
+  },
+  {
+    "k": "夕",
+    "on": "セキ",
+    "kun": "ゆう",
+    "a": "Sore / Senja",
+    "lvl": "N4",
+    "day": 14,
+    "ex": [
+      {
+        "w": "夕方",
+        "r": "ゆうがた",
+        "a": "Sore hari"
+      },
+      {
+        "w": "夕飯",
+        "r": "ゆうはん",
+        "a": "Makan malam"
+      }
+    ]
+  },
+  {
+    "k": "強",
+    "on": "キョウ",
+    "kun": "つよ・い",
+    "a": "Kuat",
+    "lvl": "N4",
+    "day": 14,
+    "ex": [
+      {
+        "w": "強い",
+        "r": "つよい",
+        "a": "Kuat"
+      },
+      {
+        "w": "勉強",
+        "r": "べんきょう",
+        "a": "Belajar"
+      }
+    ]
+  },
+  {
+    "k": "早",
+    "on": "ソウ",
+    "kun": "はや・い",
+    "a": "Cepat (Waktu), Pagi",
+    "lvl": "N5",
+    "day": 14,
+    "ex": [
+      {
+        "w": "早い",
+        "r": "はやい",
+        "a": "Cepat / Awal"
+      }
+    ]
+  },
+  {
+    "k": "遅",
+    "on": "チ",
+    "kun": "おそ・い, おく・れる",
+    "a": "Lambat, Terlambat",
+    "lvl": "N4",
+    "day": 14,
+    "ex": [
+      {
+        "w": "遅い",
+        "r": "おそい",
+        "a": "Lambat / Larut"
+      },
+      {
+        "w": "遅刻",
+        "r": "ちこく",
+        "a": "Terlambat"
+      }
+    ]
+  },
+  {
+    "k": "北",
+    "on": "ホク",
+    "kun": "きた",
+    "a": "Utara",
+    "lvl": "N5",
+    "day": 15,
+    "ex": [
+      {
+        "w": "北",
+        "r": "きた",
+        "a": "Utara"
+      }
+    ]
+  },
+  {
+    "k": "少",
+    "on": "ショウ",
+    "kun": "すく・ない, すこ・し",
+    "a": "Sedikit",
+    "lvl": "N5",
+    "day": 15,
+    "ex": [
+      {
+        "w": "少し",
+        "r": "すこし",
+        "a": "Sedikit"
+      }
+    ]
+  },
+  {
+    "k": "帰",
+    "on": "キ",
+    "kun": "かえ・る",
+    "a": "Pulang",
+    "lvl": "N5",
+    "day": 15,
+    "ex": [
+      {
+        "w": "帰る",
+        "r": "かえる",
+        "a": "Pulang"
+      }
+    ]
+  },
+  {
+    "k": "道",
+    "on": "ドウ",
+    "kun": "みち",
+    "a": "Jalan",
+    "lvl": "N5",
+    "day": 15,
+    "ex": [
+      {
+        "w": "道",
+        "r": "みち",
+        "a": "Jalan"
+      }
+    ]
+  },
+  {
+    "k": "雨",
+    "on": "ウ",
+    "kun": "あめ",
+    "a": "Hujan",
+    "lvl": "N5",
+    "day": 15,
+    "ex": [
+      {
+        "w": "雨",
+        "r": "あめ",
+        "a": "Hujan"
+      }
+    ]
+  },
+  {
+    "k": "切",
+    "on": "セツ, サイ",
+    "kun": "き・る",
+    "a": "Memotong, Tiket",
+    "lvl": "N4",
+    "day": 16,
+    "ex": [
+      {
+        "w": "切る",
+        "r": "きる",
+        "a": "Memotong"
+      },
+      {
+        "w": "切符",
+        "r": "きっぷ",
+        "a": "Tiket"
+      }
+    ]
+  },
+  {
+    "k": "親",
+    "on": "シン",
+    "kun": "おや, した・しい",
+    "a": "Orang Tua, Akrab",
+    "lvl": "N4",
+    "day": 16,
+    "ex": [
+      {
+        "w": "親",
+        "r": "おや",
+        "a": "Orang tua"
+      },
+      {
+        "w": "両親",
+        "r": "りょうしん",
+        "a": "Kedua orang tua"
+      }
+    ]
+  },
+  {
+    "k": "赤",
+    "on": "セキ",
+    "kun": "あか・い",
+    "a": "Merah",
+    "lvl": "N4",
+    "day": 16,
+    "ex": [
+      {
+        "w": "赤い",
+        "r": "あかい",
+        "a": "Merah"
+      },
+      {
+        "w": "赤ちゃん",
+        "r": "あかちゃん",
+        "a": "Bayi"
+      }
+    ]
+  },
+  {
+    "k": "青",
+    "on": "セイ, ショウ",
+    "kun": "あお・い",
+    "a": "Biru",
+    "lvl": "N4",
+    "day": 16,
+    "ex": [
+      {
+        "w": "青い",
+        "r": "あおい",
+        "a": "Biru"
+      },
+      {
+        "w": "青空",
+        "r": "あおぞら",
+        "a": "Langit biru"
+      }
+    ]
+  },
+  {
+    "k": "黒",
+    "on": "コク",
+    "kun": "くろ・い",
+    "a": "Hitam",
+    "lvl": "N4",
+    "day": 16,
+    "ex": [
+      {
+        "w": "黒い",
+        "r": "くろい",
+        "a": "Hitam"
+      },
+      {
+        "w": "黒板",
+        "r": "こくばん",
+        "a": "Papan tulis hitam"
+      }
+    ]
+  },
+  {
+    "k": "動",
+    "on": "ドウ",
+    "kun": "うご・く",
+    "a": "Bergerak",
+    "lvl": "N4",
+    "day": 17,
+    "ex": [
+      {
+        "w": "動く",
+        "r": "うごく",
+        "a": "Bergerak"
+      },
+      {
+        "w": "自動車",
+        "r": "じどうしゃ",
+        "a": "Mobil"
+      }
+    ]
+  },
+  {
+    "k": "小",
+    "on": "ショウ",
+    "kun": "ちい・さい",
+    "a": "Kecil",
+    "lvl": "N5",
+    "day": 17,
+    "ex": [
+      {
+        "w": "小さい",
+        "r": "ちいさい",
+        "a": "Kecil"
+      }
+    ]
+  },
+  {
+    "k": "度",
+    "on": "ド, ト",
+    "kun": "たび",
+    "a": "Derajat, Kali",
+    "lvl": "N4",
+    "day": 17,
+    "ex": [
+      {
+        "w": "一度",
+        "r": "いちど",
+        "a": "Satu kali"
+      },
+      {
+        "w": "今度",
+        "r": "こんど",
+        "a": "Lain kali"
+      }
+    ]
+  },
+  {
+    "k": "洗",
+    "on": "セン",
+    "kun": "あら・う",
+    "a": "Mencuci",
+    "lvl": "N4",
+    "day": 17,
+    "ex": [
+      {
+        "w": "洗う",
+        "r": "あらう",
+        "a": "Mencuci"
+      },
+      {
+        "w": "お手洗い",
+        "r": "おてあらい",
+        "a": "Toilet"
+      }
+    ]
+  },
+  {
+    "k": "練",
+    "on": "レン",
+    "kun": "ね・る",
+    "a": "Melatih, Menempa",
+    "lvl": "N4",
+    "day": 17,
+    "ex": [
+      {
+        "w": "練習",
+        "r": "れんしゅう",
+        "a": "Latihan"
+      }
+    ]
+  },
+  {
+    "k": "習",
+    "on": "シュウ",
+    "kun": "なら・う",
+    "a": "Belajar, Berlatih",
+    "lvl": "N4",
+    "day": 17,
+    "ex": [
+      {
+        "w": "習う",
+        "r": "ならう",
+        "a": "Belajar"
+      },
+      {
+        "w": "練習",
+        "r": "れんしゅう",
+        "a": "Latihan"
+      }
+    ]
+  },
+  {
+    "k": "見",
+    "on": "ケン",
+    "kun": "み・る",
+    "a": "Melihat",
+    "lvl": "N5",
+    "day": 17,
+    "ex": [
+      {
+        "w": "見る",
+        "r": "みる",
+        "a": "Melihat"
+      }
+    ]
+  },
+  {
+    "k": "読",
+    "on": "ドク",
+    "kun": "よ・む",
+    "a": "Membaca",
+    "lvl": "N5",
+    "day": 17,
+    "ex": [
+      {
+        "w": "読む",
+        "r": "よむ",
+        "a": "Membaca"
+      }
+    ]
+  },
+  {
+    "k": "運",
+    "on": "ウン",
+    "kun": "はこ・ぶ",
+    "a": "Mengangkut, Keberuntungan",
+    "lvl": "N4",
+    "day": 17,
+    "ex": [
+      {
+        "w": "運動",
+        "r": "うんどう",
+        "a": "Olahraga"
+      },
+      {
+        "w": "運",
+        "r": "うん",
+        "a": "Nasib"
+      }
+    ]
+  },
+  {
+    "k": "雪",
+    "on": "セツ",
+    "kun": "ゆき",
+    "a": "Salju",
+    "lvl": "N4",
+    "day": 17,
+    "ex": [
+      {
+        "w": "雪",
+        "r": "ゆき",
+        "a": "Salju"
+      },
+      {
+        "w": "大雪",
+        "r": "おおゆき",
+        "a": "Salju lebat"
+      }
+    ]
+  },
+  {
+    "k": "多",
+    "on": "タ",
+    "kun": "おお・い",
+    "a": "Banyak",
+    "lvl": "N5",
+    "day": 18,
+    "ex": [
+      {
+        "w": "多い",
+        "r": "おおい",
+        "a": "Banyak"
+      }
+    ]
+  },
+  {
+    "k": "字",
+    "on": "ジ",
+    "kun": "あざ",
+    "a": "Huruf, Aksara",
+    "lvl": "N4",
+    "day": 18,
+    "ex": [
+      {
+        "w": "漢字",
+        "r": "かんじ",
+        "a": "Kanji"
+      },
+      {
+        "w": "文字",
+        "r": "もじ",
+        "a": "Huruf"
+      }
+    ]
+  },
+  {
+    "k": "持",
+    "on": "ジ",
+    "kun": "も・つ",
+    "a": "Membawa, Memiliki",
+    "lvl": "N5",
+    "day": 18,
+    "ex": [
+      {
+        "w": "持つ",
+        "r": "もつ",
+        "a": "Membawa"
+      }
+    ]
+  },
+  {
+    "k": "昼",
+    "on": "チュウ",
+    "kun": "ひる",
+    "a": "Siang",
+    "lvl": "N4",
+    "day": 18,
+    "ex": [
+      {
+        "w": "昼",
+        "r": "ひる",
+        "a": "Siang"
+      },
+      {
+        "w": "昼休み",
+        "r": "ひるやすみ",
+        "a": "Istirahat siang"
+      }
+    ]
+  },
+  {
+    "k": "漢",
+    "on": "カン",
+    "kun": "-",
+    "a": "Dinasti Han, Tiongkok",
+    "lvl": "N4",
+    "day": 18,
+    "ex": [
+      {
+        "w": "漢字",
+        "r": "かんじ",
+        "a": "Kanji"
+      }
+    ]
+  },
+  {
+    "k": "買",
+    "on": "バイ",
+    "kun": "か・う",
+    "a": "Membeli",
+    "lvl": "N5",
+    "day": 18,
+    "ex": [
+      {
+        "w": "買う",
+        "r": "かう",
+        "a": "Membeli"
+      }
+    ]
+  },
+  {
+    "k": "同",
+    "on": "ドウ",
+    "kun": "おな・じ",
+    "a": "Sama, Serupa",
+    "lvl": "N4",
+    "day": 19,
+    "ex": [
+      {
+        "w": "同じ",
+        "r": "おなじ",
+        "a": "Sama"
+      },
+      {
+        "w": "同時に",
+        "r": "どうじに",
+        "a": "Bersamaan"
+      }
+    ]
+  },
+  {
+    "k": "広",
+    "on": "コウ",
+    "kun": "ひろ・い",
+    "a": "Luas, Lapang",
+    "lvl": "N4",
+    "day": 19,
+    "ex": [
+      {
+        "w": "広い",
+        "r": "ひろい",
+        "a": "Luas"
+      },
+      {
+        "w": "広場",
+        "r": "ひろば",
+        "a": "Alun-alun"
+      }
+    ]
+  },
+  {
+    "k": "店",
+    "on": "テン",
+    "kun": "みせ",
+    "a": "Toko",
+    "lvl": "N5",
+    "day": 19,
+    "ex": [
+      {
+        "w": "店",
+        "r": "みせ",
+        "a": "Toko"
+      }
+    ]
+  },
+  {
+    "k": "春",
+    "on": "シュン",
+    "kun": "はる",
+    "a": "Musim Semi",
+    "lvl": "N4",
+    "day": 19,
+    "ex": [
+      {
+        "w": "春",
+        "r": "はる",
+        "a": "Musim semi"
+      },
+      {
+        "w": "青春",
+        "r": "せいしゅん",
+        "a": "Masa muda"
+      }
+    ]
+  },
+  {
+    "k": "歩",
+    "on": "ホ",
+    "kun": "ある・く",
+    "a": "Berjalan Kaki",
+    "lvl": "N4",
+    "day": 19,
+    "ex": [
+      {
+        "w": "歩く",
+        "r": "あるく",
+        "a": "Berjalan"
+      },
+      {
+        "w": "散歩",
+        "r": "さんぽ",
+        "a": "Jalan santai"
+      }
+    ]
+  },
+  {
+    "k": "秋",
+    "on": "シュウ",
+    "kun": "あき",
+    "a": "Musim Gugur",
+    "lvl": "N4",
+    "day": 19,
+    "ex": [
+      {
+        "w": "秋",
+        "r": "あき",
+        "a": "Musim gugur"
+      }
+    ]
+  },
+  {
+    "k": "遠",
+    "on": "エン",
+    "kun": "とお・い",
+    "a": "Jauh",
+    "lvl": "N4",
+    "day": 19,
+    "ex": [
+      {
+        "w": "遠い",
+        "r": "とおい",
+        "a": "Jauh"
+      },
+      {
+        "w": "遠足",
+        "r": "えんそく",
+        "a": "Piknik"
+      }
+    ]
+  },
+  {
+    "k": "頭",
+    "on": "トウ, ズ",
+    "kun": "あたま",
+    "a": "Kepala",
+    "lvl": "N4",
+    "day": 19,
+    "ex": [
+      {
+        "w": "頭",
+        "r": "あたま",
+        "a": "Kepala"
+      },
+      {
+        "w": "頭痛",
+        "r": "ずつう",
+        "a": "Sakit kepala"
+      }
+    ]
+  },
+  {
+    "k": "問",
+    "on": "モン",
+    "kun": "と・う",
+    "a": "Pertanyaan, Menanyai",
+    "lvl": "N4",
+    "day": 20,
+    "ex": [
+      {
+        "w": "問題",
+        "r": "もんだい",
+        "a": "Soal / Masalah"
+      }
+    ]
+  },
+  {
+    "k": "宿",
+    "on": "シュク",
+    "kun": "やど",
+    "a": "Penginapan, Menginap",
+    "lvl": "N4",
+    "day": 20,
+    "ex": [
+      {
+        "w": "宿題",
+        "r": "しゅくだい",
+        "a": "PR"
+      },
+      {
+        "w": "新宿",
+        "r": "しんじゅく",
+        "a": "Shinjuku"
+      }
+    ]
+  },
+  {
+    "k": "質",
+    "on": "シツ",
+    "kun": "-",
+    "a": "Kualitas, Hakikat, Tanya",
+    "lvl": "N4",
+    "day": 20,
+    "ex": [
+      {
+        "w": "質問",
+        "r": "しつもん",
+        "a": "Pertanyaan"
+      }
+    ]
+  },
+  {
+    "k": "万",
+    "on": "マン, バン",
+    "kun": "よろず",
+    "a": "Puluh Ribu (10.000)",
+    "lvl": "N5",
+    "day": 21,
+    "ex": [
+      {
+        "w": "一万円",
+        "r": "いちまんえん",
+        "a": "Sepuluh ribu yen"
+      }
+    ]
+  },
+  {
+    "k": "円",
+    "on": "エン",
+    "kun": "まる・い",
+    "a": "Yen (Mata Uang), Bulat",
+    "lvl": "N5",
+    "day": 21,
+    "ex": [
+      {
+        "w": "百円",
+        "r": "ひゃくえん",
+        "a": "100 Yen"
+      }
+    ]
+  },
+  {
+    "k": "着",
+    "on": "チャク",
+    "kun": "き・る, つ・く",
+    "a": "Tiba, Mengenakan Pakaian",
+    "lvl": "N4",
+    "day": 21,
+    "ex": [
+      {
+        "w": "着る",
+        "r": "きる",
+        "a": "Memakai baju"
+      },
+      {
+        "w": "着く",
+        "r": "つく",
+        "a": "Sampai/Tiba"
+      }
+    ]
+  },
+  {
+    "k": "入",
+    "on": "ニュウ",
+    "kun": "はい・る",
+    "a": "Masuk",
+    "lvl": "N5",
+    "day": 22,
+    "ex": [
+      {
+        "w": "入る",
+        "r": "はいる",
+        "a": "Masuk"
+      }
+    ]
+  },
+  {
+    "k": "場",
+    "on": "ジョウ",
+    "kun": "ば",
+    "a": "Tempat, Lokasi",
+    "lvl": "N4",
+    "day": 22,
+    "ex": [
+      {
+        "w": "場所",
+        "r": "ばしょ",
+        "a": "Tempat"
+      },
+      {
+        "w": "工場",
+        "r": "こうじょう",
+        "a": "Pabrik"
+      }
+    ]
+  },
+  {
+    "k": "座",
+    "on": "ザ",
+    "kun": "すわ・る",
+    "a": "Duduk",
+    "lvl": "N5",
+    "day": 22,
+    "ex": [
+      {
+        "w": "座る",
+        "r": "すわる",
+        "a": "Duduk"
+      }
+    ]
+  },
+  {
+    "k": "待",
+    "on": "タイ",
+    "kun": "ま・つ",
+    "a": "Menunggu",
+    "lvl": "N4",
+    "day": 22,
+    "ex": [
+      {
+        "w": "待つ",
+        "r": "まつ",
+        "a": "Menunggu"
+      }
+    ]
+  },
+  {
+    "k": "終",
+    "on": "シュウ",
+    "kun": "お・わる",
+    "a": "Selesai, Berakhir",
+    "lvl": "N4",
+    "day": 23,
+    "ex": [
+      {
+        "w": "終わる",
+        "r": "おわる",
+        "a": "Selesai"
+      }
+    ]
+  },
+  {
+    "k": "送",
+    "on": "ソウ",
+    "kun": "おく・る",
+    "a": "Mengirim",
+    "lvl": "N4",
+    "day": 23,
+    "ex": [
+      {
+        "w": "送る",
+        "r": "おくる",
+        "a": "Mengirim"
+      },
+      {
+        "w": "見送る",
+        "r": "みおくる",
+        "a": "Mengantar"
+      }
+    ]
+  },
+  {
+    "k": "由",
+    "on": "ユ, ユウ",
+    "kun": "よし",
+    "a": "Alasan, Asal",
+    "lvl": "N4",
+    "day": 24,
+    "ex": [
+      {
+        "w": "自由",
+        "r": "じゆう",
+        "a": "Kebebasan"
+      },
+      {
+        "w": "理由",
+        "r": "りゆう",
+        "a": "Alasan"
+      }
+    ]
+  },
+  {
+    "k": "試",
+    "on": "シ",
+    "kun": "こころ・みる, ため・す",
+    "a": "Mencoba, Menguji",
+    "lvl": "N4",
+    "day": 24,
+    "ex": [
+      {
+        "w": "試験",
+        "r": "しけん",
+        "a": "Ujian"
+      },
+      {
+        "w": "試合",
+        "r": "しあい",
+        "a": "Pertandingan"
+      }
+    ]
+  },
+  {
+    "k": "別",
+    "on": "ベツ",
+    "kun": "わか・れる",
+    "a": "Berpisah, Lain, Beda",
+    "lvl": "N4",
+    "day": 25,
+    "ex": [
+      {
+        "w": "別れる",
+        "r": "わかれる",
+        "a": "Berpisah"
+      },
+      {
+        "w": "別の",
+        "r": "べつの",
+        "a": "Lainnya"
+      }
+    ]
+  },
+  {
+    "k": "森",
+    "on": "シン",
+    "kun": "もり",
+    "a": "Hutan Lebat, Rimba",
+    "lvl": "N4",
+    "day": 25,
+    "ex": [
+      {
+        "w": "森",
+        "r": "もり",
+        "a": "Hutan lebat"
+      },
+      {
+        "w": "森林",
+        "r": "しんりん",
+        "a": "Hutan belantara"
+      }
+    ]
+  },
+  {
+    "k": "走",
+    "on": "ソウ",
+    "kun": "はし・る",
+    "a": "Berlari",
+    "lvl": "N4",
+    "day": 25,
+    "ex": [
+      {
+        "w": "走る",
+        "r": "はしる",
+        "a": "Berlari"
+      }
+    ]
+  },
+  {
+    "k": "通",
+    "on": "ツウ",
+    "kun": "とお・る, かよ・う",
+    "a": "Lewat, Menembus",
+    "lvl": "N4",
+    "day": 25,
+    "ex": [
+      {
+        "w": "通る",
+        "r": "とおる",
+        "a": "Melewati"
+      },
+      {
+        "w": "通う",
+        "r": "かよう",
+        "a": "Pulang pergi"
+      }
+    ]
+  },
+  {
+    "k": "重",
+    "on": "ジュウ, チョウ",
+    "kun": "おも・い",
+    "a": "Berat, Tumpuk",
+    "lvl": "N4",
+    "day": 25,
+    "ex": [
+      {
+        "w": "重い",
+        "r": "おもい",
+        "a": "Berat"
+      },
+      {
+        "w": "貴重",
+        "r": "きちょう",
+        "a": "Berharga"
+      }
+    ]
+  },
+  {
+    "k": "顔",
+    "on": "ガン",
+    "kun": "かお",
+    "a": "Wajah, Muka",
+    "lvl": "N4",
+    "day": 25,
+    "ex": [
+      {
+        "w": "顔",
+        "r": "かお",
+        "a": "Wajah"
+      },
+      {
+        "w": "笑顔",
+        "r": "えがお",
+        "a": "Senyuman"
+      }
+    ]
+  },
+  {
+    "k": "南",
+    "on": "ナン",
+    "kun": "みなみ",
+    "a": "Selatan",
+    "lvl": "N5",
+    "day": 26,
+    "ex": [
+      {
+        "w": "南",
+        "r": "みなみ",
+        "a": "Selatan"
+      }
+    ]
+  },
+  {
+    "k": "西",
+    "on": "セイ, サイ",
+    "kun": "にし",
+    "a": "Barat",
+    "lvl": "N5",
+    "day": 26,
+    "ex": [
+      {
+        "w": "西",
+        "r": "にし",
+        "a": "Barat"
+      }
+    ]
+  },
+  {
+    "k": "歌",
+    "on": "カ",
+    "kun": "うた, うた・う",
+    "a": "Lagu, Menyanyi",
+    "lvl": "N4",
+    "day": 27,
+    "ex": [
+      {
+        "w": "歌",
+        "r": "うた",
+        "a": "Lagu"
+      },
+      {
+        "w": "歌う",
+        "r": "うたう",
+        "a": "Menyanyi"
+      },
+      {
+        "w": "歌手",
+        "r": "かしゅ",
+        "a": "Penyanyi"
+      }
+    ]
+  },
+  {
+    "k": "黄",
+    "on": "コウ",
+    "kun": "き",
+    "a": "Kuning",
+    "lvl": "N4",
+    "day": 27,
+    "ex": [
+      {
+        "w": "黄色",
+        "r": "きいろ",
+        "a": "Warna kuning"
+      }
+    ]
+  },
+  {
+    "k": "特",
+    "on": "トク",
+    "kun": "-",
+    "a": "Spesial, Khusus",
+    "lvl": "N4",
+    "day": 28,
+    "ex": [
+      {
+        "w": "特別",
+        "r": "とくべつ",
+        "a": "Khusus/Spesial"
+      },
+      {
+        "w": "特に",
+        "r": "とくに",
+        "a": "Khususnya"
+      }
+    ]
+  },
+  {
+    "k": "世",
+    "on": "セイ, セ",
+    "kun": "よ",
+    "a": "Dunia, Generasi",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "世界",
+        "r": "せかい",
+        "a": "Dunia"
+      },
+      {
+        "w": "世の中",
+        "r": "よのなか",
+        "a": "Dunia masyarakat"
+      }
+    ]
+  },
+  {
+    "k": "体",
+    "on": "タイ",
+    "kun": "からだ",
+    "a": "Tubuh, Badan",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "体",
+        "r": "からだ",
+        "a": "Tubuh"
+      },
+      {
+        "w": "体力",
+        "r": "たいりょく",
+        "a": "Stamina"
+      }
+    ]
+  },
+  {
+    "k": "使",
+    "on": "シ",
+    "kun": "つか・う",
+    "a": "Menggunakan",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "使う",
+        "r": "つかう",
+        "a": "Menggunakan"
+      }
+    ]
+  },
+  {
+    "k": "借",
+    "on": "シャク",
+    "kun": "か・りる",
+    "a": "Meminjam",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "借りる",
+        "r": "かりる",
+        "a": "Meminjam"
+      }
+    ]
+  },
+  {
+    "k": "力",
+    "on": "リョク",
+    "kun": "ちから",
+    "a": "Tenaga, Daya",
+    "lvl": "N5",
+    "day": 31,
+    "ex": [
+      {
+        "w": "力",
+        "r": "ちから",
+        "a": "Tenaga"
+      }
+    ]
+  },
+  {
+    "k": "口",
+    "on": "コウ",
+    "kun": "くち",
+    "a": "Mulut, Pintu",
+    "lvl": "N5",
+    "day": 31,
+    "ex": [
+      {
+        "w": "出口",
+        "r": "でぐち",
+        "a": "Pintu keluar"
+      }
+    ]
+  },
+  {
+    "k": "回",
+    "on": "カイ",
+    "kun": "まわ・る",
+    "a": "Putaran, Kali",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "回る",
+        "r": "まわる",
+        "a": "Berputar"
+      },
+      {
+        "w": "何回",
+        "r": "なんかい",
+        "a": "Berapa kali"
+      }
+    ]
+  },
+  {
+    "k": "声",
+    "on": "セイ",
+    "kun": "こえ",
+    "a": "Suara (Makhluk)",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "声",
+        "r": "こえ",
+        "a": "Suara"
+      },
+      {
+        "w": "大声",
+        "r": "おおごえ",
+        "a": "Suara lantang"
+      }
+    ]
+  },
+  {
+    "k": "売",
+    "on": "バイ",
+    "kun": "う・る",
+    "a": "Menjual",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "売る",
+        "r": "うる",
+        "a": "Menjual"
+      },
+      {
+        "w": "売店",
+        "r": "ばいてん",
+        "a": "Kios / Kantin"
+      }
+    ]
+  },
+  {
+    "k": "始",
+    "on": "シ",
+    "kun": "はじ・まる",
+    "a": "Mulai, Memulai",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "始まる",
+        "r": "はじまる",
+        "a": "Dimulai"
+      }
+    ]
+  },
+  {
+    "k": "心",
+    "on": "シン",
+    "kun": "こころ",
+    "a": "Hati, Pikiran",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "心",
+        "r": "こころ",
+        "a": "Hati"
+      },
+      {
+        "w": "安心",
+        "r": "あんしん",
+        "a": "Lega"
+      }
+    ]
+  },
+  {
+    "k": "思",
+    "on": "シ",
+    "kun": "おも・う",
+    "a": "Berpikir, Mengira",
+    "lvl": "N5",
+    "day": 31,
+    "ex": [
+      {
+        "w": "思う",
+        "r": "おもう",
+        "a": "Berpikir"
+      }
+    ]
+  },
+  {
+    "k": "急",
+    "on": "キュウ",
+    "kun": "いそ・ぐ",
+    "a": "Buru-buru, Cepat",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "急ぐ",
+        "r": "いそぐ",
+        "a": "Buru-buru"
+      },
+      {
+        "w": "特急",
+        "r": "とっきゅう",
+        "a": "Kereta Ekspres"
+      }
+    ]
+  },
+  {
+    "k": "林",
+    "on": "リン",
+    "kun": "はやし",
+    "a": "Hutan Kecil",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "林",
+        "r": "はやし",
+        "a": "Hutan kecil"
+      }
+    ]
+  },
+  {
+    "k": "止",
+    "on": "シ",
+    "kun": "と・まる, と・める",
+    "a": "Berhenti",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "止まる",
+        "r": "とまる",
+        "a": "Berhenti"
+      },
+      {
+        "w": "中止",
+        "r": "ちゅうし",
+        "a": "Batal"
+      }
+    ]
+  },
+  {
+    "k": "池",
+    "on": "チ",
+    "kun": "いけ",
+    "a": "Kolam",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "池",
+        "r": "いけ",
+        "a": "Kolam"
+      },
+      {
+        "w": "電池",
+        "r": "でんち",
+        "a": "Baterai"
+      }
+    ]
+  },
+  {
+    "k": "済",
+    "on": "サイ",
+    "kun": "す・む",
+    "a": "Selesai, Lunas",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "経済",
+        "r": "けいざい",
+        "a": "Ekonomi"
+      }
+    ]
+  },
+  {
+    "k": "男",
+    "on": "ダン, ナン",
+    "kun": "おとこ",
+    "a": "Laki-laki",
+    "lvl": "N5",
+    "day": 31,
+    "ex": [
+      {
+        "w": "男の人",
+        "r": "おとこのひと",
+        "a": "Pria"
+      }
+    ]
+  },
+  {
+    "k": "界",
+    "on": "カイ",
+    "kun": "-",
+    "a": "Batas, Lingkup, Dunia",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "世界",
+        "r": "せかい",
+        "a": "Dunia"
+      }
+    ]
+  },
+  {
+    "k": "痛",
+    "on": "ツウ",
+    "kun": "いた・い",
+    "a": "Sakit, Nyeri",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "痛い",
+        "r": "いたい",
+        "a": "Sakit"
+      },
+      {
+        "w": "頭痛",
+        "r": "ずつう",
+        "a": "Sakit kepala"
+      }
+    ]
+  },
+  {
+    "k": "知",
+    "on": "チ",
+    "kun": "し・る",
+    "a": "Tahu, Mengetahui",
+    "lvl": "N5",
+    "day": 31,
+    "ex": [
+      {
+        "w": "知る",
+        "r": "しる",
+        "a": "Mengetahui"
+      }
+    ]
+  },
+  {
+    "k": "立",
+    "on": "リツ",
+    "kun": "た・つ",
+    "a": "Berdiri",
+    "lvl": "N5",
+    "day": 31,
+    "ex": [
+      {
+        "w": "立つ",
+        "r": "たつ",
+        "a": "Berdiri"
+      }
+    ]
+  },
+  {
+    "k": "答",
+    "on": "トウ",
+    "kun": "こた・える, こたえ",
+    "a": "Jawaban, Menjawab",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "答える",
+        "r": "こたえる",
+        "a": "Menjawab"
+      },
+      {
+        "w": "答え",
+        "r": "こたえ",
+        "a": "Jawaban"
+      }
+    ]
+  },
+  {
+    "k": "経",
+    "on": "ケイ",
+    "kun": "へ・る",
+    "a": "Melalui, Mengalami",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "経験",
+        "r": "けいけん",
+        "a": "Pengalaman"
+      },
+      {
+        "w": "経済",
+        "r": "けいざい",
+        "a": "Ekonomi"
+      }
+    ]
+  },
+  {
+    "k": "耳",
+    "on": "ジ",
+    "kun": "みみ",
+    "a": "Telinga",
+    "lvl": "N5",
+    "day": 31,
+    "ex": [
+      {
+        "w": "耳",
+        "r": "みみ",
+        "a": "Telinga"
+      }
+    ]
+  },
+  {
+    "k": "言",
+    "on": "ゲン",
+    "kun": "い・う",
+    "a": "Berkata",
+    "lvl": "N5",
+    "day": 31,
+    "ex": [
+      {
+        "w": "言う",
+        "r": "いう",
+        "a": "Berkata"
+      }
+    ]
+  },
+  {
+    "k": "貸",
+    "on": "タイ",
+    "kun": "か・す",
+    "a": "Meminjamkan",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "貸す",
+        "r": "かす",
+        "a": "Meminjamkan"
+      }
+    ]
+  },
+  {
+    "k": "足",
+    "on": "ソク",
+    "kun": "あし",
+    "a": "Kaki",
+    "lvl": "N5",
+    "day": 31,
+    "ex": [
+      {
+        "w": "足",
+        "r": "あし",
+        "a": "Kaki"
+      }
+    ]
+  },
+  {
+    "k": "軽",
+    "on": "ケイ",
+    "kun": "かる・い",
+    "a": "Ringan",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "軽い",
+        "r": "かるい",
+        "a": "Ringan"
+      },
+      {
+        "w": "手軽",
+        "r": "てがる",
+        "a": "Praktis/Mudah"
+      }
+    ]
+  },
+  {
+    "k": "酒",
+    "on": "シュ",
+    "kun": "さけ",
+    "a": "Minuman Keras, Sake",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "お酒",
+        "r": "おさけ",
+        "a": "Minuman beralkohol"
+      }
+    ]
+  },
+  {
+    "k": "門",
+    "on": "モン",
+    "kun": "かど",
+    "a": "Gerbang",
+    "lvl": "N5",
+    "day": 31,
+    "ex": [
+      {
+        "w": "校門",
+        "r": "こうもん",
+        "a": "Gerbang sekolah"
+      }
+    ]
+  },
+  {
+    "k": "閉",
+    "on": "ヘイ",
+    "kun": "し・まる, と・じる",
+    "a": "Menutup, Tertutup",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "閉める",
+        "r": "しめる",
+        "a": "Menutup"
+      }
+    ]
+  },
+  {
+    "k": "開",
+    "on": "カイ",
+    "kun": "あ・く, ひら・く",
+    "a": "Membuka, Terbuka",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "開ける",
+        "r": "あける",
+        "a": "Membuka"
+      }
+    ]
+  },
+  {
+    "k": "雲",
+    "on": "ウン",
+    "kun": "くも",
+    "a": "Awan",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "雲",
+        "r": "くも",
+        "a": "Awan"
+      },
+      {
+        "w": "雨雲",
+        "r": "あまぐも",
+        "a": "Awan mendung"
+      }
+    ]
+  },
+  {
+    "k": "題",
+    "on": "ダイ",
+    "kun": "-",
+    "a": "Topik, Judul, Tema",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "問題",
+        "r": "もんだい",
+        "a": "Soal pertanyaan"
+      },
+      {
+        "w": "宿題",
+        "r": "しゅくだい",
+        "a": "PR"
+      }
+    ]
+  },
+  {
+    "k": "首",
+    "on": "シュ",
+    "kun": "くび",
+    "a": "Leher",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "首",
+        "r": "くび",
+        "a": "Leher"
+      },
+      {
+        "w": "手首",
+        "r": "てくび",
+        "a": "Pergelangan tangan"
+      }
+    ]
+  },
+  {
+    "k": "馬",
+    "on": "バ",
+    "kun": "うま",
+    "a": "Kuda",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "馬",
+        "r": "うま",
+        "a": "Kuda"
+      },
+      {
+        "w": "乗馬",
+        "r": "じょうば",
+        "a": "Berkuda"
+      }
+    ]
+  },
+  {
+    "k": "験",
+    "on": "ケン",
+    "kun": "-",
+    "a": "Ujian, Pengalaman",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "試験",
+        "r": "しけん",
+        "a": "Ujian"
+      },
+      {
+        "w": "経験",
+        "r": "けいけん",
+        "a": "Pengalaman"
+      }
+    ]
+  }
+];
+
+// ==========================================
+// DOJO & MARKET ENGINE (MANAJEMEN RUANG & DECK)
+// ==========================================
+const DojoEngine = {
+  playerUnlockedDay: 1,
+  activeMainTab: 'market', // 'market' or 'training'
+  activeFilter: 'all',
+  searchQuery: '',
+  
+  // Custom Dojo Rooms System (Stored in LocalStorage)
+  rooms: {},
+  activeRoomId: 'default',
+  masteredKanji: [],
+
+  // Training Deck States
+  trainingList: [],
+  deckIdx: 0,
+  isRevealed: false,
+  dojoMode: 'fc', // 'fc' or 'quiz'
+  
+  // Drill multi-variations & telemetry states
+  quizTarget: null,
+  drillType: 'mix', // 'mix', 'meaning', 'reading', 'kanji', 'onkun', 'blitz'
+  drillStreak: 0,
+  drillScore: 0,
+  currentQuestionData: null,
+
+  init: function() {
+    // 1. Baca hari ekspedisi dari Yomikata utama (support yk_unlocked & yk_unlocked_day)
+    let savedDay = parseInt(localStorage.getItem('yk_unlocked')) || parseInt(localStorage.getItem('yk_unlocked_day')) || 1;
+    this.playerUnlockedDay = Math.max(1, savedDay);
+
+    // Update filter chip label dengan hari aktif
+    const chipUnlocked = document.getElementById('fchip-unlocked');
+    if (chipUnlocked) {
+      chipUnlocked.innerText = `⛩️ Dari Ekspedisi (Hari 1 - ${this.playerUnlockedDay})`;
+    }
+
+    // 2. Baca data ruang dojo dari localStorage
+    let savedRooms = localStorage.getItem('yk_kanji_dojo_rooms');
+    if (savedRooms) {
+      try { this.rooms = JSON.parse(savedRooms); } catch(e) { this.rooms = {}; }
+    }
+    // Jika masih memakai default lama ['一', '二', '三', '人'], sinkronkan ke kanji Hari 1 resmi Yomikata ['私', '人', '日', '本']
+    if (this.rooms && this.rooms['default']) {
+      const oldDefault = ['一', '二', '三', '人'];
+      if (JSON.stringify(this.rooms['default'].kanji) === JSON.stringify(oldDefault)) {
+        this.rooms['default'].kanji = ['私', '人', '日', '本'];
+        this.saveRooms();
+      }
+    }
+    if (!this.rooms || Object.keys(this.rooms).length === 0) {
+      this.rooms = {
+        'default': { name: 'Dojo Latihan Utama', kanji: ['私', '人', '日', '本'] },
+        'n5_target': { name: 'Target Kanji N5', kanji: [] }
+      };
+      this.saveRooms();
+    }
+
+    let savedActiveId = localStorage.getItem('yk_active_dojo_id');
+    if (savedActiveId && this.rooms[savedActiveId]) {
+      this.activeRoomId = savedActiveId;
+    } else {
+      this.activeRoomId = Object.keys(this.rooms)[0] || 'default';
+    }
+
+    // 3. Baca kanji yang sudah dikuasai
+    let savedMaster = localStorage.getItem('yk_kanji_mastered');
+    if (savedMaster) {
+      try { this.masteredKanji = JSON.parse(savedMaster); } catch(e) { this.masteredKanji = []; }
+    }
+
+    this.renderRoomSelector();
+    this.updateStats();
+    this.renderMarket();
+    this.loadTrainingDeck();
+
+    // 4. Keyboard Shortcuts for Fluid Interaction
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        DojoEngine.closeDrillDropdown();
+        DojoEngine.closeSidebar();
+        DojoEngine.closeGuide();
+        DojoEngine.closeRoomModal();
+        return;
+      }
+
+      if (DojoEngine.activeMainTab === 'quiz') {
+        const nextBtn = document.getElementById('btn-quiz-next');
+        if (nextBtn && !nextBtn.classList.contains('hidden') && (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowRight')) {
+          e.preventDefault();
+          DojoEngine.nextQuizQuestion();
+          return;
+        }
+        if (['1', '2', '3', '4'].includes(e.key)) {
+          const idx = parseInt(e.key) - 1;
+          const opts = document.querySelectorAll('.btn-quiz-opt');
+          if (opts && opts[idx] && !opts[idx].disabled) {
+            opts[idx].click();
+          }
+        }
+      } else if (DojoEngine.activeMainTab === 'flashcard') {
+        if (e.key === 'ArrowRight' || e.key === 'Enter') {
+          DojoEngine.nextDojoCard();
+        } else if (e.key === 'ArrowLeft') {
+          DojoEngine.prevDojoCard();
+        } else if (e.key === ' ') {
+          e.preventDefault();
+          DojoEngine.toggleFcReveal();
+        }
+      }
+    });
+
+    // 5. Tutup Dropdown Drill bila klik di luar
+    document.addEventListener('click', (e) => {
+      const dd = document.getElementById('drill-dropdown-menu');
+      const btn = document.getElementById('btn-drill-dropdown');
+      if (dd && !dd.classList.contains('hidden')) {
+        if (!dd.contains(e.target) && (!btn || !btn.contains(e.target))) {
+          DojoEngine.closeDrillDropdown();
+        }
+      }
+    });
+
+    // 5. Cegah touch scroll tembus ke background saat swipe di area overlay & modal backdrop
+    const ov = document.getElementById('sidebar-overlay');
+    if (ov) {
+      ov.addEventListener('touchmove', (e) => {
+        if (e.cancelable) e.preventDefault();
+      }, { passive: false });
+    }
+
+    const sbHeader = document.querySelector('#dojo-sidebar .sidebar-header');
+    if (sbHeader) {
+      sbHeader.addEventListener('touchmove', (e) => {
+        if (e.cancelable) e.preventDefault();
+      }, { passive: false });
+    }
+
+    ['room-modal', 'guide-modal'].forEach(mId => {
+      const el = document.getElementById(mId);
+      if (el) {
+        el.addEventListener('touchmove', (e) => {
+          if (e.target === el && e.cancelable) e.preventDefault();
+        }, { passive: false });
+      }
+    });
+  },
+
+  saveRooms: function() {
+    localStorage.setItem('yk_kanji_dojo_rooms', JSON.stringify(this.rooms));
+    localStorage.setItem('yk_active_dojo_id', this.activeRoomId);
+  },
+
+  saveMastered: function() {
+    localStorage.setItem('yk_kanji_mastered', JSON.stringify(this.masteredKanji));
+  },
+
+  renderRoomSelector: function() {
+    const sel = document.getElementById('dojo-room-select');
+    if (!sel) return;
+    sel.innerHTML = Object.keys(this.rooms).map(id => `
+      <option value="${id}" ${id === this.activeRoomId ? 'selected' : ''}>${this.rooms[id].name}</option>
+    `).join('');
+  },
+
+  switchRoom: function(roomId) {
+    if (!this.rooms[roomId]) return;
+    this.activeRoomId = roomId;
+    this.saveRooms();
+    this.updateStats();
+    this.renderMarket();
+    this.loadTrainingDeck();
+    this.showToast(`⛩️ Beralih ke: ${this.rooms[roomId].name}`);
+  },
+
+  toggleSidebar: function() {
+    const sb = document.getElementById('dojo-sidebar');
+    if (sb && sb.classList.contains('active')) {
+      this.closeSidebar();
+    } else {
+      this.openSidebar();
+    }
+  },
+
+  openSidebar: function() {
+    const sb = document.getElementById('dojo-sidebar');
+    const ov = document.getElementById('sidebar-overlay');
+    if (sb) sb.classList.add('active');
+    if (ov) ov.classList.add('active');
+    this.syncBodyScrollLock();
+  },
+
+  closeSidebar: function() {
+    const sb = document.getElementById('dojo-sidebar');
+    const ov = document.getElementById('sidebar-overlay');
+    if (sb) sb.classList.remove('active');
+    if (ov) ov.classList.remove('active');
+    this.syncBodyScrollLock();
+  },
+
+  _savedScrollY: 0,
+  syncBodyScrollLock: function() {
+    const sb = document.getElementById('dojo-sidebar');
+    const rm = document.getElementById('room-modal');
+    const gm = document.getElementById('guide-modal');
+    const isSidebarActive = Boolean(sb && sb.classList.contains('active'));
+    const isRoomModalActive = Boolean(rm && !rm.classList.contains('hidden'));
+    const isGuideModalActive = Boolean(gm && !gm.classList.contains('hidden'));
+    const shouldLock = isSidebarActive || isRoomModalActive || isGuideModalActive;
+
+    const isLocked = document.body.classList.contains('drawer-open');
+    if (shouldLock && !isLocked) {
+      this._savedScrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
+      document.documentElement.classList.add('drawer-open');
+      document.body.classList.add('drawer-open');
+      document.body.style.top = `-${this._savedScrollY}px`;
+    } else if (!shouldLock && isLocked) {
+      const restoreY = this._savedScrollY || 0;
+      document.documentElement.classList.remove('drawer-open');
+      document.body.classList.remove('drawer-open');
+      document.body.style.top = '';
+      window.scrollTo(0, restoreY);
+    }
+  },
+
+  updateStats: function() {
+    const activeRoom = this.rooms[this.activeRoomId] || { name: 'Dojo Latihan', kanji: [] };
+    const count = activeRoom.kanji.length;
+    const masteredCount = activeRoom.kanji.filter(k => this.masteredKanji.includes(k)).length;
+    const pct = count > 0 ? Math.round((masteredCount / count) * 100) : 0;
+
+    const cEl = document.getElementById('dojo-card-count');
+    if (cEl) cEl.innerText = `${count} Kanji`;
+
+    const mEl = document.getElementById('dojo-master-count');
+    if (mEl) mEl.innerText = `${masteredCount} Dikuasai`;
+
+    const bEl = document.getElementById('dojo-badge-num');
+    if (bEl) bEl.innerText = count;
+
+    const totalEl = document.getElementById('market-total-badge');
+    if (totalEl) totalEl.innerText = KANJI_CATALOG.length;
+
+    const fillEl = document.getElementById('dojo-progress-fill');
+    if (fillEl) fillEl.style.width = `${pct}%`;
+
+    const pctEl = document.getElementById('dojo-progress-text');
+    if (pctEl) pctEl.innerText = `${pct}% Dikuasai`;
+
+    // Sidebar & Top Nav Synchronizations
+    const navRoomName = document.getElementById('nav-active-room-name');
+    if (navRoomName) navRoomName.innerText = activeRoom.name;
+
+    const navRoomCount = document.getElementById('nav-active-room-count');
+    if (navRoomCount) navRoomCount.innerText = count;
+
+    const sbMarketCount = document.getElementById('sidebar-market-count');
+    if (sbMarketCount) sbMarketCount.innerText = KANJI_CATALOG.length;
+
+    const sbDojoCount = document.getElementById('sidebar-dojo-count');
+    if (sbDojoCount) sbDojoCount.innerText = count;
+
+    // Flashcard top header room name sync
+    const fcRoomName = document.getElementById('fc-room-name-display');
+    if (fcRoomName) fcRoomName.innerText = activeRoom.name;
+  },
+
+  // --- ROOM MANAGEMENT MODAL ---
+  openRoomModal: function() {
+    const m = document.getElementById('room-modal');
+    if (m) {
+      m.classList.remove('hidden');
+      this.syncBodyScrollLock();
+      const input = document.getElementById('new-room-input');
+      if (input) { input.value = ''; input.focus(); }
+    }
+  },
+
+  closeRoomModal: function() {
+    const m = document.getElementById('room-modal');
+    if (m) m.classList.add('hidden');
+    this.syncBodyScrollLock();
+  },
+
+  createNewRoom: function() {
+    const input = document.getElementById('new-room-input');
+    let name = input ? input.value.trim() : '';
+    if (!name) {
+      this.showToast('⚠️ Silakan masukkan nama ruang dojo!');
+      return;
+    }
+    let newId = 'room_' + Date.now();
+    this.rooms[newId] = { name: name, kanji: [] };
+    this.activeRoomId = newId;
+    this.saveRooms();
+    this.closeRoomModal();
+    this.renderRoomSelector();
+    this.updateStats();
+    this.renderMarket();
+    this.loadTrainingDeck();
+    this.showToast(`✨ Ruang "${name}" berhasil dibuat!`);
+  },
+
+  clearCurrentDojo: function() {
+    const activeRoom = this.rooms[this.activeRoomId];
+    if (!activeRoom || activeRoom.kanji.length === 0) {
+      this.showToast('ℹ️ Ruang dojo ini sudah kosong.');
+      return;
+    }
+    if (confirm(`Yakin ingin mengosongkan seluruh kanji dari "${activeRoom.name}"?`)) {
+      activeRoom.kanji = [];
+      this.saveRooms();
+      this.updateStats();
+      this.renderMarket();
+      this.loadTrainingDeck();
+      this.showToast('🧹 Ruang dojo telah dibersihkan.');
+    }
+  },
+
+  // --- PASAR BELANJA KANJI LOGIC ---
+  setFilter: function(filterType) {
+    this.activeFilter = filterType;
+    ['all', 'unlocked', 'n5', 'n4', 'in-dojo'].forEach(f => {
+      const chip = document.getElementById(`fchip-${f}`);
+      if (chip) chip.classList.toggle('active', f === filterType);
+    });
+    this.renderMarket();
+  },
+
+  onSearch: function(q) {
+    this.searchQuery = q.trim().toLowerCase();
+    const clearBtn = document.getElementById('market-search-clear');
+    if (clearBtn) clearBtn.classList.toggle('hidden', this.searchQuery.length === 0);
+    this.renderMarket();
+  },
+
+  clearSearch: function() {
+    const input = document.getElementById('market-search');
+    if (input) { input.value = ''; input.focus(); }
+    const clearBtn = document.getElementById('market-search-clear');
+    if (clearBtn) clearBtn.classList.add('hidden');
+    this.searchQuery = '';
+    this.renderMarket();
+  },
+
+  renderMarket: function() {
+    const container = document.getElementById('market-grid-container');
+    if (!container) return;
+
+    const activeRoom = this.rooms[this.activeRoomId] || { kanji: [] };
+    let list = [...KANJI_CATALOG];
+
+    // Filter Kategori
+    if (this.activeFilter === 'unlocked') {
+      list = list.filter(item => item.day <= this.playerUnlockedDay);
+      list.sort((a, b) => a.day - b.day);
+    } else if (this.activeFilter === 'n5') {
+      list = list.filter(item => item.lvl === 'N5');
+    } else if (this.activeFilter === 'n4') {
+      list = list.filter(item => item.lvl === 'N4');
+    } else if (this.activeFilter === 'in-dojo') {
+      list = list.filter(item => activeRoom.kanji.includes(item.k));
+    }
+
+    // Filter Pencarian
+    if (this.searchQuery) {
+      let q = this.searchQuery;
+      list = list.filter(item => {
+        let matchK = item.k.includes(q);
+        let matchA = item.a.toLowerCase().includes(q);
+        let matchOn = item.on.toLowerCase().includes(q);
+        let matchKun = item.kun.toLowerCase().includes(q);
+        return matchK || matchA || matchOn || matchKun;
+      });
+    }
+
+    if (list.length === 0) {
+      container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:40px; color:var(--text-sub);">Tidak ada kanji yang sesuai dengan filter atau kata kunci.</div>`;
+      return;
+    }
+
+    container.innerHTML = list.map(item => {
+      let inDojo = activeRoom.kanji.includes(item.k);
+      let isMaster = this.masteredKanji.includes(item.k);
+      let lvlClass = item.lvl === 'N5' ? 'tag-n5' : 'tag-n4';
+      let dayBadge = item.day <= this.playerUnlockedDay 
+        ? 'Hari ' + item.day 
+        : (item.day <= 30 ? 'Hari ' + item.day + ' 🔒' : 'Ekstra N4');
+
+      return `
+        <div class="kanji-market-card">
+          <div class="card-top-meta">
+            <span class="tag-level ${lvlClass}">${item.lvl}</span>
+            <div class="card-meta-right">
+              <span class="tag-source">${dayBadge}</span>
+              <button type="button" class="btn-card-audio" onclick="DojoEngine.speakKanji('${item.k}', '${(item.kun||item.on||'').replace(/'/g, "\\'")}', event)" title="Dengarkan Pengucapan">🔊</button>
+            </div>
+          </div>
+
+          <div class="card-kanji-hero">${item.k}</div>
+          <div class="card-arti-label">${item.a}</div>
+          <div class="card-readings-hint">${item.kun || item.on}</div>
+
+          <button type="button" class="btn-cart-toggle ${inDojo ? 'is-in-dojo' : 'is-add'}" onclick="DojoEngine.toggleKanjiToDojo('${item.k}', event)">
+            <span>${inDojo ? '✓ Di Dojo' : '+ Ambil'}</span>
+            ${isMaster ? '⭐' : ''}
+          </button>
+        </div>
+      `;
+    }).join('');
+  },
+
+  toggleKanjiToDojo: function(kanjiChar, evt) {
+    if (evt) evt.stopPropagation();
+    const activeRoom = this.rooms[this.activeRoomId];
+    if (!activeRoom) return;
+
+    let idx = activeRoom.kanji.indexOf(kanjiChar);
+    if (idx > -1) {
+      activeRoom.kanji.splice(idx, 1);
+      this.showToast(`🗑️ Dikeluarkan dari ${activeRoom.name}: ${kanjiChar}`);
+    } else {
+      activeRoom.kanji.push(kanjiChar);
+      this.showToast(`🛒 Ditambahkan ke ${activeRoom.name}: ${kanjiChar}`);
+    }
+
+    this.saveRooms();
+    this.updateStats();
+    this.renderMarket();
+    this.loadTrainingDeck();
+  },
+
+  // --- RUANG LATIHAN DOJO ENGINE ---
+  switchMainTab: function(tabName) {
+    if (tabName === 'training') {
+      tabName = this.dojoMode === 'quiz' ? 'quiz' : 'flashcard';
+    }
+    this.activeMainTab = tabName;
+
+    const isMarket = tabName === 'market';
+    const isFlashcard = tabName === 'flashcard';
+    const isQuiz = tabName === 'quiz';
+
+    const tabMarketEl = document.getElementById('tab-market');
+    const tabFcEl = document.getElementById('tab-flashcard');
+    const tabQuizEl = document.getElementById('tab-quiz');
+
+    if (tabMarketEl) tabMarketEl.classList.toggle('active', isMarket);
+    if (tabFcEl) tabFcEl.classList.toggle('active', isFlashcard);
+    if (tabQuizEl) tabQuizEl.classList.toggle('active', isQuiz);
+
+    const secMarket = document.getElementById('section-market');
+    const secTraining = document.getElementById('section-training');
+
+    if (secMarket) secMarket.classList.toggle('hidden', !isMarket);
+    if (secTraining) secTraining.classList.toggle('hidden', isMarket);
+
+    if (isFlashcard) {
+      this.dojoMode = 'fc';
+      this.loadTrainingDeck();
+    } else if (isQuiz) {
+      this.dojoMode = 'quiz';
+      this.loadTrainingDeck();
+    }
+  },
+
+  loadTrainingDeck: function() {
+    const activeRoom = this.rooms[this.activeRoomId] || { kanji: [] };
+    const chars = activeRoom.kanji;
+
+    // Filter item dari katalog
+    this.trainingList = KANJI_CATALOG.filter(item => chars.includes(item.k));
+    this.deckIdx = 0;
+
+    const emptyBox = document.getElementById('dojo-empty-state');
+    const fcHeader = document.getElementById('dojo-fc-header');
+    const fcBox = document.getElementById('dojo-fc-container');
+    const quizBox = document.getElementById('dojo-quiz-container');
+    const navStrip = document.getElementById('dojo-nav-strip');
+
+    if (this.trainingList.length === 0) {
+      if (emptyBox) emptyBox.classList.remove('hidden');
+      if (fcHeader) fcHeader.classList.add('hidden');
+      if (fcBox) fcBox.classList.add('hidden');
+      if (quizBox) quizBox.classList.add('hidden');
+      if (navStrip) navStrip.classList.add('hidden');
+      return;
+    }
+
+    if (emptyBox) emptyBox.classList.add('hidden');
+
+    if (this.dojoMode === 'fc') {
+      if (fcHeader) fcHeader.classList.remove('hidden');
+      if (fcBox) fcBox.classList.remove('hidden');
+      if (quizBox) quizBox.classList.add('hidden');
+      if (navStrip) navStrip.classList.remove('hidden');
+      this.renderFlashcardCard();
+    } else {
+      if (fcHeader) fcHeader.classList.add('hidden');
+      if (fcBox) fcBox.classList.add('hidden');
+      if (quizBox) quizBox.classList.remove('hidden');
+      if (navStrip) navStrip.classList.add('hidden');
+      this.nextQuizQuestion();
+    }
+  },
+
+  setDojoMode: function(mode) {
+    if (mode === 'fc') {
+      this.switchMainTab('flashcard');
+    } else {
+      this.switchMainTab('quiz');
+    }
+  },
+
+  renderFlashcardCard: function() {
+    if (this.trainingList.length === 0) return;
+    if (this.deckIdx >= this.trainingList.length) this.deckIdx = 0;
+    if (this.deckIdx < 0) this.deckIdx = this.trainingList.length - 1;
+
+    const item = this.trainingList[this.deckIdx];
+
+    document.getElementById('dojo-curr-index').innerText = this.deckIdx + 1;
+    document.getElementById('dojo-total-index').innerText = this.trainingList.length;
+
+    document.getElementById('dojo-fc-kanji').innerText = item.k;
+    document.getElementById('dojo-fc-on').innerText = item.on || '-';
+    document.getElementById('dojo-fc-kun').innerText = item.kun || '-';
+    document.getElementById('dojo-fc-arti').innerText = item.a;
+
+    // Render Jukugo
+    const shelf = document.getElementById('dojo-fc-jukugo-shelf');
+    if (shelf) {
+      if (item.ex && item.ex.length > 0) {
+        shelf.innerHTML = item.ex.map(e => `
+          <div class="fjs-item">
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span style="font-weight:700; color:#38bdf8;">${e.w} <span style="font-size:11px; color:#fff;">(${e.r})</span></span>
+              <button type="button" class="btn-card-audio" onclick="event.stopPropagation(); DojoEngine.speakText('${e.w}')" title="Dengarkan kata majemuk">🔊</button>
+            </div>
+            <span style="color:var(--text-sub); font-style:italic;">${e.a}</span>
+          </div>
+        `).join('');
+      } else {
+        shelf.innerHTML = `<span style="font-size:11px; color:var(--text-sub);">-</span>`;
+      }
+    }
+
+    // Check mastery status
+    const btnMaster = document.getElementById('btn-master-toggle');
+    if (btnMaster) {
+      let isM = this.masteredKanji.includes(item.k);
+      btnMaster.classList.toggle('is-mastered', isM);
+    }
+
+    // Default tertutup blur
+    this.isRevealed = false;
+    document.getElementById('dojo-fc-shield').classList.remove('revealed');
+    document.getElementById('dojo-fc-hint').innerText = "👆 Ketuk untuk membuka bacaan & arti";
+  },
+
+  toggleFcReveal: function() {
+    this.isRevealed = !this.isRevealed;
+    const shield = document.getElementById('dojo-fc-shield');
+    const hint = document.getElementById('dojo-fc-hint');
+    if (this.isRevealed) {
+      shield.classList.add('revealed');
+      hint.innerText = "✨ Ketuk kanji untuk menutup";
+    } else {
+      shield.classList.remove('revealed');
+      hint.innerText = "👆 Ketuk untuk membuka bacaan & arti";
+    }
+  },
+
+  nextDojoCard: function() {
+    if (this.dojoMode === 'fc') {
+      this.deckIdx++;
+      this.renderFlashcardCard();
+    } else {
+      this.nextQuizQuestion();
+    }
+  },
+
+  prevDojoCard: function() {
+    if (this.dojoMode === 'fc') {
+      this.deckIdx--;
+      this.renderFlashcardCard();
+    }
+  },
+
+  toggleMasterCurrent: function() {
+    if (this.trainingList.length === 0) return;
+    const item = this.trainingList[this.deckIdx];
+    let idx = this.masteredKanji.indexOf(item.k);
+    if (idx > -1) {
+      this.masteredKanji.splice(idx, 1);
+      this.showToast(`Belum dikuasai: ${item.k}`);
+    } else {
+      this.masteredKanji.push(item.k);
+      this.showToast(`⭐ Hebat! Dikuasai: ${item.k}`);
+    }
+    this.saveMastered();
+    this.updateStats();
+    this.renderFlashcardCard();
+    this.renderMarket();
+  },
+
+  speakText: function(text) {
+    if ('speechSynthesis' in window && text && typeof SpeechSynthesisUtterance !== 'undefined') {
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'ja-JP';
+      u.rate = 0.88;
+      window.speechSynthesis.speak(u);
+    }
+  },
+
+  speakKanji: function(kanji, reading, evt) {
+    if (evt) evt.stopPropagation();
+    let toSpeak = kanji;
+    if (reading && reading !== '-') {
+      toSpeak = reading.split(',')[0].replace(/[\.・\-]/g, '');
+    }
+    this.speakText(toSpeak);
+  },
+
+  speakCurrent: function() {
+    if (this.trainingList.length === 0) return;
+    const item = this.trainingList[this.deckIdx];
+    let toSpeak = item.k;
+    if (item.kun && item.kun !== '-') {
+      toSpeak = item.kun.split(',')[0].replace(/[\.・\-]/g, '');
+    }
+    this.speakText(toSpeak);
+  },
+
+  // --- KUIS DRILL MULTI-VARIASI DOJO ---
+  drillDropdownOpen: false,
+
+  toggleDrillDropdown: function(e) {
+    if (e) e.stopPropagation();
+    this.drillDropdownOpen = !this.drillDropdownOpen;
+    const menu = document.getElementById('drill-dropdown-menu');
+    const btn = document.getElementById('btn-drill-dropdown');
+    if (menu) menu.classList.toggle('hidden', !this.drillDropdownOpen);
+    if (btn) btn.classList.toggle('active', this.drillDropdownOpen);
+  },
+
+  closeDrillDropdown: function() {
+    this.drillDropdownOpen = false;
+    const menu = document.getElementById('drill-dropdown-menu');
+    const btn = document.getElementById('btn-drill-dropdown');
+    if (menu) menu.classList.add('hidden');
+    if (btn) btn.classList.remove('active');
+  },
+
+  selectDrillType: function(type) {
+    this.drillType = type;
+    this.closeDrillDropdown();
+
+    const labels = {
+      'mix': '🔀 Acak / Mix',
+      'meaning': '🎯 Tebak Arti',
+      'reading': '🗣️ Tebak Bacaan',
+      'kanji': '🈴 Tebak Bentuk',
+      'onkun': '💡 On vs Kun',
+      'blitz': '⚡ Benar / Salah'
+    };
+
+    const labelEl = document.getElementById('drill-mode-current-label');
+    if (labelEl) labelEl.innerText = labels[type] || '🔀 Acak / Mix';
+
+    const items = document.querySelectorAll('.drill-dropdown-menu .dd-item');
+    items.forEach(it => {
+      it.classList.toggle('active', it.getAttribute('data-type') === type);
+    });
+
+    this.nextQuizQuestion();
+  },
+
+  setDrillType: function(type) {
+    this.selectDrillType(type);
+  },
+
+  updateDrillTelemetry: function() {
+    const sPill = document.getElementById('quiz-streak-pill');
+    if (sPill) sPill.innerText = `🔥 Combo: ${this.drillStreak}`;
+    const scorePill = document.getElementById('quiz-score-pill');
+    if (scorePill) scorePill.innerText = `⭐ Benar: ${this.drillScore}`;
+  },
+
+  nextQuizQuestion: function() {
+    if (!this.trainingList || this.trainingList.length === 0) return;
+
+    const nextBtn = document.getElementById('btn-quiz-next');
+    if (nextBtn) nextBtn.classList.add('hidden');
+    const fb = document.getElementById('dojo-quiz-feedback');
+    if (fb) fb.innerHTML = '';
+
+    // Pilih kanji target dari deck aktif
+    const target = this.trainingList[Math.floor(Math.random() * this.trainingList.length)];
+    this.quizTarget = target;
+
+    // Tentukan tipe soal
+    let qType = this.drillType;
+    if (qType === 'mix') {
+      const variations = ['meaning', 'reading', 'kanji', 'onkun', 'blitz'];
+      qType = variations[Math.floor(Math.random() * variations.length)];
+    }
+
+    let qData = null;
+    if (qType === 'reading') {
+      qData = this.buildReadingQuestion(target);
+    } else if (qType === 'kanji') {
+      qData = this.buildKanjiQuestion(target);
+    } else if (qType === 'onkun') {
+      qData = this.buildOnKunQuestion(target);
+    } else if (qType === 'blitz') {
+      qData = this.buildBlitzQuestion(target);
+    } else {
+      qData = this.buildMeaningQuestion(target);
+    }
+
+    this.currentQuestionData = qData;
+    this.renderQuestionUI(qData);
+  },
+
+  // 1. Soal Tebak Arti (Kanji -> Arti)
+  buildMeaningQuestion: function(target) {
+    let correct = target.a;
+    let pool = this.trainingList.filter(x => x.a !== target.a);
+    if (pool.length < 3) {
+      pool = KANJI_CATALOG.filter(x => x.a !== target.a);
+    }
+    this.shuffle(pool);
+
+    let distractors = [];
+    for (let item of pool) {
+      if (!distractors.includes(item.a) && item.a !== correct) {
+        distractors.push(item.a);
+      }
+      if (distractors.length === 3) break;
+    }
+
+    let choices = [correct, ...distractors];
+    this.shuffle(choices);
+
+    return {
+      type: 'meaning',
+      badge: '🎯 TEBAK ARTI KANJI',
+      promptKanji: target.k,
+      promptSub: 'Pilih arti bahasa Indonesia yang tepat:',
+      choices: choices,
+      correct: correct,
+      audioToSpeak: target.kun || target.on ? (target.kun||target.on).split(',')[0].replace(/[\.・\-]/g, '') : target.k,
+      feedbackCorrect: `Karakter <b>${target.k}</b> memang artinya adalah <b>"${target.a}"</b>.`,
+      feedbackWrong: `Karakter <b>${target.k}</b> artinya adalah <b>"${target.a}"</b>. Ingat bentuknya baik-baik ya!`,
+      isKanjiChoices: false,
+      isTwoColumns: false
+    };
+  },
+
+  // 2. Soal Tebak Cara Baca (Kanji -> Hiragana)
+  buildReadingQuestion: function(target) {
+    let cleanR = (target.kun && target.kun !== '-' ? target.kun : target.on).split(',')[0].replace(/[\.・\-]/g, '').trim();
+    let correct = cleanR;
+
+    let pool = this.trainingList.filter(x => x.k !== target.k);
+    if (pool.length < 3) {
+      pool = KANJI_CATALOG.filter(x => x.k !== target.k);
+    }
+    this.shuffle(pool);
+
+    let distractors = [];
+    for (let item of pool) {
+      let r = (item.kun && item.kun !== '-' ? item.kun : item.on).split(',')[0].replace(/[\.・\-]/g, '').trim();
+      if (r && r !== '-' && r !== correct && !distractors.includes(r)) {
+        distractors.push(r);
+      }
+      if (distractors.length === 3) break;
+    }
+
+    let choices = [correct, ...distractors];
+    this.shuffle(choices);
+
+    return {
+      type: 'reading',
+      badge: '🗣️ TEBAK CARA BACA (YOMIKATA)',
+      promptKanji: target.k,
+      promptSub: `Makna: <b style="color:var(--gold);">${target.a}</b> • Cara baca utama:`,
+      choices: choices,
+      correct: correct,
+      audioToSpeak: cleanR,
+      feedbackCorrect: `Karakter <b>${target.k}</b> (${target.a}) tepat dibaca <b>${cleanR}</b>!`,
+      feedbackWrong: `Karakter <b>${target.k}</b> (${target.a}) cara bacanya adalah <b>${cleanR}</b>. Coba lafalkan berulang kali!`,
+      isKanjiChoices: false,
+      isTwoColumns: false
+    };
+  },
+
+  // 3. Soal Tebak Bentuk Kanji (Makna/Hiragana -> Pilih Kanji)
+  buildKanjiQuestion: function(target) {
+    let readingText = (target.kun && target.kun !== '-' ? target.kun : target.on).split(',')[0];
+    let correct = target.k;
+
+    let pool = this.trainingList.filter(x => x.k !== target.k);
+    if (pool.length < 3) {
+      pool = KANJI_CATALOG.filter(x => x.k !== target.k);
+    }
+    this.shuffle(pool);
+
+    let distractors = [];
+    for (let item of pool) {
+      if (item.k !== correct && !distractors.includes(item.k)) {
+        distractors.push(item.k);
+      }
+      if (distractors.length === 3) break;
+    }
+
+    let choices = [correct, ...distractors];
+    this.shuffle(choices);
+
+    return {
+      type: 'kanji',
+      badge: '🈴 TEBAK BENTUK KANJI',
+      customPromptHtml: `<div style="font-size:clamp(22px, 5.5vw, 28px); font-weight:900; color:#fbbf24; margin:10px 0 6px;">"${target.a}"</div>`,
+      promptSub: `Pelafalan: <b style="color:#38bdf8;">${readingText}</b> • Manakah karakter kanjinya?`,
+      choices: choices,
+      correct: correct,
+      audioToSpeak: target.k,
+      feedbackCorrect: `Karakter untuk makna <i>"${target.a}"</i> adalah <b>${target.k}</b> (dibaca: <b>${readingText}</b>).`,
+      feedbackWrong: `Karakter untuk makna <i>"${target.a}"</i> adalah <b>${target.k}</b> (dibaca: <b>${readingText}</b>). Perhatikan goresannya!`,
+      isKanjiChoices: true,
+      isTwoColumns: false
+    };
+  },
+
+  // 4. Soal Detektif Onyomi vs Kunyomi (Cina vs Jepang)
+  buildOnKunQuestion: function(target) {
+    const isJukugo = target.ex && target.ex.length > 0 && Math.random() >= 0.45;
+
+    if (isJukugo) {
+      const ex = target.ex[0];
+      let choices = ['🇨🇳 Onyomi (Bacaan Cina)', '🇯🇵 Kunyomi (Bacaan Jepang)'];
+      this.shuffle(choices);
+      return {
+        type: 'onkun',
+        badge: '💡 DETEKTIF ONYOMI VS KUNYOMI',
+        customPromptHtml: `<div style="font-size:clamp(26px, 7vw, 36px); font-family:'Noto Serif JP',serif; font-weight:700; color:#fff; margin:10px 0 4px; text-shadow:0 0 20px var(--primary-glow);">${ex.w}</div>`,
+        promptSub: `Dalam kata majemuk <b>"${ex.w}"</b> (${ex.r} - ${ex.a}), cara baca kanji [ <b style="color:var(--primary);">${target.k}</b> ] adalah:`,
+        choices: choices,
+        correct: '🇨🇳 Onyomi (Bacaan Cina)',
+        audioToSpeak: ex.w,
+        feedbackCorrect: `Rumus Sakti 80/20 terbukti! Gabungan kata majemuk <b>${ex.w}</b> hampir selalu memakai ONYOMI (Cina).`,
+        feedbackWrong: `Ingat Rumus Sakti 80/20: Gabungan dua kanji (<b>${ex.w}</b>) memakai ONYOMI (Cina)!`,
+        isKanjiChoices: false,
+        isTwoColumns: true
+      };
+    } else {
+      let kunR = (target.kun && target.kun !== '-') ? target.kun.split(',')[0].trim() : (target.on ? target.on.split(',')[0].trim() : '');
+      let choices = ['🇯🇵 Kunyomi (Bacaan Jepang)', '🇨🇳 Onyomi (Bacaan Cina)'];
+      this.shuffle(choices);
+      return {
+        type: 'onkun',
+        badge: '💡 DETEKTIF ONYOMI VS KUNYOMI',
+        promptKanji: target.k,
+        promptSub: `Ketika berdiri sendirian dibaca <b>"${kunR}"</b> (${target.a}), bacaan ini termasuk:`,
+        choices: choices,
+        correct: '🇯🇵 Kunyomi (Bacaan Jepang)',
+        audioToSpeak: target.k,
+        feedbackCorrect: `Rumus Sakti 80/20 terbukti! Kanji yang berdiri sendirian <b>${target.k}</b> (= ${kunR}) memakai KUNYOMI (Jepang).`,
+        feedbackWrong: `Ingat Rumus Sakti 80/20: Kanji yang berdiri sendirian (<b>${target.k}</b> = ${kunR}) memakai KUNYOMI (Jepang)!`,
+        isKanjiChoices: false,
+        isTwoColumns: true
+      };
+    }
+  },
+
+  // 5. Soal Samurai Blitz (Benar atau Salah)
+  buildBlitzQuestion: function(target) {
+    const isTrue = Math.random() >= 0.5;
+    let statementMeaning = target.a;
+
+    if (!isTrue) {
+      const others = KANJI_CATALOG.filter(x => x.a !== target.a);
+      statementMeaning = others[Math.floor(Math.random() * others.length)].a;
+    }
+
+    const correct = isTrue ? '🟢 BENAR (Maru ⭕)' : '🔴 SALAH (Batsu ❌)';
+
+    return {
+      type: 'blitz',
+      badge: '⚡ SAMURAI BLITZ • BENAR ATAU SALAH',
+      promptKanji: target.k,
+      promptSub: `Apakah arti kanji di atas adalah: <b style="color:#fbbf24; font-size:15px;">"${statementMeaning}"</b>?`,
+      choices: ['🟢 BENAR (Maru ⭕)', '🔴 SALAH (Batsu ❌)'],
+      correct: correct,
+      audioToSpeak: target.k,
+      feedbackCorrect: isTrue 
+        ? `Pernyataan 100% tepat! Karakter <b>${target.k}</b> memang artinya <b>"${target.a}"</b>.` 
+        : `Pernyataan tepat! Karakter <b>${target.k}</b> artinya adalah <b>"${target.a}"</b> (bukan "${statementMeaning}").`,
+      feedbackWrong: isTrue
+        ? `Karakter <b>${target.k}</b> memang benar artinya <b>"${target.a}"</b>.`
+        : `Karakter <b>${target.k}</b> artinya adalah <b>"${target.a}"</b> (bukan "${statementMeaning}").`,
+      isKanjiChoices: false,
+      isTwoColumns: true
+    };
+  },
+
+  // Render UI dari data soal yang di-generate
+  renderQuestionUI: function(q) {
+    const typeLabel = document.getElementById('dojo-quiz-type-label');
+    if (typeLabel) typeLabel.innerText = q.badge;
+
+    const kanjiEl = document.getElementById('dojo-quiz-kanji');
+    const subEl = document.getElementById('dojo-quiz-sub');
+
+    if (q.customPromptHtml) {
+      if (kanjiEl) {
+        kanjiEl.classList.add('hidden');
+        kanjiEl.innerHTML = '';
+      }
+      if (subEl) {
+        subEl.classList.remove('hidden');
+        subEl.innerHTML = q.customPromptHtml + `<div style="margin-top:6px;">${q.promptSub}</div>`;
+      }
+    } else {
+      if (kanjiEl) {
+        kanjiEl.classList.remove('hidden');
+        kanjiEl.innerText = q.promptKanji;
+      }
+      if (subEl) {
+        subEl.classList.remove('hidden');
+        subEl.innerHTML = q.promptSub;
+      }
+    }
+
+    const box = document.getElementById('dojo-quiz-choices');
+    box.className = 'quiz-grid-choices' + (q.isTwoColumns ? ' two-columns' : '');
+    box.innerHTML = q.choices.map(c => {
+      let optClass = 'btn-quiz-opt' + (q.isKanjiChoices ? ' kanji-opt' : '');
+      let escaped = c.replace(/'/g, "\\'");
+      return `<button type="button" class="${optClass}" onclick="DojoEngine.answerQuiz('${escaped}', event)">${c}</button>`;
+    }).join('');
+
+    this.updateDrillTelemetry();
+  },
+
+  answerQuiz: function(selected, evt) {
+    if (!this.currentQuestionData) return;
+    const q = this.currentQuestionData;
+    const btns = document.querySelectorAll('.btn-quiz-opt');
+    btns.forEach(b => b.disabled = true);
+
+    const fb = document.getElementById('dojo-quiz-feedback');
+    const nextBtn = document.getElementById('btn-quiz-next');
+    const isCorrect = (selected === q.correct);
+    const targetBtn = evt ? (evt.currentTarget || (evt.target && evt.target.closest ? evt.target.closest('.btn-quiz-opt') : evt.target)) : null;
+
+    const praises = [
+      "⚔️ SEIKAI! Tebasan tepat sasaran!",
+      "🔥 SUGOI! Insting kanjimu makin tajam!",
+      "✨ Luar biasa! Langsung nempel di ingatan!",
+      "🎯 Tepat sasaran! Akurasi 100%!",
+      "⚡ Mantap jiwa! Kecepatan dan fokusmu on point!",
+      "🌟 Keren banget! Terus pertahankan ritmenya!",
+      "👑 Sempurna! Kanji ini resmi kamu kuasai!"
+    ];
+
+    const encouragements = [
+      "🍃 Jangan patah semangat! Samurai sejati belajar dari kesalahan.",
+      "💪 Hampir tepat! Otakmu sedang membentuk koneksi memorinya.",
+      "⛩️ Tenang, tarik napas! Pengulangan adalah rahasia para master kanji.",
+      "⚔️ Santai aja! Jadikan ini batu loncatan, kita tebas di soal berikut!",
+      "✨ Sedikit meleset! Ingat kembali polanya dan coba lagi!"
+    ];
+
+    if (isCorrect) {
+      if (targetBtn) targetBtn.classList.add('correct');
+      this.drillStreak++;
+      this.drillScore++;
+
+      const praise = praises[Math.floor(Math.random() * praises.length)];
+      let streakBadge = '';
+      if (this.drillStreak >= 3) {
+        streakBadge = `<span class="result-combo-badge">🔥 COMBO x${this.drillStreak}!</span>`;
+      }
+
+      fb.innerHTML = `
+        <div class="drill-result-card result-success">
+          <div class="result-banner">
+            <span class="result-title">${praise}</span>
+            ${streakBadge}
+          </div>
+          <div class="result-body">${q.feedbackCorrect}</div>
+        </div>
+      `;
+      if (q.audioToSpeak) this.speakText(q.audioToSpeak);
+    } else {
+      if (targetBtn) targetBtn.classList.add('wrong');
+      this.drillStreak = 0;
+      btns.forEach(b => {
+        if (b.innerText.trim() === q.correct.trim()) b.classList.add('correct');
+      });
+      const enc = encouragements[Math.floor(Math.random() * encouragements.length)];
+      fb.innerHTML = `
+        <div class="drill-result-card result-wrong">
+          <div class="result-banner">
+            <span class="result-title">${enc}</span>
+          </div>
+          <div class="result-body">${q.feedbackWrong}</div>
+        </div>
+      `;
+    }
+
+    this.updateDrillTelemetry();
+    if (nextBtn) {
+      nextBtn.classList.remove('hidden');
+      nextBtn.focus();
+    }
+  },
+
+  shuffle: function(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+  },
+
+  // --- GUIDE MODAL LOGIC ---
+  openGuide: function() {
+    const m = document.getElementById('guide-modal');
+    if (m) m.classList.remove('hidden');
+    this.syncBodyScrollLock();
+  },
+
+  closeGuide: function() {
+    const m = document.getElementById('guide-modal');
+    if (m) m.classList.add('hidden');
+    this.syncBodyScrollLock();
+  },
+
+  showToast: function(msg) {
+    const t = document.getElementById('toast');
+    if (!t) return;
+    t.innerText = msg;
+    t.classList.add('show');
+    clearTimeout(this.toastTimer);
+    this.toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+  }
+};
+
+window.addEventListener('DOMContentLoaded', () => {
+  DojoEngine.init();
+});
+</script>
+</body>
+</html>
