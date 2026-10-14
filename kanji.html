@@ -162,163 +162,258 @@
   .btn-onyomi-guide:active { transform: scale(0.95); }
 
   /* ==========================================
-     2. DOJO ROOM SELECTOR & TELEMETRY HUD BAR
+     2. TOP NAVBAR SIDEBAR TOGGLE & DRAWER
      ========================================== */
-  .dojo-deck-bar {
-    background: linear-gradient(165deg, rgba(20, 32, 64, 0.92) 0%, rgba(10, 16, 36, 0.96) 100%);
-    border: 1px solid rgba(56, 189, 248, 0.35);
-    border-radius: 18px;
-    padding: 14px 16px;
-    margin-bottom: 14px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  .btn-sidebar-toggle {
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.18) 0%, rgba(30, 58, 138, 0.3) 100%);
+    border: 1px solid rgba(56, 189, 248, 0.45);
+    color: #fff;
+    padding: 7px 12px;
+    border-radius: 12px;
+    font-size: 12.5px;
+    font-weight: 800;
+    cursor: pointer;
     display: flex;
-    flex-direction: column;
-    gap: 12px;
-    position: relative;
-    overflow: hidden;
+    align-items: center;
+    gap: 7px;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
   }
-  .dojo-deck-bar::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--primary), transparent);
+  .btn-sidebar-toggle:hover {
+    background: rgba(56, 189, 248, 0.3);
+    border-color: var(--primary);
+    box-shadow: 0 0 18px var(--primary-glow);
+    transform: translateY(-1px);
+  }
+  .btn-sidebar-toggle:active { transform: scale(0.95); }
+  .sidebar-badge-count {
+    background: var(--primary);
+    color: #040813;
+    font-size: 11px;
+    font-weight: 900;
+    padding: 1px 7px;
+    border-radius: 10px;
+    box-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
+  }
+  .hamburger-bars {
+    font-size: 14px;
+    color: var(--primary);
+    margin-left: 2px;
   }
 
-  .dojo-bar-top {
+  /* SIDEBAR DRAWER OVERLAY & PANEL */
+  .sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(3, 6, 16, 0.78);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 10000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .sidebar-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .dojo-sidebar-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: 380px;
+    background: linear-gradient(175deg, rgba(14, 23, 50, 0.98) 0%, rgba(6, 11, 26, 0.99) 100%);
+    border-left: 1px solid rgba(56, 189, 248, 0.35);
+    box-shadow: -15px 0 50px rgba(0, 0, 0, 0.9), 0 0 30px rgba(56, 189, 248, 0.15);
+    z-index: 10001;
+    transform: translateX(100%);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .dojo-sidebar-drawer.active {
+    transform: translateX(0);
+  }
+
+  .sidebar-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
+    padding: 16px 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(10, 16, 36, 0.7);
   }
-
-  .dojo-room-info {
+  .sidebar-title-group {
     display: flex;
     align-items: center;
     gap: 10px;
   }
-  .dojo-icon-badge {
-    width: 38px;
-    height: 38px;
+  .sidebar-icon {
+    font-size: 20px;
+    width: 36px;
+    height: 36px;
     background: radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, rgba(10, 16, 36, 0.8) 100%);
-    border: 1.5px solid var(--primary);
-    border-radius: 12px;
+    border: 1px solid rgba(56, 189, 248, 0.45);
+    border-radius: 11px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 19px;
-    box-shadow: 0 0 14px var(--primary-glow);
-  }
-  .dojo-name-cluster { display: flex; flex-direction: column; gap: 2px; }
-  .dojo-label {
-    font-size: 10px;
-    font-weight: 800;
-    color: var(--primary);
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
-  }
-  .dojo-select {
-    background: rgba(6, 10, 22, 0.9);
-    border: 1px solid var(--border-accent);
-    color: #fff;
-    font-size: 13.5px;
-    font-weight: 800;
-    padding: 5px 10px;
-    border-radius: 9px;
-    outline: none;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
-  }
-  .dojo-select:focus {
-    border-color: var(--primary);
     box-shadow: 0 0 12px var(--primary-glow);
   }
-
-  .dojo-bar-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  .sidebar-title {
+    font-size: 13.5px;
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: 0.8px;
   }
-  .btn-dojo-action {
+  .sidebar-subtitle {
+    font-size: 11px;
+    color: var(--text-sub);
+  }
+  .btn-sidebar-close {
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid var(--border-glass);
-    color: #f1f5f9;
-    padding: 6px 12px;
+    color: var(--text-sub);
+    width: 32px;
+    height: 32px;
     border-radius: 9px;
-    font-size: 11.5px;
-    font-weight: 800;
+    font-size: 14px;
     cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     display: flex;
     align-items: center;
-    gap: 5px;
+    justify-content: center;
+    transition: all 0.2s;
   }
-  .btn-dojo-action:hover {
+  .btn-sidebar-close:hover {
     background: rgba(239, 68, 68, 0.2);
     border-color: var(--danger);
     color: #fca5a5;
-    transform: translateY(-1px);
   }
-  .btn-create-room {
-    background: linear-gradient(135deg, rgba(34, 197, 94, 0.22) 0%, rgba(16, 185, 129, 0.15) 100%);
-    border-color: rgba(34, 197, 94, 0.5);
-    color: #86efac;
-    box-shadow: 0 0 12px rgba(34, 197, 94, 0.15);
-  }
-  .btn-create-room:hover {
-    background: var(--success);
-    color: #000;
-    border-color: var(--success);
-    box-shadow: 0 0 16px var(--success-glow);
-    transform: translateY(-1px);
-  }
-  .btn-create-room:active, .btn-dojo-action:active { transform: scale(0.95); }
 
-  /* Telemetry & Progress Strip */
-  .dojo-stats-strip {
+  .sidebar-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    padding-top: 10px;
-    border-top: 1px solid rgba(255, 255, 255, 0.07);
-  }
-  .dojo-stats-left {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-  .dojo-count-pill {
-    background: rgba(56, 189, 248, 0.14);
-    border: 1px solid rgba(56, 189, 248, 0.35);
-    color: #38bdf8;
-    padding: 3px 10px;
-    border-radius: 20px;
-    font-size: 11.5px;
-    font-weight: 800;
-  }
-  .dojo-mastered-pill {
-    background: rgba(251, 191, 36, 0.14);
-    border: 1px solid rgba(251, 191, 36, 0.35);
-    color: var(--gold);
-    padding: 3px 10px;
-    border-radius: 20px;
-    font-size: 11.5px;
-    font-weight: 800;
+    gap: 14px;
   }
 
-  .dojo-progress-box {
+  .sidebar-card {
+    background: rgba(16, 26, 56, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 14px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  }
+  .sc-label {
+    font-size: 10.5px;
+    font-weight: 900;
+    color: var(--primary);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .sidebar-select {
+    width: 100%;
+    background: rgba(6, 10, 24, 0.95);
+    border: 1px solid var(--border-accent);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 800;
+    padding: 9px 12px;
+    border-radius: 11px;
+    outline: none;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: all 0.2s;
+  }
+  .sidebar-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 14px var(--primary-glow);
+  }
+
+  .sidebar-room-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .btn-sidebar-action {
+    padding: 8px 10px;
+    border-radius: 10px;
+    font-size: 11.5px;
+    font-weight: 800;
+    cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.2s;
+  }
+  .btn-add-room {
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.2) 0%, rgba(16, 185, 129, 0.15) 100%);
+    border: 1px solid rgba(34, 197, 94, 0.45);
+    color: #86efac;
+  }
+  .btn-add-room:hover {
+    background: var(--success);
+    color: #000;
+    box-shadow: 0 0 16px var(--success-glow);
+  }
+  .btn-clear-room {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-glass);
+    color: #f1f5f9;
+  }
+  .btn-clear-room:hover {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: var(--danger);
+    color: #fca5a5;
+  }
+
+  .sidebar-stats-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .sidebar-stat-badge {
+    background: rgba(56, 189, 248, 0.12);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    color: #38bdf8;
+    padding: 8px 10px;
+    border-radius: 11px;
+    font-size: 12px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .sidebar-stat-badge.badge-gold {
+    background: rgba(251, 191, 36, 0.12);
+    border-color: rgba(251, 191, 36, 0.3);
+    color: var(--gold);
+  }
+
+  .sidebar-progress-container {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .sidebar-progress-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--text-sub);
   }
   .dojo-progress-track {
-    flex: 1;
+    width: 100%;
     height: 7px;
     background: rgba(6, 10, 22, 0.8);
     border: 1px solid rgba(255, 255, 255, 0.08);
@@ -333,12 +428,70 @@
     transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
   }
-  .dojo-progress-text {
-    font-size: 11px;
+
+  .btn-sidebar-guide {
+    width: 100%;
+    background: linear-gradient(135deg, rgba(192, 132, 252, 0.15) 0%, rgba(147, 51, 234, 0.1) 100%);
+    border: 1px solid rgba(192, 132, 252, 0.35);
+    border-radius: 12px;
+    padding: 10px 12px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+  }
+  .btn-sidebar-guide:hover {
+    background: rgba(192, 132, 252, 0.25);
+    border-color: var(--purple);
+    box-shadow: 0 0 16px var(--purple-glow);
+    transform: translateY(-1px);
+  }
+  .guide-item-icon { font-size: 20px; }
+  .guide-item-info { flex: 1; }
+  .guide-item-title { font-size: 12.5px; font-weight: 800; color: #f3e8ff; }
+  .guide-item-desc { font-size: 10.5px; color: var(--text-sub); margin-top: 1px; }
+  .guide-arrow { font-size: 12px; color: var(--purple); }
+
+  .sidebar-nav-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .sidebar-nav-item {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-glass);
+    color: #f1f5f9;
+    padding: 9px 12px;
+    border-radius: 10px;
+    font-size: 12.5px;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+  .sidebar-nav-item:hover {
+    background: rgba(56, 189, 248, 0.15);
+    border-color: var(--primary);
+    color: #fff;
+    transform: translateX(3px);
+  }
+  .sni-badge {
+    background: rgba(56, 189, 248, 0.2);
+    color: var(--primary);
+    padding: 2px 7px;
+    border-radius: 8px;
+    font-size: 10.5px;
     font-weight: 800;
-    color: var(--text-sub);
-    min-width: 80px;
-    text-align: right;
+  }
+  .nav-back-link {
+    border-color: rgba(56, 189, 248, 0.25);
+    color: #38bdf8;
   }
 
   /* ==========================================
@@ -1059,13 +1212,62 @@
   }
 
   .quiz-feedback-box {
-    min-height: 28px;
-    font-size: 13px;
-    font-weight: 800;
-    margin-top: 14px;
-    text-align: center;
+    width: 100%;
+    max-width: 480px;
+    min-height: 10px;
+  }
+
+  /* Enhanced Lively Drill Feedback Card */
+  .drill-result-card {
+    border-radius: 14px;
+    padding: 12px 14px;
+    margin-top: 12px;
+    animation: feedbackSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    text-align: left;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    width: 100%;
+  }
+  @keyframes feedbackSlideUp {
+    0% { opacity: 0; transform: translateY(10px) scale(0.97); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .drill-result-card.result-success {
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.18) 0%, rgba(16, 185, 129, 0.08) 100%);
+    border-color: rgba(34, 197, 94, 0.45);
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.2);
+  }
+  .drill-result-card.result-wrong {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.18) 0%, rgba(220, 38, 38, 0.08) 100%);
+    border-color: rgba(239, 68, 68, 0.45);
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
+  }
+  .result-banner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+  }
+  .result-title {
+    font-size: 13.5px;
+    font-weight: 900;
+    color: #fff;
+  }
+  .result-body {
+    font-size: 12.5px;
+    color: #cbd5e1;
     line-height: 1.45;
-    max-width: 460px;
+  }
+  .result-combo-badge {
+    background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 900;
+    padding: 2px 8px;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+    animation: pulseGold 1.5s infinite;
   }
 
   .btn-quiz-next {
@@ -1337,61 +1539,18 @@
       padding: 2px 5px;
       letter-spacing: 0.6px;
     }
-    .guide-btn-long { display: none; }
-    .guide-btn-short { display: inline; }
-    .btn-onyomi-guide {
-      padding: 6px 9px;
-      font-size: 11px;
-      gap: 4px;
-      border-radius: 9px;
-      white-space: nowrap;
-    }
-
-    /* 2. Dojo Deck HUD Bar */
-    .dojo-deck-bar {
-      padding: 12px 12px;
-      border-radius: 15px;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
-    .dojo-bar-top {
-      flex-direction: column;
-      align-items: stretch;
-      gap: 10px;
-    }
-    .dojo-room-info {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .dojo-icon-badge {
-      width: 34px;
-      height: 34px;
-      font-size: 16px;
-      border-radius: 10px;
-      flex-shrink: 0;
-    }
-    .dojo-name-cluster {
-      flex: 1;
-      min-width: 0;
-    }
-    .dojo-select {
-      width: 100%;
-      font-size: 13px;
-      padding: 6px 8px;
-    }
-    .dojo-bar-actions {
-      width: 100%;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-    .btn-dojo-action {
-      width: 100%;
-      justify-content: center;
-      padding: 7px 6px;
+    /* 2. Sidebar Toggle & Drawer Mobile */
+    .btn-sidebar-toggle {
+      padding: 6px 10px;
       font-size: 11.5px;
+      gap: 5px;
+      border-radius: 10px;
+    }
+    .sidebar-btn-label {
+      display: none;
+    }
+    .dojo-sidebar-drawer {
+      max-width: 88vw;
     }
 
     /* 3. Main Nav Tabs */
@@ -1463,6 +1622,99 @@
 <body>
 
 <div id="toast"></div>
+
+<!-- ==========================================
+     SIDEBAR DRAWER: PUSAT KELOLA DOJO
+     ========================================== -->
+<div id="sidebar-overlay" class="sidebar-overlay" onclick="DojoEngine.closeSidebar()"></div>
+<aside id="dojo-sidebar" class="dojo-sidebar-drawer">
+  <div class="sidebar-header">
+    <div class="sidebar-title-group">
+      <div class="sidebar-icon">⛩️</div>
+      <div>
+        <div class="sidebar-title">PUSAT KELOLA DOJO</div>
+        <div class="sidebar-subtitle">Kelola ruang, statistik & materi</div>
+      </div>
+    </div>
+    <button type="button" class="btn-sidebar-close" onclick="DojoEngine.closeSidebar()">✕</button>
+  </div>
+
+  <div class="sidebar-body">
+    <!-- Section 1: Ruang Dojo Aktif -->
+    <div class="sidebar-card">
+      <div class="sc-label">⛩️ RUANG DOJO AKTIF</div>
+      <select id="dojo-room-select" class="sidebar-select" onchange="DojoEngine.switchRoom(this.value)">
+        <!-- Options populated dynamically -->
+      </select>
+
+      <div class="sidebar-room-actions">
+        <button type="button" class="btn-sidebar-action btn-add-room" onclick="DojoEngine.openRoomModal()">
+          <span>➕ Buat Ruang</span>
+        </button>
+        <button type="button" class="btn-sidebar-action btn-clear-room" onclick="DojoEngine.clearCurrentDojo()">
+          <span>🧹 Bersihkan</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Section 2: Statistik Penguasaan Ruang Aktif -->
+    <div class="sidebar-card">
+      <div class="sc-label">📊 STATISTIK PENGUASAAN</div>
+      <div class="sidebar-stats-row">
+        <div class="sidebar-stat-badge">
+          <span class="stat-icon">🎒</span>
+          <span id="dojo-card-count">0 Kanji di Ruang Ini</span>
+        </div>
+        <div class="sidebar-stat-badge badge-gold">
+          <span class="stat-icon">⭐</span>
+          <span id="dojo-master-count">0 Dikuasai</span>
+        </div>
+      </div>
+      
+      <div class="sidebar-progress-container">
+        <div class="sidebar-progress-meta">
+          <span>Tingkat Kelulusan</span>
+          <span id="dojo-progress-text">0% Dikuasai</span>
+        </div>
+        <div class="dojo-progress-track">
+          <div class="dojo-progress-fill" id="dojo-progress-fill" style="width: 0%;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: Pusat Edukasi & Bantuan -->
+    <div class="sidebar-card">
+      <div class="sc-label">💡 PANDUAN PENTING</div>
+      <button type="button" class="btn-sidebar-guide" onclick="DojoEngine.openGuide(); DojoEngine.closeSidebar();">
+        <div class="guide-item-icon">📜</div>
+        <div class="guide-item-info">
+          <div class="guide-item-title">Rahasia Onyomi & Kunyomi</div>
+          <div class="guide-item-desc">Rumus Sakti 80/20 & tips mudah menghafal</div>
+        </div>
+        <span class="guide-arrow">➔</span>
+      </button>
+    </div>
+
+    <!-- Section 4: Navigasi Cepat -->
+    <div class="sidebar-card">
+      <div class="sc-label">🧭 NAVIGASI CEPAT</div>
+      <div class="sidebar-nav-list">
+        <button type="button" class="sidebar-nav-item" onclick="DojoEngine.switchMainTab('market'); DojoEngine.closeSidebar();">
+          <span>🛒 Pasar Belanja Kanji</span>
+          <span class="sni-badge" id="sidebar-market-count">240</span>
+        </button>
+        <button type="button" class="sidebar-nav-item" onclick="DojoEngine.switchMainTab('training'); DojoEngine.closeSidebar();">
+          <span>🥋 Arena Latihan Dojo</span>
+          <span class="sni-badge" id="sidebar-dojo-count">4</span>
+        </button>
+        <a href="index.html" class="sidebar-nav-item nav-back-link">
+          <span>⛩️ Kembali ke Silabus N5</span>
+          <span>➔</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</aside>
 
 <!-- ==========================================
      MODAL 1: PANDUAN EDUKATIF ONYOMI & KUNYOMI
@@ -1573,48 +1825,12 @@
     </div>
 
     <div class="nav-right">
-      <button type="button" class="btn-onyomi-guide" onclick="DojoEngine.openGuide()" title="Pelajari Rahasia Onyomi vs Kunyomi">
-        <span>💡</span>
-        <span class="guide-btn-long">Onyomi & Kunyomi?</span>
-        <span class="guide-btn-short">Panduan Baca</span>
+      <button type="button" class="btn-sidebar-toggle" onclick="DojoEngine.toggleSidebar()" title="Buka Pusat Kelola Dojo">
+        <span class="torii-icon">⛩️</span>
+        <span class="sidebar-btn-label" id="nav-active-room-name">Dojo Utama</span>
+        <span class="sidebar-badge-count" id="nav-active-room-count">4</span>
+        <span class="hamburger-bars">☰</span>
       </button>
-    </div>
-  </div>
-
-  <!-- ACTIVE DOJO BAR & ROOM CONTROLS -->
-  <div class="dojo-deck-bar">
-    <div class="dojo-bar-top">
-      <div class="dojo-room-info">
-        <div class="dojo-icon-badge">⛩️</div>
-        <div class="dojo-name-cluster">
-          <span class="dojo-label">RUANG DOJO AKTIF:</span>
-          <select id="dojo-room-select" class="dojo-select" onchange="DojoEngine.switchRoom(this.value)">
-            <!-- Options populated dynamically -->
-          </select>
-        </div>
-      </div>
-
-      <div class="dojo-bar-actions">
-        <button type="button" class="btn-dojo-action btn-create-room" onclick="DojoEngine.openRoomModal()" title="Buat Ruang Dojo Baru">
-          <span>+ Buat Ruang</span>
-        </button>
-        <button type="button" class="btn-dojo-action" onclick="DojoEngine.clearCurrentDojo()" title="Kosongkan Kanji di Ruang Ini">
-          <span>🧹 Bersihkan</span>
-        </button>
-      </div>
-    </div>
-
-    <div class="dojo-stats-strip">
-      <div class="dojo-stats-left">
-        <span class="dojo-count-pill" id="dojo-card-count">🎒 0 Kanji di Ruang Ini</span>
-        <span class="dojo-mastered-pill" id="dojo-master-count">⭐ 0 Dikuasai</span>
-      </div>
-      <div class="dojo-progress-box">
-        <div class="dojo-progress-track">
-          <div class="dojo-progress-fill" id="dojo-progress-fill" style="width: 0%;"></div>
-        </div>
-        <span class="dojo-progress-text" id="dojo-progress-text">0% Dikuasai</span>
-      </div>
     </div>
   </div>
 
@@ -6063,6 +6279,43 @@ const DojoEngine = {
     this.updateStats();
     this.renderMarket();
     this.loadTrainingDeck();
+
+    // 4. Keyboard Shortcuts for Fluid Interaction
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        DojoEngine.closeSidebar();
+        DojoEngine.closeGuide();
+        DojoEngine.closeRoomModal();
+        return;
+      }
+
+      if (DojoEngine.activeMainTab === 'training') {
+        if (DojoEngine.dojoMode === 'quiz') {
+          const nextBtn = document.getElementById('btn-quiz-next');
+          if (nextBtn && !nextBtn.classList.contains('hidden') && (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowRight')) {
+            e.preventDefault();
+            DojoEngine.nextQuizQuestion();
+            return;
+          }
+          if (['1', '2', '3', '4'].includes(e.key)) {
+            const idx = parseInt(e.key) - 1;
+            const opts = document.querySelectorAll('.btn-quiz-opt');
+            if (opts && opts[idx] && !opts[idx].disabled) {
+              opts[idx].click();
+            }
+          }
+        } else if (DojoEngine.dojoMode === 'fc') {
+          if (e.key === 'ArrowRight' || e.key === 'Enter') {
+            DojoEngine.nextDojoCard();
+          } else if (e.key === 'ArrowLeft') {
+            DojoEngine.prevDojoCard();
+          } else if (e.key === ' ') {
+            e.preventDefault();
+            DojoEngine.toggleFcReveal();
+          }
+        }
+      }
+    });
   },
 
   saveRooms: function() {
@@ -6092,17 +6345,40 @@ const DojoEngine = {
     this.showToast(`⛩️ Beralih ke: ${this.rooms[roomId].name}`);
   },
 
+  toggleSidebar: function() {
+    const sb = document.getElementById('dojo-sidebar');
+    const ov = document.getElementById('sidebar-overlay');
+    if (sb && ov) {
+      sb.classList.toggle('active');
+      ov.classList.toggle('active');
+    }
+  },
+
+  openSidebar: function() {
+    const sb = document.getElementById('dojo-sidebar');
+    const ov = document.getElementById('sidebar-overlay');
+    if (sb) sb.classList.add('active');
+    if (ov) ov.classList.add('active');
+  },
+
+  closeSidebar: function() {
+    const sb = document.getElementById('dojo-sidebar');
+    const ov = document.getElementById('sidebar-overlay');
+    if (sb) sb.classList.remove('active');
+    if (ov) ov.classList.remove('active');
+  },
+
   updateStats: function() {
-    const activeRoom = this.rooms[this.activeRoomId] || { kanji: [] };
+    const activeRoom = this.rooms[this.activeRoomId] || { name: 'Dojo Latihan', kanji: [] };
     const count = activeRoom.kanji.length;
     const masteredCount = activeRoom.kanji.filter(k => this.masteredKanji.includes(k)).length;
     const pct = count > 0 ? Math.round((masteredCount / count) * 100) : 0;
 
     const cEl = document.getElementById('dojo-card-count');
-    if (cEl) cEl.innerText = `🎒 ${count} Kanji di Ruang Ini`;
+    if (cEl) cEl.innerText = `${count} Kanji`;
 
     const mEl = document.getElementById('dojo-master-count');
-    if (mEl) mEl.innerText = `⭐ ${masteredCount} Dikuasai`;
+    if (mEl) mEl.innerText = `${masteredCount} Dikuasai`;
 
     const bEl = document.getElementById('dojo-badge-num');
     if (bEl) bEl.innerText = count;
@@ -6115,6 +6391,19 @@ const DojoEngine = {
 
     const pctEl = document.getElementById('dojo-progress-text');
     if (pctEl) pctEl.innerText = `${pct}% Dikuasai`;
+
+    // Sidebar & Top Nav Synchronizations
+    const navRoomName = document.getElementById('nav-active-room-name');
+    if (navRoomName) navRoomName.innerText = activeRoom.name;
+
+    const navRoomCount = document.getElementById('nav-active-room-count');
+    if (navRoomCount) navRoomCount.innerText = count;
+
+    const sbMarketCount = document.getElementById('sidebar-market-count');
+    if (sbMarketCount) sbMarketCount.innerText = KANJI_CATALOG.length;
+
+    const sbDojoCount = document.getElementById('sidebar-dojo-count');
+    if (sbDojoCount) sbDojoCount.innerText = count;
   },
 
   // --- ROOM MANAGEMENT MODAL ---
@@ -6445,7 +6734,7 @@ const DojoEngine = {
   },
 
   speakText: function(text) {
-    if ('speechSynthesis' in window && text) {
+    if ('speechSynthesis' in window && text && typeof SpeechSynthesisUtterance !== 'undefined') {
       window.speechSynthesis.cancel();
       const u = new SpeechSynthesisUtterance(text);
       u.lang = 'ja-JP';
@@ -6555,8 +6844,8 @@ const DojoEngine = {
       choices: choices,
       correct: correct,
       audioToSpeak: target.kun || target.on ? (target.kun||target.on).split(',')[0].replace(/[\.・\-]/g, '') : target.k,
-      feedbackCorrect: `⚔️ SEIKAI! Tepat sekali! <b>${target.k}</b> = ${target.a}`,
-      feedbackWrong: `❌ Kurang tepat! <b>${target.k}</b> artinya adalah <b>${target.a}</b>`,
+      feedbackCorrect: `Karakter <b>${target.k}</b> memang artinya adalah <b>"${target.a}"</b>.`,
+      feedbackWrong: `Karakter <b>${target.k}</b> artinya adalah <b>"${target.a}"</b>. Ingat bentuknya baik-baik ya!`,
       isKanjiChoices: false,
       isTwoColumns: false
     };
@@ -6593,8 +6882,8 @@ const DojoEngine = {
       choices: choices,
       correct: correct,
       audioToSpeak: cleanR,
-      feedbackCorrect: `⚔️ SEIKAI! <b>${target.k}</b> (${target.a}) dibaca: <b>${cleanR}</b>`,
-      feedbackWrong: `❌ Kurang tepat! <b>${target.k}</b> (${target.a}) cara bacanya adalah <b>${cleanR}</b>`,
+      feedbackCorrect: `Karakter <b>${target.k}</b> (${target.a}) tepat dibaca <b>${cleanR}</b>!`,
+      feedbackWrong: `Karakter <b>${target.k}</b> (${target.a}) cara bacanya adalah <b>${cleanR}</b>. Coba lafalkan berulang kali!`,
       isKanjiChoices: false,
       isTwoColumns: false
     };
@@ -6630,8 +6919,8 @@ const DojoEngine = {
       choices: choices,
       correct: correct,
       audioToSpeak: target.k,
-      feedbackCorrect: `⚔️ SEIKAI! Karakter untuk "${target.a}" adalah <b>${target.k}</b> (${readingText})`,
-      feedbackWrong: `❌ Kurang tepat! Karakter untuk "${target.a}" adalah <b>${target.k}</b>`,
+      feedbackCorrect: `Karakter untuk makna <i>"${target.a}"</i> adalah <b>${target.k}</b> (dibaca: <b>${readingText}</b>).`,
+      feedbackWrong: `Karakter untuk makna <i>"${target.a}"</i> adalah <b>${target.k}</b> (dibaca: <b>${readingText}</b>). Perhatikan goresannya!`,
       isKanjiChoices: true,
       isTwoColumns: false
     };
@@ -6653,8 +6942,8 @@ const DojoEngine = {
         choices: choices,
         correct: '🇨🇳 Onyomi (Bacaan Cina)',
         audioToSpeak: ex.w,
-        feedbackCorrect: `⚔️ SEIKAI! Rumus Sakti 80/20: Gabungan dua kanji (${ex.w}) hampir selalu memakai ONYOMI!`,
-        feedbackWrong: `❌ Ingat Rumus Sakti: Kata majemuk gabungan 2 kanji (${ex.w}) memakai ONYOMI!`,
+        feedbackCorrect: `Rumus Sakti 80/20 terbukti! Gabungan kata majemuk <b>${ex.w}</b> hampir selalu memakai ONYOMI (Cina).`,
+        feedbackWrong: `Ingat Rumus Sakti 80/20: Gabungan dua kanji (<b>${ex.w}</b>) memakai ONYOMI (Cina)!`,
         isKanjiChoices: false,
         isTwoColumns: true
       };
@@ -6670,8 +6959,8 @@ const DojoEngine = {
         choices: choices,
         correct: '🇯🇵 Kunyomi (Bacaan Jepang)',
         audioToSpeak: target.k,
-        feedbackCorrect: `⚔️ SEIKAI! Rumus Sakti 80/20: Kanji yang berdiri sendirian (${target.k} = ${kunR}) memakai KUNYOMI!`,
-        feedbackWrong: `❌ Ingat Rumus Sakti: Kanji yang berdiri sendirian (${target.k} = ${kunR}) memakai KUNYOMI!`,
+        feedbackCorrect: `Rumus Sakti 80/20 terbukti! Kanji yang berdiri sendirian <b>${target.k}</b> (= ${kunR}) memakai KUNYOMI (Jepang).`,
+        feedbackWrong: `Ingat Rumus Sakti 80/20: Kanji yang berdiri sendirian (<b>${target.k}</b> = ${kunR}) memakai KUNYOMI (Jepang)!`,
         isKanjiChoices: false,
         isTwoColumns: true
       };
@@ -6699,11 +6988,11 @@ const DojoEngine = {
       correct: correct,
       audioToSpeak: target.k,
       feedbackCorrect: isTrue 
-        ? `⚔️ TEPAT! <b>${target.k}</b> memang benar artinya <b>${target.a}</b>!` 
-        : `⚔️ TEPAT! <b>${target.k}</b> artinya bukan "${statementMeaning}", melainkan <b>${target.a}</b>!`,
+        ? `Pernyataan 100% tepat! Karakter <b>${target.k}</b> memang artinya <b>"${target.a}"</b>.` 
+        : `Pernyataan tepat! Karakter <b>${target.k}</b> artinya adalah <b>"${target.a}"</b> (bukan "${statementMeaning}").`,
       feedbackWrong: isTrue
-        ? `❌ Kurang tepat! <b>${target.k}</b> memang benar artinya <b>${target.a}</b>.`
-        : `❌ Kurang tepat! <b>${target.k}</b> artinya adalah <b>${target.a}</b>.`,
+        ? `Karakter <b>${target.k}</b> memang benar artinya <b>"${target.a}"</b>.`
+        : `Karakter <b>${target.k}</b> artinya adalah <b>"${target.a}"</b> (bukan "${statementMeaning}").`,
       isKanjiChoices: false,
       isTwoColumns: true
     };
@@ -6759,11 +7048,44 @@ const DojoEngine = {
     const isCorrect = (selected === q.correct);
     const targetBtn = evt ? (evt.currentTarget || (evt.target && evt.target.closest ? evt.target.closest('.btn-quiz-opt') : evt.target)) : null;
 
+    const praises = [
+      "⚔️ SEIKAI! Tebasan tepat sasaran!",
+      "🔥 SUGOI! Insting kanjimu makin tajam!",
+      "✨ Luar biasa! Langsung nempel di ingatan!",
+      "🎯 Tepat sasaran! Akurasi 100%!",
+      "⚡ Mantap jiwa! Kecepatan dan fokusmu on point!",
+      "🌟 Keren banget! Terus pertahankan ritmenya!",
+      "👑 Sempurna! Kanji ini resmi kamu kuasai!"
+    ];
+
+    const encouragements = [
+      "🍃 Jangan patah semangat! Samurai sejati belajar dari kesalahan.",
+      "💪 Hampir tepat! Otakmu sedang membentuk koneksi memorinya.",
+      "⛩️ Tenang, tarik napas! Pengulangan adalah rahasia para master kanji.",
+      "⚔️ Santai aja! Jadikan ini batu loncatan, kita tebas di soal berikut!",
+      "✨ Sedikit meleset! Ingat kembali polanya dan coba lagi!"
+    ];
+
     if (isCorrect) {
       if (targetBtn) targetBtn.classList.add('correct');
       this.drillStreak++;
       this.drillScore++;
-      fb.innerHTML = `<span style="color:var(--success);">${q.feedbackCorrect}</span>`;
+
+      const praise = praises[Math.floor(Math.random() * praises.length)];
+      let streakBadge = '';
+      if (this.drillStreak >= 3) {
+        streakBadge = `<span class="result-combo-badge">🔥 COMBO x${this.drillStreak}!</span>`;
+      }
+
+      fb.innerHTML = `
+        <div class="drill-result-card result-success">
+          <div class="result-banner">
+            <span class="result-title">${praise}</span>
+            ${streakBadge}
+          </div>
+          <div class="result-body">${q.feedbackCorrect}</div>
+        </div>
+      `;
       if (q.audioToSpeak) this.speakText(q.audioToSpeak);
     } else {
       if (targetBtn) targetBtn.classList.add('wrong');
@@ -6771,11 +7093,22 @@ const DojoEngine = {
       btns.forEach(b => {
         if (b.innerText.trim() === q.correct.trim()) b.classList.add('correct');
       });
-      fb.innerHTML = `<span style="color:var(--danger);">${q.feedbackWrong}</span>`;
+      const enc = encouragements[Math.floor(Math.random() * encouragements.length)];
+      fb.innerHTML = `
+        <div class="drill-result-card result-wrong">
+          <div class="result-banner">
+            <span class="result-title">${enc}</span>
+          </div>
+          <div class="result-body">${q.feedbackWrong}</div>
+        </div>
+      `;
     }
 
     this.updateDrillTelemetry();
-    if (nextBtn) nextBtn.classList.remove('hidden');
+    if (nextBtn) {
+      nextBtn.classList.remove('hidden');
+      nextBtn.focus();
+    }
   },
 
   shuffle: function(arr) {
