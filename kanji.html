@@ -1605,244 +1605,4226 @@
 // MASTER DATABASE KANJI LENGKAP (N5 + N4)
 // ==========================================
 const KANJI_CATALOG = [
-  // --- LEVEL N5 (103 KANJI DASAR) ---
-  { k: "一", on: "イチ, イツ", kun: "ひと, ひと・つ", a: "Satu", lvl: "N5", day: 1, ex: [{ w: "一つ", r: "ひとつ", a: "Satu buah" }, { w: "一人", r: "ひとり", a: "Satu orang" }] },
-  { k: "二", on: "ニ", kun: "ふた, ふた・つ", a: "Dua", lvl: "N5", day: 1, ex: [{ w: "二つ", r: "ふたつ", a: "Dua buah" }, { w: "二人", r: "ふたり", a: "Dua orang" }] },
-  { k: "三", on: "サン", kun: "み, みっ・つ", a: "Tiga", lvl: "N5", day: 1, ex: [{ w: "三つ", r: "みっつ", a: "Tiga buah" }, { w: "三日", r: "みっか", a: "Tanggal 3" }] },
-  { k: "人", on: "ジン, ニン", kun: "ひと", a: "Orang, Manusia", lvl: "N5", day: 1, ex: [{ w: "日本人", r: "にほんじん", a: "Orang Jepang" }, { w: "大人", r: "おとな", a: "Dewasa" }] },
-  { k: "四", on: "シ", kun: "よ, よ・つ, よっ・つ, よん", a: "Empat", lvl: "N5", day: 2, ex: [{ w: "四つ", r: "よっつ", a: "Empat buah" }, { w: "四月", r: "しがつ", a: "Bulan April" }] },
-  { k: "五", on: "ゴ", kun: "いつ, いつ・つ", a: "Lima", lvl: "N5", day: 2, ex: [{ w: "五つ", r: "いつつ", a: "Lima buah" }, { w: "五日", r: "いつか", a: "Tanggal 5" }] },
-  { k: "六", on: "ロク", kun: "む, むっ・つ, むい", a: "Enam", lvl: "N5", day: 2, ex: [{ w: "六つ", r: "むっつ", a: "Enam buah" }, { w: "六日", r: "むいか", a: "Tanggal 6" }] },
-  { k: "私", on: "シ", kun: "わたし, わたくし", a: "Saya, Aku", lvl: "N5", day: 2, ex: [{ w: "私", r: "わたし", a: "Saya" }] },
-  { k: "七", on: "シチ", kun: "なな, なな・つ, なの", a: "Tujuh", lvl: "N5", day: 3, ex: [{ w: "七つ", r: "ななつ", a: "Tujuh buah" }, { w: "七日", r: "なのか", a: "Tanggal 7" }] },
-  { k: "八", on: "ハチ", kun: "や, やっ・つ, よう", a: "Delapan", lvl: "N5", day: 3, ex: [{ w: "八つ", r: "やっつ", a: "Delapan buah" }, { w: "八日", r: "ようか", a: "Tanggal 8" }] },
-  { k: "九", on: "キュウ, ク", kun: "ここの, ここの・つ", a: "Sembilan", lvl: "N5", day: 3, ex: [{ w: "九つ", r: "ここのつ", a: "Sembilan buah" }, { w: "九月", r: "くがつ", a: "Bulan September" }] },
-  { k: "十", on: "ジュウ, ジッ", kun: "とお, と", a: "Sepuluh", lvl: "N5", day: 3, ex: [{ w: "十", r: "とお", a: "Sepuluh buah" }, { w: "十日", r: "とおか", a: "Tanggal 10" }] },
-  { k: "百", on: "ヒャク", kun: "もも", a: "Ratus, Seratus", lvl: "N5", day: 4, ex: [{ w: "三百", r: "さんびゃく", a: "Tiga ratus" }] },
-  { k: "千", on: "セン", kun: "ち", a: "Ribu, Seribu", lvl: "N5", day: 4, ex: [{ w: "千円", r: "せんえん", a: "Seribu yen" }] },
-  { k: "万", on: "マン, バン", kun: "よろず", a: "Puluh Ribu (10.000)", lvl: "N5", day: 4, ex: [{ w: "一万円", r: "いちまんえん", a: "Sepuluh ribu yen" }] },
-  { k: "円", on: "エン", kun: "まる・い", a: "Yen (Mata Uang), Bulat", lvl: "N5", day: 4, ex: [{ w: "百円", r: "ひゃくえん", a: "100 Yen" }] },
-  { k: "日", on: "ニチ, ジツ", kun: "ひ, -び, -か", a: "Hari, Matahari", lvl: "N5", day: 5, ex: [{ w: "日本", r: "にほん", a: "Jepang" }, { w: "日曜日", r: "にちようび", a: "Hari Minggu" }] },
-  { k: "月", on: "ゲツ, ガツ", kun: "つき", a: "Bulan", lvl: "N5", day: 5, ex: [{ w: "月曜日", r: "げつようび", a: "Hari Senin" }] },
-  { k: "年", on: "ネン", kun: "とし", a: "Tahun", lvl: "N5", day: 5, ex: [{ w: "今年", r: "ことし", a: "Tahun ini" }] },
-  { k: "火", on: "カ", kun: "ひ, -び", a: "Api", lvl: "N5", day: 6, ex: [{ w: "火曜日", r: "かようび", a: "Hari Selasa" }] },
-  { k: "水", on: "スイ", kun: "みず", a: "Air", lvl: "N5", day: 6, ex: [{ w: "水曜日", r: "すいようび", a: "Hari Rabu" }, { w: "水", r: "みず", a: "Air" }] },
-  { k: "木", on: "モク, ボク", kun: "き", a: "Pohon, Kayu", lvl: "N5", day: 6, ex: [{ w: "木曜日", r: "もくようび", a: "Hari Kamis" }] },
-  { k: "金", on: "キン, コン", kun: "かね", a: "Emas, Uang", lvl: "N5", day: 6, ex: [{ w: "金曜日", r: "きんようび", a: "Hari Jumat" }, { w: "お金", r: "おかね", a: "Uang" }] },
-  { k: "土", on: "ド, ト", kun: "つち", a: "Tanah", lvl: "N5", day: 7, ex: [{ w: "土曜日", r: "どようび", a: "Hari Sabtu" }] },
-  { k: "本", on: "ホン", kun: "もと", a: "Buku, Asal", lvl: "N5", day: 7, ex: [{ w: "本", r: "ほん", a: "Buku" }] },
-  { k: "休", on: "キュウ", kun: "やす・む", a: "Istirahat, Libur", lvl: "N5", day: 7, ex: [{ w: "休み", r: "やすみ", a: "Libur, istirahat" }] },
-  { k: "上", on: "ジョウ", kun: "うえ, あ・がる", a: "Atas, Naik", lvl: "N5", day: 8, ex: [{ w: "上", r: "うえ", a: "Atas" }, { w: "上手", r: "じょうず", a: "Pintar" }] },
-  { k: "下", on: "カ, ゲ", kun: "した, さ・がる", a: "Bawah, Turun", lvl: "N5", day: 8, ex: [{ w: "下", r: "した", a: "Bawah" }, { w: "下手", r: "へた", a: "Kurang pandai" }] },
-  { k: "中", on: "チュウ", kun: "なか", a: "Dalam, Tengah", lvl: "N5", day: 8, ex: [{ w: "中", r: "なか", a: "Di dalam" }] },
-  { k: "半", on: "ハン", kun: "なか・ば", a: "Setengah, Separuh", lvl: "N5", day: 8, ex: [{ w: "三時半", r: "さんじはん", a: "Jam 3:30" }] },
-  { k: "右", on: "ウ, ユウ", kun: "みぎ", a: "Kanan", lvl: "N5", day: 9, ex: [{ w: "右手", r: "みぎて", a: "Tangan kanan" }] },
-  { k: "左", on: "サ", kun: "ひだり", a: "Kiri", lvl: "N5", day: 9, ex: [{ w: "左手", r: "ひだりて", a: "Tangan kiri" }] },
-  { k: "前", on: "ゼン", kun: "まえ", a: "Depan, Sebelum", lvl: "N5", day: 9, ex: [{ w: "前", r: "まえ", a: "Di depan" }] },
-  { k: "後", on: "ゴ, コウ", kun: "うし・ろ, あと", a: "Belakang, Setelah", lvl: "N5", day: 9, ex: [{ w: "後ろ", r: "うしろ", a: "Belakang" }] },
-  { k: "大", on: "ダイ, タイ", kun: "おお・きい", a: "Besar", lvl: "N5", day: 10, ex: [{ w: "大きい", r: "おおきい", a: "Besar" }, { w: "大学", r: "だいがく", a: "Universitas" }] },
-  { k: "小", on: "ショウ", kun: "ちい・さい", a: "Kecil", lvl: "N5", day: 10, ex: [{ w: "小さい", r: "ちいさい", a: "Kecil" }] },
-  { k: "長", on: "チョウ", kun: "なが・い", a: "Panjang, Ketua", lvl: "N5", day: 10, ex: [{ w: "長い", r: "ながい", a: "Panjang" }] },
-  { k: "高", on: "コウ", kun: "たか・い", a: "Tinggi, Mahal", lvl: "N5", day: 10, ex: [{ w: "高い", r: "たかい", a: "Mahal / Tinggi" }, { w: "高校", r: "こうこう", a: "SMA" }] },
-  { k: "安", on: "アン", kun: "やす・い", a: "Murah, Tenang", lvl: "N5", day: 11, ex: [{ w: "安い", r: "やすい", a: "Murah" }] },
-  { k: "新", on: "シン", kun: "あたら・しい", a: "Baru", lvl: "N5", day: 11, ex: [{ w: "新しい", r: "あたらしい", a: "Baru" }, { w: "新聞", r: "しんぶん", a: "Koran" }] },
-  { k: "古", on: "コ", kun: "ふる・い", a: "Lama, Usang", lvl: "N5", day: 11, ex: [{ w: "古い", r: "ふるい", a: "Lama" }] },
-  { k: "白", on: "ハク", kun: "しろ・い", a: "Putih", lvl: "N5", day: 11, ex: [{ w: "白い", r: "しろい", a: "Putih" }] },
-  { k: "多", on: "タ", kun: "おお・い", a: "Banyak", lvl: "N5", day: 12, ex: [{ w: "多い", r: "おおい", a: "Banyak" }] },
-  { k: "少", on: "ショウ", kun: "すく・ない, すこ・し", a: "Sedikit", lvl: "N5", day: 12, ex: [{ w: "少し", r: "すこし", a: "Sedikit" }] },
-  { k: "早", on: "ソウ", kun: "はや・い", a: "Cepat (Waktu), Pagi", lvl: "N5", day: 12, ex: [{ w: "早い", r: "はやい", a: "Cepat / Awal" }] },
-  { k: "時", on: "ジ", kun: "とき", a: "Waktu, Jam", lvl: "N5", day: 12, ex: [{ w: "時間", r: "じかん", a: "Waktu" }] },
-  { k: "分", on: "ブン, フン", kun: "わ・かる", a: "Menit, Mengerti", lvl: "N5", day: 13, ex: [{ w: "五分", r: "ごふん", a: "5 Menit" }] },
-  { k: "今", on: "コン", kun: "いま", a: "Sekarang", lvl: "N5", day: 13, ex: [{ w: "今", r: "いま", a: "Sekarang" }] },
-  { k: "先", on: "セン", kun: "さき", a: "Terdahulu, Ujung", lvl: "N5", day: 13, ex: [{ w: "先生", r: "せんせい", a: "Guru" }] },
-  { k: "生", on: "セイ", kun: "い・きる, う・まれる", a: "Lahir, Hidup, Pelajar", lvl: "N5", day: 13, ex: [{ w: "学生", r: "がくせい", a: "Pelajar" }] },
-  { k: "学", on: "ガク", kun: "まな・ぶ", a: "Belajar, Ilmu", lvl: "N5", day: 14, ex: [{ w: "学校", r: "がっこう", a: "Sekolah" }] },
-  { k: "校", on: "コウ", kun: "-", a: "Sekolah", lvl: "N5", day: 14, ex: [{ w: "校長", r: "こうちょう", a: "Kepala sekolah" }] },
-  { k: "友", on: "ユウ", kun: "とも", a: "Teman", lvl: "N5", day: 14, ex: [{ w: "友達", r: "ともだち", a: "Teman" }] },
-  { k: "何", on: "カ", kun: "なに, なん", a: "Apa", lvl: "N5", day: 14, ex: [{ w: "何", r: "なに", a: "Apa" }] },
-  { k: "行", on: "コウ, ギョウ", kun: "い・く", a: "Pergi", lvl: "N5", day: 15, ex: [{ w: "行く", r: "いく", a: "Pergi" }] },
-  { k: "来", on: "ライ", kun: "く・る", a: "Datang", lvl: "N5", day: 15, ex: [{ w: "来る", r: "くる", a: "Datang" }] },
-  { k: "帰", on: "キ", kun: "かえ・る", a: "Pulang", lvl: "N5", day: 15, ex: [{ w: "帰る", r: "かえる", a: "Pulang" }] },
-  { k: "会", on: "カイ", kun: "あ・う", a: "Bertemu, Kumpulan", lvl: "N5", day: 15, ex: [{ w: "会う", r: "あう", a: "Bertemu" }, { w: "会社", r: "かいしゃ", a: "Perusahaan" }] },
-  { k: "見", on: "ケン", kun: "み・る", a: "Melihat", lvl: "N5", day: 16, ex: [{ w: "見る", r: "みる", a: "Melihat" }] },
-  { k: "聞", on: "ブン", kun: "き・く", a: "Mendengar", lvl: "N5", day: 16, ex: [{ w: "聞く", r: "きく", a: "Mendengar" }] },
-  { k: "読", on: "ドク", kun: "よ・む", a: "Membaca", lvl: "N5", day: 16, ex: [{ w: "読む", r: "よむ", a: "Membaca" }] },
-  { k: "書", on: "ショ", kun: "か・く", a: "Menulis", lvl: "N5", day: 16, ex: [{ w: "書く", r: "かく", a: "Menulis" }] },
-  { k: "話", on: "ワ", kun: "はな・す, はなし", a: "Bicara, Cerita", lvl: "N5", day: 17, ex: [{ w: "話す", r: "はなす", a: "Berbicara" }, { w: "電話", r: "でんわ", a: "Telepon" }] },
-  { k: "買", on: "バイ", kun: "か・う", a: "Membeli", lvl: "N5", day: 17, ex: [{ w: "買う", r: "かう", a: "Membeli" }] },
-  { k: "食", on: "ショク", kun: "た・べる", a: "Makan", lvl: "N5", day: 17, ex: [{ w: "食べる", r: "たべる", a: "Makan" }] },
-  { k: "飲", on: "イン", kun: "の・む", a: "Minum", lvl: "N5", day: 17, ex: [{ w: "飲む", r: "のむ", a: "Minum" }] },
-  { k: "東", on: "トウ", kun: "ひがし", a: "Timur", lvl: "N5", day: 18, ex: [{ w: "東京", r: "とうきょう", a: "Tokyo" }] },
-  { k: "西", on: "セイ, サイ", kun: "にし", a: "Barat", lvl: "N5", day: 18, ex: [{ w: "西", r: "にし", a: "Barat" }] },
-  { k: "南", on: "ナン", kun: "みなみ", a: "Selatan", lvl: "N5", day: 18, ex: [{ w: "南", r: "みなみ", a: "Selatan" }] },
-  { k: "北", on: "ホク", kun: "きた", a: "Utara", lvl: "N5", day: 18, ex: [{ w: "北", r: "きた", a: "Utara" }] },
-  { k: "口", on: "コウ", kun: "くち", a: "Mulut, Pintu", lvl: "N5", day: 19, ex: [{ w: "出口", r: "でぐち", a: "Pintu keluar" }] },
-  { k: "目", on: "モク", kun: "め", a: "Mata", lvl: "N5", day: 19, ex: [{ w: "目", r: "め", a: "Mata" }] },
-  { k: "耳", on: "ジ", kun: "みみ", a: "Telinga", lvl: "N5", day: 19, ex: [{ w: "耳", r: "みみ", a: "Telinga" }] },
-  { k: "手", on: "シュ", kun: "て", a: "Tangan", lvl: "N5", day: 19, ex: [{ w: "手", r: "て", a: "Tangan" }] },
-  { k: "足", on: "ソク", kun: "あし", a: "Kaki", lvl: "N5", day: 20, ex: [{ w: "足", r: "あし", a: "Kaki" }] },
-  { k: "力", on: "リョク", kun: "ちから", a: "Tenaga, Daya", lvl: "N5", day: 20, ex: [{ w: "力", r: "ちから", a: "Tenaga" }] },
-  { k: "男", on: "ダン, ナン", kun: "おとこ", a: "Laki-laki", lvl: "N5", day: 20, ex: [{ w: "男の人", r: "おとこのひと", a: "Pria" }] },
-  { k: "女", on: "ジョ", kun: "おんな", a: "Perempuan", lvl: "N5", day: 20, ex: [{ w: "女の人", r: "おんなのひと", a: "Wanita" }] },
-  { k: "子", on: "シ", kun: "こ", a: "Anak", lvl: "N5", day: 21, ex: [{ w: "子ども", r: "こども", a: "Anak-anak" }] },
-  { k: "父", on: "フ", kun: "ちち, とう", a: "Ayah", lvl: "N5", day: 21, ex: [{ w: "父", r: "ちち", a: "Ayah" }] },
-  { k: "母", on: "ボ", kun: "はは, かあ", a: "Ibu", lvl: "N5", day: 21, ex: [{ w: "母", r: "はは", a: "Ibu" }] },
-  { k: "山", on: "サン", kun: "やま", a: "Gunung", lvl: "N5", day: 22, ex: [{ w: "山", r: "やま", a: "Gunung" }] },
-  { k: "川", on: "セン", kun: "かわ", a: "Sungai", lvl: "N5", day: 22, ex: [{ w: "川", r: "かわ", a: "Sungai" }] },
-  { k: "田", on: "デン", kun: "た", a: "Sawah", lvl: "N5", day: 22, ex: [{ w: "田中", r: "たなか", a: "Tanaka" }] },
-  { k: "雨", on: "ウ", kun: "あめ", a: "Hujan", lvl: "N5", day: 22, ex: [{ w: "雨", r: "あめ", a: "Hujan" }] },
-  { k: "天", on: "テン", kun: "あま", a: "Langit, Surga", lvl: "N5", day: 23, ex: [{ w: "天気", r: "てんき", a: "Cuaca" }] },
-  { k: "気", on: "キ", kun: "-", a: "Energi, Udara", lvl: "N5", day: 23, ex: [{ w: "元気", r: "げんき", a: "Sehat" }] },
-  { k: "空", on: "クウ", kun: "そら", a: "Langit", lvl: "N5", day: 23, ex: [{ w: "空", r: "そら", a: "Langit" }] },
-  { k: "車", on: "シャ", kun: "くるま", a: "Mobil, Kendaraan", lvl: "N5", day: 24, ex: [{ w: "車", r: "くるま", a: "Mobil" }] },
-  { k: "門", on: "モン", kun: "かど", a: "Gerbang", lvl: "N5", day: 24, ex: [{ w: "校門", r: "こうもん", a: "Gerbang sekolah" }] },
-  { k: "道", on: "ドウ", kun: "みち", a: "Jalan", lvl: "N5", day: 24, ex: [{ w: "道", r: "みち", a: "Jalan" }] },
-  { k: "店", on: "テン", kun: "みせ", a: "Toko", lvl: "N5", day: 24, ex: [{ w: "店", r: "みせ", a: "Toko" }] },
-  { k: "名", on: "メイ", kun: "な", a: "Nama", lvl: "N5", day: 25, ex: [{ w: "名前", r: "なまえ", a: "Nama" }] },
-  { k: "国", on: "コク", kun: "くに", a: "Negara", lvl: "N5", day: 25, ex: [{ w: "外国", r: "がいこく", a: "Luar negeri" }] },
-  { k: "語", on: "ゴ", kun: "かた・る", a: "Bahasa", lvl: "N5", day: 25, ex: [{ w: "日本語", r: "にほんご", a: "Bahasa Jepang" }] },
-  { k: "間", on: "カン", kun: "あいだ", a: "Antara, Jeda Waktu", lvl: "N5", day: 25, ex: [{ w: "時間", r: "じかん", a: "Waktu" }] },
-  { k: "毎", on: "マイ", kun: "-", a: "Setiap", lvl: "N5", day: 26, ex: [{ w: "毎日", r: "まいにち", a: "Setiap hari" }] },
-  { k: "週", on: "シュウ", kun: "-", a: "Pekan, Minggu", lvl: "N5", day: 26, ex: [{ w: "今週", r: "こんしゅう", a: "Minggu ini" }] },
-  { k: "午", on: "ゴ", kun: "-", a: "Siang", lvl: "N5", day: 26, ex: [{ w: "午前", r: "ごぜん", a: "Pagi (AM)" }, { w: "午後", r: "ごご", a: "Siang (PM)" }] },
-  { k: "電", on: "デン", kun: "-", a: "Listrik", lvl: "N5", day: 26, ex: [{ w: "電車", r: "でんしゃ", a: "Kereta listrik" }] },
-  { k: "駅", on: "エキ", kun: "-", a: "Stasiun", lvl: "N5", day: 27, ex: [{ w: "駅", r: "えき", a: "Stasiun" }] },
-  { k: "魚", on: "ギョ", kun: "さかな", a: "Ikan", lvl: "N5", day: 27, ex: [{ w: "魚", r: "さかな", a: "Ikan" }] },
-  { k: "肉", on: "ニク", kun: "-", a: "Daging", lvl: "N5", day: 27, ex: [{ w: "肉", r: "にく", a: "Daging" }] },
-  { k: "入", on: "ニュウ", kun: "はい・る", a: "Masuk", lvl: "N5", day: 27, ex: [{ w: "入る", r: "はいる", a: "Masuk" }] },
-  { k: "出", on: "シュツ", kun: "で・る", a: "Keluar", lvl: "N5", day: 28, ex: [{ w: "出る", r: "でる", a: "Keluar" }] },
-  { k: "立", on: "リツ", kun: "た・つ", a: "Berdiri", lvl: "N5", day: 28, ex: [{ w: "立つ", r: "たつ", a: "Berdiri" }] },
-  { k: "座", on: "ザ", kun: "すわ・る", a: "Duduk", lvl: "N5", day: 28, ex: [{ w: "座る", r: "すわる", a: "Duduk" }] },
-  { k: "言", on: "ゲン", kun: "い・う", a: "Berkata", lvl: "N5", day: 29, ex: [{ w: "言う", r: "いう", a: "Berkata" }] },
-  { k: "思", on: "シ", kun: "おも・う", a: "Berpikir, Mengira", lvl: "N5", day: 29, ex: [{ w: "思う", r: "おもう", a: "Berpikir" }] },
-  { k: "知", on: "チ", kun: "し・る", a: "Tahu, Mengetahui", lvl: "N5", day: 29, ex: [{ w: "知る", r: "しる", a: "Mengetahui" }] },
-  { k: "持", on: "ジ", kun: "も・つ", a: "Membawa, Memiliki", lvl: "N5", day: 30, ex: [{ w: "持つ", r: "もつ", a: "Membawa" }] },
-  { k: "作", on: "サク", kun: "つく・る", a: "Membuat", lvl: "N5", day: 30, ex: [{ w: "作る", r: "つくる", a: "Membuat" }] },
-  { k: "外", on: "ガイ", kun: "そと", a: "Luar, Asing", lvl: "N5", day: 30, ex: [{ w: "外", r: "そと", a: "Luar" }] },
-
-  // --- EKSPANSI LEVEL N4 (KANJI TAMBAHAN PILIHAN) ---
-  { k: "待", on: "タイ", kun: "ま・つ", a: "Menunggu", lvl: "N4", day: 31, ex: [{ w: "待つ", r: "まつ", a: "Menunggu" }] },
-  { k: "使", on: "シ", kun: "つか・う", a: "Menggunakan", lvl: "N4", day: 31, ex: [{ w: "使う", r: "つかう", a: "Menggunakan" }] },
-  { k: "借", on: "シャク", kun: "か・りる", a: "Meminjam", lvl: "N4", day: 31, ex: [{ w: "借りる", r: "かりる", a: "Meminjam" }] },
-  { k: "貸", on: "タイ", kun: "か・す", a: "Meminjamkan", lvl: "N4", day: 31, ex: [{ w: "貸す", r: "かす", a: "Meminjamkan" }] },
-  { k: "始", on: "シ", kun: "はじ・まる", a: "Mulai, Memulai", lvl: "N4", day: 32, ex: [{ w: "始まる", r: "はじまる", a: "Dimulai" }] },
-  { k: "終", on: "シュウ", kun: "お・わる", a: "Selesai, Berakhir", lvl: "N4", day: 32, ex: [{ w: "終わる", r: "おわる", a: "Selesai" }] },
-  { k: "開", on: "カイ", kun: "あ・く, ひら・く", a: "Membuka, Terbuka", lvl: "N4", day: 32, ex: [{ w: "開ける", r: "あける", a: "Membuka" }] },
-  { k: "閉", on: "ヘイ", kun: "し・まる, と・じる", a: "Menutup, Tertutup", lvl: "N4", day: 32, ex: [{ w: "閉める", r: "しめる", a: "Menutup" }] },
-  { k: "心", on: "シン", kun: "こころ", a: "Hati, Pikiran", lvl: "N4", day: 33, ex: [{ w: "心", r: "こころ", a: "Hati" }, { w: "安心", r: "あんしん", a: "Lega" }] },
-  { k: "急", on: "キュウ", kun: "いそ・ぐ", a: "Buru-buru, Cepat", lvl: "N4", day: 33, ex: [{ w: "急ぐ", r: "いそぐ", a: "Buru-buru" }, { w: "特急", r: "とっきゅう", a: "Kereta Ekspres" }] },
-  { k: "病", on: "ビョウ", kun: "や・む", a: "Sakit, Penyakit", lvl: "N4", day: 33, ex: [{ w: "病院", r: "びょういん", a: "Rumah Sakit" }] },
-  { k: "医", on: "イ", kun: "-", a: "Medis, Dokter", lvl: "N4", day: 33, ex: [{ w: "医者", r: "いしゃ", a: "Dokter" }] },
-  { k: "者", on: "シャ", kun: "もの", a: "Orang, Tokoh", lvl: "N4", day: 33, ex: [{ w: "学者", r: "がくしゃ", a: "Cendekiawan" }] },
-  { k: "屋", on: "オク", kun: "や", a: "Toko, Atap, Rumah", lvl: "N4", day: 34, ex: [{ w: "本屋", r: "ほんや", a: "Toko buku" }, { w: "部屋", r: "へや", a: "Kamar" }] },
-  { k: "堂", on: "ドウ", kun: "-", a: "Gedung, Aula", lvl: "N4", day: 34, ex: [{ w: "食堂", r: "しょくどう", a: "Kantin" }] },
-  { k: "館", on: "カン", kun: "やかた", a: "Gedung Publik", lvl: "N4", day: 34, ex: [{ w: "図書館", r: "としょかん", a: "Perpustakaan" }] },
-  { k: "野", on: "ヤ", kun: "の", a: "Ladang, Lapangan", lvl: "N4", day: 34, ex: [{ w: "野菜", r: "やさい", a: "Sayuran" }] },
-  { k: "菜", on: "サイ", kun: "な", a: "Sayur", lvl: "N4", day: 34, ex: [{ w: "菜食", r: "さいしょく", a: "Vegetarian" }] },
-  { k: "茶", on: "チャ, サ", kun: "-", a: "Teh", lvl: "N4", day: 35, ex: [{ w: "お茶", r: "おちゃ", a: "Teh Jepang" }, { w: "喫茶店", r: "きっさてん", a: "Kedai kopi" }] },
-  { k: "酒", on: "シュ", kun: "さけ", a: "Minuman Keras, Sake", lvl: "N4", day: 35, ex: [{ w: "お酒", r: "おさけ", a: "Minuman beralkohol" }] },
-  { k: "飯", on: "ハン", kun: "めし", a: "Nasi, Makanan", lvl: "N4", day: 35, ex: [{ w: "ご飯", r: "ごはん", a: "Nasi / Makanan" }, { w: "朝ご飯", r: "あさごはん", a: "Sarapan" }] },
-  { k: "犬", on: "ケン", kun: "いぬ", a: "Anjing", lvl: "N4", day: 35, ex: [{ w: "犬", r: "いぬ", a: "Anjing" }, { w: "子犬", r: "こいぬ", a: "Anak anjing" }] },
-  { k: "猫", on: "ビョウ", kun: "ねこ", a: "Kucing", lvl: "N4", day: 35, ex: [{ w: "猫", r: "ねこ", a: "Kucing" }] },
-  { k: "鳥", on: "チョウ", kun: "とり", a: "Burung", lvl: "N4", day: 35, ex: [{ w: "小鳥", r: "ことり", a: "Burung kecil" }, { w: "焼き鳥", r: "やきとり", a: "Sate ayam" }] },
-  { k: "送", on: "ソウ", kun: "おく・る", a: "Mengirim", lvl: "N4", day: 36, ex: [{ w: "送る", r: "おくる", a: "Mengirim" }, { w: "見送る", r: "みおくる", a: "Mengantar" }] },
-  { k: "切", on: "セツ, サイ", kun: "き・る", a: "Memotong, Tiket", lvl: "N4", day: 36, ex: [{ w: "切る", r: "きる", a: "Memotong" }, { w: "切符", r: "きっぷ", a: "Tiket" }] },
-  { k: "旅", on: "リョ", kun: "たび", a: "Perjalanan, Wisata", lvl: "N4", day: 36, ex: [{ w: "旅行", r: "りょこう", a: "Wisata" }, { w: "旅館", r: "りょかん", a: "Penginapan Jepang" }] },
-  { k: "売", on: "バイ", kun: "う・る", a: "Menjual", lvl: "N4", day: 37, ex: [{ w: "売る", r: "うる", a: "Menjual" }, { w: "売店", r: "ばいてん", a: "Kios / Kantin" }] },
-  { k: "物", on: "ブツ, モツ", kun: "もの", a: "Benda, Barang", lvl: "N4", day: 37, ex: [{ w: "買い物", r: "かいもの", a: "Belanja" }, { w: "食べ物", r: "たべもの", a: "Makanan" }] },
-  { k: "事", on: "ジ", kun: "こと", a: "Hal, Perkara, Urusan", lvl: "N4", day: 37, ex: [{ w: "仕事", r: "しごと", a: "Pekerjaan" }, { w: "大事", r: "だいじ", a: "Penting" }] },
-  { k: "仕", on: "シ", kun: "つか・える", a: "Melayani, Bekerja", lvl: "N4", day: 37, ex: [{ w: "仕事", r: "しごと", a: "Pekerjaan" }, { w: "仕方", r: "しかた", a: "Cara" }] },
-  { k: "転", on: "テン", kun: "ころ・がる", a: "Berputar, Terguling", lvl: "N4", day: 38, ex: [{ w: "自転車", r: "じてんしゃ", a: "Sepeda" }, { w: "運転", r: "うんてん", a: "Menyetir" }] },
-  { k: "運", on: "ウン", kun: "はこ・ぶ", a: "Mengangkut, Keberuntungan", lvl: "N4", day: 38, ex: [{ w: "運動", r: "うんどう", a: "Olahraga" }, { w: "運", r: "うん", a: "Nasib" }] },
-  { k: "動", on: "ドウ", kun: "うご・く", a: "Bergerak", lvl: "N4", day: 38, ex: [{ w: "動く", r: "うごく", a: "Bergerak" }, { w: "自動車", r: "じどうしゃ", a: "Mobil" }] },
-  { k: "自", on: "ジ, シ", kun: "みずか・ら", a: "Diri Sendiri, Otomatis", lvl: "N4", day: 38, ex: [{ w: "自分", r: "じぶん", a: "Diri sendiri" }, { w: "自由", r: "じゆう", a: "Bebas" }] },
-  { k: "由", on: "ユ, ユウ", kun: "よし", a: "Alasan, Asal", lvl: "N4", day: 38, ex: [{ w: "自由", r: "じゆう", a: "Kebebasan" }, { w: "理由", r: "りゆう", a: "Alasan" }] },
-  { k: "理", on: "リ", kun: "ことわり", a: "Akal, Teori, Prinsip", lvl: "N4", day: 39, ex: [{ w: "料理", r: "りょうり", a: "Masakan" }, { w: "理由", r: "りゆう", a: "Alasan" }] },
-  { k: "料", on: "リョウ", kun: "-", a: "Bahan, Biaya", lvl: "N4", day: 39, ex: [{ w: "料理", r: "りょうり", a: "Masakan" }, { w: "料金", r: "りょうきん", a: "Biaya" }] },
-  { k: "着", on: "チャク", kun: "き・る, つ・く", a: "Tiba, Mengenakan Pakaian", lvl: "N4", day: 39, ex: [{ w: "着る", r: "きる", a: "Memakai baju" }, { w: "着く", r: "つく", a: "Sampai/Tiba" }] },
-  { k: "服", on: "フク", kun: "-", a: "Pakaian, Baju", lvl: "N4", day: 39, ex: [{ w: "洋服", r: "ようふく", a: "Pakaian barat" }, { w: "和服", r: "わふく", a: "Pakaian Jepang" }] },
-  { k: "洗", on: "セン", kun: "あら・う", a: "Mencuci", lvl: "N4", day: 39, ex: [{ w: "洗う", r: "あらう", a: "Mencuci" }, { w: "お手洗い", r: "おてあらい", a: "Toilet" }] },
-  { k: "歩", on: "ホ", kun: "ある・く", a: "Berjalan Kaki", lvl: "N4", day: 40, ex: [{ w: "歩く", r: "あるく", a: "Berjalan" }, { w: "散歩", r: "さんぽ", a: "Jalan santai" }] },
-  { k: "走", on: "ソウ", kun: "はし・る", a: "Berlari", lvl: "N4", day: 40, ex: [{ w: "走る", r: "はしる", a: "Berlari" }] },
-  { k: "止", on: "シ", kun: "と・まる, と・める", a: "Berhenti", lvl: "N4", day: 40, ex: [{ w: "止まる", r: "とまる", a: "Berhenti" }, { w: "中止", r: "ちゅうし", a: "Batal" }] },
-  { k: "通", on: "ツウ", kun: "とお・る, かよ・う", a: "Lewat, Menembus", lvl: "N4", day: 40, ex: [{ w: "通る", r: "とおる", a: "Melewati" }, { w: "通う", r: "かよう", a: "Pulang pergi" }] },
-  { k: "特", on: "トク", kun: "-", a: "Spesial, Khusus", lvl: "N4", day: 40, ex: [{ w: "特別", r: "とくべつ", a: "Khusus/Spesial" }, { w: "特に", r: "とくに", a: "Khususnya" }] },
-  { k: "別", on: "ベツ", kun: "わか・れる", a: "Berpisah, Lain, Beda", lvl: "N4", day: 41, ex: [{ w: "別れる", r: "わかれる", a: "Berpisah" }, { w: "別の", r: "べつの", a: "Lainnya" }] },
-  { k: "同", on: "ドウ", kun: "おな・じ", a: "Sama, Serupa", lvl: "N4", day: 41, ex: [{ w: "同じ", r: "おなじ", a: "Sama" }, { w: "同時に", r: "どうじに", a: "Bersamaan" }] },
-  { k: "元", on: "ゲン, ガン", kun: "もと", a: "Asal, Awal, Dasar", lvl: "N4", day: 41, ex: [{ w: "元気", r: "げんき", a: "Sehat" }, { w: "元日", r: "がんじつ", a: "Tahun Baru" }] },
-  { k: "有", on: "ユウ, ウ", kun: "あ・る", a: "Ada, Memiliki", lvl: "N4", day: 41, ex: [{ w: "有名", r: "ゆうめい", a: "Terkenal" }, { w: "有料", r: "ゆうりょう", a: "Berbayar" }] },
-  { k: "親", on: "シン", kun: "おや, した・しい", a: "Orang Tua, Akrab", lvl: "N4", day: 41, ex: [{ w: "親", r: "おや", a: "Orang tua" }, { w: "両親", r: "りょうしん", a: "Kedua orang tua" }] },
-  { k: "便", on: "ベン, ビン", kun: "たよ・り", a: "Praktis, Surat", lvl: "N4", day: 42, ex: [{ w: "便利", r: "べんり", a: "Praktis" }, { w: "郵便", r: "ゆうびん", a: "Pos" }] },
-  { k: "利", on: "リ", kun: "き・く", a: "Untung, Manfaat", lvl: "N4", day: 42, ex: [{ w: "便利", r: "べんり", a: "Praktis" }, { w: "利用", r: "りよう", a: "Penggunaan" }] },
-  { k: "不", on: "フ, ブ", kun: "-", a: "Tidak, Bukan", lvl: "N4", day: 42, ex: [{ w: "不便", r: "ふべん", a: "Tidak praktis" }, { w: "不安", r: "ふあん", a: "Cemas" }] },
-  { k: "広", on: "コウ", kun: "ひろ・い", a: "Luas, Lapang", lvl: "N4", day: 42, ex: [{ w: "広い", r: "ひろい", a: "Luas" }, { w: "広場", r: "ひろば", a: "Alun-alun" }] },
-  { k: "場", on: "ジョウ", kun: "ば", a: "Tempat, Lokasi", lvl: "N4", day: 42, ex: [{ w: "場所", r: "ばしょ", a: "Tempat" }, { w: "工場", r: "こうじょう", a: "Pabrik" }] },
-  { k: "所", on: "ショ", kun: "ところ", a: "Tempat", lvl: "N4", day: 43, ex: [{ w: "所", r: "ところ", a: "Tempat" }, { w: "台所", r: "だいどころ", a: "Dapur" }] },
-  { k: "近", on: "キン", kun: "ちか・い", a: "Dekat", lvl: "N4", day: 43, ex: [{ w: "近い", r: "ちかい", a: "Dekat" }, { w: "近所", r: "きんじょ", a: "Tetangga sekitar" }] },
-  { k: "遠", on: "エン", kun: "とお・い", a: "Jauh", lvl: "N4", day: 43, ex: [{ w: "遠い", r: "とおい", a: "Jauh" }, { w: "遠足", r: "えんそく", a: "Piknik" }] },
-  { k: "海", on: "カイ", kun: "うみ", a: "Laut, Samudra", lvl: "N4", day: 43, ex: [{ w: "海", r: "うみ", a: "Laut" }, { w: "海外", r: "かいがい", a: "Luar negeri" }] },
-  { k: "世", on: "セイ, セ", kun: "よ", a: "Dunia, Generasi", lvl: "N4", day: 43, ex: [{ w: "世界", r: "せかい", a: "Dunia" }, { w: "世の中", r: "よのなか", a: "Dunia masyarakat" }] },
-  { k: "界", on: "カイ", kun: "-", a: "Batas, Lingkup, Dunia", lvl: "N4", day: 43, ex: [{ w: "世界", r: "せかい", a: "Dunia" }] },
-  { k: "度", on: "ド, ト", kun: "たび", a: "Derajat, Kali", lvl: "N4", day: 44, ex: [{ w: "一度", r: "いちど", a: "Satu kali" }, { w: "今度", r: "こんど", a: "Lain kali" }] },
-  { k: "回", on: "カイ", kun: "まわ・る", a: "Putaran, Kali", lvl: "N4", day: 44, ex: [{ w: "回る", r: "まわる", a: "Berputar" }, { w: "何回", r: "なんかい", a: "Berapa kali" }] },
-  { k: "計", on: "ケイ", kun: "はか・る", a: "Mengukur, Rencana", lvl: "N4", day: 44, ex: [{ w: "時計", r: "とけい", a: "Jam" }, { w: "計画", r: "けいかく", a: "Rencana" }] },
-  { k: "画", on: "ガ, カク", kun: "-", a: "Gambar, Coretan", lvl: "N4", day: 44, ex: [{ w: "映画", r: "えいが", a: "Film" }, { w: "計画", r: "けいかく", a: "Rencana" }] },
-  { k: "映", on: "エイ", kun: "うつ・る", a: "Memantul, Proyeksi", lvl: "N4", day: 44, ex: [{ w: "映画", r: "えいが", a: "Film" }, { w: "映画館", r: "えいがかん", a: "Bioskop" }] },
-  { k: "音", on: "オン", kun: "おと, ね", a: "Suara, Bunyi", lvl: "N4", day: 45, ex: [{ w: "音", r: "おと", a: "Bunyi" }, { w: "音楽", r: "おんがく", a: "Musik" }] },
-  { k: "楽", on: "ラク, ガク", kun: "たの・しい", a: "Menyenangkan, Musik", lvl: "N4", day: 45, ex: [{ w: "楽しい", r: "たのしい", a: "Menyenangkan" }, { w: "音楽", r: "おんがく", a: "Musik" }] },
-  { k: "歌", on: "カ", kun: "うた, うた・う", a: "Lagu, Menyanyi", lvl: "N4", day: 45, ex: [{ w: "歌", r: "うた", a: "Lagu" }, { w: "歌う", r: "うたう", a: "Menyanyi" }, { w: "歌手", r: "かしゅ", a: "Penyanyi" }] },
-  { k: "写", on: "シャ", kun: "うつ・す", a: "Menyalin, Memotret", lvl: "N4", day: 45, ex: [{ w: "写真", r: "しゃしん", a: "Foto" }] },
-  { k: "真", on: "シン", kun: "ま", a: "Kebenaran, Murni", lvl: "N4", day: 45, ex: [{ w: "写真", r: "しゃしん", a: "Foto" }, { w: "真ん中", r: "まんなか", a: "Tepat di tengah" }] },
-  { k: "強", on: "キョウ", kun: "つよ・い", a: "Kuat", lvl: "N4", day: 46, ex: [{ w: "強い", r: "つよい", a: "Kuat" }, { w: "勉強", r: "べんきょう", a: "Belajar" }] },
-  { k: "勉", on: "ベン", kun: "-", a: "Berusaha Keras", lvl: "N4", day: 46, ex: [{ w: "勉強", r: "べんきょう", a: "Belajar" }] },
-  { k: "教", on: "キョウ", kun: "おし・える", a: "Mengajar", lvl: "N4", day: 46, ex: [{ w: "教える", r: "おしえる", a: "Mengajar" }, { w: "教室", r: "きょうしつ", a: "Ruang kelas" }] },
-  { k: "室", on: "シツ", kun: "むろ", a: "Ruangan, Kamar", lvl: "N4", day: 46, ex: [{ w: "教室", r: "きょうしつ", a: "Ruang kelas" }, { w: "研究室", r: "けんきゅうしつ", a: "Lab riset" }] },
-  { k: "習", on: "シュウ", kun: "なら・う", a: "Belajar, Berlatih", lvl: "N4", day: 46, ex: [{ w: "習う", r: "ならう", a: "Belajar" }, { w: "練習", r: "れんしゅう", a: "Latihan" }] },
-  { k: "練", on: "レン", kun: "ね・る", a: "Melatih, Menempa", lvl: "N4", day: 47, ex: [{ w: "練習", r: "れんしゅう", a: "Latihan" }] },
-  { k: "試", on: "シ", kun: "こころ・みる, ため・す", a: "Mencoba, Menguji", lvl: "N4", day: 47, ex: [{ w: "試験", r: "しけん", a: "Ujian" }, { w: "試合", r: "しあい", a: "Pertandingan" }] },
-  { k: "験", on: "ケン", kun: "-", a: "Ujian, Pengalaman", lvl: "N4", day: 47, ex: [{ w: "試験", r: "しけん", a: "Ujian" }, { w: "経験", r: "けいけん", a: "Pengalaman" }] },
-  { k: "経", on: "ケイ", kun: "へ・る", a: "Melalui, Mengalami", lvl: "N4", day: 47, ex: [{ w: "経験", r: "けいけん", a: "Pengalaman" }, { w: "経済", r: "けいざい", a: "Ekonomi" }] },
-  { k: "済", on: "サイ", kun: "す・む", a: "Selesai, Lunas", lvl: "N4", day: 47, ex: [{ w: "経済", r: "けいざい", a: "Ekonomi" }] },
-  { k: "答", on: "トウ", kun: "こた・える, こたえ", a: "Jawaban, Menjawab", lvl: "N4", day: 48, ex: [{ w: "答える", r: "こたえる", a: "Menjawab" }, { w: "答え", r: "こたえ", a: "Jawaban" }] },
-  { k: "問", on: "モン", kun: "と・う", a: "Pertanyaan, Menanyai", lvl: "N4", day: 48, ex: [{ w: "問題", r: "もんだい", a: "Soal / Masalah" }] },
-  { k: "題", on: "ダイ", kun: "-", a: "Topik, Judul, Tema", lvl: "N4", day: 48, ex: [{ w: "問題", r: "もんだい", a: "Soal pertanyaan" }, { w: "宿題", r: "しゅくだい", a: "PR" }] },
-  { k: "宿", on: "シュク", kun: "やど", a: "Penginapan, Menginap", lvl: "N4", day: 48, ex: [{ w: "宿題", r: "しゅくだい", a: "PR" }, { w: "新宿", r: "しんじゅく", a: "Shinjuku" }] },
-  { k: "字", on: "ジ", kun: "あざ", a: "Huruf, Aksara", lvl: "N4", day: 48, ex: [{ w: "漢字", r: "かんじ", a: "Kanji" }, { w: "文字", r: "もじ", a: "Huruf" }] },
-  { k: "漢", on: "カン", kun: "-", a: "Dinasti Han, Tiongkok", lvl: "N4", day: 48, ex: [{ w: "漢字", r: "かんじ", a: "Kanji" }] },
-  { k: "紙", on: "シ", kun: "かみ", a: "Kertas", lvl: "N4", day: 49, ex: [{ w: "手紙", r: "てがみ", a: "Surat" }, { w: "折り紙", r: "おりがみ", a: "Origami" }] },
-  { k: "銀", on: "ギン", kun: "しろがね", a: "Perak, Bank", lvl: "N4", day: 49, ex: [{ w: "銀行", r: "ぎんこう", a: "Bank" }, { w: "銀色", r: "ぎんいろ", a: "Warna perak" }] },
-  { k: "質", on: "シツ", kun: "-", a: "Kualitas, Hakikat, Tanya", lvl: "N4", day: 49, ex: [{ w: "質問", r: "しつもん", a: "Pertanyaan" }] },
-  { k: "重", on: "ジュウ, チョウ", kun: "おも・い", a: "Berat, Tumpuk", lvl: "N4", day: 49, ex: [{ w: "重い", r: "おもい", a: "Berat" }, { w: "貴重", r: "きちょう", a: "Berharga" }] },
-  { k: "軽", on: "ケイ", kun: "かる・い", a: "Ringan", lvl: "N4", day: 49, ex: [{ w: "軽い", r: "かるい", a: "Ringan" }, { w: "手軽", r: "てがる", a: "Praktis/Mudah" }] },
-  { k: "遅", on: "チ", kun: "おそ・い, おく・れる", a: "Lambat, Terlambat", lvl: "N4", day: 50, ex: [{ w: "遅い", r: "おそい", a: "Lambat / Larut" }, { w: "遅刻", r: "ちこく", a: "Terlambat" }] },
-  { k: "夜", on: "ヤ", kun: "よる, よ", a: "Malam", lvl: "N4", day: 50, ex: [{ w: "夜", r: "よる", a: "Malam" }, { w: "今夜", r: "こんや", a: "Malam ini" }] },
-  { k: "朝", on: "チョウ", kun: "あさ", a: "Pagi", lvl: "N4", day: 50, ex: [{ w: "朝", r: "あさ", a: "Pagi" }, { w: "今朝", r: "けさ", a: "Pagi ini" }] },
-  { k: "昼", on: "チュウ", kun: "ひる", a: "Siang", lvl: "N4", day: 50, ex: [{ w: "昼", r: "ひる", a: "Siang" }, { w: "昼休み", r: "ひるやすみ", a: "Istirahat siang" }] },
-  { k: "夕", on: "セキ", kun: "ゆう", a: "Sore / Senja", lvl: "N4", day: 50, ex: [{ w: "夕方", r: "ゆうがた", a: "Sore hari" }, { w: "夕飯", r: "ゆうはん", a: "Makan malam" }] },
-  { k: "方", on: "ホウ", kun: "かた", a: "Arah, Cara, Orang (sopan)", lvl: "N4", day: 50, ex: [{ w: "夕方", r: "ゆうがた", a: "Sore" }, { w: "読み方", r: "よみかた", a: "Cara baca" }] },
-  { k: "体", on: "タイ", kun: "からだ", a: "Tubuh, Badan", lvl: "N4", day: 51, ex: [{ w: "体", r: "からだ", a: "Tubuh" }, { w: "体力", r: "たいりょく", a: "Stamina" }] },
-  { k: "頭", on: "トウ, ズ", kun: "あたま", a: "Kepala", lvl: "N4", day: 51, ex: [{ w: "頭", r: "あたま", a: "Kepala" }, { w: "頭痛", r: "ずつう", a: "Sakit kepala" }] },
-  { k: "痛", on: "ツウ", kun: "いた・い", a: "Sakit, Nyeri", lvl: "N4", day: 51, ex: [{ w: "痛い", r: "いたい", a: "Sakit" }, { w: "頭痛", r: "ずつう", a: "Sakit kepala" }] },
-  { k: "顔", on: "ガン", kun: "かお", a: "Wajah, Muka", lvl: "N4", day: 51, ex: [{ w: "顔", r: "かお", a: "Wajah" }, { w: "笑顔", r: "えがお", a: "Senyuman" }] },
-  { k: "首", on: "シュ", kun: "くび", a: "Leher", lvl: "N4", day: 51, ex: [{ w: "首", r: "くび", a: "Leher" }, { w: "手首", r: "てくび", a: "Pergelangan tangan" }] },
-  { k: "声", on: "セイ", kun: "こえ", a: "Suara (Makhluk)", lvl: "N4", day: 52, ex: [{ w: "声", r: "こえ", a: "Suara" }, { w: "大声", r: "おおごえ", a: "Suara lantang" }] },
-  { k: "風", on: "フウ", kun: "かぜ", a: "Angin, Gaya, Flu", lvl: "N4", day: 52, ex: [{ w: "風", r: "かぜ", a: "Angin" }, { w: "風邪", r: "かぜ", a: "Masuk angin / Flu" }, { w: "台風", r: "たいふう", a: "Topan" }] },
-  { k: "雪", on: "セツ", kun: "ゆき", a: "Salju", lvl: "N4", day: 52, ex: [{ w: "雪", r: "ゆき", a: "Salju" }, { w: "大雪", r: "おおゆき", a: "Salju lebat" }] },
-  { k: "雲", on: "ウン", kun: "くも", a: "Awan", lvl: "N4", day: 52, ex: [{ w: "雲", r: "くも", a: "Awan" }, { w: "雨雲", r: "あまぐも", a: "Awan mendung" }] },
-  { k: "春", on: "シュン", kun: "はる", a: "Musim Semi", lvl: "N4", day: 53, ex: [{ w: "春", r: "はる", a: "Musim semi" }, { w: "青春", r: "せいしゅん", a: "Masa muda" }] },
-  { k: "夏", on: "カ", kun: "なつ", a: "Musim Panas", lvl: "N4", day: 53, ex: [{ w: "夏", r: "なつ", a: "Musim panas" }, { w: "夏休み", r: "なつやすみ", a: "Liburan musim panas" }] },
-  { k: "秋", on: "シュウ", kun: "あき", a: "Musim Gugur", lvl: "N4", day: 53, ex: [{ w: "秋", r: "あき", a: "Musim gugur" }] },
-  { k: "冬", on: "トウ", kun: "ふゆ", a: "Musim Dingin", lvl: "N4", day: 53, ex: [{ w: "冬", r: "ふゆ", a: "Musim dingin" }, { w: "冬休み", r: "ふゆやすみ", a: "Liburan musim dingin" }] },
-  { k: "色", on: "ショク, シキ", kun: "いろ", a: "Warna", lvl: "N4", day: 54, ex: [{ w: "色", r: "いろ", a: "Warna" }, { w: "色々", r: "いろいろ", a: "Bermacam-macam" }] },
-  { k: "黒", on: "コク", kun: "くろ・い", a: "Hitam", lvl: "N4", day: 54, ex: [{ w: "黒い", r: "くろい", a: "Hitam" }, { w: "黒板", r: "こくばん", a: "Papan tulis hitam" }] },
-  { k: "赤", on: "セキ", kun: "あか・い", a: "Merah", lvl: "N4", day: 54, ex: [{ w: "赤い", r: "あかい", a: "Merah" }, { w: "赤ちゃん", r: "あかちゃん", a: "Bayi" }] },
-  { k: "青", on: "セイ, ショウ", kun: "あお・い", a: "Biru", lvl: "N4", day: 54, ex: [{ w: "青い", r: "あおい", a: "Biru" }, { w: "青空", r: "あおぞら", a: "Langit biru" }] },
-  { k: "黄", on: "コウ", kun: "き", a: "Kuning", lvl: "N4", day: 54, ex: [{ w: "黄色", r: "きいろ", a: "Warna kuning" }] },
-  { k: "牛", on: "ギュウ", kun: "うし", a: "Sapi, Lembu", lvl: "N4", day: 55, ex: [{ w: "牛", r: "うし", a: "Sapi" }, { w: "牛乳", r: "ぎゅうにゅう", a: "Susu sapi" }, { w: "牛肉", r: "ぎゅうにく", a: "Daging sapi" }] },
-  { k: "馬", on: "バ", kun: "うま", a: "Kuda", lvl: "N4", day: 55, ex: [{ w: "馬", r: "うま", a: "Kuda" }, { w: "乗馬", r: "じょうば", a: "Berkuda" }] },
-  { k: "林", on: "リン", kun: "はやし", a: "Hutan Kecil", lvl: "N4", day: 55, ex: [{ w: "林", r: "はやし", a: "Hutan kecil" }] },
-  { k: "森", on: "シン", kun: "もり", a: "Hutan Lebat, Rimba", lvl: "N4", day: 55, ex: [{ w: "森", r: "もり", a: "Hutan lebat" }, { w: "森林", r: "しんりん", a: "Hutan belantara" }] },
-  { k: "池", on: "チ", kun: "いけ", a: "Kolam", lvl: "N4", day: 55, ex: [{ w: "池", r: "いけ", a: "Kolam" }, { w: "電池", r: "でんち", a: "Baterai" }] }
+  {
+    "k": "人",
+    "on": "ジン, ニン",
+    "kun": "ひと",
+    "a": "Orang, Manusia",
+    "lvl": "N5",
+    "day": 1,
+    "ex": [
+      {
+        "w": "日本人",
+        "r": "にほんじん",
+        "a": "Orang Jepang"
+      },
+      {
+        "w": "大人",
+        "r": "おとな",
+        "a": "Dewasa"
+      }
+    ]
+  },
+  {
+    "k": "先",
+    "on": "セン",
+    "kun": "さき",
+    "a": "Terdahulu, Ujung",
+    "lvl": "N5",
+    "day": 1,
+    "ex": [
+      {
+        "w": "先生",
+        "r": "せんせい",
+        "a": "Guru"
+      }
+    ]
+  },
+  {
+    "k": "出",
+    "on": "シュツ",
+    "kun": "で・る",
+    "a": "Keluar",
+    "lvl": "N5",
+    "day": 1,
+    "ex": [
+      {
+        "w": "出る",
+        "r": "でる",
+        "a": "Keluar"
+      }
+    ]
+  },
+  {
+    "k": "前",
+    "on": "ゼン",
+    "kun": "まえ",
+    "a": "Depan, Sebelum",
+    "lvl": "N5",
+    "day": 1,
+    "ex": [
+      {
+        "w": "前",
+        "r": "まえ",
+        "a": "Di depan"
+      }
+    ]
+  },
+  {
+    "k": "名",
+    "on": "メイ",
+    "kun": "な",
+    "a": "Nama",
+    "lvl": "N5",
+    "day": 1,
+    "ex": [
+      {
+        "w": "名前",
+        "r": "なまえ",
+        "a": "Nama"
+      }
+    ]
+  },
+  {
+    "k": "員",
+    "on": "イン",
+    "kun": "-",
+    "a": "Anggota, Pegawai",
+    "lvl": "N5",
+    "day": 1,
+    "ex": [
+      {
+        "w": "社員",
+        "r": "しゃいん",
+        "a": "Pegawai perusahaan"
+      },
+      {
+        "w": "店員",
+        "r": "てんいん",
+        "a": "Pegawai toko"
+      }
+    ]
+  },
+  {
+    "k": "大",
+    "on": "ダイ, タイ",
+    "kun": "おお・きい",
+    "a": "Besar",
+    "lvl": "N5",
+    "day": 1,
+    "ex": [
+      {
+        "w": "大きい",
+        "r": "おおきい",
+        "a": "Besar"
+      },
+      {
+        "w": "大学",
+        "r": "だいがく",
+        "a": "Universitas"
+      }
+    ]
+  },
+  {
+    "k": "女",
+    "on": "ジョ",
+    "kun": "おんな",
+    "a": "Perempuan",
+    "lvl": "N5",
+    "day": 1,
+    "ex": [
+      {
+        "w": "女の人",
+        "r": "おんなのひと",
+        "a": "Wanita"
+      }
+    ]
+  },
+  {
+    "k": "学",
+    "on": "ガク",
+    "kun": "まな・ぶ",
+    "a": "Belajar, Ilmu",
+    "lvl": "N5",
+    "day": 1,
+    "ex": [
+      {
+        "w": "学校",
+        "r": "がっこう",
+        "a": "Sekolah"
+      }
+    ]
+  },
+  {
+    "k": "山",
+    "on": "サン",
+    "kun": "やま",
+    "a": "Gunung",
+    "lvl": "N5",
+    "day": 1,
+    "ex": [
+      {
+        "w": "山",
+        "r": "やま",
+        "a": "Gunung"
+      }
+    ]
+  },
+  {
+    "k": "年",
+    "on": "ネン",
+    "kun": "とし",
+    "a": "Tahun",
+    "lvl": "N5",
+    "day": 1,
+    "ex": [
+      {
+        "w": "今年",
+        "r": "ことし",
+        "a": "Tahun ini"
+      }
+    ]
+  },
+  {
+    "k": "彼",
+    "on": "ヒ",
+    "kun": "かれ, かの",
+    "a": "Dia (Laki-laki)",
+    "lvl": "N5",
+    "day": 1,
+    "ex": [
+      {
+        "w": "彼",
+        "r": "かれ",
+        "a": "Dia (laki-laki)"
+      },
+      {
+        "w": "彼女",
+        "r": "かのじょ",
+        "a": "Dia (perempuan)"
+      }
+    ]
+  },
+  {
+    "k": "日",
+    "on": "ニチ, ジツ",
+    "kun": "ひ, -び, -か",
+    "a": "Hari, Matahari",
+    "lvl": "N5",
+    "day": 1,
+    "ex": [
+      {
+        "w": "日本",
+        "r": "にほん",
+        "a": "Jepang"
+      },
+      {
+        "w": "日曜日",
+        "r": "にちようび",
+        "a": "Hari Minggu"
+      }
+    ]
+  },
+  {
+    "k": "本",
+    "on": "ホン",
+    "kun": "もと",
+    "a": "Buku, Asal",
+    "lvl": "N5",
+    "day": 1,
+    "ex": [
+      {
+        "w": "本",
+        "r": "ほん",
+        "a": "Buku"
+      }
+    ]
+  },
+  {
+    "k": "歳",
+    "on": "サイ, セイ",
+    "kun": "とし",
+    "a": "Usia, Umur, Tahun",
+    "lvl": "N5",
+    "day": 1,
+    "ex": [
+      {
+        "w": "何歳",
+        "r": "なんさい",
+        "a": "Berapa usia"
+      },
+      {
+        "w": "二十歳",
+        "r": "はたち",
+        "a": "20 tahun"
+      }
+    ]
+  },
+  {
+    "k": "生",
+    "on": "セイ",
+    "kun": "い・きる, う・まれる",
+    "a": "Lahir, Hidup, Pelajar",
+    "lvl": "N5",
+    "day": 1,
+    "ex": [
+      {
+        "w": "学生",
+        "r": "がくせい",
+        "a": "Pelajar"
+      }
+    ]
+  },
+  {
+    "k": "田",
+    "on": "デン",
+    "kun": "た",
+    "a": "Sawah",
+    "lvl": "N5",
+    "day": 1,
+    "ex": [
+      {
+        "w": "田中",
+        "r": "たなか",
+        "a": "Tanaka"
+      }
+    ]
+  },
+  {
+    "k": "社",
+    "on": "シャ",
+    "kun": "やしろ",
+    "a": "Perusahaan, Kuil",
+    "lvl": "N5",
+    "day": 1,
+    "ex": [
+      {
+        "w": "会社",
+        "r": "かいしゃ",
+        "a": "Perusahaan"
+      },
+      {
+        "w": "社員",
+        "r": "しゃいん",
+        "a": "Pegawai"
+      },
+      {
+        "w": "神社",
+        "r": "じんじゃ",
+        "a": "Kuil Shinto"
+      }
+    ]
+  },
+  {
+    "k": "私",
+    "on": "シ",
+    "kun": "わたし, わたくし",
+    "a": "Saya, Aku",
+    "lvl": "N5",
+    "day": 1,
+    "ex": [
+      {
+        "w": "私",
+        "r": "わたし",
+        "a": "Saya"
+      }
+    ]
+  },
+  {
+    "k": "菜",
+    "on": "サイ",
+    "kun": "な",
+    "a": "Sayur",
+    "lvl": "N4",
+    "day": 1,
+    "ex": [
+      {
+        "w": "菜食",
+        "r": "さいしょく",
+        "a": "Vegetarian"
+      }
+    ]
+  },
+  {
+    "k": "身",
+    "on": "シン",
+    "kun": "み",
+    "a": "Badan, Diri, Asal",
+    "lvl": "N5",
+    "day": 1,
+    "ex": [
+      {
+        "w": "出身",
+        "r": "しゅっしん",
+        "a": "Asal daerah/negara"
+      },
+      {
+        "w": "自身",
+        "r": "じしん",
+        "a": "Diri sendiri"
+      }
+    ]
+  },
+  {
+    "k": "野",
+    "on": "ヤ",
+    "kun": "の",
+    "a": "Ladang, Lapangan",
+    "lvl": "N4",
+    "day": 1,
+    "ex": [
+      {
+        "w": "野菜",
+        "r": "やさい",
+        "a": "Sayuran"
+      }
+    ]
+  },
+  {
+    "k": "会",
+    "on": "カイ",
+    "kun": "あ・う",
+    "a": "Bertemu, Kumpulan",
+    "lvl": "N5",
+    "day": 2,
+    "ex": [
+      {
+        "w": "会う",
+        "r": "あう",
+        "a": "Bertemu"
+      },
+      {
+        "w": "会社",
+        "r": "かいしゃ",
+        "a": "Perusahaan"
+      }
+    ]
+  },
+  {
+    "k": "室",
+    "on": "シツ",
+    "kun": "むろ",
+    "a": "Ruangan, Kamar",
+    "lvl": "N4",
+    "day": 2,
+    "ex": [
+      {
+        "w": "教室",
+        "r": "きょうしつ",
+        "a": "Ruang kelas"
+      },
+      {
+        "w": "研究室",
+        "r": "けんきゅうしつ",
+        "a": "Lab riset"
+      }
+    ]
+  },
+  {
+    "k": "屋",
+    "on": "オク",
+    "kun": "や",
+    "a": "Toko, Atap, Rumah",
+    "lvl": "N4",
+    "day": 2,
+    "ex": [
+      {
+        "w": "本屋",
+        "r": "ほんや",
+        "a": "Toko buku"
+      },
+      {
+        "w": "部屋",
+        "r": "へや",
+        "a": "Kamar"
+      }
+    ]
+  },
+  {
+    "k": "教",
+    "on": "キョウ",
+    "kun": "おし・える",
+    "a": "Mengajar",
+    "lvl": "N4",
+    "day": 2,
+    "ex": [
+      {
+        "w": "教える",
+        "r": "おしえる",
+        "a": "Mengajar"
+      },
+      {
+        "w": "教室",
+        "r": "きょうしつ",
+        "a": "Ruang kelas"
+      }
+    ]
+  },
+  {
+    "k": "時",
+    "on": "ジ",
+    "kun": "とき",
+    "a": "Waktu, Jam",
+    "lvl": "N5",
+    "day": 2,
+    "ex": [
+      {
+        "w": "時間",
+        "r": "じかん",
+        "a": "Waktu"
+      }
+    ]
+  },
+  {
+    "k": "書",
+    "on": "ショ",
+    "kun": "か・く",
+    "a": "Menulis",
+    "lvl": "N5",
+    "day": 2,
+    "ex": [
+      {
+        "w": "書く",
+        "r": "かく",
+        "a": "Menulis"
+      }
+    ]
+  },
+  {
+    "k": "校",
+    "on": "コウ",
+    "kun": "-",
+    "a": "Sekolah",
+    "lvl": "N5",
+    "day": 2,
+    "ex": [
+      {
+        "w": "校長",
+        "r": "こうちょう",
+        "a": "Kepala sekolah"
+      }
+    ]
+  },
+  {
+    "k": "計",
+    "on": "ケイ",
+    "kun": "はか・る",
+    "a": "Mengukur, Rencana",
+    "lvl": "N4",
+    "day": 2,
+    "ex": [
+      {
+        "w": "時計",
+        "r": "とけい",
+        "a": "Jam"
+      },
+      {
+        "w": "計画",
+        "r": "けいかく",
+        "a": "Rencana"
+      }
+    ]
+  },
+  {
+    "k": "車",
+    "on": "シャ",
+    "kun": "くるま",
+    "a": "Mobil, Kendaraan",
+    "lvl": "N5",
+    "day": 2,
+    "ex": [
+      {
+        "w": "車",
+        "r": "くるま",
+        "a": "Mobil"
+      }
+    ]
+  },
+  {
+    "k": "友",
+    "on": "ユウ",
+    "kun": "とも",
+    "a": "Teman",
+    "lvl": "N5",
+    "day": 3,
+    "ex": [
+      {
+        "w": "友達",
+        "r": "ともだち",
+        "a": "Teman"
+      }
+    ]
+  },
+  {
+    "k": "国",
+    "on": "コク",
+    "kun": "くに",
+    "a": "Negara",
+    "lvl": "N5",
+    "day": 3,
+    "ex": [
+      {
+        "w": "外国",
+        "r": "がいこく",
+        "a": "Luar negeri"
+      }
+    ]
+  },
+  {
+    "k": "天",
+    "on": "テン",
+    "kun": "あま",
+    "a": "Langit, Surga",
+    "lvl": "N5",
+    "day": 3,
+    "ex": [
+      {
+        "w": "天気",
+        "r": "てんき",
+        "a": "Cuaca"
+      }
+    ]
+  },
+  {
+    "k": "子",
+    "on": "シ",
+    "kun": "こ",
+    "a": "Anak",
+    "lvl": "N5",
+    "day": 3,
+    "ex": [
+      {
+        "w": "子ども",
+        "r": "こども",
+        "a": "Anak-anak"
+      }
+    ]
+  },
+  {
+    "k": "所",
+    "on": "ショ",
+    "kun": "ところ",
+    "a": "Tempat",
+    "lvl": "N4",
+    "day": 3,
+    "ex": [
+      {
+        "w": "所",
+        "r": "ところ",
+        "a": "Tempat"
+      },
+      {
+        "w": "台所",
+        "r": "だいどころ",
+        "a": "Dapur"
+      }
+    ]
+  },
+  {
+    "k": "新",
+    "on": "シン",
+    "kun": "あたら・しい",
+    "a": "Baru",
+    "lvl": "N5",
+    "day": 3,
+    "ex": [
+      {
+        "w": "新しい",
+        "r": "あたらしい",
+        "a": "Baru"
+      },
+      {
+        "w": "新聞",
+        "r": "しんぶん",
+        "a": "Koran"
+      }
+    ]
+  },
+  {
+    "k": "服",
+    "on": "フク",
+    "kun": "-",
+    "a": "Pakaian, Baju",
+    "lvl": "N4",
+    "day": 3,
+    "ex": [
+      {
+        "w": "洋服",
+        "r": "ようふく",
+        "a": "Pakaian barat"
+      },
+      {
+        "w": "和服",
+        "r": "わふく",
+        "a": "Pakaian Jepang"
+      }
+    ]
+  },
+  {
+    "k": "海",
+    "on": "カイ",
+    "kun": "うみ",
+    "a": "Laut, Samudra",
+    "lvl": "N4",
+    "day": 3,
+    "ex": [
+      {
+        "w": "海",
+        "r": "うみ",
+        "a": "Laut"
+      },
+      {
+        "w": "海外",
+        "r": "かいがい",
+        "a": "Luar negeri"
+      }
+    ]
+  },
+  {
+    "k": "者",
+    "on": "シャ",
+    "kun": "もの",
+    "a": "Orang, Tokoh",
+    "lvl": "N4",
+    "day": 3,
+    "ex": [
+      {
+        "w": "学者",
+        "r": "がくしゃ",
+        "a": "Cendekiawan"
+      }
+    ]
+  },
+  {
+    "k": "聞",
+    "on": "ブン",
+    "kun": "き・く",
+    "a": "Mendengar",
+    "lvl": "N5",
+    "day": 3,
+    "ex": [
+      {
+        "w": "聞く",
+        "r": "きく",
+        "a": "Mendengar"
+      }
+    ]
+  },
+  {
+    "k": "長",
+    "on": "チョウ",
+    "kun": "なが・い",
+    "a": "Panjang, Ketua",
+    "lvl": "N5",
+    "day": 3,
+    "ex": [
+      {
+        "w": "長い",
+        "r": "ながい",
+        "a": "Panjang"
+      }
+    ]
+  },
+  {
+    "k": "館",
+    "on": "カン",
+    "kun": "やかた",
+    "a": "Gedung Publik",
+    "lvl": "N4",
+    "day": 3,
+    "ex": [
+      {
+        "w": "図書館",
+        "r": "としょかん",
+        "a": "Perpustakaan"
+      }
+    ]
+  },
+  {
+    "k": "駅",
+    "on": "エキ",
+    "kun": "-",
+    "a": "Stasiun",
+    "lvl": "N5",
+    "day": 3,
+    "ex": [
+      {
+        "w": "駅",
+        "r": "えき",
+        "a": "Stasiun"
+      }
+    ]
+  },
+  {
+    "k": "今",
+    "on": "コン",
+    "kun": "いま",
+    "a": "Sekarang",
+    "lvl": "N5",
+    "day": 4,
+    "ex": [
+      {
+        "w": "今",
+        "r": "いま",
+        "a": "Sekarang"
+      }
+    ]
+  },
+  {
+    "k": "休",
+    "on": "キュウ",
+    "kun": "やす・む",
+    "a": "Istirahat, Libur",
+    "lvl": "N5",
+    "day": 4,
+    "ex": [
+      {
+        "w": "休み",
+        "r": "やすみ",
+        "a": "Libur, istirahat"
+      }
+    ]
+  },
+  {
+    "k": "作",
+    "on": "サク",
+    "kun": "つく・る",
+    "a": "Membuat",
+    "lvl": "N5",
+    "day": 4,
+    "ex": [
+      {
+        "w": "作る",
+        "r": "つくる",
+        "a": "Membuat"
+      }
+    ]
+  },
+  {
+    "k": "冬",
+    "on": "トウ",
+    "kun": "ふゆ",
+    "a": "Musim Dingin",
+    "lvl": "N4",
+    "day": 4,
+    "ex": [
+      {
+        "w": "冬",
+        "r": "ふゆ",
+        "a": "Musim dingin"
+      },
+      {
+        "w": "冬休み",
+        "r": "ふゆやすみ",
+        "a": "Liburan musim dingin"
+      }
+    ]
+  },
+  {
+    "k": "夜",
+    "on": "ヤ",
+    "kun": "よる, よ",
+    "a": "Malam",
+    "lvl": "N4",
+    "day": 4,
+    "ex": [
+      {
+        "w": "夜",
+        "r": "よる",
+        "a": "Malam"
+      },
+      {
+        "w": "今夜",
+        "r": "こんや",
+        "a": "Malam ini"
+      }
+    ]
+  },
+  {
+    "k": "料",
+    "on": "リョウ",
+    "kun": "-",
+    "a": "Bahan, Biaya",
+    "lvl": "N4",
+    "day": 4,
+    "ex": [
+      {
+        "w": "料理",
+        "r": "りょうり",
+        "a": "Masakan"
+      },
+      {
+        "w": "料金",
+        "r": "りょうきん",
+        "a": "Biaya"
+      }
+    ]
+  },
+  {
+    "k": "理",
+    "on": "リ",
+    "kun": "ことわり",
+    "a": "Akal, Teori, Prinsip",
+    "lvl": "N4",
+    "day": 4,
+    "ex": [
+      {
+        "w": "料理",
+        "r": "りょうり",
+        "a": "Masakan"
+      },
+      {
+        "w": "理由",
+        "r": "りゆう",
+        "a": "Alasan"
+      }
+    ]
+  },
+  {
+    "k": "自",
+    "on": "ジ, シ",
+    "kun": "みずか・ら",
+    "a": "Diri Sendiri, Otomatis",
+    "lvl": "N4",
+    "day": 4,
+    "ex": [
+      {
+        "w": "自分",
+        "r": "じぶん",
+        "a": "Diri sendiri"
+      },
+      {
+        "w": "自由",
+        "r": "じゆう",
+        "a": "Bebas"
+      }
+    ]
+  },
+  {
+    "k": "語",
+    "on": "ゴ",
+    "kun": "かた・る",
+    "a": "Bahasa",
+    "lvl": "N5",
+    "day": 4,
+    "ex": [
+      {
+        "w": "日本語",
+        "r": "にほんご",
+        "a": "Bahasa Jepang"
+      }
+    ]
+  },
+  {
+    "k": "何",
+    "on": "カ",
+    "kun": "なに, なん",
+    "a": "Apa",
+    "lvl": "N5",
+    "day": 5,
+    "ex": [
+      {
+        "w": "何",
+        "r": "なに",
+        "a": "Apa"
+      }
+    ]
+  },
+  {
+    "k": "楽",
+    "on": "ラク, ガク",
+    "kun": "たの・しい",
+    "a": "Menyenangkan, Musik",
+    "lvl": "N4",
+    "day": 5,
+    "ex": [
+      {
+        "w": "楽しい",
+        "r": "たのしい",
+        "a": "Menyenangkan"
+      },
+      {
+        "w": "音楽",
+        "r": "おんがく",
+        "a": "Musik"
+      }
+    ]
+  },
+  {
+    "k": "水",
+    "on": "スイ",
+    "kun": "みず",
+    "a": "Air",
+    "lvl": "N5",
+    "day": 5,
+    "ex": [
+      {
+        "w": "水曜日",
+        "r": "すいようび",
+        "a": "Hari Rabu"
+      },
+      {
+        "w": "水",
+        "r": "みず",
+        "a": "Air"
+      }
+    ]
+  },
+  {
+    "k": "病",
+    "on": "ビョウ",
+    "kun": "や・む",
+    "a": "Sakit, Penyakit",
+    "lvl": "N4",
+    "day": 5,
+    "ex": [
+      {
+        "w": "病院",
+        "r": "びょういん",
+        "a": "Rumah Sakit"
+      }
+    ]
+  },
+  {
+    "k": "色",
+    "on": "ショク, シキ",
+    "kun": "いろ",
+    "a": "Warna",
+    "lvl": "N4",
+    "day": 5,
+    "ex": [
+      {
+        "w": "色",
+        "r": "いろ",
+        "a": "Warna"
+      },
+      {
+        "w": "色々",
+        "r": "いろいろ",
+        "a": "Bermacam-macam"
+      }
+    ]
+  },
+  {
+    "k": "茶",
+    "on": "チャ, サ",
+    "kun": "-",
+    "a": "Teh",
+    "lvl": "N4",
+    "day": 5,
+    "ex": [
+      {
+        "w": "お茶",
+        "r": "おちゃ",
+        "a": "Teh Jepang"
+      },
+      {
+        "w": "喫茶店",
+        "r": "きっさてん",
+        "a": "Kedai kopi"
+      }
+    ]
+  },
+  {
+    "k": "転",
+    "on": "テン",
+    "kun": "ころ・がる",
+    "a": "Berputar, Terguling",
+    "lvl": "N4",
+    "day": 5,
+    "ex": [
+      {
+        "w": "自転車",
+        "r": "じてんしゃ",
+        "a": "Sepeda"
+      },
+      {
+        "w": "運転",
+        "r": "うんてん",
+        "a": "Menyetir"
+      }
+    ]
+  },
+  {
+    "k": "音",
+    "on": "オン",
+    "kun": "おと, ね",
+    "a": "Suara, Bunyi",
+    "lvl": "N4",
+    "day": 5,
+    "ex": [
+      {
+        "w": "音",
+        "r": "おと",
+        "a": "Bunyi"
+      },
+      {
+        "w": "音楽",
+        "r": "おんがく",
+        "a": "Musik"
+      }
+    ]
+  },
+  {
+    "k": "高",
+    "on": "コウ",
+    "kun": "たか・い",
+    "a": "Tinggi, Mahal",
+    "lvl": "N5",
+    "day": 5,
+    "ex": [
+      {
+        "w": "高い",
+        "r": "たかい",
+        "a": "Mahal / Tinggi"
+      },
+      {
+        "w": "高校",
+        "r": "こうこう",
+        "a": "SMA"
+      }
+    ]
+  },
+  {
+    "k": "写",
+    "on": "シャ",
+    "kun": "うつ・す",
+    "a": "Menyalin, Memotret",
+    "lvl": "N4",
+    "day": 6,
+    "ex": [
+      {
+        "w": "写真",
+        "r": "しゃしん",
+        "a": "Foto"
+      }
+    ]
+  },
+  {
+    "k": "医",
+    "on": "イ",
+    "kun": "-",
+    "a": "Medis, Dokter",
+    "lvl": "N4",
+    "day": 6,
+    "ex": [
+      {
+        "w": "医者",
+        "r": "いしゃ",
+        "a": "Dokter"
+      }
+    ]
+  },
+  {
+    "k": "川",
+    "on": "セン",
+    "kun": "かわ",
+    "a": "Sungai",
+    "lvl": "N5",
+    "day": 6,
+    "ex": [
+      {
+        "w": "川",
+        "r": "かわ",
+        "a": "Sungai"
+      }
+    ]
+  },
+  {
+    "k": "朝",
+    "on": "チョウ",
+    "kun": "あさ",
+    "a": "Pagi",
+    "lvl": "N4",
+    "day": 6,
+    "ex": [
+      {
+        "w": "朝",
+        "r": "あさ",
+        "a": "Pagi"
+      },
+      {
+        "w": "今朝",
+        "r": "けさ",
+        "a": "Pagi ini"
+      }
+    ]
+  },
+  {
+    "k": "母",
+    "on": "ボ",
+    "kun": "はは, かあ",
+    "a": "Ibu",
+    "lvl": "N5",
+    "day": 6,
+    "ex": [
+      {
+        "w": "母",
+        "r": "はは",
+        "a": "Ibu"
+      }
+    ]
+  },
+  {
+    "k": "父",
+    "on": "フ",
+    "kun": "ちち, とう",
+    "a": "Ayah",
+    "lvl": "N5",
+    "day": 6,
+    "ex": [
+      {
+        "w": "父",
+        "r": "ちち",
+        "a": "Ayah"
+      }
+    ]
+  },
+  {
+    "k": "物",
+    "on": "ブツ, モツ",
+    "kun": "もの",
+    "a": "Benda, Barang",
+    "lvl": "N4",
+    "day": 6,
+    "ex": [
+      {
+        "w": "買い物",
+        "r": "かいもの",
+        "a": "Belanja"
+      },
+      {
+        "w": "食べ物",
+        "r": "たべもの",
+        "a": "Makanan"
+      }
+    ]
+  },
+  {
+    "k": "犬",
+    "on": "ケン",
+    "kun": "いぬ",
+    "a": "Anjing",
+    "lvl": "N4",
+    "day": 6,
+    "ex": [
+      {
+        "w": "犬",
+        "r": "いぬ",
+        "a": "Anjing"
+      },
+      {
+        "w": "子犬",
+        "r": "こいぬ",
+        "a": "Anak anjing"
+      }
+    ]
+  },
+  {
+    "k": "猫",
+    "on": "ビョウ",
+    "kun": "ねこ",
+    "a": "Kucing",
+    "lvl": "N4",
+    "day": 6,
+    "ex": [
+      {
+        "w": "猫",
+        "r": "ねこ",
+        "a": "Kucing"
+      }
+    ]
+  },
+  {
+    "k": "真",
+    "on": "シン",
+    "kun": "ま",
+    "a": "Kebenaran, Murni",
+    "lvl": "N4",
+    "day": 6,
+    "ex": [
+      {
+        "w": "写真",
+        "r": "しゃしん",
+        "a": "Foto"
+      },
+      {
+        "w": "真ん中",
+        "r": "まんなか",
+        "a": "Tepat di tengah"
+      }
+    ]
+  },
+  {
+    "k": "食",
+    "on": "ショク",
+    "kun": "た・べる",
+    "a": "Makan",
+    "lvl": "N5",
+    "day": 6,
+    "ex": [
+      {
+        "w": "食べる",
+        "r": "たべる",
+        "a": "Makan"
+      }
+    ]
+  },
+  {
+    "k": "飲",
+    "on": "イン",
+    "kun": "の・む",
+    "a": "Minum",
+    "lvl": "N5",
+    "day": 6,
+    "ex": [
+      {
+        "w": "飲む",
+        "r": "のむ",
+        "a": "Minum"
+      }
+    ]
+  },
+  {
+    "k": "魚",
+    "on": "ギョ",
+    "kun": "さかな",
+    "a": "Ikan",
+    "lvl": "N5",
+    "day": 6,
+    "ex": [
+      {
+        "w": "魚",
+        "r": "さかな",
+        "a": "Ikan"
+      }
+    ]
+  },
+  {
+    "k": "手",
+    "on": "シュ",
+    "kun": "て",
+    "a": "Tangan",
+    "lvl": "N5",
+    "day": 7,
+    "ex": [
+      {
+        "w": "手",
+        "r": "て",
+        "a": "Tangan"
+      }
+    ]
+  },
+  {
+    "k": "目",
+    "on": "モク",
+    "kun": "め",
+    "a": "Mata",
+    "lvl": "N5",
+    "day": 7,
+    "ex": [
+      {
+        "w": "目",
+        "r": "め",
+        "a": "Mata"
+      }
+    ]
+  },
+  {
+    "k": "紙",
+    "on": "シ",
+    "kun": "かみ",
+    "a": "Kertas",
+    "lvl": "N4",
+    "day": 7,
+    "ex": [
+      {
+        "w": "手紙",
+        "r": "てがみ",
+        "a": "Surat"
+      },
+      {
+        "w": "折り紙",
+        "r": "おりがみ",
+        "a": "Origami"
+      }
+    ]
+  },
+  {
+    "k": "肉",
+    "on": "ニク",
+    "kun": "-",
+    "a": "Daging",
+    "lvl": "N5",
+    "day": 7,
+    "ex": [
+      {
+        "w": "肉",
+        "r": "にく",
+        "a": "Daging"
+      }
+    ]
+  },
+  {
+    "k": "話",
+    "on": "ワ",
+    "kun": "はな・す, はなし",
+    "a": "Bicara, Cerita",
+    "lvl": "N5",
+    "day": 7,
+    "ex": [
+      {
+        "w": "話す",
+        "r": "はなす",
+        "a": "Berbicara"
+      },
+      {
+        "w": "電話",
+        "r": "でんわ",
+        "a": "Telepon"
+      }
+    ]
+  },
+  {
+    "k": "電",
+    "on": "デン",
+    "kun": "-",
+    "a": "Listrik",
+    "lvl": "N5",
+    "day": 7,
+    "ex": [
+      {
+        "w": "電車",
+        "r": "でんしゃ",
+        "a": "Kereta listrik"
+      }
+    ]
+  },
+  {
+    "k": "飯",
+    "on": "ハン",
+    "kun": "めし",
+    "a": "Nasi, Makanan",
+    "lvl": "N4",
+    "day": 7,
+    "ex": [
+      {
+        "w": "ご飯",
+        "r": "ごはん",
+        "a": "Nasi / Makanan"
+      },
+      {
+        "w": "朝ご飯",
+        "r": "あさごはん",
+        "a": "Sarapan"
+      }
+    ]
+  },
+  {
+    "k": "便",
+    "on": "ベン, ビン",
+    "kun": "たよ・り",
+    "a": "Praktis, Surat",
+    "lvl": "N4",
+    "day": 8,
+    "ex": [
+      {
+        "w": "便利",
+        "r": "べんり",
+        "a": "Praktis"
+      },
+      {
+        "w": "郵便",
+        "r": "ゆうびん",
+        "a": "Pos"
+      }
+    ]
+  },
+  {
+    "k": "外",
+    "on": "ガイ",
+    "kun": "そと",
+    "a": "Luar, Asing",
+    "lvl": "N5",
+    "day": 8,
+    "ex": [
+      {
+        "w": "外",
+        "r": "そと",
+        "a": "Luar"
+      }
+    ]
+  },
+  {
+    "k": "木",
+    "on": "モク, ボク",
+    "kun": "き",
+    "a": "Pohon, Kayu",
+    "lvl": "N5",
+    "day": 8,
+    "ex": [
+      {
+        "w": "木曜日",
+        "r": "もくようび",
+        "a": "Hari Kamis"
+      }
+    ]
+  },
+  {
+    "k": "空",
+    "on": "クウ",
+    "kun": "そら",
+    "a": "Langit",
+    "lvl": "N5",
+    "day": 8,
+    "ex": [
+      {
+        "w": "空",
+        "r": "そら",
+        "a": "Langit"
+      }
+    ]
+  },
+  {
+    "k": "行",
+    "on": "コウ, ギョウ",
+    "kun": "い・く",
+    "a": "Pergi",
+    "lvl": "N5",
+    "day": 8,
+    "ex": [
+      {
+        "w": "行く",
+        "r": "いく",
+        "a": "Pergi"
+      }
+    ]
+  },
+  {
+    "k": "銀",
+    "on": "ギン",
+    "kun": "しろがね",
+    "a": "Perak, Bank",
+    "lvl": "N4",
+    "day": 8,
+    "ex": [
+      {
+        "w": "銀行",
+        "r": "ぎんこう",
+        "a": "Bank"
+      },
+      {
+        "w": "銀色",
+        "r": "ぎんいろ",
+        "a": "Warna perak"
+      }
+    ]
+  },
+  {
+    "k": "風",
+    "on": "フウ",
+    "kun": "かぜ",
+    "a": "Angin, Gaya, Flu",
+    "lvl": "N4",
+    "day": 8,
+    "ex": [
+      {
+        "w": "風",
+        "r": "かぜ",
+        "a": "Angin"
+      },
+      {
+        "w": "風邪",
+        "r": "かぜ",
+        "a": "Masuk angin / Flu"
+      },
+      {
+        "w": "台風",
+        "r": "たいふう",
+        "a": "Topan"
+      }
+    ]
+  },
+  {
+    "k": "鳥",
+    "on": "チョウ",
+    "kun": "とり",
+    "a": "Burung",
+    "lvl": "N4",
+    "day": 8,
+    "ex": [
+      {
+        "w": "小鳥",
+        "r": "ことり",
+        "a": "Burung kecil"
+      },
+      {
+        "w": "焼き鳥",
+        "r": "やきとり",
+        "a": "Sate ayam"
+      }
+    ]
+  },
+  {
+    "k": "方",
+    "on": "ホウ",
+    "kun": "かた",
+    "a": "Arah, Cara, Orang (sopan)",
+    "lvl": "N4",
+    "day": 9,
+    "ex": [
+      {
+        "w": "夕方",
+        "r": "ゆうがた",
+        "a": "Sore"
+      },
+      {
+        "w": "読み方",
+        "r": "よみかた",
+        "a": "Cara baca"
+      }
+    ]
+  },
+  {
+    "k": "不",
+    "on": "フ, ブ",
+    "kun": "-",
+    "a": "Tidak, Bukan",
+    "lvl": "N4",
+    "day": 10,
+    "ex": [
+      {
+        "w": "不便",
+        "r": "ふべん",
+        "a": "Tidak praktis"
+      },
+      {
+        "w": "不安",
+        "r": "ふあん",
+        "a": "Cemas"
+      }
+    ]
+  },
+  {
+    "k": "中",
+    "on": "チュウ",
+    "kun": "なか",
+    "a": "Dalam, Tengah",
+    "lvl": "N5",
+    "day": 10,
+    "ex": [
+      {
+        "w": "中",
+        "r": "なか",
+        "a": "Di dalam"
+      }
+    ]
+  },
+  {
+    "k": "利",
+    "on": "リ",
+    "kun": "き・く",
+    "a": "Untung, Manfaat",
+    "lvl": "N4",
+    "day": 10,
+    "ex": [
+      {
+        "w": "便利",
+        "r": "べんり",
+        "a": "Praktis"
+      },
+      {
+        "w": "利用",
+        "r": "りよう",
+        "a": "Penggunaan"
+      }
+    ]
+  },
+  {
+    "k": "古",
+    "on": "コ",
+    "kun": "ふる・い",
+    "a": "Lama, Usang",
+    "lvl": "N5",
+    "day": 10,
+    "ex": [
+      {
+        "w": "古い",
+        "r": "ふるい",
+        "a": "Lama"
+      }
+    ]
+  },
+  {
+    "k": "安",
+    "on": "アン",
+    "kun": "やす・い",
+    "a": "Murah, Tenang",
+    "lvl": "N5",
+    "day": 10,
+    "ex": [
+      {
+        "w": "安い",
+        "r": "やすい",
+        "a": "Murah"
+      }
+    ]
+  },
+  {
+    "k": "有",
+    "on": "ユウ, ウ",
+    "kun": "あ・る",
+    "a": "Ada, Memiliki",
+    "lvl": "N4",
+    "day": 10,
+    "ex": [
+      {
+        "w": "有名",
+        "r": "ゆうめい",
+        "a": "Terkenal"
+      },
+      {
+        "w": "有料",
+        "r": "ゆうりょう",
+        "a": "Berbayar"
+      }
+    ]
+  },
+  {
+    "k": "映",
+    "on": "エイ",
+    "kun": "うつ・る",
+    "a": "Memantul, Proyeksi",
+    "lvl": "N4",
+    "day": 11,
+    "ex": [
+      {
+        "w": "映画",
+        "r": "えいが",
+        "a": "Film"
+      },
+      {
+        "w": "映画館",
+        "r": "えいがかん",
+        "a": "Bioskop"
+      }
+    ]
+  },
+  {
+    "k": "画",
+    "on": "ガ, カク",
+    "kun": "-",
+    "a": "Gambar, Coretan",
+    "lvl": "N4",
+    "day": 11,
+    "ex": [
+      {
+        "w": "映画",
+        "r": "えいが",
+        "a": "Film"
+      },
+      {
+        "w": "計画",
+        "r": "けいかく",
+        "a": "Rencana"
+      }
+    ]
+  },
+  {
+    "k": "白",
+    "on": "ハク",
+    "kun": "しろ・い",
+    "a": "Putih",
+    "lvl": "N5",
+    "day": 11,
+    "ex": [
+      {
+        "w": "白い",
+        "r": "しろい",
+        "a": "Putih"
+      }
+    ]
+  },
+  {
+    "k": "上",
+    "on": "ジョウ",
+    "kun": "うえ, あ・がる",
+    "a": "Atas, Naik",
+    "lvl": "N5",
+    "day": 12,
+    "ex": [
+      {
+        "w": "上",
+        "r": "うえ",
+        "a": "Atas"
+      },
+      {
+        "w": "上手",
+        "r": "じょうず",
+        "a": "Pintar"
+      }
+    ]
+  },
+  {
+    "k": "下",
+    "on": "カ, ゲ",
+    "kun": "した, さ・がる",
+    "a": "Bawah, Turun",
+    "lvl": "N5",
+    "day": 12,
+    "ex": [
+      {
+        "w": "下",
+        "r": "した",
+        "a": "Bawah"
+      },
+      {
+        "w": "下手",
+        "r": "へた",
+        "a": "Kurang pandai"
+      }
+    ]
+  },
+  {
+    "k": "元",
+    "on": "ゲン, ガン",
+    "kun": "もと",
+    "a": "Asal, Awal, Dasar",
+    "lvl": "N4",
+    "day": 12,
+    "ex": [
+      {
+        "w": "元気",
+        "r": "げんき",
+        "a": "Sehat"
+      },
+      {
+        "w": "元日",
+        "r": "がんじつ",
+        "a": "Tahun Baru"
+      }
+    ]
+  },
+  {
+    "k": "八",
+    "on": "ハチ",
+    "kun": "や, やっ・つ, よう",
+    "a": "Delapan",
+    "lvl": "N5",
+    "day": 12,
+    "ex": [
+      {
+        "w": "八つ",
+        "r": "やっつ",
+        "a": "Delapan buah"
+      },
+      {
+        "w": "八日",
+        "r": "ようか",
+        "a": "Tanggal 8"
+      }
+    ]
+  },
+  {
+    "k": "右",
+    "on": "ウ, ユウ",
+    "kun": "みぎ",
+    "a": "Kanan",
+    "lvl": "N5",
+    "day": 12,
+    "ex": [
+      {
+        "w": "右手",
+        "r": "みぎて",
+        "a": "Tangan kanan"
+      }
+    ]
+  },
+  {
+    "k": "堂",
+    "on": "ドウ",
+    "kun": "-",
+    "a": "Gedung, Aula",
+    "lvl": "N4",
+    "day": 12,
+    "ex": [
+      {
+        "w": "食堂",
+        "r": "しょくどう",
+        "a": "Kantin"
+      }
+    ]
+  },
+  {
+    "k": "左",
+    "on": "サ",
+    "kun": "ひだり",
+    "a": "Kiri",
+    "lvl": "N5",
+    "day": 12,
+    "ex": [
+      {
+        "w": "左手",
+        "r": "ひだりて",
+        "a": "Tangan kiri"
+      }
+    ]
+  },
+  {
+    "k": "後",
+    "on": "ゴ, コウ",
+    "kun": "うし・ろ, あと",
+    "a": "Belakang, Setelah",
+    "lvl": "N5",
+    "day": 12,
+    "ex": [
+      {
+        "w": "後ろ",
+        "r": "うしろ",
+        "a": "Belakang"
+      }
+    ]
+  },
+  {
+    "k": "気",
+    "on": "キ",
+    "kun": "-",
+    "a": "Energi, Udara",
+    "lvl": "N5",
+    "day": 12,
+    "ex": [
+      {
+        "w": "元気",
+        "r": "げんき",
+        "a": "Sehat"
+      }
+    ]
+  },
+  {
+    "k": "牛",
+    "on": "ギュウ",
+    "kun": "うし",
+    "a": "Sapi, Lembu",
+    "lvl": "N4",
+    "day": 12,
+    "ex": [
+      {
+        "w": "牛",
+        "r": "うし",
+        "a": "Sapi"
+      },
+      {
+        "w": "牛乳",
+        "r": "ぎゅうにゅう",
+        "a": "Susu sapi"
+      },
+      {
+        "w": "牛肉",
+        "r": "ぎゅうにく",
+        "a": "Daging sapi"
+      }
+    ]
+  },
+  {
+    "k": "百",
+    "on": "ヒャク",
+    "kun": "もも",
+    "a": "Ratus, Seratus",
+    "lvl": "N5",
+    "day": 12,
+    "ex": [
+      {
+        "w": "三百",
+        "r": "さんびゃく",
+        "a": "Tiga ratus"
+      }
+    ]
+  },
+  {
+    "k": "近",
+    "on": "キン",
+    "kun": "ちか・い",
+    "a": "Dekat",
+    "lvl": "N4",
+    "day": 12,
+    "ex": [
+      {
+        "w": "近い",
+        "r": "ちかい",
+        "a": "Dekat"
+      },
+      {
+        "w": "近所",
+        "r": "きんじょ",
+        "a": "Tetangga sekitar"
+      }
+    ]
+  },
+  {
+    "k": "間",
+    "on": "カン",
+    "kun": "あいだ",
+    "a": "Antara, Jeda Waktu",
+    "lvl": "N5",
+    "day": 12,
+    "ex": [
+      {
+        "w": "時間",
+        "r": "じかん",
+        "a": "Waktu"
+      }
+    ]
+  },
+  {
+    "k": "一",
+    "on": "イチ, イツ",
+    "kun": "ひと, ひと・つ",
+    "a": "Satu",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "一つ",
+        "r": "ひとつ",
+        "a": "Satu buah"
+      },
+      {
+        "w": "一人",
+        "r": "ひとり",
+        "a": "Satu orang"
+      }
+    ]
+  },
+  {
+    "k": "七",
+    "on": "シチ",
+    "kun": "なな, なな・つ, なの",
+    "a": "Tujuh",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "七つ",
+        "r": "ななつ",
+        "a": "Tujuh buah"
+      },
+      {
+        "w": "七日",
+        "r": "なのか",
+        "a": "Tanggal 7"
+      }
+    ]
+  },
+  {
+    "k": "三",
+    "on": "サン",
+    "kun": "み, みっ・つ",
+    "a": "Tiga",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "三つ",
+        "r": "みっつ",
+        "a": "Tiga buah"
+      },
+      {
+        "w": "三日",
+        "r": "みっか",
+        "a": "Tanggal 3"
+      }
+    ]
+  },
+  {
+    "k": "九",
+    "on": "キュウ, ク",
+    "kun": "ここの, ここの・つ",
+    "a": "Sembilan",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "九つ",
+        "r": "ここのつ",
+        "a": "Sembilan buah"
+      },
+      {
+        "w": "九月",
+        "r": "くがつ",
+        "a": "Bulan September"
+      }
+    ]
+  },
+  {
+    "k": "事",
+    "on": "ジ",
+    "kun": "こと",
+    "a": "Hal, Perkara, Urusan",
+    "lvl": "N4",
+    "day": 13,
+    "ex": [
+      {
+        "w": "仕事",
+        "r": "しごと",
+        "a": "Pekerjaan"
+      },
+      {
+        "w": "大事",
+        "r": "だいじ",
+        "a": "Penting"
+      }
+    ]
+  },
+  {
+    "k": "二",
+    "on": "ニ",
+    "kun": "ふた, ふた・つ",
+    "a": "Dua",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "二つ",
+        "r": "ふたつ",
+        "a": "Dua buah"
+      },
+      {
+        "w": "二人",
+        "r": "ふたり",
+        "a": "Dua orang"
+      }
+    ]
+  },
+  {
+    "k": "五",
+    "on": "ゴ",
+    "kun": "いつ, いつ・つ",
+    "a": "Lima",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "五つ",
+        "r": "いつつ",
+        "a": "Lima buah"
+      },
+      {
+        "w": "五日",
+        "r": "いつか",
+        "a": "Tanggal 5"
+      }
+    ]
+  },
+  {
+    "k": "仕",
+    "on": "シ",
+    "kun": "つか・える",
+    "a": "Melayani, Bekerja",
+    "lvl": "N4",
+    "day": 13,
+    "ex": [
+      {
+        "w": "仕事",
+        "r": "しごと",
+        "a": "Pekerjaan"
+      },
+      {
+        "w": "仕方",
+        "r": "しかた",
+        "a": "Cara"
+      }
+    ]
+  },
+  {
+    "k": "六",
+    "on": "ロク",
+    "kun": "む, むっ・つ, むい",
+    "a": "Enam",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "六つ",
+        "r": "むっつ",
+        "a": "Enam buah"
+      },
+      {
+        "w": "六日",
+        "r": "むいか",
+        "a": "Tanggal 6"
+      }
+    ]
+  },
+  {
+    "k": "分",
+    "on": "ブン, フン",
+    "kun": "わ・かる",
+    "a": "Menit, Mengerti",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "五分",
+        "r": "ごふん",
+        "a": "5 Menit"
+      }
+    ]
+  },
+  {
+    "k": "十",
+    "on": "ジュウ, ジッ",
+    "kun": "とお, と",
+    "a": "Sepuluh",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "十",
+        "r": "とお",
+        "a": "Sepuluh buah"
+      },
+      {
+        "w": "十日",
+        "r": "とおか",
+        "a": "Tanggal 10"
+      }
+    ]
+  },
+  {
+    "k": "千",
+    "on": "セン",
+    "kun": "ち",
+    "a": "Ribu, Seribu",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "千円",
+        "r": "せんえん",
+        "a": "Seribu yen"
+      }
+    ]
+  },
+  {
+    "k": "午",
+    "on": "ゴ",
+    "kun": "-",
+    "a": "Siang",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "午前",
+        "r": "ごぜん",
+        "a": "Pagi (AM)"
+      },
+      {
+        "w": "午後",
+        "r": "ごご",
+        "a": "Siang (PM)"
+      }
+    ]
+  },
+  {
+    "k": "半",
+    "on": "ハン",
+    "kun": "なか・ば",
+    "a": "Setengah, Separuh",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "三時半",
+        "r": "さんじはん",
+        "a": "Jam 3:30"
+      }
+    ]
+  },
+  {
+    "k": "四",
+    "on": "シ",
+    "kun": "よ, よ・つ, よっ・つ, よん",
+    "a": "Empat",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "四つ",
+        "r": "よっつ",
+        "a": "Empat buah"
+      },
+      {
+        "w": "四月",
+        "r": "しがつ",
+        "a": "Bulan April"
+      }
+    ]
+  },
+  {
+    "k": "土",
+    "on": "ド, ト",
+    "kun": "つち",
+    "a": "Tanah",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "土曜日",
+        "r": "どようび",
+        "a": "Hari Sabtu"
+      }
+    ]
+  },
+  {
+    "k": "夏",
+    "on": "カ",
+    "kun": "なつ",
+    "a": "Musim Panas",
+    "lvl": "N4",
+    "day": 13,
+    "ex": [
+      {
+        "w": "夏",
+        "r": "なつ",
+        "a": "Musim panas"
+      },
+      {
+        "w": "夏休み",
+        "r": "なつやすみ",
+        "a": "Liburan musim panas"
+      }
+    ]
+  },
+  {
+    "k": "旅",
+    "on": "リョ",
+    "kun": "たび",
+    "a": "Perjalanan, Wisata",
+    "lvl": "N4",
+    "day": 13,
+    "ex": [
+      {
+        "w": "旅行",
+        "r": "りょこう",
+        "a": "Wisata"
+      },
+      {
+        "w": "旅館",
+        "r": "りょかん",
+        "a": "Penginapan Jepang"
+      }
+    ]
+  },
+  {
+    "k": "月",
+    "on": "ゲツ, ガツ",
+    "kun": "つき",
+    "a": "Bulan",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "月曜日",
+        "r": "げつようび",
+        "a": "Hari Senin"
+      }
+    ]
+  },
+  {
+    "k": "来",
+    "on": "ライ",
+    "kun": "く・る",
+    "a": "Datang",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "来る",
+        "r": "くる",
+        "a": "Datang"
+      }
+    ]
+  },
+  {
+    "k": "東",
+    "on": "トウ",
+    "kun": "ひがし",
+    "a": "Timur",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "東京",
+        "r": "とうきょう",
+        "a": "Tokyo"
+      }
+    ]
+  },
+  {
+    "k": "毎",
+    "on": "マイ",
+    "kun": "-",
+    "a": "Setiap",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "毎日",
+        "r": "まいにち",
+        "a": "Setiap hari"
+      }
+    ]
+  },
+  {
+    "k": "火",
+    "on": "カ",
+    "kun": "ひ, -び",
+    "a": "Api",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "火曜日",
+        "r": "かようび",
+        "a": "Hari Selasa"
+      }
+    ]
+  },
+  {
+    "k": "週",
+    "on": "シュウ",
+    "kun": "-",
+    "a": "Pekan, Minggu",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "今週",
+        "r": "こんしゅう",
+        "a": "Minggu ini"
+      }
+    ]
+  },
+  {
+    "k": "金",
+    "on": "キン, コン",
+    "kun": "かね",
+    "a": "Emas, Uang",
+    "lvl": "N5",
+    "day": 13,
+    "ex": [
+      {
+        "w": "金曜日",
+        "r": "きんようび",
+        "a": "Hari Jumat"
+      },
+      {
+        "w": "お金",
+        "r": "おかね",
+        "a": "Uang"
+      }
+    ]
+  },
+  {
+    "k": "勉",
+    "on": "ベン",
+    "kun": "-",
+    "a": "Berusaha Keras",
+    "lvl": "N4",
+    "day": 14,
+    "ex": [
+      {
+        "w": "勉強",
+        "r": "べんきょう",
+        "a": "Belajar"
+      }
+    ]
+  },
+  {
+    "k": "夕",
+    "on": "セキ",
+    "kun": "ゆう",
+    "a": "Sore / Senja",
+    "lvl": "N4",
+    "day": 14,
+    "ex": [
+      {
+        "w": "夕方",
+        "r": "ゆうがた",
+        "a": "Sore hari"
+      },
+      {
+        "w": "夕飯",
+        "r": "ゆうはん",
+        "a": "Makan malam"
+      }
+    ]
+  },
+  {
+    "k": "強",
+    "on": "キョウ",
+    "kun": "つよ・い",
+    "a": "Kuat",
+    "lvl": "N4",
+    "day": 14,
+    "ex": [
+      {
+        "w": "強い",
+        "r": "つよい",
+        "a": "Kuat"
+      },
+      {
+        "w": "勉強",
+        "r": "べんきょう",
+        "a": "Belajar"
+      }
+    ]
+  },
+  {
+    "k": "早",
+    "on": "ソウ",
+    "kun": "はや・い",
+    "a": "Cepat (Waktu), Pagi",
+    "lvl": "N5",
+    "day": 14,
+    "ex": [
+      {
+        "w": "早い",
+        "r": "はやい",
+        "a": "Cepat / Awal"
+      }
+    ]
+  },
+  {
+    "k": "遅",
+    "on": "チ",
+    "kun": "おそ・い, おく・れる",
+    "a": "Lambat, Terlambat",
+    "lvl": "N4",
+    "day": 14,
+    "ex": [
+      {
+        "w": "遅い",
+        "r": "おそい",
+        "a": "Lambat / Larut"
+      },
+      {
+        "w": "遅刻",
+        "r": "ちこく",
+        "a": "Terlambat"
+      }
+    ]
+  },
+  {
+    "k": "北",
+    "on": "ホク",
+    "kun": "きた",
+    "a": "Utara",
+    "lvl": "N5",
+    "day": 15,
+    "ex": [
+      {
+        "w": "北",
+        "r": "きた",
+        "a": "Utara"
+      }
+    ]
+  },
+  {
+    "k": "少",
+    "on": "ショウ",
+    "kun": "すく・ない, すこ・し",
+    "a": "Sedikit",
+    "lvl": "N5",
+    "day": 15,
+    "ex": [
+      {
+        "w": "少し",
+        "r": "すこし",
+        "a": "Sedikit"
+      }
+    ]
+  },
+  {
+    "k": "帰",
+    "on": "キ",
+    "kun": "かえ・る",
+    "a": "Pulang",
+    "lvl": "N5",
+    "day": 15,
+    "ex": [
+      {
+        "w": "帰る",
+        "r": "かえる",
+        "a": "Pulang"
+      }
+    ]
+  },
+  {
+    "k": "道",
+    "on": "ドウ",
+    "kun": "みち",
+    "a": "Jalan",
+    "lvl": "N5",
+    "day": 15,
+    "ex": [
+      {
+        "w": "道",
+        "r": "みち",
+        "a": "Jalan"
+      }
+    ]
+  },
+  {
+    "k": "雨",
+    "on": "ウ",
+    "kun": "あめ",
+    "a": "Hujan",
+    "lvl": "N5",
+    "day": 15,
+    "ex": [
+      {
+        "w": "雨",
+        "r": "あめ",
+        "a": "Hujan"
+      }
+    ]
+  },
+  {
+    "k": "切",
+    "on": "セツ, サイ",
+    "kun": "き・る",
+    "a": "Memotong, Tiket",
+    "lvl": "N4",
+    "day": 16,
+    "ex": [
+      {
+        "w": "切る",
+        "r": "きる",
+        "a": "Memotong"
+      },
+      {
+        "w": "切符",
+        "r": "きっぷ",
+        "a": "Tiket"
+      }
+    ]
+  },
+  {
+    "k": "親",
+    "on": "シン",
+    "kun": "おや, した・しい",
+    "a": "Orang Tua, Akrab",
+    "lvl": "N4",
+    "day": 16,
+    "ex": [
+      {
+        "w": "親",
+        "r": "おや",
+        "a": "Orang tua"
+      },
+      {
+        "w": "両親",
+        "r": "りょうしん",
+        "a": "Kedua orang tua"
+      }
+    ]
+  },
+  {
+    "k": "赤",
+    "on": "セキ",
+    "kun": "あか・い",
+    "a": "Merah",
+    "lvl": "N4",
+    "day": 16,
+    "ex": [
+      {
+        "w": "赤い",
+        "r": "あかい",
+        "a": "Merah"
+      },
+      {
+        "w": "赤ちゃん",
+        "r": "あかちゃん",
+        "a": "Bayi"
+      }
+    ]
+  },
+  {
+    "k": "青",
+    "on": "セイ, ショウ",
+    "kun": "あお・い",
+    "a": "Biru",
+    "lvl": "N4",
+    "day": 16,
+    "ex": [
+      {
+        "w": "青い",
+        "r": "あおい",
+        "a": "Biru"
+      },
+      {
+        "w": "青空",
+        "r": "あおぞら",
+        "a": "Langit biru"
+      }
+    ]
+  },
+  {
+    "k": "黒",
+    "on": "コク",
+    "kun": "くろ・い",
+    "a": "Hitam",
+    "lvl": "N4",
+    "day": 16,
+    "ex": [
+      {
+        "w": "黒い",
+        "r": "くろい",
+        "a": "Hitam"
+      },
+      {
+        "w": "黒板",
+        "r": "こくばん",
+        "a": "Papan tulis hitam"
+      }
+    ]
+  },
+  {
+    "k": "動",
+    "on": "ドウ",
+    "kun": "うご・く",
+    "a": "Bergerak",
+    "lvl": "N4",
+    "day": 17,
+    "ex": [
+      {
+        "w": "動く",
+        "r": "うごく",
+        "a": "Bergerak"
+      },
+      {
+        "w": "自動車",
+        "r": "じどうしゃ",
+        "a": "Mobil"
+      }
+    ]
+  },
+  {
+    "k": "小",
+    "on": "ショウ",
+    "kun": "ちい・さい",
+    "a": "Kecil",
+    "lvl": "N5",
+    "day": 17,
+    "ex": [
+      {
+        "w": "小さい",
+        "r": "ちいさい",
+        "a": "Kecil"
+      }
+    ]
+  },
+  {
+    "k": "度",
+    "on": "ド, ト",
+    "kun": "たび",
+    "a": "Derajat, Kali",
+    "lvl": "N4",
+    "day": 17,
+    "ex": [
+      {
+        "w": "一度",
+        "r": "いちど",
+        "a": "Satu kali"
+      },
+      {
+        "w": "今度",
+        "r": "こんど",
+        "a": "Lain kali"
+      }
+    ]
+  },
+  {
+    "k": "洗",
+    "on": "セン",
+    "kun": "あら・う",
+    "a": "Mencuci",
+    "lvl": "N4",
+    "day": 17,
+    "ex": [
+      {
+        "w": "洗う",
+        "r": "あらう",
+        "a": "Mencuci"
+      },
+      {
+        "w": "お手洗い",
+        "r": "おてあらい",
+        "a": "Toilet"
+      }
+    ]
+  },
+  {
+    "k": "練",
+    "on": "レン",
+    "kun": "ね・る",
+    "a": "Melatih, Menempa",
+    "lvl": "N4",
+    "day": 17,
+    "ex": [
+      {
+        "w": "練習",
+        "r": "れんしゅう",
+        "a": "Latihan"
+      }
+    ]
+  },
+  {
+    "k": "習",
+    "on": "シュウ",
+    "kun": "なら・う",
+    "a": "Belajar, Berlatih",
+    "lvl": "N4",
+    "day": 17,
+    "ex": [
+      {
+        "w": "習う",
+        "r": "ならう",
+        "a": "Belajar"
+      },
+      {
+        "w": "練習",
+        "r": "れんしゅう",
+        "a": "Latihan"
+      }
+    ]
+  },
+  {
+    "k": "見",
+    "on": "ケン",
+    "kun": "み・る",
+    "a": "Melihat",
+    "lvl": "N5",
+    "day": 17,
+    "ex": [
+      {
+        "w": "見る",
+        "r": "みる",
+        "a": "Melihat"
+      }
+    ]
+  },
+  {
+    "k": "読",
+    "on": "ドク",
+    "kun": "よ・む",
+    "a": "Membaca",
+    "lvl": "N5",
+    "day": 17,
+    "ex": [
+      {
+        "w": "読む",
+        "r": "よむ",
+        "a": "Membaca"
+      }
+    ]
+  },
+  {
+    "k": "運",
+    "on": "ウン",
+    "kun": "はこ・ぶ",
+    "a": "Mengangkut, Keberuntungan",
+    "lvl": "N4",
+    "day": 17,
+    "ex": [
+      {
+        "w": "運動",
+        "r": "うんどう",
+        "a": "Olahraga"
+      },
+      {
+        "w": "運",
+        "r": "うん",
+        "a": "Nasib"
+      }
+    ]
+  },
+  {
+    "k": "雪",
+    "on": "セツ",
+    "kun": "ゆき",
+    "a": "Salju",
+    "lvl": "N4",
+    "day": 17,
+    "ex": [
+      {
+        "w": "雪",
+        "r": "ゆき",
+        "a": "Salju"
+      },
+      {
+        "w": "大雪",
+        "r": "おおゆき",
+        "a": "Salju lebat"
+      }
+    ]
+  },
+  {
+    "k": "多",
+    "on": "タ",
+    "kun": "おお・い",
+    "a": "Banyak",
+    "lvl": "N5",
+    "day": 18,
+    "ex": [
+      {
+        "w": "多い",
+        "r": "おおい",
+        "a": "Banyak"
+      }
+    ]
+  },
+  {
+    "k": "字",
+    "on": "ジ",
+    "kun": "あざ",
+    "a": "Huruf, Aksara",
+    "lvl": "N4",
+    "day": 18,
+    "ex": [
+      {
+        "w": "漢字",
+        "r": "かんじ",
+        "a": "Kanji"
+      },
+      {
+        "w": "文字",
+        "r": "もじ",
+        "a": "Huruf"
+      }
+    ]
+  },
+  {
+    "k": "持",
+    "on": "ジ",
+    "kun": "も・つ",
+    "a": "Membawa, Memiliki",
+    "lvl": "N5",
+    "day": 18,
+    "ex": [
+      {
+        "w": "持つ",
+        "r": "もつ",
+        "a": "Membawa"
+      }
+    ]
+  },
+  {
+    "k": "昼",
+    "on": "チュウ",
+    "kun": "ひる",
+    "a": "Siang",
+    "lvl": "N4",
+    "day": 18,
+    "ex": [
+      {
+        "w": "昼",
+        "r": "ひる",
+        "a": "Siang"
+      },
+      {
+        "w": "昼休み",
+        "r": "ひるやすみ",
+        "a": "Istirahat siang"
+      }
+    ]
+  },
+  {
+    "k": "漢",
+    "on": "カン",
+    "kun": "-",
+    "a": "Dinasti Han, Tiongkok",
+    "lvl": "N4",
+    "day": 18,
+    "ex": [
+      {
+        "w": "漢字",
+        "r": "かんじ",
+        "a": "Kanji"
+      }
+    ]
+  },
+  {
+    "k": "買",
+    "on": "バイ",
+    "kun": "か・う",
+    "a": "Membeli",
+    "lvl": "N5",
+    "day": 18,
+    "ex": [
+      {
+        "w": "買う",
+        "r": "かう",
+        "a": "Membeli"
+      }
+    ]
+  },
+  {
+    "k": "同",
+    "on": "ドウ",
+    "kun": "おな・じ",
+    "a": "Sama, Serupa",
+    "lvl": "N4",
+    "day": 19,
+    "ex": [
+      {
+        "w": "同じ",
+        "r": "おなじ",
+        "a": "Sama"
+      },
+      {
+        "w": "同時に",
+        "r": "どうじに",
+        "a": "Bersamaan"
+      }
+    ]
+  },
+  {
+    "k": "広",
+    "on": "コウ",
+    "kun": "ひろ・い",
+    "a": "Luas, Lapang",
+    "lvl": "N4",
+    "day": 19,
+    "ex": [
+      {
+        "w": "広い",
+        "r": "ひろい",
+        "a": "Luas"
+      },
+      {
+        "w": "広場",
+        "r": "ひろば",
+        "a": "Alun-alun"
+      }
+    ]
+  },
+  {
+    "k": "店",
+    "on": "テン",
+    "kun": "みせ",
+    "a": "Toko",
+    "lvl": "N5",
+    "day": 19,
+    "ex": [
+      {
+        "w": "店",
+        "r": "みせ",
+        "a": "Toko"
+      }
+    ]
+  },
+  {
+    "k": "春",
+    "on": "シュン",
+    "kun": "はる",
+    "a": "Musim Semi",
+    "lvl": "N4",
+    "day": 19,
+    "ex": [
+      {
+        "w": "春",
+        "r": "はる",
+        "a": "Musim semi"
+      },
+      {
+        "w": "青春",
+        "r": "せいしゅん",
+        "a": "Masa muda"
+      }
+    ]
+  },
+  {
+    "k": "歩",
+    "on": "ホ",
+    "kun": "ある・く",
+    "a": "Berjalan Kaki",
+    "lvl": "N4",
+    "day": 19,
+    "ex": [
+      {
+        "w": "歩く",
+        "r": "あるく",
+        "a": "Berjalan"
+      },
+      {
+        "w": "散歩",
+        "r": "さんぽ",
+        "a": "Jalan santai"
+      }
+    ]
+  },
+  {
+    "k": "秋",
+    "on": "シュウ",
+    "kun": "あき",
+    "a": "Musim Gugur",
+    "lvl": "N4",
+    "day": 19,
+    "ex": [
+      {
+        "w": "秋",
+        "r": "あき",
+        "a": "Musim gugur"
+      }
+    ]
+  },
+  {
+    "k": "遠",
+    "on": "エン",
+    "kun": "とお・い",
+    "a": "Jauh",
+    "lvl": "N4",
+    "day": 19,
+    "ex": [
+      {
+        "w": "遠い",
+        "r": "とおい",
+        "a": "Jauh"
+      },
+      {
+        "w": "遠足",
+        "r": "えんそく",
+        "a": "Piknik"
+      }
+    ]
+  },
+  {
+    "k": "頭",
+    "on": "トウ, ズ",
+    "kun": "あたま",
+    "a": "Kepala",
+    "lvl": "N4",
+    "day": 19,
+    "ex": [
+      {
+        "w": "頭",
+        "r": "あたま",
+        "a": "Kepala"
+      },
+      {
+        "w": "頭痛",
+        "r": "ずつう",
+        "a": "Sakit kepala"
+      }
+    ]
+  },
+  {
+    "k": "問",
+    "on": "モン",
+    "kun": "と・う",
+    "a": "Pertanyaan, Menanyai",
+    "lvl": "N4",
+    "day": 20,
+    "ex": [
+      {
+        "w": "問題",
+        "r": "もんだい",
+        "a": "Soal / Masalah"
+      }
+    ]
+  },
+  {
+    "k": "宿",
+    "on": "シュク",
+    "kun": "やど",
+    "a": "Penginapan, Menginap",
+    "lvl": "N4",
+    "day": 20,
+    "ex": [
+      {
+        "w": "宿題",
+        "r": "しゅくだい",
+        "a": "PR"
+      },
+      {
+        "w": "新宿",
+        "r": "しんじゅく",
+        "a": "Shinjuku"
+      }
+    ]
+  },
+  {
+    "k": "質",
+    "on": "シツ",
+    "kun": "-",
+    "a": "Kualitas, Hakikat, Tanya",
+    "lvl": "N4",
+    "day": 20,
+    "ex": [
+      {
+        "w": "質問",
+        "r": "しつもん",
+        "a": "Pertanyaan"
+      }
+    ]
+  },
+  {
+    "k": "万",
+    "on": "マン, バン",
+    "kun": "よろず",
+    "a": "Puluh Ribu (10.000)",
+    "lvl": "N5",
+    "day": 21,
+    "ex": [
+      {
+        "w": "一万円",
+        "r": "いちまんえん",
+        "a": "Sepuluh ribu yen"
+      }
+    ]
+  },
+  {
+    "k": "円",
+    "on": "エン",
+    "kun": "まる・い",
+    "a": "Yen (Mata Uang), Bulat",
+    "lvl": "N5",
+    "day": 21,
+    "ex": [
+      {
+        "w": "百円",
+        "r": "ひゃくえん",
+        "a": "100 Yen"
+      }
+    ]
+  },
+  {
+    "k": "着",
+    "on": "チャク",
+    "kun": "き・る, つ・く",
+    "a": "Tiba, Mengenakan Pakaian",
+    "lvl": "N4",
+    "day": 21,
+    "ex": [
+      {
+        "w": "着る",
+        "r": "きる",
+        "a": "Memakai baju"
+      },
+      {
+        "w": "着く",
+        "r": "つく",
+        "a": "Sampai/Tiba"
+      }
+    ]
+  },
+  {
+    "k": "入",
+    "on": "ニュウ",
+    "kun": "はい・る",
+    "a": "Masuk",
+    "lvl": "N5",
+    "day": 22,
+    "ex": [
+      {
+        "w": "入る",
+        "r": "はいる",
+        "a": "Masuk"
+      }
+    ]
+  },
+  {
+    "k": "場",
+    "on": "ジョウ",
+    "kun": "ば",
+    "a": "Tempat, Lokasi",
+    "lvl": "N4",
+    "day": 22,
+    "ex": [
+      {
+        "w": "場所",
+        "r": "ばしょ",
+        "a": "Tempat"
+      },
+      {
+        "w": "工場",
+        "r": "こうじょう",
+        "a": "Pabrik"
+      }
+    ]
+  },
+  {
+    "k": "座",
+    "on": "ザ",
+    "kun": "すわ・る",
+    "a": "Duduk",
+    "lvl": "N5",
+    "day": 22,
+    "ex": [
+      {
+        "w": "座る",
+        "r": "すわる",
+        "a": "Duduk"
+      }
+    ]
+  },
+  {
+    "k": "待",
+    "on": "タイ",
+    "kun": "ま・つ",
+    "a": "Menunggu",
+    "lvl": "N4",
+    "day": 22,
+    "ex": [
+      {
+        "w": "待つ",
+        "r": "まつ",
+        "a": "Menunggu"
+      }
+    ]
+  },
+  {
+    "k": "終",
+    "on": "シュウ",
+    "kun": "お・わる",
+    "a": "Selesai, Berakhir",
+    "lvl": "N4",
+    "day": 23,
+    "ex": [
+      {
+        "w": "終わる",
+        "r": "おわる",
+        "a": "Selesai"
+      }
+    ]
+  },
+  {
+    "k": "送",
+    "on": "ソウ",
+    "kun": "おく・る",
+    "a": "Mengirim",
+    "lvl": "N4",
+    "day": 23,
+    "ex": [
+      {
+        "w": "送る",
+        "r": "おくる",
+        "a": "Mengirim"
+      },
+      {
+        "w": "見送る",
+        "r": "みおくる",
+        "a": "Mengantar"
+      }
+    ]
+  },
+  {
+    "k": "由",
+    "on": "ユ, ユウ",
+    "kun": "よし",
+    "a": "Alasan, Asal",
+    "lvl": "N4",
+    "day": 24,
+    "ex": [
+      {
+        "w": "自由",
+        "r": "じゆう",
+        "a": "Kebebasan"
+      },
+      {
+        "w": "理由",
+        "r": "りゆう",
+        "a": "Alasan"
+      }
+    ]
+  },
+  {
+    "k": "試",
+    "on": "シ",
+    "kun": "こころ・みる, ため・す",
+    "a": "Mencoba, Menguji",
+    "lvl": "N4",
+    "day": 24,
+    "ex": [
+      {
+        "w": "試験",
+        "r": "しけん",
+        "a": "Ujian"
+      },
+      {
+        "w": "試合",
+        "r": "しあい",
+        "a": "Pertandingan"
+      }
+    ]
+  },
+  {
+    "k": "別",
+    "on": "ベツ",
+    "kun": "わか・れる",
+    "a": "Berpisah, Lain, Beda",
+    "lvl": "N4",
+    "day": 25,
+    "ex": [
+      {
+        "w": "別れる",
+        "r": "わかれる",
+        "a": "Berpisah"
+      },
+      {
+        "w": "別の",
+        "r": "べつの",
+        "a": "Lainnya"
+      }
+    ]
+  },
+  {
+    "k": "森",
+    "on": "シン",
+    "kun": "もり",
+    "a": "Hutan Lebat, Rimba",
+    "lvl": "N4",
+    "day": 25,
+    "ex": [
+      {
+        "w": "森",
+        "r": "もり",
+        "a": "Hutan lebat"
+      },
+      {
+        "w": "森林",
+        "r": "しんりん",
+        "a": "Hutan belantara"
+      }
+    ]
+  },
+  {
+    "k": "走",
+    "on": "ソウ",
+    "kun": "はし・る",
+    "a": "Berlari",
+    "lvl": "N4",
+    "day": 25,
+    "ex": [
+      {
+        "w": "走る",
+        "r": "はしる",
+        "a": "Berlari"
+      }
+    ]
+  },
+  {
+    "k": "通",
+    "on": "ツウ",
+    "kun": "とお・る, かよ・う",
+    "a": "Lewat, Menembus",
+    "lvl": "N4",
+    "day": 25,
+    "ex": [
+      {
+        "w": "通る",
+        "r": "とおる",
+        "a": "Melewati"
+      },
+      {
+        "w": "通う",
+        "r": "かよう",
+        "a": "Pulang pergi"
+      }
+    ]
+  },
+  {
+    "k": "重",
+    "on": "ジュウ, チョウ",
+    "kun": "おも・い",
+    "a": "Berat, Tumpuk",
+    "lvl": "N4",
+    "day": 25,
+    "ex": [
+      {
+        "w": "重い",
+        "r": "おもい",
+        "a": "Berat"
+      },
+      {
+        "w": "貴重",
+        "r": "きちょう",
+        "a": "Berharga"
+      }
+    ]
+  },
+  {
+    "k": "顔",
+    "on": "ガン",
+    "kun": "かお",
+    "a": "Wajah, Muka",
+    "lvl": "N4",
+    "day": 25,
+    "ex": [
+      {
+        "w": "顔",
+        "r": "かお",
+        "a": "Wajah"
+      },
+      {
+        "w": "笑顔",
+        "r": "えがお",
+        "a": "Senyuman"
+      }
+    ]
+  },
+  {
+    "k": "南",
+    "on": "ナン",
+    "kun": "みなみ",
+    "a": "Selatan",
+    "lvl": "N5",
+    "day": 26,
+    "ex": [
+      {
+        "w": "南",
+        "r": "みなみ",
+        "a": "Selatan"
+      }
+    ]
+  },
+  {
+    "k": "西",
+    "on": "セイ, サイ",
+    "kun": "にし",
+    "a": "Barat",
+    "lvl": "N5",
+    "day": 26,
+    "ex": [
+      {
+        "w": "西",
+        "r": "にし",
+        "a": "Barat"
+      }
+    ]
+  },
+  {
+    "k": "歌",
+    "on": "カ",
+    "kun": "うた, うた・う",
+    "a": "Lagu, Menyanyi",
+    "lvl": "N4",
+    "day": 27,
+    "ex": [
+      {
+        "w": "歌",
+        "r": "うた",
+        "a": "Lagu"
+      },
+      {
+        "w": "歌う",
+        "r": "うたう",
+        "a": "Menyanyi"
+      },
+      {
+        "w": "歌手",
+        "r": "かしゅ",
+        "a": "Penyanyi"
+      }
+    ]
+  },
+  {
+    "k": "黄",
+    "on": "コウ",
+    "kun": "き",
+    "a": "Kuning",
+    "lvl": "N4",
+    "day": 27,
+    "ex": [
+      {
+        "w": "黄色",
+        "r": "きいろ",
+        "a": "Warna kuning"
+      }
+    ]
+  },
+  {
+    "k": "特",
+    "on": "トク",
+    "kun": "-",
+    "a": "Spesial, Khusus",
+    "lvl": "N4",
+    "day": 28,
+    "ex": [
+      {
+        "w": "特別",
+        "r": "とくべつ",
+        "a": "Khusus/Spesial"
+      },
+      {
+        "w": "特に",
+        "r": "とくに",
+        "a": "Khususnya"
+      }
+    ]
+  },
+  {
+    "k": "世",
+    "on": "セイ, セ",
+    "kun": "よ",
+    "a": "Dunia, Generasi",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "世界",
+        "r": "せかい",
+        "a": "Dunia"
+      },
+      {
+        "w": "世の中",
+        "r": "よのなか",
+        "a": "Dunia masyarakat"
+      }
+    ]
+  },
+  {
+    "k": "体",
+    "on": "タイ",
+    "kun": "からだ",
+    "a": "Tubuh, Badan",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "体",
+        "r": "からだ",
+        "a": "Tubuh"
+      },
+      {
+        "w": "体力",
+        "r": "たいりょく",
+        "a": "Stamina"
+      }
+    ]
+  },
+  {
+    "k": "使",
+    "on": "シ",
+    "kun": "つか・う",
+    "a": "Menggunakan",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "使う",
+        "r": "つかう",
+        "a": "Menggunakan"
+      }
+    ]
+  },
+  {
+    "k": "借",
+    "on": "シャク",
+    "kun": "か・りる",
+    "a": "Meminjam",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "借りる",
+        "r": "かりる",
+        "a": "Meminjam"
+      }
+    ]
+  },
+  {
+    "k": "力",
+    "on": "リョク",
+    "kun": "ちから",
+    "a": "Tenaga, Daya",
+    "lvl": "N5",
+    "day": 31,
+    "ex": [
+      {
+        "w": "力",
+        "r": "ちから",
+        "a": "Tenaga"
+      }
+    ]
+  },
+  {
+    "k": "口",
+    "on": "コウ",
+    "kun": "くち",
+    "a": "Mulut, Pintu",
+    "lvl": "N5",
+    "day": 31,
+    "ex": [
+      {
+        "w": "出口",
+        "r": "でぐち",
+        "a": "Pintu keluar"
+      }
+    ]
+  },
+  {
+    "k": "回",
+    "on": "カイ",
+    "kun": "まわ・る",
+    "a": "Putaran, Kali",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "回る",
+        "r": "まわる",
+        "a": "Berputar"
+      },
+      {
+        "w": "何回",
+        "r": "なんかい",
+        "a": "Berapa kali"
+      }
+    ]
+  },
+  {
+    "k": "声",
+    "on": "セイ",
+    "kun": "こえ",
+    "a": "Suara (Makhluk)",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "声",
+        "r": "こえ",
+        "a": "Suara"
+      },
+      {
+        "w": "大声",
+        "r": "おおごえ",
+        "a": "Suara lantang"
+      }
+    ]
+  },
+  {
+    "k": "売",
+    "on": "バイ",
+    "kun": "う・る",
+    "a": "Menjual",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "売る",
+        "r": "うる",
+        "a": "Menjual"
+      },
+      {
+        "w": "売店",
+        "r": "ばいてん",
+        "a": "Kios / Kantin"
+      }
+    ]
+  },
+  {
+    "k": "始",
+    "on": "シ",
+    "kun": "はじ・まる",
+    "a": "Mulai, Memulai",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "始まる",
+        "r": "はじまる",
+        "a": "Dimulai"
+      }
+    ]
+  },
+  {
+    "k": "心",
+    "on": "シン",
+    "kun": "こころ",
+    "a": "Hati, Pikiran",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "心",
+        "r": "こころ",
+        "a": "Hati"
+      },
+      {
+        "w": "安心",
+        "r": "あんしん",
+        "a": "Lega"
+      }
+    ]
+  },
+  {
+    "k": "思",
+    "on": "シ",
+    "kun": "おも・う",
+    "a": "Berpikir, Mengira",
+    "lvl": "N5",
+    "day": 31,
+    "ex": [
+      {
+        "w": "思う",
+        "r": "おもう",
+        "a": "Berpikir"
+      }
+    ]
+  },
+  {
+    "k": "急",
+    "on": "キュウ",
+    "kun": "いそ・ぐ",
+    "a": "Buru-buru, Cepat",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "急ぐ",
+        "r": "いそぐ",
+        "a": "Buru-buru"
+      },
+      {
+        "w": "特急",
+        "r": "とっきゅう",
+        "a": "Kereta Ekspres"
+      }
+    ]
+  },
+  {
+    "k": "林",
+    "on": "リン",
+    "kun": "はやし",
+    "a": "Hutan Kecil",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "林",
+        "r": "はやし",
+        "a": "Hutan kecil"
+      }
+    ]
+  },
+  {
+    "k": "止",
+    "on": "シ",
+    "kun": "と・まる, と・める",
+    "a": "Berhenti",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "止まる",
+        "r": "とまる",
+        "a": "Berhenti"
+      },
+      {
+        "w": "中止",
+        "r": "ちゅうし",
+        "a": "Batal"
+      }
+    ]
+  },
+  {
+    "k": "池",
+    "on": "チ",
+    "kun": "いけ",
+    "a": "Kolam",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "池",
+        "r": "いけ",
+        "a": "Kolam"
+      },
+      {
+        "w": "電池",
+        "r": "でんち",
+        "a": "Baterai"
+      }
+    ]
+  },
+  {
+    "k": "済",
+    "on": "サイ",
+    "kun": "す・む",
+    "a": "Selesai, Lunas",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "経済",
+        "r": "けいざい",
+        "a": "Ekonomi"
+      }
+    ]
+  },
+  {
+    "k": "男",
+    "on": "ダン, ナン",
+    "kun": "おとこ",
+    "a": "Laki-laki",
+    "lvl": "N5",
+    "day": 31,
+    "ex": [
+      {
+        "w": "男の人",
+        "r": "おとこのひと",
+        "a": "Pria"
+      }
+    ]
+  },
+  {
+    "k": "界",
+    "on": "カイ",
+    "kun": "-",
+    "a": "Batas, Lingkup, Dunia",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "世界",
+        "r": "せかい",
+        "a": "Dunia"
+      }
+    ]
+  },
+  {
+    "k": "痛",
+    "on": "ツウ",
+    "kun": "いた・い",
+    "a": "Sakit, Nyeri",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "痛い",
+        "r": "いたい",
+        "a": "Sakit"
+      },
+      {
+        "w": "頭痛",
+        "r": "ずつう",
+        "a": "Sakit kepala"
+      }
+    ]
+  },
+  {
+    "k": "知",
+    "on": "チ",
+    "kun": "し・る",
+    "a": "Tahu, Mengetahui",
+    "lvl": "N5",
+    "day": 31,
+    "ex": [
+      {
+        "w": "知る",
+        "r": "しる",
+        "a": "Mengetahui"
+      }
+    ]
+  },
+  {
+    "k": "立",
+    "on": "リツ",
+    "kun": "た・つ",
+    "a": "Berdiri",
+    "lvl": "N5",
+    "day": 31,
+    "ex": [
+      {
+        "w": "立つ",
+        "r": "たつ",
+        "a": "Berdiri"
+      }
+    ]
+  },
+  {
+    "k": "答",
+    "on": "トウ",
+    "kun": "こた・える, こたえ",
+    "a": "Jawaban, Menjawab",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "答える",
+        "r": "こたえる",
+        "a": "Menjawab"
+      },
+      {
+        "w": "答え",
+        "r": "こたえ",
+        "a": "Jawaban"
+      }
+    ]
+  },
+  {
+    "k": "経",
+    "on": "ケイ",
+    "kun": "へ・る",
+    "a": "Melalui, Mengalami",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "経験",
+        "r": "けいけん",
+        "a": "Pengalaman"
+      },
+      {
+        "w": "経済",
+        "r": "けいざい",
+        "a": "Ekonomi"
+      }
+    ]
+  },
+  {
+    "k": "耳",
+    "on": "ジ",
+    "kun": "みみ",
+    "a": "Telinga",
+    "lvl": "N5",
+    "day": 31,
+    "ex": [
+      {
+        "w": "耳",
+        "r": "みみ",
+        "a": "Telinga"
+      }
+    ]
+  },
+  {
+    "k": "言",
+    "on": "ゲン",
+    "kun": "い・う",
+    "a": "Berkata",
+    "lvl": "N5",
+    "day": 31,
+    "ex": [
+      {
+        "w": "言う",
+        "r": "いう",
+        "a": "Berkata"
+      }
+    ]
+  },
+  {
+    "k": "貸",
+    "on": "タイ",
+    "kun": "か・す",
+    "a": "Meminjamkan",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "貸す",
+        "r": "かす",
+        "a": "Meminjamkan"
+      }
+    ]
+  },
+  {
+    "k": "足",
+    "on": "ソク",
+    "kun": "あし",
+    "a": "Kaki",
+    "lvl": "N5",
+    "day": 31,
+    "ex": [
+      {
+        "w": "足",
+        "r": "あし",
+        "a": "Kaki"
+      }
+    ]
+  },
+  {
+    "k": "軽",
+    "on": "ケイ",
+    "kun": "かる・い",
+    "a": "Ringan",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "軽い",
+        "r": "かるい",
+        "a": "Ringan"
+      },
+      {
+        "w": "手軽",
+        "r": "てがる",
+        "a": "Praktis/Mudah"
+      }
+    ]
+  },
+  {
+    "k": "酒",
+    "on": "シュ",
+    "kun": "さけ",
+    "a": "Minuman Keras, Sake",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "お酒",
+        "r": "おさけ",
+        "a": "Minuman beralkohol"
+      }
+    ]
+  },
+  {
+    "k": "門",
+    "on": "モン",
+    "kun": "かど",
+    "a": "Gerbang",
+    "lvl": "N5",
+    "day": 31,
+    "ex": [
+      {
+        "w": "校門",
+        "r": "こうもん",
+        "a": "Gerbang sekolah"
+      }
+    ]
+  },
+  {
+    "k": "閉",
+    "on": "ヘイ",
+    "kun": "し・まる, と・じる",
+    "a": "Menutup, Tertutup",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "閉める",
+        "r": "しめる",
+        "a": "Menutup"
+      }
+    ]
+  },
+  {
+    "k": "開",
+    "on": "カイ",
+    "kun": "あ・く, ひら・く",
+    "a": "Membuka, Terbuka",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "開ける",
+        "r": "あける",
+        "a": "Membuka"
+      }
+    ]
+  },
+  {
+    "k": "雲",
+    "on": "ウン",
+    "kun": "くも",
+    "a": "Awan",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "雲",
+        "r": "くも",
+        "a": "Awan"
+      },
+      {
+        "w": "雨雲",
+        "r": "あまぐも",
+        "a": "Awan mendung"
+      }
+    ]
+  },
+  {
+    "k": "題",
+    "on": "ダイ",
+    "kun": "-",
+    "a": "Topik, Judul, Tema",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "問題",
+        "r": "もんだい",
+        "a": "Soal pertanyaan"
+      },
+      {
+        "w": "宿題",
+        "r": "しゅくだい",
+        "a": "PR"
+      }
+    ]
+  },
+  {
+    "k": "首",
+    "on": "シュ",
+    "kun": "くび",
+    "a": "Leher",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "首",
+        "r": "くび",
+        "a": "Leher"
+      },
+      {
+        "w": "手首",
+        "r": "てくび",
+        "a": "Pergelangan tangan"
+      }
+    ]
+  },
+  {
+    "k": "馬",
+    "on": "バ",
+    "kun": "うま",
+    "a": "Kuda",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "馬",
+        "r": "うま",
+        "a": "Kuda"
+      },
+      {
+        "w": "乗馬",
+        "r": "じょうば",
+        "a": "Berkuda"
+      }
+    ]
+  },
+  {
+    "k": "験",
+    "on": "ケン",
+    "kun": "-",
+    "a": "Ujian, Pengalaman",
+    "lvl": "N4",
+    "day": 31,
+    "ex": [
+      {
+        "w": "試験",
+        "r": "しけん",
+        "a": "Ujian"
+      },
+      {
+        "w": "経験",
+        "r": "けいけん",
+        "a": "Pengalaman"
+      }
+    ]
+  }
 ];
 
 // ==========================================
@@ -1873,14 +5855,28 @@ const DojoEngine = {
     let savedDay = parseInt(localStorage.getItem('yk_unlocked')) || parseInt(localStorage.getItem('yk_unlocked_day')) || 1;
     this.playerUnlockedDay = Math.max(1, savedDay);
 
+    // Update filter chip label dengan hari aktif
+    const chipUnlocked = document.getElementById('fchip-unlocked');
+    if (chipUnlocked) {
+      chipUnlocked.innerText = `⛩️ Dari Ekspedisi (Hari 1 - ${this.playerUnlockedDay})`;
+    }
+
     // 2. Baca data ruang dojo dari localStorage
     let savedRooms = localStorage.getItem('yk_kanji_dojo_rooms');
     if (savedRooms) {
       try { this.rooms = JSON.parse(savedRooms); } catch(e) { this.rooms = {}; }
     }
+    // Jika masih memakai default lama ['一', '二', '三', '人'], sinkronkan ke kanji Hari 1 resmi Yomikata ['私', '人', '日', '本']
+    if (this.rooms && this.rooms['default']) {
+      const oldDefault = ['一', '二', '三', '人'];
+      if (JSON.stringify(this.rooms['default'].kanji) === JSON.stringify(oldDefault)) {
+        this.rooms['default'].kanji = ['私', '人', '日', '本'];
+        this.saveRooms();
+      }
+    }
     if (!this.rooms || Object.keys(this.rooms).length === 0) {
       this.rooms = {
-        'default': { name: 'Dojo Latihan Utama', kanji: ['一', '二', '三', '人'] },
+        'default': { name: 'Dojo Latihan Utama', kanji: ['私', '人', '日', '本'] },
         'n5_target': { name: 'Target Kanji N5', kanji: [] }
       };
       this.saveRooms();
@@ -2043,6 +6039,7 @@ const DojoEngine = {
     // Filter Kategori
     if (this.activeFilter === 'unlocked') {
       list = list.filter(item => item.day <= this.playerUnlockedDay);
+      list.sort((a, b) => a.day - b.day);
     } else if (this.activeFilter === 'n5') {
       list = list.filter(item => item.lvl === 'N5');
     } else if (this.activeFilter === 'n4') {
@@ -2072,13 +6069,16 @@ const DojoEngine = {
       let inDojo = activeRoom.kanji.includes(item.k);
       let isMaster = this.masteredKanji.includes(item.k);
       let lvlClass = item.lvl === 'N5' ? 'tag-n5' : 'tag-n4';
+      let dayBadge = item.day <= this.playerUnlockedDay 
+        ? 'Hari ' + item.day 
+        : (item.day <= 30 ? 'Hari ' + item.day + ' 🔒' : 'Ekstra N4');
 
       return `
         <div class="kanji-market-card">
           <div class="card-top-meta">
             <span class="tag-level ${lvlClass}">${item.lvl}</span>
             <div class="card-meta-right">
-              <span class="tag-source">${item.day <= this.playerUnlockedDay ? 'Hari ' + item.day : 'Sektor ' + item.day}</span>
+              <span class="tag-source">${dayBadge}</span>
               <button type="button" class="btn-card-audio" onclick="DojoEngine.speakKanji('${item.k}', '${(item.kun||item.on||'').replace(/'/g, "\\'")}', event)" title="Dengarkan Pengucapan">🔊</button>
             </div>
           </div>
