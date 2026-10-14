@@ -3,240 +3,428 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Modul Kanji N5 - YOMIKATA</title>
+<title>Pasar & Dojo Kanji Kensei - YOMIKATA</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg-main: #080d1a;
-    --card-bg: rgba(15, 23, 42, 0.85);
+    --bg-base: #050813;
+    --bg-surface: rgba(13, 22, 45, 0.82);
+    --bg-card: rgba(16, 26, 54, 0.75);
+    --bg-card-hover: rgba(24, 38, 76, 0.92);
     --primary: #38bdf8;
-    --primary-glow: rgba(56, 189, 248, 0.3);
+    --primary-glow: rgba(56, 189, 248, 0.4);
     --success: #22c55e;
-    --danger: #ef4444;
+    --success-glow: rgba(34, 197, 94, 0.4);
     --warning: #f59e0b;
     --gold: #fbbf24;
+    --gold-glow: rgba(251, 191, 36, 0.45);
+    --danger: #ef4444;
+    --danger-glow: rgba(239, 68, 68, 0.4);
     --purple: #c084fc;
+    --purple-glow: rgba(192, 132, 252, 0.4);
+    --pink: #f472b6;
+    --pink-glow: rgba(244, 114, 182, 0.4);
     --text-main: #f8fafc;
     --text-sub: #94a3b8;
-    --border-glass: rgba(255, 255, 255, 0.08);
+    --text-muted: #64748b;
+    --border-glass: rgba(255, 255, 255, 0.09);
+    --border-accent: rgba(56, 189, 248, 0.35);
   }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
   body {
-    font-family: 'Outfit', 'Segoe UI', sans-serif;
-    background: radial-gradient(circle at 50% 0%, #0f1f38 0%, var(--bg-main) 70%);
+    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: var(--bg-base);
+    background-image: 
+      radial-gradient(circle at 50% 0%, rgba(30, 58, 138, 0.38) 0%, transparent 60%),
+      radial-gradient(circle at 10% 35%, rgba(192, 132, 252, 0.12) 0%, transparent 40%),
+      radial-gradient(circle at 90% 70%, rgba(56, 189, 248, 0.12) 0%, transparent 40%),
+      linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 100% 100%, 36px 36px, 36px 36px;
     color: var(--text-main);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 12px 10px 90px 10px;
+    padding: 14px 12px 100px 12px;
     overflow-x: hidden;
   }
 
-  .container { width: 100%; max-width: 620px; position: relative; }
-  button, input { touch-action: manipulation; font-family: inherit; }
+  .container { width: 100%; max-width: 680px; position: relative; }
+  button, input, select { touch-action: manipulation; font-family: inherit; }
   .hidden { display: none !important; }
 
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); }
+  ::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.3); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(56, 189, 248, 0.6); }
+
   /* ==========================================
-     TOP MASTER BAR (KENSEI EXPEDITION SYNC)
+     1. MASTER TOP NAVIGATION & BRANDING
      ========================================== */
   .top-navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    background: rgba(10, 16, 30, 0.92);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid var(--border-glass);
-    border-radius: 16px;
-    padding: 8px 12px;
-    margin-bottom: 12px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    background: rgba(10, 17, 36, 0.9);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 18px;
+    padding: 9px 14px;
+    margin-bottom: 14px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.65), inset 0 1px 1px rgba(255, 255, 255, 0.15);
   }
 
-  .nav-left { display: flex; align-items: center; gap: 8px; }
+  .nav-left { display: flex; align-items: center; gap: 10px; }
   .btn-back {
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid var(--border-glass);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     color: var(--primary);
-    padding: 6px 12px;
-    border-radius: 10px;
+    padding: 7px 13px;
+    border-radius: 11px;
     font-size: 13px;
     font-weight: 800;
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 5px;
-    transition: all 0.2s ease;
+    gap: 6px;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   }
   .btn-back:hover {
-    background: rgba(56, 189, 248, 0.15);
+    background: rgba(56, 189, 248, 0.2);
     border-color: var(--primary);
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+    box-shadow: 0 0 16px var(--primary-glow);
   }
+  .btn-back:active { transform: scale(0.95); }
 
-  .nav-brand {
-    display: flex;
-    flex-direction: column;
-  }
+  .nav-title-group { display: flex; flex-direction: column; }
   .nav-title {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 900;
-    color: #fff;
-    letter-spacing: 1px;
+    letter-spacing: 0.8px;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
+    background: linear-gradient(135deg, #ffffff 40%, #bae6fd 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
-  .nav-badge-n5 {
-    background: rgba(56, 189, 248, 0.15);
-    color: var(--primary);
-    border: 1px solid rgba(56, 189, 248, 0.4);
-    font-size: 10px;
+  .badge-market {
+    background: linear-gradient(135deg, rgba(251, 191, 36, 0.25) 0%, rgba(245, 158, 11, 0.12) 100%);
+    border: 1px solid rgba(251, 191, 36, 0.5);
+    color: var(--gold);
+    font-size: 9.5px;
     font-weight: 800;
-    padding: 1px 6px;
+    padding: 3px 8px;
     border-radius: 6px;
+    letter-spacing: 1.2px;
+    box-shadow: 0 0 10px rgba(251, 191, 36, 0.2);
+    animation: pulseGold 3s infinite;
+    -webkit-text-fill-color: var(--gold);
+  }
+  @keyframes pulseGold {
+    0%, 100% { box-shadow: 0 0 8px rgba(251, 191, 36, 0.2); }
+    50% { box-shadow: 0 0 16px rgba(251, 191, 36, 0.45); }
   }
 
   .nav-right { display: flex; align-items: center; gap: 6px; }
-  .sync-pill {
-    background: rgba(34, 197, 94, 0.1);
-    border: 1px solid rgba(34, 197, 94, 0.3);
-    color: #4ade80;
-    font-size: 11px;
+  .btn-onyomi-guide {
+    background: linear-gradient(135deg, rgba(192, 132, 252, 0.25) 0%, rgba(147, 51, 234, 0.2) 100%);
+    border: 1px solid rgba(192, 132, 252, 0.5);
+    color: #f3e8ff;
+    padding: 7px 13px;
+    border-radius: 11px;
+    font-size: 12px;
     font-weight: 800;
-    padding: 5px 10px;
-    border-radius: 10px;
-    display: inline-flex;
+    cursor: pointer;
+    display: flex;
     align-items: center;
-    gap: 4px;
-    white-space: nowrap;
+    gap: 6px;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 0 16px rgba(192, 132, 252, 0.25);
+  }
+  .btn-onyomi-guide:hover {
+    background: linear-gradient(135deg, rgba(192, 132, 252, 0.4) 0%, rgba(147, 51, 234, 0.35) 100%);
+    border-color: #c084fc;
+    transform: translateY(-2px);
+    box-shadow: 0 0 24px var(--purple-glow);
+  }
+  .btn-onyomi-guide:active { transform: scale(0.95); }
+
+  /* ==========================================
+     2. DOJO ROOM SELECTOR & TELEMETRY HUD BAR
+     ========================================== */
+  .dojo-deck-bar {
+    background: linear-gradient(165deg, rgba(20, 32, 64, 0.92) 0%, rgba(10, 16, 36, 0.96) 100%);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    border-radius: 18px;
+    padding: 14px 16px;
+    margin-bottom: 14px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+    overflow: hidden;
+  }
+  .dojo-deck-bar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--primary), transparent);
   }
 
-  /* Progress Banner & Telemetry */
-  .telemetry-card {
-    background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.95) 100%);
-    border: 1px solid var(--border-glass);
-    border-radius: 16px;
-    padding: 14px 18px;
-    margin-bottom: 12px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-  }
-
-  .telemetry-header {
+  .dojo-bar-top {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 8px;
+    flex-wrap: wrap;
+    gap: 10px;
   }
-  .telemetry-title {
-    font-size: 12px;
+
+  .dojo-room-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .dojo-icon-badge {
+    width: 38px;
+    height: 38px;
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, rgba(10, 16, 36, 0.8) 100%);
+    border: 1.5px solid var(--primary);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 19px;
+    box-shadow: 0 0 14px var(--primary-glow);
+  }
+  .dojo-name-cluster { display: flex; flex-direction: column; gap: 2px; }
+  .dojo-label {
+    font-size: 10px;
     font-weight: 800;
-    color: var(--gold);
-    letter-spacing: 0.5px;
+    color: var(--primary);
+    letter-spacing: 1.2px;
     text-transform: uppercase;
   }
-  .telemetry-count {
-    font-size: 13px;
-    font-weight: 900;
+  .dojo-select {
+    background: rgba(6, 10, 22, 0.9);
+    border: 1px solid var(--border-accent);
     color: #fff;
+    font-size: 13.5px;
+    font-weight: 800;
+    padding: 5px 10px;
+    border-radius: 9px;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
   }
-  .telemetry-count b { color: var(--primary); }
+  .dojo-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 12px var(--primary-glow);
+  }
 
-  .telemetry-track {
-    width: 100%;
-    height: 6px;
-    background: rgba(255, 255, 255, 0.08);
+  .dojo-bar-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-dojo-action {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-glass);
+    color: #f1f5f9;
+    padding: 6px 12px;
+    border-radius: 9px;
+    font-size: 11.5px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .btn-dojo-action:hover {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: var(--danger);
+    color: #fca5a5;
+    transform: translateY(-1px);
+  }
+  .btn-create-room {
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.22) 0%, rgba(16, 185, 129, 0.15) 100%);
+    border-color: rgba(34, 197, 94, 0.5);
+    color: #86efac;
+    box-shadow: 0 0 12px rgba(34, 197, 94, 0.15);
+  }
+  .btn-create-room:hover {
+    background: var(--success);
+    color: #000;
+    border-color: var(--success);
+    box-shadow: 0 0 16px var(--success-glow);
+    transform: translateY(-1px);
+  }
+  .btn-create-room:active, .btn-dojo-action:active { transform: scale(0.95); }
+
+  /* Telemetry & Progress Strip */
+  .dojo-stats-strip {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+  }
+  .dojo-stats-left {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .dojo-count-pill {
+    background: rgba(56, 189, 248, 0.14);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    color: #38bdf8;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11.5px;
+    font-weight: 800;
+  }
+  .dojo-mastered-pill {
+    background: rgba(251, 191, 36, 0.14);
+    border: 1px solid rgba(251, 191, 36, 0.35);
+    color: var(--gold);
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11.5px;
+    font-weight: 800;
+  }
+
+  .dojo-progress-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .dojo-progress-track {
+    flex: 1;
+    height: 7px;
+    background: rgba(6, 10, 22, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 10px;
     overflow: hidden;
     position: relative;
   }
-  .telemetry-fill {
+  .dojo-progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--primary) 0%, #818cf8 50%, var(--gold) 100%);
+    background: linear-gradient(90deg, #38bdf8 0%, #22c55e 60%, #fbbf24 100%);
+    border-radius: 10px;
     transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 0 10px var(--primary-glow);
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
   }
-
-  .telemetry-desc {
-    display: flex;
-    justify-content: space-between;
+  .dojo-progress-text {
     font-size: 11px;
+    font-weight: 800;
     color: var(--text-sub);
-    margin-top: 8px;
+    min-width: 80px;
+    text-align: right;
   }
 
-  /* Main Mode Tabs */
-  .nav-tabs {
+  /* ==========================================
+     3. MAIN MODE TABS (Pasar vs Latihan Dojo)
+     ========================================== */
+  .main-nav-tabs {
     display: flex;
-    background: rgba(10, 16, 30, 0.75);
+    background: rgba(10, 16, 34, 0.88);
     backdrop-filter: blur(16px);
-    padding: 4px;
-    border-radius: 14px;
+    padding: 5px;
+    border-radius: 16px;
     border: 1px solid var(--border-glass);
-    gap: 4px;
-    margin-bottom: 12px;
+    gap: 6px;
+    margin-bottom: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
   }
-  .tab-btn {
+  .tab-main-btn {
     flex: 1;
     background: transparent;
     color: var(--text-sub);
     border: 1px solid transparent;
-    padding: 8px 6px;
-    border-radius: 10px;
+    padding: 10px 10px;
+    border-radius: 12px;
     cursor: pointer;
-    font-weight: 700;
-    font-size: 12.5px;
+    font-weight: 800;
+    font-size: 13.5px;
     text-align: center;
-    transition: all 0.2s ease;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 5px;
+    gap: 8px;
+    user-select: none;
   }
-  .tab-btn:hover { color: #fff; background: rgba(255, 255, 255, 0.06); }
-  .tab-btn.active {
-    background: linear-gradient(135deg, rgba(56, 189, 248, 0.22) 0%, rgba(99, 102, 241, 0.18) 100%);
+  .tab-main-btn:hover { color: #fff; background: rgba(255, 255, 255, 0.05); }
+  .tab-main-btn.active {
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.24) 0%, rgba(99, 102, 241, 0.2) 100%);
     color: var(--primary);
-    border-color: rgba(56, 189, 248, 0.45);
+    border-color: rgba(56, 189, 248, 0.5);
+    box-shadow: 0 4px 16px rgba(56, 189, 248, 0.25);
+    transform: translateY(-1px);
+  }
+  .tab-badge-num {
+    background: rgba(56, 189, 248, 0.2);
+    border: 1px solid rgba(56, 189, 248, 0.4);
+    font-size: 10.5px;
+    padding: 2px 7px;
+    border-radius: 10px;
     font-weight: 800;
-    box-shadow: 0 2px 10px rgba(56, 189, 248, 0.2);
+    color: #fff;
   }
 
-  /* Filter Chips & Search Bar */
-  .filter-controls {
+  /* ==========================================
+     4. PASAR KANJI (KATALOG DENGAN KERANJANG)
+     ========================================== */
+  .market-toolbar {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    margin-bottom: 14px;
+    gap: 10px;
+    margin-bottom: 16px;
   }
-  .search-box-row {
+  .search-wrapper {
     display: flex;
     align-items: center;
-    background: rgba(15, 23, 42, 0.7);
+    background: rgba(13, 21, 44, 0.9);
     border: 1px solid var(--border-glass);
-    border-radius: 12px;
-    padding: 2px 12px;
-    transition: all 0.2s ease;
+    border-radius: 14px;
+    padding: 3px 14px;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
   }
-  .search-box-row:focus-within {
+  .search-wrapper:focus-within {
     border-color: var(--primary);
-    box-shadow: 0 0 12px var(--primary-glow);
+    box-shadow: 0 0 18px var(--primary-glow);
+    background: rgba(16, 26, 56, 0.95);
   }
   .search-input {
     flex: 1;
     background: transparent;
     border: none;
     color: #fff;
-    padding: 9px 8px;
+    padding: 10px 8px;
     font-size: 13.5px;
     outline: none;
   }
+  .search-input::placeholder { color: var(--text-muted); }
   .search-clear {
     background: transparent;
     border: none;
@@ -244,534 +432,721 @@
     font-size: 14px;
     cursor: pointer;
     padding: 4px;
+    transition: color 0.2s;
   }
+  .search-clear:hover { color: #fff; }
 
-  .chips-row {
+  .filter-chips-stream {
     display: flex;
-    gap: 6px;
+    gap: 7px;
     overflow-x: auto;
-    padding-bottom: 4px;
+    padding-bottom: 6px;
     scrollbar-width: none;
   }
-  .chips-row::-webkit-scrollbar { display: none; }
-  .chip-btn {
+  .filter-chips-stream::-webkit-scrollbar { display: none; }
+  .filter-chip {
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid var(--border-glass);
     color: var(--text-sub);
-    padding: 6px 12px;
+    padding: 7px 14px;
     border-radius: 20px;
     font-size: 11.5px;
     font-weight: 800;
     cursor: pointer;
     white-space: nowrap;
-    transition: all 0.2s ease;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .chip-btn:hover { color: #fff; background: rgba(255, 255, 255, 0.08); }
-  .chip-btn.active {
-    background: rgba(56, 189, 248, 0.18);
+  .filter-chip:hover { color: #fff; background: rgba(255, 255, 255, 0.08); transform: translateY(-1px); }
+  .filter-chip.active {
+    background: rgba(56, 189, 248, 0.2);
     border-color: var(--primary);
     color: var(--primary);
-    box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+    box-shadow: 0 0 14px rgba(56, 189, 248, 0.3);
   }
+  .filter-chip:active { transform: scale(0.95); }
 
-  /* ==========================================
-     VIEW 1: FLASHCARD CARD DISPLAY
-     ========================================== */
-  .flashcard-wrapper {
-    background: linear-gradient(165deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.92) 100%);
-    border: 1px solid rgba(56, 189, 248, 0.25);
-    border-radius: 20px;
-    padding: 24px 20px;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(56, 189, 248, 0.08);
-    min-height: 420px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .fc-top-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    padding-bottom: 10px;
-  }
-  .fc-day-tag {
-    font-size: 11px;
-    font-weight: 800;
-    color: var(--gold);
-    letter-spacing: 1px;
-  }
-  .fc-counter {
-    font-size: 11px;
-    font-weight: 800;
-    color: var(--text-sub);
-  }
-  .fc-counter b { color: var(--primary); }
-
-  .fc-main-body {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px 0;
-    text-align: center;
-    cursor: pointer;
-    user-select: none;
-  }
-
-  .fc-kanji-hero {
-    font-family: 'Noto Sans JP', sans-serif;
-    font-size: clamp(68px, 18vw, 92px);
-    font-weight: 900;
-    color: #fff;
-    line-height: 1.1;
-    margin-bottom: 6px;
-    text-shadow: 0 0 25px rgba(56, 189, 248, 0.35);
-    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .fc-main-body:hover .fc-kanji-hero {
-    transform: scale(1.05);
-    color: var(--gold);
-    text-shadow: 0 0 30px rgba(251, 191, 36, 0.5);
-  }
-
-  .fc-tap-hint {
-    font-size: 11.5px;
-    font-weight: 700;
-    color: var(--text-sub);
-    margin-bottom: 16px;
-    animation: pulseHint 2s infinite ease-in-out;
-  }
-  @keyframes pulseHint { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; color: var(--primary); } }
-
-  /* Hidden / Revealed Sections */
-  .fc-revealed-section {
-    width: 100%;
-    max-width: 480px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    transition: all 0.3s ease;
-  }
-  .blur-shield {
-    filter: blur(10px);
-    opacity: 0.2;
-    transform: translateY(8px);
-    pointer-events: none;
-    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .blur-shield.unlocked-view {
-    filter: blur(0);
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-  }
-
-  .fc-reading-grid {
+  /* Catalog Grid Cards */
+  .market-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    width: 100%;
-  }
-  .reading-box {
-    background: rgba(2, 6, 23, 0.6);
-    border: 1px solid var(--border-glass);
-    border-radius: 12px;
-    padding: 8px 10px;
-    text-align: left;
-  }
-  .reading-label {
-    font-size: 10px;
-    font-weight: 800;
-    letter-spacing: 0.8px;
-    margin-bottom: 3px;
-    text-transform: uppercase;
-  }
-  .reading-onyomi .reading-label { color: #f472b6; }
-  .reading-kunyomi .reading-label { color: #38bdf8; }
-  .reading-value {
-    font-family: 'Noto Sans JP', sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    color: #fff;
-    word-break: break-all;
-  }
-
-  .fc-meaning-box {
-    background: rgba(251, 191, 36, 0.08);
-    border: 1px solid rgba(251, 191, 36, 0.3);
-    border-radius: 12px;
-    padding: 10px 14px;
-    text-align: center;
-  }
-  .meaning-label {
-    font-size: 9.5px;
-    font-weight: 800;
-    color: var(--gold);
-    letter-spacing: 1px;
-    text-transform: uppercase;
-  }
-  .meaning-text {
-    font-size: 16px;
-    font-weight: 800;
-    color: #fff;
-    margin-top: 2px;
-  }
-
-  /* Contoh Jukugo */
-  .fc-jukugo-panel {
-    background: rgba(2, 6, 23, 0.5);
-    border: 1px solid var(--border-glass);
-    border-radius: 12px;
-    padding: 10px 12px;
-    text-align: left;
-  }
-  .jukugo-title {
-    font-size: 10px;
-    font-weight: 800;
-    color: var(--text-sub);
-    letter-spacing: 0.8px;
-    margin-bottom: 6px;
-    text-transform: uppercase;
-  }
-  .jukugo-list {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-  }
-  .jukugo-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 13px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-    padding-bottom: 3px;
-  }
-  .jukugo-word {
-    font-family: 'Noto Sans JP', sans-serif;
-    font-weight: 700;
-    color: #38bdf8;
-  }
-  .jukugo-meaning {
-    font-size: 11.5px;
-    color: var(--text-sub);
-    font-style: italic;
-  }
-
-  /* Flashcard Action Buttons */
-  .fc-action-row {
-    display: flex;
-    gap: 8px;
-    width: 100%;
-    margin-top: 14px;
-  }
-  .btn-nav-fc {
-    flex: 1;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid var(--border-glass);
-    color: #fff;
-    font-size: 13px;
-    font-weight: 800;
-    padding: 11px 16px;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-  .btn-nav-fc:hover {
-    background: rgba(56, 189, 248, 0.2);
-    border-color: var(--primary);
-  }
-  .btn-nav-next {
-    flex: 2;
-    background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
-    border-color: var(--primary);
-    color: #fff;
-    box-shadow: 0 0 15px rgba(2, 132, 199, 0.4);
-  }
-  .btn-nav-next:hover {
-    background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
-    color: #000;
-  }
-  .btn-audio-speak {
-    width: 44px;
-    height: 44px;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid var(--border-glass);
-    border-radius: 12px;
-    color: #38bdf8;
-    font-size: 18px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-    flex-shrink: 0;
-  }
-  .btn-audio-speak:hover {
-    background: rgba(56, 189, 248, 0.2);
-    transform: scale(1.08);
-  }
-
-  /* ==========================================
-     VIEW 2: GRID / KATALOG CARD DISPLAY
-     ========================================== */
-  .kanji-grid-stream {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
     gap: 10px;
     width: 100%;
   }
 
-  .grid-card {
-    background: rgba(15, 23, 42, 0.85);
+  .kanji-market-card {
+    background: linear-gradient(165deg, rgba(17, 27, 54, 0.88) 0%, rgba(9, 14, 30, 0.94) 100%);
     border: 1px solid var(--border-glass);
-    border-radius: 14px;
+    border-radius: 16px;
     padding: 12px 10px;
-    text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
-    cursor: pointer;
+    user-select: none;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
   }
-  .grid-card:hover {
-    transform: translateY(-3px);
+  .kanji-market-card:hover {
+    background: linear-gradient(165deg, rgba(25, 39, 78, 0.95) 0%, rgba(13, 20, 42, 0.98) 100%);
+    transform: translateY(-4px) scale(1.02);
     border-color: var(--primary);
-    box-shadow: 0 8px 20px rgba(56, 189, 248, 0.2);
-    background: rgba(22, 33, 58, 0.95);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.65), 0 0 20px rgba(56, 189, 248, 0.25);
+    z-index: 2;
   }
 
-  .grid-kanji-char {
+  .card-top-meta {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    font-size: 9.5px;
+    font-weight: 800;
+  }
+  .tag-level {
+    padding: 2px 6px;
+    border-radius: 5px;
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+  }
+  .tag-n5 { background: rgba(56, 189, 248, 0.18); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4); }
+  .tag-n4 { background: rgba(192, 132, 252, 0.18); color: #c084fc; border: 1px solid rgba(192, 132, 252, 0.4); }
+
+  .card-meta-right {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .tag-source { color: var(--gold); font-size: 9px; font-weight: 700; }
+  .btn-card-audio {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--border-glass);
+    color: var(--text-sub);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    font-size: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .btn-card-audio:hover {
+    background: var(--primary);
+    color: #000;
+    transform: scale(1.15);
+  }
+  .btn-card-audio:active { transform: scale(0.9); }
+
+  .card-kanji-hero {
     font-family: 'Noto Sans JP', sans-serif;
-    font-size: 38px;
+    font-size: 44px;
     font-weight: 900;
     color: #fff;
     line-height: 1.1;
-    margin: 4px 0;
+    margin: 6px 0 3px;
+    text-shadow: 0 0 18px rgba(255, 255, 255, 0.15);
+    transition: transform 0.2s;
   }
-  .grid-arti {
-    font-size: 11px;
-    font-weight: 700;
+  .kanji-market-card:hover .card-kanji-hero {
+    transform: scale(1.08);
+    color: #bae6fd;
+    text-shadow: 0 0 20px var(--primary-glow);
+  }
+
+  .card-arti-label {
+    font-size: 11.5px;
+    font-weight: 800;
     color: var(--gold);
     line-height: 1.2;
-    margin-bottom: 4px;
+    text-align: center;
+    margin-bottom: 2px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     width: 100%;
   }
-  .grid-day-tag {
-    font-size: 9.5px;
-    font-weight: 800;
+  .card-readings-hint {
+    font-size: 10px;
     color: var(--text-sub);
-    background: rgba(255, 255, 255, 0.05);
-    padding: 2px 6px;
-    border-radius: 6px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+    text-align: center;
   }
 
-  /* Locked Kanji Card (Misty Fog Seal) */
-  .grid-card.is-locked {
-    background: rgba(10, 15, 26, 0.7);
-    border-color: rgba(255, 255, 255, 0.05);
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
-  .grid-card.is-locked .grid-kanji-char {
-    filter: blur(5px) grayscale(100%);
-    opacity: 0.25;
-    user-select: none;
-  }
-  .grid-card.is-locked:hover {
-    transform: none;
-    border-color: rgba(239, 68, 68, 0.4);
-    box-shadow: 0 0 15px rgba(239, 68, 68, 0.2);
-  }
-  .grid-lock-badge {
-    position: absolute;
-    inset: 0;
+  /* Cart Toggle Button */
+  .btn-cart-toggle {
+    width: 100%;
+    border-radius: 9px;
+    padding: 7px 4px;
+    font-size: 11px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    border: none;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: rgba(8, 13, 26, 0.82);
-    backdrop-filter: blur(3px);
-    border-radius: 14px;
-    padding: 6px;
+    gap: 4px;
   }
-  .grid-lock-icon { font-size: 20px; margin-bottom: 2px; }
-  .grid-lock-text {
-    font-size: 9.5px;
-    font-weight: 800;
-    color: #f87171;
-    text-transform: uppercase;
-    line-height: 1.2;
+  .btn-cart-toggle.is-add {
+    background: rgba(56, 189, 248, 0.14);
+    border: 1px solid rgba(56, 189, 248, 0.4);
+    color: #38bdf8;
   }
+  .btn-cart-toggle.is-add:hover {
+    background: var(--primary);
+    color: #000;
+    box-shadow: 0 0 14px var(--primary-glow);
+    transform: translateY(-1px);
+  }
+  .btn-cart-toggle.is-in-dojo {
+    background: rgba(34, 197, 94, 0.22);
+    border: 1px solid var(--success);
+    color: #86efac;
+    box-shadow: 0 0 10px rgba(34, 197, 94, 0.2);
+  }
+  .btn-cart-toggle.is-in-dojo:hover {
+    background: rgba(239, 68, 68, 0.25);
+    border-color: var(--danger);
+    color: #fca5a5;
+    box-shadow: 0 0 12px var(--danger-glow);
+  }
+  .btn-cart-toggle:active { transform: scale(0.95); }
 
   /* ==========================================
-     VIEW 3: KUIS DRILL KANJI
+     5. RUANG DOJO LATIHAN (FLASHCARD & KUIS)
      ========================================== */
-  .quiz-wrapper {
-    background: linear-gradient(165deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.92) 100%);
-    border: 1px solid rgba(56, 189, 248, 0.25);
-    border-radius: 20px;
+  .dojo-arena-card {
+    background: linear-gradient(170deg, rgba(22, 34, 68, 0.96) 0%, rgba(10, 16, 36, 0.98) 100%);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    border-radius: 24px;
     padding: 24px 20px;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
-    min-height: 400px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75), 0 0 30px rgba(56, 189, 248, 0.12);
+    min-height: 440px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    position: relative;
+    overflow: hidden;
   }
 
-  .quiz-header {
+  .dojo-subnav-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    padding-bottom: 10px;
+    padding-bottom: 12px;
+    margin-bottom: 14px;
   }
-  .quiz-badge {
-    font-size: 11px;
+  .dojo-mode-pills {
+    display: flex;
+    gap: 8px;
+  }
+  .btn-dojo-mode {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-glass);
+    color: var(--text-sub);
+    padding: 6px 12px;
+    border-radius: 9px;
+    font-size: 11.5px;
     font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .btn-dojo-mode:hover { color: #fff; background: rgba(255, 255, 255, 0.1); }
+  .btn-dojo-mode.active {
+    background: rgba(56, 189, 248, 0.22);
+    border-color: var(--primary);
     color: var(--primary);
-    background: rgba(56, 189, 248, 0.15);
-    padding: 3px 8px;
-    border-radius: 6px;
-    border: 1px solid rgba(56, 189, 248, 0.35);
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
   }
 
-  .quiz-body {
+  /* Flashcard Content */
+  .fc-body-box {
     flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 20px 0;
+    padding: 10px 0;
     text-align: center;
-  }
-  .quiz-prompt {
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 1px;
-    color: var(--text-sub);
-    text-transform: uppercase;
-    margin-bottom: 10px;
-  }
-  .quiz-kanji-display {
-    font-family: 'Noto Sans JP', sans-serif;
-    font-size: 68px;
-    font-weight: 900;
-    color: #fff;
-    margin-bottom: 20px;
-    text-shadow: 0 0 25px rgba(56, 189, 248, 0.3);
+    cursor: pointer;
   }
 
-  .quiz-options-grid {
+  .fc-kanji-big {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: clamp(76px, 19vw, 105px);
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.1;
+    margin-bottom: 6px;
+    text-shadow: 0 0 35px rgba(56, 189, 248, 0.45);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    animation: floatKanji 4s ease-in-out infinite;
+  }
+  @keyframes floatKanji {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+  .fc-body-box:hover .fc-kanji-big {
+    transform: scale(1.08) translateY(-4px);
+    color: var(--gold);
+    text-shadow: 0 0 40px var(--gold-glow);
+  }
+
+  .fc-reveal-wrap {
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: all 0.3s ease;
+  }
+  .shield-blur {
+    filter: blur(12px);
+    opacity: 0.12;
+    transform: translateY(10px) scale(0.96);
+    pointer-events: none;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .shield-blur.revealed {
+    filter: blur(0);
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+
+  .fc-grid-two {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    width: 100%;
-    max-width: 440px;
+    gap: 10px;
   }
-  .quiz-opt-btn {
-    background: rgba(255, 255, 255, 0.06);
-    border: 1.5px solid var(--border-glass);
+  .reading-cell {
+    background: rgba(6, 10, 24, 0.78);
+    border: 1px solid var(--border-glass);
     border-radius: 12px;
-    padding: 12px 10px;
-    color: #fff;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    text-align: center;
+    padding: 10px 12px;
+    text-align: left;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+    transition: border-color 0.2s;
   }
-  .quiz-opt-btn:hover {
-    background: rgba(56, 189, 248, 0.15);
+  .reading-cell:hover { border-color: rgba(255, 255, 255, 0.2); }
+  .rc-label {
+    font-size: 9.5px;
+    font-weight: 900;
+    letter-spacing: 0.9px;
+    margin-bottom: 3px;
+    text-transform: uppercase;
+  }
+  .rc-onyomi .rc-label { color: #f472b6; text-shadow: 0 0 8px rgba(244, 114, 182, 0.4); }
+  .rc-kunyomi .rc-label { color: #38bdf8; text-shadow: 0 0 8px rgba(56, 189, 248, 0.4); }
+  .rc-val {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #fff;
+    word-break: break-word;
+  }
+
+  .fc-meaning-banner {
+    background: linear-gradient(135deg, rgba(251, 191, 36, 0.12) 0%, rgba(245, 158, 11, 0.06) 100%);
+    border: 1px solid rgba(251, 191, 36, 0.35);
+    border-radius: 12px;
+    padding: 10px 14px;
+    text-align: center;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+  }
+  .fmb-label { font-size: 9.5px; font-weight: 800; color: var(--gold); letter-spacing: 1.2px; text-transform: uppercase; }
+  .fmb-text { font-size: 17px; font-weight: 800; color: #fff; margin-top: 2px; }
+
+  .fc-jukugo-shelf {
+    background: rgba(6, 10, 24, 0.75);
+    border: 1px solid var(--border-glass);
+    border-radius: 12px;
+    padding: 10px 12px;
+    text-align: left;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+  }
+  .fjs-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12.5px;
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  .fjs-item:last-child { border-bottom: none; }
+
+  /* Dojo Navigation Bottom Controls */
+  .dojo-nav-controls {
+    display: flex;
+    gap: 9px;
+    width: 100%;
+    margin-top: 14px;
+  }
+  .btn-dn {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-glass);
+    color: #fff;
+    font-size: 13.5px;
+    font-weight: 800;
+    padding: 11px 14px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .btn-dn:hover {
+    background: rgba(56, 189, 248, 0.2);
     border-color: var(--primary);
     transform: translateY(-2px);
   }
-  .quiz-opt-btn.correct {
-    background: rgba(34, 197, 94, 0.25) !important;
-    border-color: var(--success) !important;
-    color: #4ade80 !important;
-    box-shadow: 0 0 15px rgba(34, 197, 94, 0.4);
+  .btn-dn:active { transform: scale(0.95); }
+
+  .btn-dn-next {
+    flex: 2;
+    background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+    border-color: var(--primary);
+    color: #fff;
+    box-shadow: 0 4px 18px rgba(2, 132, 199, 0.45);
   }
-  .quiz-opt-btn.wrong {
-    background: rgba(239, 68, 68, 0.25) !important;
-    border-color: var(--danger) !important;
-    color: #f87171 !important;
+  .btn-dn-next:hover {
+    background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+    color: #000;
+    box-shadow: 0 0 24px var(--primary-glow);
   }
 
-  .quiz-feedback {
-    min-height: 24px;
-    font-size: 13px;
-    font-weight: 800;
-    margin-top: 12px;
+  .btn-mark-master {
+    background: rgba(251, 191, 36, 0.15);
+    border: 1px solid rgba(251, 191, 36, 0.4);
+    color: var(--gold);
+    font-size: 16px;
+    width: 44px;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .btn-mark-master:hover {
+    transform: translateY(-2px) scale(1.1);
+    box-shadow: 0 0 16px var(--gold-glow);
+  }
+  .btn-mark-master.is-mastered {
+    background: var(--gold);
+    color: #000;
+    box-shadow: 0 0 18px var(--gold-glow);
+  }
+
+  /* Empty Dojo State */
+  .empty-dojo-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
+    padding: 45px 20px;
+    color: var(--text-sub);
+    gap: 14px;
+  }
+  .empty-icon { font-size: 52px; animation: floatKanji 3s ease-in-out infinite; }
+  .empty-title { font-size: 19px; font-weight: 800; color: #fff; }
+  .empty-desc { font-size: 13.5px; max-width: 400px; line-height: 1.5; color: var(--text-sub); }
+  .btn-jump-market {
+    background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+    color: #000;
+    font-weight: 900;
+    padding: 11px 22px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 0 20px var(--primary-glow);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .btn-jump-market:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 28px var(--primary-glow);
+  }
+  .btn-jump-market:active { transform: scale(0.95); }
+
+  /* ==========================================
+     6. DOJO KUIS DRILL UI
+     ========================================== */
+  .quiz-area-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    padding: 20px 0;
+  }
+  .quiz-kanji-big {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 72px;
+    font-weight: 900;
+    color: #fff;
+    margin-bottom: 20px;
+    text-shadow: 0 0 30px var(--primary-glow);
+    animation: floatKanji 4s ease-in-out infinite;
+  }
+  .quiz-grid-choices {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    width: 100%;
+    max-width: 480px;
+  }
+  .btn-quiz-opt {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1.5px solid var(--border-glass);
+    border-radius: 14px;
+    padding: 13px 12px;
+    color: #fff;
+    font-size: 14.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+  .btn-quiz-opt:hover {
+    background: rgba(56, 189, 248, 0.18);
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.2);
+  }
+  .btn-quiz-opt:active { transform: scale(0.95); }
+  .btn-quiz-opt.correct {
+    background: rgba(34, 197, 94, 0.3) !important;
+    border-color: var(--success) !important;
+    color: #86efac !important;
+    box-shadow: 0 0 20px var(--success-glow);
+    animation: pulseGlow 0.5s ease;
+  }
+  .btn-quiz-opt.wrong {
+    background: rgba(239, 68, 68, 0.3) !important;
+    border-color: var(--danger) !important;
+    color: #fca5a5 !important;
+    animation: shake 0.4s ease;
+  }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
   }
 
-  /* Kanji Detail Modal */
+  /* ==========================================
+     7. POPUP MODAL: PANDUAN ONYOMI & KUNYOMI
+     ========================================== */
   .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(8px);
+    background: rgba(4, 7, 18, 0.88);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
     z-index: 9999;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 15px;
   }
-  .detail-modal-card {
-    background: rgba(15, 23, 42, 0.98);
-    border: 1px solid rgba(56, 189, 248, 0.35);
-    border-radius: 20px;
+  .guide-modal-card {
+    background: linear-gradient(165deg, rgba(16, 25, 50, 0.98) 0%, rgba(9, 14, 30, 0.99) 100%);
+    border: 1px solid rgba(192, 132, 252, 0.45);
+    border-radius: 24px;
     width: 100%;
-    max-width: 440px;
-    padding: 22px;
-    box-shadow: 0 25px 60px rgba(0,0,0,0.9), 0 0 35px rgba(56, 189, 248, 0.2);
+    max-width: 520px;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 24px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95), 0 0 40px var(--purple-glow);
     position: relative;
-    animation: popIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    animation: popModal 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  @keyframes popIn {
+  @keyframes popModal {
     from { opacity: 0; transform: scale(0.92); }
     to { opacity: 1; transform: scale(1); }
   }
 
-  .detail-close-btn {
-    position: absolute;
-    top: 14px;
-    right: 14px;
+  .guide-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 14px;
+    margin-bottom: 16px;
+  }
+  .guide-title {
+    font-size: 19px;
+    font-weight: 900;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #fff 40%, #e9d5ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .guide-sub { font-size: 12.5px; color: var(--text-sub); margin-top: 3px; }
+  .btn-modal-close {
     background: rgba(255, 255, 255, 0.08);
     border: 1px solid var(--border-glass);
     color: #fff;
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
-    font-size: 14px;
+    font-size: 15px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
   }
-  .detail-close-btn:hover { background: rgba(239, 68, 68, 0.3); border-color: var(--danger); }
+  .btn-modal-close:hover { background: rgba(239, 68, 68, 0.3); border-color: var(--danger); transform: scale(1.1); }
+  .btn-modal-close:active { transform: scale(0.9); }
+
+  .guide-concept-card {
+    background: rgba(6, 10, 24, 0.8);
+    border-radius: 16px;
+    padding: 15px;
+    margin-bottom: 14px;
+    border-left: 4px solid var(--primary);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  }
+  .guide-concept-card.purple-accent { border-left-color: #c084fc; }
+  .guide-concept-card.cyan-accent { border-left-color: #38bdf8; }
+
+  .gcc-title {
+    font-size: 14.5px;
+    font-weight: 800;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .gcc-badge-orig {
+    font-size: 9px;
+    font-weight: 900;
+    padding: 2px 7px;
+    border-radius: 5px;
+    background: rgba(192, 132, 252, 0.2);
+    border: 1px solid rgba(192, 132, 252, 0.4);
+    color: #c084fc;
+    letter-spacing: 0.8px;
+  }
+  .gcc-badge-orig.cyan {
+    background: rgba(56, 189, 248, 0.2);
+    border-color: rgba(56, 189, 248, 0.4);
+    color: #38bdf8;
+  }
+
+  .gcc-desc {
+    font-size: 12.5px;
+    color: var(--text-sub);
+    line-height: 1.55;
+  }
+  .gcc-example {
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-top: 10px;
+    font-size: 12.5px;
+    color: #f1f5f9;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .gcce-header { font-size: 12.5px; border-bottom: 1px solid rgba(255, 255, 255, 0.06); padding-bottom: 4px; }
+  .gcce-row { display: flex; justify-content: space-between; align-items: center; }
+  .btn-mini-audio {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--border-glass);
+    color: #fff;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    font-size: 11px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .btn-mini-audio:hover { background: var(--primary); color: #000; transform: scale(1.15); }
+  .btn-mini-audio:active { transform: scale(0.9); }
+
+  .golden-rule-banner {
+    background: linear-gradient(135deg, rgba(251, 191, 36, 0.18) 0%, rgba(245, 158, 11, 0.1) 100%);
+    border: 1px solid rgba(251, 191, 36, 0.45);
+    border-radius: 14px;
+    padding: 14px 16px;
+    text-align: center;
+    margin-top: 16px;
+    box-shadow: 0 6px 20px rgba(251, 191, 36, 0.15);
+  }
+  .grb-badge {
+    font-size: 11px;
+    font-weight: 900;
+    color: var(--gold);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .grb-text {
+    font-size: 14.5px;
+    font-weight: 800;
+    color: #fff;
+    margin-top: 6px;
+    line-height: 1.45;
+  }
+  .grb-sub {
+    font-size: 11px;
+    color: var(--text-sub);
+    margin-top: 4px;
+    font-style: italic;
+  }
+
+  /* Create Room Modal Input */
+  .input-room-name {
+    width: 100%;
+    background: rgba(6, 10, 24, 0.9);
+    border: 1px solid var(--border-accent);
+    color: #fff;
+    padding: 11px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    outline: none;
+    margin: 14px 0 18px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+    transition: border-color 0.2s;
+  }
+  .input-room-name:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 16px var(--primary-glow);
+  }
 
   /* Toast Notification */
   #toast {
     position: fixed;
-    bottom: 24px;
+    bottom: 26px;
     left: 50%;
-    transform: translateX(-50%) translateY(30px);
-    background: rgba(15, 23, 42, 0.96);
+    transform: translateX(-50%) translateY(40px);
+    background: rgba(10, 18, 38, 0.98);
     border: 1px solid var(--primary);
     color: #fff;
-    padding: 10px 18px;
+    padding: 11px 24px;
     border-radius: 30px;
-    font-size: 13px;
+    font-size: 13.5px;
     font-weight: 800;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 20px rgba(56, 189, 248, 0.3);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.85), 0 0 24px var(--primary-glow);
     opacity: 0;
     pointer-events: none;
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -782,703 +1157,935 @@
     opacity: 1;
     transform: translateX(-50%) translateY(0);
   }
+
+  /* Responsive tuning */
+  @media (max-width: 480px) {
+    .market-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .card-kanji-hero { font-size: 40px; }
+    .fc-kanji-big { font-size: 80px; }
+    .dojo-bar-top { flex-direction: column; align-items: flex-start; }
+    .dojo-bar-actions { width: 100%; justify-content: flex-end; }
+  }
 </style>
 </head>
 <body>
 
 <div id="toast"></div>
 
-<!-- Kanji Detail Modal -->
-<div id="detail-modal" class="modal-overlay hidden" onclick="if(event.target === this) KanjiApp.closeDetail()">
-  <div class="detail-modal-card" id="detail-card-content">
-    <!-- Rendered dynamically -->
+<!-- ==========================================
+     MODAL 1: PANDUAN EDUKATIF ONYOMI & KUNYOMI
+     ========================================== -->
+<div id="guide-modal" class="modal-overlay hidden" onclick="if(event.target === this) DojoEngine.closeGuide()">
+  <div class="guide-modal-card">
+    <div class="guide-header-row">
+      <div>
+        <div class="guide-title">
+          <span>💡</span>
+          <span>Rahasia Onyomi & Kunyomi</span>
+        </div>
+        <div class="guide-sub">Panduan praktis agar tidak bingung cara membaca kanji</div>
+      </div>
+      <button type="button" class="btn-modal-close" onclick="DojoEngine.closeGuide()">✕</button>
+    </div>
+
+    <!-- Onyomi Concept -->
+    <div class="guide-concept-card purple-accent">
+      <div class="gcc-title">
+        <span class="gcc-badge-orig">🇨🇳 ASAL CINA</span>
+        <span>1. Onyomi (音読み) • Cara Baca Cina</span>
+      </div>
+      <div class="gcc-desc">
+        Ditulis dengan huruf <b>Katakana</b> di kamus. Ini adalah pelafalan serapan dari bahasa Tiongkok kuno saat aksara kanji pertama kali masuk ke Jepang.
+        <br><b>Kapan digunakan?</b> Hampir selalu dipakai saat kanji <b>bergabung dengan kanji lain</b> membentuk kata majemuk (<i>Jukugo</i>).
+      </div>
+      <div class="gcc-example">
+        <div class="gcce-header"><b>Contoh Kanji 水 (Air):</b> Onyomi = <b style="color:#f472b6;">スイ (SUI)</b></div>
+        <div class="gcce-row">
+          <span>• Kata Majemuk: <b>水曜日</b> = <i>Sui-youbi</i> (Hari Rabu)</span>
+          <button type="button" class="btn-mini-audio" onclick="DojoEngine.speakText('すいようび')" title="Dengarkan Suara">🔊</button>
+        </div>
+        <div class="gcce-row">
+          <span>• Kata Majemuk: <b>水泳</b> = <i>Sui-ei</i> (Berenang)</span>
+          <button type="button" class="btn-mini-audio" onclick="DojoEngine.speakText('すいえい')" title="Dengarkan Suara">🔊</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Kunyomi Concept -->
+    <div class="guide-concept-card cyan-accent">
+      <div class="gcc-title">
+        <span class="gcc-badge-orig cyan">🇯🇵 ASLI JEPANG</span>
+        <span>2. Kunyomi (訓読み) • Cara Baca Asli Jepang</span>
+      </div>
+      <div class="gcc-desc">
+        Ditulis dengan huruf <b>Hiragana</b> di kamus. Ini adalah kata asli dari peradaban Jepang kuno yang dipasangkan maknanya ke lambang kanji.
+        <br><b>Kapan digunakan?</b> Umumnya dipakai saat kanji <b>berdiri sendirian</b> sebagai kata tunggal, atau ditemani huruf hiragana pelengkap (<i>okurigana</i>).
+      </div>
+      <div class="gcc-example">
+        <div class="gcce-header"><b>Contoh Kanji 水 (Air):</b> Kunyomi = <b style="color:#38bdf8;">みず (mizu)</b></div>
+        <div class="gcce-row">
+          <span>• Berdiri Sendiri: <b>水</b> = <i>mizu</i> (air biasa/air minum)</span>
+          <button type="button" class="btn-mini-audio" onclick="DojoEngine.speakText('みず')" title="Dengarkan Suara">🔊</button>
+        </div>
+        <div class="gcce-row">
+          <span>• Berdiri Sendiri: <b>山</b> = <i>yama</i> (gunung)</span>
+          <button type="button" class="btn-mini-audio" onclick="DojoEngine.speakText('やま')" title="Dengarkan Suara">🔊</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- The 80/20 Golden Rule -->
+    <div class="golden-rule-banner">
+      <div class="grb-badge">⚡ RUMUS SAKTI 80/20 KENSEI</div>
+      <div class="grb-text">"Sendirian = <b>Kunyomi (Hiragana)</b><br>Gandeng Dua Kanji = <b>Onyomi (Katakana)</b>"</div>
+      <div class="grb-sub">Ada sedikit pengecualian (seperti nama orang/tempat), namun rumus 80% ini menyelamatkan ingatanmu!</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================
+     MODAL 2: BUAT RUANG DOJO BARU
+     ========================================== -->
+<div id="room-modal" class="modal-overlay hidden" onclick="if(event.target === this) DojoEngine.closeRoomModal()">
+  <div class="guide-modal-card" style="max-width:400px;">
+    <div class="guide-header-row">
+      <div class="guide-title">
+        <span>⛩️</span>
+        <span>Buat Ruang Dojo Baru</span>
+      </div>
+      <button type="button" class="btn-modal-close" onclick="DojoEngine.closeRoomModal()">✕</button>
+    </div>
+    <p style="font-size:12.5px; color:var(--text-sub);">Beri nama ruang dojo untuk mengelompokkan kanji latihanmu (contoh: "Kanji Hari 1-5", "Kanji Target N5", dsb.)</p>
+    
+    <input type="text" class="input-room-name" id="new-room-input" placeholder="Nama Ruang Dojo..." maxlength="20">
+    
+    <button type="button" class="btn-jump-market" style="width:100%;" onclick="DojoEngine.createNewRoom()">+ Buat & Masuk ke Ruang</button>
   </div>
 </div>
 
 <div class="container">
   
-  <!-- TOP KENSEI NAVBAR -->
+  <!-- MASTER TOP NAVBAR -->
   <div class="top-navbar">
     <div class="nav-left">
-      <a href="index.html" class="btn-back" title="Kembali ke Yomikata Utama">
+      <a href="index.html" class="btn-back" title="Kembali ke Ekspedisi Yomikata">
         <span>⬅️</span>
         <span>Yomikata</span>
       </a>
-      <div class="nav-brand">
+      <div class="nav-title-group">
         <div class="nav-title">
-          <span>KANJI N5</span>
-          <span class="nav-badge-n5">103 KANJI</span>
+          <span>KANJI KENSEI</span>
+          <span class="badge-market">PASAR & DOJO</span>
         </div>
       </div>
     </div>
 
     <div class="nav-right">
-      <div class="sync-pill" id="sync-status-pill">
-        <span>⛩️</span>
-        <span id="player-sektor-label">Sektor Hari 1</span>
+      <button type="button" class="btn-onyomi-guide" onclick="DojoEngine.openGuide()" title="Pelajari Rahasia Onyomi vs Kunyomi">
+        <span>💡</span>
+        <span>Onyomi & Kunyomi?</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ACTIVE DOJO BAR & ROOM CONTROLS -->
+  <div class="dojo-deck-bar">
+    <div class="dojo-bar-top">
+      <div class="dojo-room-info">
+        <div class="dojo-icon-badge">⛩️</div>
+        <div class="dojo-name-cluster">
+          <span class="dojo-label">RUANG DOJO AKTIF:</span>
+          <select id="dojo-room-select" class="dojo-select" onchange="DojoEngine.switchRoom(this.value)">
+            <!-- Options populated dynamically -->
+          </select>
+        </div>
+      </div>
+
+      <div class="dojo-bar-actions">
+        <button type="button" class="btn-dojo-action btn-create-room" onclick="DojoEngine.openRoomModal()" title="Buat Ruang Dojo Baru">
+          <span>+ Buat Ruang</span>
+        </button>
+        <button type="button" class="btn-dojo-action" onclick="DojoEngine.clearCurrentDojo()" title="Kosongkan Kanji di Ruang Ini">
+          <span>🧹 Bersihkan</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="dojo-stats-strip">
+      <div class="dojo-stats-left">
+        <span class="dojo-count-pill" id="dojo-card-count">🎒 0 Kanji di Ruang Ini</span>
+        <span class="dojo-mastered-pill" id="dojo-master-count">⭐ 0 Dikuasai</span>
+      </div>
+      <div class="dojo-progress-box">
+        <div class="dojo-progress-track">
+          <div class="dojo-progress-fill" id="dojo-progress-fill" style="width: 0%;"></div>
+        </div>
+        <span class="dojo-progress-text" id="dojo-progress-text">0% Dikuasai</span>
       </div>
     </div>
   </div>
 
-  <!-- PROGRESSION TELEMETRY STRIP -->
-  <div class="telemetry-card">
-    <div class="telemetry-header">
-      <span class="telemetry-title">⚡ SEGEL KANJI TERBUKA</span>
-      <span class="telemetry-count"><b id="unlocked-count">0</b> / 103 Kanji</span>
-    </div>
-    <div class="telemetry-track">
-      <div class="telemetry-fill" id="telemetry-fill-bar" style="width: 0%;"></div>
-    </div>
-    <div class="telemetry-desc">
-      <span id="telemetry-sub-status">Sinkronisasi dengan ekspedisi harianmu</span>
-      <span id="telemetry-pct" style="color:var(--primary); font-weight:800;">0% Selesai</span>
-    </div>
-  </div>
-
-  <!-- MAIN MODE TABS (Flashcard vs Katalog Grid vs Kuis) -->
-  <div class="nav-tabs">
-    <button type="button" class="tab-btn active" id="tab-flashcard" onclick="KanjiApp.switchView('flashcard')">
-      <span>🎴</span>
-      <span>Flashcard</span>
+  <!-- MAIN MODE SWITCHER (Pasar Belanja vs Latihan Dojo) -->
+  <div class="main-nav-tabs">
+    <button type="button" class="tab-main-btn active" id="tab-market" onclick="DojoEngine.switchMainTab('market')">
+      <span>🛒</span>
+      <span>Pasar Belanja Kanji</span>
+      <span class="tab-badge-num" id="market-total-badge">145</span>
     </button>
-    <button type="button" class="tab-btn" id="tab-grid" onclick="KanjiApp.switchView('grid')">
-      <span>📋</span>
-      <span>Katalog Kanji</span>
-    </button>
-    <button type="button" class="tab-btn" id="tab-quiz" onclick="KanjiApp.switchView('quiz')">
-      <span>🎯</span>
-      <span>Latihan Kuis</span>
+    <button type="button" class="tab-main-btn" id="tab-training" onclick="DojoEngine.switchMainTab('training')">
+      <span>🥋</span>
+      <span>Latihan di Dojo</span>
+      <span class="tab-badge-num" id="dojo-badge-num">0</span>
     </button>
   </div>
 
-  <!-- FILTER CONTROLS & SEARCH BAR -->
-  <div class="filter-controls" id="filter-controls-area">
-    <div class="search-box-row">
-      <span>🔍</span>
-      <input type="text" class="search-input" id="search-input" placeholder="Cari kanji, arti, onyomi, atau kunyomi..." oninput="KanjiApp.onSearch(this.value)">
-      <button type="button" class="search-clear hidden" id="search-clear-btn" onclick="KanjiApp.clearSearch()">✕</button>
+  <!-- ==========================================
+       TAB 1: PASAR BELANJA KANJI (KATALOG)
+       ========================================== -->
+  <div id="section-market">
+    <div class="market-toolbar">
+      <div class="search-wrapper">
+        <span>🔍</span>
+        <input type="text" class="search-input" id="market-search" placeholder="Cari kanji, arti, onyomi, atau kunyomi..." oninput="DojoEngine.onSearch(this.value)">
+        <button type="button" class="search-clear hidden" id="market-search-clear" onclick="DojoEngine.clearSearch()">✕</button>
+      </div>
+
+      <div class="filter-chips-stream">
+        <button type="button" class="filter-chip active" id="fchip-all" onclick="DojoEngine.setFilter('all')">Semua Kanji (N5 + N4)</button>
+        <button type="button" class="filter-chip" id="fchip-unlocked" onclick="DojoEngine.setFilter('unlocked')">⛩️ Dari Ekspedisi Yomikata</button>
+        <button type="button" class="filter-chip" id="fchip-n5" onclick="DojoEngine.setFilter('n5')">🔰 Level N5 (Dasar)</button>
+        <button type="button" class="filter-chip" id="fchip-n4" onclick="DojoEngine.setFilter('n4')">⚔️ Level N4 (Lanjutan)</button>
+        <button type="button" class="filter-chip" id="fchip-in-dojo" onclick="DojoEngine.setFilter('in-dojo')">🎒 Sudah di Dojo</button>
+      </div>
     </div>
 
-    <div class="chips-row">
-      <button type="button" class="chip-btn active" id="chip-unlocked" onclick="KanjiApp.setFilter('unlocked')">🟢 Terbuka Sektor</button>
-      <button type="button" class="chip-btn" id="chip-today" onclick="KanjiApp.setFilter('today')">🎯 Hari Ini Saja</button>
-      <button type="button" class="chip-btn" id="chip-all" onclick="KanjiApp.setFilter('all')">👁️ Semua 103 (Katalog)</button>
+    <!-- Kanji Catalog Grid -->
+    <div class="market-grid" id="market-grid-container">
+      <!-- Generated dynamically -->
     </div>
   </div>
 
-  <!-- VIEW CONTAINER 1: FLASHCARD -->
-  <div id="view-flashcard" class="flashcard-wrapper">
-    <div class="fc-top-bar">
-      <span class="fc-day-tag" id="fc-day-badge">HARI 1 • DASAR IDENTITAS</span>
-      <div class="fc-counter">KANJI <b id="fc-curr-idx">1</b> / <span id="fc-total-count">0</span></div>
-    </div>
+  <!-- ==========================================
+       TAB 2: RUANG DOJO LATIHAN (FLASHCARD & KUIS)
+       ========================================== -->
+  <div id="section-training" class="hidden">
+    <div class="dojo-arena-card">
+      <div class="dojo-subnav-row">
+        <div class="dojo-mode-pills">
+          <button type="button" class="btn-dojo-mode active" id="dmode-fc" onclick="DojoEngine.setDojoMode('fc')">🎴 Flashcard</button>
+          <button type="button" class="btn-dojo-mode" id="dmode-quiz" onclick="DojoEngine.setDojoMode('quiz')">🎯 Kuis Drill</button>
+        </div>
+        <div style="font-size:11.5px; font-weight:800; color:var(--text-sub);">
+          <span id="dojo-curr-index">1</span> / <span id="dojo-total-index">0</span>
+        </div>
+      </div>
 
-    <div class="fc-main-body" onclick="KanjiApp.toggleReveal()">
-      <div class="fc-kanji-hero" id="fc-kanji-display">一</div>
-      <div class="fc-tap-hint" id="fc-tap-hint">👆 Ketuk untuk membuka bacaan & arti</div>
+      <!-- State A: Flashcard Mode -->
+      <div id="dojo-fc-container" class="fc-body-box" onclick="DojoEngine.toggleFcReveal()">
+        <div class="fc-kanji-big" id="dojo-fc-kanji">一</div>
+        <div style="font-size:11.5px; color:var(--text-sub); margin-bottom:14px;" id="dojo-fc-hint">👆 Ketuk untuk membuka bacaan & arti</div>
 
-      <div class="fc-revealed-section blur-shield" id="fc-revealed-area">
-        <div class="fc-reading-grid">
-          <div class="reading-box reading-onyomi">
-            <div class="reading-label">ONYOMI (音読み)</div>
-            <div class="reading-value" id="fc-onyomi">イチ, イツ</div>
+        <div class="fc-reveal-wrap shield-blur" id="dojo-fc-shield">
+          <div class="fc-grid-two">
+            <div class="reading-cell rc-onyomi">
+              <div class="rc-label">ONYOMI (Cina)</div>
+              <div class="rc-val" id="dojo-fc-on">イチ, イツ</div>
+            </div>
+            <div class="reading-cell rc-kunyomi">
+              <div class="rc-label">KUNYOMI (Jepang)</div>
+              <div class="rc-val" id="dojo-fc-kun">ひと, ひと・つ</div>
+            </div>
           </div>
-          <div class="reading-box reading-kunyomi">
-            <div class="reading-label">KUNYOMI (訓読み)</div>
-            <div class="reading-value" id="fc-kunyomi">ひと, ひと・つ</div>
+
+          <div class="fc-meaning-banner">
+            <div class="fmb-label">ARTI BAHASA INDONESIA</div>
+            <div class="fmb-text" id="dojo-fc-arti">Satu</div>
+          </div>
+
+          <div class="fc-jukugo-shelf" id="dojo-fc-jukugo-shelf">
+            <!-- Jukugo list -->
           </div>
         </div>
-
-        <div class="fc-meaning-box">
-          <div class="meaning-label">ARTI BAHASA INDONESIA</div>
-          <div class="meaning-text" id="fc-meaning">Satu</div>
-        </div>
-
-        <div class="fc-jukugo-panel" id="fc-jukugo-box">
-          <div class="jukugo-title">💡 CONTOH KATA / JUKUGO</div>
-          <div class="jukugo-list" id="fc-jukugo-list"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="fc-action-row">
-      <button type="button" class="btn-nav-fc" onclick="KanjiApp.prevCard()">⬅️ Sblm</button>
-      <button type="button" class="btn-audio-speak" onclick="KanjiApp.speakCurrent()" title="Dengarkan Pengucapan Asli Jepang">🔊</button>
-      <button type="button" class="btn-nav-fc btn-nav-next" onclick="KanjiApp.nextCard()">Lanjut ➔</button>
-    </div>
-  </div>
-
-  <!-- VIEW CONTAINER 2: KATALOG GRID -->
-  <div id="view-grid" class="hidden">
-    <div class="kanji-grid-stream" id="grid-stream-container">
-      <!-- Rendered dynamically -->
-    </div>
-  </div>
-
-  <!-- VIEW CONTAINER 3: LATIHAN KUIS KANJI -->
-  <div id="view-quiz" class="quiz-wrapper hidden">
-    <div class="quiz-header">
-      <span class="quiz-badge">🎯 DOJO DRILL KANJI</span>
-      <span style="font-size:12px; font-weight:800; color:var(--gold);">SKOR: <b id="quiz-score">0</b></span>
-    </div>
-
-    <div class="quiz-body">
-      <div class="quiz-prompt" id="quiz-prompt-label">APA ARTI ATAU CARA BACA KANJI INI?</div>
-      <div class="quiz-kanji-display" id="quiz-kanji-target">一</div>
-
-      <div class="quiz-options-grid" id="quiz-options-box">
-        <!-- Rendered dynamically -->
       </div>
 
-      <div class="quiz-feedback" id="quiz-feedback"></div>
-    </div>
+      <!-- State B: Quiz Drill Mode -->
+      <div id="dojo-quiz-container" class="quiz-area-container hidden">
+        <div style="font-size:11px; font-weight:800; color:var(--primary); letter-spacing:1px; margin-bottom:6px;">DOJO DRILL • TEBAK ARTI:</div>
+        <div class="quiz-kanji-big" id="dojo-quiz-kanji">一</div>
+        <div class="quiz-grid-choices" id="dojo-quiz-choices">
+          <!-- Choices rendered dynamically -->
+        </div>
+        <div id="dojo-quiz-feedback" style="min-height:24px; font-size:13px; font-weight:800; margin-top:14px;"></div>
+      </div>
 
-    <button type="button" class="btn-nav-fc btn-nav-next hidden" id="quiz-btn-next" onclick="KanjiApp.nextQuizQuestion()">Soal Berikutnya ➔</button>
+      <!-- Dojo Navigation Bottom Strip -->
+      <div class="dojo-nav-controls" id="dojo-nav-strip">
+        <button type="button" class="btn-dn" onclick="DojoEngine.prevDojoCard()">⬅️ Sblm</button>
+        <button type="button" class="btn-mark-master" id="btn-master-toggle" onclick="DojoEngine.toggleMasterCurrent()" title="Tandai Sudah Dikuasai (⭐)">⭐</button>
+        <button type="button" class="btn-dn" onclick="DojoEngine.speakCurrent()" title="Dengarkan Suara">🔊</button>
+        <button type="button" class="btn-dn btn-dn-next" onclick="DojoEngine.nextDojoCard()">Lanjut ➔</button>
+      </div>
+
+      <!-- Empty State when 0 Kanji in Dojo -->
+      <div id="dojo-empty-state" class="empty-dojo-box hidden">
+        <div class="empty-icon">🎒</div>
+        <div class="empty-title">Ruang Dojo Masih Kosong!</div>
+        <div class="empty-desc">Ruang dojo ini belum memiliki kanji untuk dilatih. Buka <b>Pasar Belanja Kanji</b> untuk memilih kanji-kanji yang ingin kamu kuasai.</div>
+        <button type="button" class="btn-jump-market" onclick="DojoEngine.switchMainTab('market')">🛒 Pergi Belanja Kanji ➔</button>
+      </div>
+    </div>
   </div>
 
 </div>
 
 <script>
 // ==========================================
-// BASIS DATA LENGKAP 103 KANJI RESMI JLPT N5
-// TERDISTRIBUSI PROGRESSIF KE DALAM 30 HARI
+// MASTER DATABASE KANJI LENGKAP (N5 + N4)
 // ==========================================
-const KANJI_N5_DATABASE = [
-  // --- SEKTOR 1: DASAR ANGKA & IDENTITAS (HARI 1 - 5) ---
-  { k: "一", on: "イチ, イツ", kun: "ひと, ひと・つ", a: "Satu", day: 1, ex: [{ w: "一つ", r: "ひとつ", a: "Satu buah" }, { w: "一人", r: "ひとり", a: "Satu orang" }] },
-  { k: "二", on: "ニ", kun: "ふた, ふた・つ", a: "Dua", day: 1, ex: [{ w: "二つ", r: "ふたつ", a: "Dua buah" }, { w: "二人", r: "ふたり", a: "Dua orang" }] },
-  { k: "三", on: "サン", kun: "み, みっ・つ", a: "Tiga", day: 1, ex: [{ w: "三つ", r: "みっつ", a: "Tiga buah" }, { w: "三日", r: "みっか", a: "Tanggal 3" }] },
-  { k: "人", on: "ジン, ニン", kun: "ひと", a: "Orang, Manusia", day: 1, ex: [{ w: "日本人", r: "にほんじん", a: "Orang Jepang" }, { w: "大人", r: "おとな", a: "Dewasa" }] },
+const KANJI_CATALOG = [
+  // --- LEVEL N5 (103 KANJI DASAR) ---
+  { k: "一", on: "イチ, イツ", kun: "ひと, ひと・つ", a: "Satu", lvl: "N5", day: 1, ex: [{ w: "一つ", r: "ひとつ", a: "Satu buah" }, { w: "一人", r: "ひとり", a: "Satu orang" }] },
+  { k: "二", on: "ニ", kun: "ふた, ふた・つ", a: "Dua", lvl: "N5", day: 1, ex: [{ w: "二つ", r: "ふたつ", a: "Dua buah" }, { w: "二人", r: "ふたり", a: "Dua orang" }] },
+  { k: "三", on: "サン", kun: "み, みっ・つ", a: "Tiga", lvl: "N5", day: 1, ex: [{ w: "三つ", r: "みっつ", a: "Tiga buah" }, { w: "三日", r: "みっか", a: "Tanggal 3" }] },
+  { k: "人", on: "ジン, ニン", kun: "ひと", a: "Orang, Manusia", lvl: "N5", day: 1, ex: [{ w: "日本人", r: "にほんじん", a: "Orang Jepang" }, { w: "大人", r: "おとな", a: "Dewasa" }] },
+  { k: "四", on: "シ", kun: "よ, よ・つ, よっ・つ, よん", a: "Empat", lvl: "N5", day: 2, ex: [{ w: "四つ", r: "よっつ", a: "Empat buah" }, { w: "四月", r: "しがつ", a: "Bulan April" }] },
+  { k: "五", on: "ゴ", kun: "いつ, いつ・つ", a: "Lima", lvl: "N5", day: 2, ex: [{ w: "五つ", r: "いつつ", a: "Lima buah" }, { w: "五日", r: "いつか", a: "Tanggal 5" }] },
+  { k: "六", on: "ロク", kun: "む, むっ・つ, むい", a: "Enam", lvl: "N5", day: 2, ex: [{ w: "六つ", r: "むっつ", a: "Enam buah" }, { w: "六日", r: "むいか", a: "Tanggal 6" }] },
+  { k: "私", on: "シ", kun: "わたし, わたくし", a: "Saya, Aku", lvl: "N5", day: 2, ex: [{ w: "私", r: "わたし", a: "Saya" }] },
+  { k: "七", on: "シチ", kun: "なな, なな・つ, なの", a: "Tujuh", lvl: "N5", day: 3, ex: [{ w: "七つ", r: "ななつ", a: "Tujuh buah" }, { w: "七日", r: "なのか", a: "Tanggal 7" }] },
+  { k: "八", on: "ハチ", kun: "や, やっ・つ, よう", a: "Delapan", lvl: "N5", day: 3, ex: [{ w: "八つ", r: "やっつ", a: "Delapan buah" }, { w: "八日", r: "ようか", a: "Tanggal 8" }] },
+  { k: "九", on: "キュウ, ク", kun: "ここの, ここの・つ", a: "Sembilan", lvl: "N5", day: 3, ex: [{ w: "九つ", r: "こcosplayつ", a: "Sembilan buah" }, { w: "九月", r: "くがつ", a: "Bulan September" }] },
+  { k: "十", on: "ジュウ, ジッ", kun: "とお, と", a: "Sepuluh", lvl: "N5", day: 3, ex: [{ w: "十", r: "とお", a: "Sepuluh buah" }, { w: "十日", r: "とおか", a: "Tanggal 10" }] },
+  { k: "百", on: "ヒャク", kun: "もも", a: "Ratus, Seratus", lvl: "N5", day: 4, ex: [{ w: "三百", r: "さんびゃく", a: "Tiga ratus" }] },
+  { k: "千", on: "セン", kun: "ち", a: "Ribu, Seribu", lvl: "N5", day: 4, ex: [{ w: "千円", r: "せんえん", a: "Seribu yen" }] },
+  { k: "万", on: "マン, バン", kun: "よろず", a: "Puluh Ribu (10.000)", lvl: "N5", day: 4, ex: [{ w: "一万円", r: "いちまんえん", a: "Sepuluh ribu yen" }] },
+  { k: "円", on: "エン", kun: "まる・い", a: "Yen (Mata Uang), Bulat", lvl: "N5", day: 4, ex: [{ w: "百円", r: "ひゃくえん", a: "100 Yen" }] },
+  { k: "日", on: "ニチ, ジツ", kun: "ひ, -び, -か", a: "Hari, Matahari", lvl: "N5", day: 5, ex: [{ w: "日本", r: "にほん", a: "Jepang" }, { w: "日曜日", r: "にちようび", a: "Hari Minggu" }] },
+  { k: "月", on: "ゲツ, ガツ", kun: "つき", a: "Bulan", lvl: "N5", day: 5, ex: [{ w: "月曜日", r: "げつようび", a: "Hari Senin" }] },
+  { k: "年", on: "ネン", kun: "とし", a: "Tahun", lvl: "N5", day: 5, ex: [{ w: "今年", r: "ことし", a: "Tahun ini" }] },
+  { k: "火", on: "カ", kun: "ひ, -び", a: "Api", lvl: "N5", day: 6, ex: [{ w: "火曜日", r: "かようび", a: "Hari Selasa" }] },
+  { k: "水", on: "スイ", kun: "みず", a: "Air", lvl: "N5", day: 6, ex: [{ w: "水曜日", r: "すいようび", a: "Hari Rabu" }, { w: "水", r: "みず", a: "Air" }] },
+  { k: "木", on: "モク, ボク", kun: "き", a: "Pohon, Kayu", lvl: "N5", day: 6, ex: [{ w: "木曜日", r: "もくようび", a: "Hari Kamis" }] },
+  { k: "金", on: "キン, コン", kun: "かね", a: "Emas, Uang", lvl: "N5", day: 6, ex: [{ w: "金曜日", r: "きんようび", a: "Hari Jumat" }, { w: "お金", r: "おかね", a: "Uang" }] },
+  { k: "土", on: "ド, ト", kun: "つち", a: "Tanah", lvl: "N5", day: 7, ex: [{ w: "土曜日", r: "どようび", a: "Hari Sabtu" }] },
+  { k: "本", on: "ホン", kun: "もと", a: "Buku, Asal", lvl: "N5", day: 7, ex: [{ w: "本", r: "ほん", a: "Buku" }] },
+  { k: "休", on: "キュウ", kun: "やす・む", a: "Istirahat, Libur", lvl: "N5", day: 7, ex: [{ w: "休み", r: "やすみ", a: "Libur, istirahat" }] },
+  { k: "上", on: "ジョウ", kun: "うえ, あ・がる", a: "Atas, Naik", lvl: "N5", day: 8, ex: [{ w: "上", r: "うえ", a: "Atas" }, { w: "上手", r: "じょうず", a: "Pintar" }] },
+  { k: "下", on: "カ, ゲ", kun: "した, さ・がる", a: "Bawah, Turun", lvl: "N5", day: 8, ex: [{ w: "下", r: "した", a: "Bawah" }, { w: "下手", r: "へた", a: "Kurang pandai" }] },
+  { k: "中", on: "チュウ", kun: "なか", a: "Dalam, Tengah", lvl: "N5", day: 8, ex: [{ w: "中", r: "なか", a: "Di dalam" }] },
+  { k: "半", on: "ハン", kun: "なか・ば", a: "Setengah, Separuh", lvl: "N5", day: 8, ex: [{ w: "三時半", r: "さんじはん", a: "Jam 3:30" }] },
+  { k: "右", on: "ウ, ユウ", kun: "みぎ", a: "Kanan", lvl: "N5", day: 9, ex: [{ w: "右手", r: "みぎて", a: "Tangan kanan" }] },
+  { k: "左", on: "サ", kun: "ひだり", a: "Kiri", lvl: "N5", day: 9, ex: [{ w: "左手", r: "ひだりて", a: "Tangan kiri" }] },
+  { k: "前", on: "ゼン", kun: "まえ", a: "Depan, Sebelum", lvl: "N5", day: 9, ex: [{ w: "前", r: "まえ", a: "Di depan" }] },
+  { k: "後", on: "ゴ, コウ", kun: "うし・ろ, あと", a: "Belakang, Setelah", lvl: "N5", day: 9, ex: [{ w: "後ろ", r: "うしろ", a: "Belakang" }] },
+  { k: "大", on: "ダイ, タイ", kun: "おお・きい", a: "Besar", lvl: "N5", day: 10, ex: [{ w: "大きい", r: "おおきい", a: "Besar" }, { w: "大学", r: "だいがく", a: "Universitas" }] },
+  { k: "小", on: "ショウ", kun: "ちい・さい", a: "Kecil", lvl: "N5", day: 10, ex: [{ w: "小さい", r: "ちいさい", a: "Kecil" }] },
+  { k: "長", on: "チョウ", kun: "なが・い", a: "Panjang, Ketua", lvl: "N5", day: 10, ex: [{ w: "長い", r: "ながい", a: "Panjang" }] },
+  { k: "高", on: "コウ", kun: "たか・い", a: "Tinggi, Mahal", lvl: "N5", day: 10, ex: [{ w: "高い", r: "たかい", a: "Mahal / Tinggi" }, { w: "高校", r: "こうこう", a: "SMA" }] },
+  { k: "安", on: "アン", kun: "やす・い", a: "Murah, Tenang", lvl: "N5", day: 11, ex: [{ w: "安い", r: "やすい", a: "Murah" }] },
+  { k: "新", on: "シン", kun: "あたら・しい", a: "Baru", lvl: "N5", day: 11, ex: [{ w: "新しい", r: "あたらしい", a: "Baru" }, { w: "新聞", r: "しんぶん", a: "Koran" }] },
+  { k: "古", on: "コ", kun: "ふる・い", a: "Lama, Usang", lvl: "N5", day: 11, ex: [{ w: "古い", r: "ふるい", a: "Lama" }] },
+  { k: "白", on: "ハク", kun: "しろ・い", a: "Putih", lvl: "N5", day: 11, ex: [{ w: "白い", r: "しろい", a: "Putih" }] },
+  { k: "多", on: "タ", kun: "おお・い", a: "Banyak", lvl: "N5", day: 12, ex: [{ w: "多い", r: "おおい", a: "Banyak" }] },
+  { k: "少", on: "ショウ", kun: "すく・ない, すこ・し", a: "Sedikit", lvl: "N5", day: 12, ex: [{ w: "少し", r: "すこし", a: "Sedikit" }] },
+  { k: "早", on: "ソウ", kun: "はや・い", a: "Cepat (Waktu), Pagi", lvl: "N5", day: 12, ex: [{ w: "早い", r: "はやい", a: "Cepat / Awal" }] },
+  { k: "時", on: "ジ", kun: "とき", a: "Waktu, Jam", lvl: "N5", day: 12, ex: [{ w: "時間", r: "じかん", a: "Waktu" }] },
+  { k: "分", on: "ブン, フン", kun: "わ・かる", a: "Menit, Mengerti", lvl: "N5", day: 13, ex: [{ w: "五分", r: "ごふん", a: "5 Menit" }] },
+  { k: "今", on: "コン", kun: "いま", a: "Sekarang", lvl: "N5", day: 13, ex: [{ w: "今", r: "いま", a: "Sekarang" }] },
+  { k: "先", on: "セン", kun: "さき", a: "Terdahulu, Ujung", lvl: "N5", day: 13, ex: [{ w: "先生", r: "せんせい", a: "Guru" }] },
+  { k: "生", on: "セイ", kun: "い・きる, う・まれる", a: "Lahir, Hidup, Pelajar", lvl: "N5", day: 13, ex: [{ w: "学生", r: "がくせい", a: "Pelajar" }] },
+  { k: "学", on: "ガク", kun: "まな・ぶ", a: "Belajar, Ilmu", lvl: "N5", day: 14, ex: [{ w: "学校", r: "がっこう", a: "Sekolah" }] },
+  { k: "校", on: "コウ", kun: "-", a: "Sekolah", lvl: "N5", day: 14, ex: [{ w: "校長", r: "こうちょう", a: "Kepala sekolah" }] },
+  { k: "友", on: "ユウ", kun: "とも", a: "Teman", lvl: "N5", day: 14, ex: [{ w: "友達", r: "ともだち", a: "Teman" }] },
+  { k: "何", on: "カ", kun: "なに, なん", a: "Apa", lvl: "N5", day: 14, ex: [{ w: "何", r: "なに", a: "Apa" }] },
+  { k: "行", on: "コウ, ギョウ", kun: "い・く", a: "Pergi", lvl: "N5", day: 15, ex: [{ w: "行く", r: "いく", a: "Pergi" }] },
+  { k: "来", on: "ライ", kun: "く・る", a: "Datang", lvl: "N5", day: 15, ex: [{ w: "来る", r: "くる", a: "Datang" }] },
+  { k: "帰", on: "キ", kun: "かえ・る", a: "Pulang", lvl: "N5", day: 15, ex: [{ w: "帰る", r: "かえる", a: "Pulang" }] },
+  { k: "会", on: "カイ", kun: "あ・う", a: "Bertemu, Kumpulan", lvl: "N5", day: 15, ex: [{ w: "会う", r: "あう", a: "Bertemu" }, { w: "会社", r: "かいしゃ", a: "Perusahaan" }] },
+  { k: "見", on: "ケン", kun: "み・る", a: "Melihat", lvl: "N5", day: 16, ex: [{ w: "見る", r: "みる", a: "Melihat" }] },
+  { k: "聞", on: "ブン", kun: "き・く", a: "Mendengar", lvl: "N5", day: 16, ex: [{ w: "聞く", r: "きく", a: "Mendengar" }] },
+  { k: "読", on: "ドク", kun: "よ・む", a: "Membaca", lvl: "N5", day: 16, ex: [{ w: "読む", r: "よむ", a: "Membaca" }] },
+  { k: "書", on: "ショ", kun: "か・く", a: "Menulis", lvl: "N5", day: 16, ex: [{ w: "書く", r: "かく", a: "Menulis" }] },
+  { k: "話", on: "ワ", kun: "はな・す, はなし", a: "Bicara, Cerita", lvl: "N5", day: 17, ex: [{ w: "話す", r: "はなす", a: "Berbicara" }, { w: "電話", r: "でんわ", a: "Telepon" }] },
+  { k: "買", on: "バイ", kun: "か・う", a: "Membeli", lvl: "N5", day: 17, ex: [{ w: "買う", r: "かう", a: "Membeli" }] },
+  { k: "食", on: "ショク", kun: "た・べる", a: "Makan", lvl: "N5", day: 17, ex: [{ w: "食べる", r: "たべる", a: "Makan" }] },
+  { k: "飲", on: "イン", kun: "の・む", a: "Minum", lvl: "N5", day: 17, ex: [{ w: "飲む", r: "のむ", a: "Minum" }] },
+  { k: "東", on: "トウ", kun: "ひがし", a: "Timur", lvl: "N5", day: 18, ex: [{ w: "東京", r: "とうきょう", a: "Tokyo" }] },
+  { k: "西", on: "セイ, サイ", kun: "にし", a: "Barat", lvl: "N5", day: 18, ex: [{ w: "西", r: "にし", a: "Barat" }] },
+  { k: "南", on: "ナン", kun: "みなみ", a: "Selatan", lvl: "N5", day: 18, ex: [{ w: "南", r: "みなみ", a: "Selatan" }] },
+  { k: "北", on: "ホク", kun: "きた", a: "Utara", lvl: "N5", day: 18, ex: [{ w: "北", r: "きた", a: "Utara" }] },
+  { k: "口", on: "コウ", kun: "くち", a: "Mulut, Pintu", lvl: "N5", day: 19, ex: [{ w: "出口", r: "でぐち", a: "Pintu keluar" }] },
+  { k: "目", on: "モク", kun: "め", a: "Mata", lvl: "N5", day: 19, ex: [{ w: "目", r: "め", a: "Mata" }] },
+  { k: "耳", on: "ジ", kun: "みみ", a: "Telinga", lvl: "N5", day: 19, ex: [{ w: "耳", r: "みみ", a: "Telinga" }] },
+  { k: "手", on: "シュ", kun: "て", a: "Tangan", lvl: "N5", day: 19, ex: [{ w: "手", r: "て", a: "Tangan" }] },
+  { k: "足", on: "ソク", kun: "あし", a: "Kaki", lvl: "N5", day: 20, ex: [{ w: "足", r: "あし", a: "Kaki" }] },
+  { k: "力", on: "リョク", kun: "ちから", a: "Tenaga, Daya", lvl: "N5", day: 20, ex: [{ w: "力", r: "ちから", a: "Tenaga" }] },
+  { k: "男", on: "ダン, ナン", kun: "おとこ", a: "Laki-laki", lvl: "N5", day: 20, ex: [{ w: "男の人", r: "おとこのひと", a: "Pria" }] },
+  { k: "女", on: "ジョ", kun: "おんな", a: "Perempuan", lvl: "N5", day: 20, ex: [{ w: "女の人", r: "おんなのひと", a: "Wanita" }] },
+  { k: "子", on: "シ", kun: "こ", a: "Anak", lvl: "N5", day: 21, ex: [{ w: "子ども", r: "こども", a: "Anak-anak" }] },
+  { k: "父", on: "フ", kun: "ちち, とう", a: "Ayah", lvl: "N5", day: 21, ex: [{ w: "父", r: "ちち", a: "Ayah" }] },
+  { k: "母", on: "ボ", kun: "はは, かあ", a: "Ibu", lvl: "N5", day: 21, ex: [{ w: "母", r: "はは", a: "Ibu" }] },
+  { k: "山", on: "サン", kun: "やま", a: "Gunung", lvl: "N5", day: 22, ex: [{ w: "山", r: "やま", a: "Gunung" }] },
+  { k: "川", on: "セン", kun: "かわ", a: "Sungai", lvl: "N5", day: 22, ex: [{ w: "川", r: "かわ", a: "Sungai" }] },
+  { k: "田", on: "デン", kun: "た", a: "Sawah", lvl: "N5", day: 22, ex: [{ w: "田中", r: "たなか", a: "Tanaka" }] },
+  { k: "雨", on: "ウ", kun: "あめ", a: "Hujan", lvl: "N5", day: 22, ex: [{ w: "雨", r: "あめ", a: "Hujan" }] },
+  { k: "天", on: "テン", kun: "あま", a: "Langit, Surga", lvl: "N5", day: 23, ex: [{ w: "天気", r: "てんき", a: "Cuaca" }] },
+  { k: "気", on: "キ", kun: "-", a: "Energi, Udara", lvl: "N5", day: 23, ex: [{ w: "元気", r: "げんき", a: "Sehat" }] },
+  { k: "空", on: "クウ", kun: "そら", a: "Langit", lvl: "N5", day: 23, ex: [{ w: "空", r: "そら", a: "Langit" }] },
+  { k: "車", on: "シャ", kun: "くるま", a: "Mobil, Kendaraan", lvl: "N5", day: 24, ex: [{ w: "車", r: "くるま", a: "Mobil" }] },
+  { k: "門", on: "モン", kun: "かど", a: "Gerbang", lvl: "N5", day: 24, ex: [{ w: "校門", r: "こうもん", a: "Gerbang sekolah" }] },
+  { k: "道", on: "ドウ", kun: "みち", a: "Jalan", lvl: "N5", day: 24, ex: [{ w: "道", r: "みち", a: "Jalan" }] },
+  { k: "店", on: "テン", kun: "みせ", a: "Toko", lvl: "N5", day: 24, ex: [{ w: "店", r: "みせ", a: "Toko" }] },
+  { k: "名", on: "メイ", kun: "な", a: "Nama", lvl: "N5", day: 25, ex: [{ w: "名前", r: "なまえ", a: "Nama" }] },
+  { k: "国", on: "コク", kun: "くに", a: "Negara", lvl: "N5", day: 25, ex: [{ w: "外国", r: "がいこく", a: "Luar negeri" }] },
+  { k: "語", on: "ゴ", kun: "かた・る", a: "Bahasa", lvl: "N5", day: 25, ex: [{ w: "日本語", r: "にほんご", a: "Bahasa Jepang" }] },
+  { k: "間", on: "カン", kun: "あいだ", a: "Antara, Jeda Waktu", lvl: "N5", day: 25, ex: [{ w: "時間", r: "じかん", a: "Waktu" }] },
+  { k: "毎", on: "マイ", kun: "-", a: "Setiap", lvl: "N5", day: 26, ex: [{ w: "毎日", r: "まいにち", a: "Setiap hari" }] },
+  { k: "週", on: "シュウ", kun: "-", a: "Pekan, Minggu", lvl: "N5", day: 26, ex: [{ w: "今週", r: "こんしゅう", a: "Minggu ini" }] },
+  { k: "午", on: "ゴ", kun: "-", a: "Siang", lvl: "N5", day: 26, ex: [{ w: "午前", r: "ごぜん", a: "Pagi (AM)" }, { w: "午後", r: "ごご", a: "Siang (PM)" }] },
+  { k: "電", on: "デン", kun: "-", a: "Listrik", lvl: "N5", day: 26, ex: [{ w: "電車", r: "でんしゃ", a: "Kereta listrik" }] },
+  { k: "駅", on: "エキ", kun: "-", a: "Stasiun", lvl: "N5", day: 27, ex: [{ w: "駅", r: "えき", a: "Stasiun" }] },
+  { k: "魚", on: "ギョ", kun: "さかな", a: "Ikan", lvl: "N5", day: 27, ex: [{ w: "魚", r: "さかな", a: "Ikan" }] },
+  { k: "肉", on: "ニク", kun: "-", a: "Daging", lvl: "N5", day: 27, ex: [{ w: "肉", r: "にく", a: "Daging" }] },
+  { k: "入", on: "ニュウ", kun: "はい・る", a: "Masuk", lvl: "N5", day: 27, ex: [{ w: "入る", r: "はいる", a: "Masuk" }] },
+  { k: "出", on: "シュツ", kun: "で・る", a: "Keluar", lvl: "N5", day: 28, ex: [{ w: "出る", r: "でる", a: "Keluar" }] },
+  { k: "立", on: "リツ", kun: "た・つ", a: "Berdiri", lvl: "N5", day: 28, ex: [{ w: "立つ", r: "たつ", a: "Berdiri" }] },
+  { k: "座", on: "ザ", kun: "すわ・る", a: "Duduk", lvl: "N5", day: 28, ex: [{ w: "座る", r: "すわる", a: "Duduk" }] },
+  { k: "言", on: "ゲン", kun: "い・う", a: "Berkata", lvl: "N5", day: 29, ex: [{ w: "言う", r: "いう", a: "Berkata" }] },
+  { k: "思", on: "シ", kun: "おも・う", a: "Berpikir, Mengira", lvl: "N5", day: 29, ex: [{ w: "思う", r: "おもう", a: "Berpikir" }] },
+  { k: "知", on: "チ", kun: "し・る", a: "Tahu, Mengetahui", lvl: "N5", day: 29, ex: [{ w: "知る", r: "しる", a: "Mengetahui" }] },
+  { k: "持", on: "ジ", kun: "も・つ", a: "Membawa, Memiliki", lvl: "N5", day: 30, ex: [{ w: "持つ", r: "もつ", a: "Membawa" }] },
+  { k: "作", on: "サク", kun: "つく・る", a: "Membuat", lvl: "N5", day: 30, ex: [{ w: "作る", r: "つくる", a: "Membuat" }] },
+  { k: "外", on: "ガイ", kun: "そと", a: "Luar, Asing", lvl: "N5", day: 30, ex: [{ w: "外", r: "そと", a: "Luar" }] },
 
-  { k: "四", on: "シ", kun: "よ, よ・つ, よっ・つ, よん", a: "Empat", day: 2, ex: [{ w: "四つ", r: "よっつ", a: "Empat buah" }, { w: "四月", r: "しがつ", a: "Bulan April" }] },
-  { k: "五", on: "ゴ", kun: "いつ, いつ・つ", a: "Lima", day: 2, ex: [{ w: "五つ", r: "いつつ", a: "Lima buah" }, { w: "五日", r: "いつか", a: "Tanggal 5" }] },
-  { k: "六", on: "ロク", kun: "む, むっ・つ, むい", a: "Enam", day: 2, ex: [{ w: "六つ", r: "むっつ", a: "Enam buah" }, { w: "六日", r: "むいか", a: "Tanggal 6" }] },
-  { k: "私", on: "シ", kun: "わたし, わたくし", a: "Saya, Aku", day: 2, ex: [{ w: "私", r: "わたし", a: "Saya" }] },
-
-  { k: "七", on: "シチ", kun: "なな, なな・つ, なの", a: "Tujuh", day: 3, ex: [{ w: "七つ", r: "ななつ", a: "Tujuh buah" }, { w: "七日", r: "なのか", a: "Tanggal 7" }] },
-  { k: "八", on: "ハチ", kun: "や, やっ・つ, よう", a: "Delapan", day: 3, ex: [{ w: "八つ", r: "やっつ", a: "Delapan buah" }, { w: "八日", r: "ようか", a: "Tanggal 8" }] },
-  { k: "九", on: "キュウ, ク", kun: "ここの, ここの・つ", a: "Sembilan", day: 3, ex: [{ w: "九つ", r: "ここのつ", a: "Sembilan buah" }, { w: "九月", r: "くがつ", a: "Bulan September" }] },
-  { k: "十", on: "ジュウ, ジッ", kun: "とお, と", a: "Sepuluh", day: 3, ex: [{ w: "十", r: "とお", a: "Sepuluh buah" }, { w: "十日", r: "とおか", a: "Tanggal 10" }] },
-
-  { k: "百", on: "ヒャク", kun: "もも", a: "Ratus, Seratus", day: 4, ex: [{ w: "三百", r: "さんびゃく", a: "Tiga ratus" }, { w: "百科事典", r: "ひゃっかじてん", a: "Ensiklopedia" }] },
-  { k: "千", on: "セン", kun: "ち", a: "Ribu, Seribu", day: 4, ex: [{ w: "千円", r: "せんえん", a: "Seribu yen" }, { w: "三千", r: "さんぜん", a: "Tiga ribu" }] },
-  { k: "万", on: "マン, バン", kun: "よろず", a: "Puluh Ribu (10.000)", day: 4, ex: [{ w: "一万円", r: "いちまんえん", a: "Sepuluh ribu yen" }, { w: "万国", r: "ばんこく", a: "Semua negara" }] },
-  { k: "円", on: "エン", kun: "まる・い", a: "Yen (Mata Uang), Bulat", day: 4, ex: [{ w: "百円", r: "ひゃくえん", a: "100 Yen" }, { w: "円高", r: "えんだか", a: "Penguatan nilai Yen" }] },
-
-  { k: "日", on: "ニチ, ジツ", kun: "ひ, -び, -か", a: "Hari, Matahari", day: 5, ex: [{ w: "日本", r: "にほん", a: "Jepang" }, { w: "日曜日", r: "にちようび", a: "Hari Minggu" }] },
-  { k: "月", on: "ゲツ, ガツ", kun: "つき", a: "Bulan", day: 5, ex: [{ w: "月曜日", r: "げつようび", a: "Hari Senin" }, { w: "一月", r: "いちがつ", a: "Bulan Januari" }] },
-  { k: "年", on: "ネン", kun: "とし", a: "Tahun", day: 5, ex: [{ w: "今年", r: "ことし", a: "Tahun ini" }, { w: "去年", r: "きょねん", a: "Tahun lalu" }] },
-
-  // --- SEKTOR 2: ELEMEN ALAM, WAKTU & POSISI (HARI 6 - 10) ---
-  { k: "火", on: "カ", kun: "ひ, -び, ほ-", a: "Api", day: 6, ex: [{ w: "火曜日", r: "かようび", a: "Hari Selasa" }, { w: "火事", r: "かじ", a: "Kebakaran" }] },
-  { k: "水", on: "スイ", kun: "みず", a: "Air", day: 6, ex: [{ w: "水曜日", r: "すいようび", a: "Hari Rabu" }, { w: "水泳", r: "すいえい", a: "Berenang" }] },
-  { k: "木", on: "モク, ボク", kun: "き, こ-", a: "Pohon, Kayu", day: 6, ex: [{ w: "木曜日", r: "もくようび", a: "Hari Kamis" }] },
-  { k: "金", on: "キン, コン", kun: "かね, かな-", a: "Emas, Uang", day: 6, ex: [{ w: "金曜日", r: "きんようび", a: "Hari Jumat" }, { w: "お金", r: "おかね", a: "Uang" }] },
-
-  { k: "土", on: "ド, ト", kun: "つち", a: "Tanah", day: 7, ex: [{ w: "土曜日", r: "どようび", a: "Hari Sabtu" }, { w: "土地", r: "とち", a: "Tanah, lahan" }] },
-  { k: "本", on: "ホン", kun: "もと", a: "Buku, Asal", day: 7, ex: [{ w: "本", r: "ほん", a: "Buku" }, { w: "本当", r: "ほんとう", a: "Sungguh, benar" }] },
-  { k: "休", on: "キュウ", kun: "やす・む, やす・まる", a: "Istirahat, Libur", day: 7, ex: [{ w: "休み", r: "やすみ", a: "Libur, istirahat" }, { w: "休日", r: "きゅうじつ", a: "Hari libur" }] },
-
-  { k: "上", on: "ジョウ, ショウ", kun: "うえ, かみ, あ・がる", a: "Atas, Naik", day: 8, ex: [{ w: "上", r: "うえ", a: "Atas" }, { w: "上手", r: "じょうず", a: "Pintar, mahir" }] },
-  { k: "下", on: "カ, ゲ", kun: "した, しも, さ・がる", a: "Bawah, Turun", day: 8, ex: [{ w: "下", r: "した", a: "Bawah" }, { w: "下手", r: "へた", a: "Kurang mahir" }] },
-  { k: "中", on: "チュウ", kun: "なか", a: "Dalam, Tengah", day: 8, ex: [{ w: "中", r: "なか", a: "Di dalam" }, { w: "一日中", r: "いちにちじゅう", a: "Sepanjang hari" }] },
-  { k: "半", on: "ハン", kun: "なか・ば", a: "Setengah, Separuh", day: 8, ex: [{ w: "三時半", r: "さんじはん", a: "Jam 3:30" }, { w: "半分", r: "はんぶん", a: "Separuh" }] },
-
-  { k: "右", on: "ウ, ユウ", kun: "みぎ", a: "Kanan", day: 9, ex: [{ w: "右手", r: "みぎて", a: "Tangan kanan" }, { w: "右側", r: "みぎがわ", a: "Sisi kanan" }] },
-  { k: "左", on: "サ", kun: "ひだり", a: "Kiri", day: 9, ex: [{ w: "左手", r: "ひだりて", a: "Tangan kiri" }, { w: "左右", r: "さゆう", a: "Kiri dan kanan" }] },
-  { k: "前", on: "ゼン", kun: "まえ", a: "Depan, Sebelum", day: 9, ex: [{ w: "前", r: "まえ", a: "Di depan" }, { w: "午前", r: "ごぜん", a: "Pagi (AM)" }] },
-  { k: "後", on: "ゴ, コウ", kun: "うし・ろ, あと, のち", a: "Belakang, Setelah", day: 9, ex: [{ w: "後ろ", r: "うしろ", a: "Belakang" }, { w: "午後", r: "ごご", a: "Siang/Sore (PM)" }] },
-
-  { k: "大", on: "ダイ, タイ", kun: "おお・きい", a: "Besar", day: 10, ex: [{ w: "大きい", r: "おおきい", a: "Besar" }, { w: "大学", r: "だいがく", a: "Universitas" }] },
-  { k: "小", on: "ショウ", kun: "ちい・さい, こ-, お-", a: "Kecil", day: 10, ex: [{ w: "小さい", r: "ちいさい", a: "Kecil" }, { w: "小学校", r: "しょうがっこう", a: "SD" }] },
-  { k: "長", on: "チョウ", kun: "なが・い", a: "Panjang, Pemimpin", day: 10, ex: [{ w: "長い", r: "ながい", a: "Panjang" }, { w: "社長", r: "しゃちょう", a: "Presiden direktur" }] },
-  { k: "高", on: "コウ", kun: "たか・い, たか・まる", a: "Tinggi, Mahal", day: 10, ex: [{ w: "高い", r: "たかい", a: "Mahal / Tinggi" }, { w: "高校", r: "こうこう", a: "SMA" }] },
-
-  // --- SEKTOR 3: KATA SIFAT, WAKTU & KELUARGA (HARI 11 - 15) ---
-  { k: "安", on: "アン", kun: "やす・い", a: "Murah, Aman", day: 11, ex: [{ w: "安い", r: "やすい", a: "Murah" }, { w: "安心", r: "あんしん", a: "Lega, tenang" }] },
-  { k: "新", on: "シン", kun: "あたら・しい, あら・た", a: "Baru", day: 11, ex: [{ w: "新しい", r: "あたらしい", a: "Baru" }, { w: "新聞", r: "しんぶん", a: "Koran" }] },
-  { k: "古", on: "コ", kun: "ふる・い", a: "Tua, Lama (Benda)", day: 11, ex: [{ w: "古い", r: "ふるい", a: "Lama, usang" }, { w: "中古", r: "ちゅうこ", a: "Barang bekas" }] },
-  { k: "白", on: "ハク, ビャク", kun: "しろ, しろ・い", a: "Putih", day: 11, ex: [{ w: "白い", r: "しろい", a: "Putih" }, { w: "白鳥", r: "はくちょう", a: "Angsa putih" }] },
-
-  { k: "多", on: "タ", kun: "おお・い", a: "Banyak", day: 12, ex: [{ w: "多い", r: "おおい", a: "Banyak" }, { w: "多数", r: "たすう", a: "Jumlah besar" }] },
-  { k: "少", on: "ショウ", kun: "すく・ない, すこ・し", a: "Sedikit", day: 12, ex: [{ w: "少ない", r: "すくない", a: "Sedikit" }, { w: "少し", r: "すこし", a: "Agak / sedikit" }] },
-  { k: "早", on: "ソウ, サッ", kun: "はや・い", a: "Cepat (Waktu), Awal", day: 12, ex: [{ w: "早い", r: "はやい", a: "Cepat / Awal" }, { w: "早朝", r: "そうちょう", a: "Pagi-pagi buta" }] },
-  { k: "時", on: "ジ", kun: "とき", a: "Waktu, Jam", day: 12, ex: [{ w: "時間", r: "じかん", a: "Waktu, jam" }, { w: "一時", r: "いちじ", a: "Jam satu" }] },
-
-  { k: "分", on: "ブン, フン, ブ", kun: "わ・かる, わ・ける", a: "Menit, Mengerti, Bagian", day: 13, ex: [{ w: "五分", r: "ごふん", a: "5 menit" }, { w: "分かる", r: "わかる", a: "Mengerti" }] },
-  { k: "今", on: "コン, キン", kun: "いま", a: "Sekarang", day: 13, ex: [{ w: "今", r: "いま", a: "Sekarang" }, { w: "今日", r: "きょう", a: "Hari ini" }] },
-  { k: "先", on: "セン", kun: "さき", a: "Terdahulu, Guru", day: 13, ex: [{ w: "先生", r: "せんせい", a: "Guru" }, { w: "先週", r: "せんしゅう", a: "Minggu lalu" }] },
-  { k: "生", on: "セイ, ショウ", kun: "い・きる, う・まれる, なま", a: "Hidup, Lahir, Murid", day: 13, ex: [{ w: "学生", r: "がくせい", a: "Siswa" }, { w: "生まれる", r: "うまれる", a: "Lahir" }] },
-
-  { k: "学", on: "ガク", kun: "まな・ぶ", a: "Belajar, Ilmu", day: 14, ex: [{ w: "学校", r: "がっこう", a: "Sekolah" }, { w: "学ぶ", r: "まなぶ", a: "Mempelajari" }] },
-  { k: "校", on: "コウ", kun: "-", a: "Sekolah", day: 14, ex: [{ w: "校長", r: "こうちょう", a: "Kepala sekolah" }, { w: "高校", r: "こうこう", a: "SMA" }] },
-  { k: "友", on: "ユウ", kun: "とも", a: "Teman, Sahabat", day: 14, ex: [{ w: "友達", r: "ともだち", a: "Teman" }, { w: "親友", r: "しんゆう", a: "Sahabat akrab" }] },
-  { k: "何", on: "カ", kun: "なに, なん", a: "Apa", day: 14, ex: [{ w: "何", r: "なに", a: "Apa" }, { w: "何時", r: "なんじ", a: "Jam berapa" }] },
-
-  { k: "行", on: "コウ, ギョウ", kun: "い・く, ゆ・く, おこな・う", a: "Pergi, Melakukan", day: 15, ex: [{ w: "行く", r: "いく", a: "Pergi" }, { w: "旅行", r: "りょこう", a: "Wisata" }] },
-  { k: "来", on: "ライ", kun: "く・る, きた・る", a: "Datang, Tiba", day: 15, ex: [{ w: "来る", r: "くる", a: "Datang" }, { w: "来年", r: "らいねん", a: "Tahun depan" }] },
-  { k: "帰", on: "キ", kun: "かえ・る, かえ・す", a: "Pulang, Kembali", day: 15, ex: [{ w: "帰る", r: "かえる", a: "Pulang" }, { w: "帰国", r: "きこく", a: "Pulang ke negara asal" }] },
-  { k: "会", on: "カイ, エ", kun: "あ・う", a: "Bertemu, Pertemuan", day: 15, ex: [{ w: "会う", r: "あう", a: "Bertemu" }, { w: "会社", r: "かいしゃ", a: "Perusahaan" }] },
-
-  // --- SEKTOR 4: AKTIVITAS VERBA & SENSORIK (HARI 16 - 20) ---
-  { k: "見", on: "ケン", kun: "み・る, み・える, み・せる", a: "Melihat, Menonton", day: 16, ex: [{ w: "見る", r: "みる", a: "Melihat" }, { w: "見せる", r: "みせる", a: "Memperlihatkan" }] },
-  { k: "聞", on: "ブン, モン", kun: "き・く, き・こえる", a: "Mendengar, Bertanya", day: 16, ex: [{ w: "聞く", r: "きく", a: "Mendengar" }, { w: "新聞", r: "しんぶん", a: "Koran" }] },
-  { k: "読", on: "ドク, トク", kun: "よ・む", a: "Membaca", day: 16, ex: [{ w: "読む", r: "よむ", a: "Membaca" }, { w: "読書", r: "どくしょ", a: "Membaca buku" }] },
-  { k: "書", on: "ショ", kun: "か・く", a: "Menulis, Dokumen", day: 16, ex: [{ w: "書く", r: "かく", a: "Menulis" }, { w: "辞書", r: "じしょ", a: "Kamus" }] },
-
-  { k: "話", on: "ワ", kun: "はな・す, はなし", a: "Bicara, Cerita", day: 17, ex: [{ w: "話す", r: "はなす", a: "Berbicara" }, { w: "電話", r: "でんわ", a: "Telepon" }] },
-  { k: "買", on: "バイ", kun: "か・う", a: "Membeli", day: 17, ex: [{ w: "買う", r: "かう", a: "Membeli" }, { w: "買い物", r: "かいもの", a: "Belanja" }] },
-  { k: "食", on: "ショク, ジキ", kun: "た・べる, く・う", a: "Makan, Makanan", day: 17, ex: [{ w: "食べる", r: "たべる", a: "Makan" }, { w: "食事", r: "しょくじ", a: "Santapan" }] },
-  { k: "飲", on: "イン", kun: "の・む", a: "Minum", day: 17, ex: [{ w: "飲む", r: "のむ", a: "Minum" }, { w: "飲み物", r: "のみもの", a: "Minuman" }] },
-
-  { k: "東", on: "トウ", kun: "ひがし", a: "Timur", day: 18, ex: [{ w: "東", r: "ひがし", a: "Timur" }, { w: "東京", r: "とうきょう", a: "Tokyo" }] },
-  { k: "西", on: "セイ, サイ", kun: "にし", a: "Barat", day: 18, ex: [{ w: "西", r: "にし", a: "Barat" }, { w: "西洋", r: "せいよう", a: "Negara barat" }] },
-  { k: "南", on: "ナン", kun: "みなみ", a: "Selatan", day: 18, ex: [{ w: "南", r: "みなみ", a: "Selatan" }, { w: "東南アジア", r: "とうなんあじあ", a: "Asia Tenggara" }] },
-  { k: "北", on: "ホク", kun: "きた", a: "Utara", day: 18, ex: [{ w: "北", r: "きた", a: "Utara" }, { w: "北海道", r: "ほっかいどう", a: "Hokkaido" }] },
-
-  { k: "口", on: "コウ, ク", kun: "くち", a: "Mulut, Pintu Keluar/Masuk", day: 19, ex: [{ w: "口", r: "くち", a: "Mulut" }, { w: "出口", r: "でぐち", a: "Pintu keluar" }] },
-  { k: "目", on: "モク, ボク", kun: "め, -め", a: "Mata", day: 19, ex: [{ w: "目", r: "め", a: "Mata" }, { w: "目的", r: "もくてき", a: "Tujuan" }] },
-  { k: "耳", on: "ジ", kun: "みみ", a: "Telinga", day: 19, ex: [{ w: "耳", r: "みみ", a: "Telinga" }] },
-  { k: "手", on: "シュ", kun: "て, た-", a: "Tangan", day: 19, ex: [{ w: "手", r: "て", a: "Tangan" }, { w: "手紙", r: "てがみ", a: "Surat" }] },
-
-  { k: "足", on: "ソク", kun: "あし, た・りる", a: "Kaki, Cukup", day: 20, ex: [{ w: "足", r: "あし", a: "Kaki" }, { w: "足りる", r: "たりる", a: "Cukup" }] },
-  { k: "力", on: "リョク, リキ", kun: "ちから", a: "Tenaga, Daya, Kekuatan", day: 20, ex: [{ w: "力", r: "ちから", a: "Tenaga" }, { w: "電力", r: "でんりょく", a: "Daya listrik" }] },
-  { k: "男", on: "ダン, ナン", kun: "おとこ, お", a: "Laki-laki, Pria", day: 20, ex: [{ w: "男の人", r: "おとこのひと", a: "Pria" }, { w: "男の子", r: "おとこのこ", a: "Anak laki-laki" }] },
-  { k: "女", on: "ジョ, ニョ", kun: "おんな, め", a: "Perempuan, Wanita", day: 20, ex: [{ w: "女の人", r: "おんなのひと", a: "Wanita" }, { w: "女の子", r: "おんなのこ", a: "Anak perempuan" }] },
-
-  // --- SEKTOR 5: KELUARGA, ALAM & LINGKUNGAN (HARI 21 - 25) ---
-  { k: "子", on: "シ, ス", kun: "こ", a: "Anak", day: 21, ex: [{ w: "子ども", r: "こども", a: "Anak-anak" }] },
-  { k: "父", on: "フ", kun: "ちち, とう", a: "Ayah", day: 21, ex: [{ w: "父", r: "ちち", a: "Ayah (sendiri)" }, { w: "お父さん", r: "おとうさん", a: "Ayah (orang lain)" }] },
-  { k: "母", on: "ボ", kun: "はは, かあ", a: "Ibu", day: 21, ex: [{ w: "母", r: "はは", a: "Ibu (sendiri)" }, { w: "お母さん", r: "おかあさん", a: "Ibu (orang lain)" }] },
-
-  { k: "山", on: "サン", kun: "やま", a: "Gunung", day: 22, ex: [{ w: "山", r: "やま", a: "Gunung" }, { w: "富士山", r: "ふじさん", a: "Gunung Fuji" }] },
-  { k: "川", on: "セン", kun: "かわ", a: "Sungai", day: 22, ex: [{ w: "川", r: "かわ", a: "Sungai" }] },
-  { k: "田", on: "デン", kun: "た", a: "Sawah", day: 22, ex: [{ w: "田んぼ", r: "たんぼ", a: "Sawah" }, { w: "田中", r: "たなか", a: "Tanaka (Nama)" }] },
-  { k: "雨", on: "ウ", kun: "あめ, あま-", a: "Hujan", day: 22, ex: [{ w: "雨", r: "あめ", a: "Hujan" }, { w: "大雨", r: "おおあめ", a: "Hujan lebat" }] },
-
-  { k: "天", on: "テン", kun: "あま, あめ", a: "Langit, Surga", day: 23, ex: [{ w: "天気", r: "てんき", a: "Cuaca" }, { w: "天才", r: "てんさい", a: "Jenius" }] },
-  { k: "気", on: "キ, ケ", kun: "-", a: "Energi, Udara, Semangat", day: 23, ex: [{ w: "元気", r: "げんき", a: "Sehat, ceria" }, { w: "気持ち", r: "きもち", a: "Perasaan" }] },
-  { k: "空", on: "クウ", kun: "そら, あ・く, から", a: "Langit, Kosong", day: 23, ex: [{ w: "空", r: "そら", a: "Langit" }, { w: "空気", r: "くうき", a: "Udara" }] },
-
-  { k: "車", on: "シャ", kun: "くるま", a: "Mobil, Kendaraan", day: 24, ex: [{ w: "車", r: "くるま", a: "Mobil" }, { w: "電車", r: "でんしゃ", a: "Kereta listrik" }] },
-  { k: "門", on: "モン", kun: "かど", a: "Gerbang, Pintu Utama", day: 24, ex: [{ w: "校門", r: "こうもん", a: "Gerbang sekolah" }, { w: "専門", r: "せんもん", a: "Keahlian" }] },
-  { k: "道", on: "ドウ, トウ", kun: "みち", a: "Jalan, Cara", day: 24, ex: [{ w: "道", r: "みち", a: "Jalan" }, { w: "柔道", r: "じゅうどう", a: "Judo" }] },
-  { k: "店", on: "テン", kun: "みせ", a: "Toko, Kedai", day: 24, ex: [{ w: "店", r: "みせ", a: "Toko" }, { w: "店員", r: "てんいん", a: "Pelayan toko" }] },
-
-  { k: "名", on: "メイ, ミョウ", kun: "な", a: "Nama, Terkenal", day: 25, ex: [{ w: "名前", r: "なまえ", a: "Nama" }, { w: "有名", r: "ゆうめい", a: "Terkenal" }] },
-  { k: "国", on: "コク", kun: "くに", a: "Negara, Daerah Asal", day: 25, ex: [{ w: "国", r: "くに", a: "Negara" }, { w: "外国人", r: "がいこくじん", a: "WNA" }] },
-  { k: "語", on: "ゴ", kun: "かた・る", a: "Bahasa, Bercerita", day: 25, ex: [{ w: "日本語", r: "にほんご", a: "Bahasa Jepang" }, { w: "英語", r: "えいご", a: "Bahasa Inggris" }] },
-  { k: "間", on: "カン, ケン", kun: "あいだ, ま", a: "Antara, Durasi Waktu", day: 25, ex: [{ w: "時間", r: "じかん", a: "Waktu / Jam" }, { w: "間に合う", r: "まにあう", a: "Tepat waktu" }] },
-
-  // --- SEKTOR 6: KOTA, SOSIAL & AKHIR N5 (HARI 26 - 30) ---
-  { k: "毎", on: "マイ", kun: "-", a: "Setiap", day: 26, ex: [{ w: "毎日", r: "まいにち", a: "Setiap hari" }, { w: "毎週", r: "まいしゅう", a: "Setiap minggu" }] },
-  { k: "週", on: "シュウ", kun: "-", a: "Minggu (Pekan)", day: 26, ex: [{ w: "今週", r: "こんしゅう", a: "Minggu ini" }, { w: "来週", r: "らいしゅう", a: "Minggu depan" }] },
-  { k: "午", on: "ゴ", kun: "-", a: "Tengah Hari (Siang)", day: 26, ex: [{ w: "午前", r: "ごぜん", a: "Pagi (AM)" }, { w: "午後", r: "ごご", a: "Siang (PM)" }] },
-  { k: "電", on: "デン", kun: "-", a: "Listrik", day: 26, ex: [{ w: "電車", r: "でんしゃ", a: "Kereta" }, { w: "電気", r: "でんき", a: "Listrik, Lampu" }] },
-
-  { k: "駅", on: "エキ", kun: "-", a: "Stasiun", day: 27, ex: [{ w: "駅", r: "えき", a: "Stasiun" }, { w: "駅員", r: "えきいん", a: "Petugas stasiun" }] },
-  { k: "魚", on: "ギョ", kun: "さかな, うお", a: "Ikan", day: 27, ex: [{ w: "魚", r: "さかな", a: "Ikan" }, { w: "金魚", r: "きんぎょ", a: "Ikan mas koki" }] },
-  { k: "肉", on: "ニク", kun: "-", a: "Daging", day: 27, ex: [{ w: "肉", r: "にく", a: "Daging" }, { w: "牛肉", r: "ぎゅうにく", a: "Daging sapi" }] },
-  { k: "入", on: "ニュウ", kun: "はい・る, い・れる", a: "Masuk", day: 27, ex: [{ w: "入る", r: "はいる", a: "Masuk" }, { w: "入口", r: "いりぐち", a: "Pintu masuk" }] },
-
-  { k: "出", on: "シュツ, スイ", kun: "で・る, だ・す", a: "Keluar, Mengeluarkan", day: 28, ex: [{ w: "出る", r: "でる", a: "Keluar" }, { w: "出口", r: "でぐち", a: "Pintu keluar" }] },
-  { k: "立", on: "リツ", kun: "た・つ, た・てる", a: "Berdiri", day: 28, ex: [{ w: "立つ", r: "たつ", a: "Berdiri" }, { w: "国立", r: "こくりつ", a: "Negeri / Nasional" }] },
-  { k: "座", on: "ザ", kun: "すわ・る", a: "Duduk, Kursi", day: 28, ex: [{ w: "座る", r: "すわる", a: "Duduk" }, { w: "座席", r: "ざせき", a: "Tempat duduk" }] },
-
-  { k: "言", on: "ゲン, ゴン", kun: "い・う, こと", a: "Berkata, Ucapan", day: 29, ex: [{ w: "言う", r: "いう", a: "Berkata" }, { w: "言葉", r: "ことば", a: "Bahasa, Kata" }] },
-  { k: "思", on: "シ", kun: "おも・う", a: "Berpikir, Mengira", day: 29, ex: [{ w: "思う", r: "おもう", a: "Berpikir / Mengira" }, { w: "思い出", r: "おもいで", a: "Kenangan" }] },
-  { k: "知", on: "チ", kun: "し・る", a: "Mengetahui, Kenal", day: 29, ex: [{ w: "知る", r: "しる", a: "Mengetahui" }, { w: "知人", r: "ちじん", a: "Kenalan" }] },
-
-  { k: "持", on: "ジ", kun: "も・つ", a: "Memegang, Memiliki", day: 30, ex: [{ w: "持つ", r: "もつ", a: "Membawa / Memiliki" }, { w: "金持ち", r: "かねもち", a: "Orang kaya" }] },
-  { k: "作", on: "サク, サ", kun: "つく・る", a: "Membuat, Karya", day: 30, ex: [{ w: "作る", r: "つくる", a: "Membuat" }, { w: "作文", r: "さくぶん", a: "Karangan" }] },
-  { k: "外", on: "ガイ, ゲ", kun: "そと, ほか, はず・す", a: "Luar, Asing", day: 30, ex: [{ w: "外", r: "そと", a: "Luar" }, { w: "外国", r: "がいこく", a: "Luar negeri" }] }
+  // --- EKSPANSI LEVEL N4 (KANJI TAMBAHAN PILIHAN) ---
+  { k: "待", on: "タイ", kun: "ま・つ", a: "Menunggu", lvl: "N4", day: 31, ex: [{ w: "待つ", r: "まつ", a: "Menunggu" }] },
+  { k: "使", on: "シ", kun: "つか・う", a: "Menggunakan", lvl: "N4", day: 31, ex: [{ w: "使う", r: "つかう", a: "Menggunakan" }] },
+  { k: "借", on: "シャク", kun: "か・りる", a: "Meminjam", lvl: "N4", day: 31, ex: [{ w: "借りる", r: "かりる", a: "Meminjam" }] },
+  { k: "貸", on: "タイ", kun: "か・す", a: "Meminjamkan", lvl: "N4", day: 31, ex: [{ w: "貸す", r: "かす", a: "Meminjamkan" }] },
+  { k: "始", on: "シ", kun: "はじ・まる", a: "Mulai, Memulai", lvl: "N4", day: 32, ex: [{ w: "始まる", r: "はじまる", a: "Dimulai" }] },
+  { k: "終", on: "シュウ", kun: "お・わる", a: "Selesai, Berakhir", lvl: "N4", day: 32, ex: [{ w: "終わる", r: "おわる", a: "Selesai" }] },
+  { k: "開", on: "カイ", kun: "あ・く, ひら・く", a: "Membuka, Terbuka", lvl: "N4", day: 32, ex: [{ w: "開ける", r: "あける", a: "Membuka" }] },
+  { k: "閉", on: "ヘイ", kun: "し・まる, と・じる", a: "Menutup, Tertutup", lvl: "N4", day: 32, ex: [{ w: "閉める", r: "しめる", a: "Menutup" }] },
+  { k: "心", on: "シン", kun: "こころ", a: "Hati, Pikiran", lvl: "N4", day: 33, ex: [{ w: "心", r: "こころ", a: "Hati" }, { w: "安心", r: "あんしん", a: "Lega" }] },
+  { k: "急", on: "キュウ", kun: "いそ・ぐ", a: "Buru-buru, Cepat", lvl: "N4", day: 33, ex: [{ w: "急ぐ", r: "いそぐ", a: "Buru-buru" }, { w: "特急", r: "とっきゅう", a: "Kereta Ekspres" }] },
+  { k: "病", on: "ビョウ", kun: "や・む", a: "Sakit, Penyakit", lvl: "N4", day: 33, ex: [{ w: "病院", r: "びょういん", a: "Rumah Sakit" }] },
+  { k: "医", on: "イ", kun: "-", a: "Medis, Dokter", lvl: "N4", day: 33, ex: [{ w: "医者", r: "いしゃ", a: "Dokter" }] },
+  { k: "者", on: "シャ", kun: "もの", a: "Orang, Tokoh", lvl: "N4", day: 33, ex: [{ w: "学者", r: "がくしゃ", a: "Cendekiawan" }] },
+  { k: "屋", on: "オク", kun: "や", a: "Toko, Atap, Rumah", lvl: "N4", day: 34, ex: [{ w: "本屋", r: "ほんや", a: "Toko buku" }, { w: "部屋", r: "へや", a: "Kamar" }] },
+  { k: "堂", on: "ドウ", kun: "-", a: "Gedung, Aula", lvl: "N4", day: 34, ex: [{ w: "食堂", r: "しょくどう", a: "Kantin" }] },
+  { k: "館", on: "カン", kun: "やかた", a: "Gedung Publik", lvl: "N4", day: 34, ex: [{ w: "図書館", r: "としょかん", a: "Perpustakaan" }] },
+  { k: "野", on: "ヤ", kun: "の", a: "Ladang, Lapangan", lvl: "N4", day: 34, ex: [{ w: "野菜", r: "やさい", a: "Sayuran" }] },
+  { k: "菜", on: "サイ", kun: "な", a: "Sayur", lvl: "N4", day: 34, ex: [{ w: "菜食", r: "さいしょく", a: "Vegetarian" }] },
+  { k: "茶", on: "チャ, サ", kun: "-", a: "Teh", lvl: "N4", day: 35, ex: [{ w: "お茶", r: "おちゃ", a: "Teh Jepang" }, { w: "喫茶店", r: "きっさてん", a: "Kedai kopi" }] },
+  { k: "酒", on: "シュ", kun: "さけ", a: "Minuman Keras, Sake", lvl: "N4", day: 35, ex: [{ w: "お酒", r: "おさけ", a: "Minuman beralkohol" }] },
+  { k: "飯", on: "ハン", kun: "めし", a: "Nasi, Makanan", lvl: "N4", day: 35, ex: [{ w: "ご飯", r: "ごはん", a: "Nasi / Makanan" }, { w: "朝ご飯", r: "あさごはん", a: "Sarapan" }] },
+  { k: "犬", on: "ケン", kun: "いぬ", a: "Anjing", lvl: "N4", day: 35, ex: [{ w: "犬", r: "いぬ", a: "Anjing" }, { w: "子犬", r: "こいぬ", a: "Anak anjing" }] },
+  { k: "猫", on: "ビョウ", kun: "ねこ", a: "Kucing", lvl: "N4", day: 35, ex: [{ w: "猫", r: "ねこ", a: "Kucing" }] },
+  { k: "鳥", on: "チョウ", kun: "とり", a: "Burung", lvl: "N4", day: 35, ex: [{ w: "小鳥", r: "ことり", a: "Burung kecil" }, { w: "焼き鳥", r: "やきとり", a: "Sate ayam" }] }
 ];
 
 // ==========================================
-// KANJI APP CONTROLLER
+// DOJO & MARKET ENGINE (MANAJEMEN RUANG & DECK)
 // ==========================================
-const KanjiApp = {
+const DojoEngine = {
   playerUnlockedDay: 1,
-  currentDay: 1,
-  activeView: 'flashcard',
-  activeFilter: 'unlocked', // 'unlocked', 'today', 'all'
-  filteredList: [],
-  cardIdx: 0,
-  isRevealed: false,
+  activeMainTab: 'market', // 'market' or 'training'
+  activeFilter: 'all',
+  searchQuery: '',
   
-  // Quiz states
-  quizScore: 0,
-  quizCurrentQuestion: null,
+  // Custom Dojo Rooms System (Stored in LocalStorage)
+  rooms: {},
+  activeRoomId: 'default',
+  masteredKanji: [],
+
+  // Training Deck States
+  trainingList: [],
+  deckIdx: 0,
+  isRevealed: false,
+  dojoMode: 'fc', // 'fc' or 'quiz'
+  
+  // Quiz drill
+  quizTarget: null,
 
   init: function() {
-    // 1. Baca data sinkronisasi dari localStorage utama Yomikata
-    let savedUnlocked = parseInt(localStorage.getItem('yk_unlocked_day')) || 1;
-    let savedCurr = parseInt(localStorage.getItem('yk_day')) || 1;
-    this.playerUnlockedDay = Math.max(1, savedUnlocked);
-    this.currentDay = Math.max(1, savedCurr);
+    // 1. Baca hari ekspedisi dari Yomikata utama
+    let savedDay = parseInt(localStorage.getItem('yk_unlocked_day')) || 1;
+    this.playerUnlockedDay = Math.max(1, savedDay);
 
-    // Update UI telemetry
-    const label = document.getElementById('player-sektor-label');
-    if (label) label.innerText = `Sektor Hari ${this.currentDay} (Max Hari ${this.playerUnlockedDay})`;
+    // 2. Baca data ruang dojo dari localStorage
+    let savedRooms = localStorage.getItem('yk_kanji_dojo_rooms');
+    if (savedRooms) {
+      try { this.rooms = JSON.parse(savedRooms); } catch(e) { this.rooms = {}; }
+    }
+    if (!this.rooms || Object.keys(this.rooms).length === 0) {
+      this.rooms = {
+        'default': { name: 'Dojo Latihan Utama', kanji: ['一', '二', '三', '人'] },
+        'n5_target': { name: 'Target Kanji N5', kanji: [] }
+      };
+      this.saveRooms();
+    }
 
-    this.applyFilter();
-    this.updateTelemetryProgress();
-    this.renderCurrentView();
+    let savedActiveId = localStorage.getItem('yk_active_dojo_id');
+    if (savedActiveId && this.rooms[savedActiveId]) {
+      this.activeRoomId = savedActiveId;
+    } else {
+      this.activeRoomId = Object.keys(this.rooms)[0] || 'default';
+    }
+
+    // 3. Baca kanji yang sudah dikuasai
+    let savedMaster = localStorage.getItem('yk_kanji_mastered');
+    if (savedMaster) {
+      try { this.masteredKanji = JSON.parse(savedMaster); } catch(e) { this.masteredKanji = []; }
+    }
+
+    this.renderRoomSelector();
+    this.updateStats();
+    this.renderMarket();
+    this.loadTrainingDeck();
   },
 
-  updateTelemetryProgress: function() {
-    let unlockedTotal = KANJI_N5_DATABASE.filter(item => item.day <= this.playerUnlockedDay).length;
-    let total = KANJI_N5_DATABASE.length;
-    let pct = Math.round((unlockedTotal / total) * 100);
+  saveRooms: function() {
+    localStorage.setItem('yk_kanji_dojo_rooms', JSON.stringify(this.rooms));
+    localStorage.setItem('yk_active_dojo_id', this.activeRoomId);
+  },
 
-    const countEl = document.getElementById('unlocked-count');
-    if (countEl) countEl.innerText = unlockedTotal;
-    
-    const fillEl = document.getElementById('telemetry-fill-bar');
+  saveMastered: function() {
+    localStorage.setItem('yk_kanji_mastered', JSON.stringify(this.masteredKanji));
+  },
+
+  renderRoomSelector: function() {
+    const sel = document.getElementById('dojo-room-select');
+    if (!sel) return;
+    sel.innerHTML = Object.keys(this.rooms).map(id => `
+      <option value="${id}" ${id === this.activeRoomId ? 'selected' : ''}>${this.rooms[id].name}</option>
+    `).join('');
+  },
+
+  switchRoom: function(roomId) {
+    if (!this.rooms[roomId]) return;
+    this.activeRoomId = roomId;
+    this.saveRooms();
+    this.updateStats();
+    this.renderMarket();
+    this.loadTrainingDeck();
+    this.showToast(`⛩️ Beralih ke: ${this.rooms[roomId].name}`);
+  },
+
+  updateStats: function() {
+    const activeRoom = this.rooms[this.activeRoomId] || { kanji: [] };
+    const count = activeRoom.kanji.length;
+    const masteredCount = activeRoom.kanji.filter(k => this.masteredKanji.includes(k)).length;
+    const pct = count > 0 ? Math.round((masteredCount / count) * 100) : 0;
+
+    const cEl = document.getElementById('dojo-card-count');
+    if (cEl) cEl.innerText = `🎒 ${count} Kanji di Ruang Ini`;
+
+    const mEl = document.getElementById('dojo-master-count');
+    if (mEl) mEl.innerText = `⭐ ${masteredCount} Dikuasai`;
+
+    const bEl = document.getElementById('dojo-badge-num');
+    if (bEl) bEl.innerText = count;
+
+    const totalEl = document.getElementById('market-total-badge');
+    if (totalEl) totalEl.innerText = KANJI_CATALOG.length;
+
+    const fillEl = document.getElementById('dojo-progress-fill');
     if (fillEl) fillEl.style.width = `${pct}%`;
 
-    const pctEl = document.getElementById('telemetry-pct');
-    if (pctEl) pctEl.innerText = `${pct}% Terbuka`;
+    const pctEl = document.getElementById('dojo-progress-text');
+    if (pctEl) pctEl.innerText = `${pct}% Dikuasai`;
   },
 
+  // --- ROOM MANAGEMENT MODAL ---
+  openRoomModal: function() {
+    const m = document.getElementById('room-modal');
+    if (m) {
+      m.classList.remove('hidden');
+      const input = document.getElementById('new-room-input');
+      if (input) { input.value = ''; input.focus(); }
+    }
+  },
+
+  closeRoomModal: function() {
+    const m = document.getElementById('room-modal');
+    if (m) m.classList.add('hidden');
+  },
+
+  createNewRoom: function() {
+    const input = document.getElementById('new-room-input');
+    let name = input ? input.value.trim() : '';
+    if (!name) {
+      this.showToast('⚠️ Silakan masukkan nama ruang dojo!');
+      return;
+    }
+    let newId = 'room_' + Date.now();
+    this.rooms[newId] = { name: name, kanji: [] };
+    this.activeRoomId = newId;
+    this.saveRooms();
+    this.closeRoomModal();
+    this.renderRoomSelector();
+    this.updateStats();
+    this.renderMarket();
+    this.loadTrainingDeck();
+    this.showToast(`✨ Ruang "${name}" berhasil dibuat!`);
+  },
+
+  clearCurrentDojo: function() {
+    const activeRoom = this.rooms[this.activeRoomId];
+    if (!activeRoom || activeRoom.kanji.length === 0) {
+      this.showToast('ℹ️ Ruang dojo ini sudah kosong.');
+      return;
+    }
+    if (confirm(`Yakin ingin mengosongkan seluruh kanji dari "${activeRoom.name}"?`)) {
+      activeRoom.kanji = [];
+      this.saveRooms();
+      this.updateStats();
+      this.renderMarket();
+      this.loadTrainingDeck();
+      this.showToast('🧹 Ruang dojo telah dibersihkan.');
+    }
+  },
+
+  // --- PASAR BELANJA KANJI LOGIC ---
   setFilter: function(filterType) {
     this.activeFilter = filterType;
-    ['unlocked', 'today', 'all'].forEach(f => {
-      const chip = document.getElementById(`chip-${f}`);
+    ['all', 'unlocked', 'n5', 'n4', 'in-dojo'].forEach(f => {
+      const chip = document.getElementById(`fchip-${f}`);
       if (chip) chip.classList.toggle('active', f === filterType);
     });
-    this.applyFilter();
-    this.cardIdx = 0;
-    this.renderCurrentView();
+    this.renderMarket();
   },
 
-  onSearch: function(query) {
-    let q = query.trim().toLowerCase();
-    const clearBtn = document.getElementById('search-clear-btn');
-    if (clearBtn) clearBtn.classList.toggle('hidden', q.length === 0);
-
-    this.applyFilter(q);
-    this.cardIdx = 0;
-    this.renderCurrentView();
+  onSearch: function(q) {
+    this.searchQuery = q.trim().toLowerCase();
+    const clearBtn = document.getElementById('market-search-clear');
+    if (clearBtn) clearBtn.classList.toggle('hidden', this.searchQuery.length === 0);
+    this.renderMarket();
   },
 
   clearSearch: function() {
-    const input = document.getElementById('search-input');
+    const input = document.getElementById('market-search');
     if (input) { input.value = ''; input.focus(); }
-    const clearBtn = document.getElementById('search-clear-btn');
+    const clearBtn = document.getElementById('market-search-clear');
     if (clearBtn) clearBtn.classList.add('hidden');
-    this.applyFilter();
-    this.cardIdx = 0;
-    this.renderCurrentView();
+    this.searchQuery = '';
+    this.renderMarket();
   },
 
-  applyFilter: function(searchQuery = "") {
-    let list = [...KANJI_N5_DATABASE];
+  renderMarket: function() {
+    const container = document.getElementById('market-grid-container');
+    if (!container) return;
 
+    const activeRoom = this.rooms[this.activeRoomId] || { kanji: [] };
+    let list = [...KANJI_CATALOG];
+
+    // Filter Kategori
     if (this.activeFilter === 'unlocked') {
       list = list.filter(item => item.day <= this.playerUnlockedDay);
-    } else if (this.activeFilter === 'today') {
-      list = list.filter(item => item.day === this.currentDay);
-      if (list.length === 0) {
-        // Fallback jika hari saat ini tidak ada kanji baru
-        list = KANJI_N5_DATABASE.filter(item => item.day <= this.playerUnlockedDay);
-      }
+    } else if (this.activeFilter === 'n5') {
+      list = list.filter(item => item.lvl === 'N5');
+    } else if (this.activeFilter === 'n4') {
+      list = list.filter(item => item.lvl === 'N4');
+    } else if (this.activeFilter === 'in-dojo') {
+      list = list.filter(item => activeRoom.kanji.includes(item.k));
     }
-    // Jika 'all', biarkan seluruh 103 kanji
 
-    if (searchQuery) {
+    // Filter Pencarian
+    if (this.searchQuery) {
+      let q = this.searchQuery;
       list = list.filter(item => {
-        let matchK = item.k.includes(searchQuery);
-        let matchA = item.a.toLowerCase().includes(searchQuery);
-        let matchOn = item.on.toLowerCase().includes(searchQuery);
-        let matchKun = item.kun.toLowerCase().includes(searchQuery);
+        let matchK = item.k.includes(q);
+        let matchA = item.a.toLowerCase().includes(q);
+        let matchOn = item.on.toLowerCase().includes(q);
+        let matchKun = item.kun.toLowerCase().includes(q);
         return matchK || matchA || matchOn || matchKun;
       });
     }
 
-    this.filteredList = list;
-  },
-
-  switchView: function(viewName) {
-    this.activeView = viewName;
-    ['flashcard', 'grid', 'quiz'].forEach(v => {
-      const btn = document.getElementById(`tab-${v}`);
-      const view = document.getElementById(`view-${v}`);
-      if (btn) btn.classList.toggle('active', v === viewName);
-      if (view) view.classList.toggle('hidden', v !== viewName);
-    });
-
-    // Kontrol filter search bar hanya relevan untuk flashcard & grid
-    const filtersArea = document.getElementById('filter-controls-area');
-    if (filtersArea) filtersArea.classList.toggle('hidden', viewName === 'quiz');
-
-    if (viewName === 'quiz') {
-      this.initQuiz();
-    } else {
-      this.renderCurrentView();
-    }
-  },
-
-  renderCurrentView: function() {
-    if (this.activeView === 'flashcard') this.renderFlashcard();
-    else if (this.activeView === 'grid') this.renderGrid();
-  },
-
-  // --- FLASHCARD LOGIC ---
-  renderFlashcard: function() {
-    const totalCount = this.filteredList.length;
-    const totalEl = document.getElementById('fc-total-count');
-    if (totalEl) totalEl.innerText = totalCount;
-
-    if (totalCount === 0) {
-      document.getElementById('fc-kanji-display').innerText = "🔒";
-      document.getElementById('fc-tap-hint').innerText = "Belum ada kanji yang terbuka di sektor ini. Tingkatkan level ekspedisimu!";
-      document.getElementById('fc-revealed-area').classList.remove('unlocked-view');
-      document.getElementById('fc-day-badge').innerText = `SEKTOR HARI ${this.playerUnlockedDay}`;
+    if (list.length === 0) {
+      container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:40px; color:var(--text-sub);">Tidak ada kanji yang sesuai dengan filter atau kata kunci.</div>`;
       return;
     }
 
-    if (this.cardIdx >= totalCount) this.cardIdx = 0;
-    if (this.cardIdx < 0) this.cardIdx = totalCount - 1;
+    container.innerHTML = list.map(item => {
+      let inDojo = activeRoom.kanji.includes(item.k);
+      let isMaster = this.masteredKanji.includes(item.k);
+      let lvlClass = item.lvl === 'N5' ? 'tag-n5' : 'tag-n4';
 
-    const item = this.filteredList[this.cardIdx];
-    document.getElementById('fc-curr-idx').innerText = this.cardIdx + 1;
-    document.getElementById('fc-day-badge').innerText = `HARI ${item.day} • KANJI RESMI N5`;
-    document.getElementById('fc-kanji-display').innerText = item.k;
-    document.getElementById('fc-onyomi').innerText = item.on || '-';
-    document.getElementById('fc-kunyomi').innerText = item.kun || '-';
-    document.getElementById('fc-meaning').innerText = item.a;
+      return `
+        <div class="kanji-market-card">
+          <div class="card-top-meta">
+            <span class="tag-level ${lvlClass}">${item.lvl}</span>
+            <div class="card-meta-right">
+              <span class="tag-source">${item.day <= this.playerUnlockedDay ? 'Hari ' + item.day : 'Sektor ' + item.day}</span>
+              <button type="button" class="btn-card-audio" onclick="DojoEngine.speakKanji('${item.k}', '${(item.kun||item.on||'').replace(/'/g, "\\'")}', event)" title="Dengarkan Pengucapan">🔊</button>
+            </div>
+          </div>
+
+          <div class="card-kanji-hero">${item.k}</div>
+          <div class="card-arti-label">${item.a}</div>
+          <div class="card-readings-hint">${item.kun || item.on}</div>
+
+          <button type="button" class="btn-cart-toggle ${inDojo ? 'is-in-dojo' : 'is-add'}" onclick="DojoEngine.toggleKanjiToDojo('${item.k}', event)">
+            <span>${inDojo ? '✓ Di Dojo' : '+ Ambil'}</span>
+            ${isMaster ? '⭐' : ''}
+          </button>
+        </div>
+      `;
+    }).join('');
+  },
+
+  toggleKanjiToDojo: function(kanjiChar, evt) {
+    if (evt) evt.stopPropagation();
+    const activeRoom = this.rooms[this.activeRoomId];
+    if (!activeRoom) return;
+
+    let idx = activeRoom.kanji.indexOf(kanjiChar);
+    if (idx > -1) {
+      activeRoom.kanji.splice(idx, 1);
+      this.showToast(`🗑️ Dikeluarkan dari ${activeRoom.name}: ${kanjiChar}`);
+    } else {
+      activeRoom.kanji.push(kanjiChar);
+      this.showToast(`🛒 Ditambahkan ke ${activeRoom.name}: ${kanjiChar}`);
+    }
+
+    this.saveRooms();
+    this.updateStats();
+    this.renderMarket();
+    this.loadTrainingDeck();
+  },
+
+  // --- RUANG LATIHAN DOJO ENGINE ---
+  switchMainTab: function(tabName) {
+    this.activeMainTab = tabName;
+    document.getElementById('tab-market').classList.toggle('active', tabName === 'market');
+    document.getElementById('tab-training').classList.toggle('active', tabName === 'training');
+    document.getElementById('section-market').classList.toggle('hidden', tabName !== 'market');
+    document.getElementById('section-training').classList.toggle('hidden', tabName !== 'training');
+
+    if (tabName === 'training') {
+      this.loadTrainingDeck();
+    }
+  },
+
+  loadTrainingDeck: function() {
+    const activeRoom = this.rooms[this.activeRoomId] || { kanji: [] };
+    const chars = activeRoom.kanji;
+
+    // Filter item dari katalog
+    this.trainingList = KANJI_CATALOG.filter(item => chars.includes(item.k));
+    this.deckIdx = 0;
+
+    const emptyBox = document.getElementById('dojo-empty-state');
+    const fcBox = document.getElementById('dojo-fc-container');
+    const quizBox = document.getElementById('dojo-quiz-container');
+    const navStrip = document.getElementById('dojo-nav-strip');
+
+    if (this.trainingList.length === 0) {
+      if (emptyBox) emptyBox.classList.remove('hidden');
+      if (fcBox) fcBox.classList.add('hidden');
+      if (quizBox) quizBox.classList.add('hidden');
+      if (navStrip) navStrip.classList.add('hidden');
+      return;
+    }
+
+    if (emptyBox) emptyBox.classList.add('hidden');
+    if (navStrip) navStrip.classList.remove('hidden');
+
+    if (this.dojoMode === 'fc') {
+      if (fcBox) fcBox.classList.remove('hidden');
+      if (quizBox) quizBox.classList.add('hidden');
+      this.renderFlashcardCard();
+    } else {
+      if (fcBox) fcBox.classList.add('hidden');
+      if (quizBox) quizBox.classList.remove('hidden');
+      this.nextQuizQuestion();
+    }
+  },
+
+  setDojoMode: function(mode) {
+    this.dojoMode = mode;
+    document.getElementById('dmode-fc').classList.toggle('active', mode === 'fc');
+    document.getElementById('dmode-quiz').classList.toggle('active', mode === 'quiz');
+
+    const fcBox = document.getElementById('dojo-fc-container');
+    const quizBox = document.getElementById('dojo-quiz-container');
+
+    if (mode === 'fc') {
+      if (fcBox) fcBox.classList.remove('hidden');
+      if (quizBox) quizBox.classList.add('hidden');
+      this.renderFlashcardCard();
+    } else {
+      if (fcBox) fcBox.classList.add('hidden');
+      if (quizBox) quizBox.classList.remove('hidden');
+      this.nextQuizQuestion();
+    }
+  },
+
+  renderFlashcardCard: function() {
+    if (this.trainingList.length === 0) return;
+    if (this.deckIdx >= this.trainingList.length) this.deckIdx = 0;
+    if (this.deckIdx < 0) this.deckIdx = this.trainingList.length - 1;
+
+    const item = this.trainingList[this.deckIdx];
+
+    document.getElementById('dojo-curr-index').innerText = this.deckIdx + 1;
+    document.getElementById('dojo-total-index').innerText = this.trainingList.length;
+
+    document.getElementById('dojo-fc-kanji').innerText = item.k;
+    document.getElementById('dojo-fc-on').innerText = item.on || '-';
+    document.getElementById('dojo-fc-kun').innerText = item.kun || '-';
+    document.getElementById('dojo-fc-arti').innerText = item.a;
 
     // Render Jukugo
-    const jukugoBox = document.getElementById('fc-jukugo-list');
-    if (jukugoBox) {
+    const shelf = document.getElementById('dojo-fc-jukugo-shelf');
+    if (shelf) {
       if (item.ex && item.ex.length > 0) {
-        jukugoBox.innerHTML = item.ex.map(ex => `
-          <div class="jukugo-item">
-            <span class="jukugo-word">${ex.w} <span style="font-size:11px; color:#fff; font-weight:normal;">(${ex.r})</span></span>
-            <span class="jukugo-meaning">${ex.a}</span>
+        shelf.innerHTML = item.ex.map(e => `
+          <div class="fjs-item">
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span style="font-weight:700; color:#38bdf8;">${e.w} <span style="font-size:11px; color:#fff;">(${e.r})</span></span>
+              <button type="button" class="btn-card-audio" onclick="event.stopPropagation(); DojoEngine.speakText('${e.w}')" title="Dengarkan kata majemuk">🔊</button>
+            </div>
+            <span style="color:var(--text-sub); font-style:italic;">${e.a}</span>
           </div>
         `).join('');
       } else {
-        jukugoBox.innerHTML = `<span style="font-size:12px; color:var(--text-sub);">Belum ada contoh kata gabungan.</span>`;
+        shelf.innerHTML = `<span style="font-size:11px; color:var(--text-sub);">-</span>`;
       }
+    }
+
+    // Check mastery status
+    const btnMaster = document.getElementById('btn-master-toggle');
+    if (btnMaster) {
+      let isM = this.masteredKanji.includes(item.k);
+      btnMaster.classList.toggle('is-mastered', isM);
     }
 
     // Default tertutup blur
     this.isRevealed = false;
-    document.getElementById('fc-revealed-area').classList.remove('unlocked-view');
-    document.getElementById('fc-tap-hint').innerText = "👆 Ketuk untuk membuka bacaan & arti";
+    document.getElementById('dojo-fc-shield').classList.remove('revealed');
+    document.getElementById('dojo-fc-hint').innerText = "👆 Ketuk untuk membuka bacaan & arti";
   },
 
-  toggleReveal: function() {
+  toggleFcReveal: function() {
     this.isRevealed = !this.isRevealed;
-    const area = document.getElementById('fc-revealed-area');
-    const hint = document.getElementById('fc-tap-hint');
+    const shield = document.getElementById('dojo-fc-shield');
+    const hint = document.getElementById('dojo-fc-hint');
     if (this.isRevealed) {
-      area.classList.add('unlocked-view');
-      hint.innerText = "✨ Ketuk kanji untuk menutup kembali";
+      shield.classList.add('revealed');
+      hint.innerText = "✨ Ketuk kanji untuk menutup";
     } else {
-      area.classList.remove('unlocked-view');
+      shield.classList.remove('revealed');
       hint.innerText = "👆 Ketuk untuk membuka bacaan & arti";
     }
   },
 
-  nextCard: function() {
-    this.cardIdx++;
-    this.renderFlashcard();
-  },
-
-  prevCard: function() {
-    this.cardIdx--;
-    this.renderFlashcard();
-  },
-
-  speakCurrent: function() {
-    if (this.filteredList.length === 0) return;
-    const item = this.filteredList[this.cardIdx];
-    if ('speechSynthesis' in window) {
-      let textToSpeak = item.k;
-      // Jika ada kunyomi, bunyikan kunyomi utama agar lebih natural
-      if (item.kun && item.kun !== '-') {
-        textToSpeak = item.kun.split(',')[0].replace(/[\.・\-]/g, '');
-      }
-      const u = new SpeechSynthesisUtterance(textToSpeak);
-      u.lang = 'ja-JP';
-      u.rate = 0.85;
-      window.speechSynthesis.speak(u);
-      this.showToast(`🔊 Melafalkan: ${textToSpeak}`);
+  nextDojoCard: function() {
+    if (this.dojoMode === 'fc') {
+      this.deckIdx++;
+      this.renderFlashcardCard();
     } else {
-      this.showToast("⚠️ Browser belum mendukung Text-to-Speech");
+      this.nextQuizQuestion();
     }
   },
 
-  // --- GRID KATALOG LOGIC ---
-  renderGrid: function() {
-    const container = document.getElementById('grid-stream-container');
-    if (!container) return;
-
-    if (this.filteredList.length === 0) {
-      container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:40px; color:var(--text-sub);">Tidak ditemukan kanji yang sesuai kriteria pencarian.</div>`;
-      return;
+  prevDojoCard: function() {
+    if (this.dojoMode === 'fc') {
+      this.deckIdx--;
+      this.renderFlashcardCard();
     }
-
-    container.innerHTML = this.filteredList.map((item, idx) => {
-      let isLocked = item.day > this.playerUnlockedDay;
-      if (isLocked) {
-        return `
-          <div class="grid-card is-locked" onclick="KanjiApp.showLockedNotice(${item.day})">
-            <span class="grid-day-tag">HARI ${item.day}</span>
-            <div class="grid-kanji-char">${item.k}</div>
-            <div class="grid-arti">???</div>
-            <div class="grid-lock-badge">
-              <span class="grid-lock-icon">🔒</span>
-              <span class="grid-lock-text">Segel Hari ${item.day}</span>
-            </div>
-          </div>
-        `;
-      } else {
-        return `
-          <div class="grid-card" onclick="KanjiApp.openDetail(${idx})">
-            <span class="grid-day-tag">HARI ${item.day}</span>
-            <div class="grid-kanji-char">${item.k}</div>
-            <div class="grid-arti">${item.a}</div>
-            <span style="font-size:10px; color:var(--text-sub);">${(item.kun || item.on || '').split(',')[0]}</span>
-          </div>
-        `;
-      }
-    }).join('');
   },
 
-  showLockedNotice: function(dayRequired) {
-    this.showToast(`🔒 Segel Misterius! Kanji ini baru terbuka saat Anda menyelesaikan Sektor Hari ke-${dayRequired} di petualangan utama.`);
-  },
-
-  // --- KANJI DETAIL MODAL ---
-  openDetail: function(idx) {
-    const item = this.filteredList[idx];
-    if (!item) return;
-
-    const modal = document.getElementById('detail-modal');
-    const content = document.getElementById('detail-card-content');
-    
-    let jukugoHtml = (item.ex && item.ex.length > 0) ? item.ex.map(ex => `
-      <div class="jukugo-item">
-        <span class="jukugo-word">${ex.w} <span style="font-size:12px; color:#fff;">(${ex.r})</span></span>
-        <span class="jukugo-meaning">${ex.a}</span>
-      </div>
-    `).join('') : '<span style="font-size:12px; color:var(--text-sub);">-</span>';
-
-    content.innerHTML = `
-      <button type="button" class="detail-close-btn" onclick="KanjiApp.closeDetail()">✕</button>
-      <div style="text-align:center; margin-bottom:15px;">
-        <span class="grid-day-tag" style="background:rgba(56,189,248,0.15); color:var(--primary); font-size:11px;">HARI ${item.day} • ARSIP RESMI N5</span>
-        <div style="font-family:'Noto Sans JP', sans-serif; font-size:72px; font-weight:900; color:#fff; line-height:1.2; text-shadow:0 0 25px rgba(56,189,248,0.3); margin-top:5px;">${item.k}</div>
-        <div style="font-size:18px; font-weight:800; color:var(--gold);">${item.a}</div>
-      </div>
-
-      <div style="display:flex; flex-direction:column; gap:10px; width:100%;">
-        <div class="fc-reading-grid">
-          <div class="reading-box reading-onyomi">
-            <div class="reading-label">ONYOMI (Cina)</div>
-            <div class="reading-value">${item.on || '-'}</div>
-          </div>
-          <div class="reading-box reading-kunyomi">
-            <div class="reading-label">KUNYOMI (Jepang)</div>
-            <div class="reading-value">${item.kun || '-'}</div>
-          </div>
-        </div>
-
-        <div class="fc-jukugo-panel">
-          <div class="jukugo-title">💡 CONTOH GABUNGAN KATA (JUKUGO)</div>
-          <div class="jukugo-list">${jukugoHtml}</div>
-        </div>
-
-        <button type="button" class="btn-nav-fc" style="background:rgba(56,189,248,0.15); border-color:var(--primary); color:var(--primary); font-weight:800; margin-top:5px;" onclick="KanjiApp.speakText('${item.kun ? item.kun.split(',')[0].replace(/[\.・\-]/g, '') : item.k}')">🔊 Dengarkan Pengucapan Asli</button>
-      </div>
-    `;
-
-    modal.classList.remove('hidden');
-  },
-
-  closeDetail: function() {
-    const modal = document.getElementById('detail-modal');
-    if (modal) modal.classList.add('hidden');
+  toggleMasterCurrent: function() {
+    if (this.trainingList.length === 0) return;
+    const item = this.trainingList[this.deckIdx];
+    let idx = this.masteredKanji.indexOf(item.k);
+    if (idx > -1) {
+      this.masteredKanji.splice(idx, 1);
+      this.showToast(`Belum dikuasai: ${item.k}`);
+    } else {
+      this.masteredKanji.push(item.k);
+      this.showToast(`⭐ Hebat! Dikuasai: ${item.k}`);
+    }
+    this.saveMastered();
+    this.updateStats();
+    this.renderFlashcardCard();
+    this.renderMarket();
   },
 
   speakText: function(text) {
-    if ('speechSynthesis' in window) {
+    if ('speechSynthesis' in window && text) {
+      window.speechSynthesis.cancel();
       const u = new SpeechSynthesisUtterance(text);
       u.lang = 'ja-JP';
-      u.rate = 0.85;
+      u.rate = 0.88;
       window.speechSynthesis.speak(u);
     }
   },
 
-  // --- KUIS DRILL KANJI ---
-  initQuiz: function() {
-    this.quizScore = 0;
-    document.getElementById('quiz-score').innerText = '0';
-    this.nextQuizQuestion();
+  speakKanji: function(kanji, reading, evt) {
+    if (evt) evt.stopPropagation();
+    let toSpeak = kanji;
+    if (reading && reading !== '-') {
+      toSpeak = reading.split(',')[0].replace(/[\.・\-]/g, '');
+    }
+    this.speakText(toSpeak);
   },
 
-  nextQuizQuestion: function() {
-    const unlockedPool = KANJI_N5_DATABASE.filter(item => item.day <= this.playerUnlockedDay);
-    if (unlockedPool.length < 2) {
-      document.getElementById('quiz-kanji-target').innerText = "🔒";
-      document.getElementById('quiz-prompt-label').innerText = "MINIMAL SELESAIKAN HARI 1 UNTUK MEMBUKA KUIS";
-      document.getElementById('quiz-options-box').innerHTML = "";
-      return;
+  speakCurrent: function() {
+    if (this.trainingList.length === 0) return;
+    const item = this.trainingList[this.deckIdx];
+    let toSpeak = item.k;
+    if (item.kun && item.kun !== '-') {
+      toSpeak = item.kun.split(',')[0].replace(/[\.・\-]/g, '');
     }
+    this.speakText(toSpeak);
+  },
 
-    document.getElementById('quiz-btn-next').classList.add('hidden');
-    document.getElementById('quiz-feedback').innerText = "";
+  // --- KUIS DRILL DOJO ---
+  nextQuizQuestion: function() {
+    if (this.trainingList.length === 0) return;
+    const target = this.trainingList[Math.floor(Math.random() * this.trainingList.length)];
+    this.quizTarget = target;
 
-    // Pilih 1 kanji acak dari yang sudah terbuka
-    const target = unlockedPool[Math.floor(Math.random() * unlockedPool.length)];
-    this.quizCurrentQuestion = target;
+    document.getElementById('dojo-quiz-kanji').innerText = target.k;
+    document.getElementById('dojo-quiz-feedback').innerText = '';
 
-    document.getElementById('quiz-kanji-target').innerText = target.k;
-    document.getElementById('quiz-prompt-label').innerText = "PILIH ARTI BAHASA INDONESIA YANG TEPAT:";
+    // Buat pilihan ganda
+    let opts = [target.a];
+    let pool = KANJI_CATALOG.filter(x => x.a !== target.a);
+    this.shuffle(pool);
+    if (pool[0]) opts.push(pool[0].a);
+    if (pool[1]) opts.push(pool[1].a);
+    if (pool[2]) opts.push(pool[2].a);
+    this.shuffle(opts);
 
-    // Buat 4 opsi pilihan ganda
-    let options = [target.a];
-    let poolDistractors = KANJI_N5_DATABASE.filter(x => x.a !== target.a);
-    this.shuffle(poolDistractors);
-    if (poolDistractors[0]) options.push(poolDistractors[0].a);
-    if (poolDistractors[1]) options.push(poolDistractors[1].a);
-    if (poolDistractors[2]) options.push(poolDistractors[2].a);
-    this.shuffle(options);
-
-    const box = document.getElementById('quiz-options-box');
-    box.innerHTML = options.map(opt => `
-      <button type="button" class="quiz-opt-btn" onclick="KanjiApp.answerQuiz('${opt.replace(/'/g, "\\'")}', event)">${opt}</button>
+    const box = document.getElementById('dojo-quiz-choices');
+    box.innerHTML = opts.map(o => `
+      <button type="button" class="btn-quiz-opt" onclick="DojoEngine.answerQuiz('${o.replace(/'/g, "\\'")}', event)">${o}</button>
     `).join('');
   },
 
   answerQuiz: function(selected, evt) {
-    const target = this.quizCurrentQuestion;
-    if (!target) return;
-
-    const btns = document.querySelectorAll('.quiz-opt-btn');
+    if (!this.quizTarget) return;
+    const btns = document.querySelectorAll('.btn-quiz-opt');
     btns.forEach(b => b.disabled = true);
 
-    const fb = document.getElementById('quiz-feedback');
-    const isCorrect = (selected === target.a);
+    const fb = document.getElementById('dojo-quiz-feedback');
+    const isCorrect = (selected === this.quizTarget.a);
 
     if (isCorrect) {
       evt.target.classList.add('correct');
-      this.quizScore += 10;
-      document.getElementById('quiz-score').innerText = this.quizScore;
-      fb.innerHTML = `<span style="color:var(--success);">⚔️ SEIKAI! Tepat sekali! (${target.k} = ${target.a})</span>`;
+      fb.innerHTML = `<span style="color:var(--success);">⚔️ SEIKAI! Tepat sekali (${this.quizTarget.k} = ${this.quizTarget.a})</span>`;
     } else {
       evt.target.classList.add('wrong');
       btns.forEach(b => {
-        if (b.innerText === target.a) b.classList.add('correct');
+        if (b.innerText === this.quizTarget.a) b.classList.add('correct');
       });
-      fb.innerHTML = `<span style="color:var(--danger);">❌ Kurang tepat! Jawaban benar: <b>${target.a}</b></span>`;
+      fb.innerHTML = `<span style="color:var(--danger);">❌ Kurang tepat! Jawaban benar: <b>${this.quizTarget.a}</b></span>`;
     }
-
-    document.getElementById('quiz-btn-next').classList.remove('hidden');
   },
 
   shuffle: function(arr) {
@@ -1488,19 +2095,29 @@ const KanjiApp = {
     }
   },
 
+  // --- GUIDE MODAL LOGIC ---
+  openGuide: function() {
+    const m = document.getElementById('guide-modal');
+    if (m) m.classList.remove('hidden');
+  },
+
+  closeGuide: function() {
+    const m = document.getElementById('guide-modal');
+    if (m) m.classList.add('hidden');
+  },
+
   showToast: function(msg) {
     const t = document.getElementById('toast');
     if (!t) return;
     t.innerText = msg;
     t.classList.add('show');
     clearTimeout(this.toastTimer);
-    this.toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+    this.toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
   }
 };
 
-// Jalankan inisialisasi saat dokumen siap
 window.addEventListener('DOMContentLoaded', () => {
-  KanjiApp.init();
+  DojoEngine.init();
 });
 </script>
 </body>
