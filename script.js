@@ -2855,7 +2855,46 @@ const UI = {
   },
 
   showToast: (msg, type='success') => { const t = document.getElementById('toast'); t.innerText = msg; t.className = `show ${type}`; setTimeout(()=> t.className = '', 2500); },
-  toggleSidebar: () => { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); },
+  
+  _savedScrollY: 0,
+  syncBodyScrollLock: () => {
+    const sb = document.getElementById('sidebar');
+    const isSidebarActive = Boolean(sb && sb.classList.contains('active'));
+    const shouldLock = isSidebarActive;
+
+    const isLocked = document.body.classList.contains('sidebar-locked');
+    if (shouldLock && !isLocked) {
+      UI._savedScrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
+      document.documentElement.classList.add('sidebar-locked');
+      document.body.classList.add('sidebar-locked');
+      document.body.style.top = `-${UI._savedScrollY}px`;
+    } else if (!shouldLock && isLocked) {
+      const restoreY = UI._savedScrollY || 0;
+      document.documentElement.classList.remove('sidebar-locked');
+      document.body.classList.remove('sidebar-locked');
+      document.body.style.top = '';
+      window.scrollTo(0, restoreY);
+    }
+  },
+
+  toggleSidebar: () => { 
+    const sb = document.getElementById('sidebar'); 
+    const ov = document.getElementById('overlay'); 
+    if (!sb) return;
+    const isActive = sb.classList.toggle('active');
+    if (ov) ov.classList.toggle('active', isActive);
+    UI.syncBodyScrollLock();
+  },
+
+  closeSidebar: () => {
+    const sb = document.getElementById('sidebar');
+    const ov = document.getElementById('overlay');
+    if (sb && sb.classList.contains('active')) {
+      sb.classList.remove('active');
+      if (ov) ov.classList.remove('active');
+      UI.syncBodyScrollLock();
+    }
+  },
 
   selectMission: (day) => {
     if (day <= Game.unlockedDay) {
@@ -6692,6 +6731,14 @@ window.onload = async () => {
     Streak.init();
     Cloud.init();
     Game.checkStoredMode();
+
+    // Prevent mobile touch scrolling leak through sidebar overlay
+    const mainOverlay = document.getElementById('overlay');
+    if (mainOverlay) {
+      mainOverlay.addEventListener('touchmove', (e) => {
+        if (e.cancelable) e.preventDefault();
+      }, { passive: false });
+    }
   } catch (error) {
     Dojo.init();
     Streak.init();
