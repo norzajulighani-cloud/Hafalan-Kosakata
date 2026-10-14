@@ -484,11 +484,12 @@
     display: flex;
     background: rgba(10, 16, 34, 0.88);
     backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     padding: 5px;
     border-radius: 16px;
     border: 1px solid var(--border-glass);
     gap: 6px;
-    margin-bottom: 16px;
+    margin-bottom: 18px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
   }
   .tab-main-btn {
@@ -496,32 +497,33 @@
     background: transparent;
     color: var(--text-sub);
     border: 1px solid transparent;
-    padding: 10px 10px;
+    padding: 10px 8px;
     border-radius: 12px;
     cursor: pointer;
     font-weight: 800;
-    font-size: 13.5px;
+    font-size: 13px;
     text-align: center;
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 7px;
     user-select: none;
+    white-space: nowrap;
   }
   .tab-main-btn:hover { color: #fff; background: rgba(255, 255, 255, 0.05); }
   .tab-main-btn.active {
-    background: linear-gradient(135deg, rgba(56, 189, 248, 0.24) 0%, rgba(99, 102, 241, 0.2) 100%);
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.22) 0%, rgba(99, 102, 241, 0.2) 100%);
     color: var(--primary);
-    border-color: rgba(56, 189, 248, 0.5);
-    box-shadow: 0 4px 16px rgba(56, 189, 248, 0.25);
+    border-color: rgba(56, 189, 248, 0.45);
+    box-shadow: 0 4px 16px rgba(56, 189, 248, 0.22);
     transform: translateY(-1px);
   }
   .tab-badge-num {
     background: rgba(56, 189, 248, 0.2);
     border: 1px solid rgba(56, 189, 248, 0.4);
     font-size: 10.5px;
-    padding: 2px 7px;
+    padding: 1px 7px;
     border-radius: 10px;
     font-weight: 800;
     color: #fff;
@@ -784,35 +786,33 @@
     overflow: hidden;
   }
 
-  .dojo-subnav-row {
+  /* Flashcard Top Bar (Minimal, No nested tabs) */
+  .fc-header-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     padding-bottom: 12px;
     margin-bottom: 14px;
+    width: 100%;
   }
-  .dojo-mode-pills {
-    display: flex;
-    gap: 8px;
-  }
-  .btn-dojo-mode {
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid var(--border-glass);
-    color: var(--text-sub);
-    padding: 6px 12px;
+  .fc-room-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    padding: 4px 10px;
     border-radius: 9px;
     font-size: 11.5px;
     font-weight: 800;
-    cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .btn-dojo-mode:hover { color: #fff; background: rgba(255, 255, 255, 0.1); }
-  .btn-dojo-mode.active {
-    background: rgba(56, 189, 248, 0.22);
-    border-color: var(--primary);
     color: var(--primary);
-    box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+  }
+  .fc-counter-badge {
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--text-sub);
+    letter-spacing: 0.5px;
   }
 
   /* Flashcard Content */
@@ -1090,50 +1090,22 @@
     75% { transform: translateX(6px); }
   }
 
-  /* Drill Variations Toolbar & Question Elements */
-  .drill-type-toolbar {
+  /* Quiz Top Bar & Compact Drill Mode Selector */
+  .quiz-top-bar {
     display: flex;
-    gap: 6px;
-    overflow-x: auto;
-    padding: 2px 2px 8px 2px;
-    margin-bottom: 12px;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
+    justify-content: space-between;
+    align-items: center;
     width: 100%;
-    max-width: 520px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    position: relative;
+    z-index: 20;
   }
-  .drill-type-toolbar::-webkit-scrollbar { display: none; }
-  .btn-drill-type {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--border-glass);
-    color: var(--text-sub);
-    padding: 6px 12px;
-    border-radius: 10px;
-    font-size: 11.5px;
-    font-weight: 800;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .btn-drill-type:hover {
-    color: #fff;
-    background: rgba(255, 255, 255, 0.1);
-  }
-  .btn-drill-type.active {
-    background: rgba(56, 189, 248, 0.22);
-    border-color: var(--primary);
-    color: var(--primary);
-    box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
-  }
-  .btn-drill-type:active { transform: scale(0.95); }
-
-  .quiz-stats-row {
+  .quiz-telemetry-cluster {
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 8px;
-    margin-bottom: 8px;
-    width: 100%;
   }
   .quiz-stat-pill {
     background: rgba(245, 158, 11, 0.14);
@@ -1141,13 +1113,124 @@
     color: var(--gold);
     font-size: 11px;
     font-weight: 800;
-    padding: 3px 10px;
+    padding: 4px 10px;
     border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
   }
   .quiz-stat-pill.score-pill {
     background: rgba(34, 197, 94, 0.14);
     border-color: rgba(34, 197, 94, 0.35);
     color: #86efac;
+  }
+
+  /* Compact Drill Mode Dropdown */
+  .drill-mode-dropdown-wrap {
+    position: relative;
+  }
+  .btn-drill-dropdown {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  }
+  .btn-drill-dropdown:hover,
+  .btn-drill-dropdown.active {
+    background: rgba(56, 189, 248, 0.2);
+    border-color: var(--primary);
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.3);
+  }
+  .dropdown-caret {
+    font-size: 10px;
+    color: var(--primary);
+    transition: transform 0.2s;
+  }
+  .btn-drill-dropdown.active .dropdown-caret {
+    transform: rotate(180deg);
+  }
+
+  .drill-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 250px;
+    background: linear-gradient(165deg, rgba(16, 26, 56, 0.98) 0%, rgba(8, 14, 32, 0.99) 100%);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    border-radius: 16px;
+    padding: 8px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.9), 0 0 25px rgba(56, 189, 248, 0.2);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    z-index: 100;
+    animation: popDropdown 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes popDropdown {
+    from { opacity: 0; transform: translateY(-8px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .dd-header {
+    font-size: 9.5px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    color: var(--text-sub);
+    padding: 4px 8px 6px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    margin-bottom: 2px;
+  }
+  .dd-item {
+    background: transparent;
+    border: 1px solid transparent;
+    padding: 8px 10px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.18s;
+  }
+  .dd-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+  .dd-item.active {
+    background: rgba(56, 189, 248, 0.18);
+    border-color: rgba(56, 189, 248, 0.45);
+  }
+  .dd-icon {
+    font-size: 16px;
+    width: 24px;
+    text-align: center;
+  }
+  .dd-text {
+    flex: 1;
+  }
+  .dd-title {
+    font-size: 12.5px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .dd-item.active .dd-title {
+    color: var(--primary);
+  }
+  .dd-desc {
+    font-size: 10px;
+    color: var(--text-sub);
+    line-height: 1.25;
+    margin-top: 2px;
   }
 
   .quiz-question-type-badge {
@@ -1532,20 +1615,22 @@
     .main-nav-tabs {
       padding: 4px;
       border-radius: 14px;
-      gap: 5px;
+      gap: 4px;
       margin-bottom: 14px;
     }
-    .tab-txt-desktop { display: none; }
-    .tab-txt-mobile { display: inline; }
     .tab-main-btn {
-      padding: 8px 6px;
-      font-size: 12px;
-      gap: 5px;
+      padding: 8px 4px;
+      font-size: 11.5px;
+      gap: 4px;
       white-space: nowrap;
     }
     .tab-badge-num {
-      font-size: 10px;
-      padding: 1px 6px;
+      font-size: 9.5px;
+      padding: 1px 5px;
+    }
+    .drill-dropdown-menu {
+      width: 230px;
+      right: 0;
     }
 
     /* 4. Filter Chips & Market Grid */
@@ -1678,9 +1763,12 @@
           <span>🛒 Pasar Belanja Kanji</span>
           <span class="sni-badge" id="sidebar-market-count">240</span>
         </button>
-        <button type="button" class="sidebar-nav-item" onclick="DojoEngine.switchMainTab('training'); DojoEngine.closeSidebar();">
-          <span>🥋 Arena Latihan Dojo</span>
+        <button type="button" class="sidebar-nav-item" onclick="DojoEngine.switchMainTab('flashcard'); DojoEngine.closeSidebar();">
+          <span>🎴 Flashcard Dojo</span>
           <span class="sni-badge" id="sidebar-dojo-count">4</span>
+        </button>
+        <button type="button" class="sidebar-nav-item" onclick="DojoEngine.switchMainTab('quiz'); DojoEngine.closeSidebar();">
+          <span>🎯 Kuis Drill Kanji</span>
         </button>
       </div>
     </div>
@@ -1803,19 +1891,21 @@
     </div>
   </div>
 
-  <!-- MAIN MODE SWITCHER (Pasar Belanja vs Latihan Dojo) -->
+  <!-- MAIN MODE SWITCHER (Pasar, Flashcard, Kuis Drill) -->
   <div class="main-nav-tabs">
     <button type="button" class="tab-main-btn active" id="tab-market" onclick="DojoEngine.switchMainTab('market')">
       <span>🛒</span>
-      <span class="tab-txt-desktop">Pasar Belanja Kanji</span>
-      <span class="tab-txt-mobile">Pasar Kanji</span>
+      <span>Pasar Kanji</span>
       <span class="tab-badge-num" id="market-total-badge">145</span>
     </button>
-    <button type="button" class="tab-main-btn" id="tab-training" onclick="DojoEngine.switchMainTab('training')">
-      <span>🥋</span>
-      <span class="tab-txt-desktop">Latihan di Dojo</span>
-      <span class="tab-txt-mobile">Dojo Latihan</span>
+    <button type="button" class="tab-main-btn" id="tab-flashcard" onclick="DojoEngine.switchMainTab('flashcard')">
+      <span>🎴</span>
+      <span>Flashcard</span>
       <span class="tab-badge-num" id="dojo-badge-num">0</span>
+    </button>
+    <button type="button" class="tab-main-btn" id="tab-quiz" onclick="DojoEngine.switchMainTab('quiz')">
+      <span>🎯</span>
+      <span>Kuis Drill</span>
     </button>
   </div>
 
@@ -1850,12 +1940,13 @@
        ========================================== -->
   <div id="section-training" class="hidden">
     <div class="dojo-arena-card">
-      <div class="dojo-subnav-row">
-        <div class="dojo-mode-pills">
-          <button type="button" class="btn-dojo-mode active" id="dmode-fc" onclick="DojoEngine.setDojoMode('fc')">🎴 Flashcard</button>
-          <button type="button" class="btn-dojo-mode" id="dmode-quiz" onclick="DojoEngine.setDojoMode('quiz')">🎯 Kuis Drill</button>
+      <!-- Flashcard Header Bar (Minimal, No nested tabs) -->
+      <div class="fc-header-bar" id="dojo-fc-header">
+        <div class="fc-room-tag">
+          <span class="fc-tag-icon">⛩️</span>
+          <span id="fc-room-name-display">Ruang Latihan</span>
         </div>
-        <div style="font-size:11.5px; font-weight:800; color:var(--text-sub);">
+        <div class="fc-counter-badge">
           <span id="dojo-curr-index">1</span> / <span id="dojo-total-index">0</span>
         </div>
       </div>
@@ -1890,20 +1981,64 @@
 
       <!-- State B: Quiz Drill Mode -->
       <div id="dojo-quiz-container" class="quiz-area-container hidden">
-        <!-- Drill Variations Toolbar -->
-        <div class="drill-type-toolbar" id="drill-type-toolbar">
-          <button type="button" class="btn-drill-type active" id="dtype-mix" onclick="DojoEngine.setDrillType('mix')">🔀 Acak / Mix</button>
-          <button type="button" class="btn-drill-type" id="dtype-meaning" onclick="DojoEngine.setDrillType('meaning')">🎯 Tebak Arti</button>
-          <button type="button" class="btn-drill-type" id="dtype-reading" onclick="DojoEngine.setDrillType('reading')">🗣️ Tebak Bacaan</button>
-          <button type="button" class="btn-drill-type" id="dtype-kanji" onclick="DojoEngine.setDrillType('kanji')">🈴 Tebak Bentuk</button>
-          <button type="button" class="btn-drill-type" id="dtype-onkun" onclick="DojoEngine.setDrillType('onkun')">💡 On vs Kun</button>
-          <button type="button" class="btn-drill-type" id="dtype-blitz" onclick="DojoEngine.setDrillType('blitz')">⚡ Benar / Salah</button>
-        </div>
+        <!-- Quiz Control & Telemetry Bar (Single Row, No tab bloat) -->
+        <div class="quiz-top-bar">
+          <div class="quiz-telemetry-cluster">
+            <span class="quiz-stat-pill" id="quiz-streak-pill">🔥 Combo: 0</span>
+            <span class="quiz-stat-pill score-pill" id="quiz-score-pill">⭐ Benar: 0</span>
+          </div>
 
-        <!-- Telemetry Stats Strip -->
-        <div class="quiz-stats-row">
-          <span class="quiz-stat-pill" id="quiz-streak-pill">🔥 Combo: 0</span>
-          <span class="quiz-stat-pill score-pill" id="quiz-score-pill">⭐ Benar: 0</span>
+          <div class="drill-mode-dropdown-wrap">
+            <button type="button" class="btn-drill-dropdown" id="btn-drill-dropdown" onclick="DojoEngine.toggleDrillDropdown(event)" title="Ganti Tipe Soal">
+              <span id="drill-mode-current-label">🔀 Acak / Mix</span>
+              <span class="dropdown-caret">▾</span>
+            </button>
+            <div class="drill-dropdown-menu hidden" id="drill-dropdown-menu">
+              <div class="dd-header">PILIH VARIASI DRILL</div>
+              <button type="button" class="dd-item active" data-type="mix" onclick="DojoEngine.selectDrillType('mix')">
+                <span class="dd-icon">🔀</span>
+                <div class="dd-text">
+                  <div class="dd-title">Acak / Mix</div>
+                  <div class="dd-desc">Kombinasi semua tipe soal (Rekomendasi)</div>
+                </div>
+              </button>
+              <button type="button" class="dd-item" data-type="meaning" onclick="DojoEngine.selectDrillType('meaning')">
+                <span class="dd-icon">🎯</span>
+                <div class="dd-text">
+                  <div class="dd-title">Tebak Arti</div>
+                  <div class="dd-desc">Pilih arti bahasa Indonesia dari kanji</div>
+                </div>
+              </button>
+              <button type="button" class="dd-item" data-type="reading" onclick="DojoEngine.selectDrillType('reading')">
+                <span class="dd-icon">🗣️</span>
+                <div class="dd-text">
+                  <div class="dd-title">Tebak Bacaan</div>
+                  <div class="dd-desc">Pilih cara baca hiragana/romaji</div>
+                </div>
+              </button>
+              <button type="button" class="dd-item" data-type="kanji" onclick="DojoEngine.selectDrillType('kanji')">
+                <span class="dd-icon">🈴</span>
+                <div class="dd-text">
+                  <div class="dd-title">Tebak Bentuk</div>
+                  <div class="dd-desc">Pilih karakter kanji yang tepat</div>
+                </div>
+              </button>
+              <button type="button" class="dd-item" data-type="onkun" onclick="DojoEngine.selectDrillType('onkun')">
+                <span class="dd-icon">💡</span>
+                <div class="dd-text">
+                  <div class="dd-title">On vs Kun</div>
+                  <div class="dd-desc">Tebak Onyomi atau Kunyomi kanji</div>
+                </div>
+              </button>
+              <button type="button" class="dd-item" data-type="blitz" onclick="DojoEngine.selectDrillType('blitz')">
+                <span class="dd-icon">⚡</span>
+                <div class="dd-text">
+                  <div class="dd-title">Benar / Salah</div>
+                  <div class="dd-desc">Uji kecepatan verifikasi pasangan kanji</div>
+                </div>
+              </button>
+            </div>
+          </div>
         </div>
 
         <!-- Question Type Label -->
@@ -6252,36 +6387,46 @@ const DojoEngine = {
     // 4. Keyboard Shortcuts for Fluid Interaction
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
+        DojoEngine.closeDrillDropdown();
         DojoEngine.closeSidebar();
         DojoEngine.closeGuide();
         DojoEngine.closeRoomModal();
         return;
       }
 
-      if (DojoEngine.activeMainTab === 'training') {
-        if (DojoEngine.dojoMode === 'quiz') {
-          const nextBtn = document.getElementById('btn-quiz-next');
-          if (nextBtn && !nextBtn.classList.contains('hidden') && (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowRight')) {
-            e.preventDefault();
-            DojoEngine.nextQuizQuestion();
-            return;
+      if (DojoEngine.activeMainTab === 'quiz') {
+        const nextBtn = document.getElementById('btn-quiz-next');
+        if (nextBtn && !nextBtn.classList.contains('hidden') && (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowRight')) {
+          e.preventDefault();
+          DojoEngine.nextQuizQuestion();
+          return;
+        }
+        if (['1', '2', '3', '4'].includes(e.key)) {
+          const idx = parseInt(e.key) - 1;
+          const opts = document.querySelectorAll('.btn-quiz-opt');
+          if (opts && opts[idx] && !opts[idx].disabled) {
+            opts[idx].click();
           }
-          if (['1', '2', '3', '4'].includes(e.key)) {
-            const idx = parseInt(e.key) - 1;
-            const opts = document.querySelectorAll('.btn-quiz-opt');
-            if (opts && opts[idx] && !opts[idx].disabled) {
-              opts[idx].click();
-            }
-          }
-        } else if (DojoEngine.dojoMode === 'fc') {
-          if (e.key === 'ArrowRight' || e.key === 'Enter') {
-            DojoEngine.nextDojoCard();
-          } else if (e.key === 'ArrowLeft') {
-            DojoEngine.prevDojoCard();
-          } else if (e.key === ' ') {
-            e.preventDefault();
-            DojoEngine.toggleFcReveal();
-          }
+        }
+      } else if (DojoEngine.activeMainTab === 'flashcard') {
+        if (e.key === 'ArrowRight' || e.key === 'Enter') {
+          DojoEngine.nextDojoCard();
+        } else if (e.key === 'ArrowLeft') {
+          DojoEngine.prevDojoCard();
+        } else if (e.key === ' ') {
+          e.preventDefault();
+          DojoEngine.toggleFcReveal();
+        }
+      }
+    });
+
+    // 5. Tutup Dropdown Drill bila klik di luar
+    document.addEventListener('click', (e) => {
+      const dd = document.getElementById('drill-dropdown-menu');
+      const btn = document.getElementById('btn-drill-dropdown');
+      if (dd && !dd.classList.contains('hidden')) {
+        if (!dd.contains(e.target) && (!btn || !btn.contains(e.target))) {
+          DojoEngine.closeDrillDropdown();
         }
       }
     });
@@ -6424,6 +6569,10 @@ const DojoEngine = {
 
     const sbDojoCount = document.getElementById('sidebar-dojo-count');
     if (sbDojoCount) sbDojoCount.innerText = count;
+
+    // Flashcard top header room name sync
+    const fcRoomName = document.getElementById('fc-room-name-display');
+    if (fcRoomName) fcRoomName.innerText = activeRoom.name;
   },
 
   // --- ROOM MANAGEMENT MODAL ---
@@ -6593,13 +6742,34 @@ const DojoEngine = {
 
   // --- RUANG LATIHAN DOJO ENGINE ---
   switchMainTab: function(tabName) {
-    this.activeMainTab = tabName;
-    document.getElementById('tab-market').classList.toggle('active', tabName === 'market');
-    document.getElementById('tab-training').classList.toggle('active', tabName === 'training');
-    document.getElementById('section-market').classList.toggle('hidden', tabName !== 'market');
-    document.getElementById('section-training').classList.toggle('hidden', tabName !== 'training');
-
     if (tabName === 'training') {
+      tabName = this.dojoMode === 'quiz' ? 'quiz' : 'flashcard';
+    }
+    this.activeMainTab = tabName;
+
+    const isMarket = tabName === 'market';
+    const isFlashcard = tabName === 'flashcard';
+    const isQuiz = tabName === 'quiz';
+
+    const tabMarketEl = document.getElementById('tab-market');
+    const tabFcEl = document.getElementById('tab-flashcard');
+    const tabQuizEl = document.getElementById('tab-quiz');
+
+    if (tabMarketEl) tabMarketEl.classList.toggle('active', isMarket);
+    if (tabFcEl) tabFcEl.classList.toggle('active', isFlashcard);
+    if (tabQuizEl) tabQuizEl.classList.toggle('active', isQuiz);
+
+    const secMarket = document.getElementById('section-market');
+    const secTraining = document.getElementById('section-training');
+
+    if (secMarket) secMarket.classList.toggle('hidden', !isMarket);
+    if (secTraining) secTraining.classList.toggle('hidden', isMarket);
+
+    if (isFlashcard) {
+      this.dojoMode = 'fc';
+      this.loadTrainingDeck();
+    } else if (isQuiz) {
+      this.dojoMode = 'quiz';
       this.loadTrainingDeck();
     }
   },
@@ -6613,12 +6783,14 @@ const DojoEngine = {
     this.deckIdx = 0;
 
     const emptyBox = document.getElementById('dojo-empty-state');
+    const fcHeader = document.getElementById('dojo-fc-header');
     const fcBox = document.getElementById('dojo-fc-container');
     const quizBox = document.getElementById('dojo-quiz-container');
     const navStrip = document.getElementById('dojo-nav-strip');
 
     if (this.trainingList.length === 0) {
       if (emptyBox) emptyBox.classList.remove('hidden');
+      if (fcHeader) fcHeader.classList.add('hidden');
       if (fcBox) fcBox.classList.add('hidden');
       if (quizBox) quizBox.classList.add('hidden');
       if (navStrip) navStrip.classList.add('hidden');
@@ -6626,14 +6798,15 @@ const DojoEngine = {
     }
 
     if (emptyBox) emptyBox.classList.add('hidden');
-    if (navStrip) navStrip.classList.remove('hidden');
 
     if (this.dojoMode === 'fc') {
+      if (fcHeader) fcHeader.classList.remove('hidden');
       if (fcBox) fcBox.classList.remove('hidden');
       if (quizBox) quizBox.classList.add('hidden');
       if (navStrip) navStrip.classList.remove('hidden');
       this.renderFlashcardCard();
     } else {
+      if (fcHeader) fcHeader.classList.add('hidden');
       if (fcBox) fcBox.classList.add('hidden');
       if (quizBox) quizBox.classList.remove('hidden');
       if (navStrip) navStrip.classList.add('hidden');
@@ -6642,24 +6815,10 @@ const DojoEngine = {
   },
 
   setDojoMode: function(mode) {
-    this.dojoMode = mode;
-    document.getElementById('dmode-fc').classList.toggle('active', mode === 'fc');
-    document.getElementById('dmode-quiz').classList.toggle('active', mode === 'quiz');
-
-    const fcBox = document.getElementById('dojo-fc-container');
-    const quizBox = document.getElementById('dojo-quiz-container');
-    const navStrip = document.getElementById('dojo-nav-strip');
-
     if (mode === 'fc') {
-      if (fcBox) fcBox.classList.remove('hidden');
-      if (quizBox) quizBox.classList.add('hidden');
-      if (navStrip) navStrip.classList.remove('hidden');
-      this.renderFlashcardCard();
+      this.switchMainTab('flashcard');
     } else {
-      if (fcBox) fcBox.classList.add('hidden');
-      if (quizBox) quizBox.classList.remove('hidden');
-      if (navStrip) navStrip.classList.add('hidden');
-      this.nextQuizQuestion();
+      this.switchMainTab('quiz');
     }
   },
 
@@ -6785,14 +6944,51 @@ const DojoEngine = {
   },
 
   // --- KUIS DRILL MULTI-VARIASI DOJO ---
-  setDrillType: function(type) {
+  drillDropdownOpen: false,
+
+  toggleDrillDropdown: function(e) {
+    if (e) e.stopPropagation();
+    this.drillDropdownOpen = !this.drillDropdownOpen;
+    const menu = document.getElementById('drill-dropdown-menu');
+    const btn = document.getElementById('btn-drill-dropdown');
+    if (menu) menu.classList.toggle('hidden', !this.drillDropdownOpen);
+    if (btn) btn.classList.toggle('active', this.drillDropdownOpen);
+  },
+
+  closeDrillDropdown: function() {
+    this.drillDropdownOpen = false;
+    const menu = document.getElementById('drill-dropdown-menu');
+    const btn = document.getElementById('btn-drill-dropdown');
+    if (menu) menu.classList.add('hidden');
+    if (btn) btn.classList.remove('active');
+  },
+
+  selectDrillType: function(type) {
     this.drillType = type;
-    const types = ['mix', 'meaning', 'reading', 'kanji', 'onkun', 'blitz'];
-    types.forEach(t => {
-      const btn = document.getElementById(`dtype-${t}`);
-      if (btn) btn.classList.toggle('active', t === type);
+    this.closeDrillDropdown();
+
+    const labels = {
+      'mix': '🔀 Acak / Mix',
+      'meaning': '🎯 Tebak Arti',
+      'reading': '🗣️ Tebak Bacaan',
+      'kanji': '🈴 Tebak Bentuk',
+      'onkun': '💡 On vs Kun',
+      'blitz': '⚡ Benar / Salah'
+    };
+
+    const labelEl = document.getElementById('drill-mode-current-label');
+    if (labelEl) labelEl.innerText = labels[type] || '🔀 Acak / Mix';
+
+    const items = document.querySelectorAll('.drill-dropdown-menu .dd-item');
+    items.forEach(it => {
+      it.classList.toggle('active', it.getAttribute('data-type') === type);
     });
+
     this.nextQuizQuestion();
+  },
+
+  setDrillType: function(type) {
+    this.selectDrillType(type);
   },
 
   updateDrillTelemetry: function() {
