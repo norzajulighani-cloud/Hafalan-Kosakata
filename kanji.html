@@ -954,6 +954,139 @@
     75% { transform: translateX(6px); }
   }
 
+  /* Drill Variations Toolbar & Question Elements */
+  .drill-type-toolbar {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding: 2px 2px 8px 2px;
+    margin-bottom: 12px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    max-width: 520px;
+  }
+  .drill-type-toolbar::-webkit-scrollbar { display: none; }
+  .btn-drill-type {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-glass);
+    color: var(--text-sub);
+    padding: 6px 12px;
+    border-radius: 10px;
+    font-size: 11.5px;
+    font-weight: 800;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .btn-drill-type:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+  }
+  .btn-drill-type.active {
+    background: rgba(56, 189, 248, 0.22);
+    border-color: var(--primary);
+    color: var(--primary);
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+  }
+  .btn-drill-type:active { transform: scale(0.95); }
+
+  .quiz-stats-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    width: 100%;
+  }
+  .quiz-stat-pill {
+    background: rgba(245, 158, 11, 0.14);
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    color: var(--gold);
+    font-size: 11px;
+    font-weight: 800;
+    padding: 3px 10px;
+    border-radius: 12px;
+  }
+  .quiz-stat-pill.score-pill {
+    background: rgba(34, 197, 94, 0.14);
+    border-color: rgba(34, 197, 94, 0.35);
+    color: #86efac;
+  }
+
+  .quiz-question-type-badge {
+    font-size: 11px;
+    font-weight: 900;
+    color: var(--primary);
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  .quiz-prompt-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 110px;
+    margin-bottom: 14px;
+    text-align: center;
+    width: 100%;
+  }
+  .quiz-prompt-sub {
+    font-size: 13.5px;
+    color: var(--text-sub);
+    margin-top: 4px;
+    max-width: 440px;
+    line-height: 1.45;
+  }
+
+  .btn-quiz-opt.kanji-opt {
+    font-family: 'Noto Serif JP', 'Noto Sans JP', serif;
+    font-size: 30px;
+    font-weight: 700;
+    padding: 10px 8px;
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .quiz-grid-choices.two-columns {
+    grid-template-columns: 1fr;
+    max-width: 420px;
+  }
+
+  .quiz-feedback-box {
+    min-height: 28px;
+    font-size: 13px;
+    font-weight: 800;
+    margin-top: 14px;
+    text-align: center;
+    line-height: 1.45;
+    max-width: 460px;
+  }
+
+  .btn-quiz-next {
+    background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+    border: none;
+    color: #000;
+    font-size: 13.5px;
+    font-weight: 900;
+    padding: 10px 24px;
+    border-radius: 12px;
+    cursor: pointer;
+    margin-top: 12px;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 0 20px var(--primary-glow);
+  }
+  .btn-quiz-next:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 28px var(--primary-glow);
+  }
+  .btn-quiz-next:active { transform: scale(0.95); }
+
   /* ==========================================
      7. POPUP MODAL: PANDUAN ONYOMI & KUNYOMI
      ========================================== */
@@ -1572,12 +1705,39 @@
 
       <!-- State B: Quiz Drill Mode -->
       <div id="dojo-quiz-container" class="quiz-area-container hidden">
-        <div style="font-size:11px; font-weight:800; color:var(--primary); letter-spacing:1px; margin-bottom:6px;">DOJO DRILL • TEBAK ARTI:</div>
-        <div class="quiz-kanji-big" id="dojo-quiz-kanji">一</div>
+        <!-- Drill Variations Toolbar -->
+        <div class="drill-type-toolbar" id="drill-type-toolbar">
+          <button type="button" class="btn-drill-type active" id="dtype-mix" onclick="DojoEngine.setDrillType('mix')">🔀 Acak / Mix</button>
+          <button type="button" class="btn-drill-type" id="dtype-meaning" onclick="DojoEngine.setDrillType('meaning')">🎯 Tebak Arti</button>
+          <button type="button" class="btn-drill-type" id="dtype-reading" onclick="DojoEngine.setDrillType('reading')">🗣️ Tebak Bacaan</button>
+          <button type="button" class="btn-drill-type" id="dtype-kanji" onclick="DojoEngine.setDrillType('kanji')">🈴 Tebak Bentuk</button>
+          <button type="button" class="btn-drill-type" id="dtype-onkun" onclick="DojoEngine.setDrillType('onkun')">💡 On vs Kun</button>
+          <button type="button" class="btn-drill-type" id="dtype-blitz" onclick="DojoEngine.setDrillType('blitz')">⚡ Benar / Salah</button>
+        </div>
+
+        <!-- Telemetry Stats Strip -->
+        <div class="quiz-stats-row">
+          <span class="quiz-stat-pill" id="quiz-streak-pill">🔥 Combo: 0</span>
+          <span class="quiz-stat-pill score-pill" id="quiz-score-pill">⭐ Benar: 0</span>
+        </div>
+
+        <!-- Question Type Label -->
+        <div class="quiz-question-type-badge" id="dojo-quiz-type-label">DOJO DRILL • TEBAK ARTI:</div>
+
+        <!-- Prompt Area -->
+        <div class="quiz-prompt-box" id="dojo-quiz-prompt-box">
+          <div class="quiz-kanji-big" id="dojo-quiz-kanji">一</div>
+          <div class="quiz-prompt-sub hidden" id="dojo-quiz-sub"></div>
+        </div>
+
+        <!-- Choices Grid -->
         <div class="quiz-grid-choices" id="dojo-quiz-choices">
           <!-- Choices rendered dynamically -->
         </div>
-        <div id="dojo-quiz-feedback" style="min-height:24px; font-size:13px; font-weight:800; margin-top:14px;"></div>
+
+        <!-- Feedback & Next Action -->
+        <div id="dojo-quiz-feedback" class="quiz-feedback-box"></div>
+        <button type="button" class="btn-quiz-next hidden" id="btn-quiz-next" onclick="DojoEngine.nextQuizQuestion()">Soal Berikutnya ➔</button>
       </div>
 
       <!-- Dojo Navigation Bottom Strip -->
@@ -5847,8 +6007,12 @@ const DojoEngine = {
   isRevealed: false,
   dojoMode: 'fc', // 'fc' or 'quiz'
   
-  // Quiz drill
+  // Drill multi-variations & telemetry states
   quizTarget: null,
+  drillType: 'mix', // 'mix', 'meaning', 'reading', 'kanji', 'onkun', 'blitz'
+  drillStreak: 0,
+  drillScore: 0,
+  currentQuestionData: null,
 
   init: function() {
     // 1. Baca hari ekspedisi dari Yomikata utama (support yk_unlocked & yk_unlocked_day)
@@ -6156,10 +6320,12 @@ const DojoEngine = {
     if (this.dojoMode === 'fc') {
       if (fcBox) fcBox.classList.remove('hidden');
       if (quizBox) quizBox.classList.add('hidden');
+      if (navStrip) navStrip.classList.remove('hidden');
       this.renderFlashcardCard();
     } else {
       if (fcBox) fcBox.classList.add('hidden');
       if (quizBox) quizBox.classList.remove('hidden');
+      if (navStrip) navStrip.classList.add('hidden');
       this.nextQuizQuestion();
     }
   },
@@ -6171,14 +6337,17 @@ const DojoEngine = {
 
     const fcBox = document.getElementById('dojo-fc-container');
     const quizBox = document.getElementById('dojo-quiz-container');
+    const navStrip = document.getElementById('dojo-nav-strip');
 
     if (mode === 'fc') {
       if (fcBox) fcBox.classList.remove('hidden');
       if (quizBox) quizBox.classList.add('hidden');
+      if (navStrip) navStrip.classList.remove('hidden');
       this.renderFlashcardCard();
     } else {
       if (fcBox) fcBox.classList.add('hidden');
       if (quizBox) quizBox.classList.remove('hidden');
+      if (navStrip) navStrip.classList.add('hidden');
       this.nextQuizQuestion();
     }
   },
@@ -6304,48 +6473,309 @@ const DojoEngine = {
     this.speakText(toSpeak);
   },
 
-  // --- KUIS DRILL DOJO ---
+  // --- KUIS DRILL MULTI-VARIASI DOJO ---
+  setDrillType: function(type) {
+    this.drillType = type;
+    const types = ['mix', 'meaning', 'reading', 'kanji', 'onkun', 'blitz'];
+    types.forEach(t => {
+      const btn = document.getElementById(`dtype-${t}`);
+      if (btn) btn.classList.toggle('active', t === type);
+    });
+    this.nextQuizQuestion();
+  },
+
+  updateDrillTelemetry: function() {
+    const sPill = document.getElementById('quiz-streak-pill');
+    if (sPill) sPill.innerText = `🔥 Combo: ${this.drillStreak}`;
+    const scorePill = document.getElementById('quiz-score-pill');
+    if (scorePill) scorePill.innerText = `⭐ Benar: ${this.drillScore}`;
+  },
+
   nextQuizQuestion: function() {
-    if (this.trainingList.length === 0) return;
+    if (!this.trainingList || this.trainingList.length === 0) return;
+
+    const nextBtn = document.getElementById('btn-quiz-next');
+    if (nextBtn) nextBtn.classList.add('hidden');
+    const fb = document.getElementById('dojo-quiz-feedback');
+    if (fb) fb.innerHTML = '';
+
+    // Pilih kanji target dari deck aktif
     const target = this.trainingList[Math.floor(Math.random() * this.trainingList.length)];
     this.quizTarget = target;
 
-    document.getElementById('dojo-quiz-kanji').innerText = target.k;
-    document.getElementById('dojo-quiz-feedback').innerText = '';
+    // Tentukan tipe soal
+    let qType = this.drillType;
+    if (qType === 'mix') {
+      const variations = ['meaning', 'reading', 'kanji', 'onkun', 'blitz'];
+      qType = variations[Math.floor(Math.random() * variations.length)];
+    }
 
-    // Buat pilihan ganda
-    let opts = [target.a];
-    let pool = KANJI_CATALOG.filter(x => x.a !== target.a);
+    let qData = null;
+    if (qType === 'reading') {
+      qData = this.buildReadingQuestion(target);
+    } else if (qType === 'kanji') {
+      qData = this.buildKanjiQuestion(target);
+    } else if (qType === 'onkun') {
+      qData = this.buildOnKunQuestion(target);
+    } else if (qType === 'blitz') {
+      qData = this.buildBlitzQuestion(target);
+    } else {
+      qData = this.buildMeaningQuestion(target);
+    }
+
+    this.currentQuestionData = qData;
+    this.renderQuestionUI(qData);
+  },
+
+  // 1. Soal Tebak Arti (Kanji -> Arti)
+  buildMeaningQuestion: function(target) {
+    let correct = target.a;
+    let pool = this.trainingList.filter(x => x.a !== target.a);
+    if (pool.length < 3) {
+      pool = KANJI_CATALOG.filter(x => x.a !== target.a);
+    }
     this.shuffle(pool);
-    if (pool[0]) opts.push(pool[0].a);
-    if (pool[1]) opts.push(pool[1].a);
-    if (pool[2]) opts.push(pool[2].a);
-    this.shuffle(opts);
+
+    let distractors = [];
+    for (let item of pool) {
+      if (!distractors.includes(item.a) && item.a !== correct) {
+        distractors.push(item.a);
+      }
+      if (distractors.length === 3) break;
+    }
+
+    let choices = [correct, ...distractors];
+    this.shuffle(choices);
+
+    return {
+      type: 'meaning',
+      badge: '🎯 TEBAK ARTI KANJI',
+      promptKanji: target.k,
+      promptSub: 'Pilih arti bahasa Indonesia yang tepat:',
+      choices: choices,
+      correct: correct,
+      audioToSpeak: target.kun || target.on ? (target.kun||target.on).split(',')[0].replace(/[\.・\-]/g, '') : target.k,
+      feedbackCorrect: `⚔️ SEIKAI! Tepat sekali! <b>${target.k}</b> = ${target.a}`,
+      feedbackWrong: `❌ Kurang tepat! <b>${target.k}</b> artinya adalah <b>${target.a}</b>`,
+      isKanjiChoices: false,
+      isTwoColumns: false
+    };
+  },
+
+  // 2. Soal Tebak Cara Baca (Kanji -> Hiragana)
+  buildReadingQuestion: function(target) {
+    let cleanR = (target.kun && target.kun !== '-' ? target.kun : target.on).split(',')[0].replace(/[\.・\-]/g, '').trim();
+    let correct = cleanR;
+
+    let pool = this.trainingList.filter(x => x.k !== target.k);
+    if (pool.length < 3) {
+      pool = KANJI_CATALOG.filter(x => x.k !== target.k);
+    }
+    this.shuffle(pool);
+
+    let distractors = [];
+    for (let item of pool) {
+      let r = (item.kun && item.kun !== '-' ? item.kun : item.on).split(',')[0].replace(/[\.・\-]/g, '').trim();
+      if (r && r !== '-' && r !== correct && !distractors.includes(r)) {
+        distractors.push(r);
+      }
+      if (distractors.length === 3) break;
+    }
+
+    let choices = [correct, ...distractors];
+    this.shuffle(choices);
+
+    return {
+      type: 'reading',
+      badge: '🗣️ TEBAK CARA BACA (YOMIKATA)',
+      promptKanji: target.k,
+      promptSub: `Makna: <b style="color:var(--gold);">${target.a}</b> • Cara baca utama:`,
+      choices: choices,
+      correct: correct,
+      audioToSpeak: cleanR,
+      feedbackCorrect: `⚔️ SEIKAI! <b>${target.k}</b> (${target.a}) dibaca: <b>${cleanR}</b>`,
+      feedbackWrong: `❌ Kurang tepat! <b>${target.k}</b> (${target.a}) cara bacanya adalah <b>${cleanR}</b>`,
+      isKanjiChoices: false,
+      isTwoColumns: false
+    };
+  },
+
+  // 3. Soal Tebak Bentuk Kanji (Makna/Hiragana -> Pilih Kanji)
+  buildKanjiQuestion: function(target) {
+    let readingText = (target.kun && target.kun !== '-' ? target.kun : target.on).split(',')[0];
+    let correct = target.k;
+
+    let pool = this.trainingList.filter(x => x.k !== target.k);
+    if (pool.length < 3) {
+      pool = KANJI_CATALOG.filter(x => x.k !== target.k);
+    }
+    this.shuffle(pool);
+
+    let distractors = [];
+    for (let item of pool) {
+      if (item.k !== correct && !distractors.includes(item.k)) {
+        distractors.push(item.k);
+      }
+      if (distractors.length === 3) break;
+    }
+
+    let choices = [correct, ...distractors];
+    this.shuffle(choices);
+
+    return {
+      type: 'kanji',
+      badge: '🈴 TEBAK BENTUK KANJI',
+      customPromptHtml: `<div style="font-size:clamp(22px, 5.5vw, 28px); font-weight:900; color:#fbbf24; margin:10px 0 6px;">"${target.a}"</div>`,
+      promptSub: `Pelafalan: <b style="color:#38bdf8;">${readingText}</b> • Manakah karakter kanjinya?`,
+      choices: choices,
+      correct: correct,
+      audioToSpeak: target.k,
+      feedbackCorrect: `⚔️ SEIKAI! Karakter untuk "${target.a}" adalah <b>${target.k}</b> (${readingText})`,
+      feedbackWrong: `❌ Kurang tepat! Karakter untuk "${target.a}" adalah <b>${target.k}</b>`,
+      isKanjiChoices: true,
+      isTwoColumns: false
+    };
+  },
+
+  // 4. Soal Detektif Onyomi vs Kunyomi (Cina vs Jepang)
+  buildOnKunQuestion: function(target) {
+    const isJukugo = target.ex && target.ex.length > 0 && Math.random() >= 0.45;
+
+    if (isJukugo) {
+      const ex = target.ex[0];
+      let choices = ['🇨🇳 Onyomi (Bacaan Cina)', '🇯🇵 Kunyomi (Bacaan Jepang)'];
+      this.shuffle(choices);
+      return {
+        type: 'onkun',
+        badge: '💡 DETEKTIF ONYOMI VS KUNYOMI',
+        customPromptHtml: `<div style="font-size:clamp(26px, 7vw, 36px); font-family:'Noto Serif JP',serif; font-weight:700; color:#fff; margin:10px 0 4px; text-shadow:0 0 20px var(--primary-glow);">${ex.w}</div>`,
+        promptSub: `Dalam kata majemuk <b>"${ex.w}"</b> (${ex.r} - ${ex.a}), cara baca kanji [ <b style="color:var(--primary);">${target.k}</b> ] adalah:`,
+        choices: choices,
+        correct: '🇨🇳 Onyomi (Bacaan Cina)',
+        audioToSpeak: ex.w,
+        feedbackCorrect: `⚔️ SEIKAI! Rumus Sakti 80/20: Gabungan dua kanji (${ex.w}) hampir selalu memakai ONYOMI!`,
+        feedbackWrong: `❌ Ingat Rumus Sakti: Kata majemuk gabungan 2 kanji (${ex.w}) memakai ONYOMI!`,
+        isKanjiChoices: false,
+        isTwoColumns: true
+      };
+    } else {
+      let kunR = (target.kun && target.kun !== '-') ? target.kun.split(',')[0].trim() : (target.on ? target.on.split(',')[0].trim() : '');
+      let choices = ['🇯🇵 Kunyomi (Bacaan Jepang)', '🇨🇳 Onyomi (Bacaan Cina)'];
+      this.shuffle(choices);
+      return {
+        type: 'onkun',
+        badge: '💡 DETEKTIF ONYOMI VS KUNYOMI',
+        promptKanji: target.k,
+        promptSub: `Ketika berdiri sendirian dibaca <b>"${kunR}"</b> (${target.a}), bacaan ini termasuk:`,
+        choices: choices,
+        correct: '🇯🇵 Kunyomi (Bacaan Jepang)',
+        audioToSpeak: target.k,
+        feedbackCorrect: `⚔️ SEIKAI! Rumus Sakti 80/20: Kanji yang berdiri sendirian (${target.k} = ${kunR}) memakai KUNYOMI!`,
+        feedbackWrong: `❌ Ingat Rumus Sakti: Kanji yang berdiri sendirian (${target.k} = ${kunR}) memakai KUNYOMI!`,
+        isKanjiChoices: false,
+        isTwoColumns: true
+      };
+    }
+  },
+
+  // 5. Soal Samurai Blitz (Benar atau Salah)
+  buildBlitzQuestion: function(target) {
+    const isTrue = Math.random() >= 0.5;
+    let statementMeaning = target.a;
+
+    if (!isTrue) {
+      const others = KANJI_CATALOG.filter(x => x.a !== target.a);
+      statementMeaning = others[Math.floor(Math.random() * others.length)].a;
+    }
+
+    const correct = isTrue ? '🟢 BENAR (Maru ⭕)' : '🔴 SALAH (Batsu ❌)';
+
+    return {
+      type: 'blitz',
+      badge: '⚡ SAMURAI BLITZ • BENAR ATAU SALAH',
+      promptKanji: target.k,
+      promptSub: `Apakah arti kanji di atas adalah: <b style="color:#fbbf24; font-size:15px;">"${statementMeaning}"</b>?`,
+      choices: ['🟢 BENAR (Maru ⭕)', '🔴 SALAH (Batsu ❌)'],
+      correct: correct,
+      audioToSpeak: target.k,
+      feedbackCorrect: isTrue 
+        ? `⚔️ TEPAT! <b>${target.k}</b> memang benar artinya <b>${target.a}</b>!` 
+        : `⚔️ TEPAT! <b>${target.k}</b> artinya bukan "${statementMeaning}", melainkan <b>${target.a}</b>!`,
+      feedbackWrong: isTrue
+        ? `❌ Kurang tepat! <b>${target.k}</b> memang benar artinya <b>${target.a}</b>.`
+        : `❌ Kurang tepat! <b>${target.k}</b> artinya adalah <b>${target.a}</b>.`,
+      isKanjiChoices: false,
+      isTwoColumns: true
+    };
+  },
+
+  // Render UI dari data soal yang di-generate
+  renderQuestionUI: function(q) {
+    const typeLabel = document.getElementById('dojo-quiz-type-label');
+    if (typeLabel) typeLabel.innerText = q.badge;
+
+    const kanjiEl = document.getElementById('dojo-quiz-kanji');
+    const subEl = document.getElementById('dojo-quiz-sub');
+
+    if (q.customPromptHtml) {
+      if (kanjiEl) {
+        kanjiEl.classList.add('hidden');
+        kanjiEl.innerHTML = '';
+      }
+      if (subEl) {
+        subEl.classList.remove('hidden');
+        subEl.innerHTML = q.customPromptHtml + `<div style="margin-top:6px;">${q.promptSub}</div>`;
+      }
+    } else {
+      if (kanjiEl) {
+        kanjiEl.classList.remove('hidden');
+        kanjiEl.innerText = q.promptKanji;
+      }
+      if (subEl) {
+        subEl.classList.remove('hidden');
+        subEl.innerHTML = q.promptSub;
+      }
+    }
 
     const box = document.getElementById('dojo-quiz-choices');
-    box.innerHTML = opts.map(o => `
-      <button type="button" class="btn-quiz-opt" onclick="DojoEngine.answerQuiz('${o.replace(/'/g, "\\'")}', event)">${o}</button>
-    `).join('');
+    box.className = 'quiz-grid-choices' + (q.isTwoColumns ? ' two-columns' : '');
+    box.innerHTML = q.choices.map(c => {
+      let optClass = 'btn-quiz-opt' + (q.isKanjiChoices ? ' kanji-opt' : '');
+      let escaped = c.replace(/'/g, "\\'");
+      return `<button type="button" class="${optClass}" onclick="DojoEngine.answerQuiz('${escaped}', event)">${c}</button>`;
+    }).join('');
+
+    this.updateDrillTelemetry();
   },
 
   answerQuiz: function(selected, evt) {
-    if (!this.quizTarget) return;
+    if (!this.currentQuestionData) return;
+    const q = this.currentQuestionData;
     const btns = document.querySelectorAll('.btn-quiz-opt');
     btns.forEach(b => b.disabled = true);
 
     const fb = document.getElementById('dojo-quiz-feedback');
-    const isCorrect = (selected === this.quizTarget.a);
+    const nextBtn = document.getElementById('btn-quiz-next');
+    const isCorrect = (selected === q.correct);
+    const targetBtn = evt ? (evt.currentTarget || (evt.target && evt.target.closest ? evt.target.closest('.btn-quiz-opt') : evt.target)) : null;
 
     if (isCorrect) {
-      evt.target.classList.add('correct');
-      fb.innerHTML = `<span style="color:var(--success);">⚔️ SEIKAI! Tepat sekali (${this.quizTarget.k} = ${this.quizTarget.a})</span>`;
+      if (targetBtn) targetBtn.classList.add('correct');
+      this.drillStreak++;
+      this.drillScore++;
+      fb.innerHTML = `<span style="color:var(--success);">${q.feedbackCorrect}</span>`;
+      if (q.audioToSpeak) this.speakText(q.audioToSpeak);
     } else {
-      evt.target.classList.add('wrong');
+      if (targetBtn) targetBtn.classList.add('wrong');
+      this.drillStreak = 0;
       btns.forEach(b => {
-        if (b.innerText === this.quizTarget.a) b.classList.add('correct');
+        if (b.innerText.trim() === q.correct.trim()) b.classList.add('correct');
       });
-      fb.innerHTML = `<span style="color:var(--danger);">❌ Kurang tepat! Jawaban benar: <b>${this.quizTarget.a}</b></span>`;
+      fb.innerHTML = `<span style="color:var(--danger);">${q.feedbackWrong}</span>`;
     }
+
+    this.updateDrillTelemetry();
+    if (nextBtn) nextBtn.classList.remove('hidden');
   },
 
   shuffle: function(arr) {
