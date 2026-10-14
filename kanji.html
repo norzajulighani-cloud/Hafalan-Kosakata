@@ -1054,40 +1054,117 @@
   .btn-quiz-opt {
     background: rgba(255, 255, 255, 0.06);
     border: 1.5px solid var(--border-glass);
-    border-radius: 14px;
+    border-radius: 16px;
     padding: 13px 12px;
     color: #fff;
     font-size: 14.5px;
     font-weight: 700;
     cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), 
+                background 0.22s ease, 
+                border-color 0.22s ease, 
+                box-shadow 0.22s ease,
+                opacity 0.25s ease;
     text-align: center;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+    user-select: none;
   }
-  .btn-quiz-opt:hover {
+  .btn-quiz-opt:hover:not(:disabled) {
     background: rgba(56, 189, 248, 0.18);
     border-color: var(--primary);
     transform: translateY(-2px);
-    box-shadow: 0 0 16px rgba(56, 189, 248, 0.2);
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.25);
   }
-  .btn-quiz-opt:active { transform: scale(0.95); }
+  .btn-quiz-opt:active:not(:disabled) { transform: scale(0.96); }
+
+  /* Tactile Correct Spring Animation */
+  @keyframes popCorrect {
+    0% { transform: scale(1); }
+    35% { transform: scale(1.06); }
+    65% { transform: scale(0.98); }
+    100% { transform: scale(1.02); }
+  }
   .btn-quiz-opt.correct {
-    background: rgba(34, 197, 94, 0.3) !important;
-    border-color: var(--success) !important;
-    color: #86efac !important;
-    box-shadow: 0 0 20px var(--success-glow);
-    animation: pulseGlow 0.5s ease;
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.38) 0%, rgba(16, 185, 129, 0.48) 100%) !important;
+    border-color: #4ade80 !important;
+    color: #fff !important;
+    box-shadow: 0 0 25px rgba(74, 222, 128, 0.5), 0 4px 15px rgba(0, 0, 0, 0.4) !important;
+    animation: popCorrect 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards !important;
+  }
+
+  /* Elastic Shake for Wrong Selection */
+  @keyframes elasticShake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-8px) rotate(-1deg); }
+    40% { transform: translateX(7px) rotate(1deg); }
+    60% { transform: translateX(-5px); }
+    80% { transform: translateX(3px); }
   }
   .btn-quiz-opt.wrong {
-    background: rgba(239, 68, 68, 0.3) !important;
-    border-color: var(--danger) !important;
-    color: #fca5a5 !important;
-    animation: shake 0.4s ease;
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.38) 0%, rgba(185, 28, 28, 0.48) 100%) !important;
+    border-color: #f87171 !important;
+    color: #fecaca !important;
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.45) !important;
+    animation: elasticShake 0.42s cubic-bezier(0.36, 0.07, 0.19, 0.97) forwards !important;
   }
-  @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-6px); }
-    75% { transform: translateX(6px); }
+
+  /* Revealed Correct Beacon (when user picked wrong) */
+  @keyframes gentlePulseGreen {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 10px rgba(74, 222, 128, 0.2); }
+    50% { transform: scale(1.03); box-shadow: 0 0 24px rgba(74, 222, 128, 0.5); }
+  }
+  .btn-quiz-opt.revealed-correct {
+    background: rgba(34, 197, 94, 0.22) !important;
+    border-color: #4ade80 !important;
+    color: #86efac !important;
+    animation: gentlePulseGreen 1.4s ease-in-out infinite !important;
+  }
+
+  /* Dimmed options to focus user's attention */
+  .btn-quiz-opt.dimmed {
+    opacity: 0.3 !important;
+    transform: scale(0.97);
+    filter: grayscale(40%);
+    pointer-events: none;
+  }
+
+  /* Hero Kanji Interactive Reactions */
+  @keyframes kanjiCelebrate {
+    0% { transform: scale(1) translateY(0); filter: drop-shadow(0 0 20px rgba(56, 189, 248, 0.4)); }
+    40% { transform: scale(1.16) translateY(-8px); filter: drop-shadow(0 0 45px rgba(74, 222, 128, 0.85)) drop-shadow(0 0 20px rgba(250, 204, 21, 0.7)); }
+    75% { transform: scale(1.02) translateY(-2px); }
+    100% { transform: scale(1.05) translateY(-3px); filter: drop-shadow(0 0 28px rgba(74, 222, 128, 0.6)); }
+  }
+  .quiz-kanji-big.kanji-celebrate {
+    animation: kanjiCelebrate 0.65s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards !important;
+    color: #fef08a !important;
+  }
+
+  @keyframes kanjiWrong {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    30% { transform: scale(0.94); opacity: 0.55; }
+    70% { transform: scale(0.98); opacity: 0.85; }
+  }
+  .quiz-kanji-big.kanji-wrong {
+    animation: kanjiWrong 0.5s ease-in-out !important;
+  }
+
+  /* Kinetic Question Flow Stage Transitions */
+  @keyframes stageExitLeft {
+    0% { opacity: 1; transform: translateX(0) scale(1); }
+    100% { opacity: 0; transform: translateX(-35px) scale(0.96); }
+  }
+  @keyframes stageEnterRight {
+    0% { opacity: 0; transform: translateX(35px) scale(0.96); }
+    100% { opacity: 1; transform: translateX(0) scale(1); }
+  }
+  .stage-exit {
+    animation: stageExitLeft 0.16s cubic-bezier(0.4, 0, 1, 1) forwards !important;
+  }
+  .stage-enter {
+    animation: stageEnterRight 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
   }
 
   /* Quiz Top Bar & Compact Drill Mode Selector */
@@ -1285,28 +1362,30 @@
 
   /* Enhanced Lively Drill Feedback Card */
   .drill-result-card {
-    border-radius: 14px;
-    padding: 12px 14px;
-    margin-top: 12px;
-    animation: feedbackSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    border-radius: 16px;
+    padding: 14px 18px;
+    margin-top: 14px;
+    animation: feedbackSlideUp 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
     text-align: left;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
     width: 100%;
+    box-sizing: border-box;
   }
   @keyframes feedbackSlideUp {
-    0% { opacity: 0; transform: translateY(10px) scale(0.97); }
+    0% { opacity: 0; transform: translateY(-12px) scale(0.96); }
+    70% { opacity: 1; transform: translateY(2px) scale(1.01); }
     100% { opacity: 1; transform: translateY(0) scale(1); }
   }
   .drill-result-card.result-success {
-    background: linear-gradient(135deg, rgba(34, 197, 94, 0.18) 0%, rgba(16, 185, 129, 0.08) 100%);
-    border-color: rgba(34, 197, 94, 0.45);
-    box-shadow: 0 0 20px rgba(34, 197, 94, 0.2);
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.22) 0%, rgba(16, 185, 129, 0.12) 100%);
+    border-color: rgba(74, 222, 128, 0.45);
+    box-shadow: 0 0 25px rgba(34, 197, 94, 0.25);
   }
   .drill-result-card.result-wrong {
-    background: linear-gradient(135deg, rgba(239, 68, 68, 0.18) 0%, rgba(220, 38, 38, 0.08) 100%);
-    border-color: rgba(239, 68, 68, 0.45);
-    box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.22) 0%, rgba(220, 38, 38, 0.12) 100%);
+    border-color: rgba(248, 113, 113, 0.45);
+    box-shadow: 0 0 25px rgba(239, 68, 68, 0.25);
   }
   .result-banner {
     display: flex;
@@ -1325,35 +1404,49 @@
     color: #cbd5e1;
     line-height: 1.45;
   }
+
+  @keyframes comboBurstPop {
+    0% { transform: scale(0.4) rotate(-8deg); opacity: 0; }
+    65% { transform: scale(1.22) rotate(3deg); opacity: 1; }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+  }
   .result-combo-badge {
     background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
     color: #fff;
-    font-size: 10px;
+    font-size: 10.5px;
     font-weight: 900;
-    padding: 2px 8px;
+    padding: 3px 10px;
     border-radius: 12px;
-    box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
-    animation: pulseGold 1.5s infinite;
+    box-shadow: 0 0 14px rgba(245, 158, 11, 0.6);
+    animation: comboBurstPop 0.42s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    display: inline-block;
   }
 
+  @keyframes btnNextPop {
+    0% { opacity: 0; transform: translateY(12px) scale(0.92); }
+    70% { transform: translateY(-2px) scale(1.02); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
   .btn-quiz-next {
-    background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+    background: linear-gradient(135deg, #38bdf8 0%, #2563eb 100%);
     border: none;
-    color: #000;
-    font-size: 13.5px;
+    color: #fff;
+    font-size: 14px;
     font-weight: 900;
-    padding: 10px 24px;
-    border-radius: 12px;
+    padding: 12px 28px;
+    border-radius: 14px;
     cursor: pointer;
-    margin-top: 12px;
+    margin-top: 14px;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 20px rgba(56, 189, 248, 0.35);
+    animation: btnNextPop 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 0 20px var(--primary-glow);
   }
   .btn-quiz-next:hover {
     transform: translateY(-2px);
-    box-shadow: 0 0 28px var(--primary-glow);
+    box-shadow: 0 8px 28px rgba(56, 189, 248, 0.55);
   }
-  .btn-quiz-next:active { transform: scale(0.95); }
+  .btn-quiz-next:active { transform: scale(0.96); }
 
   /* ==========================================
      7. POPUP MODAL: PANDUAN ONYOMI & KUNYOMI
@@ -2057,7 +2150,7 @@
 
         <!-- Feedback & Next Action -->
         <div id="dojo-quiz-feedback" class="quiz-feedback-box"></div>
-        <button type="button" class="btn-quiz-next hidden" id="btn-quiz-next" onclick="DojoEngine.nextQuizQuestion()">Soal Berikutnya ➔</button>
+        <button type="button" class="btn-quiz-next hidden" id="btn-quiz-next" onclick="DojoEngine.triggerNextQuestionWithAnim()">Soal Berikutnya ➔</button>
       </div>
 
       <!-- Dojo Navigation Bottom Strip -->
@@ -6398,7 +6491,7 @@ const DojoEngine = {
         const nextBtn = document.getElementById('btn-quiz-next');
         if (nextBtn && !nextBtn.classList.contains('hidden') && (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowRight')) {
           e.preventDefault();
-          DojoEngine.nextQuizQuestion();
+          DojoEngine.triggerNextQuestionWithAnim();
           return;
         }
         if (['1', '2', '3', '4'].includes(e.key)) {
@@ -6998,6 +7091,84 @@ const DojoEngine = {
     if (scorePill) scorePill.innerText = `⭐ Benar: ${this.drillScore}`;
   },
 
+  // Web Audio API Synthesizer (Zero asset download, instant tactile audio)
+  playSfx: function(type) {
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+      if (!this._audioCtx) {
+        this._audioCtx = new AudioCtx();
+      }
+      if (this._audioCtx.state === 'suspended') {
+        this._audioCtx.resume();
+      }
+      const ctx = this._audioCtx;
+      const now = ctx.currentTime;
+
+      if (type === 'correct') {
+        // Nada akor mayor ceria (E5 -> G#5 -> B5)
+        [
+          { freq: 659.25, time: 0, dur: 0.12 },
+          { freq: 830.61, time: 0.08, dur: 0.14 },
+          { freq: 987.77, time: 0.16, dur: 0.28 }
+        ].forEach(note => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(note.freq, now + note.time);
+          gain.gain.setValueAtTime(0.001, now + note.time);
+          gain.gain.exponentialRampToValueAtTime(0.18, now + note.time + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + note.time + note.dur);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now + note.time);
+          osc.stop(now + note.time + note.dur);
+        });
+      } else if (type === 'wrong') {
+        // Nada lembut thud / boing frekuensi rendah yang bersahabat
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(260, now);
+        osc.frequency.exponentialRampToValueAtTime(140, now + 0.22);
+        gain.gain.setValueAtTime(0.16, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.24);
+      } else if (type === 'combo') {
+        // Fanfare pop kecil saat combo streak tercapai
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(523.25, now);
+        osc.frequency.exponentialRampToValueAtTime(1046.5, now + 0.18);
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.22);
+      }
+    } catch (e) {
+      // Audio context might be restricted before user gesture
+    }
+  },
+
+  triggerNextQuestionWithAnim: function() {
+    const stage = document.getElementById('dojo-quiz-container');
+    if (stage) {
+      stage.classList.add('stage-exit');
+      setTimeout(() => {
+        stage.classList.remove('stage-exit');
+        this.nextQuizQuestion();
+      }, 140);
+    } else {
+      this.nextQuizQuestion();
+    }
+  },
+
   nextQuizQuestion: function() {
     if (!this.trainingList || this.trainingList.length === 0) return;
 
@@ -7005,6 +7176,17 @@ const DojoEngine = {
     if (nextBtn) nextBtn.classList.add('hidden');
     const fb = document.getElementById('dojo-quiz-feedback');
     if (fb) fb.innerHTML = '';
+
+    const kanjiHero = document.getElementById('dojo-quiz-kanji');
+    if (kanjiHero) kanjiHero.classList.remove('kanji-celebrate', 'kanji-wrong');
+
+    const stage = document.getElementById('dojo-quiz-container');
+    if (stage) {
+      stage.classList.remove('stage-enter');
+      void stage.offsetWidth;
+      stage.classList.add('stage-enter');
+      setTimeout(() => stage.classList.remove('stage-enter'), 320);
+    }
 
     // Pilih kanji target dari deck aktif
     const target = this.trainingList[Math.floor(Math.random() * this.trainingList.length)];
@@ -7263,6 +7445,7 @@ const DojoEngine = {
 
     const fb = document.getElementById('dojo-quiz-feedback');
     const nextBtn = document.getElementById('btn-quiz-next');
+    const kanjiHero = document.getElementById('dojo-quiz-kanji');
     const isCorrect = (selected === q.correct);
     const targetBtn = evt ? (evt.currentTarget || (evt.target && evt.target.closest ? evt.target.closest('.btn-quiz-opt') : evt.target)) : null;
 
@@ -7285,9 +7468,24 @@ const DojoEngine = {
     ];
 
     if (isCorrect) {
-      if (targetBtn) targetBtn.classList.add('correct');
+      this.playSfx('correct');
       this.drillStreak++;
       this.drillScore++;
+
+      if (targetBtn) targetBtn.classList.add('correct');
+      btns.forEach(b => {
+        if (b !== targetBtn) b.classList.add('dimmed');
+      });
+
+      if (kanjiHero) {
+        kanjiHero.classList.remove('kanji-celebrate', 'kanji-wrong');
+        void kanjiHero.offsetWidth;
+        kanjiHero.classList.add('kanji-celebrate');
+      }
+
+      if (this.drillStreak >= 3) {
+        setTimeout(() => this.playSfx('combo'), 180);
+      }
 
       const praise = praises[Math.floor(Math.random() * praises.length)];
       let streakBadge = '';
@@ -7306,11 +7504,24 @@ const DojoEngine = {
       `;
       if (q.audioToSpeak) this.speakText(q.audioToSpeak);
     } else {
-      if (targetBtn) targetBtn.classList.add('wrong');
+      this.playSfx('wrong');
       this.drillStreak = 0;
+
+      if (targetBtn) targetBtn.classList.add('wrong');
       btns.forEach(b => {
-        if (b.innerText.trim() === q.correct.trim()) b.classList.add('correct');
+        if (b.innerText.trim() === q.correct.trim()) {
+          b.classList.add('revealed-correct');
+        } else if (b !== targetBtn) {
+          b.classList.add('dimmed');
+        }
       });
+
+      if (kanjiHero) {
+        kanjiHero.classList.remove('kanji-celebrate', 'kanji-wrong');
+        void kanjiHero.offsetWidth;
+        kanjiHero.classList.add('kanji-wrong');
+      }
+
       const enc = encouragements[Math.floor(Math.random() * encouragements.length)];
       fb.innerHTML = `
         <div class="drill-result-card result-wrong">
