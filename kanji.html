@@ -72,131 +72,91 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    background: rgba(10, 17, 36, 0.9);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 18px;
-    padding: 9px 14px;
+    padding: 6px 2px 14px 2px;
     margin-bottom: 14px;
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.65), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: transparent;
   }
 
-  .nav-left { display: flex; align-items: center; gap: 10px; }
+  .nav-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
   .btn-back {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.12);
     color: var(--primary);
-    padding: 7px 13px;
-    border-radius: 11px;
-    font-size: 13px;
+    font-size: 13.5px;
     font-weight: 800;
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 6px;
-    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     text-decoration: none;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    padding: 4px 6px;
+    background: transparent;
+    border: none;
   }
   .btn-back:hover {
-    background: rgba(56, 189, 248, 0.2);
-    border-color: var(--primary);
-    transform: translateY(-2px);
-    box-shadow: 0 0 16px var(--primary-glow);
+    color: #fff;
+    transform: translateX(-2px);
+    text-shadow: 0 0 10px var(--primary-glow);
   }
   .btn-back:active { transform: scale(0.95); }
 
-  .nav-title-group { display: flex; flex-direction: column; }
-  .nav-title {
-    font-size: 15px;
-    font-weight: 900;
-    letter-spacing: 0.8px;
+  .nav-title-group {
     display: flex;
     align-items: center;
-    gap: 8px;
+  }
+  .nav-title {
+    font-size: 16px;
+    font-weight: 900;
+    letter-spacing: 1px;
     background: linear-gradient(135deg, #ffffff 40%, #bae6fd 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-  }
-  .badge-market {
-    background: linear-gradient(135deg, rgba(251, 191, 36, 0.25) 0%, rgba(245, 158, 11, 0.12) 100%);
-    border: 1px solid rgba(251, 191, 36, 0.5);
-    color: var(--gold);
-    font-size: 9.5px;
-    font-weight: 800;
-    padding: 3px 8px;
-    border-radius: 6px;
-    letter-spacing: 1.2px;
-    box-shadow: 0 0 10px rgba(251, 191, 36, 0.2);
-    animation: pulseGold 3s infinite;
-    -webkit-text-fill-color: var(--gold);
-  }
-  @keyframes pulseGold {
-    0%, 100% { box-shadow: 0 0 8px rgba(251, 191, 36, 0.2); }
-    50% { box-shadow: 0 0 16px rgba(251, 191, 36, 0.45); }
+    margin: 0;
   }
 
-  .nav-right { display: flex; align-items: center; gap: 6px; }
-  .btn-onyomi-guide {
-    background: linear-gradient(135deg, rgba(192, 132, 252, 0.25) 0%, rgba(147, 51, 234, 0.2) 100%);
-    border: 1px solid rgba(192, 132, 252, 0.5);
-    color: #f3e8ff;
-    padding: 7px 13px;
-    border-radius: 11px;
+  .nav-right {
+    display: flex;
+    align-items: center;
+  }
+
+  /* ==========================================
+     2. TOP NAVBAR SIDEBAR TOGGLE & DRAWER
+     ========================================== */
+  .btn-sidebar-toggle {
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 20px;
     font-size: 12px;
     font-weight: 800;
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 6px;
-    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 0 16px rgba(192, 132, 252, 0.25);
-  }
-  .btn-onyomi-guide:hover {
-    background: linear-gradient(135deg, rgba(192, 132, 252, 0.4) 0%, rgba(147, 51, 234, 0.35) 100%);
-    border-color: #c084fc;
-    transform: translateY(-2px);
-    box-shadow: 0 0 24px var(--purple-glow);
-  }
-  .btn-onyomi-guide:active { transform: scale(0.95); }
-
-  /* ==========================================
-     2. TOP NAVBAR SIDEBAR TOGGLE & DRAWER
-     ========================================== */
-  .btn-sidebar-toggle {
-    background: linear-gradient(135deg, rgba(56, 189, 248, 0.18) 0%, rgba(30, 58, 138, 0.3) 100%);
-    border: 1px solid rgba(56, 189, 248, 0.45);
-    color: #fff;
-    padding: 7px 12px;
-    border-radius: 12px;
-    font-size: 12.5px;
-    font-weight: 800;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .btn-sidebar-toggle:hover {
-    background: rgba(56, 189, 248, 0.3);
+    background: rgba(56, 189, 248, 0.22);
     border-color: var(--primary);
-    box-shadow: 0 0 18px var(--primary-glow);
+    box-shadow: 0 0 14px var(--primary-glow);
     transform: translateY(-1px);
   }
   .btn-sidebar-toggle:active { transform: scale(0.95); }
   .sidebar-badge-count {
     background: var(--primary);
     color: #040813;
-    font-size: 11px;
+    font-size: 10.5px;
     font-weight: 900;
-    padding: 1px 7px;
+    padding: 1px 6px;
     border-radius: 10px;
-    box-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
   }
   .hamburger-bars {
-    font-size: 14px;
+    font-size: 13px;
     color: var(--primary);
     margin-left: 2px;
   }
@@ -210,11 +170,13 @@
     -webkit-backdrop-filter: blur(10px);
     z-index: 10000;
     opacity: 0;
+    visibility: hidden;
     pointer-events: none;
-    transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s;
   }
   .sidebar-overlay.active {
     opacity: 1;
+    visibility: visible;
     pointer-events: auto;
   }
 
@@ -227,16 +189,21 @@
     max-width: 380px;
     background: linear-gradient(175deg, rgba(14, 23, 50, 0.98) 0%, rgba(6, 11, 26, 0.99) 100%);
     border-left: 1px solid rgba(56, 189, 248, 0.35);
-    box-shadow: -15px 0 50px rgba(0, 0, 0, 0.9), 0 0 30px rgba(56, 189, 248, 0.15);
     z-index: 10001;
     transform: translateX(100%);
-    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    visibility: hidden;
+    pointer-events: none;
+    box-shadow: none;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.35s, box-shadow 0.35s;
     display: flex;
     flex-direction: column;
     overflow: hidden;
   }
   .dojo-sidebar-drawer.active {
     transform: translateX(0);
+    visibility: visible;
+    pointer-events: auto;
+    box-shadow: -15px 0 50px rgba(0, 0, 0, 0.9), 0 0 30px rgba(56, 189, 248, 0.15);
   }
 
   .sidebar-header {
@@ -488,10 +455,6 @@
     border-radius: 8px;
     font-size: 10.5px;
     font-weight: 800;
-  }
-  .nav-back-link {
-    border-color: rgba(56, 189, 248, 0.25);
-    color: #38bdf8;
   }
 
   /* ==========================================
@@ -1518,25 +1481,17 @@
 
     /* 1. Top Navbar */
     .top-navbar {
-      padding: 8px 10px;
-      border-radius: 14px;
+      padding: 4px 0 10px 0;
       margin-bottom: 12px;
     }
     .nav-left { gap: 6px; }
     .btn-back {
-      padding: 6px 9px;
-      font-size: 11.5px;
+      padding: 4px 2px;
+      font-size: 13px;
       gap: 4px;
-      border-radius: 9px;
     }
     .nav-title {
-      font-size: 13px;
-      gap: 5px;
-      letter-spacing: 0.4px;
-    }
-    .badge-market {
-      font-size: 8px;
-      padding: 2px 5px;
+      font-size: 14.5px;
       letter-spacing: 0.6px;
     }
     /* 2. Sidebar Toggle & Drawer Mobile */
@@ -1707,10 +1662,6 @@
           <span>🥋 Arena Latihan Dojo</span>
           <span class="sni-badge" id="sidebar-dojo-count">4</span>
         </button>
-        <a href="index.html" class="sidebar-nav-item nav-back-link">
-          <span>⛩️ Kembali ke Silabus N5</span>
-          <span>➔</span>
-        </a>
       </div>
     </div>
   </div>
@@ -1813,15 +1764,13 @@
   <div class="top-navbar">
     <div class="nav-left">
       <a href="index.html" class="btn-back" title="Kembali ke Ekspedisi Yomikata">
-        <span>⬅️</span>
+        <span>←</span>
         <span>Yomikata</span>
       </a>
-      <div class="nav-title-group">
-        <div class="nav-title">
-          <span>KANJI KENSEI</span>
-          <span class="badge-market">PASAR & DOJO</span>
-        </div>
-      </div>
+    </div>
+
+    <div class="nav-title-group">
+      <h1 class="nav-title">KANJI KENSEI</h1>
     </div>
 
     <div class="nav-right">
