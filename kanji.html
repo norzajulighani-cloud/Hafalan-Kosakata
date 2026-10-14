@@ -6,7 +6,7 @@
 <title>Pasar & Dojo Kanji Kensei - YOMIKATA</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Serif+JP:wght@600;700;900&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg-base: #050813;
@@ -502,6 +502,7 @@
     align-items: center;
     font-size: 9.5px;
     font-weight: 800;
+    gap: 4px;
   }
   .tag-level {
     padding: 2px 6px;
@@ -509,22 +510,30 @@
     font-size: 9px;
     font-weight: 900;
     letter-spacing: 0.5px;
+    flex-shrink: 0;
   }
   .tag-n5 { background: rgba(56, 189, 248, 0.18); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4); }
   .tag-n4 { background: rgba(192, 132, 252, 0.18); color: #c084fc; border: 1px solid rgba(192, 132, 252, 0.4); }
 
   .card-meta-right {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 4px;
+    gap: 5px;
+    flex-shrink: 0;
   }
-  .tag-source { color: var(--gold); font-size: 9px; font-weight: 700; }
+  .tag-source {
+    color: var(--gold);
+    font-size: 9.5px;
+    font-weight: 700;
+    white-space: nowrap;
+    line-height: 1;
+  }
   .btn-card-audio {
     background: rgba(255, 255, 255, 0.08);
     border: 1px solid var(--border-glass);
     color: var(--text-sub);
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
     font-size: 10px;
     cursor: pointer;
@@ -532,6 +541,9 @@
     align-items: center;
     justify-content: center;
     transition: all 0.2s;
+    flex-shrink: 0;
+    padding: 0;
+    line-height: 1;
   }
   .btn-card-audio:hover {
     background: var(--primary);
@@ -541,13 +553,13 @@
   .btn-card-audio:active { transform: scale(0.9); }
 
   .card-kanji-hero {
-    font-family: 'Noto Sans JP', sans-serif;
-    font-size: 44px;
-    font-weight: 900;
+    font-family: 'Noto Serif JP', 'Noto Sans JP', serif;
+    font-size: 42px;
+    font-weight: 700;
     color: #fff;
-    line-height: 1.1;
-    margin: 6px 0 3px;
-    text-shadow: 0 0 18px rgba(255, 255, 255, 0.15);
+    line-height: 1.15;
+    margin: 5px 0 2px;
+    text-shadow: 0 0 16px rgba(255, 255, 255, 0.15);
     transition: transform 0.2s;
   }
   .kanji-market-card:hover .card-kanji-hero {
@@ -680,9 +692,9 @@
   }
 
   .fc-kanji-big {
-    font-family: 'Noto Sans JP', sans-serif;
-    font-size: clamp(76px, 19vw, 105px);
-    font-weight: 900;
+    font-family: 'Noto Serif JP', 'Noto Sans JP', serif;
+    font-size: clamp(74px, 18vw, 100px);
+    font-weight: 700;
     color: #fff;
     line-height: 1.1;
     margin-bottom: 6px;
@@ -888,9 +900,9 @@
     padding: 20px 0;
   }
   .quiz-kanji-big {
-    font-family: 'Noto Sans JP', sans-serif;
+    font-family: 'Noto Serif JP', 'Noto Sans JP', serif;
     font-size: 72px;
-    font-weight: 900;
+    font-weight: 700;
     color: #fff;
     margin-bottom: 20px;
     text-shadow: 0 0 30px var(--primary-glow);
@@ -1158,13 +1170,160 @@
     transform: translateX(-50%) translateY(0);
   }
 
-  /* Responsive tuning */
-  @media (max-width: 480px) {
-    .market-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-    .card-kanji-hero { font-size: 40px; }
-    .fc-kanji-big { font-size: 80px; }
-    .dojo-bar-top { flex-direction: column; align-items: flex-start; }
-    .dojo-bar-actions { width: 100%; justify-content: flex-end; }
+  /* ==========================================
+     RESPONSIVE TUNING (MOBILE FIRST PERFECTION)
+     ========================================== */
+  .guide-btn-short { display: none; }
+  .tab-txt-mobile { display: none; }
+
+  @media (max-width: 540px) {
+    body {
+      padding: 10px 10px 90px 10px;
+    }
+
+    /* 1. Top Navbar */
+    .top-navbar {
+      padding: 8px 10px;
+      border-radius: 14px;
+      margin-bottom: 12px;
+    }
+    .nav-left { gap: 6px; }
+    .btn-back {
+      padding: 6px 9px;
+      font-size: 11.5px;
+      gap: 4px;
+      border-radius: 9px;
+    }
+    .nav-title {
+      font-size: 13px;
+      gap: 5px;
+      letter-spacing: 0.4px;
+    }
+    .badge-market {
+      font-size: 8px;
+      padding: 2px 5px;
+      letter-spacing: 0.6px;
+    }
+    .guide-btn-long { display: none; }
+    .guide-btn-short { display: inline; }
+    .btn-onyomi-guide {
+      padding: 6px 9px;
+      font-size: 11px;
+      gap: 4px;
+      border-radius: 9px;
+      white-space: nowrap;
+    }
+
+    /* 2. Dojo Deck HUD Bar */
+    .dojo-deck-bar {
+      padding: 12px 12px;
+      border-radius: 15px;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .dojo-bar-top {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 10px;
+    }
+    .dojo-room-info {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .dojo-icon-badge {
+      width: 34px;
+      height: 34px;
+      font-size: 16px;
+      border-radius: 10px;
+      flex-shrink: 0;
+    }
+    .dojo-name-cluster {
+      flex: 1;
+      min-width: 0;
+    }
+    .dojo-select {
+      width: 100%;
+      font-size: 13px;
+      padding: 6px 8px;
+    }
+    .dojo-bar-actions {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .btn-dojo-action {
+      width: 100%;
+      justify-content: center;
+      padding: 7px 6px;
+      font-size: 11.5px;
+    }
+
+    /* 3. Main Nav Tabs */
+    .main-nav-tabs {
+      padding: 4px;
+      border-radius: 14px;
+      gap: 5px;
+      margin-bottom: 14px;
+    }
+    .tab-txt-desktop { display: none; }
+    .tab-txt-mobile { display: inline; }
+    .tab-main-btn {
+      padding: 8px 6px;
+      font-size: 12px;
+      gap: 5px;
+      white-space: nowrap;
+    }
+    .tab-badge-num {
+      font-size: 10px;
+      padding: 1px 6px;
+    }
+
+    /* 4. Filter Chips & Market Grid */
+    .filter-chips-stream {
+      gap: 6px;
+      padding: 2px 2px 6px 2px;
+      scroll-padding-left: 2px;
+    }
+    .filter-chip {
+      padding: 6px 11px;
+      font-size: 11px;
+    }
+    .market-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+    .kanji-market-card {
+      padding: 10px 8px;
+      border-radius: 14px;
+    }
+    .card-kanji-hero {
+      font-size: 38px;
+      margin: 4px 0 2px;
+    }
+    .card-arti-label {
+      font-size: 11px;
+    }
+    .card-readings-hint {
+      font-size: 9.5px;
+      margin-bottom: 8px;
+    }
+
+    /* 5. Dojo Training Arena */
+    .dojo-arena-card {
+      padding: 16px 12px;
+      border-radius: 18px;
+      min-height: 400px;
+    }
+    .fc-kanji-big {
+      font-size: 76px;
+    }
+    .quiz-kanji-big {
+      font-size: 64px;
+      margin-bottom: 14px;
+    }
   }
 </style>
 </head>
@@ -1283,7 +1442,8 @@
     <div class="nav-right">
       <button type="button" class="btn-onyomi-guide" onclick="DojoEngine.openGuide()" title="Pelajari Rahasia Onyomi vs Kunyomi">
         <span>💡</span>
-        <span>Onyomi & Kunyomi?</span>
+        <span class="guide-btn-long">Onyomi & Kunyomi?</span>
+        <span class="guide-btn-short">Panduan Baca</span>
       </button>
     </div>
   </div>
@@ -1329,12 +1489,14 @@
   <div class="main-nav-tabs">
     <button type="button" class="tab-main-btn active" id="tab-market" onclick="DojoEngine.switchMainTab('market')">
       <span>🛒</span>
-      <span>Pasar Belanja Kanji</span>
+      <span class="tab-txt-desktop">Pasar Belanja Kanji</span>
+      <span class="tab-txt-mobile">Pasar Kanji</span>
       <span class="tab-badge-num" id="market-total-badge">145</span>
     </button>
     <button type="button" class="tab-main-btn" id="tab-training" onclick="DojoEngine.switchMainTab('training')">
       <span>🥋</span>
-      <span>Latihan di Dojo</span>
+      <span class="tab-txt-desktop">Latihan di Dojo</span>
+      <span class="tab-txt-mobile">Dojo Latihan</span>
       <span class="tab-badge-num" id="dojo-badge-num">0</span>
     </button>
   </div>
@@ -1352,10 +1514,10 @@
 
       <div class="filter-chips-stream">
         <button type="button" class="filter-chip active" id="fchip-all" onclick="DojoEngine.setFilter('all')">Semua Kanji (N5 + N4)</button>
-        <button type="button" class="filter-chip" id="fchip-unlocked" onclick="DojoEngine.setFilter('unlocked')">⛩️ Dari Ekspedisi Yomikata</button>
+        <button type="button" class="filter-chip" id="fchip-unlocked" onclick="DojoEngine.setFilter('unlocked')">⛩️ Dari Ekspedisi</button>
         <button type="button" class="filter-chip" id="fchip-n5" onclick="DojoEngine.setFilter('n5')">🔰 Level N5 (Dasar)</button>
         <button type="button" class="filter-chip" id="fchip-n4" onclick="DojoEngine.setFilter('n4')">⚔️ Level N4 (Lanjutan)</button>
-        <button type="button" class="filter-chip" id="fchip-in-dojo" onclick="DojoEngine.setFilter('in-dojo')">🎒 Sudah di Dojo</button>
+        <button type="button" class="filter-chip" id="fchip-in-dojo" onclick="DojoEngine.setFilter('in-dojo')">🎒 Di Dojo</button>
       </div>
     </div>
 
@@ -1454,7 +1616,7 @@ const KANJI_CATALOG = [
   { k: "私", on: "シ", kun: "わたし, わたくし", a: "Saya, Aku", lvl: "N5", day: 2, ex: [{ w: "私", r: "わたし", a: "Saya" }] },
   { k: "七", on: "シチ", kun: "なな, なな・つ, なの", a: "Tujuh", lvl: "N5", day: 3, ex: [{ w: "七つ", r: "ななつ", a: "Tujuh buah" }, { w: "七日", r: "なのか", a: "Tanggal 7" }] },
   { k: "八", on: "ハチ", kun: "や, やっ・つ, よう", a: "Delapan", lvl: "N5", day: 3, ex: [{ w: "八つ", r: "やっつ", a: "Delapan buah" }, { w: "八日", r: "ようか", a: "Tanggal 8" }] },
-  { k: "九", on: "キュウ, ク", kun: "ここの, ここの・つ", a: "Sembilan", lvl: "N5", day: 3, ex: [{ w: "九つ", r: "こcosplayつ", a: "Sembilan buah" }, { w: "九月", r: "くがつ", a: "Bulan September" }] },
+  { k: "九", on: "キュウ, ク", kun: "ここの, ここの・つ", a: "Sembilan", lvl: "N5", day: 3, ex: [{ w: "九つ", r: "ここのつ", a: "Sembilan buah" }, { w: "九月", r: "くがつ", a: "Bulan September" }] },
   { k: "十", on: "ジュウ, ジッ", kun: "とお, と", a: "Sepuluh", lvl: "N5", day: 3, ex: [{ w: "十", r: "とお", a: "Sepuluh buah" }, { w: "十日", r: "とおか", a: "Tanggal 10" }] },
   { k: "百", on: "ヒャク", kun: "もも", a: "Ratus, Seratus", lvl: "N5", day: 4, ex: [{ w: "三百", r: "さんびゃく", a: "Tiga ratus" }] },
   { k: "千", on: "セン", kun: "ち", a: "Ribu, Seribu", lvl: "N5", day: 4, ex: [{ w: "千円", r: "せんえん", a: "Seribu yen" }] },
@@ -1582,7 +1744,105 @@ const KANJI_CATALOG = [
   { k: "飯", on: "ハン", kun: "めし", a: "Nasi, Makanan", lvl: "N4", day: 35, ex: [{ w: "ご飯", r: "ごはん", a: "Nasi / Makanan" }, { w: "朝ご飯", r: "あさごはん", a: "Sarapan" }] },
   { k: "犬", on: "ケン", kun: "いぬ", a: "Anjing", lvl: "N4", day: 35, ex: [{ w: "犬", r: "いぬ", a: "Anjing" }, { w: "子犬", r: "こいぬ", a: "Anak anjing" }] },
   { k: "猫", on: "ビョウ", kun: "ねこ", a: "Kucing", lvl: "N4", day: 35, ex: [{ w: "猫", r: "ねこ", a: "Kucing" }] },
-  { k: "鳥", on: "チョウ", kun: "とり", a: "Burung", lvl: "N4", day: 35, ex: [{ w: "小鳥", r: "ことり", a: "Burung kecil" }, { w: "焼き鳥", r: "やきとり", a: "Sate ayam" }] }
+  { k: "鳥", on: "チョウ", kun: "とり", a: "Burung", lvl: "N4", day: 35, ex: [{ w: "小鳥", r: "ことり", a: "Burung kecil" }, { w: "焼き鳥", r: "やきとり", a: "Sate ayam" }] },
+  { k: "送", on: "ソウ", kun: "おく・る", a: "Mengirim", lvl: "N4", day: 36, ex: [{ w: "送る", r: "おくる", a: "Mengirim" }, { w: "見送る", r: "みおくる", a: "Mengantar" }] },
+  { k: "切", on: "セツ, サイ", kun: "き・る", a: "Memotong, Tiket", lvl: "N4", day: 36, ex: [{ w: "切る", r: "きる", a: "Memotong" }, { w: "切符", r: "きっぷ", a: "Tiket" }] },
+  { k: "旅", on: "リョ", kun: "たび", a: "Perjalanan, Wisata", lvl: "N4", day: 36, ex: [{ w: "旅行", r: "りょこう", a: "Wisata" }, { w: "旅館", r: "りょかん", a: "Penginapan Jepang" }] },
+  { k: "売", on: "バイ", kun: "う・る", a: "Menjual", lvl: "N4", day: 37, ex: [{ w: "売る", r: "うる", a: "Menjual" }, { w: "売店", r: "ばいてん", a: "Kios / Kantin" }] },
+  { k: "物", on: "ブツ, モツ", kun: "もの", a: "Benda, Barang", lvl: "N4", day: 37, ex: [{ w: "買い物", r: "かいもの", a: "Belanja" }, { w: "食べ物", r: "たべもの", a: "Makanan" }] },
+  { k: "事", on: "ジ", kun: "こと", a: "Hal, Perkara, Urusan", lvl: "N4", day: 37, ex: [{ w: "仕事", r: "しごと", a: "Pekerjaan" }, { w: "大事", r: "だいじ", a: "Penting" }] },
+  { k: "仕", on: "シ", kun: "つか・える", a: "Melayani, Bekerja", lvl: "N4", day: 37, ex: [{ w: "仕事", r: "しごと", a: "Pekerjaan" }, { w: "仕方", r: "しかた", a: "Cara" }] },
+  { k: "転", on: "テン", kun: "ころ・がる", a: "Berputar, Terguling", lvl: "N4", day: 38, ex: [{ w: "自転車", r: "じてんしゃ", a: "Sepeda" }, { w: "運転", r: "うんてん", a: "Menyetir" }] },
+  { k: "運", on: "ウン", kun: "はこ・ぶ", a: "Mengangkut, Keberuntungan", lvl: "N4", day: 38, ex: [{ w: "運動", r: "うんどう", a: "Olahraga" }, { w: "運", r: "うん", a: "Nasib" }] },
+  { k: "動", on: "ドウ", kun: "うご・く", a: "Bergerak", lvl: "N4", day: 38, ex: [{ w: "動く", r: "うごく", a: "Bergerak" }, { w: "自動車", r: "じどうしゃ", a: "Mobil" }] },
+  { k: "自", on: "ジ, シ", kun: "みずか・ら", a: "Diri Sendiri, Otomatis", lvl: "N4", day: 38, ex: [{ w: "自分", r: "じぶん", a: "Diri sendiri" }, { w: "自由", r: "じゆう", a: "Bebas" }] },
+  { k: "由", on: "ユ, ユウ", kun: "よし", a: "Alasan, Asal", lvl: "N4", day: 38, ex: [{ w: "自由", r: "じゆう", a: "Kebebasan" }, { w: "理由", r: "りゆう", a: "Alasan" }] },
+  { k: "理", on: "リ", kun: "ことわり", a: "Akal, Teori, Prinsip", lvl: "N4", day: 39, ex: [{ w: "料理", r: "りょうり", a: "Masakan" }, { w: "理由", r: "りゆう", a: "Alasan" }] },
+  { k: "料", on: "リョウ", kun: "-", a: "Bahan, Biaya", lvl: "N4", day: 39, ex: [{ w: "料理", r: "りょうり", a: "Masakan" }, { w: "料金", r: "りょうきん", a: "Biaya" }] },
+  { k: "着", on: "チャク", kun: "き・る, つ・く", a: "Tiba, Mengenakan Pakaian", lvl: "N4", day: 39, ex: [{ w: "着る", r: "きる", a: "Memakai baju" }, { w: "着く", r: "つく", a: "Sampai/Tiba" }] },
+  { k: "服", on: "フク", kun: "-", a: "Pakaian, Baju", lvl: "N4", day: 39, ex: [{ w: "洋服", r: "ようふく", a: "Pakaian barat" }, { w: "和服", r: "わふく", a: "Pakaian Jepang" }] },
+  { k: "洗", on: "セン", kun: "あら・う", a: "Mencuci", lvl: "N4", day: 39, ex: [{ w: "洗う", r: "あらう", a: "Mencuci" }, { w: "お手洗い", r: "おてあらい", a: "Toilet" }] },
+  { k: "歩", on: "ホ", kun: "ある・く", a: "Berjalan Kaki", lvl: "N4", day: 40, ex: [{ w: "歩く", r: "あるく", a: "Berjalan" }, { w: "散歩", r: "さんぽ", a: "Jalan santai" }] },
+  { k: "走", on: "ソウ", kun: "はし・る", a: "Berlari", lvl: "N4", day: 40, ex: [{ w: "走る", r: "はしる", a: "Berlari" }] },
+  { k: "止", on: "シ", kun: "と・まる, と・める", a: "Berhenti", lvl: "N4", day: 40, ex: [{ w: "止まる", r: "とまる", a: "Berhenti" }, { w: "中止", r: "ちゅうし", a: "Batal" }] },
+  { k: "通", on: "ツウ", kun: "とお・る, かよ・う", a: "Lewat, Menembus", lvl: "N4", day: 40, ex: [{ w: "通る", r: "とおる", a: "Melewati" }, { w: "通う", r: "かよう", a: "Pulang pergi" }] },
+  { k: "特", on: "トク", kun: "-", a: "Spesial, Khusus", lvl: "N4", day: 40, ex: [{ w: "特別", r: "とくべつ", a: "Khusus/Spesial" }, { w: "特に", r: "とくに", a: "Khususnya" }] },
+  { k: "別", on: "ベツ", kun: "わか・れる", a: "Berpisah, Lain, Beda", lvl: "N4", day: 41, ex: [{ w: "別れる", r: "わかれる", a: "Berpisah" }, { w: "別の", r: "べつの", a: "Lainnya" }] },
+  { k: "同", on: "ドウ", kun: "おな・じ", a: "Sama, Serupa", lvl: "N4", day: 41, ex: [{ w: "同じ", r: "おなじ", a: "Sama" }, { w: "同時に", r: "どうじに", a: "Bersamaan" }] },
+  { k: "元", on: "ゲン, ガン", kun: "もと", a: "Asal, Awal, Dasar", lvl: "N4", day: 41, ex: [{ w: "元気", r: "げんき", a: "Sehat" }, { w: "元日", r: "がんじつ", a: "Tahun Baru" }] },
+  { k: "有", on: "ユウ, ウ", kun: "あ・る", a: "Ada, Memiliki", lvl: "N4", day: 41, ex: [{ w: "有名", r: "ゆうめい", a: "Terkenal" }, { w: "有料", r: "ゆうりょう", a: "Berbayar" }] },
+  { k: "親", on: "シン", kun: "おや, した・しい", a: "Orang Tua, Akrab", lvl: "N4", day: 41, ex: [{ w: "親", r: "おや", a: "Orang tua" }, { w: "両親", r: "りょうしん", a: "Kedua orang tua" }] },
+  { k: "便", on: "ベン, ビン", kun: "たよ・り", a: "Praktis, Surat", lvl: "N4", day: 42, ex: [{ w: "便利", r: "べんり", a: "Praktis" }, { w: "郵便", r: "ゆうびん", a: "Pos" }] },
+  { k: "利", on: "リ", kun: "き・く", a: "Untung, Manfaat", lvl: "N4", day: 42, ex: [{ w: "便利", r: "べんり", a: "Praktis" }, { w: "利用", r: "りよう", a: "Penggunaan" }] },
+  { k: "不", on: "フ, ブ", kun: "-", a: "Tidak, Bukan", lvl: "N4", day: 42, ex: [{ w: "不便", r: "ふべん", a: "Tidak praktis" }, { w: "不安", r: "ふあん", a: "Cemas" }] },
+  { k: "広", on: "コウ", kun: "ひろ・い", a: "Luas, Lapang", lvl: "N4", day: 42, ex: [{ w: "広い", r: "ひろい", a: "Luas" }, { w: "広場", r: "ひろば", a: "Alun-alun" }] },
+  { k: "場", on: "ジョウ", kun: "ば", a: "Tempat, Lokasi", lvl: "N4", day: 42, ex: [{ w: "場所", r: "ばしょ", a: "Tempat" }, { w: "工場", r: "こうじょう", a: "Pabrik" }] },
+  { k: "所", on: "ショ", kun: "ところ", a: "Tempat", lvl: "N4", day: 43, ex: [{ w: "所", r: "ところ", a: "Tempat" }, { w: "台所", r: "だいどころ", a: "Dapur" }] },
+  { k: "近", on: "キン", kun: "ちか・い", a: "Dekat", lvl: "N4", day: 43, ex: [{ w: "近い", r: "ちかい", a: "Dekat" }, { w: "近所", r: "きんじょ", a: "Tetangga sekitar" }] },
+  { k: "遠", on: "エン", kun: "とお・い", a: "Jauh", lvl: "N4", day: 43, ex: [{ w: "遠い", r: "とおい", a: "Jauh" }, { w: "遠足", r: "えんそく", a: "Piknik" }] },
+  { k: "海", on: "カイ", kun: "うみ", a: "Laut, Samudra", lvl: "N4", day: 43, ex: [{ w: "海", r: "うみ", a: "Laut" }, { w: "海外", r: "かいがい", a: "Luar negeri" }] },
+  { k: "世", on: "セイ, セ", kun: "よ", a: "Dunia, Generasi", lvl: "N4", day: 43, ex: [{ w: "世界", r: "せかい", a: "Dunia" }, { w: "世の中", r: "よのなか", a: "Dunia masyarakat" }] },
+  { k: "界", on: "カイ", kun: "-", a: "Batas, Lingkup, Dunia", lvl: "N4", day: 43, ex: [{ w: "世界", r: "せかい", a: "Dunia" }] },
+  { k: "度", on: "ド, ト", kun: "たび", a: "Derajat, Kali", lvl: "N4", day: 44, ex: [{ w: "一度", r: "いちど", a: "Satu kali" }, { w: "今度", r: "こんど", a: "Lain kali" }] },
+  { k: "回", on: "カイ", kun: "まわ・る", a: "Putaran, Kali", lvl: "N4", day: 44, ex: [{ w: "回る", r: "まわる", a: "Berputar" }, { w: "何回", r: "なんかい", a: "Berapa kali" }] },
+  { k: "計", on: "ケイ", kun: "はか・る", a: "Mengukur, Rencana", lvl: "N4", day: 44, ex: [{ w: "時計", r: "とけい", a: "Jam" }, { w: "計画", r: "けいかく", a: "Rencana" }] },
+  { k: "画", on: "ガ, カク", kun: "-", a: "Gambar, Coretan", lvl: "N4", day: 44, ex: [{ w: "映画", r: "えいが", a: "Film" }, { w: "計画", r: "けいかく", a: "Rencana" }] },
+  { k: "映", on: "エイ", kun: "うつ・る", a: "Memantul, Proyeksi", lvl: "N4", day: 44, ex: [{ w: "映画", r: "えいが", a: "Film" }, { w: "映画館", r: "えいがかん", a: "Bioskop" }] },
+  { k: "音", on: "オン", kun: "おと, ね", a: "Suara, Bunyi", lvl: "N4", day: 45, ex: [{ w: "音", r: "おと", a: "Bunyi" }, { w: "音楽", r: "おんがく", a: "Musik" }] },
+  { k: "楽", on: "ラク, ガク", kun: "たの・しい", a: "Menyenangkan, Musik", lvl: "N4", day: 45, ex: [{ w: "楽しい", r: "たのしい", a: "Menyenangkan" }, { w: "音楽", r: "おんがく", a: "Musik" }] },
+  { k: "歌", on: "カ", kun: "うた, うた・う", a: "Lagu, Menyanyi", lvl: "N4", day: 45, ex: [{ w: "歌", r: "うた", a: "Lagu" }, { w: "歌う", r: "うたう", a: "Menyanyi" }, { w: "歌手", r: "かしゅ", a: "Penyanyi" }] },
+  { k: "写", on: "シャ", kun: "うつ・す", a: "Menyalin, Memotret", lvl: "N4", day: 45, ex: [{ w: "写真", r: "しゃしん", a: "Foto" }] },
+  { k: "真", on: "シン", kun: "ま", a: "Kebenaran, Murni", lvl: "N4", day: 45, ex: [{ w: "写真", r: "しゃしん", a: "Foto" }, { w: "真ん中", r: "まんなか", a: "Tepat di tengah" }] },
+  { k: "強", on: "キョウ", kun: "つよ・い", a: "Kuat", lvl: "N4", day: 46, ex: [{ w: "強い", r: "つよい", a: "Kuat" }, { w: "勉強", r: "べんきょう", a: "Belajar" }] },
+  { k: "勉", on: "ベン", kun: "-", a: "Berusaha Keras", lvl: "N4", day: 46, ex: [{ w: "勉強", r: "べんきょう", a: "Belajar" }] },
+  { k: "教", on: "キョウ", kun: "おし・える", a: "Mengajar", lvl: "N4", day: 46, ex: [{ w: "教える", r: "おしえる", a: "Mengajar" }, { w: "教室", r: "きょうしつ", a: "Ruang kelas" }] },
+  { k: "室", on: "シツ", kun: "むろ", a: "Ruangan, Kamar", lvl: "N4", day: 46, ex: [{ w: "教室", r: "きょうしつ", a: "Ruang kelas" }, { w: "研究室", r: "けんきゅうしつ", a: "Lab riset" }] },
+  { k: "習", on: "シュウ", kun: "なら・う", a: "Belajar, Berlatih", lvl: "N4", day: 46, ex: [{ w: "習う", r: "ならう", a: "Belajar" }, { w: "練習", r: "れんしゅう", a: "Latihan" }] },
+  { k: "練", on: "レン", kun: "ね・る", a: "Melatih, Menempa", lvl: "N4", day: 47, ex: [{ w: "練習", r: "れんしゅう", a: "Latihan" }] },
+  { k: "試", on: "シ", kun: "こころ・みる, ため・す", a: "Mencoba, Menguji", lvl: "N4", day: 47, ex: [{ w: "試験", r: "しけん", a: "Ujian" }, { w: "試合", r: "しあい", a: "Pertandingan" }] },
+  { k: "験", on: "ケン", kun: "-", a: "Ujian, Pengalaman", lvl: "N4", day: 47, ex: [{ w: "試験", r: "しけん", a: "Ujian" }, { w: "経験", r: "けいけん", a: "Pengalaman" }] },
+  { k: "経", on: "ケイ", kun: "へ・る", a: "Melalui, Mengalami", lvl: "N4", day: 47, ex: [{ w: "経験", r: "けいけん", a: "Pengalaman" }, { w: "経済", r: "けいざい", a: "Ekonomi" }] },
+  { k: "済", on: "サイ", kun: "す・む", a: "Selesai, Lunas", lvl: "N4", day: 47, ex: [{ w: "経済", r: "けいざい", a: "Ekonomi" }] },
+  { k: "答", on: "トウ", kun: "こた・える, こたえ", a: "Jawaban, Menjawab", lvl: "N4", day: 48, ex: [{ w: "答える", r: "こたえる", a: "Menjawab" }, { w: "答え", r: "こたえ", a: "Jawaban" }] },
+  { k: "問", on: "モン", kun: "と・う", a: "Pertanyaan, Menanyai", lvl: "N4", day: 48, ex: [{ w: "問題", r: "もんだい", a: "Soal / Masalah" }] },
+  { k: "題", on: "ダイ", kun: "-", a: "Topik, Judul, Tema", lvl: "N4", day: 48, ex: [{ w: "問題", r: "もんだい", a: "Soal pertanyaan" }, { w: "宿題", r: "しゅくだい", a: "PR" }] },
+  { k: "宿", on: "シュク", kun: "やど", a: "Penginapan, Menginap", lvl: "N4", day: 48, ex: [{ w: "宿題", r: "しゅくだい", a: "PR" }, { w: "新宿", r: "しんじゅく", a: "Shinjuku" }] },
+  { k: "字", on: "ジ", kun: "あざ", a: "Huruf, Aksara", lvl: "N4", day: 48, ex: [{ w: "漢字", r: "かんじ", a: "Kanji" }, { w: "文字", r: "もじ", a: "Huruf" }] },
+  { k: "漢", on: "カン", kun: "-", a: "Dinasti Han, Tiongkok", lvl: "N4", day: 48, ex: [{ w: "漢字", r: "かんじ", a: "Kanji" }] },
+  { k: "紙", on: "シ", kun: "かみ", a: "Kertas", lvl: "N4", day: 49, ex: [{ w: "手紙", r: "てがみ", a: "Surat" }, { w: "折り紙", r: "おりがみ", a: "Origami" }] },
+  { k: "銀", on: "ギン", kun: "しろがね", a: "Perak, Bank", lvl: "N4", day: 49, ex: [{ w: "銀行", r: "ぎんこう", a: "Bank" }, { w: "銀色", r: "ぎんいろ", a: "Warna perak" }] },
+  { k: "質", on: "シツ", kun: "-", a: "Kualitas, Hakikat, Tanya", lvl: "N4", day: 49, ex: [{ w: "質問", r: "しつもん", a: "Pertanyaan" }] },
+  { k: "重", on: "ジュウ, チョウ", kun: "おも・い", a: "Berat, Tumpuk", lvl: "N4", day: 49, ex: [{ w: "重い", r: "おもい", a: "Berat" }, { w: "貴重", r: "きちょう", a: "Berharga" }] },
+  { k: "軽", on: "ケイ", kun: "かる・い", a: "Ringan", lvl: "N4", day: 49, ex: [{ w: "軽い", r: "かるい", a: "Ringan" }, { w: "手軽", r: "てがる", a: "Praktis/Mudah" }] },
+  { k: "遅", on: "チ", kun: "おそ・い, おく・れる", a: "Lambat, Terlambat", lvl: "N4", day: 50, ex: [{ w: "遅い", r: "おそい", a: "Lambat / Larut" }, { w: "遅刻", r: "ちこく", a: "Terlambat" }] },
+  { k: "夜", on: "ヤ", kun: "よる, よ", a: "Malam", lvl: "N4", day: 50, ex: [{ w: "夜", r: "よる", a: "Malam" }, { w: "今夜", r: "こんや", a: "Malam ini" }] },
+  { k: "朝", on: "チョウ", kun: "あさ", a: "Pagi", lvl: "N4", day: 50, ex: [{ w: "朝", r: "あさ", a: "Pagi" }, { w: "今朝", r: "けさ", a: "Pagi ini" }] },
+  { k: "昼", on: "チュウ", kun: "ひる", a: "Siang", lvl: "N4", day: 50, ex: [{ w: "昼", r: "ひる", a: "Siang" }, { w: "昼休み", r: "ひるやすみ", a: "Istirahat siang" }] },
+  { k: "夕", on: "セキ", kun: "ゆう", a: "Sore / Senja", lvl: "N4", day: 50, ex: [{ w: "夕方", r: "ゆうがた", a: "Sore hari" }, { w: "夕飯", r: "ゆうはん", a: "Makan malam" }] },
+  { k: "方", on: "ホウ", kun: "かた", a: "Arah, Cara, Orang (sopan)", lvl: "N4", day: 50, ex: [{ w: "夕方", r: "ゆうがた", a: "Sore" }, { w: "読み方", r: "よみかた", a: "Cara baca" }] },
+  { k: "体", on: "タイ", kun: "からだ", a: "Tubuh, Badan", lvl: "N4", day: 51, ex: [{ w: "体", r: "からだ", a: "Tubuh" }, { w: "体力", r: "たいりょく", a: "Stamina" }] },
+  { k: "頭", on: "トウ, ズ", kun: "あたま", a: "Kepala", lvl: "N4", day: 51, ex: [{ w: "頭", r: "あたま", a: "Kepala" }, { w: "頭痛", r: "ずつう", a: "Sakit kepala" }] },
+  { k: "痛", on: "ツウ", kun: "いた・い", a: "Sakit, Nyeri", lvl: "N4", day: 51, ex: [{ w: "痛い", r: "いたい", a: "Sakit" }, { w: "頭痛", r: "ずつう", a: "Sakit kepala" }] },
+  { k: "顔", on: "ガン", kun: "かお", a: "Wajah, Muka", lvl: "N4", day: 51, ex: [{ w: "顔", r: "かお", a: "Wajah" }, { w: "笑顔", r: "えがお", a: "Senyuman" }] },
+  { k: "首", on: "シュ", kun: "くび", a: "Leher", lvl: "N4", day: 51, ex: [{ w: "首", r: "くび", a: "Leher" }, { w: "手首", r: "てくび", a: "Pergelangan tangan" }] },
+  { k: "声", on: "セイ", kun: "こえ", a: "Suara (Makhluk)", lvl: "N4", day: 52, ex: [{ w: "声", r: "こえ", a: "Suara" }, { w: "大声", r: "おおごえ", a: "Suara lantang" }] },
+  { k: "風", on: "フウ", kun: "かぜ", a: "Angin, Gaya, Flu", lvl: "N4", day: 52, ex: [{ w: "風", r: "かぜ", a: "Angin" }, { w: "風邪", r: "かぜ", a: "Masuk angin / Flu" }, { w: "台風", r: "たいふう", a: "Topan" }] },
+  { k: "雪", on: "セツ", kun: "ゆき", a: "Salju", lvl: "N4", day: 52, ex: [{ w: "雪", r: "ゆき", a: "Salju" }, { w: "大雪", r: "おおゆき", a: "Salju lebat" }] },
+  { k: "雲", on: "ウン", kun: "くも", a: "Awan", lvl: "N4", day: 52, ex: [{ w: "雲", r: "くも", a: "Awan" }, { w: "雨雲", r: "あまぐも", a: "Awan mendung" }] },
+  { k: "春", on: "シュン", kun: "はる", a: "Musim Semi", lvl: "N4", day: 53, ex: [{ w: "春", r: "はる", a: "Musim semi" }, { w: "青春", r: "せいしゅん", a: "Masa muda" }] },
+  { k: "夏", on: "カ", kun: "なつ", a: "Musim Panas", lvl: "N4", day: 53, ex: [{ w: "夏", r: "なつ", a: "Musim panas" }, { w: "夏休み", r: "なつやすみ", a: "Liburan musim panas" }] },
+  { k: "秋", on: "シュウ", kun: "あき", a: "Musim Gugur", lvl: "N4", day: 53, ex: [{ w: "秋", r: "あき", a: "Musim gugur" }] },
+  { k: "冬", on: "トウ", kun: "ふゆ", a: "Musim Dingin", lvl: "N4", day: 53, ex: [{ w: "冬", r: "ふゆ", a: "Musim dingin" }, { w: "冬休み", r: "ふゆやすみ", a: "Liburan musim dingin" }] },
+  { k: "色", on: "ショク, シキ", kun: "いろ", a: "Warna", lvl: "N4", day: 54, ex: [{ w: "色", r: "いろ", a: "Warna" }, { w: "色々", r: "いろいろ", a: "Bermacam-macam" }] },
+  { k: "黒", on: "コク", kun: "くろ・い", a: "Hitam", lvl: "N4", day: 54, ex: [{ w: "黒い", r: "くろい", a: "Hitam" }, { w: "黒板", r: "こくばん", a: "Papan tulis hitam" }] },
+  { k: "赤", on: "セキ", kun: "あか・い", a: "Merah", lvl: "N4", day: 54, ex: [{ w: "赤い", r: "あかい", a: "Merah" }, { w: "赤ちゃん", r: "あかちゃん", a: "Bayi" }] },
+  { k: "青", on: "セイ, ショウ", kun: "あお・い", a: "Biru", lvl: "N4", day: 54, ex: [{ w: "青い", r: "あおい", a: "Biru" }, { w: "青空", r: "あおぞら", a: "Langit biru" }] },
+  { k: "黄", on: "コウ", kun: "き", a: "Kuning", lvl: "N4", day: 54, ex: [{ w: "黄色", r: "きいろ", a: "Warna kuning" }] },
+  { k: "牛", on: "ギュウ", kun: "うし", a: "Sapi, Lembu", lvl: "N4", day: 55, ex: [{ w: "牛", r: "うし", a: "Sapi" }, { w: "牛乳", r: "ぎゅうにゅう", a: "Susu sapi" }, { w: "牛肉", r: "ぎゅうにく", a: "Daging sapi" }] },
+  { k: "馬", on: "バ", kun: "うま", a: "Kuda", lvl: "N4", day: 55, ex: [{ w: "馬", r: "うま", a: "Kuda" }, { w: "乗馬", r: "じょうば", a: "Berkuda" }] },
+  { k: "林", on: "リン", kun: "はやし", a: "Hutan Kecil", lvl: "N4", day: 55, ex: [{ w: "林", r: "はやし", a: "Hutan kecil" }] },
+  { k: "森", on: "シン", kun: "もり", a: "Hutan Lebat, Rimba", lvl: "N4", day: 55, ex: [{ w: "森", r: "もり", a: "Hutan lebat" }, { w: "森林", r: "しんりん", a: "Hutan belantara" }] },
+  { k: "池", on: "チ", kun: "いけ", a: "Kolam", lvl: "N4", day: 55, ex: [{ w: "池", r: "いけ", a: "Kolam" }, { w: "電池", r: "でんち", a: "Baterai" }] }
 ];
 
 // ==========================================
@@ -1609,8 +1869,8 @@ const DojoEngine = {
   quizTarget: null,
 
   init: function() {
-    // 1. Baca hari ekspedisi dari Yomikata utama
-    let savedDay = parseInt(localStorage.getItem('yk_unlocked_day')) || 1;
+    // 1. Baca hari ekspedisi dari Yomikata utama (support yk_unlocked & yk_unlocked_day)
+    let savedDay = parseInt(localStorage.getItem('yk_unlocked')) || parseInt(localStorage.getItem('yk_unlocked_day')) || 1;
     this.playerUnlockedDay = Math.max(1, savedDay);
 
     // 2. Baca data ruang dojo dari localStorage
