@@ -612,6 +612,8 @@
   }
 
   .kanji-market-card {
+    content-visibility: auto;
+    contain-intrinsic-size: 0 160px;
     background: linear-gradient(165deg, rgba(17, 27, 54, 0.88) 0%, rgba(9, 14, 30, 0.94) 100%);
     border: 1px solid var(--border-glass);
     border-radius: 16px;
@@ -620,10 +622,14 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                background 0.22s ease,
+                border-color 0.22s ease,
+                box-shadow 0.22s ease;
     position: relative;
     user-select: none;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+    transform: translateZ(0);
   }
   .kanji-market-card:hover {
     background: linear-gradient(165deg, rgba(25, 39, 78, 0.95) 0%, rgba(13, 20, 42, 0.98) 100%);
@@ -901,6 +907,15 @@
     color: #fff;
     word-break: break-word;
   }
+  .rc-romaji {
+    font-size: 11px;
+    color: var(--text-sub);
+    font-weight: 600;
+    margin-top: 3px;
+    letter-spacing: 0.3px;
+    font-style: italic;
+    word-break: break-word;
+  }
 
   .fc-meaning-banner {
     background: linear-gradient(135deg, rgba(251, 191, 36, 0.12) 0%, rgba(245, 158, 11, 0.06) 100%);
@@ -930,6 +945,66 @@
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   }
   .fjs-item:last-child { border-bottom: none; }
+
+  /* Example Sentence Shelf on Flashcard */
+  .fc-sentence-shelf {
+    background: rgba(6, 10, 24, 0.78);
+    border: 1px solid var(--border-glass);
+    border-radius: 12px;
+    padding: 10px 14px;
+    text-align: left;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+    margin-top: 4px;
+    transition: border-color 0.2s;
+    transform: translateZ(0);
+  }
+  .fc-sentence-shelf:hover {
+    border-color: rgba(56, 189, 248, 0.35);
+  }
+  .fss-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+  .fss-badge {
+    font-size: 9.5px;
+    font-weight: 900;
+    color: var(--primary);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .fss-jp {
+    font-family: 'Noto Serif JP', 'Noto Sans JP', serif;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.45;
+  }
+  .fss-jp .highlight-kanji {
+    color: var(--gold);
+    background: rgba(245, 158, 11, 0.16);
+    padding: 1px 4px;
+    border-radius: 4px;
+    border-bottom: 1.5px solid var(--gold);
+  }
+  .fss-romaji {
+    font-size: 11px;
+    color: var(--text-sub);
+    font-style: italic;
+    margin-top: 3px;
+    line-height: 1.35;
+  }
+  .fss-id {
+    font-size: 12px;
+    color: #cbd5e1;
+    margin-top: 3px;
+    font-weight: 500;
+    line-height: 1.35;
+  }
 
   /* Dojo Navigation Bottom Controls */
   .dojo-nav-controls {
@@ -1741,6 +1816,7 @@
       gap: 8px;
     }
     .kanji-market-card {
+      contain-intrinsic-size: 0 148px;
       padding: 10px 8px;
       border-radius: 14px;
     }
@@ -2054,10 +2130,12 @@
             <div class="reading-cell rc-onyomi">
               <div class="rc-label">ONYOMI (Cina)</div>
               <div class="rc-val" id="dojo-fc-on">イチ, イツ</div>
+              <div class="rc-romaji" id="dojo-fc-on-romaji">ichi, itsu</div>
             </div>
             <div class="reading-cell rc-kunyomi">
               <div class="rc-label">KUNYOMI (Jepang)</div>
               <div class="rc-val" id="dojo-fc-kun">ひと, ひと・つ</div>
+              <div class="rc-romaji" id="dojo-fc-kun-romaji">hito, hito.tsu</div>
             </div>
           </div>
 
@@ -2068,6 +2146,16 @@
 
           <div class="fc-jukugo-shelf" id="dojo-fc-jukugo-shelf">
             <!-- Jukugo list -->
+          </div>
+
+          <div class="fc-sentence-shelf" id="dojo-fc-sentence-shelf">
+            <div class="fss-top">
+              <span class="fss-badge">📝 Contoh Kalimat</span>
+              <button type="button" class="btn-card-audio" id="btn-fc-sentence-audio" onclick="event.stopPropagation(); DojoEngine.speakCurrentSentence()" title="Dengarkan Contoh Kalimat">🔊</button>
+            </div>
+            <div class="fss-jp" id="dojo-fc-sen-jp">あの人はだれですか。</div>
+            <div class="fss-romaji" id="dojo-fc-sen-romaji">Ano hito wa dare desu ka.</div>
+            <div class="fss-id" id="dojo-fc-sen-id">Orang itu siapa?</div>
           </div>
         </div>
       </div>
@@ -6401,6 +6489,252 @@ const KANJI_CATALOG = [
 ];
 
 // ==========================================
+// CONTOH KALIMAT RESMI (JLPT N5 AUTHENTIC SENTENCES)
+// ==========================================
+const KANJI_SENTENCES = {
+  "人": { jp: "あの人は日本人です。", r: "Ano hito wa nihonjin desu.", id: "Orang itu adalah orang Jepang." },
+  "先": { jp: "田中先生はとても親切です。", r: "Tanaka sensei wa totemo shinsetsu desu.", id: "Guru Tanaka sangat ramah." },
+  "出": { jp: "毎朝七時に家を出ます。", r: "Maiasa shichiji ni ie o demasu.", id: "Setiap pagi saya keluar rumah jam 7." },
+  "前": { jp: "駅の前で友達を待ちます。", r: "Eki no mae de tomodachi o machimasu.", id: "Saya menunggu teman di depan stasiun." },
+  "名": { jp: "ここにお名前を書いてください。", r: "Koko ni onamae o kaite kudasai.", id: "Tolong tulis nama Anda di sini." },
+  "員": { jp: "兄は銀行員です。", r: "Ani wa ginkouin desu.", id: "Kakak laki-laki saya adalah pegawai bank." },
+  "大": { jp: "富士山は大きい山です。", r: "Fujisan wa ookii yama desu.", id: "Gunung Fuji adalah gunung yang besar." },
+  "女": { jp: "あそこにきれいな女の人がいます。", r: "Asoko ni kirei na onna no hito ga imasu.", id: "Di sana ada seorang wanita cantik." },
+  "学": { jp: "毎日学校で勉強します。", r: "Mainichi gakkou de benkyou shimasu.", id: "Setiap hari saya belajar di sekolah." },
+  "山": { jp: "週末に友達と山へ行きます。", r: "Shuumatsu ni tomodachi to yama e ikimasu.", id: "Di akhir pekan saya pergi ke gunung bersama teman." },
+  "年": { jp: "今年日本語の試験を受けます。", r: "Kotoshi nihongo no shiken o ukemasu.", id: "Tahun ini saya akan mengikuti ujian bahasa Jepang." },
+  "彼": { jp: "彼は私の親友です。", r: "Kare wa watashi no shinyuu desu.", id: "Dia adalah sahabat baik saya." },
+  "日": { jp: "日曜日は家でゆっくり休みます。", r: "Nichiyoubi wa ie de yukkuri yasumimasu.", id: "Hari Minggu saya beristirahat santai di rumah." },
+  "本": { jp: "日本の本を毎日一冊読みます。", r: "Nihon no hon o mainichi issatsu yomimasu.", id: "Saya membaca satu buku Jepang setiap hari." },
+  "歳": { jp: "弟は今年二十歳になります。", r: "Otouto wa kotoshi hatachi ni narimasu.", id: "Adik laki-laki saya tahun ini berusia 20 tahun." },
+  "生": { jp: "私は大学の一年生です。", r: "Watashi wa daigaku no ichininsei desu.", id: "Saya adalah mahasiswa tahun pertama universitas." },
+  "田": { jp: "私の田舎には広い田んぼがあります。", r: "Watashi no inaka ni wa hiroi tanbo ga arimasu.", id: "Di kampung halaman saya ada sawah yang luas." },
+  "社": { jp: "毎朝会社へ地下鉄で行きます。", r: "Maiasa kaisha e chikatetsu de ikimasu.", id: "Setiap pagi saya pergi ke kantor naik kereta bawah tanah." },
+  "私": { jp: "私の趣味は音楽を聞くことです。", r: "Watashi no shumi wa ongaku o kiku koto desu.", id: "Hobi saya adalah mendengarkan musik." },
+  "菜": { jp: "健康のために毎日野菜を食べます。", r: "Kenkou no tame ni mainichi yasai o tabemasu.", id: "Demi kesehatan saya makan sayur setiap hari." },
+  "身": { jp: "彼の身長は百八十センチです。", r: "Kare no shincho wa hyaku hachijuu senchi desu.", id: "Tinggi badannya adalah 180 sentimeter." },
+  "野": { jp: "公園で野球を練習しています。", r: "Kouen de yakyuu o renshuu shite imasu.", id: "Sedang berlatih bisbol di taman." },
+  "会": { jp: "駅の改札口で友達に会います。", r: "Eki no kaisatsuguchi de tomodachi ni aimasu.", id: "Saya bertemu teman di gerbang tiket stasiun." },
+  "室": { jp: "教室に先生と学生がいます。", r: "Kyoushitsu ni sensei to gakusei ga imasu.", id: "Di dalam kelas ada guru dan murid." },
+  "屋": { jp: "駅前のパン屋でおいしいパンを買いました。", r: "Ekimae no panya de oishii pan o kaimashita.", id: "Saya membeli roti lezat di toko roti depan stasiun." },
+  "教": { jp: "先生が親切に日本語を教えてくれました。", r: "Sensei ga shinsetsu ni nihongo o oshiete kuremashita.", id: "Guru dengan ramah mengajari saya bahasa Jepang." },
+  "時": { jp: "今何時ですか。ちょうど三時です。", r: "Ima nanji desu ka. Choudo sanji desu.", id: "Sekarang jam berapa? Tepat jam 3." },
+  "書": { jp: "手紙を書いて友達に送ります。", r: "Tegami o kaite tomodachi ni okurimasu.", id: "Saya menulis surat dan mengirimkannya ke teman." },
+  "校": { jp: "毎朝自転車で学校へ通っています。", r: "Maiasa jitensha de gakkou e kayotte imasu.", id: "Setiap pagi saya pulang pergi ke sekolah naik sepeda." },
+  "計": { jp: "時計を見て時間を確かめます。", r: "Tokei o mite jikan o tashikamemasu.", id: "Saya melihat jam untuk memastikan waktu." },
+  "車": { jp: "父は新しい車を買いました。", r: "Chichi wa atarashii kuruma o kaimashita.", id: "Ayah membeli mobil baru." },
+  "友": { jp: "週末に友達と映画を見に行きます。", r: "Shuumatsu ni tomodachi to eiga o mi ni ikimasu.", id: "Di akhir pekan saya pergi nonton film bersama teman." },
+  "国": { jp: "日本はとても美しい国です。", r: "Nihon wa totemo utsukushii kuni desu.", id: "Jepang adalah negara yang sangat indah." },
+  "天": { jp: "今日はいいてんきですね。", r: "Kyou wa ii tenki desu ne.", id: "Hari ini cuacanya bagus ya." },
+  "子": { jp: "公園で子供たちが遊んでいます。", r: "Kouen de kodomotachi ga asonde imasu.", id: "Anak-anak sedang bermain di taman." },
+  "所": { jp: "京都はとても静かでいい所です。", r: "Kyouto wa totemo shizuka de ii tokoro desu.", id: "Kyoto adalah tempat yang sangat tenang dan bagus." },
+  "新": { jp: "毎朝父は新聞を読みます。", r: "Maiasa chichi wa shinbun o yomimasu.", id: "Setiap pagi ayah membaca koran." },
+  "服": { jp: "デパートで新しい服を買いました。", r: "Depaato de atarashii fuku o kaimashita.", id: "Saya membeli baju baru di toserba." },
+  "海": { jp: "夏休みに家族と海へ行きました。", r: "Natsuyasumi ni kazoku to umi e ikimashita.", id: "Saat liburan musim panas saya pergi ke laut bersama keluarga." },
+  "者": { jp: "母は病院で医者をしています。", r: "Haha wa byouin de isha o shite imasu.", id: "Ibu bekerja sebagai dokter di rumah sakit." },
+  "聞": { jp: "部屋で好きな音楽を聞きます。", r: "Heya de suki na ongaku o kikimasu.", id: "Saya mendengarkan musik favorit di kamar." },
+  "長": { jp: "この川は日本で一番長いです。", r: "Kono kawa wa nihon de ichiban nagai desu.", id: "Sungai ini adalah yang terpanjang di Jepang." },
+  "館": { jp: "静かな図書館で本を借りました。", r: "Shizuka na toshokan de hon o karimashita.", id: "Saya meminjam buku di perpustakaan yang tenang." },
+  "駅": { jp: "東京駅で電車を乗り換えます。", r: "Toukyou eki de densha o norikaemasu.", id: "Saya berganti kereta di Stasiun Tokyo." },
+  "今": { jp: "今から宿題を始めます。", r: "Ima kara shukudai o hajimemasu.", id: "Mulai sekarang saya akan mengerjakan PR." },
+  "休": { jp: "明日は仕事が休みです。", r: "Ashita wa shigoto ga yasumi desu.", id: "Besok pekerjaan libur." },
+  "作": { jp: "母とおいしい料理を作りました。", r: "Haha to oishii ryouri o tsukurimashita.", id: "Saya memasak hidangan lezat bersama ibu." },
+  "冬": { jp: "冬の北海道は雪がたくさん降ります。", r: "Fuyu no hokkaidou wa yuki ga takusan furimasu.", id: "Musim dingin di Hokkaido banyak turun salju." },
+  "夜": { jp: "夜十時に寝ます。", r: "Yoru juuji ni nemasu.", id: "Saya tidur jam 10 malam." },
+  "料": { jp: "母の作る日本料理は最高です。", r: "Haha no tsukuru nihon ryouri wa saikou desu.", id: "Masakan Jepang buatan ibu adalah yang terbaik." },
+  "理": { jp: "科学の理由を調べます。", r: "Kagaku no riyuu o shirabemasu.", id: "Saya mencari tahu alasan ilmiahnya." },
+  "自": { jp: "駅まで自転車で行きます。", r: "Eki made jitensha de ikimasu.", id: "Saya pergi sampai ke stasiun naik sepeda." },
+  "語": { jp: "毎日日本語の単語を覚えます。", r: "Mainichi nihongo no tango o oboemasu.", id: "Setiap hari saya menghafal kosakata bahasa Jepang." },
+  "何": { jp: "朝ご飯に何を食べましたか。", r: "Asagohan ni nani o tabemashita ka.", id: "Kamu makan apa untuk sarapan?" },
+  "楽": { jp: "旅行はとても楽しかったです。", r: "Ryokou wa totemo tanoshikatta desu.", id: "Perjalanannya sangat menyenangkan." },
+  "水": { jp: "冷たい水を一杯飲みました。", r: "Tsumetai mizu o ippai nomimashita.", id: "Saya minum segelas air dingin." },
+  "病": { jp: "風邪をひいて病院へ行きました。", r: "Kaze o hiite byouin e ikimashita.", id: "Saya masuk angin lalu pergi ke rumah sakit." },
+  "色": { jp: "青い色が一番好きです。", r: "Aoi iro ga ichiban suki desu.", id: "Warna biru adalah yang paling saya sukai." },
+  "茶": { jp: "食後に温かいお茶を飲みます。", r: "Shokugo ni atatakai ocha o nomimasu.", id: "Setelah makan saya minum teh hangat." },
+  "転": { jp: "新しい自転車を買ってもらいました。", r: "Atarashii jitensha o katte moraimashita.", id: "Saya dibelikan sepeda baru." },
+  "音": { jp: "外からきれいな鳥の音が聞こえます。", r: "Soto kara kirei na tori no oto ga kikoemasu.", id: "Dari luar terdengar suara burung yang merdu." },
+  "高": { jp: "あのビルはとても高いです。", r: "Ano biru wa totemo takai desu.", id: "Gedung itu sangat tinggi." },
+  "写": { jp: "旅行でたくさんの写真を撮りました。", r: "Ryokou de takusan no shashin o torimashita.", id: "Saya mengambil banyak foto saat berwisata." },
+  "医": { jp: "将来立派な医者になりたいです。", r: "Shourai rippa na isha ni naritai desu.", id: "Di masa depan saya ingin menjadi dokter yang hebat." },
+  "川": { jp: "川の近くでバーベキューをしました。", r: "Kawa no chikaku de baabekyuu o shimashita.", id: "Kami mengadakan barbekyu di dekat sungai." },
+  "朝": { jp: "毎朝六時に起きます。", r: "Maiasa rokuji ni okimasu.", id: "Setiap pagi saya bangun jam 6." },
+  "母": { jp: "母はとても優しい人です。", r: "Haha wa totemo yasashii hito desu.", id: "Ibu saya adalah orang yang sangat lembut." },
+  "父": { jp: "父と一緒に釣りをしました。", r: "Chichi to issho ni tsuri o shimashita.", id: "Saya memancing bersama ayah." },
+  "物": { jp: "スーパーで食べ物を買いました。", r: "Suupaa de tabemono o kaimashita.", id: "Saya membeli makanan di supermarket." },
+  "犬": { jp: "公園で白い犬を散歩させます。", r: "Kouen de shiroi inu o sanpo sasemasu.", id: "Saya mengajak anjing putih jalan-jalan di taman." },
+  "猫": { jp: "庭に小さな猫がいます。", r: "Niwa ni chiisana neko ga imasu.", id: "Ada kucing kecil di halaman rumah." },
+  "真": { jp: "彼の話は本当に面白いです。", r: "Kare no hanashi wa hontou ni omoshiroi desu.", id: "Ceritanya benar-benar menarik." },
+  "食": { jp: "日本の食べ物はとてもおいしいです。", r: "Nihon no tabemono wa totemo oishii desu.", id: "Makanan Jepang sangat lezat." },
+  "飲": { jp: "毎朝冷たい牛乳を飲みます。", r: "Maiasa tsumetai gyuunyuu o nomimasu.", id: "Setiap pagi saya minum susu dingin." },
+  "魚": { jp: "池で赤いきれいな魚が泳いでいます。", r: "Ike de akai kirei na sakana ga oyoide imasu.", id: "Ikan merah yang indah berenang di kolam." },
+  "手": { jp: "食事の前に手を石鹸で洗います。", r: "Shokuji no mae ni te o sekken de araimasu.", id: "Sebelum makan saya mencuci tangan dengan sabun." },
+  "目": { jp: "目が疲れたので少し休みます。", r: "Me ga tsukareta node sukoshi yasumimasu.", id: "Karena mata lelah, saya istirahat sebentar." },
+  "紙": { jp: "白い紙に絵を描きました。", r: "Shiroi kami ni e o kakimashita.", id: "Saya menggambar di atas kertas putih." },
+  "肉": { jp: "今晩はおいしい牛肉を食べます。", r: "Konban wa oishii gyuuniku o tabemasu.", id: "Malam ini saya makan daging sapi yang lezat." },
+  "話": { jp: "電話で家族と楽しく話しました。", r: "Denwa de kazoku to tanoshiku hanashimashita.", id: "Saya mengobrol menyenangkan dengan keluarga lewat telepon." },
+  "電": { jp: "朝八時の電車に乗ります。", r: "Asa hachiji no densha ni norimasu.", id: "Saya naik kereta jam 8 pagi." },
+  "飯": { jp: "晩ご飯を友達と一緒に食べました。", r: "Bangohan o tomodachi to issho ni tabemashita.", id: "Saya makan malam bersama teman." },
+  "便": { jp: "地下鉄は早くてとても便利です。", r: "Chikatetsu wa hayakute totemo benri desu.", id: "Kereta bawah tanah cepat dan sangat praktis." },
+  "外": { jp: "外は雨が降っています。", r: "Soto wa ame ga futte imasu.", id: "Di luar sedang turun hujan." },
+  "木": { jp: "庭に大きい桜の木があります。", r: "Niwa ni ookii sakura no ki ga arimasu.", id: "Ada pohon sakura besar di halaman rumah." },
+  "空": { jp: "青い空に白い雲が浮かんでいます。", r: "Aoi sora ni shiroi kumo ga ukande imasu.", id: "Awan putih melayang di langit biru." },
+  "行": { jp: "来週京都へ旅行に行きます。", r: "Raishuu kyouto e ryokou ni ikimasu.", id: "Minggu depan saya pergi liburan ke Kyoto." },
+  "銀": { jp: "駅の近くの銀行でお金を下ろします。", r: "Eki no chikaku no ginkou de okane o oroshimasu.", id: "Saya menarik uang di bank dekat stasiun." },
+  "風": { jp: "今日は強い風が吹いています。", r: "Kyou wa tsuyoi kaze ga fuite imasu.", id: "Hari ini bertiup angin kencang." },
+  "鳥": { jp: "木の上で小鳥が鳴いています。", r: "Ki no ue de kotori ga naite imasu.", id: "Burung kecil berkicau di atas pohon." },
+  "方": { jp: "漢字の書き方を教えてください。", r: "Kanji no kakikata o oshiete kudasai.", id: "Tolong ajari saya cara menulis kanji." },
+  "不": { jp: "近くに店がなくて少し不便です。", r: "Chikaku ni mise ga nakute sukoshi fuben desu.", id: "Tidak ada toko di dekat sini jadi agak tidak praktis." },
+  "中": { jp: "かばんの中に財布と鍵があります。", r: "Kaban no naka ni saifu to kagi ga arimasu.", id: "Di dalam tas ada dompet dan kunci." },
+  "利": { jp: "コンビニは二十四時間開いていて便利です。", r: "Konbini wa nijuuyo jikan aiteite benri desu.", id: "Minimarket buka 24 jam jadi sangat praktis." },
+  "古": { jp: "この町には古いお寺がたくさんあります。", r: "Kono machi ni wa furui otera ga takusan arimasu.", id: "Di kota ini ada banyak kuil kuno." },
+  "安": { jp: "この服は安くて質もいいです。", r: "Kono fuku wa yasukute shitsu mo ii desu.", id: "Baju ini murah dan kualitasnya juga bagus." },
+  "有": { jp: "京都は有名なお寺が多いです。", r: "Kyouto wa yuumei na otera ga ooi desu.", id: "Kyoto memiliki banyak kuil terkenal." },
+  "映": { jp: "映画館で面白い映画を見ました。", r: "Eigakan de omoshiroi eiga o mimashita.", id: "Saya menonton film menarik di bioskop." },
+  "画": { jp: "美術館で日本の絵画を見ました。", r: "Bijutsukan de nihon no kaiga o mimashita.", id: "Saya melihat lukisan Jepang di museum seni." },
+  "白": { jp: "白いシャツを着て出かけます。", r: "Shiroi shatsu o kite dekakemasu.", id: "Saya memakai kemeja putih lalu pergi keluar." },
+  "上": { jp: "机の上に辞書があります。", r: "Tsukue no ue ni jisho ga arimasu.", id: "Ada kamus di atas meja." },
+  "下": { jp: "木の下で涼しい風を感じます。", r: "Ki no shita de suzushii kaze o kanjimasu.", id: "Di bawah pohon saya merasakan angin sejuk." },
+  "元": { jp: "お元気ですか。はい、とても元気です。", r: "Ogenki desu ka. Hai, totemo genki desu.", id: "Apa kabar? Ya, saya sangat sehat." },
+  "八": { jp: "朝八時にバスが来ます。", r: "Asa hachiji ni basu ga kimasu.", id: "Bus datang jam 8 pagi." },
+  "右": { jp: "交差点を右に曲がってください。", r: "Kousaten o migi ni magatte kudasai.", id: "Tolong belok ke kanan di persimpangan jalan." },
+  "堂": { jp: "昼休みに学生食堂でカレーを食べます。", r: "Hiruyasumi ni gakusei shokudou de karee o tabemasu.", id: "Saat istirahat siang saya makan kari di kantin murid." },
+  "左": { jp: "郵便局は銀行の左側にあります。", r: "Yuubinkyoku wa ginkou no hidarigawa ni arimasu.", id: "Kantor pos ada di sebelah kiri bank." },
+  "後": { jp: "授業の後で図書館へ行きます。", r: "Jugyou no ato de toshokan e ikimasu.", id: "Setelah kelas saya pergi ke perpustakaan." },
+  "気": { jp: "明日の天気予報を見ました。", r: "Ashita no tenki yohou o mimashita.", id: "Saya melihat ramalan cuaca besok." },
+  "牛": { jp: "毎朝新鮮な牛乳を一本飲みます。", r: "Maiasa shinsen na gyuunyuu o ippon nomimasu.", id: "Setiap pagi saya minum sebotol susu sapi segar." },
+  "百": { jp: "このリンゴは一つ百円です。", r: "Kono ringo wa hitotsu hyaku en desu.", id: "Apel ini satu buah harganya 100 yen." },
+  "近": { jp: "私の家は駅からとても近いです。", r: "Watashi no ie wa eki kara totemo chikai desu.", id: "Rumah saya sangat dekat dari stasiun." },
+  "間": { jp: "毎日二時間日本語を勉強します。", r: "Mainichi nijikan nihongo o benkyou shimasu.", id: "Setiap hari saya belajar bahasa Jepang selama 2 jam." },
+  "一": { jp: "りんごを一つ買いました。", r: "Ringo o hitotsu kaimashita.", id: "Saya membeli satu buah apel." },
+  "七": { jp: "七時に起きて朝ご飯を食べます。", r: "Shichiji ni okite asagohan o tabemasu.", id: "Saya bangun jam 7 lalu sarapan." },
+  "三": { jp: "教室に三人の学生がいます。", r: "Kyoushitsu ni sannin no gakusei ga imasu.", id: "Ada tiga orang murid di dalam kelas." },
+  "九": { jp: "夜九時まで図書館で勉強しました。", r: "Yoru kuji made toshokan de benkyou shimashita.", id: "Saya belajar di perpustakaan sampai jam 9 malam." },
+  "事": { jp: "父は毎日忙しく仕事をしています。", r: "Chichi wa mainichi isogashiku shigoto o shite imasu.", id: "Ayah setiap hari sibuk bekerja." },
+  "二": { jp: "猫が二匹庭で遊んでいます。", r: "Neko ga nihiki niwa de asonde imasu.", id: "Dua ekor kucing sedang bermain di halaman." },
+  "五": { jp: "午後五時に仕事が終わります。", r: "Gogo goji ni shigoto ga owarimasu.", id: "Pekerjaan selesai jam 5 sore." },
+  "仕": { jp: "来週から新しい仕事を始めます。", r: "Raishuu kara atarashii shigoto o hajimemasu.", id: "Mulai minggu depan saya memulai pekerjaan baru." },
+  "六": { jp: "六月に日本へ旅行する予定です。", r: "Rokugatsu ni nihon e ryokou suru yotei desu.", id: "Rencananya saya berwisata ke Jepang pada bulan Juni." },
+  "分": { jp: "駅から家まで歩いて十分かかります。", r: "Eki kara ie made aruite juppun kakarimasu.", id: "Dari stasiun ke rumah memakan waktu 10 menit jalan kaki." },
+  "十": { jp: "十本のペンを買いました。", r: "Juppon no pen o kaimashita.", id: "Saya membeli 10 buah pena." },
+  "千": { jp: "この本は一冊千円です。", r: "Kono hon wa issatsu sen en desu.", id: "Buku ini harganya 1.000 yen per buah." },
+  "午": { jp: "午後から雨が降るそうです。", r: "Gogo kara ame ga furu sou desu.", id: "Katanya mulai sore hari akan turun hujan." },
+  "半": { jp: "毎朝六時半にジョギングをします。", r: "Maiasa rokujihan ni jogingu o shimasu.", id: "Setiap pagi jam 6.30 saya joging." },
+  "四": { jp: "部屋に椅子が四つあります。", r: "Heya ni isu ga yottsu arimasu.", id: "Di kamar ada empat buah kursi." },
+  "土": { jp: "土曜日の夜に友達と食事します。", r: "Doyoubi no yoru ni tomodachi to shokuji shimasu.", id: "Sabtu malam saya makan bersama teman." },
+  "夏": { jp: "日本の夏はとても暑いです。", r: "Nihon no natsu wa totemo atsui desu.", id: "Musim panas di Jepang sangat panas." },
+  "旅": { jp: "京都へ楽しい旅行に行きました。", r: "Kyouto e tanoshii ryokou ni ikimashita.", id: "Saya pergi perjalanan menyenangkan ke Kyoto." },
+  "月": { jp: "月曜日の朝にテストがあります。", r: "Getsuyoubi no asa ni tesuto ga arimasu.", id: "Senin pagi ada ujian." },
+  "来": { jp: "来月日本から友達が来ます。", r: "Raigetsu nihon kara tomodachi ga kimasu.", id: "Bulan depan teman dari Jepang akan datang." },
+  "東": { jp: "東京は日本の首都です。", r: "Toukyou wa nihon no shuto desu.", id: "Tokyo adalah ibu kota Jepang." },
+  "毎": { jp: "毎日日本語の漢字を練習します。", r: "Mainichi nihongo no kanji o renshuu shimasu.", id: "Setiap hari saya melatih kanji bahasa Jepang." },
+  "火": { jp: "火曜日は日本語の授業があります。", r: "Kayoubi wa nihongo no jugyou ga arimasu.", id: "Hari Selasa ada kelas bahasa Jepang." },
+  "週": { jp: "週末は家でアニメを見ます。", r: "Shuumatsu wa ie de anime o mimasu.", id: "Akhir pekan saya menonton anime di rumah." },
+  "金": { jp: "金曜日の夜は外食をします。", r: "Kinyoubi no yoru wa gaishoku o shimasu.", id: "Jumat malam saya makan di luar." },
+  "勉": { jp: "試験のために一生懸命勉強します。", r: "Shiken no tame ni isshoukenmei benkyou shimasu.", id: "Saya belajar sungguh-sungguh untuk ujian." },
+  "夕": { jp: "夕方に涼しい風が吹きました。", r: "Yuugata ni suzushii kaze ga fukimashita.", id: "Di waktu sore bertiup angin yang sejuk." },
+  "強": { jp: "外で強い雨が降っています。", r: "Soto de tsuyoi ame ga futte imasu.", id: "Di luar sedang turun hujan deras." },
+  "早": { jp: "朝早く起きて散歩をしました。", r: "Asa hayaku okite sanpo o shimashita.", id: "Saya bangun pagi-pagi lalu jalan-jalan." },
+  "遅": { jp: "電車が遅れて遅刻しました。", r: "Densha ga okurete chikoku shimashita.", id: "Karena kereta terlambat, saya jadi telat." },
+  "北": { jp: "北海道は日本の北にあります。", r: "Hokkaidou wa nihon no kita ni arimasu.", id: "Hokkaido berada di sebelah utara Jepang." },
+  "少": { jp: "少し日本語が話せます。", r: "Sukoshi nihongo ga hanasemasu.", id: "Saya bisa sedikit berbicara bahasa Jepang." },
+  "帰": { jp: "夕方五時に家へ帰ります。", r: "Yuugata goji ni ie e kaerimasu.", id: "Sore jam 5 saya pulang ke rumah." },
+  "道": { jp: "この道をまっすぐ歩いてください。", r: "Kono michi o massugu aruite kudasai.", id: "Tolong jalan lurus di jalan ini." },
+  "雨": { jp: "雨が降っているので傘をさします。", r: "Ame ga futte iru node kasa o sashimasu.", id: "Karena hujan turun, saya memakai payung." },
+  "切": { jp: "手紙に切手を貼って出しました。", r: "Tegami ni kitte o hatte dashimashita.", id: "Saya menempelkan perangko di surat lalu mengirimkannya." },
+  "親": { jp: "両親に感謝の手紙を書きました。", r: "Ryoushin ni kansha no tegami o kakimashita.", id: "Saya menulis surat terima kasih kepada kedua orang tua." },
+  "赤": { jp: "赤いリンゴを食べました。", r: "Akai ringo o tabemashita.", id: "Saya memakan apel merah." },
+  "青": { jp: "青い海がきれいに見えます。", r: "Aoi umi ga kirei ni miemasu.", id: "Laut biru terlihat indah." },
+  "黒": { jp: "黒い靴を履いて出かけます。", r: "Kuroi kutsu o haite dekakemasu.", id: "Saya memakai sepatu hitam lalu bepergian." },
+  "動": { jp: "動物園でパンダを見ました。", r: "Doubutsuen de panda o mimashita.", id: "Saya melihat panda di kebun binatang." },
+  "小": { jp: "小さな川で魚を見つけました。", r: "Chiisana kawa de sakana o mitsukemashita.", id: "Saya menemukan ikan di sungai kecil." },
+  "度": { jp: "もう一度ゆっくり言ってください。", r: "Mou ichido yukkuri itte kudasai.", id: "Tolong katakan sekali lagi dengan pelan." },
+  "洗": { jp: "ご飯を食べる前に手を洗います。", r: "Gohan o taberu mae ni te o araimasu.", id: "Sebelum makan nasi saya mencuci tangan." },
+  "練": { jp: "毎日ピアノを練習しています。", r: "Mainichi piano o renshuu shite imasu.", id: "Setiap hari saya berlatih piano." },
+  "習": { jp: "学校で日本の文化を習いました。", r: "Gakkou de nihon no bunka o naraimashita.", id: "Saya mempelajari budaya Jepang di sekolah." },
+  "見": { jp: "富士山がきれいに見えます。", r: "Fujisan ga kirei ni miemasu.", id: "Gunung Fuji terlihat dengan jelas dan indah." },
+  "読": { jp: "夜寝る前に本を読みます。", r: "Yoru neru mae ni hon o yomimasu.", id: "Sebelum tidur malam saya membaca buku." },
+  "運": { jp: "毎朝運動して体を動かします。", r: "Mainichi undou shite karada o ugokashimasu.", id: "Setiap pagi saya berolahraga menggerakkan tubuh." },
+  "雪": { jp: "外に白い雪がたくさん積もっています。", r: "Soto ni shiroi yuki ga takusan tsumotte imasu.", id: "Di luar salju putih menumpuk banyak." },
+  "多": { jp: "この町は外国人が多いです。", r: "Kono machi wa gaikokujin ga ooi desu.", id: "Di kota ini ada banyak orang asing." },
+  "字": { jp: "ノートにきれいな文字を書きます。", r: "Nouto ni kirei na moji o kakimasu.", id: "Saya menulis huruf yang rapi di buku catatan." },
+  "持": { jp: "傘を持って出かけましょう。", r: "Kasa o motte dekakemashou.", id: "Ayo kita membawa payung saat bepergian." },
+  "昼": { jp: "昼休みに友達とお弁当を食べます。", r: "Hiruyasumi ni tomodachi to obentou o tabemasu.", id: "Saat istirahat siang saya makan bekal bersama teman." },
+  "漢": { jp: "漢字の勉強はとても面白いです。", r: "Kanji no benkyou wa totemo omoshiroi desu.", id: "Belajar kanji sangatlah menarik." },
+  "買": { jp: "スーパーでおいしいお菓子を買いました。", r: "Suupaa de oishii okashi o kaimashita.", id: "Saya membeli cemilan lezat di supermarket." },
+  "同": { jp: "彼と同じクラスになりました。", r: "Kare to onaji kurasu ni narimashita.", id: "Saya masuk ke kelas yang sama dengannya." },
+  "広": { jp: "この公園はとても広くて気持ちいいです。", r: "Kono kouen wa totemo hirokute kimochi ii desu.", id: "Taman ini sangat luas dan nyaman." },
+  "店": { jp: "駅前の店で買い物をしました。", r: "Ekimae no mise de kaimono o shimashita.", id: "Saya berbelanja di toko depan stasiun." },
+  "春": { jp: "春になるときれいな桜が咲きます。", r: "Haru ni naru to kirei na sakura ga sakimasu.", id: "Saat tiba musim semi, bunga sakura yang indah mekar." },
+  "歩": { jp: "駅まで歩いて十五分です。", r: "Eki made aruite juugofun desu.", id: "Sampai stasiun jalan kaki 15 menit." },
+  "秋": { jp: "秋は紅葉がとても美しいです。", r: "Aki wa kouyou ga totemo utsukushii desu.", id: "Di musim gugur daun-daun merah sangatlah indah." },
+  "遠": { jp: "私の家から学校は遠いです。", r: "Watashi no ie kara gakkou wa tooi desu.", id: "Dari rumah saya ke sekolah sangat jauh." },
+  "頭": { jp: "風邪をひいて頭が痛いです。", r: "Kaze o hiite atama ga itai desu.", id: "Karena masuk angin kepala saya terasa sakit." },
+  "問": { jp: "試験の問題は難しかったです。", r: "Shiken no mondai wa muzukashikatta desu.", id: "Soal ujiannya tadi sulit." },
+  "宿": { jp: "晩ご飯の後に宿題をやります。", r: "Bangohan no ato ni shukudai o yarimasu.", id: "Setelah makan malam saya mengerjakan PR." },
+  "質": { jp: "先生に分からないところを質問しました。", r: "Sensei ni wakaranai tokoro o shitsumon shimashita.", id: "Saya bertanya kepada guru tentang bagian yang tidak dimengerti." },
+  "万": { jp: "このパソコンは十万円でした。", r: "Kono pasokon wa juuman en deshita.", id: "Laptop ini harganya 100.000 yen." },
+  "円": { jp: "リンゴを百円で買いました。", r: "Ringo o hyaku en de kaimashita.", id: "Saya membeli apel seharga 100 yen." },
+  "着": { jp: "新しい着物を着てお祭りに行きます。", r: "Atarashii kimono o kite omatsuri ni ikimasu.", id: "Saya memakai kimono baru lalu pergi ke festival." },
+  "入": { jp: "部屋に入る前に靴を脱ぎます。", r: "Heya ni hairu mae ni kutsu o nugimasu.", id: "Sebelum masuk kamar saya melepas sepatu." },
+  "場": { jp: "駅前の広場に人が大勢集まっています。", r: "Ekimae no hiroba ni hito ga oozei atsumatte imasu.", id: "Banyak orang berkumpul di lapangan depan stasiun." },
+  "座": { jp: "どうぞこの椅子に座ってください。", r: "Douzo kono isu ni suwatte kudasai.", id: "Silakan duduk di kursi ini." },
+  "待": { jp: "改札口で友達を待っています。", r: "Kaisatsuguchi de tomodachi o matte imasu.", id: "Saya sedang menunggu teman di gerbang tiket." },
+  "終": { jp: "午後四時にテストが終わりました。", r: "Gogo yoji ni tesuto ga owarimashita.", id: "Jam 4 sore ujian telah selesai." },
+  "送": { jp: "友達に誕生日プレゼントを送りました。", r: "Tomodachi ni tanjoubi purezento o okurimashita.", id: "Saya mengirimkan hadiah ulang tahun ke teman." },
+  "由": { jp: "学校を休んだ理由を話しました。", r: "Gakkou o yasunda riyuu o hanashimashita.", id: "Saya menceritakan alasan tidak masuk sekolah." },
+  "試": { jp: "明日日本語の試験があります。", r: "Ashita nihongo no shiken ga arimasu.", id: "Besok ada ujian bahasa Jepang." },
+  "別": { jp: "友達と駅で別れました。", r: "Tomodachi to eki de wakaremashita.", id: "Saya berpisah dengan teman di stasiun." },
+  "森": { jp: "静かな森の中を散歩しました。", r: "Shizuka na mori no naka o sanpo shimashita.", id: "Saya berjalan-jalan di dalam hutan yang sunyi." },
+  "走": { jp: "毎朝公園を走っています。", r: "Maiasa kouen o hashitte imasu.", id: "Setiap pagi saya berlari di taman." },
+  "通": { jp: "この道をまっすぐ通ってください。", r: "Kono michi o massugu tootte kudasai.", id: "Tolong lewati jalan ini lurus." },
+  "重": { jp: "この荷物はとても重いです。", r: "Kono nimotsu wa totemo omoi desu.", id: "Barang bawaan ini sangat berat." },
+  "顔": { jp: "朝起きたら冷たい水で顔を洗います。", r: "Asa okitara tsumetai mizu de kao o araimasu.", id: "Saat bangun pagi saya membasuh wajah dengan air dingin." },
+  "南": { jp: "沖縄は日本の南にあります。", r: "Okinawa wa nihon no minami ni arimasu.", id: "Okinawa berada di sebelah selatan Jepang." },
+  "西": { jp: "太陽が西の空に沈みます。", r: "Taiyou ga nishi no sora ni shizumimasu.", id: "Matahari terbenam di langit sebelah barat." },
+  "歌": { jp: "カラオケで日本の歌を歌いました。", r: "Karaoke de nihon no uta o utaimashita.", id: "Saya menyanyikan lagu Jepang di karaoke." },
+  "黄": { jp: "黄色い花がたくさん咲いています。", r: "Kiiroi hana ga takusan saite imasu.", id: "Ada banyak bunga kuning yang sedang mekar." },
+  "特": { jp: "この料理は特別な味がします。", r: "Kono ryouri wa tokubetsu na aji ga shimasu.", id: "Masakan ini memiliki rasa yang istimewa." },
+  "世": { jp: "世界中を旅行してみたいです。", r: "Sekaijuu o ryokou shite mitai desu.", id: "Saya ingin mencoba bepergian ke seluruh dunia." },
+  "体": { jp: "健康のために体を動かします。", r: "Kenkou no tame ni karada o ugokashimasu.", id: "Demi kesehatan saya menggerakkan tubuh." },
+  "使": { jp: "鉛筆を使ってノートに書きます。", r: "Enpitsu o tsukatte nouto ni kakimasu.", id: "Saya menulis di buku catatan menggunakan pensil." },
+  "借": { jp: "図書館で面白い小説を借りました。", r: "Toshokan de omoshiroi shousetsu o karimashita.", id: "Saya meminjam novel menarik di perpustakaan." },
+  "力": { jp: "力を合わせて頑張りましょう。", r: "Chikara o awasete ganbarimashou.", id: "Mari satukan kekuatan dan berjuang bersama." },
+  "口": { jp: "歯磨きの後に口をゆすぎます。", r: "Hamigaki no ato ni kuchi o yusugimasu.", id: "Setelah sikat gigi saya berkumur-kumur." },
+  "回": { jp: "一日に三回薬を飲みます。", r: "Ichinichi ni sankai kusuri o nomimasu.", id: "Minum obat tiga kali dalam sehari." },
+  "声": { jp: "先生の大きな声が聞こえます。", r: "Sensei no ookina koe ga kikoemasu.", id: "Terdengar suara lantang dari guru." },
+  "売": { jp: "この店でおいしい果物を売っています。", r: "Kono mise de oishii kudamono o utte imasu.", id: "Toko ini menjual buah-buahan yang lezat." },
+  "始": { jp: "朝九時に授業が始まります。", r: "Asa kuji ni jugyou ga hajimarimasu.", id: "Pelajaran dimulai jam 9 pagi." },
+  "心": { jp: "彼の優しい心に感動しました。", r: "Kare no yasashii kokoro ni kandou shimashita.", id: "Saya terharu oleh kebaikan hatinya." },
+  "思": { jp: "明日いい天気になると思います。", r: "Ashita ii tenki ni naru to omoimasu.", id: "Saya rasa besok cuaca akan menjadi cerah." },
+  "急": { jp: "急いで駅へ向かいました。", r: "Isoide eki e mukaimashita.", id: "Saya bergegas menuju stasiun." },
+  "林": { jp: "小鳥が林の中でさえずっています。", r: "Kotori ga hayashi no naka de saezutte imasu.", id: "Burung kecil berkicau di dalam rimbun pepohonan." },
+  "止": { jp: "信号が赤になったので車を止めました。", r: "Shingou ga aka ni natta node kuruma o tomemashita.", id: "Karena lampu merah, saya menghentikan mobil." },
+  "池": { jp: "公園の池に鯉がたくさん泳いでいます。", r: "Kouen no ike ni koi ga takusan oyoide imasu.", id: "Banyak ikan koi berenang di kolam taman." },
+  "済": { jp: "宿題はもう全部済みました。", r: "Shukudai wa mou zenbu sumimashita.", id: "PR sudah semuanya selesai." },
+  "男": { jp: "あそこに男の人が立っています。", r: "Asoko ni otoko no hito ga tatte imasu.", id: "Di sana ada seorang pria yang sedang berdiri." },
+  "界": { jp: "世界には色々な国があります。", r: "Sekai ni wa iroiro na kuni ga arimasu.", id: "Di dunia ada berbagai macam negara." },
+  "痛": { jp: "お腹が痛いので病院へ行きます。", r: "Onaka ga itai node byouin e ikimasu.", id: "Karena perut saya sakit, saya pergi ke rumah sakit." },
+  "知": { jp: "あの人の名前を知っていますか。", r: "Ano hito no namae o shitte imasu ka.", id: "Apakah Anda tahu nama orang itu?" },
+  "立": { jp: "バス停の前に立って待ちます。", r: "Basutei no mae ni tatte machimasu.", id: "Saya berdiri menunggu di depan halte bus." },
+  "答": { jp: "質問に正しく答えました。", r: "Shitsumon ni tadashiku kotaemashita.", id: "Saya menjawab pertanyaan dengan benar." },
+  "経": { jp: "日本経済について勉強しています。", r: "Nihon keizai ni tsuite benkyou shite imasu.", id: "Saya sedang mempelajari ekonomi Jepang." },
+  "耳": { jp: "耳を澄まして鳥の声を聞きます。", r: "Mimi o sumashite tori no koe o kikimasu.", id: "Saya menajamkan telinga mendengarkan suara burung." },
+  "言": { jp: "先生が大切なことを言いました。", r: "Sensei ga taisetsu na koto o iimashita.", id: "Guru mengatakan hal yang penting." },
+  "貸": { jp: "友達に消しゴムを貸しました。", r: "Tomodachi ni keshigomu o kashimashita.", id: "Saya meminjamkan penghapus ke teman." },
+  "足": { jp: "たくさん歩いたので足が痛いです。", r: "Takusan aruita node ashi ga itai desu.", id: "Karena banyak berjalan kaki saya terasa sakit." },
+  "軽": { jp: "このカバンは軽くて持ちやすいです。", r: "Kono kaban wa karukute mochiyasui desu.", id: "Tas ini ringan dan mudah dibawa." },
+  "酒": { jp: "二十歳になってお酒を飲みました。", r: "Hatachi ni natte osake o nomimashita.", id: "Setelah berusia 20 tahun saya minum sake." },
+  "門": { jp: "学校の正門の前で集合します。", r: "Gakkou no seimon no mae de shuugou shimasu.", id: "Kami berkumpul di depan gerbang utama sekolah." },
+  "閉": { jp: "寒いので窓を閉めてください。", r: "Samui node mado o shimete kudasai.", id: "Karena dingin tolong tutup jendelanya." },
+  "開": { jp: "朝八時にドアを開けます。", r: "Asa hachiji ni doa o akemasu.", id: "Pagi jam 8 saya membuka pintu." },
+  "雲": { jp: "空に白い雲が浮かんでいます。", r: "Sora ni shiroi kumo ga ukande imasu.", id: "Awan putih mengapung di langit." },
+  "題": { jp: "教科書の問題を解きます。", r: "Kyoukasho no mondai o tokimasu.", id: "Saya menyelesaikan soal-soal di buku pelajaran." },
+  "首": { jp: "マフラーを首に巻いて出かけます。", r: "Mafuraa o kubi ni maite dekakemasu.", id: "Saya melilitkan syal di leher lalu pergi." },
+  "馬": { jp: "牧場で白い馬を見ました。", r: "Bokujou de shiroi uma o mimashita.", id: "Saya melihat kuda putih di peternakan." },
+  "験": { jp: "来週日本語能力試験を受けます。", r: "Raishuu nihongo nouryoku shiken o ukemasu.", id: "Minggu depan saya mengikuti ujian kemampuan bahasa Jepang." }
+};
+
+// ==========================================
 // DOJO & MARKET ENGINE (MANAJEMEN RUANG & DECK)
 // ==========================================
 const DojoEngine = {
@@ -6734,7 +7068,10 @@ const DojoEngine = {
     this.searchQuery = q.trim().toLowerCase();
     const clearBtn = document.getElementById('market-search-clear');
     if (clearBtn) clearBtn.classList.toggle('hidden', this.searchQuery.length === 0);
-    this.renderMarket();
+    clearTimeout(this._searchTimer);
+    this._searchTimer = setTimeout(() => {
+      this.renderMarket();
+    }, 180);
   },
 
   clearSearch: function() {
@@ -6818,19 +7155,37 @@ const DojoEngine = {
     const activeRoom = this.rooms[this.activeRoomId];
     if (!activeRoom) return;
 
+    let inDojoAfter = false;
     let idx = activeRoom.kanji.indexOf(kanjiChar);
     if (idx > -1) {
       activeRoom.kanji.splice(idx, 1);
       this.showToast(`🗑️ Dikeluarkan dari ${activeRoom.name}: ${kanjiChar}`);
+      inDojoAfter = false;
     } else {
       activeRoom.kanji.push(kanjiChar);
       this.showToast(`🛒 Ditambahkan ke ${activeRoom.name}: ${kanjiChar}`);
+      inDojoAfter = true;
     }
 
     this.saveRooms();
     this.updateStats();
-    this.renderMarket();
     this.loadTrainingDeck();
+
+    // If currently filtered by 'in-dojo', re-render because the filtered set changed
+    if (this.activeFilter === 'in-dojo') {
+      this.renderMarket();
+      return;
+    }
+
+    // Targeted DOM mutation for instant 60fps response (0ms lag, no full re-render)
+    const btn = evt ? (evt.currentTarget || (evt.target && evt.target.closest ? evt.target.closest('.btn-cart-toggle') : null)) : null;
+    if (btn) {
+      let isMaster = this.masteredKanji.includes(kanjiChar);
+      btn.className = `btn-cart-toggle ${inDojoAfter ? 'is-in-dojo' : 'is-add'}`;
+      btn.innerHTML = `<span>${inDojoAfter ? '✓ Di Dojo' : '+ Ambil'}</span>${isMaster ? '⭐' : ''}`;
+    } else {
+      this.renderMarket();
+    }
   },
 
   // --- RUANG LATIHAN DOJO ENGINE ---
@@ -6915,6 +7270,99 @@ const DojoEngine = {
     }
   },
 
+  kanaToRomaji: function(str) {
+    if (!str || str === '-') return '';
+    const map = {
+      'あ':'a','い':'i','う':'u','え':'e','お':'o',
+      'か':'ka','き':'ki','く':'ku','け':'ke','こ':'ko',
+      'さ':'sa','し':'shi','す':'su','せ':'se','そ':'so',
+      'た':'ta','ち':'chi','つ':'tsu','て':'te','と':'to',
+      'な':'na','に':'ni','ぬ':'nu','ね':'ne','の':'no',
+      'は':'ha','ひ':'hi','ふ':'fu','へ':'he','ほ':'ho',
+      'ま':'ma','み':'mi','む':'mu','め':'me','も':'mo',
+      'や':'ya','ゆ':'yu','よ':'yo',
+      'ら':'ra','り':'ri','る':'ru','れ':'re','ろ':'ro',
+      'わ':'wa','を':'wo','ん':'n',
+      'が':'ga','ぎ':'gi','ぐ':'gu','げ':'ge','ご':'go',
+      'ざ':'za','じ':'ji','ず':'zu','ぜ':'ze','ぞ':'zo',
+      'だ':'da','ぢ':'ji','づ':'zu','で':'de','ど':'do',
+      'ば':'ba','び':'bi','ぶ':'bu','べ':'be','ぼ':'bo',
+      'ぱ':'pa','ぴ':'pi','ぷ':'pu','ぺ':'pe','ぽ':'po',
+      'きゃ':'kya','きゅ':'kyu','きょ':'kyo',
+      'しゃ':'sha','しゅ':'shu','しょ':'sho',
+      'ちゃ':'cha','ちゅ':'chu','ちょ':'cho',
+      'にゃ':'nya','にゅ':'nyu','にょ':'nyo',
+      'ひゃ':'hya','ひゅ':'hyu','ひょ':'hyo',
+      'みゃ':'mya','みゅ':'myu','みょ':'myo',
+      'りゃ':'rya','りゅ':'ryu','りょ':'ryo',
+      'ぎゃ':'gya','ぎゅ':'gyu','ぎょ':'gyo',
+      'じゃ':'ja','じゅ':'ju','じょ':'jo',
+      'びゃ':'bya','びゅ':'byu','びょ':'byo',
+      'ぴゃ':'pya','ぴゅ':'pyu','ぴょ':'pyo',
+      'ア':'a','イ':'i','ウ':'u','エ':'e','オ':'o',
+      'カ':'ka','キ':'ki','ク':'ku','ケ':'ke','コ':'ko',
+      'サ':'sa','シ':'shi','ス':'su','セ':'se','ソ':'so',
+      'タ':'ta','チ':'chi','ツ':'tsu','テ':'te','ト':'to',
+      'ナ':'na','ニ':'ni','ヌ':'nu','ネ':'ne','ノ':'no',
+      'ハ':'ha','ヒ':'hi','フ':'fu','ヘ':'he','ホ':'ho',
+      'マ':'ma','ミ':'mi','ム':'mu','メ':'me','モ':'mo',
+      'ヤ':'ya','ユ':'yu','ヨ':'yo',
+      'ラ':'ra','リ':'ri','ル':'ru','レ':'re','ロ':'ro',
+      'ワ':'wa','ヲ':'wo','ン':'n',
+      'ガ':'ga','ギ':'gi','グ':'gu','ゲ':'ge','ゴ':'go',
+      'ザ':'za','ジ':'ji','ズ':'zu','ゼ':'ze','ゾ':'zo',
+      'ダ':'da','ヂ':'ji','ヅ':'zu','デ':'de','ド':'do',
+      'バ':'ba','ビ':'bi','ブ':'bu','ベ':'be','ボ':'bo',
+      'パ':'pa','ピ':'pi','プ':'pu','ペ':'pe','ポ':'po',
+      'キャ':'kya','キュ':'kyu','キョ':'kyo',
+      'シャ':'sha','シュ':'shu','ショ':'sho',
+      'チャ':'cha','チュ':'chu','チョ':'cho',
+      'ニャ':'nya','ニュ':'nyu','ニョ':'nyo',
+      'ヒャ':'hya','ヒュ':'hyu','ヒョ':'hyo',
+      'ミャ':'mya','ミュ':'myu','ミョ':'myo',
+      'リャ':'rya','リュ':'ryu','リョ':'ryo',
+      'ギャ':'gya','ギュ':'gyu','ギョ':'gyo',
+      'ジャ':'ja','ジュ':'ju','ジョ':'jo',
+      'ビャ':'bya','ビュ':'byu','ビョ':'byo',
+      'ピャ':'pya','ピュ':'pyu','ピョ':'pyo',
+      'ー':'-','・':'.'
+    };
+    let res = '';
+    let i = 0;
+    while (i < str.length) {
+      let two = str.substr(i, 2);
+      if (map[two]) {
+        res += map[two];
+        i += 2;
+        continue;
+      }
+      let one = str[i];
+      if (one === 'っ' || one === 'ッ') {
+        let nextChar = str[i + 1];
+        let nextTwo = str.substr(i + 1, 2);
+        let nextRom = map[nextTwo] || map[nextChar] || '';
+        if (nextRom) {
+          res += (nextRom[0] === 'c' ? 't' : nextRom[0]);
+        }
+        i++;
+        continue;
+      }
+      if (map[one]) {
+        res += map[one];
+      } else {
+        res += one;
+      }
+      i++;
+    }
+    return res;
+  },
+
+  speakCurrentSentence: function() {
+    if (this.currentSentenceText) {
+      this.speakText(this.currentSentenceText);
+    }
+  },
+
   renderFlashcardCard: function() {
     if (this.trainingList.length === 0) return;
     if (this.deckIdx >= this.trainingList.length) this.deckIdx = 0;
@@ -6928,6 +7376,15 @@ const DojoEngine = {
     document.getElementById('dojo-fc-kanji').innerText = item.k;
     document.getElementById('dojo-fc-on').innerText = item.on || '-';
     document.getElementById('dojo-fc-kun').innerText = item.kun || '-';
+
+    // Romaji for Onyomi & Kunyomi
+    const onRom = item.on ? this.kanaToRomaji(item.on) : '';
+    const kunRom = item.kun ? this.kanaToRomaji(item.kun) : '';
+    const onRomEl = document.getElementById('dojo-fc-on-romaji');
+    if (onRomEl) onRomEl.innerText = onRom ? `(${onRom})` : '';
+    const kunRomEl = document.getElementById('dojo-fc-kun-romaji');
+    if (kunRomEl) kunRomEl.innerText = kunRom ? `(${kunRom})` : '';
+
     document.getElementById('dojo-fc-arti').innerText = item.a;
 
     // Render Jukugo
@@ -6946,6 +7403,31 @@ const DojoEngine = {
       } else {
         shelf.innerHTML = `<span style="font-size:11px; color:var(--text-sub);">-</span>`;
       }
+    }
+
+    // Render Authentic Example Sentence
+    const senData = (typeof KANJI_SENTENCES !== 'undefined' && KANJI_SENTENCES[item.k]) 
+      ? KANJI_SENTENCES[item.k] 
+      : (item.ex && item.ex[0] ? { jp: `これは${item.ex[0].w}です。`, r: `Kore wa ${item.ex[0].r} desu.`, id: `Ini adalah ${item.ex[0].a}.` } : null);
+
+    const senJpEl = document.getElementById('dojo-fc-sen-jp');
+    const senRomEl = document.getElementById('dojo-fc-sen-romaji');
+    const senIdEl = document.getElementById('dojo-fc-sen-id');
+
+    if (senData) {
+      this.currentSentenceText = senData.jp;
+      if (senJpEl) {
+        // Highlight the target kanji character
+        const highlighted = senData.jp.split(item.k).join(`<span class="highlight-kanji">${item.k}</span>`);
+        senJpEl.innerHTML = highlighted;
+      }
+      if (senRomEl) senRomEl.innerText = senData.r;
+      if (senIdEl) senIdEl.innerText = senData.id;
+    } else {
+      this.currentSentenceText = '';
+      if (senJpEl) senJpEl.innerText = '-';
+      if (senRomEl) senRomEl.innerText = '';
+      if (senIdEl) senIdEl.innerText = '';
     }
 
     // Check mastery status
