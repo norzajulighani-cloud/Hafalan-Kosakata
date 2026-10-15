@@ -632,6 +632,48 @@
     width: 100%;
   }
 
+  .market-load-more-row {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 24px 0 36px;
+  }
+  .btn-load-more-kanji {
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.16) 0%, rgba(30, 58, 138, 0.3) 100%);
+    border: 1px solid rgba(56, 189, 248, 0.45);
+    color: #bae6fd;
+    font-size: 13px;
+    font-weight: 800;
+    padding: 10px 24px;
+    border-radius: 999px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.22s ease;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4), 0 0 16px rgba(56, 189, 248, 0.15);
+  }
+  .btn-load-more-kanji:hover {
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.3) 0%, rgba(30, 58, 138, 0.5) 100%);
+    border-color: var(--primary);
+    color: #fff;
+    box-shadow: 0 6px 20px rgba(56, 189, 248, 0.35);
+    transform: translateY(-2px);
+  }
+  .btn-load-more-kanji:active {
+    transform: scale(0.97);
+  }
+  .all-kanji-loaded-badge {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 24px 0 36px;
+    font-size: 12px;
+    color: var(--text-sub);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
   .kanji-market-card {
     content-visibility: auto;
     contain-intrinsic-size: 0 160px;
@@ -7032,10 +7074,12 @@ const DojoEngine = {
       return;
     }
 
-    // Render first batch of 24 cards (Lightning fast <10ms)
+    // Initialize scroll listener & observer early
+    this.setupMarketInfiniteScroll();
+
+    // Render first batch of 36 cards (Instant <10ms)
     container.innerHTML = '';
     this.renderMoreMarketCards();
-    this.setupMarketInfiniteScroll();
   },
 
   buildMarketCardHtml: function(item) {
@@ -7081,48 +7125,76 @@ const DojoEngine = {
     const container = document.getElementById('market-grid-container');
     if (!container || !this.filteredMarketList) return;
 
+    if (this._isRenderingMarket) return;
+    this._isRenderingMarket = true;
+
     const oldSentinel = document.getElementById('market-scroll-sentinel');
-    if (oldSentinel) oldSentinel.remove();
+    if (oldSentinel) {
+      if (this._marketObserver) {
+        this._marketObserver.unobserve(oldSentinel);
+      }
+      oldSentinel.remove();
+    }
 
-    const batchSize = 24;
+    const batchSize = 36;
     const nextBatch = this.filteredMarketList.slice(this.marketRenderedCount, this.marketRenderedCount + batchSize);
-    if (nextBatch.length === 0) return;
+    
+    if (nextBatch.length > 0) {
+      const html = nextBatch.map(item => this.buildMarketCardHtml(item)).join('');
+      container.insertAdjacentHTML('beforeend', html);
+      this.marketRenderedCount += nextBatch.length;
+    }
 
-    const html = nextBatch.map(item => this.buildMarketCardHtml(item)).join('');
-    container.insertAdjacentHTML('beforeend', html);
-    this.marketRenderedCount += nextBatch.length;
-
-    // Attach sentinel for next batch if remaining
+    // Attach sentinel with interactive load-more fallback if remaining
     if (this.marketRenderedCount < this.filteredMarketList.length) {
+      const remaining = this.filteredMarketList.length - this.marketRenderedCount;
       const sentinel = document.createElement('div');
       sentinel.id = 'market-scroll-sentinel';
-      sentinel.style.cssText = 'grid-column: 1/-1; height: 35px; display: flex; align-items: center; justify-content: center; color: var(--text-sub); font-size: 11px;';
-      sentinel.innerHTML = '<span>Memuat kanji berikutnya...</span>';
+      sentinel.className = 'market-load-more-row';
+      sentinel.innerHTML = `
+        <button type="button" class="btn-load-more-kanji" onclick="DojoEngine.renderMoreMarketCards()">
+          <span>⬇️ Tampilkan Lebih Banyak (${remaining} lagi)</span>
+        </button>
+      `;
       container.appendChild(sentinel);
 
       if (this._marketObserver) {
         this._marketObserver.observe(sentinel);
       }
+    } else if (this.filteredMarketList.length > 36) {
+      const endBadge = document.createElement('div');
+      endBadge.className = 'all-kanji-loaded-badge';
+      endBadge.innerHTML = `<span>✨ Semua ${this.filteredMarketList.length} kanji telah ditampilkan</span>`;
+      container.appendChild(endBadge);
     }
+
+    this._isRenderingMarket = false;
   },
 
   setupMarketInfiniteScroll: function() {
-    if (this._marketObserver) return;
-    if ('IntersectionObserver' in window) {
+    if (!this._scrollListenerAttached) {
+      this._scrollListenerAttached = true;
+      // Dual-layer safety: window scroll listener fires automatically on all mobile & desktop browsers
+      window.addEventListener('scroll', () => {
+        if (DojoEngine.activeMainTab !== 'market') return;
+        const sentinel = document.getElementById('market-scroll-sentinel');
+        if (sentinel && !DojoEngine._isRenderingMarket) {
+          const rect = sentinel.getBoundingClientRect();
+          if (rect.top <= window.innerHeight + 350) {
+            DojoEngine.renderMoreMarketCards();
+          }
+        }
+      }, { passive: true });
+    }
+
+    if (!this._marketObserver && 'IntersectionObserver' in window) {
       this._marketObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            this.renderMoreMarketCards();
+            DojoEngine.renderMoreMarketCards();
           }
         });
-      }, { rootMargin: '300px' });
-    } else {
-      window.addEventListener('scroll', () => {
-        if (this.activeMainTab !== 'market') return;
-        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 500) {
-          this.renderMoreMarketCards();
-        }
-      });
+      }, { rootMargin: '400px 0px' });
     }
   },
 
