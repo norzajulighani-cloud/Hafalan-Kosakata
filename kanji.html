@@ -2247,7 +2247,7 @@
                 <span class="dd-icon">🗣️</span>
                 <div class="dd-text">
                   <div class="dd-title">Tebak Bacaan</div>
-                  <div class="dd-desc">Pilih cara baca hiragana/romaji</div>
+                  <div class="dd-desc">Tebak bacaan kunyomi / onyomi secara cerdas</div>
                 </div>
               </button>
               <button type="button" class="dd-item" data-type="kanji" onclick="DojoEngine.selectDrillType('kanji')">
@@ -2255,13 +2255,6 @@
                 <div class="dd-text">
                   <div class="dd-title">Tebak Bentuk</div>
                   <div class="dd-desc">Pilih karakter kanji yang tepat</div>
-                </div>
-              </button>
-              <button type="button" class="dd-item" data-type="onkun" onclick="DojoEngine.selectDrillType('onkun')">
-                <span class="dd-icon">💡</span>
-                <div class="dd-text">
-                  <div class="dd-title">On vs Kun</div>
-                  <div class="dd-desc">Tebak Onyomi atau Kunyomi kanji</div>
                 </div>
               </button>
               <button type="button" class="dd-item" data-type="blitz" onclick="DojoEngine.selectDrillType('blitz')">
@@ -6817,7 +6810,7 @@ const DojoEngine = {
   
   // Drill multi-variations & telemetry states
   quizTarget: null,
-  drillType: 'mix', // 'mix', 'meaning', 'reading', 'kanji', 'onkun', 'blitz'
+  drillType: 'mix', // 'mix', 'meaning', 'reading', 'kanji', 'blitz'
   drillStreak: 0,
   drillScore: 0,
   currentQuestionData: null,
@@ -7669,7 +7662,6 @@ const DojoEngine = {
       'meaning': '🎯 Tebak Arti',
       'reading': '🗣️ Tebak Bacaan',
       'kanji': '🈴 Tebak Bentuk',
-      'onkun': '💡 On vs Kun',
       'blitz': '⚡ Benar / Salah'
     };
 
@@ -7803,7 +7795,7 @@ const DojoEngine = {
     // Tentukan tipe soal
     let qType = this.drillType;
     if (qType === 'mix') {
-      const variations = ['meaning', 'reading', 'kanji', 'onkun', 'blitz'];
+      const variations = ['meaning', 'reading', 'kanji', 'blitz'];
       qType = variations[Math.floor(Math.random() * variations.length)];
     }
 
@@ -7812,8 +7804,6 @@ const DojoEngine = {
       qData = this.buildReadingQuestion(target);
     } else if (qType === 'kanji') {
       qData = this.buildKanjiQuestion(target);
-    } else if (qType === 'onkun') {
-      qData = this.buildOnKunQuestion(target);
     } else if (qType === 'blitz') {
       qData = this.buildBlitzQuestion(target);
     } else {
@@ -7863,34 +7853,71 @@ const DojoEngine = {
   },
 
   buildReadingQuestion: function(target) {
-    const correctReading = this.getValidReading(target);
+    const hasValidKun = target.kun && target.kun !== '-' && target.kun.trim() !== '';
+    const hasValidOn = target.on && target.on !== '-' && target.on.trim() !== '';
+
+    const hasBoth = hasValidKun && hasValidOn;
+    const askOnyomi = hasBoth ? (Math.random() > 0.5) : hasValidOn;
+
+    let targetReading = '';
+    let badge = '';
+    let promptSub = '';
+    let feedbackCorrect = '';
+    let feedbackWrong = '';
+
+    if (hasBoth) {
+      if (askOnyomi) {
+        targetReading = target.on.split(',')[0].trim();
+        badge = '🗣️ Tebak Bacaan (Onyomi)';
+        promptSub = `Bagaimana bacaan <b>ONYOMI</b> (bunyi Cina) dari kanji <b>${target.k}</b>?`;
+        feedbackCorrect = `Bagus! Bacaan Onyomi kanji <b>${target.k}</b> adalah <b>${targetReading}</b>.`;
+        feedbackWrong = `Kurang tepat! Bacaan Onyomi kanji <b>${target.k}</b> adalah <b>${targetReading}</b>.`;
+      } else {
+        targetReading = target.kun.split(',')[0].trim();
+        badge = '🗣️ Tebak Bacaan (Kunyomi)';
+        promptSub = `Bagaimana bacaan <b>KUNYOMI</b> (asli Jepang) dari kanji <b>${target.k}</b>?`;
+        feedbackCorrect = `Bagus! Bacaan Kunyomi kanji <b>${target.k}</b> adalah <b>${targetReading}</b>.`;
+        feedbackWrong = `Kurang tepat! Bacaan Kunyomi kanji <b>${target.k}</b> adalah <b>${targetReading}</b>.`;
+      }
+    } else {
+      targetReading = hasValidKun ? target.kun.split(',')[0].trim() : target.on.split(',')[0].trim();
+      badge = '🗣️ Tebak Bacaan Kanji';
+      promptSub = `Bagaimana cara membaca kanji <b>${target.k}</b> (${target.a})?`;
+      feedbackCorrect = `Bagus! Kanji <b>${target.k}</b> dibaca <b>${targetReading}</b>.`;
+      feedbackWrong = `Salah tebas! Kanji <b>${target.k}</b> dibaca <b>${targetReading}</b>.`;
+    }
+
+    // Cari pengecoh yang sesuai tipe bacaan (Katakana jika Onyomi, Hiragana jika Kunyomi)
     const distractors = KANJI_CATALOG.filter(k => {
       if (k.k === target.k) return false;
-      const r = this.getValidReading(k);
-      return r && r !== '-' && r !== correctReading;
+      const r = askOnyomi ? k.on : k.kun;
+      return r && r !== '-' && r.trim() !== '' && r.split(',')[0].trim() !== targetReading;
     });
     this.shuffle(distractors);
 
-    const uniqueChoices = [correctReading];
+    const choices = [targetReading];
     for (const d of distractors) {
-      const r = this.getValidReading(d);
-      if (r && r !== '-' && !uniqueChoices.includes(r)) {
-        uniqueChoices.push(r);
+      const raw = askOnyomi ? d.on : d.kun;
+      if (raw && raw !== '-' && raw.trim() !== '') {
+        const r = raw.split(',')[0].trim();
+        if (r && r !== '-' && !choices.includes(r)) {
+          choices.push(r);
+        }
       }
-      if (uniqueChoices.length === 4) break;
+      if (choices.length === 4) break;
     }
-    this.shuffle(uniqueChoices);
+    this.shuffle(choices);
 
     return {
       type: 'reading',
-      badge: '🗣️ Tebak Bacaan Kanji',
+      badge: badge,
       promptKanji: target.k,
-      promptSub: `Bagaimana cara membaca kanji <b>${target.k}</b> (${target.a})?`,
-      choices: uniqueChoices,
-      correct: correctReading,
-      feedbackCorrect: `Bagus! Kanji <b>${target.k}</b> dibaca <b>${correctReading}</b>.`,
-      feedbackWrong: `Salah tebas! Kanji <b>${target.k}</b> dibaca <b>${correctReading}</b>.`,
-      audioToSpeak: correctReading.replace(/[\.・\-]/g, ''),
+      promptSub: promptSub,
+      choices: choices,
+      correct: targetReading,
+      feedbackCorrect: feedbackCorrect,
+      feedbackWrong: feedbackWrong,
+      audioToSpeak: targetReading.replace(/[\.・\-]/g, ''),
       isKanjiChoices: false
     };
   },
@@ -7919,52 +7946,6 @@ const DojoEngine = {
       feedbackWrong: `Meleset! Kanji untuk "<b>${target.a}</b>" adalah <b>${target.k}</b>.`,
       audioToSpeak: target.k,
       isKanjiChoices: true
-    };
-  },
-
-  buildOnKunQuestion: function(target) {
-    let hasValidOn = target.on && target.on !== '-' && target.on.trim() !== '';
-    let hasValidKun = target.kun && target.kun !== '-' && target.kun.trim() !== '';
-
-    let askOnyomi = Math.random() > 0.5;
-    if (!hasValidOn) askOnyomi = false;
-    if (!hasValidKun) askOnyomi = true;
-
-    let targetRaw = askOnyomi ? target.on : target.kun;
-    let targetReading = targetRaw.split(',')[0].trim();
-    let label = askOnyomi ? 'ONYOMI (Bunyi Cina)' : 'KUNYOMI (Asli Jepang)';
-
-    const distractors = KANJI_CATALOG.filter(k => {
-      if (k.k === target.k) return false;
-      const r = askOnyomi ? k.on : k.kun;
-      return r && r !== '-' && r.trim() !== '' && r.split(',')[0].trim() !== targetReading;
-    });
-    this.shuffle(distractors);
-
-    const choices = [targetReading];
-    for (const d of distractors) {
-      const raw = askOnyomi ? d.on : d.kun;
-      if (raw && raw !== '-' && raw.trim() !== '') {
-        const r = raw.split(',')[0].trim();
-        if (r && r !== '-' && !choices.includes(r)) {
-          choices.push(r);
-        }
-      }
-      if (choices.length === 4) break;
-    }
-    this.shuffle(choices);
-
-    return {
-      type: 'onkun',
-      badge: `💡 ${label}`,
-      promptKanji: target.k,
-      promptSub: `Manakah bacaan <b>${label}</b> untuk kanji <b>${target.k}</b> (${target.a})?`,
-      choices: choices,
-      correct: targetReading,
-      feedbackCorrect: `Tepat! ${label} dari <b>${target.k}</b> adalah <b>${targetReading}</b>.`,
-      feedbackWrong: `Keliru! ${label} dari <b>${target.k}</b> adalah <b>${targetReading}</b>.`,
-      audioToSpeak: targetReading.split(',')[0].replace(/[\.・\-]/g, ''),
-      isKanjiChoices: false
     };
   },
 
