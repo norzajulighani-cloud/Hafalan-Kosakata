@@ -3,244 +3,1336 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Modul Kata Sifat - YOMIKATA</title>
+<title>Modul Kata Sifat Kensei (Keiyoushi) - YOMIKATA N5</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Serif+JP:wght@600;700;900&display=swap" rel="stylesheet">
 <style>
-  :root { 
-    --bg-main: #0b1120;
-    --card-bg: #1e293b;
-    --primary: #38bdf8; 
-    --success: #22c55e; 
-    --danger: #ef4444; 
-    --warning: #eab308;
+  :root {
+    --bg-base: #050813;
+    --bg-surface: rgba(13, 22, 45, 0.82);
+    --bg-card: rgba(16, 26, 54, 0.75);
+    --bg-card-hover: rgba(24, 38, 76, 0.92);
+    --primary: #38bdf8;
+    --primary-glow: rgba(56, 189, 248, 0.35);
+    --success: #22c55e;
+    --success-glow: rgba(34, 197, 94, 0.35);
+    --warning: #f59e0b;
     --gold: #fbbf24;
-    --text-main: #f8fafc; 
+    --gold-glow: rgba(251, 191, 36, 0.45);
+    --danger: #ef4444;
+    --danger-glow: rgba(239, 68, 68, 0.4);
+    --purple: #c084fc;
+    --purple-glow: rgba(192, 132, 252, 0.35);
+    --text-main: #f8fafc;
     --text-sub: #94a3b8;
+    --text-muted: #64748b;
+    --border-glass: rgba(255, 255, 255, 0.08);
+    --border-accent: rgba(56, 189, 248, 0.35);
   }
-  
-  body { font-family: 'Segoe UI', sans-serif; background: var(--bg-main); color: var(--text-main); margin: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 15px 10px 80px 10px; overflow-x: hidden; }
-  .container { width: 100%; max-width: 550px; position: relative; }
-  button, input { touch-action: manipulation; font-family: inherit; }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: var(--bg-base);
+    background-image: 
+      radial-gradient(circle at 50% 0%, rgba(30, 58, 138, 0.38) 0%, transparent 60%),
+      radial-gradient(circle at 10% 35%, rgba(192, 132, 252, 0.12) 0%, transparent 40%),
+      radial-gradient(circle at 90% 70%, rgba(56, 189, 248, 0.12) 0%, transparent 40%),
+      linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 100% 100%, 36px 36px, 36px 36px;
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 14px 12px 60px 12px;
+    overflow-x: hidden;
+  }
+
+  .container { width: 100%; max-width: 680px; position: relative; }
+  button, input, select { touch-action: manipulation; font-family: inherit; }
   .hidden { display: none !important; }
 
-  /* HEADER MINIMALIS */
-  .top-header { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 20px; }
-  .btn-header { background: #1e293b; color: white; border: 1px solid #334155; width: 42px; height: 42px; border-radius: 12px; font-size: 20px; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); -webkit-tap-highlight-color: transparent; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
-  .btn-header:active { transform: scale(0.85); box-shadow: 0 2px 3px rgba(0,0,0,0.3); }
-  .btn-header.spin-anim { transform: rotate(180deg) scale(0.5); opacity: 0; }
-  .header-title { font-weight: 800; font-size: 18px; color: var(--gold); letter-spacing: 2px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); }
+  ::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.3); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(56, 189, 248, 0.6); }
 
-  /* BOTTOM NAVIGATION BAR */
-  .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); border-top: 1px solid #334155; display: flex; padding: 8px 0 15px 0; z-index: 100; justify-content: space-around; box-shadow: 0 -5px 15px rgba(0,0,0,0.5); }
-  .b-nav-btn { flex: 1; background: transparent; border: none; color: var(--text-sub); font-size: 11px; font-weight: bold; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); -webkit-tap-highlight-color: transparent; }
-  .b-nav-icon { font-size: 24px; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); filter: grayscale(100%); opacity: 0.5; }
-  .b-nav-btn:active { transform: scale(0.92); }
-  .b-nav-btn.active#btn-mode-sifati { color: var(--primary); }
-  .b-nav-btn.active#btn-mode-sifati .b-nav-icon { filter: none; opacity: 1; transform: translateY(-4px) scale(1.15); }
-  .b-nav-btn.active#btn-mode-sifatna { color: var(--success); }
-  .b-nav-btn.active#btn-mode-sifatna .b-nav-icon { filter: none; opacity: 1; transform: translateY(-4px) scale(1.15); }
-
-  /* Tab Menu Utama */
-  .nav-tabs { display: flex; gap: 5px; margin-bottom: 10px; justify-content: center; background: transparent;}
-  .tab-btn { background: #1e293b; color: var(--text-sub); border: 1px solid #334155; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 13px; flex-grow: 1; transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); text-align: center; -webkit-tap-highlight-color: transparent; }
-  .tab-btn:active { transform: scale(0.95); }
-  .tab-btn.active { color: var(--gold); border: 1px solid var(--gold); background: rgba(251, 191, 36, 0.1); box-shadow: 0 4px 12px rgba(251, 191, 36, 0.15); transform: translateY(-2px); }
-
-  /* Sub Navigasi Sesi */
-  .sub-nav { display: flex; gap: 5px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 5px; scrollbar-width: none; transition: opacity 0.3s ease; }
-  .sub-nav::-webkit-scrollbar { display: none; }
-  .sub-btn { background: rgba(255,255,255,0.05); color: var(--text-sub); border: 1px solid rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; cursor: pointer; white-space: nowrap; transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); -webkit-tap-highlight-color: transparent; }
-  .sub-btn:active { transform: scale(0.92); }
-  .sub-btn.active { background: var(--primary); color: #000; border-color: var(--primary); box-shadow: 0 0 10px rgba(56, 189, 248, 0.4); transform: translateY(-2px); }
-
-  /* Animasi Transisi Mulus */
-  .fade-in-up { animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-  .fade-out-down { animation: fadeOutDown 0.25s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards; }
-  .pop-in { animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-  .slide-in-right { animation: slideInRight 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
-  .slide-out-left { animation: slideOutLeft 0.25s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards; }
-  .slide-in-left { animation: slideInLeft 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
-  .slide-out-right { animation: slideOutRight 0.25s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards; }
-  
-  @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes fadeOutDown { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(20px); } }
-  @keyframes popIn { 0% { opacity: 0; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1); } }
-  @keyframes slideInRight { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: translateX(0); } }
-  @keyframes slideOutLeft { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(-50px); } }
-  @keyframes slideInLeft { from { opacity: 0; transform: translateX(-50px); } to { opacity: 1; transform: translateX(0); } }
-  @keyframes slideOutRight { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(50px); } }
-
-  /* Area Konten Umum */
-  .content-section { background: var(--card-bg); border-radius: 20px; padding: 25px 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); min-height: 400px; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid rgba(255,255,255,0.05); overflow: hidden; position: relative; }
-  .progress-text { font-size: 14px; font-weight: bold; letter-spacing: 1px; margin-bottom: 15px; text-transform: uppercase; }
-
-  /* Flashcard UI */
-  .content-hafalan { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; position: relative; padding-top: 30px; }
-  .kanji-text { font-size: clamp(35px, 8vw, 55px); font-weight: bold; margin: 5px 0 15px 0; color: var(--text-main); text-shadow: 0 4px 10px rgba(0,0,0,0.5); cursor: pointer; transition: all 0.3s ease; -webkit-tap-highlight-color: transparent; line-height: 1.2; }
-  .hira-text { font-size: clamp(14px, 4vw, 18px); color: var(--warning); margin-bottom: 5px; font-weight: bold; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-  .arti-text { font-size: clamp(15px, 4.5vw, 20px); color: var(--text-sub); font-style: italic; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-  
-  .blur-hide { filter: blur(8px); opacity: 0; transform: translateY(10px); pointer-events: none; }
-  .blur-show { filter: blur(0); opacity: 1; transform: translateY(0); pointer-events: auto; }
-  .fc-revealed { animation: popKanji 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; color: var(--gold); }
-  .hira-hide { opacity: 0; transform: translateY(15px) scale(0.5); pointer-events: none; }
-  .hira-show { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
-
-  .pulse-hint { animation: pulseHint 2s infinite; }
-  @keyframes pulseHint { 0%, 100% { transform: scale(1); color: var(--text-main); } 50% { transform: scale(1.05); color: var(--primary); } }
-
-  /* Floating Bubble UI */
-  .btn-bubble { position: absolute; right: 0px; top: -15px; width: 35px; height: 35px; border-radius: 50%; background: rgba(34, 197, 94, 0.2); border: 1px solid var(--success); color: white; font-size: 18px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 10; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); -webkit-tap-highlight-color: transparent;}
-  .btn-bubble:hover { background: rgba(34, 197, 94, 0.4); transform: scale(1.1); }
-  .btn-bubble:active { transform: scale(0.9); }
-  
-  .bubble-popup { 
-    position: absolute; top: 30px; right: 0px; background: rgba(15, 23, 42, 0.95); 
-    border: 2px solid var(--success); padding: 15px; border-radius: 12px; width: 250px; 
-    text-align: left; font-size: 13px; color: var(--text-main); z-index: 11; 
-    box-shadow: 0 10px 25px rgba(0,0,0,0.7); backdrop-filter: blur(5px); line-height: 1.5;
-    opacity: 0; visibility: hidden; transform: translateY(-15px) scale(0.9);
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    transform-origin: top right;
+  /* ==========================================
+     1. MASTER TOP NAVIGATION & TELEMETRY
+     ========================================== */
+  .top-navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 6px 2px 14px 2px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: transparent;
   }
-  .bubble-popup.show-popup { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
 
-  /* Buku Tabel UI */
-  .book-container { flex-grow: 1; display: flex; flex-direction: column; width: 100%; height: 100%; text-align: left; }
-  .book-page { flex-grow: 1; overflow-y: auto; overflow-x: hidden; padding-right: 5px; scrollbar-width: thin; scrollbar-color: var(--success) transparent; }
-  .book-title { color: var(--success); font-size: 20px; font-weight: bold; margin-bottom: 10px; border-bottom: 2px dashed rgba(34, 197, 94, 0.3); padding-bottom: 8px;}
-  .book-narrative { font-size: 14px; line-height: 1.6; color: var(--text-main); margin-bottom: 20px; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 12px; border-left: 4px solid var(--success); }
-  
-  .tabel-waktu { width: 100%; border-collapse: collapse; font-size: 16px; margin-bottom: 10px; background: rgba(255,255,255,0.02); border-radius: 8px; table-layout: auto; }
-  .tabel-waktu th { background: rgba(34, 197, 94, 0.15); color: var(--success); padding: 12px; border-bottom: 2px solid var(--success); text-align: left; position: sticky; top: 0; backdrop-filter: blur(5px); z-index: 5;}
-  .tabel-waktu td { padding: 12px; border-bottom: 1px dashed rgba(255,255,255,0.05); vertical-align: middle; word-break: break-word;}
+  .nav-left { display: flex; align-items: center; gap: 8px; }
+  .btn-back {
+    color: var(--primary);
+    font-size: 13.5px;
+    font-weight: 800;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    text-decoration: none;
+    padding: 4px 6px;
+    background: transparent;
+    border: none;
+  }
+  .btn-back:hover {
+    color: #fff;
+    transform: translateX(-2px);
+    text-shadow: 0 0 10px var(--primary-glow);
+  }
+  .btn-back:active { transform: scale(0.95); }
+
+  .nav-title-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+  .nav-title {
+    font-size: 16px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    background: linear-gradient(135deg, #ffffff 40%, #bae6fd 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0;
+  }
+  .nav-master-badge {
+    font-size: 10.5px;
+    font-weight: 800;
+    color: var(--gold);
+    background: rgba(251, 191, 36, 0.12);
+    border: 1px solid rgba(251, 191, 36, 0.3);
+    padding: 1px 8px;
+    border-radius: 10px;
+  }
+
+  .nav-right { display: flex; align-items: center; gap: 6px; }
+  .btn-rumus-toggle {
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .btn-rumus-toggle:hover {
+    background: rgba(56, 189, 248, 0.22);
+    border-color: var(--primary);
+    box-shadow: 0 0 14px var(--primary-glow);
+    transform: translateY(-1px);
+  }
+  .btn-rumus-toggle:active { transform: scale(0.95); }
+
+  /* Mastery Progress Track */
+  .mastery-progress-track {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+  .mastery-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--primary) 0%, var(--gold) 100%);
+    transition: width 0.4s ease;
+  }
+
+  /* ==========================================
+     2. MAIN MODE TABS (Single Clean Bar)
+     ========================================== */
+  .main-nav-tabs {
+    display: flex;
+    background: rgba(10, 16, 34, 0.88);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    padding: 5px;
+    border-radius: 16px;
+    border: 1px solid var(--border-glass);
+    gap: 6px;
+    margin-bottom: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  }
+  .tab-main-btn {
+    flex: 1;
+    background: transparent;
+    color: var(--text-sub);
+    border: 1px solid transparent;
+    padding: 10px 8px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 800;
+    font-size: 13px;
+    text-align: center;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    user-select: none;
+    white-space: nowrap;
+  }
+  .tab-main-btn:hover { color: #fff; background: rgba(255, 255, 255, 0.05); }
+  .tab-main-btn.active {
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.22) 0%, rgba(99, 102, 241, 0.2) 100%);
+    color: var(--primary);
+    border-color: rgba(56, 189, 248, 0.45);
+    box-shadow: 0 4px 16px rgba(56, 189, 248, 0.22);
+    transform: translateY(-1px);
+  }
+  .tab-main-btn.active.mode-na-accent {
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.22) 0%, rgba(16, 185, 129, 0.2) 100%);
+    color: var(--success);
+    border-color: rgba(34, 197, 94, 0.45);
+    box-shadow: 0 4px 16px rgba(34, 197, 94, 0.22);
+  }
+
+  /* ==========================================
+     3. UNIFIED HORIZONTAL FILTER CHIP STREAM
+     (Category Sifat-i/na + Sesi in ONE neat strip!)
+     ========================================== */
+  .filter-stream-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    overflow-x: auto;
+    padding: 2px 2px 10px 2px;
+    margin-bottom: 12px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .filter-stream-bar::-webkit-scrollbar { display: none; }
+
+  .filter-chip-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .filter-pill {
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-sub);
+    border: 1px solid var(--border-glass);
+    padding: 7px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .filter-pill:hover { color: #fff; border-color: rgba(255, 255, 255, 0.25); background: rgba(255, 255, 255, 0.08); }
+  .filter-pill:active { transform: scale(0.95); }
+
+  .filter-pill.active#chip-cat-i {
+    background: rgba(56, 189, 248, 0.18);
+    color: var(--primary);
+    border-color: var(--primary);
+    box-shadow: 0 0 14px rgba(56, 189, 248, 0.3);
+  }
+  .filter-pill.active#chip-cat-na {
+    background: rgba(34, 197, 94, 0.18);
+    color: var(--success);
+    border-color: var(--success);
+    box-shadow: 0 0 14px rgba(34, 197, 94, 0.3);
+  }
+
+  .filter-divider {
+    width: 1px;
+    height: 22px;
+    background: rgba(255, 255, 255, 0.15);
+    margin: 0 2px;
+    flex-shrink: 0;
+  }
+
+  .sesi-pill {
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--text-sub);
+    border: 1px solid var(--border-glass);
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 11.5px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .sesi-pill:hover { color: #fff; border-color: rgba(255, 255, 255, 0.2); }
+  .sesi-pill:active { transform: scale(0.95); }
+  .sesi-pill.active {
+    background: rgba(56, 189, 248, 0.16);
+    color: #fff;
+    border-color: var(--primary);
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+  }
+  .sesi-pill.active.pill-na {
+    background: rgba(34, 197, 94, 0.16);
+    color: #fff;
+    border-color: var(--success);
+    box-shadow: 0 0 12px rgba(34, 197, 94, 0.25);
+  }
+
+  /* ==========================================
+     4. UNBOXED RPG ARENA CARD (MATCHING KANJI.HTML)
+     No Russian Dolls! Single Card Container!
+     ========================================== */
+  .dojo-arena-card {
+    background: linear-gradient(170deg, rgba(22, 34, 68, 0.96) 0%, rgba(10, 16, 36, 0.98) 100%);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    border-radius: 24px;
+    padding: 22px 18px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75), 0 0 30px rgba(56, 189, 248, 0.12);
+    min-height: 480px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    transition: border-color 0.3s;
+  }
+  .dojo-arena-card.na-mode-border {
+    border-color: rgba(34, 197, 94, 0.4);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75), 0 0 30px rgba(34, 197, 94, 0.12);
+  }
+
+  /* Header Bar inside Card */
+  .fc-header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+    width: 100%;
+  }
+  .fc-room-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    padding: 4px 10px;
+    border-radius: 9px;
+    font-size: 11.5px;
+    font-weight: 800;
+    color: var(--primary);
+  }
+  .fc-room-tag.na-tag {
+    background: rgba(34, 197, 94, 0.1);
+    border-color: rgba(34, 197, 94, 0.25);
+    color: var(--success);
+  }
+
+  .fc-header-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .fc-counter-badge {
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--text-sub);
+    letter-spacing: 0.5px;
+  }
+  .btn-star-mark {
+    background: rgba(251, 191, 36, 0.12);
+    border: 1px solid rgba(251, 191, 36, 0.35);
+    color: var(--gold);
+    font-size: 14px;
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .btn-star-mark:hover { transform: scale(1.1); box-shadow: 0 0 12px var(--gold-glow); }
+  .btn-star-mark.is-mastered {
+    background: var(--gold);
+    color: #000;
+    box-shadow: 0 0 16px var(--gold-glow);
+  }
+
+  /* Body of Flashcard (Floating, Unboxed) */
+  .fc-stage-box {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 8px 0;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    width: 100%;
+  }
+
+  .fc-kanji-big {
+    font-family: 'Noto Serif JP', 'Noto Sans JP', serif;
+    font-size: clamp(48px, 12vw, 68px);
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.15;
+    margin: 6px 0 4px;
+    text-shadow: 0 0 35px rgba(56, 189, 248, 0.45);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    animation: floatKanji 4s ease-in-out infinite;
+  }
+  @keyframes floatKanji {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+  .fc-stage-box:hover .fc-kanji-big {
+    transform: scale(1.05) translateY(-3px);
+    color: #fff;
+  }
+
+  .fc-hira-text {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: clamp(16px, 4.5vw, 20px);
+    color: var(--gold);
+    font-weight: 800;
+    margin-bottom: 4px;
+    text-shadow: 0 0 12px rgba(251, 191, 36, 0.3);
+  }
+
+  .fc-arti-text {
+    font-size: clamp(16px, 4.2vw, 19px);
+    color: #f1f5f9;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  /* 4 Forms Matrix (Clean Glass Tiles, NOT Boxes inside Boxes) */
+  .fc-grid-two {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 10px;
+    text-align: left;
+  }
+
+  .inflection-cell {
+    background: rgba(6, 10, 24, 0.72);
+    border: 1px solid var(--border-glass);
+    border-radius: 12px;
+    padding: 8px 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
+  }
+  .inflection-cell:hover {
+    border-color: rgba(56, 189, 248, 0.45);
+    background: rgba(56, 189, 248, 0.1);
+    transform: translateY(-1px);
+  }
+  .inf-label {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.6px;
+    color: var(--text-sub);
+    margin-bottom: 3px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .inf-label span:first-child { color: var(--primary); }
+  .inf-val {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    color: #fff;
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+    flex-wrap: wrap;
+  }
+  .inf-sub {
+    font-size: 10.5px;
+    color: var(--gold);
+    font-weight: 700;
+  }
+  .inf-speaker {
+    font-size: 11px;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+  }
+  .inflection-cell:hover .inf-speaker { opacity: 1; }
+
+  /* Antonym Badge / Tag (Seamless, Unboxed) */
+  .fc-antonym-strip {
+    width: 100%;
+    margin-top: 8px;
+    background: rgba(251, 191, 36, 0.08);
+    border: 1px solid rgba(251, 191, 36, 0.25);
+    border-radius: 12px;
+    padding: 7px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .fc-antonym-strip:hover {
+    background: rgba(251, 191, 36, 0.16);
+    border-color: var(--gold);
+  }
+  .antonym-tag-label {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .antonym-pair-text {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 12.5px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  /* Note banner */
+  .fc-note-strip {
+    width: 100%;
+    margin-top: 6px;
+    background: rgba(56, 189, 248, 0.08);
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    border-radius: 10px;
+    padding: 6px 10px;
+    font-size: 11px;
+    color: #bae6fd;
+    text-align: left;
+    line-height: 1.4;
+  }
+
+  .tap-hint-pill {
+    margin-top: 10px;
+    font-size: 11.5px;
+    color: var(--text-sub);
+    animation: pulseHint 2s infinite;
+  }
+  @keyframes pulseHint {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.02); color: var(--primary); }
+  }
+
+  .shield-blur {
+    filter: blur(12px);
+    opacity: 0.12;
+    transform: translateY(10px) scale(0.96);
+    pointer-events: none;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .shield-blur.revealed {
+    filter: blur(0);
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+
+  /* Dojo Navigation Bottom Controls (Matching kanji.html) */
+  .dojo-nav-controls {
+    display: flex;
+    gap: 9px;
+    width: 100%;
+    margin-top: 14px;
+  }
+  .btn-dn {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-glass);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 800;
+    padding: 11px 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+  }
+  .btn-dn:disabled { opacity: 0.35; cursor: not-allowed; }
+  .btn-dn:not(:disabled):hover {
+    background: rgba(56, 189, 248, 0.2);
+    border-color: var(--primary);
+    transform: translateY(-2px);
+  }
+  .btn-dn:not(:disabled):active { transform: scale(0.95); }
+
+  .btn-dn-next {
+    flex: 2;
+    background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+    border-color: var(--primary);
+    color: #fff;
+    box-shadow: 0 4px 18px rgba(2, 132, 199, 0.45);
+  }
+  .btn-dn-next:hover {
+    background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+    color: #000;
+    box-shadow: 0 0 24px var(--primary-glow);
+  }
+  .btn-dn-next.na-btn {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    border-color: var(--success);
+    box-shadow: 0 4px 18px rgba(5, 150, 105, 0.45);
+  }
+  .btn-dn-next.na-btn:hover {
+    background: linear-gradient(135deg, #22c55e 0%, #059669 100%);
+    color: #000;
+    box-shadow: 0 0 24px var(--success-glow);
+  }
+
+  /* ==========================================
+     5. ARENA KUIS BERVARIASI (Compact Dropdown Selector)
+     No Tabs-in-Tabs! Sleek dropdown like kanji.html!
+     ========================================== */
+  .quiz-top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    position: relative;
+    z-index: 20;
+  }
+  .quiz-telemetry-cluster {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .quiz-stat-pill {
+    background: rgba(56, 189, 248, 0.12);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    color: var(--primary);
+    font-size: 11.5px;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .quiz-stat-pill.score-pill {
+    background: rgba(34, 197, 94, 0.14);
+    border-color: rgba(34, 197, 94, 0.35);
+    color: #86efac;
+  }
+
+  /* Compact Drill Mode Dropdown (Kanji.html style) */
+  .drill-mode-dropdown-wrap {
+    position: relative;
+  }
+  .btn-drill-dropdown {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  }
+  .btn-drill-dropdown:hover,
+  .btn-drill-dropdown.active {
+    background: rgba(56, 189, 248, 0.2);
+    border-color: var(--primary);
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.3);
+  }
+  .dropdown-caret {
+    font-size: 10px;
+    color: var(--primary);
+    transition: transform 0.2s;
+  }
+  .btn-drill-dropdown.active .dropdown-caret {
+    transform: rotate(180deg);
+  }
+
+  .drill-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 250px;
+    background: linear-gradient(165deg, rgba(16, 26, 56, 0.98) 0%, rgba(8, 14, 32, 0.99) 100%);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    border-radius: 16px;
+    padding: 8px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.9), 0 0 25px rgba(56, 189, 248, 0.2);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    z-index: 100;
+    animation: popDropdown 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes popDropdown {
+    from { opacity: 0; transform: translateY(-8px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .dd-header {
+    font-size: 9.5px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    color: var(--text-sub);
+    padding: 4px 8px 6px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    margin-bottom: 2px;
+  }
+  .dd-item {
+    background: transparent;
+    border: 1px solid transparent;
+    padding: 8px 10px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.18s;
+  }
+  .dd-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+  .dd-item.active {
+    background: rgba(56, 189, 248, 0.18);
+    border-color: rgba(56, 189, 248, 0.45);
+  }
+  .dd-icon { font-size: 16px; width: 24px; text-align: center; }
+  .dd-text { flex: 1; }
+  .dd-title { font-size: 12px; font-weight: 800; color: #fff; }
+  .dd-item.active .dd-title { color: var(--primary); }
+  .dd-desc { font-size: 10px; color: var(--text-sub); line-height: 1.2; margin-top: 1px; }
+
+  /* Quiz Question and Answers */
+  .quiz-stage-box {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 10px 0;
+  }
+  .quiz-q-text {
+    font-size: 17px;
+    font-weight: 800;
+    line-height: 1.45;
+    color: var(--text-main);
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .quiz-options-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    width: 100%;
+    max-width: 480px;
+  }
+  @media (min-width: 480px) {
+    .quiz-options-grid.grid-two { grid-template-columns: 1fr 1fr; }
+  }
+
+  .btn-quiz-opt {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1.5px solid var(--border-glass);
+    border-radius: 14px;
+    padding: 12px 14px;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    text-align: center;
+  }
+  .btn-quiz-opt:hover:not(:disabled) {
+    border-color: var(--primary);
+    background: rgba(56, 189, 248, 0.16);
+    transform: translateY(-2px);
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.25);
+  }
+  .btn-quiz-opt:active:not(:disabled) { transform: scale(0.96); }
+
+  /* Tactile Correct Spring Animation */
+  @keyframes popCorrect {
+    0% { transform: scale(1); }
+    35% { transform: scale(1.06); }
+    65% { transform: scale(0.98); }
+    100% { transform: scale(1.02); }
+  }
+  .btn-quiz-opt.correct {
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.38) 0%, rgba(16, 185, 129, 0.48) 100%) !important;
+    border-color: #4ade80 !important;
+    color: #fff !important;
+    box-shadow: 0 0 25px rgba(74, 222, 128, 0.5) !important;
+    animation: popCorrect 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards !important;
+  }
+
+  /* Elastic Shake for Wrong Selection */
+  @keyframes elasticShake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-8px) rotate(-1deg); }
+    40% { transform: translateX(7px) rotate(1deg); }
+    60% { transform: translateX(-5px); }
+    80% { transform: translateX(3px); }
+  }
+  .btn-quiz-opt.wrong {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.38) 0%, rgba(185, 28, 28, 0.48) 100%) !important;
+    border-color: #f87171 !important;
+    color: #fecaca !important;
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.45) !important;
+    animation: elasticShake 0.42s cubic-bezier(0.36, 0.07, 0.19, 0.97) forwards !important;
+  }
+
+  .quiz-feedback-bar {
+    font-size: 14.5px;
+    font-weight: 800;
+    min-height: 28px;
+    margin-top: 12px;
+    opacity: 0;
+    transition: opacity 0.2s;
+    text-align: center;
+  }
+
+  /* Isian Input Box */
+  .isian-input-box {
+    width: 100%;
+    max-width: 440px;
+    padding: 13px 16px;
+    border-radius: 14px;
+    border: 1.5px solid rgba(255, 255, 255, 0.18);
+    background: rgba(10, 18, 38, 0.9);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 12px;
+    outline: none;
+    transition: all 0.2s;
+  }
+  .isian-input-box:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.35);
+  }
+  .btn-isian-submit {
+    background: linear-gradient(135deg, var(--primary) 0%, #0284c7 100%);
+    color: #020617;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 14.5px;
+    cursor: pointer;
+    width: 100%;
+    max-width: 440px;
+    transition: all 0.2s;
+    box-shadow: 0 4px 16px rgba(56, 189, 248, 0.25);
+  }
+  .btn-isian-submit:hover { filter: brightness(1.1); transform: translateY(-1px); }
+
+  /* ==========================================
+     6. TABEL BUKU SAKU VIEW
+     ========================================== */
+  .table-stage-box {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    text-align: left;
+  }
+  .table-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .table-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--primary);
+  }
+  .table-title.na-title { color: var(--success); }
+
+  .btn-sensor-furi {
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    border: 1px solid var(--border-glass);
+    padding: 6px 12px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 11.5px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-sensor-furi:hover { border-color: var(--primary); }
+  .btn-sensor-furi.active {
+    background: rgba(56, 189, 248, 0.15);
+    color: var(--primary);
+    border-color: var(--primary);
+  }
+
+  .tabel-waktu {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    margin-bottom: 12px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .tabel-waktu th {
+    background: rgba(56, 189, 248, 0.12);
+    color: var(--primary);
+    padding: 9px 12px;
+    border-bottom: 1px solid rgba(56, 189, 248, 0.3);
+    text-align: left;
+    font-size: 11.5px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+  }
+  .tabel-waktu.na-table th {
+    background: rgba(34, 197, 94, 0.12);
+    color: var(--success);
+    border-bottom-color: rgba(34, 197, 94, 0.3);
+  }
+  .tabel-waktu td {
+    padding: 10px 12px;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
+    vertical-align: top;
+  }
   .tabel-waktu tr:last-child td { border-bottom: none; }
-  
-  /* FURIGANA STYLES */
+
   ruby { line-height: 1.5; white-space: nowrap; }
-  .ruby-item { font-weight: bold; color: var(--text-main); font-size: 20px; cursor: pointer; display: inline-block; padding: 4px 8px; border-radius: 8px; transition: background 0.3s, color 0.3s; -webkit-tap-highlight-color: transparent; border: 1px solid transparent; }
-  .ruby-item:active { opacity: 0.7; transform: scale(0.95); }
-  .furi-anim { opacity: 0; transform: translateY(10px) scale(0.5); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); color: var(--warning); font-size: 11px; font-weight: bold; pointer-events: none; }
-  .ruby-item.revealed { animation: popKanji 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; background: rgba(251, 191, 36, 0.15); border-color: rgba(251, 191, 36, 0.3); color: var(--gold); }
-  .ruby-item.revealed .furi-anim { opacity: 1; transform: translateY(0) scale(1); }
-  .show-all-furi .ruby-item { background: rgba(251, 191, 36, 0.15); border-color: rgba(251, 191, 36, 0.3); color: var(--gold); }
-  .show-all-furi .ruby-item .furi-anim { opacity: 1 !important; transform: translateY(0) scale(1) !important; }
-  
-  @keyframes popKanji { 0% { transform: scale(1); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
-  
-  .t-arti { color: var(--text-main); font-size: 16px; font-weight: bold; display: block; margin-bottom: 4px;}
-  .contoh-box { background: rgba(56, 189, 248, 0.1); border-left: 3px solid var(--primary); padding: 8px 10px; border-radius: 4px; font-size: 13px; color: var(--text-main); margin-top: 8px; font-style: italic; }
-  .note-inline { color: var(--success); font-size: 12px; margin-top: 5px; }
-  .alert-inline { color: var(--danger); font-size: 12px; margin-top: 5px; }
-  
-  .btn-sensor { background: #334155; color: white; border: 1px solid #475569; padding: 10px; border-radius: 8px; font-weight: bold; font-size: 13px; cursor: pointer; width: 100%; margin-bottom: 15px; transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); -webkit-tap-highlight-color: transparent; }
-  .btn-sensor:active { transform: scale(0.95); }
-  .btn-sensor.active { background: rgba(56, 189, 248, 0.2); color: var(--primary); border-color: var(--primary); }
+  .ruby-item {
+    font-weight: 800;
+    color: var(--text-main);
+    font-size: 17px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 4px;
+    border-radius: 6px;
+    transition: all 0.2s;
+  }
+  .ruby-item:hover { background: rgba(255, 255, 255, 0.06); }
+  .furi-anim {
+    opacity: 0;
+    transform: translateY(6px) scale(0.6);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    color: var(--gold);
+    font-size: 11px;
+    font-weight: 800;
+    pointer-events: none;
+  }
+  .ruby-item.revealed .furi-anim,
+  .show-all-furi .ruby-item .furi-anim {
+    opacity: 1 !important;
+    transform: translateY(0) scale(1) !important;
+  }
 
-  .book-nav { display: flex; justify-content: space-between; align-items: center; background: #0f172a; padding: 10px 15px; border-radius: 12px; border: 1px solid #334155; margin-top: 15px; }
-  .book-nav-btn { background: var(--success); color: #000; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); -webkit-tap-highlight-color: transparent; }
-  .book-nav-btn:disabled { background: #334155; color: var(--text-sub); cursor: not-allowed; }
-  .book-nav-btn:not(:disabled):hover { filter: brightness(1.2); transform: translateY(-2px); }
-  .book-nav-btn:not(:disabled):active { transform: scale(0.92) translateY(2px); box-shadow: none; }
-  .book-page-text { font-size: 13px; font-weight: bold; color: var(--text-sub); letter-spacing: 1px; }
+  .btn-audio-inline {
+    background: transparent;
+    border: none;
+    color: var(--primary);
+    font-size: 13px;
+    cursor: pointer;
+    padding: 2px 4px;
+    border-radius: 6px;
+    transition: transform 0.2s;
+  }
+  .btn-audio-inline:hover { transform: scale(1.2); }
+  .t-arti { color: #f1f5f9; font-size: 13.5px; font-weight: 700; display: block; margin-bottom: 4px; }
+  .table-inf-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    margin-top: 6px;
+    font-size: 11px;
+    color: var(--text-sub);
+    background: rgba(0, 0, 0, 0.25);
+    padding: 6px 8px;
+    border-radius: 8px;
+  }
+  .tig-cell { display: flex; align-items: center; gap: 4px; }
+  .tig-tag { color: var(--gold); font-size: 9.5px; font-weight: 800; }
 
-  /* Info & Evaluasi */
-  .eval-box { background: rgba(0,0,0,0.3); padding: 20px; border-radius: 15px; margin-top: 20px; text-align: center; line-height: 1.6; border: 1px solid rgba(255,255,255,0.1); }
-  .btn-next { background: #334155; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: bold; font-size: 18px; cursor: pointer; width: 100%; margin-top: 20px; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); -webkit-tap-highlight-color: transparent; }
-  .btn-next:hover { background: #475569; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-  .btn-next:active { transform: scale(0.94) translateY(2px); box-shadow: none; }
+  /* ==========================================
+     7. MODAL CHEATSHEET RUMUS 4 BENTUK INFLEKSI
+     ========================================== */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(2, 6, 23, 0.88);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    z-index: 200;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 14px;
+    opacity: 1;
+    transition: opacity 0.2s;
+  }
+  .modal-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+    display: none;
+  }
+  .cheatsheet-card {
+    background: linear-gradient(165deg, rgba(16, 26, 56, 0.98) 0%, rgba(8, 14, 32, 0.99) 100%);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    border-radius: 22px;
+    width: 100%;
+    max-width: 560px;
+    max-height: 88vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9), 0 0 35px rgba(56, 189, 248, 0.2);
+    overflow: hidden;
+    animation: popModal 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes popModal {
+    from { opacity: 0; transform: translateY(16px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
 
-  /* Kuis UI */
-  .kuis-q { font-size: 20px; font-weight: bold; margin-bottom: 25px; line-height: 1.4; color: var(--text-main); }
-  .pg-grid { display: grid; grid-template-columns: 1fr; gap: 10px; width: 100%; }
-  .btn-opt { background: #0f172a; color: white; border: 2px solid #334155; padding: 15px; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); -webkit-tap-highlight-color: transparent; }
-  .btn-opt:not(:disabled):hover { border-color: var(--primary); transform: translateY(-2px); }
-  .btn-opt:not(:disabled):active { transform: scale(0.94) translateY(2px); }
-  .btn-opt.correct { background: rgba(34, 197, 94, 0.2); border-color: var(--success); color: var(--success); transform: scale(1.02); }
-  .btn-opt.wrong { background: rgba(239, 68, 68, 0.2); border-color: var(--danger); color: var(--danger); animation: shake 0.4s ease; }
-  @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+  .cs-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .cs-title-group { display: flex; align-items: center; gap: 8px; }
+  .cs-title-icon { font-size: 20px; }
+  .cs-title { font-size: 16px; font-weight: 800; color: #fff; }
+  .btn-cs-close {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-glass);
+    color: var(--text-sub);
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-cs-close:hover { color: #fff; border-color: var(--danger); background: rgba(239, 68, 68, 0.15); }
 
-  .input-box { width: 100%; padding: 15px; border-radius: 12px; border: 2px solid #475569; background: #0f172a; color: white; font-size: 18px; text-align: center; margin-bottom: 15px; box-sizing: border-box; transition: all 0.3s ease; }
-  .input-box:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 15px rgba(56, 189, 248, 0.2); transform: scale(1.02); }
-  .btn-submit { background: var(--primary); color: #000; border: none; padding: 14px; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; width: 100%; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); -webkit-tap-highlight-color: transparent; }
-  .btn-submit:hover { filter: brightness(1.1); transform: translateY(-2px); }
-  .btn-submit:active { transform: scale(0.94) translateY(2px); }
-  .feedback { font-size: 18px; font-weight: bold; min-height: 25px; margin-top: 15px; opacity: 0; }
+  .cs-tab-row { display: flex; gap: 8px; padding: 12px 20px 0; }
+  .cs-tab-btn {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-glass);
+    color: var(--text-sub);
+    padding: 8px 10px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .cs-tab-btn.active.i-tab {
+    background: rgba(56, 189, 248, 0.18);
+    color: var(--primary);
+    border-color: var(--primary);
+  }
+  .cs-tab-btn.active.na-tab {
+    background: rgba(34, 197, 94, 0.18);
+    color: var(--success);
+    border-color: var(--success);
+  }
+
+  .cs-body {
+    padding: 16px 20px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary) transparent;
+    line-height: 1.55;
+    font-size: 13px;
+  }
+  .cs-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0 14px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.25);
+  }
+  .cs-table th {
+    background: rgba(56, 189, 248, 0.14);
+    color: var(--primary);
+    padding: 8px 10px;
+    font-size: 11px;
+    font-weight: 800;
+    text-align: left;
+    border-bottom: 1px solid rgba(56, 189, 248, 0.25);
+  }
+  .cs-table.na-cs th {
+    background: rgba(34, 197, 94, 0.14);
+    color: var(--success);
+    border-bottom-color: rgba(34, 197, 94, 0.25);
+  }
+  .cs-table td {
+    padding: 8px 10px;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.06);
+    font-size: 12.5px;
+  }
+  .cs-table tr:last-child td { border-bottom: none; }
+
+  .cs-alert-box {
+    background: rgba(251, 191, 36, 0.1);
+    border-left: 3px solid var(--gold);
+    padding: 10px 12px;
+    border-radius: 8px;
+    color: #fef08a;
+    font-size: 12px;
+    margin-top: 10px;
+  }
+  .cs-alert-box.danger-box {
+    background: rgba(239, 68, 68, 0.1);
+    border-left-color: var(--danger);
+    color: #fca5a5;
+  }
+
+  /* Animations */
+  .fade-in-up { animation: fadeInUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+  .slide-in-right { animation: slideInRight 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+  .slide-out-left { animation: slideOutLeft 0.2s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards; }
+  .slide-in-left { animation: slideInLeft 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+  .slide-out-right { animation: slideOutRight 0.2s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards; }
+
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes slideInRight { from { opacity: 0; transform: translateX(36px); } to { opacity: 1; transform: translateX(0); } }
+  @keyframes slideOutLeft { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(-36px); } }
+  @keyframes slideInLeft { from { opacity: 0; transform: translateX(-36px); } to { opacity: 1; transform: translateX(0); } }
+  @keyframes slideOutRight { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(36px); } }
 </style>
 </head>
 <body>
 
 <div class="container">
   
-  <div class="top-header">
-    <button class="btn-header" onclick="window.location.href='index.html'">⬅️</button>
-    <div class="header-title">YOMIKATA</div>
-    <button class="btn-header" id="btn-toggle-view" onclick="Modul.toggleView()">📋</button>
+  <!-- 1. TOP NAVBAR & TELEMETRY -->
+  <header class="top-navbar">
+    <div class="nav-left">
+      <a href="index.html" class="btn-back" title="Kembali ke Yomikata Utama">
+        <span>←</span>
+        <span>Yomikata</span>
+      </a>
+    </div>
+    <div class="nav-title-group">
+      <h1 class="nav-title">🏷️ KATA SIFAT KENSEI</h1>
+      <span class="nav-master-badge" id="nav-mastered-text">⭐ Dikuasai: 0 / 165</span>
+    </div>
+    <div class="nav-right">
+      <button type="button" class="btn-rumus-toggle" onclick="Modul.openCheatsheet()" title="Panduan Rumus 4 Bentuk Infleksi">
+        <span>📜</span>
+        <span>Rumus</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mastery Progress Fill Bar -->
+  <div class="mastery-progress-track">
+    <div class="mastery-progress-fill" id="mastery-progress-fill"></div>
   </div>
 
-  <div class="nav-tabs">
-    <button class="tab-btn active" id="btn-tab-hafalan" onclick="Modul.switchTab('hafalan')">📖 Hafalan</button>
-    <button class="tab-btn" id="btn-tab-pg" onclick="Modul.switchTab('pg')">🎯 Pilgan</button>
-    <button class="tab-btn" id="btn-tab-isian" onclick="Modul.switchTab('isian')">✍️ Isian</button>
-  </div>
+  <!-- 2. MAIN MODE TABS (Single Clean Bar) -->
+  <nav class="main-nav-tabs">
+    <button type="button" class="tab-main-btn active" id="btn-tab-flashcard" onclick="Modul.switchTab('flashcard')">
+      <span>🎴</span>
+      <span>Flashcard</span>
+    </button>
+    <button type="button" class="tab-main-btn" id="btn-tab-quiz" onclick="Modul.switchTab('quiz')">
+      <span>🎯</span>
+      <span>Arena Kuis</span>
+    </button>
+    <button type="button" class="tab-main-btn" id="btn-tab-tabel" onclick="Modul.switchTab('tabel')">
+      <span>📋</span>
+      <span>Tabel Buku</span>
+    </button>
+  </nav>
 
-  <div class="sub-nav fade-in-up" id="sub-nav-sifati">
-    <button class="sub-btn active" id="btn-i-0" onclick="Modul.switchSesi(0)">Sesi 1: 1-20</button>
-    <button class="sub-btn" id="btn-i-1" onclick="Modul.switchSesi(1)">Sesi 2: 21-40</button>
-    <button class="sub-btn" id="btn-i-2" onclick="Modul.switchSesi(2)">Sesi 3: 41-60</button>
-    <button class="sub-btn" id="btn-i-3" onclick="Modul.switchSesi(3)">Sesi 4: 61-80</button>
-    <button class="sub-btn" id="btn-i-4" onclick="Modul.switchSesi(4)">Sesi 5: 81-97</button>
-  </div>
-
-  <div class="sub-nav fade-in-up hidden" id="sub-nav-sifatna">
-    <button class="sub-btn active" id="btn-na-0" onclick="Modul.switchSesi(0)">Sesi 1: 1-17</button>
-    <button class="sub-btn" id="btn-na-1" onclick="Modul.switchSesi(1)">Sesi 2: 18-34</button>
-    <button class="sub-btn" id="btn-na-2" onclick="Modul.switchSesi(2)">Sesi 3: 35-51</button>
-    <button class="sub-btn" id="btn-na-3" onclick="Modul.switchSesi(3)">Sesi 4: 52-68</button>
-  </div>
-
-  <div id="sec-hafalan" class="content-section fade-in-up"></div>
-
-  <div id="sec-pg" class="content-section hidden fade-in-up">
-    <div class="progress-text" id="pg-progress" style="color:var(--gold);">KUIS PILGAN: 1 / 20</div>
-    <div class="content-hafalan" style="justify-content: flex-start; width: 100%;">
-      <div id="pg-content-wrapper" style="width: 100%;">
-        <div class="kuis-q" id="pg-q">Memuat soal...</div>
-        <div class="pg-grid" id="pg-opts"></div>
-      </div>
-      <div class="feedback" id="pg-feedback"></div>
+  <!-- 3. UNIFIED HORIZONTAL FILTER CHIP STREAM (Category + Sesi) -->
+  <div class="filter-stream-bar">
+    <div class="filter-chip-group">
+      <button type="button" class="filter-pill active" id="chip-cat-i" onclick="Modul.switchCategory('sifati')">
+        <span>い</span>
+        <span>Sifat-i (97)</span>
+      </button>
+      <button type="button" class="filter-pill" id="chip-cat-na" onclick="Modul.switchCategory('sifatna')">
+        <span>な</span>
+        <span>Sifat-na (68)</span>
+      </button>
+    </div>
+    <div class="filter-divider"></div>
+    <div class="filter-chip-group" id="sesi-chips-wrap">
+      <!-- Generated dynamically -->
     </div>
   </div>
 
-  <div id="sec-isian" class="content-section hidden fade-in-up">
-    <div class="progress-text" id="isian-progress" style="color:var(--gold);">KUIS ISIAN: 1 / 20</div>
-    <div class="content-hafalan" style="justify-content: center; width: 100%;">
-      <div id="isian-content-wrapper" style="width: 100%;">
-        <div class="kuis-q" id="isian-q">Memuat soal...</div>
-        <div style="font-size:12px; color:var(--text-sub); margin-top:-15px; margin-bottom:15px;" id="isian-hint-teks">(Gunakan keyboard Jepang untuk Hiragana)</div>
-        <input type="text" id="isian-input" class="input-box" placeholder="Ketik jawabanmu..." autocomplete="off" onkeypress="if(event.key==='Enter') Modul.checkIsian()">
-        <button class="btn-submit" id="btn-submit-isian" onclick="Modul.checkIsian()">Kirim Jawaban</button>
+  <!-- 4. FLASHCARD STAGE (UNBOXED RPG STAGE) -->
+  <div id="sec-flashcard" class="dojo-arena-card fade-in-up">
+    <!-- Diisi via renderFC -->
+  </div>
+
+  <!-- 5. ARENA KUIS STAGE -->
+  <div id="sec-quiz" class="dojo-arena-card hidden fade-in-up">
+    <!-- Top Bar inside Quiz -->
+    <div class="quiz-top-bar">
+      <div class="quiz-telemetry-cluster">
+        <span class="quiz-stat-pill" id="quiz-progress-pill">🎯 Soal: 1 / 15</span>
+        <span class="quiz-stat-pill score-pill" id="quiz-score-pill">⭐ Skor: 0</span>
       </div>
-      <div class="feedback" id="isian-feedback"></div>
+
+      <!-- Compact Drill Mode Dropdown (Kanji.html style) -->
+      <div class="drill-mode-dropdown-wrap">
+        <button type="button" class="btn-drill-dropdown" id="btn-drill-dropdown" onclick="Modul.toggleDrillDropdown(event)">
+          <span id="drill-label-icon">🔀</span>
+          <span id="drill-label-text">Acak / Mix</span>
+          <span class="dropdown-caret">▼</span>
+        </button>
+
+        <div class="drill-dropdown-menu hidden" id="drill-dropdown-menu" onclick="event.stopPropagation()">
+          <div class="dd-header">MODE LATIHAN KUIS</div>
+          <div class="dd-item active" data-qtype="mix" onclick="Modul.selectDrillSubtype('mix', '🔀', 'Acak / Mix')">
+            <div class="dd-icon">🔀</div>
+            <div class="dd-text">
+              <div class="dd-title">Acak / Campuran</div>
+              <div class="dd-desc">Kombinasi infleksi, lawan kata, dan arti</div>
+            </div>
+          </div>
+          <div class="dd-item" data-qtype="inflection" onclick="Modul.selectDrillSubtype('inflection', '🔄', '4 Infleksi')">
+            <div class="dd-icon">🔄</div>
+            <div class="dd-text">
+              <div class="dd-title">4 Perubahan Bentuk</div>
+              <div class="dd-desc">Latihan rumus sekarang, lampau, & negatif</div>
+            </div>
+          </div>
+          <div class="dd-item" data-qtype="antonym" onclick="Modul.selectDrillSubtype('antonym', '⚖️', 'Lawan Kata')">
+            <div class="dd-icon">⚖️</div>
+            <div class="dd-text">
+              <div class="dd-title">Lawan Kata (Antonym)</div>
+              <div class="dd-desc">Tebak pasangan antonim bahasa Jepang</div>
+            </div>
+          </div>
+          <div class="dd-item" data-qtype="meaning" onclick="Modul.selectDrillSubtype('meaning', '🎯', 'Tebak Arti')">
+            <div class="dd-icon">🎯</div>
+            <div class="dd-text">
+              <div class="dd-title">Arti & Cara Baca</div>
+              <div class="dd-desc">Tebak hiragana dan makna bahasa Indonesia</div>
+            </div>
+          </div>
+          <div class="dd-item" data-qtype="isian" onclick="Modul.selectDrillSubtype('isian', '✍️', 'Isian Bebas')">
+            <div class="dd-icon">✍️</div>
+            <div class="dd-text">
+              <div class="dd-title">Tantangan Isian Bebas</div>
+              <div class="dd-desc">Ketik langsung tanpa bantuan pilihan ganda</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <!-- Question Stage -->
+    <div class="quiz-stage-box" id="quiz-stage-box">
+      <div id="quiz-content-wrapper" style="width:100%; display:flex; flex-direction:column; align-items:center;">
+        <div class="quiz-q-text" id="quiz-q-text">Memuat soal...</div>
+        <div class="quiz-options-grid" id="quiz-options-container"></div>
+        <div id="quiz-isian-container" class="hidden" style="width:100%; display:flex; flex-direction:column; align-items:center;">
+          <input type="text" id="quiz-isian-input" class="isian-input-box" placeholder="Ketik jawabanmu..." autocomplete="off" onkeypress="if(event.key==='Enter') Modul.checkIsianSubmit()">
+          <button type="button" class="btn-isian-submit" id="btn-submit-isian" onclick="Modul.checkIsianSubmit()">Kirim Jawaban</button>
+        </div>
+      </div>
+      <div class="quiz-feedback-bar" id="quiz-feedback-bar"></div>
+    </div>
+  </div>
+
+  <!-- 6. TABEL BUKU SAKU STAGE -->
+  <div id="sec-tabel" class="dojo-arena-card hidden fade-in-up">
+    <!-- Diisi via renderTabel -->
   </div>
 
 </div>
 
-<div class="bottom-nav">
-  <button class="b-nav-btn active" id="btn-mode-sifati" onclick="Modul.switchMode('sifati')">
-    <span class="b-nav-icon">い</span>
-    <span>Sifat-i</span>
-  </button>
-  <button class="b-nav-btn" id="btn-mode-sifatna" onclick="Modul.switchMode('sifatna')">
-    <span class="b-nav-icon">な</span>
-    <span>Sifat-na</span>
-  </button>
+<!-- 7. MODAL CHEATSHEET RUMUS 4 BENTUK INFLEKSI -->
+<div id="cheatsheet-modal" class="modal-overlay hidden" onclick="if(event.target === this) Modul.closeCheatsheet()">
+  <div class="cheatsheet-card">
+    <div class="cs-header">
+      <div class="cs-title-group">
+        <span class="cs-title-icon">📜</span>
+        <span class="cs-title">Rumus 4 Bentuk Kata Sifat</span>
+      </div>
+      <button type="button" class="btn-cs-close" onclick="Modul.closeCheatsheet()" title="Tutup">✕</button>
+    </div>
+
+    <div class="cs-tab-row">
+      <button type="button" class="cs-tab-btn active i-tab" id="cs-tab-i" onclick="Modul.switchCheatsheetTab('i')">Sifat-i (い-Keiyoushi)</button>
+      <button type="button" class="cs-tab-btn na-tab" id="cs-tab-na" onclick="Modul.switchCheatsheetTab('na')">Sifat-na (な-Keiyoushi)</button>
+    </div>
+
+    <div class="cs-body" id="cs-body-content">
+      <!-- Diisi secara dinamis -->
+    </div>
+  </div>
 </div>
 
 <script>
-// ==========================================
-// DATABASE MATERI KATA SIFAT (Diperkaya dengan Kanji)
-// ==========================================
+
 const DB_I_Adj = [
   { k: "大きい", r: "おおきい", a: "besar", grp: 0 },
   { k: "小さい", r: "ちいさい", a: "kecil", grp: 0 },
@@ -434,455 +1526,1066 @@ const Pages_Na = [
   { title: "Sifat-na (52-68)", narasi: "Kata-kata serapan dari bahasa asing (Katakana) seperti <b>ハンサム (hansamu)</b> selalu dikategorikan sebagai kata sifat-na.", groups: [3] }
 ];
 
+// ==========================================
+// PETA LAWAN KATA (ANTONYMS MAP)
+// ==========================================
+const ANTONYM_PAIRS = [
+  ['大きい', '小さい'],
+  ['長い', '短い'],
+  ['多い', '少ない'],
+  ['太い', '細い'],
+  ['厚い', '薄い'],
+  ['固い', '柔かい'],
+  ['広い', '狭い'],
+  ['新しい', '古い'],
+  ['高い', '低い'],
+  ['高い', '安い'],
+  ['早い', '遅い'],
+  ['速い', '遅い'],
+  ['遠い', '近い'],
+  ['強い', '弱い'],
+  ['熱い', '冷たい'],
+  ['暑い', '寒い'],
+  ['甘い', '辛い'],
+  ['甘い', '苦い'],
+  ['濃い', '薄い'],
+  ['美味しい', '不味い'],
+  ['明るい', '暗い'],
+  ['重い', '軽い'],
+  ['難しい', '易しい'],
+  ['良い', '悪い'],
+  ['楽しい', '詰まらない'],
+  ['好き', '嫌い'],
+  ['大好き', '大嫌い'],
+  ['上手', '下手'],
+  ['得意', '苦手'],
+  ['便利', '不便'],
+  ['安全', '危険'],
+  ['複雑', '簡単'],
+  ['賑やか', '静か'],
+  ['真面目', '不真面目'],
+  ['大変', '楽'],
+  ['正しい', '悪い'],
+  ['優しい', '厳しい'],
+  ['温かい', '冷たい'],
+  ['暖かい', '涼しい']
+];
+
+const ANTONYM_MAP = {};
+ANTONYM_PAIRS.forEach(([a, b]) => {
+  if (!ANTONYM_MAP[a]) ANTONYM_MAP[a] = [];
+  if (!ANTONYM_MAP[b]) ANTONYM_MAP[b] = [];
+  if (!ANTONYM_MAP[a].includes(b)) ANTONYM_MAP[a].push(b);
+  if (!ANTONYM_MAP[b].includes(a)) ANTONYM_MAP[b].push(a);
+});
 
 // ==========================================
-// ENGINE MODUL
+// ADJECTIVE INFLECTION GENERATOR (4 BENTUK)
+// ==========================================
+function getAdjectiveInflections(k, r, isNa) {
+  if (!isNa) {
+    if (k === 'いい' || k === '良い' || r === 'いい') {
+      return {
+        presPos: { kanji: k, hira: 'いい', label: 'Sekarang (+)' },
+        presNeg: { kanji: 'よくない', hira: 'よくない', label: 'Sekarang (-)' },
+        pastPos: { kanji: 'よかった', hira: 'よかった', label: 'Lampau (+)' },
+        pastNeg: { kanji: 'よくなかった', hira: 'よくなかった', label: 'Lampau Negatif (-)' },
+        modNoun: { kanji: k + ' 人', hira: 'いい ひと', label: 'Di Depan Benda' }
+      };
+    }
+    if (k.endsWith('いい') && k.length > 2) {
+      const baseK = k.slice(0, -2);
+      const baseR = r.slice(0, -2);
+      return {
+        presPos: { kanji: k, hira: r, label: 'Sekarang (+)' },
+        presNeg: { kanji: baseK + 'よくない', hira: baseR + 'よくない', label: 'Sekarang (-)' },
+        pastPos: { kanji: baseK + 'よかった', hira: baseR + 'よかった', label: 'Lampau (+)' },
+        pastNeg: { kanji: baseK + 'よくなかった', hira: baseR + 'よくなかった', label: 'Lampau Negatif (-)' },
+        modNoun: { kanji: k + ' 人', hira: r + ' ひと', label: 'Di Depan Benda' }
+      };
+    }
+    const stemK = k.endsWith('い') ? k.slice(0, -1) : k;
+    const stemR = r.endsWith('い') ? r.slice(0, -1) : r;
+    return {
+      presPos: { kanji: k, hira: r, label: 'Sekarang (+)' },
+      presNeg: { kanji: stemK + 'くない', hira: stemR + 'くない', label: 'Sekarang (-)' },
+      pastPos: { kanji: stemK + 'かった', hira: stemR + 'かった', label: 'Lampau (+)' },
+      pastNeg: { kanji: stemK + 'くなかった', hira: stemR + 'くなかった', label: 'Lampau Negatif (-)' },
+      modNoun: { kanji: k + ' 人/物', hira: r + ' ひと/もの', label: 'Di Depan Benda' }
+    };
+  } else {
+    return {
+      presPos: { kanji: k + 'だ (です)', hira: r + 'だ (です)', label: 'Sekarang (+)' },
+      presNeg: { kanji: k + 'じゃない', hira: r + 'じゃない', label: 'Sekarang (-)' },
+      pastPos: { kanji: k + 'だった', hira: r + 'だった', label: 'Lampau (+)' },
+      pastNeg: { kanji: k + 'じゃなかった', hira: r + 'じゃなかった', label: 'Lampau Negatif (-)' },
+      modNoun: { kanji: k + 'な 人/部屋', hira: r + 'な ひと/へや', label: 'Di Depan Benda' }
+    };
+  }
+}
+
+// ==========================================
+// ROMAJI TO HIRAGANA CONVERTER HELPER
+// ==========================================
+const ROMAJI_MAP = {
+  'kya':'きゃ','kyu':'きゅ','kyo':'きょ',
+  'sha':'しゃ','shu':'しゅ','sho':'しょ',
+  'cha':'ちゃ','chu':'ちゅ','cho':'ちょ',
+  'nya':'にゃ','nyu':'にゅ','nyo':'にょ',
+  'hya':'ひゃ','hyu':'ひゅ','hyo':'ひょ',
+  'mya':'みゃ','myu':'みゅ','myo':'みょ',
+  'rya':'りゃ','ryu':'りゅ','ryo':'りょ',
+  'gya':'ぎゃ','gyu':'ぎゅ','gyo':'ぎょ',
+  'ja':'じゃ','ju':'じゅ','jo':'じょ',
+  'bya':'びゃ','byu':'びゅ','byo':'びょ',
+  'pya':'ぴゃ','pyu':'ぴゅ','pyo':'ぴょ',
+  'shi':'し','chi':'ち','tsu':'つ','fu':'ふ',
+  'ka':'か','ki':'き','ku':'く','ke':'け','ko':'こ',
+  'sa':'さ','si':'し','su':'す','se':'せ','so':'そ',
+  'ta':'た','ti':'ち','tu':'つ','te':'て','to':'と',
+  'na':'な','ni':'に','nu':'ぬ','ne':'ね','no':'の',
+  'ha':'は','hi':'ひ','hu':'ふ','he':'へ','ho':'ほ',
+  'ma':'ま','mi':'み','mu':'む','me':'め','mo':'も',
+  'ya':'や','yu':'ゆ','yo':'よ',
+  'ra':'ら','ri':'り','ru':'る','re':'れ','ro':'ろ',
+  'wa':'わ','wo':'を',
+  'ga':'が','gi':'ぎ','gu':'ぐ','ge':'げ','go':'ご',
+  'za':'ざ','ji':'じ','zi':'じ','zu':'ず','ze':'ぜ','zo':'ぞ',
+  'da':'だ','di':'ぢ','du':'づ','de':'で','do':'ど',
+  'ba':'ば','bi':'び','bu':'ぶ','be':'べ','bo':'ぼ',
+  'pa':'ぱ','pi':'ぴ','pu':'ぷ','pe':'ぺ','po':'ぽ',
+  'a':'あ','i':'い','u':'う','e':'え','o':'お','nn':'ん','n':'ん'
+};
+const ROMAJI_REGEX = new RegExp(Object.keys(ROMAJI_MAP).sort((a,b) => b.length - a.length).join('|'), 'g');
+
+function romajiToHiragana(text) {
+  if (!text) return '';
+  let s = text.toLowerCase().trim();
+  s = s.replace(/([bcdfghjklmpqrstvwxyz])\1/g, (m, c) => 'っ' + c);
+  return s.replace(ROMAJI_REGEX, m => ROMAJI_MAP[m]);
+}
+
+// ==========================================
+// ENGINE MODUL KATA SIFAT KENSEI
+// ==========================================
+
+// ==========================================
+// ENGINE MODUL KATA SIFAT KENSEI
 // ==========================================
 const Modul = {
-  activeMode: 'sifati', activeTab: 'hafalan', viewMode: 'flashcard',
-  activeSesi: 0, cardIdx: 0, 
-  idxPG: 0, scorePG: 0, idxIsian: 0, scoreIsian: 0,
-  activeArray: [], activePGData: [], activeIsianData: [],
+  activeCategory: 'sifati', // 'sifati' or 'sifatna'
+  activeTab: 'flashcard',   // 'flashcard', 'quiz', 'tabel'
+  activeSesi: 0,
+  cardIdx: 0,
+  cardRevealed: false,
+  
+  // Quiz
+  idxQuiz: 0,
+  scoreQuiz: 0,
+  drillSubtype: 'mix', // 'mix', 'inflection', 'antonym', 'meaning', 'isian'
+  activeQuizData: [],
 
-  init: function() { this.switchMode('sifati'); },
+  activeArray: [],
+  masteredList: [],
+  csActiveTab: 'i',
+  _audioCtx: null,
+
+  init: function() {
+    this.loadMastery();
+    this.renderSessionChips();
+    this.loadActiveArray();
+    this.switchTab('flashcard');
+    this.bindKeyboardShortcuts();
+
+    // Close dropdown on outside click
+    document.addEventListener('click', () => {
+      const dd = document.getElementById('drill-dropdown-menu');
+      const btn = document.getElementById('btn-drill-dropdown');
+      if (dd && !dd.classList.contains('hidden')) {
+        dd.classList.add('hidden');
+        if (btn) btn.classList.remove('active');
+      }
+    });
+  },
+
+  loadMastery: function() {
+    try {
+      const saved = localStorage.getItem('yk_adjectives_mastered');
+      this.masteredList = saved ? JSON.parse(saved) : [];
+    } catch(e) {
+      this.masteredList = [];
+    }
+    this.updateMasteryUI();
+  },
+
+  toggleMastery: function(k, e) {
+    if (e) e.stopPropagation();
+    this.playSfx('tap');
+    const idx = this.masteredList.indexOf(k);
+    if (idx > -1) {
+      this.masteredList.splice(idx, 1);
+    } else {
+      this.masteredList.push(k);
+    }
+    localStorage.setItem('yk_adjectives_mastered', JSON.stringify(this.masteredList));
+    this.updateMasteryUI();
+
+    const starBtn = document.getElementById('btn-star-' + k);
+    if (starBtn) {
+      const isM = this.masteredList.includes(k);
+      starBtn.classList.toggle('is-mastered', isM);
+      starBtn.title = isM ? 'Telah Dikuasai' : 'Tandai Dikuasai';
+    }
+  },
+
+  updateMasteryUI: function() {
+    const totalAll = DB_I_Adj.length + DB_Na_Adj.length;
+    const count = this.masteredList.length;
+    const pct = Math.round((count / totalAll) * 100);
+
+    const textEl = document.getElementById('nav-mastered-text');
+    if (textEl) textEl.innerText = `⭐ Dikuasai: ${count} / ${totalAll} (${pct}%)`;
+
+    const fillEl = document.getElementById('mastery-progress-fill');
+    if (fillEl) fillEl.style.width = `${pct}%`;
+  },
+
+  bindKeyboardShortcuts: function() {
+    window.addEventListener('keydown', (e) => {
+      if (document.activeElement && document.activeElement.tagName === 'INPUT') return;
+
+      if (e.key === 'Escape') {
+        this.closeCheatsheet();
+        return;
+      }
+
+      if (this.activeTab === 'flashcard') {
+        if (e.key === ' ' || e.key === 'Enter') {
+          e.preventDefault();
+          this.revealCard();
+        } else if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          this.nextCard();
+        } else if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          this.prevCard();
+        } else if (e.key.toLowerCase() === 's' || e.key.toLowerCase() === 'a') {
+          e.preventDefault();
+          if (this.activeArray[this.cardIdx]) {
+            this.speakText(this.activeArray[this.cardIdx].k || this.activeArray[this.cardIdx].r);
+          }
+        }
+      }
+    });
+  },
+
+  speakText: function(text, e) {
+    if (e) e.stopPropagation();
+    try {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const cleanText = text.replace(/[\.・\-\(\)\/]/g, '').trim();
+      const utter = new SpeechSynthesisUtterance(cleanText);
+      utter.lang = 'ja-JP';
+      utter.rate = 0.88;
+      const voices = window.speechSynthesis.getVoices();
+      const jaVoice = voices.find(v => v.lang.startsWith('ja') || v.lang.includes('JP'));
+      if (jaVoice) utter.voice = jaVoice;
+      window.speechSynthesis.speak(utter);
+    } catch (err) {}
+  },
+
+  playSfx: function(type) {
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+      if (!this._audioCtx) this._audioCtx = new AudioCtx();
+      if (this._audioCtx.state === 'suspended') this._audioCtx.resume();
+      const ctx = this._audioCtx;
+      const now = ctx.currentTime;
+
+      if (type === 'correct') {
+        const osc1 = ctx.createOscillator();
+        const osc2 = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc1.type = 'sine'; osc2.type = 'triangle';
+        osc1.frequency.setValueAtTime(523.25, now);
+        osc1.frequency.exponentialRampToValueAtTime(659.25, now + 0.09);
+        osc2.frequency.setValueAtTime(659.25, now + 0.09);
+        osc2.frequency.exponentialRampToValueAtTime(783.99, now + 0.2);
+        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.24);
+        osc1.connect(gain); osc2.connect(gain); gain.connect(ctx.destination);
+        osc1.start(now); osc2.start(now + 0.09);
+        osc1.stop(now + 0.24); osc2.stop(now + 0.24);
+      } else if (type === 'wrong') {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(175, now);
+        osc.frequency.exponentialRampToValueAtTime(95, now + 0.2);
+        gain.gain.setValueAtTime(0.14, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.start(now); osc.stop(now + 0.22);
+      } else if (type === 'tap' || type === 'reveal') {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(type === 'reveal' ? 620 : 440, now);
+        osc.frequency.exponentialRampToValueAtTime(type === 'reveal' ? 880 : 540, now + 0.07);
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.start(now); osc.stop(now + 0.09);
+      }
+    } catch(e) {}
+  },
 
   triggerAnimation: function(elementId, animClass) {
     const el = document.getElementById(elementId);
-    if(!el) return;
-    el.classList.remove('slide-in-right', 'slide-out-left', 'slide-in-left', 'slide-out-right', 'pop-in', 'fade-in-up', 'fade-out-down');
+    if (!el) return;
+    el.classList.remove('slide-in-right', 'slide-out-left', 'slide-in-left', 'slide-out-right', 'fade-in-up');
     void el.offsetWidth;
     el.classList.add(animClass);
   },
 
-  switchMode: function(mode) {
-    this.activeMode = mode;
-    this.cardIdx = 0; 
-    
-    document.getElementById('btn-mode-sifati').classList.toggle('active', mode === 'sifati');
-    document.getElementById('btn-mode-sifatna').classList.toggle('active', mode === 'sifatna');
-    
-    let col = (mode === 'sifati') ? 'var(--primary)' : 'var(--success)';
-    document.getElementById('btn-submit-isian').style.background = col;
-    
-    if (mode === 'sifati') {
-        document.getElementById('sub-nav-sifati').classList.remove('hidden');
-        document.getElementById('sub-nav-sifatna').classList.add('hidden');
-    } else {
-        document.getElementById('sub-nav-sifati').classList.add('hidden');
-        document.getElementById('sub-nav-sifatna').classList.remove('hidden');
-    }
-    
+  // Switch Category (Sifat-i vs Sifat-na)
+  switchCategory: function(cat) {
+    this.playSfx('tap');
+    this.activeCategory = cat;
     this.activeSesi = 0;
-    this.switchTab('hafalan');
+    this.cardIdx = 0;
+    this.cardRevealed = false;
+
+    document.getElementById('chip-cat-i').classList.toggle('active', cat === 'sifati');
+    document.getElementById('chip-cat-na').classList.toggle('active', cat === 'sifatna');
+
+    const arenaCards = document.querySelectorAll('.dojo-arena-card');
+    arenaCards.forEach(c => c.classList.toggle('na-mode-border', cat === 'sifatna'));
+
+    const tabBtns = document.querySelectorAll('.tab-main-btn');
+    tabBtns.forEach(b => b.classList.toggle('mode-na-accent', cat === 'sifatna'));
+
+    this.renderSessionChips();
+    this.loadActiveArray();
+    this.refreshCurrentTab();
   },
 
-  toggleView: function() {
-    const btn = document.getElementById('btn-toggle-view');
-    btn.classList.add('spin-anim'); 
-    
-    this.triggerAnimation('sec-hafalan', 'fade-out-down');
+  renderSessionChips: function() {
+    const wrap = document.getElementById('sesi-chips-wrap');
+    if (!wrap) return;
 
-    setTimeout(() => {
-        this.viewMode = (this.viewMode === 'flashcard') ? 'tabel' : 'flashcard';
-        this.cardIdx = 0;
-        btn.innerHTML = (this.viewMode === 'flashcard') ? '📋' : '🎴';
-        btn.classList.remove('spin-anim'); 
-        
-        if (this.activeTab === 'hafalan') {
-            this.renderHafalan(false); 
-            this.triggerAnimation('sec-hafalan', 'fade-in-up'); 
-        }
-    }, 250); 
-  },
+    const pages = (this.activeCategory === 'sifati') ? Pages_I : Pages_Na;
+    const isNa = this.activeCategory === 'sifatna';
 
-  switchTab: function(tab) {
-    this.activeTab = tab;
-    ['hafalan', 'pg', 'isian'].forEach(t => {
-      document.getElementById('btn-tab-'+t).classList.remove('active');
-      document.getElementById('sec-'+t).classList.add('hidden');
+    let html = '';
+    pages.forEach((p, idx) => {
+      const activeClass = (idx === this.activeSesi) ? 'active' : '';
+      const naClass = isNa ? 'pill-na' : '';
+      html += `<button type="button" class="sesi-pill ${activeClass} ${naClass}" onclick="Modul.switchSesi(${idx})">${p.title.split(' ')[0]} ${idx+1}</button>`;
     });
-    
-    document.getElementById('btn-tab-'+tab).classList.add('active');
-    
-    document.getElementById('btn-toggle-view').style.visibility = (tab === 'hafalan') ? 'visible' : 'hidden';
-    
-    if (tab === 'hafalan') { 
-      document.getElementById('sec-hafalan').classList.remove('hidden');
-      this.triggerAnimation('sec-hafalan', 'fade-in-up');
-      this.switchSesi(this.activeSesi);
-    } 
-    else if (tab === 'pg') { 
-      document.getElementById('sec-pg').classList.remove('hidden');
-      this.triggerAnimation('sec-pg', 'fade-in-up');
-      this.activePGData = this.generatePG();
-      this.idxPG = 0; this.scorePG = 0; this.renderPG(false); 
-    }
-    else if (tab === 'isian') { 
-      document.getElementById('sec-isian').classList.remove('hidden');
-      this.triggerAnimation('sec-isian', 'fade-in-up');
-      this.activeIsianData = this.generateIsian();
-      this.idxIsian = 0; this.scoreIsian = 0; this.renderIsian(false); 
-    }
+    wrap.innerHTML = html;
   },
 
   switchSesi: function(s) {
+    this.playSfx('tap');
     this.activeSesi = s;
-    let prefix = this.activeMode === 'sifati' ? 'btn-i-' : 'btn-na-';
-    let pages = (this.activeMode === 'sifati') ? Pages_I : Pages_Na;
-    
-    for(let i = 0; i < pages.length; i++) {
-        let btn = document.getElementById(prefix + i);
-        if(btn) btn.classList.remove('active');
-    }
-    let activeBtn = document.getElementById(prefix + s);
-    if(activeBtn) activeBtn.classList.add('active');
-    
-    let db = (this.activeMode === 'sifati') ? DB_I_Adj : DB_Na_Adj;
-    let grps = pages[s].groups;
-    this.activeArray = db.filter(item => grps.includes(item.grp));
     this.cardIdx = 0;
+    this.cardRevealed = false;
 
-    if (this.activeTab === 'hafalan') this.renderHafalan(false);
-    else if (this.activeTab === 'pg') { this.activePGData = this.generatePG(); this.idxPG = 0; this.scorePG = 0; this.renderPG(false); } 
-    else if (this.activeTab === 'isian') { this.activeIsianData = this.generateIsian(); this.idxIsian = 0; this.scoreIsian = 0; this.renderIsian(false); }
+    const pills = document.querySelectorAll('.sesi-pill');
+    pills.forEach((p, idx) => p.classList.toggle('active', idx === s));
+
+    this.loadActiveArray();
+    this.refreshCurrentTab();
   },
 
-  renderHafalan: function(useSlideAnim = true) {
-    if (this.viewMode === 'flashcard') this.renderFC(useSlideAnim);
-    else this.renderBook(useSlideAnim ? 'right' : 'none');
+  loadActiveArray: function() {
+    const pages = (this.activeCategory === 'sifati') ? Pages_I : Pages_Na;
+    const db = (this.activeCategory === 'sifati') ? DB_I_Adj : DB_Na_Adj;
+    const grps = pages[this.activeSesi].groups;
+    this.activeArray = db.filter(item => grps.includes(item.grp));
   },
 
+  switchTab: function(tab) {
+    this.playSfx('tap');
+    this.activeTab = tab;
+
+    ['flashcard', 'quiz', 'tabel'].forEach(t => {
+      const btn = document.getElementById('btn-tab-' + t);
+      if (btn) btn.classList.toggle('active', t === tab);
+      const sec = document.getElementById('sec-' + t);
+      if (sec) sec.classList.toggle('hidden', t !== tab);
+    });
+
+    this.refreshCurrentTab();
+  },
+
+  refreshCurrentTab: function() {
+    if (this.activeTab === 'flashcard') {
+      this.renderFC(false);
+      this.triggerAnimation('sec-flashcard', 'fade-in-up');
+    } else if (this.activeTab === 'quiz') {
+      this.activeQuizData = this.generateQuizQuestions();
+      this.idxQuiz = 0;
+      this.scoreQuiz = 0;
+      this.renderQuiz(false);
+      this.triggerAnimation('sec-quiz', 'fade-in-up');
+    } else if (this.activeTab === 'tabel') {
+      this.renderTabel(false);
+      this.triggerAnimation('sec-tabel', 'fade-in-up');
+    }
+  },
+
+  // ==========================================
+  // FLASHCARD RENDERING (UNBOXED RPG STAGE)
+  // ==========================================
   renderFC: function(useSlideAnim = true) {
-    const sec = document.getElementById('sec-hafalan');
-    sec.style.padding = "25px 20px";
-    
+    const sec = document.getElementById('sec-flashcard');
+    this.cardRevealed = false;
+
     if (this.cardIdx >= this.activeArray.length) {
-      sec.innerHTML = `<div class="content-hafalan"><div class="kanji-text" style="cursor:default;">🎉 Tuntas!</div></div>
-      <button class="btn-next" onclick="Modul.cardIdx=0; Modul.renderFC(true)">Ulangi Hafalan</button>`;
-      if(useSlideAnim) this.triggerAnimation('sec-hafalan', 'slide-in-right');
+      sec.innerHTML = `
+        <div class="fc-header-bar">
+          <span class="fc-room-tag">🏆 SELESAI</span>
+          <span class="fc-counter-badge">${this.activeArray.length} / ${this.activeArray.length}</span>
+        </div>
+        <div style="flex-grow:1; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;">
+          <div style="font-size:48px; margin-bottom:12px;">🌟</div>
+          <div style="font-size:22px; font-weight:800; color:var(--gold); margin-bottom:6px;">Sesi Ini Tuntas!</div>
+          <div style="font-size:13.5px; color:var(--text-sub); max-width:380px;">Semua kata sifat di sesi ini telah kamu pelajari. Ingin mengulangi atau lanjut menguji kemampuan di Arena Kuis?</div>
+        </div>
+        <div class="dojo-nav-controls">
+          <button type="button" class="btn-dn" onclick="Modul.cardIdx=0; Modul.renderFC(true)">Ulangi Sesi ↺</button>
+          <button type="button" class="btn-dn btn-dn-next" onclick="Modul.switchTab('quiz')">Uji di Arena Kuis 🎯</button>
+        </div>
+      `;
+      if (useSlideAnim) this.triggerAnimation('sec-flashcard', 'slide-in-right');
       return;
     }
 
     const item = this.activeArray[this.cardIdx];
-    let pages = (this.activeMode === 'sifati') ? Pages_I : Pages_Na;
-    let pageTitle = pages[this.activeSesi].title.split(':')[0];
-    let narasi = pages[this.activeSesi].narasi;
-    
-    let bubbleHTML = '';
-    if (narasi) {
-        bubbleHTML = `
-            <button class="btn-bubble" onclick="document.getElementById('fc-popup-narasi').classList.toggle('show-popup')">💡</button>
-            <div id="fc-popup-narasi" class="bubble-popup">${narasi}</div>
-        `;
+    const isNa = this.activeCategory === 'sifatna';
+    const isMastered = this.masteredList.includes(item.k);
+    const pages = isNa ? Pages_Na : Pages_I;
+    const pageTitle = pages[this.activeSesi].title.split(':')[0];
+
+    // Inflections 4 Forms
+    const inf = getAdjectiveInflections(item.k, item.r, isNa);
+
+    // Antonym
+    const antonyms = ANTONYM_MAP[item.k] || [];
+    let antonymHTML = '';
+    if (antonyms.length > 0) {
+      antonymHTML = `
+        <div class="fc-antonym-strip shield-blur" id="fc-antonym-strip" onclick="event.stopPropagation(); Modul.speakText('${antonyms[0]}')">
+          <span class="antonym-tag-label">⚖️ LAWAN KATA:</span>
+          <span class="antonym-pair-text">${antonyms.join(', ')} 🔊</span>
+        </div>
+      `;
     }
-    
+
+    const prevDisabled = this.cardIdx === 0 ? 'disabled' : '';
+
     sec.innerHTML = `
-      <div class="progress-text" style="color:var(--primary);">HAFALAN (${pageTitle}): ${this.cardIdx+1} / ${this.activeArray.length}</div>
-      <div id="fc-content" class="content-hafalan">
-        ${bubbleHTML}
-        <div class="hira-text hira-hide" id="fc-hira">${item.r}</div>
-        <div class="kanji-text pulse-hint" id="fc-kanji" onclick="Modul.revealCard()">${item.k}</div>
-        <div id="fc-hint" style="font-size:12px; color:var(--text-sub); margin-top:-10px; margin-bottom:10px;">(Sentuh Kanji untuk membuka)</div>
-        <div class="arti-text blur-hide" id="fc-arti">${item.a}</div>
-        ${item.note ? `<div class="note-box blur-hide" id="fc-note">💡 ${item.note}</div>` : ''}
+      <!-- Top header inside arena card -->
+      <div class="fc-header-bar">
+        <span class="fc-room-tag ${isNa ? 'na-tag' : ''}">
+          ${isNa ? 'な-Keiyoushi' : 'い-Keiyoushi'} • ${pageTitle}
+        </span>
+        <div class="fc-header-right">
+          <span class="fc-counter-badge">${this.cardIdx + 1} / ${this.activeArray.length}</span>
+          <button type="button" class="btn-star-mark ${isMastered ? 'is-mastered' : ''}" id="btn-star-${item.k}" onclick="Modul.toggleMastery('${item.k}', event)" title="${isMastered ? 'Dikuasai' : 'Tandai Dikuasai'}">⭐</button>
+          <button type="button" class="btn-star-mark" onclick="Modul.speakText('${item.k || item.r}', event)" title="Dengarkan Suara (ja-JP)">🔊</button>
+        </div>
       </div>
-      <button class="btn-next" onclick="Modul.nextCard()">Selanjutnya →</button>
+
+      <!-- Main Unboxed Flashcard Stage -->
+      <div class="fc-stage-box" id="fc-stage-box" onclick="Modul.revealCard()">
+        <div class="fc-kanji-big">${item.k}</div>
+        <div class="fc-hira-text shield-blur" id="fc-hira">${item.r}</div>
+        <div class="fc-arti-text shield-blur" id="fc-arti">${item.a}</div>
+
+        <!-- 4 Forms Matrix: Clean, Unboxed Glass Cells -->
+        <div class="fc-grid-two shield-blur" id="fc-matrix">
+          <div class="inflection-cell" onclick="event.stopPropagation(); Modul.speakText('${inf.presPos.kanji}')">
+            <div class="inf-label"><span>☀️ Sekarang (+)</span> <span class="inf-speaker">🔊</span></div>
+            <div class="inf-val">${inf.presPos.kanji} <span class="inf-sub">${inf.presPos.hira}</span></div>
+          </div>
+          <div class="inflection-cell" onclick="event.stopPropagation(); Modul.speakText('${inf.presNeg.kanji}')">
+            <div class="inf-label"><span>❄️ Negatif (-)</span> <span class="inf-speaker">🔊</span></div>
+            <div class="inf-val">${inf.presNeg.kanji} <span class="inf-sub">${inf.presNeg.hira}</span></div>
+          </div>
+          <div class="inflection-cell" onclick="event.stopPropagation(); Modul.speakText('${inf.pastPos.kanji}')">
+            <div class="inf-label"><span>⏳ Lampau (+)</span> <span class="inf-speaker">🔊</span></div>
+            <div class="inf-val">${inf.pastPos.kanji} <span class="inf-sub">${inf.pastPos.hira}</span></div>
+          </div>
+          <div class="inflection-cell" onclick="event.stopPropagation(); Modul.speakText('${inf.pastNeg.kanji}')">
+            <div class="inf-label"><span>🚫 Lampau (-)</span> <span class="inf-speaker">🔊</span></div>
+            <div class="inf-val">${inf.pastNeg.kanji} <span class="inf-sub">${inf.pastNeg.hira}</span></div>
+          </div>
+        </div>
+
+        ${antonymHTML}
+        ${item.note ? `<div class="fc-note-strip shield-blur" id="fc-note">💡 ${item.note}</div>` : ''}
+
+        <div class="tap-hint-pill" id="fc-tap-hint">👆 Sentuh kartu / tekan Spasi untuk buka 4 Bentuk Infleksi</div>
+      </div>
+
+      <!-- Action Navigation Buttons -->
+      <div class="dojo-nav-controls">
+        <button type="button" class="btn-dn" ${prevDisabled} onclick="Modul.prevCard()">← Sebelumnya</button>
+        <button type="button" class="btn-dn btn-dn-next ${isNa ? 'na-btn' : ''}" onclick="Modul.nextCard()">Selanjutnya →</button>
+      </div>
     `;
-    
-    if(useSlideAnim) this.triggerAnimation('fc-content', 'slide-in-right');
+
+    if (useSlideAnim) this.triggerAnimation('fc-stage-box', 'slide-in-right');
   },
 
   revealCard: function() {
-    document.getElementById('fc-hira').classList.replace('hira-hide', 'hira-show');
-    document.getElementById('fc-arti').classList.replace('blur-hide', 'blur-show');
-    document.getElementById('fc-kanji').classList.remove('pulse-hint');
-    document.getElementById('fc-kanji').classList.add('fc-revealed');
-    document.getElementById('fc-hint').style.display = 'none';
-    if(document.getElementById('fc-note')) document.getElementById('fc-note').classList.replace('blur-hide', 'blur-show');
-    
-    let popup = document.getElementById('fc-popup-narasi');
-    if(popup) popup.classList.remove('show-popup');
+    if (this.cardRevealed) return;
+    this.cardRevealed = true;
+    this.playSfx('reveal');
+
+    const els = ['fc-hira', 'fc-arti', 'fc-matrix', 'fc-antonym-strip', 'fc-note'];
+    els.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('revealed');
+    });
+
+    const hint = document.getElementById('fc-tap-hint');
+    if (hint) hint.style.display = 'none';
   },
 
-  nextCard: function() { 
-    this.triggerAnimation('fc-content', 'slide-out-left');
-    setTimeout(() => { this.cardIdx++; this.renderFC(true); }, 250);
+  nextCard: function() {
+    this.playSfx('tap');
+    this.triggerAnimation('fc-stage-box', 'slide-out-left');
+    setTimeout(() => {
+      this.cardIdx++;
+      this.renderFC(true);
+    }, 180);
   },
 
-  renderBook: function(dir = 'right') {
-    const sec = document.getElementById('sec-hafalan');
-    sec.style.padding = "15px 15px 5px 15px"; 
-    
-    let pages = (this.activeMode === 'sifati') ? Pages_I : Pages_Na;
-    const pageData = pages[this.activeSesi];
-    
-    let html = `<div class="book-container" id="book-wrapper">`;
-    html += `<div class="book-page" id="book-page">`;
-    html += `<div class="book-title">${pageData.title}</div>`;
-    html += `<div class="book-narrative">${pageData.narasi}</div>`;
-    
-    html += `<button id="btn-sensor" class="btn-sensor" onclick="Modul.toggleFurigana()">👁️ Tampilkan Semua Furigana</button>
-             <div id="waktu-table-container">`;
+  prevCard: function() {
+    if (this.cardIdx <= 0) return;
+    this.playSfx('tap');
+    this.triggerAnimation('fc-stage-box', 'slide-out-right');
+    setTimeout(() => {
+      this.cardIdx--;
+      this.renderFC(true);
+    }, 180);
+  },
 
-    html += `<table class="tabel-waktu"><tr><th>Kanji</th><th>Arti & Catatan</th></tr>`;
-    
-    this.activeArray.forEach(item => {
-        let rubyHTML = '';
-        let k_arr = item.k.split(' ');
-        let r_arr = item.r.split(' ');
-        if(k_arr.length > 1 && k_arr.length === r_arr.length) {
-            k_arr.forEach((kanji, i) => { rubyHTML += `<ruby style="margin-right:4px;">${kanji}<rt class="furi-anim">${r_arr[i]}</rt></ruby>`; });
+  // ==========================================
+  // ARENA KUIS SYSTEM
+  // ==========================================
+  toggleDrillDropdown: function(e) {
+    if (e) e.stopPropagation();
+    this.playSfx('tap');
+    const menu = document.getElementById('drill-dropdown-menu');
+    const btn = document.getElementById('btn-drill-dropdown');
+    if (menu && btn) {
+      menu.classList.toggle('hidden');
+      btn.classList.toggle('active');
+    }
+  },
+
+  selectDrillSubtype: function(st, icon, label) {
+    this.drillSubtype = st;
+    this.playSfx('tap');
+
+    const iconEl = document.getElementById('drill-label-icon');
+    const labelEl = document.getElementById('drill-label-text');
+    if (iconEl) iconEl.innerText = icon;
+    if (labelEl) labelEl.innerText = label;
+
+    document.querySelectorAll('.dd-item').forEach(item => {
+      item.classList.toggle('active', item.getAttribute('data-qtype') === st);
+    });
+
+    const menu = document.getElementById('drill-dropdown-menu');
+    const btn = document.getElementById('btn-drill-dropdown');
+    if (menu) menu.classList.add('hidden');
+    if (btn) btn.classList.remove('active');
+
+    this.activeQuizData = this.generateQuizQuestions();
+    this.idxQuiz = 0;
+    this.scoreQuiz = 0;
+    this.renderQuiz(true);
+  },
+
+  generateQuizQuestions: function() {
+    const isNa = this.activeCategory === 'sifatna';
+    const pool = this.activeArray;
+    const targetSubtype = this.drillSubtype;
+    const generated = [];
+
+    const shuffle = (arr) => arr.sort(() => Math.random() - 0.5);
+
+    // 1. INFLECTION DRILL
+    if (targetSubtype === 'inflection' || targetSubtype === 'mix') {
+      const infPool = shuffle([...pool]).slice(0, 5);
+      const formTypes = ['presNeg', 'pastPos', 'pastNeg'];
+
+      infPool.forEach(item => {
+        const inf = getAdjectiveInflections(item.k, item.r, isNa);
+        const fKey = formTypes[Math.floor(Math.random() * formTypes.length)];
+        const targetForm = inf[fKey];
+        const formNames = {
+          presNeg: 'Negatif Sekarang (-)',
+          pastPos: 'Lampau Positif (+)',
+          pastNeg: 'Lampau Negatif (-)'
+        };
+
+        const ans = targetForm.kanji;
+        const opts = [ans];
+
+        if (targetForm !== inf.presPos) opts.push(inf.presPos.kanji);
+        if (targetForm !== inf.presNeg && !opts.includes(inf.presNeg.kanji)) opts.push(inf.presNeg.kanji);
+        if (targetForm !== inf.pastPos && !opts.includes(inf.pastPos.kanji)) opts.push(inf.pastPos.kanji);
+        if (targetForm !== inf.pastNeg && !opts.includes(inf.pastNeg.kanji)) opts.push(inf.pastNeg.kanji);
+
+        const others = shuffle(pool.filter(o => o.k !== item.k));
+        for (const o of others) {
+          const oInf = getAdjectiveInflections(o.k, o.r, isNa);
+          if (oInf[fKey] && !opts.includes(oInf[fKey].kanji)) opts.push(oInf[fKey].kanji);
+          if (opts.length >= 4) break;
+        }
+
+        generated.push({
+          type: 'mc',
+          q: `Ubah kata <b>${item.k}</b> (${item.a}) ke bentuk <b>${formNames[fKey]}</b>!`,
+          audio: ans,
+          opts: shuffle(opts.slice(0, 4)),
+          ans: ans,
+          badge: '🔄 4 Infleksi'
+        });
+      });
+    }
+
+    // 2. ANTONYM DRILL
+    if (targetSubtype === 'antonym' || targetSubtype === 'mix') {
+      const antPool = pool.filter(item => ANTONYM_MAP[item.k] && ANTONYM_MAP[item.k].length > 0);
+      const chosen = shuffle([...antPool]).slice(0, 4);
+
+      chosen.forEach(item => {
+        const targetAnt = ANTONYM_MAP[item.k][0];
+        const ans = targetAnt;
+        const opts = [ans];
+
+        const distractors = shuffle(pool.filter(d => d.k !== item.k && d.k !== targetAnt));
+        for (const d of distractors) {
+          if (!opts.includes(d.k)) opts.push(d.k);
+          if (opts.length >= 4) break;
+        }
+
+        generated.push({
+          type: 'mc',
+          q: `Manakah <b>LAWAN KATA</b> dari <b>${item.k}</b> (${item.a})?`,
+          audio: ans,
+          opts: shuffle(opts.slice(0, 4)),
+          ans: ans,
+          badge: '⚖️ Lawan Kata'
+        });
+      });
+    }
+
+    // 3. MEANING & READING DRILL
+    if (targetSubtype === 'meaning' || targetSubtype === 'mix' || generated.length < 5) {
+      const meanPool = shuffle([...pool]).slice(0, 6);
+      meanPool.forEach(item => {
+        const isKanjiToHira = Math.random() > 0.5;
+        if (isKanjiToHira) {
+          const ans = item.r;
+          const opts = [ans];
+          const distractors = shuffle(pool.filter(d => d.k !== item.k));
+          for (const d of distractors) {
+            if (!opts.includes(d.r)) opts.push(d.r);
+            if (opts.length >= 4) break;
+          }
+          generated.push({
+            type: 'mc',
+            q: `Bagaimana bacaan Hiragana dari <b>${item.k}</b> (${item.a})?`,
+            audio: item.k,
+            opts: shuffle(opts.slice(0, 4)),
+            ans: ans,
+            badge: '🎯 Cara Baca'
+          });
         } else {
-            rubyHTML = `<ruby>${item.k}<rt class="furi-anim">${item.r}</rt></ruby>`;
+          const ans = item.a;
+          const opts = [ans];
+          const distractors = shuffle(pool.filter(d => d.k !== item.k));
+          for (const d of distractors) {
+            if (!opts.includes(d.a)) opts.push(d.a);
+            if (opts.length >= 4) break;
+          }
+          generated.push({
+            type: 'mc',
+            q: `Apa arti bahasa Indonesia dari <b>${item.k}</b> (${item.r})?`,
+            audio: item.k,
+            opts: shuffle(opts.slice(0, 4)),
+            ans: ans,
+            badge: '🎯 Tebak Arti'
+          });
         }
-
-        html += `<tr>
-            <td style="max-width: 45%; vertical-align:top;">
-                <span class="ruby-item" onclick="this.classList.toggle('revealed')">${rubyHTML}</span>
-            </td>
-            <td style="max-width: 55%; vertical-align:top;">
-                <span class="t-arti">${item.a}</span>
-                ${item.note ? `<div class="note-inline">💡 ${item.note}</div>` : ''}
-            </td>
-        </tr>`;
-    });
-    
-    html += `</table></div></div>`;
-
-    let prevDis = (this.activeSesi === 0) ? 'disabled' : '';
-    let nextDis = (this.activeSesi === pages.length - 1) ? 'disabled' : '';
-    html += `
-      <div class="book-nav">
-        <button class="book-nav-btn" ${prevDis} onclick="Modul.turnPage(-1)">◀ Prev</button>
-        <span class="book-page-text">Hal ${this.activeSesi + 1} dari ${pages.length}</span>
-        <button class="book-nav-btn" ${nextDis} onclick="Modul.turnPage(1)">Next ▶</button>
-      </div>
-    </div>`;
-
-    sec.innerHTML = html;
-
-    if (dir === 'right') this.triggerAnimation('book-page', 'slide-in-right');
-    else if (dir === 'left') this.triggerAnimation('book-page', 'slide-in-left');
-    else if (dir !== 'none') this.triggerAnimation('book-wrapper', 'fade-in-up');
-  },
-
-  turnPage: function(step) {
-    let pages = (this.activeMode === 'sifati') ? Pages_I : Pages_Na;
-    let targetSesi = this.activeSesi + step;
-    
-    if (targetSesi >= 0 && targetSesi < pages.length) {
-        let animOut = (step === 1) ? 'slide-out-left' : 'slide-out-right';
-        this.triggerAnimation('book-page', animOut);
-        
-        setTimeout(() => {
-            this.switchSesi(targetSesi);
-        }, 250);
+      });
     }
-  },
 
-  toggleFurigana: function() {
-    const container = document.getElementById('waktu-table-container');
-    const btn = document.getElementById('btn-sensor');
-    const isHidden = !container.classList.contains('show-all-furi');
-    
-    if (isHidden) {
-        container.classList.add('show-all-furi');
-        btn.innerHTML = "🙈 Sembunyikan Semua Furigana";
-        btn.classList.add('active');
-    } else {
-        container.classList.remove('show-all-furi');
-        btn.innerHTML = "👁️ Tampilkan Semua Furigana";
-        btn.classList.remove('active');
-    }
-  },
-
-  generatePG: function() {
-    let db = (this.activeMode === 'sifati') ? DB_I_Adj : DB_Na_Adj;
-    let pages = (this.activeMode === 'sifati') ? Pages_I : Pages_Na;
-    let groups = pages[this.activeSesi].groups; 
-    
-    let pool = db.filter(item => groups.includes(item.grp));
-    let limit = Math.min(10, pool.length);
-    let part1 = [...pool].sort(() => Math.random() - 0.5).slice(0, limit); 
-    let part2 = [...pool].sort(() => Math.random() - 0.5).slice(0, limit); 
-    let generated = [];
-
-    part1.forEach(item => {
-        let ans = item.r.replace(/[\s]/g, ''); let opts = [ans]; 
-        let distractors = [...pool].sort(() => Math.random() - 0.5);
-        for(let d of distractors) {
-            let dText = d.r.replace(/[\s]/g, '');
-            if(!opts.includes(dText)) opts.push(dText);
-            if(opts.length === 4) break;
+    // 4. ISIAN DRILL
+    if (targetSubtype === 'isian') {
+      const isianPool = shuffle([...pool]).slice(0, 10);
+      isianPool.forEach(item => {
+        const isArti = Math.random() > 0.5;
+        if (isArti) {
+          const cleanA = item.a.toLowerCase();
+          const ansArray = [cleanA.replace(/[\s-]/g, '').replace(/\([^)]*\)/g, '')];
+          cleanA.split(',').forEach(p => {
+            const cp = p.replace(/\([^)]*\)/g, '').replace(/[\s-]/g, '');
+            if (cp && !ansArray.includes(cp)) ansArray.push(cp);
+          });
+          generated.push({
+            type: 'isian',
+            isArti: true,
+            q: `Ketik arti bahasa Indonesia dari:<br><span style="font-size:36px; font-weight:800; color:var(--gold);">${item.k}</span>`,
+            audio: item.k,
+            ans: ansArray,
+            badge: '✍️ Isian Arti'
+          });
+        } else {
+          const ansArray = [item.r.replace(/[\s]/g, '')];
+          if (item.alt) ansArray.push(item.alt.replace(/[\s]/g, ''));
+          generated.push({
+            type: 'isian',
+            isArti: false,
+            q: `Ketik bacaan Hiragana dari:<br><span style="font-size:36px; font-weight:800; color:#fff;">${item.k}</span>`,
+            audio: item.k,
+            ans: ansArray,
+            badge: '✍️ Isian Hiragana'
+          });
         }
-        generated.push({ q: `Apa cara baca (Hiragana) dari <b>${item.k}</b>?`, opts: opts.sort(() => Math.random() - 0.5), ans: ans });
-    });
-
-    part2.forEach(item => {
-        let ans = item.k.replace(/[\s]/g, ''); let opts = [ans];
-        let distractors = [...pool].sort(() => Math.random() - 0.5);
-        for(let d of distractors) {
-            let dText = d.k.replace(/[\s]/g, '');
-            if(!opts.includes(dText)) opts.push(dText);
-            if(opts.length === 4) break;
-        }
-        generated.push({ q: `Apa bentuk tulisan Kanji dari <b>${item.r}</b>?`, opts: opts.sort(() => Math.random() - 0.5), ans: ans });
-    });
-
-    return generated;
-  },
-
-  generateIsian: function() {
-    let db = (this.activeMode === 'sifati') ? DB_I_Adj : DB_Na_Adj;
-    let pages = (this.activeMode === 'sifati') ? Pages_I : Pages_Na;
-    let groups = pages[this.activeSesi].groups; 
-    
-    let pool = db.filter(item => groups.includes(item.grp));
-    let limit = Math.min(10, pool.length);
-    let part1 = [...pool].sort(() => Math.random() - 0.5).slice(0, limit); 
-    let part2 = [...pool].sort(() => Math.random() - 0.5).slice(0, limit); 
-    let generated = [];
-
-    // Part 1: Kanji -> Hiragana
-    part1.forEach(item => {
-        let ansArray = [item.r.replace(/[\s]/g, '')];
-        if (item.alt) ansArray.push(item.alt.replace(/[\s]/g, ''));
-        generated.push({ q: `Ketik hiragana dari:<br><span style="font-size:35px; color:var(--text-main);">${item.k}</span>`, ans: ansArray});
-    });
-
-    // Part 2: Kanji -> Arti (DENGAN TOLERANSI PINTAR)
-    part2.forEach(item => {
-        let cleanA = item.a.toLowerCase();
-        let ansArray = [];
-
-        // 1. Masukkan jawaban asli (hapus spasi, strip, dan kurung penjelas)
-        ansArray.push(cleanA.replace(/[\s-]/g, '').replace(/\([^)]*\)/g, ''));
-
-        // 2. Pecah kata berdasarkan koma (contoh: "indah, cantik" -> "indah", "cantik")
-        let parts = cleanA.split(',');
-        parts.forEach(p => {
-            let cleanP = p.replace(/\([^)]*\)/g, '').replace(/[\s-]/g, '');
-            if(cleanP && !ansArray.includes(cleanP)) ansArray.push(cleanP);
-        });
-
-        // 3. Masukkan variasi utuh tanpa tanda kurung
-        let noBracket = cleanA.replace(/\([^)]*\)/g, '').replace(/[\s-]/g, '');
-        if (noBracket && !ansArray.includes(noBracket)) ansArray.push(noBracket);
-
-        generated.push({ 
-            q: `Apa arti dari kanji:<br><span style="font-size:35px; color:var(--warning);">${item.k}</span>`, 
-            ans: ansArray 
-        });
-    });
-
-    return generated;
-  },
-
-  getEvaluasiHTML: function(mode, sesi, score, total) {
-    let pct = score / total;
-    if (pct === 1) return `<div class="eval-box">🌟 <b>SEMPURNA!</b><br>Luar biasa, perbendaharaan kosa kata Sensei sangat hebat!</div>`;
-    
-    let tip = "";
-    if (mode === 'sifati') {
-        tip = "💡 TIPS: Ingat, kata sifat-i selalu diakhiri 'i'. Saat diubah ke negatif, buang 'i' terakhir lalu ganti jadi ~kunai.";
-    } else {
-        tip = "💡 TIPS: Beberapa kata sifat-na terasa seperti -i (misal: きれい, 嫌い), jangan terkecoh! Hafalkan pengecualiannya.";
+      });
     }
-    return `<div class="eval-box">💪 <b>TETAP SEMANGAT!</b><br>Perbanyak membaca untuk membiasakan diri.<br><br><span style="color:var(--gold);">${tip}</span></div>`;
+
+    return shuffle(generated).slice(0, 15);
   },
 
-  renderPG: function(useSlideAnim = true) {
-    const fb = document.getElementById('pg-feedback'); fb.innerHTML = ""; fb.style.opacity = "0";
-    const pool = this.activePGData;
-    
-    if (this.idxPG >= pool.length) {
-      document.getElementById('pg-q').innerHTML = `🎉 Kuis Selesai!<br>Skor: ${this.scorePG} / ${pool.length}`;
-      let evalHTML = this.getEvaluasiHTML(this.activeMode, this.activeSesi, this.scorePG, pool.length);
-      document.getElementById('pg-opts').innerHTML = evalHTML + `<button class="btn-next" onclick="Modul.switchTab('pg')">Acak & Ulangi Kuis</button>`;
-      if(useSlideAnim) this.triggerAnimation('pg-content-wrapper', 'slide-in-right');
+  renderQuiz: function(useSlideAnim = true) {
+    const fb = document.getElementById('quiz-feedback-bar');
+    if (fb) { fb.innerHTML = ''; fb.style.opacity = '0'; }
+    const pool = this.activeQuizData;
+
+    const progPill = document.getElementById('quiz-progress-pill');
+    const scorePill = document.getElementById('quiz-score-pill');
+    if (scorePill) scorePill.innerText = `⭐ Skor: ${this.scoreQuiz} / ${pool.length}`;
+
+    const optContainer = document.getElementById('quiz-options-container');
+    const isianContainer = document.getElementById('quiz-isian-container');
+
+    if (this.idxQuiz >= pool.length) {
+      if (progPill) progPill.innerText = '🎉 KUIS SELESAI';
+      document.getElementById('quiz-q-text').innerHTML = `
+        <div style="font-size:42px; margin-bottom:8px;">🏆</div>
+        <div>Latihan Selesai!</div>
+        <div style="font-size:14px; font-weight:600; color:var(--text-sub); margin-top:4px;">Skor Akhir: ${this.scoreQuiz} / ${pool.length}</div>
+      `;
+      optContainer.classList.remove('hidden');
+      isianContainer.classList.add('hidden');
+      optContainer.innerHTML = `<button type="button" class="btn-dn btn-dn-next" style="grid-column: span 2;" onclick="Modul.refreshCurrentTab()">Ulangi Kuis ↺</button>`;
       return;
     }
 
-    const target = pool[this.idxPG];
-    document.getElementById('pg-progress').innerText = `KUIS PILGAN: ${this.idxPG+1} / ${pool.length}`;
-    document.getElementById('pg-q').innerHTML = target.q;
-    
-    let optsHTML = target.opts.map(o => `<button class="btn-opt" onclick="Modul.checkPG(this,'${o}','${target.ans}')">${o}</button>`).join('');
-    document.getElementById('pg-opts').innerHTML = optsHTML;
+    const cur = pool[this.idxQuiz];
+    if (progPill) progPill.innerText = `${cur.badge}: ${this.idxQuiz + 1} / ${pool.length}`;
+    document.getElementById('quiz-q-text').innerHTML = cur.q;
 
-    if(useSlideAnim) this.triggerAnimation('pg-content-wrapper', 'slide-in-right');
+    if (cur.type === 'mc') {
+      optContainer.classList.remove('hidden');
+      isianContainer.classList.add('hidden');
+      optContainer.classList.toggle('grid-two', cur.opts.length > 2);
+
+      let optsHTML = cur.opts.map(o => `<button type="button" class="btn-quiz-opt" onclick="Modul.checkMCOption(this, '${o}', '${cur.ans}', '${cur.audio || ''}')">${o}</button>`).join('');
+      optContainer.innerHTML = optsHTML;
+    } else {
+      optContainer.classList.add('hidden');
+      isianContainer.classList.remove('hidden');
+      const input = document.getElementById('quiz-isian-input');
+      input.value = '';
+      input.disabled = false;
+      input.placeholder = cur.isArti ? 'Ketik arti bahasa Indonesia...' : 'Ketik Hiragana atau Romaji...';
+      input.focus();
+    }
+
+    if (useSlideAnim) this.triggerAnimation('quiz-content-wrapper', 'slide-in-right');
   },
 
-  checkPG: function(btn, sel, cor) {
-    const fb = document.getElementById('pg-feedback');
-    document.querySelectorAll('.btn-opt').forEach(b => b.disabled = true);
-    fb.style.opacity = "1"; this.triggerAnimation('pg-feedback', 'pop-in');
+  checkMCOption: function(btn, sel, cor, audio) {
+    const fb = document.getElementById('quiz-feedback-bar');
+    document.querySelectorAll('.btn-quiz-opt').forEach(b => b.disabled = true);
+    fb.style.opacity = '1';
 
-    if(sel === cor) { btn.classList.add('correct'); fb.innerHTML = "BENAR! ✅"; fb.style.color = "var(--success)"; this.scorePG++; } 
-    else { btn.classList.add('wrong'); fb.innerHTML = "SALAH! ❌"; fb.style.color = "var(--danger)"; }
-    
-    setTimeout(() => { 
-      this.triggerAnimation('pg-content-wrapper', 'slide-out-left');
-      setTimeout(() => { this.idxPG++; this.renderPG(true); }, 1200);
+    if (sel === cor) {
+      this.playSfx('correct');
+      btn.classList.add('correct');
+      fb.innerHTML = 'BENAR SEKALI! ✅';
+      fb.style.color = 'var(--success)';
+      this.scoreQuiz++;
+    } else {
+      this.playSfx('wrong');
+      btn.classList.add('wrong');
+      fb.innerHTML = `KURANG TEPAT! ❌ Kunci: <b>${cor}</b>`;
+      fb.style.color = 'var(--danger)';
+    }
+
+    if (audio) this.speakText(audio);
+
+    const scorePill = document.getElementById('quiz-score-pill');
+    if (scorePill) scorePill.innerText = `⭐ Skor: ${this.scoreQuiz} / ${this.activeQuizData.length}`;
+
+    setTimeout(() => {
+      this.triggerAnimation('quiz-content-wrapper', 'slide-out-left');
+      setTimeout(() => {
+        this.idxQuiz++;
+        this.renderQuiz(true);
+      }, 180);
+    }, 1100);
+  },
+
+  checkIsianSubmit: function() {
+    const input = document.getElementById('quiz-isian-input');
+    const fb = document.getElementById('quiz-feedback-bar');
+    const rawVal = input.value.trim().toLowerCase();
+    if (!rawVal) return;
+
+    input.disabled = true;
+    const cur = this.activeQuizData[this.idxQuiz];
+    const correctAns = cur.ans.map(a => a.toLowerCase().replace(/[\s-]/g, ''));
+    const cleanUser = rawVal.replace(/[\s-]/g, '');
+    const convertedUser = romajiToHiragana(rawVal).replace(/[\s-]/g, '');
+
+    const isCorrect = correctAns.includes(cleanUser) || (!cur.isArti && correctAns.includes(convertedUser));
+
+    fb.style.opacity = '1';
+    if (isCorrect) {
+      this.playSfx('correct');
+      fb.innerHTML = 'BENAR! ✅';
+      fb.style.color = 'var(--success)';
+      this.scoreQuiz++;
+    } else {
+      this.playSfx('wrong');
+      fb.innerHTML = `SALAH! ❌ Jawaban: <b>${cur.ans[0]}</b>`;
+      fb.style.color = 'var(--danger)';
+    }
+
+    if (cur.audio) this.speakText(cur.audio);
+
+    const scorePill = document.getElementById('quiz-score-pill');
+    if (scorePill) scorePill.innerText = `⭐ Skor: ${this.scoreQuiz} / ${this.activeQuizData.length}`;
+
+    setTimeout(() => {
+      this.triggerAnimation('quiz-content-wrapper', 'slide-out-left');
+      setTimeout(() => {
+        this.idxQuiz++;
+        this.renderQuiz(true);
+      }, 180);
     }, 1200);
   },
 
-  renderIsian: function(useSlideAnim = true) {
-    const fb = document.getElementById('isian-feedback'); fb.innerHTML = ""; fb.style.opacity = "0";
-    const input = document.getElementById('isian-input'); input.value = ""; input.disabled = false;
-    document.getElementById('btn-submit-isian').classList.remove('hidden');
-    
-    const pool = this.activeIsianData;
+  // ==========================================
+  // TABEL BUKU SAKU VIEW
+  // ==========================================
+  renderTabel: function(useSlideAnim = true) {
+    const sec = document.getElementById('sec-tabel');
+    const isNa = this.activeCategory === 'sifatna';
+    const pages = isNa ? Pages_Na : Pages_I;
+    const pageData = pages[this.activeSesi];
 
-    if (this.idxIsian >= pool.length) {
-      document.getElementById('isian-q').innerHTML = `🎉 Latihan Tuntas!<br>Skor: ${this.scoreIsian} / ${pool.length}`;
-      input.classList.add('hidden'); document.getElementById('btn-submit-isian').classList.add('hidden');
-      
-      let evalHTML = this.getEvaluasiHTML(this.activeMode, this.activeSesi, this.scoreIsian, pool.length);
-      fb.style.opacity = "1";
-      fb.innerHTML = evalHTML + `<button class="btn-next" onclick="Modul.switchTab('isian')">Acak & Ulangi Kuis</button>`;
-      
-      if(useSlideAnim) this.triggerAnimation('isian-content-wrapper', 'slide-in-right');
-      return;
-    }
+    let html = `
+      <div class="table-stage-box" id="table-stage-box">
+        <div class="table-header-row">
+          <div class="table-title ${isNa ? 'na-title' : ''}">${pageData.title} (${this.activeArray.length} Kata)</div>
+          <button type="button" class="btn-sensor-furi" id="btn-toggle-furi" onclick="Modul.toggleFurigana()">👁️ Furigana</button>
+        </div>
+        <div style="font-size:12px; color:var(--text-sub); margin-bottom:12px; line-height:1.45;">${pageData.narasi}</div>
+        <div id="table-waktu-container">
+          <table class="tabel-waktu ${isNa ? 'na-table' : ''}">
+            <tr>
+              <th style="width:42%;">Kanji & 4 Bentuk</th>
+              <th style="width:58%;">Arti & Lawan Kata</th>
+            </tr>
+    `;
 
-    const target = pool[this.idxIsian];
-    document.getElementById('isian-progress').innerText = `KUIS ISIAN: ${this.idxIsian+1} / ${pool.length}`;
-    document.getElementById('isian-q').innerHTML = target.q;
-    
-    let hintTeks = document.getElementById('isian-hint-teks');
-    if (hintTeks) {
-        hintTeks.classList.remove('hidden');
-        if (target.q.includes("Apa arti")) { 
-            hintTeks.innerText = "(Ketik terjemahannya, misal: besar / ramah)"; 
-        } else { 
-            hintTeks.innerText = "(Gunakan keyboard Jepang untuk Hiragana)"; 
-        }
-    }
-    input.classList.remove('hidden'); input.focus();
-    if(useSlideAnim) this.triggerAnimation('isian-content-wrapper', 'slide-in-right');
+    this.activeArray.forEach(item => {
+      let rubyHTML = `<ruby>${item.k}<rt class="furi-anim">${item.r}</rt></ruby>`;
+      const inf = getAdjectiveInflections(item.k, item.r, isNa);
+      const antonyms = ANTONYM_MAP[item.k] || [];
+
+      html += `
+        <tr>
+          <td>
+            <span class="ruby-item" onclick="this.classList.toggle('revealed')">
+              ${rubyHTML}
+              <button type="button" class="btn-audio-inline" onclick="Modul.speakText('${item.k || item.r}', event)">🔊</button>
+            </span>
+            <div class="table-inf-grid">
+              <div class="tig-cell"><span class="tig-tag">(-):</span> ${inf.presNeg.kanji}</div>
+              <div class="tig-cell"><span class="tig-tag">(+L):</span> ${inf.pastPos.kanji}</div>
+              <div class="tig-cell" style="grid-column: span 2;"><span class="tig-tag">(-L):</span> ${inf.pastNeg.kanji}</div>
+            </div>
+          </td>
+          <td>
+            <span class="t-arti">${item.a}</span>
+            ${antonyms.length > 0 ? `<div style="font-size:11px; color:var(--gold); font-weight:700;">⚖️ Lawan: ${antonyms.join(', ')}</div>` : ''}
+            ${item.note ? `<div style="font-size:10.5px; color:#bae6fd; margin-top:2px;">💡 ${item.note}</div>` : ''}
+          </td>
+        </tr>
+      `;
+    });
+
+    html += `
+          </table>
+        </div>
+      </div>
+    `;
+
+    sec.innerHTML = html;
+    if (useSlideAnim) this.triggerAnimation('table-stage-box', 'fade-in-up');
   },
 
-  checkIsian: function() {
-    const fb = document.getElementById('isian-feedback');
-    const input = document.getElementById('isian-input');
-    const answer = input.value.toLowerCase().replace(/[\s-]/g, '');
-    if(!answer) return;
+  toggleFurigana: function() {
+    this.playSfx('tap');
+    const container = document.getElementById('table-waktu-container');
+    const btn = document.getElementById('btn-toggle-furi');
+    if (!container || !btn) return;
 
-    input.disabled = true; document.getElementById('btn-submit-isian').classList.add('hidden');
-    
-    const target = this.activeIsianData[this.idxIsian];
-    const correctAns = target.ans.map(a => a.toLowerCase().replace(/[\s-]/g, ''));
+    const isHidden = !container.classList.contains('show-all-furi');
+    container.classList.toggle('show-all-furi', isHidden);
+    btn.classList.toggle('active', isHidden);
+    btn.innerText = isHidden ? '🙈 Furigana' : '👁️ Furigana';
+  },
 
-    fb.style.opacity = "1"; this.triggerAnimation('isian-feedback', 'pop-in');
+  // ==========================================
+  // CHEATSHEET RUMUS 4 BENTUK INFLEKSI
+  // ==========================================
+  openCheatsheet: function() {
+    this.playSfx('tap');
+    const modal = document.getElementById('cheatsheet-modal');
+    if (modal) {
+      modal.classList.remove('hidden');
+      this.renderCheatsheetContent();
+    }
+  },
 
-    if(correctAns.includes(answer)) { fb.innerHTML = "BENAR! ✅"; fb.style.color = "var(--success)"; this.scoreIsian++; } 
-    else { fb.innerHTML = `SALAH! ❌<br><span style="font-size:14px; color:var(--text-sub);">Kunci: ${target.ans[0]}</span>`; fb.style.color = "var(--danger)"; }
-    
-    setTimeout(() => { 
-      this.triggerAnimation('isian-content-wrapper', 'slide-out-left');
-      setTimeout(() => { this.idxIsian++; this.renderIsian(true); }, 1500);
-    }, 1500);
+  closeCheatsheet: function() {
+    this.playSfx('tap');
+    const modal = document.getElementById('cheatsheet-modal');
+    if (modal) modal.classList.add('hidden');
+  },
+
+  switchCheatsheetTab: function(tab) {
+    this.playSfx('tap');
+    this.csActiveTab = tab;
+    document.getElementById('cs-tab-i').classList.toggle('active', tab === 'i');
+    document.getElementById('cs-tab-na').classList.toggle('active', tab === 'na');
+    this.renderCheatsheetContent();
+  },
+
+  renderCheatsheetContent: function() {
+    const box = document.getElementById('cs-body-content');
+    if (!box) return;
+
+    if (this.csActiveTab === 'i') {
+      box.innerHTML = `
+        <div style="font-weight:800; color:var(--primary); margin-bottom:6px;">🔹 Pola Perubahan Sifat-i (~い)</div>
+        <p style="color:var(--text-sub); margin-bottom:10px;">
+          Kata sifat-i selalu mengubah huruf <b>い (i)</b> di bagian paling belakang menjadi akhiran rumus yang diinginkan:
+        </p>
+
+        <table class="cs-table">
+          <tr>
+            <th>Bentuk</th>
+            <th>Rumus</th>
+            <th>Contoh: 大きい (Besar)</th>
+          </tr>
+          <tr>
+            <td><b>Sekarang (+)</b></td>
+            <td><b>~い</b></td>
+            <td>大きい (ookii) <button type="button" class="btn-audio-inline" onclick="Modul.speakText('おおきい')">🔊</button></td>
+          </tr>
+          <tr>
+            <td><b>Sekarang (-)</b></td>
+            <td><b>~くない</b></td>
+            <td>大きくない (ookikunai) <button type="button" class="btn-audio-inline" onclick="Modul.speakText('おおきくない')">🔊</button></td>
+          </tr>
+          <tr>
+            <td><b>Lampau (+)</b></td>
+            <td><b>~かった</b></td>
+            <td>大きかった (ookikatta) <button type="button" class="btn-audio-inline" onclick="Modul.speakText('おおきかった')">🔊</button></td>
+          </tr>
+          <tr>
+            <td><b>Lampau (-)</b></td>
+            <td><b>~くなかった</b></td>
+            <td>大きくなかった (ookikunakatta) <button type="button" class="btn-audio-inline" onclick="Modul.speakText('おおきくなかった')">🔊</button></td>
+          </tr>
+        </table>
+
+        <div class="cs-alert-box">
+          ⭐ <b>PENGECUALIAN EMAS: いい (ii - Bagus)</b><br>
+          Berasal dari kata asli <i>よい (yoi)</i>. Saat diubah, akar kata <b>いい</b> berubah menjadi <b>よ~</b>:<br>
+          • Negatif: <b>よくない</b> (bukan iikunai!) <button type="button" class="btn-audio-inline" onclick="Modul.speakText('よくない')">🔊</button><br>
+          • Lampau: <b>よかった</b> <button type="button" class="btn-audio-inline" onclick="Modul.speakText('よかった')">🔊</button><br>
+          • Lampau Negatif: <b>よくなかった</b> <button type="button" class="btn-audio-inline" onclick="Modul.speakText('よくなかった')">🔊</button>
+        </div>
+      `;
+    } else {
+      box.innerHTML = `
+        <div style="font-weight:800; color:var(--success); margin-bottom:6px;">🔸 Pola Perubahan Sifat-na (~な)</div>
+        <p style="color:var(--text-sub); margin-bottom:10px;">
+          Kata sifat-na tidak berubah di badannya, melainkan menambahkan kata bantu kopula di belakangnya:
+        </p>
+
+        <table class="cs-table na-cs">
+          <tr>
+            <th>Bentuk</th>
+            <th>Biasa / Sopan</th>
+            <th>Contoh: 静か (Tenang)</th>
+          </tr>
+          <tr>
+            <td><b>Sekarang (+)</b></td>
+            <td><b>だ / です</b></td>
+            <td>静かだ / 静かです <button type="button" class="btn-audio-inline" onclick="Modul.speakText('しずかです')">🔊</button></td>
+          </tr>
+          <tr>
+            <td><b>Sekarang (-)</b></td>
+            <td><b>じゃない / ではありません</b></td>
+            <td>静かじゃない <button type="button" class="btn-audio-inline" onclick="Modul.speakText('しずかじゃない')">🔊</button></td>
+          </tr>
+          <tr>
+            <td><b>Lampau (+)</b></td>
+            <td><b>だった / でした</b></td>
+            <td>静かだった <button type="button" class="btn-audio-inline" onclick="Modul.speakText('しずかだった')">🔊</button></td>
+          </tr>
+          <tr>
+            <td><b>Lampau (-)</b></td>
+            <td><b>じゃなかった</b></td>
+            <td>静かじゃなかった <button type="button" class="btn-audio-inline" onclick="Modul.speakText('しずかじゃなかった')">🔊</button></td>
+          </tr>
+        </table>
+
+        <div class="cs-alert-box danger-box">
+          ⚠️ <b>JEBAKAN SIFAT-NA BERAKHIRAN "I":</b><br>
+          Hati-hati dengan kata: <b>きれい (綺麗 - cantik/bersih)</b> dan <b>きらい (嫌い - benci)</b>.<br>
+          Walaupun berakhiran 'i', keduanya adalah <b>KATA SIFAT-NA</b>! Bentuk negatifnya adalah <i>きれいじゃない</i> (bukan kirekunai!).
+        </div>
+
+        <div class="cs-alert-box" style="margin-top:8px;">
+          📌 <b>Menyambung Kata Benda:</b><br>
+          Wajib menambahkan partikel <b>な (na)</b> jika diletakkan tepat di depan kata benda:<br>
+          • <b>静かな部屋</b> (shizuka na heya = kamar yang tenang)<br>
+          • <b>きれいな花</b> (kirei na hana = bunga yang indah)
+        </div>
+      `;
+    }
   }
 };
 
