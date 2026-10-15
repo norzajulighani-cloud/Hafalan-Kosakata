@@ -7100,19 +7100,22 @@ const DojoEngine = {
       btnClass = 'is-in-dojo';
     }
 
+    const readingForDisplay = (item.kun && item.kun !== '-') ? item.kun : (item.on && item.on !== '-' ? item.on : '');
+    const audioReading = (item.kun && item.kun !== '-') ? item.kun : (item.on && item.on !== '-' ? item.on : '');
+
     return `
       <div class="kanji-market-card ${isMaster ? 'card-mastered' : ''}" data-kanji="${item.k}">
         <div class="card-top-meta">
           <span class="tag-level ${lvlClass}">${item.lvl}</span>
           <div class="card-meta-right">
             <span class="tag-source">${dayBadge}</span>
-            <button type="button" class="btn-card-audio" onclick="DojoEngine.speakKanji('${item.k}', '${(item.kun||item.on||'').replace(/'/g, "\\'")}', event)" title="Dengarkan Pengucapan">🔊</button>
+            <button type="button" class="btn-card-audio" onclick="DojoEngine.speakKanji('${item.k}', '${audioReading.replace(/'/g, "\\'")}', event)" title="Dengarkan Pengucapan">🔊</button>
           </div>
         </div>
 
         <div class="card-kanji-hero">${item.k}</div>
         <div class="card-arti-label">${item.a}</div>
-        <div class="card-readings-hint">${item.kun || item.on}</div>
+        <div class="card-readings-hint">${readingForDisplay}</div>
 
         <button type="button" class="btn-cart-toggle ${btnClass}" onclick="DojoEngine.toggleKanjiCard('${item.k}', event)">
           <span>${btnText}</span>
@@ -7631,6 +7634,8 @@ const DojoEngine = {
     let toSpeak = item.k;
     if (item.kun && item.kun !== '-') {
       toSpeak = item.kun.split(',')[0].replace(/[\.・\-]/g, '');
+    } else if (item.on && item.on !== '-') {
+      toSpeak = item.on.split(',')[0].replace(/[\.・\-]/g, '');
     }
     this.speakText(toSpeak);
   },
@@ -7819,10 +7824,28 @@ const DojoEngine = {
     this.renderQuestionUI(qData);
   },
 
+  getValidReading: function(k) {
+    if (!k) return '';
+    if (k.kun && k.kun !== '-' && k.kun.trim() !== '') {
+      return k.kun.split(',')[0].trim();
+    }
+    if (k.on && k.on !== '-' && k.on.trim() !== '') {
+      return k.on.split(',')[0].trim();
+    }
+    return '';
+  },
+
   buildMeaningQuestion: function(target) {
-    const distractors = KANJI_CATALOG.filter(k => k.k !== target.k);
+    const distractors = KANJI_CATALOG.filter(k => k.k !== target.k && k.a !== target.a);
     this.shuffle(distractors);
-    const choices = [target.a, distractors[0].a, distractors[1].a, distractors[2].a];
+
+    const choices = [target.a];
+    for (const d of distractors) {
+      if (d.a && !choices.includes(d.a)) {
+        choices.push(d.a);
+      }
+      if (choices.length === 4) break;
+    }
     this.shuffle(choices);
 
     return {
@@ -7840,21 +7863,30 @@ const DojoEngine = {
   },
 
   buildReadingQuestion: function(target) {
-    const correctReading = target.kun ? target.kun.split(',')[0].trim() : target.on.split(',')[0].trim();
-    const distractors = KANJI_CATALOG.filter(k => k.k !== target.k);
+    const correctReading = this.getValidReading(target);
+    const distractors = KANJI_CATALOG.filter(k => {
+      if (k.k === target.k) return false;
+      const r = this.getValidReading(k);
+      return r && r !== '-' && r !== correctReading;
+    });
     this.shuffle(distractors);
 
-    const getReading = k => (k.kun ? k.kun.split(',')[0].trim() : k.on.split(',')[0].trim());
-    const dReadings = [getReading(distractors[0]), getReading(distractors[1]), getReading(distractors[2])];
-    const choices = [correctReading, ...dReadings];
-    this.shuffle(choices);
+    const uniqueChoices = [correctReading];
+    for (const d of distractors) {
+      const r = this.getValidReading(d);
+      if (r && r !== '-' && !uniqueChoices.includes(r)) {
+        uniqueChoices.push(r);
+      }
+      if (uniqueChoices.length === 4) break;
+    }
+    this.shuffle(uniqueChoices);
 
     return {
       type: 'reading',
       badge: '🗣️ Tebak Bacaan Kanji',
       promptKanji: target.k,
       promptSub: `Bagaimana cara membaca kanji <b>${target.k}</b> (${target.a})?`,
-      choices: choices,
+      choices: uniqueChoices,
       correct: correctReading,
       feedbackCorrect: `Bagus! Kanji <b>${target.k}</b> dibaca <b>${correctReading}</b>.`,
       feedbackWrong: `Salah tebas! Kanji <b>${target.k}</b> dibaca <b>${correctReading}</b>.`,
@@ -7866,7 +7898,14 @@ const DojoEngine = {
   buildKanjiQuestion: function(target) {
     const distractors = KANJI_CATALOG.filter(k => k.k !== target.k);
     this.shuffle(distractors);
-    const choices = [target.k, distractors[0].k, distractors[1].k, distractors[2].k];
+
+    const choices = [target.k];
+    for (const d of distractors) {
+      if (d.k && !choices.includes(d.k)) {
+        choices.push(d.k);
+      }
+      if (choices.length === 4) break;
+    }
     this.shuffle(choices);
 
     return {
@@ -7884,21 +7923,35 @@ const DojoEngine = {
   },
 
   buildOnKunQuestion: function(target) {
-    let askOnyomi = Math.random() > 0.5;
-    if (!target.on || target.on === '-') askOnyomi = false;
-    if (!target.kun || target.kun === '-') askOnyomi = true;
+    let hasValidOn = target.on && target.on !== '-' && target.on.trim() !== '';
+    let hasValidKun = target.kun && target.kun !== '-' && target.kun.trim() !== '';
 
-    let targetReading = askOnyomi ? target.on : target.kun;
+    let askOnyomi = Math.random() > 0.5;
+    if (!hasValidOn) askOnyomi = false;
+    if (!hasValidKun) askOnyomi = true;
+
+    let targetRaw = askOnyomi ? target.on : target.kun;
+    let targetReading = targetRaw.split(',')[0].trim();
     let label = askOnyomi ? 'ONYOMI (Bunyi Cina)' : 'KUNYOMI (Asli Jepang)';
 
-    const distractors = KANJI_CATALOG.filter(k => k.k !== target.k && (askOnyomi ? k.on : k.kun));
+    const distractors = KANJI_CATALOG.filter(k => {
+      if (k.k === target.k) return false;
+      const r = askOnyomi ? k.on : k.kun;
+      return r && r !== '-' && r.trim() !== '' && r.split(',')[0].trim() !== targetReading;
+    });
     this.shuffle(distractors);
 
-    let d1 = askOnyomi ? distractors[0].on : distractors[0].kun;
-    let d2 = askOnyomi ? distractors[1].on : distractors[1].kun;
-    let d3 = askOnyomi ? distractors[2].on : distractors[2].kun;
-
-    const choices = [targetReading, d1, d2, d3];
+    const choices = [targetReading];
+    for (const d of distractors) {
+      const raw = askOnyomi ? d.on : d.kun;
+      if (raw && raw !== '-' && raw.trim() !== '') {
+        const r = raw.split(',')[0].trim();
+        if (r && r !== '-' && !choices.includes(r)) {
+          choices.push(r);
+        }
+      }
+      if (choices.length === 4) break;
+    }
     this.shuffle(choices);
 
     return {
