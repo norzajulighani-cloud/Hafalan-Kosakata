@@ -164,7 +164,7 @@
   }
 
   /* ==========================================
-     2. MAIN MODE TABS (Single Clean Bar)
+     2. MAIN MODE TABS (2 Focused Action Tabs!)
      ========================================== */
   .main-nav-tabs {
     display: flex;
@@ -187,13 +187,13 @@
     border-radius: 12px;
     cursor: pointer;
     font-weight: 800;
-    font-size: 13px;
+    font-size: 13.5px;
     text-align: center;
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 7px;
+    gap: 8px;
     user-select: none;
     white-space: nowrap;
   }
@@ -214,7 +214,6 @@
 
   /* ==========================================
      3. UNIFIED HORIZONTAL FILTER CHIP STREAM
-     (Category Sifat-i/na + Sesi in ONE neat strip!)
      ========================================== */
   .filter-stream-bar {
     display: flex;
@@ -303,8 +302,7 @@
   }
 
   /* ==========================================
-     4. UNBOXED RPG ARENA CARD (MATCHING KANJI.HTML)
-     No Russian Dolls! Single Card Container!
+     4. UNBOXED RPG ARENA CARD
      ========================================== */
   .dojo-arena-card {
     background: linear-gradient(170deg, rgba(22, 34, 68, 0.96) 0%, rgba(10, 16, 36, 0.98) 100%);
@@ -312,7 +310,7 @@
     border-radius: 24px;
     padding: 22px 18px;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75), 0 0 30px rgba(56, 189, 248, 0.12);
-    min-height: 480px;
+    min-height: 500px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -394,9 +392,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    padding: 8px 0;
+    padding: 6px 0;
     text-align: center;
-    cursor: pointer;
     user-select: none;
     width: 100%;
   }
@@ -407,7 +404,7 @@
     font-weight: 700;
     color: #fff;
     line-height: 1.15;
-    margin: 6px 0 4px;
+    margin: 4px 0 2px;
     text-shadow: 0 0 35px rgba(56, 189, 248, 0.45);
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     animation: floatKanji 4s ease-in-out infinite;
@@ -418,7 +415,6 @@
   }
   .fc-stage-box:hover .fc-kanji-big {
     transform: scale(1.05) translateY(-3px);
-    color: #fff;
   }
 
   .fc-hira-text {
@@ -426,7 +422,7 @@
     font-size: clamp(16px, 4.5vw, 20px);
     color: var(--gold);
     font-weight: 800;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
     text-shadow: 0 0 12px rgba(251, 191, 36, 0.3);
   }
 
@@ -437,13 +433,13 @@
     margin-bottom: 8px;
   }
 
-  /* 4 Forms Matrix (Clean Glass Tiles, NOT Boxes inside Boxes) */
+  /* 4 Forms Matrix: Clean Glass Tiles */
   .fc-grid-two {
     width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 8px;
-    margin-top: 10px;
+    margin-top: 6px;
     text-align: left;
   }
 
@@ -451,25 +447,38 @@
     background: rgba(6, 10, 24, 0.72);
     border: 1px solid var(--border-glass);
     border-radius: 12px;
-    padding: 8px 12px;
+    padding: 8px 11px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
+    position: relative;
   }
   .inflection-cell:hover {
     border-color: rgba(56, 189, 248, 0.45);
     background: rgba(56, 189, 248, 0.1);
     transform: translateY(-1px);
   }
+  .inflection-cell.active-cell {
+    border-color: var(--primary) !important;
+    background: rgba(56, 189, 248, 0.18) !important;
+    box-shadow: 0 0 14px rgba(56, 189, 248, 0.35) !important;
+    transform: translateY(-1px);
+  }
+  .inflection-cell.active-cell.na-cell {
+    border-color: var(--success) !important;
+    background: rgba(34, 197, 94, 0.18) !important;
+    box-shadow: 0 0 14px rgba(34, 197, 94, 0.35) !important;
+  }
+
   .inf-label {
     font-size: 10px;
     font-weight: 800;
     letter-spacing: 0.6px;
     color: var(--text-sub);
-    margin-bottom: 3px;
+    margin-bottom: 2px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -477,7 +486,7 @@
   .inf-label span:first-child { color: var(--primary); }
   .inf-val {
     font-family: 'Noto Sans JP', sans-serif;
-    font-size: 14px;
+    font-size: 13.5px;
     font-weight: 800;
     color: #fff;
     display: flex;
@@ -486,25 +495,25 @@
     flex-wrap: wrap;
   }
   .inf-sub {
-    font-size: 10.5px;
+    font-size: 10px;
     color: var(--gold);
     font-weight: 700;
   }
   .inf-speaker {
-    font-size: 11px;
+    font-size: 10px;
     opacity: 0.6;
     transition: opacity 0.2s;
   }
   .inflection-cell:hover .inf-speaker { opacity: 1; }
 
-  /* Antonym Badge / Tag (Seamless, Unboxed) */
+  /* Antonym Badge / Tag */
   .fc-antonym-strip {
     width: 100%;
     margin-top: 8px;
     background: rgba(251, 191, 36, 0.08);
     border: 1px solid rgba(251, 191, 36, 0.25);
     border-radius: 12px;
-    padding: 7px 12px;
+    padding: 6px 12px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -516,7 +525,7 @@
     border-color: var(--gold);
   }
   .antonym-tag-label {
-    font-size: 11px;
+    font-size: 10.5px;
     font-weight: 800;
     color: var(--gold);
     display: flex;
@@ -525,9 +534,119 @@
   }
   .antonym-pair-text {
     font-family: 'Noto Sans JP', sans-serif;
-    font-size: 12.5px;
+    font-size: 12px;
     font-weight: 800;
     color: #fff;
+  }
+
+  /* ==========================================
+     5. DYNAMIC SENTENCE MORPH SHELF
+     (Live Morphing Conjugation Sentence)
+     ========================================== */
+  .fc-sentence-shelf {
+    width: 100%;
+    margin-top: 10px;
+    background: rgba(6, 10, 24, 0.82);
+    border: 1px solid var(--border-glass);
+    border-radius: 14px;
+    padding: 10px 14px;
+    text-align: left;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+    transition: all 0.25s ease;
+  }
+  .fc-sentence-shelf:hover {
+    border-color: rgba(56, 189, 248, 0.35);
+  }
+  .fss-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .fss-badge-wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .fss-badge {
+    font-size: 10px;
+    font-weight: 900;
+    color: var(--primary);
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+  }
+  .fss-form-pill {
+    background: rgba(56, 189, 248, 0.15);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    color: var(--primary);
+    font-size: 9.5px;
+    font-weight: 800;
+    padding: 1px 7px;
+    border-radius: 8px;
+    transition: all 0.2s;
+  }
+  .fss-form-pill.na-pill {
+    background: rgba(34, 197, 94, 0.15);
+    border-color: rgba(34, 197, 94, 0.35);
+    color: var(--success);
+  }
+
+  .btn-sentence-audio {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-glass);
+    color: var(--primary);
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    font-size: 11px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .btn-sentence-audio:hover {
+    background: var(--primary);
+    color: #000;
+    transform: scale(1.1);
+  }
+
+  .fss-jp {
+    font-family: 'Noto Serif JP', 'Noto Sans JP', serif;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.45;
+    transition: all 0.2s ease;
+  }
+  .fss-jp .highlight-adj {
+    color: var(--gold);
+    background: rgba(245, 158, 11, 0.16);
+    padding: 1px 5px;
+    border-radius: 4px;
+    border-bottom: 1.5px solid var(--gold);
+  }
+  .fss-romaji {
+    font-size: 11.5px;
+    color: var(--text-sub);
+    font-style: italic;
+    margin-top: 3px;
+    line-height: 1.35;
+  }
+  .fss-id {
+    font-size: 12.5px;
+    color: #cbd5e1;
+    margin-top: 3px;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+  .fss-id .highlight-meaning {
+    color: #fff;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--primary);
   }
 
   /* Note banner */
@@ -569,7 +688,7 @@
     pointer-events: auto;
   }
 
-  /* Dojo Navigation Bottom Controls (Matching kanji.html) */
+  /* Dojo Navigation Bottom Controls */
   .dojo-nav-controls {
     display: flex;
     gap: 9px;
@@ -624,8 +743,7 @@
   }
 
   /* ==========================================
-     5. ARENA KUIS BERVARIASI (Compact Dropdown Selector)
-     No Tabs-in-Tabs! Sleek dropdown like kanji.html!
+     6. ARENA KUIS BERVARIASI
      ========================================== */
   .quiz-top-bar {
     display: flex;
@@ -661,7 +779,7 @@
     color: #86efac;
   }
 
-  /* Compact Drill Mode Dropdown (Kanji.html style) */
+  /* Compact Drill Mode Dropdown */
   .drill-mode-dropdown-wrap {
     position: relative;
   }
@@ -801,7 +919,6 @@
   }
   .btn-quiz-opt:active:not(:disabled) { transform: scale(0.96); }
 
-  /* Tactile Correct Spring Animation */
   @keyframes popCorrect {
     0% { transform: scale(1); }
     35% { transform: scale(1.06); }
@@ -816,7 +933,6 @@
     animation: popCorrect 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards !important;
   }
 
-  /* Elastic Shake for Wrong Selection */
   @keyframes elasticShake {
     0%, 100% { transform: translateX(0); }
     20% { transform: translateX(-8px) rotate(-1deg); }
@@ -877,133 +993,6 @@
     box-shadow: 0 4px 16px rgba(56, 189, 248, 0.25);
   }
   .btn-isian-submit:hover { filter: brightness(1.1); transform: translateY(-1px); }
-
-  /* ==========================================
-     6. TABEL BUKU SAKU VIEW
-     ========================================== */
-  .table-stage-box {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    text-align: left;
-  }
-  .table-header-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-  }
-  .table-title {
-    font-size: 16px;
-    font-weight: 800;
-    color: var(--primary);
-  }
-  .table-title.na-title { color: var(--success); }
-
-  .btn-sensor-furi {
-    background: rgba(255, 255, 255, 0.05);
-    color: #fff;
-    border: 1px solid var(--border-glass);
-    padding: 6px 12px;
-    border-radius: 10px;
-    font-weight: 700;
-    font-size: 11.5px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .btn-sensor-furi:hover { border-color: var(--primary); }
-  .btn-sensor-furi.active {
-    background: rgba(56, 189, 248, 0.15);
-    color: var(--primary);
-    border-color: var(--primary);
-  }
-
-  .tabel-waktu {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13.5px;
-    margin-bottom: 12px;
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: 12px;
-    overflow: hidden;
-  }
-  .tabel-waktu th {
-    background: rgba(56, 189, 248, 0.12);
-    color: var(--primary);
-    padding: 9px 12px;
-    border-bottom: 1px solid rgba(56, 189, 248, 0.3);
-    text-align: left;
-    font-size: 11.5px;
-    font-weight: 800;
-    letter-spacing: 0.5px;
-  }
-  .tabel-waktu.na-table th {
-    background: rgba(34, 197, 94, 0.12);
-    color: var(--success);
-    border-bottom-color: rgba(34, 197, 94, 0.3);
-  }
-  .tabel-waktu td {
-    padding: 10px 12px;
-    border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
-    vertical-align: top;
-  }
-  .tabel-waktu tr:last-child td { border-bottom: none; }
-
-  ruby { line-height: 1.5; white-space: nowrap; }
-  .ruby-item {
-    font-weight: 800;
-    color: var(--text-main);
-    font-size: 17px;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 2px 4px;
-    border-radius: 6px;
-    transition: all 0.2s;
-  }
-  .ruby-item:hover { background: rgba(255, 255, 255, 0.06); }
-  .furi-anim {
-    opacity: 0;
-    transform: translateY(6px) scale(0.6);
-    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    color: var(--gold);
-    font-size: 11px;
-    font-weight: 800;
-    pointer-events: none;
-  }
-  .ruby-item.revealed .furi-anim,
-  .show-all-furi .ruby-item .furi-anim {
-    opacity: 1 !important;
-    transform: translateY(0) scale(1) !important;
-  }
-
-  .btn-audio-inline {
-    background: transparent;
-    border: none;
-    color: var(--primary);
-    font-size: 13px;
-    cursor: pointer;
-    padding: 2px 4px;
-    border-radius: 6px;
-    transition: transform 0.2s;
-  }
-  .btn-audio-inline:hover { transform: scale(1.2); }
-  .t-arti { color: #f1f5f9; font-size: 13.5px; font-weight: 700; display: block; margin-bottom: 4px; }
-  .table-inf-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4px;
-    margin-top: 6px;
-    font-size: 11px;
-    color: var(--text-sub);
-    background: rgba(0, 0, 0, 0.25);
-    padding: 6px 8px;
-    border-radius: 8px;
-  }
-  .tig-cell { display: flex; align-items: center; gap: 4px; }
-  .tig-tag { color: var(--gold); font-size: 9.5px; font-weight: 800; }
 
   /* ==========================================
      7. MODAL CHEATSHEET RUMUS 4 BENTUK INFLEKSI
@@ -1191,19 +1180,15 @@
     <div class="mastery-progress-fill" id="mastery-progress-fill"></div>
   </div>
 
-  <!-- 2. MAIN MODE TABS (Single Clean Bar) -->
+  <!-- 2. MAIN MODE TABS (2 Clean Focused Tabs) -->
   <nav class="main-nav-tabs">
     <button type="button" class="tab-main-btn active" id="btn-tab-flashcard" onclick="Modul.switchTab('flashcard')">
       <span>🎴</span>
-      <span>Flashcard</span>
+      <span>Flashcard & Infleksi</span>
     </button>
     <button type="button" class="tab-main-btn" id="btn-tab-quiz" onclick="Modul.switchTab('quiz')">
       <span>🎯</span>
       <span>Arena Kuis</span>
-    </button>
-    <button type="button" class="tab-main-btn" id="btn-tab-tabel" onclick="Modul.switchTab('tabel')">
-      <span>📋</span>
-      <span>Tabel Buku</span>
     </button>
   </nav>
 
@@ -1239,7 +1224,7 @@
         <span class="quiz-stat-pill score-pill" id="quiz-score-pill">⭐ Skor: 0</span>
       </div>
 
-      <!-- Compact Drill Mode Dropdown (Kanji.html style) -->
+      <!-- Compact Drill Mode Dropdown -->
       <div class="drill-mode-dropdown-wrap">
         <button type="button" class="btn-drill-dropdown" id="btn-drill-dropdown" onclick="Modul.toggleDrillDropdown(event)">
           <span id="drill-label-icon">🔀</span>
@@ -1300,11 +1285,6 @@
       </div>
       <div class="quiz-feedback-bar" id="quiz-feedback-bar"></div>
     </div>
-  </div>
-
-  <!-- 6. TABEL BUKU SAKU STAGE -->
-  <div id="sec-tabel" class="dojo-arena-card hidden fade-in-up">
-    <!-- Diisi via renderTabel -->
   </div>
 
 </div>
@@ -1670,14 +1650,194 @@ function romajiToHiragana(text) {
 // ==========================================
 
 // ==========================================
+// CONTEXTUAL SENTENCE GENERATOR
+// ==========================================
+function getContextSubject(item, isNa) {
+  const k = item.k;
+  const a = item.a.toLowerCase();
+
+  // Weather / temperature
+  if (['暑い', '寒い', '暖かい', '涼しい', '蒸暑い'].includes(k) || a.includes('suhu') || a.includes('cuaca')) {
+    return {
+      pres: { jp: '今日は', ro: 'Kyou wa ', id: 'Hari ini ' },
+      past: { jp: '昨日は', ro: 'Kinou wa ', id: 'Kemarin ' }
+    };
+  }
+  // Taste / food / drink
+  if (['甘い', '辛い', '酸っぱい', '塩辛い', '苦い', '濃い', '薄い', '美味しい', '不味い', '上手い', '熱い', '冷たい'].includes(k) || a.includes('rasa') || a.includes('manis') || a.includes('pedas') || a.includes('enak')) {
+    return {
+      pres: { jp: 'この料理は', ro: 'Kono ryouri wa ', id: 'Masakan ini ' },
+      past: { jp: 'あの料理は', ro: 'Ano ryouri wa ', id: 'Masakan itu dulu ' }
+    };
+  }
+  // Price / speed / travel
+  if (['高い', '安い'].includes(k) && (a.includes('mahal') || a.includes('murah'))) {
+    return {
+      pres: { jp: 'このカメラは', ro: 'Kono kamera wa ', id: 'Kamera ini ' },
+      past: { jp: 'あのカメラは', ro: 'Ano kamera wa ', id: 'Kamera itu dulu ' }
+    };
+  }
+  if (['早い', '遅い', '速い'].includes(k)) {
+    return {
+      pres: { jp: 'この電車は', ro: 'Kono densha wa ', id: 'Kereta ini ' },
+      past: { jp: 'あの電車は', ro: 'Ano densha wa ', id: 'Kereta kemarin ' }
+    };
+  }
+  if (['遠い', '近い'].includes(k)) {
+    return {
+      pres: { jp: '駅は', ro: 'Eki wa ', id: 'Stasiun ' },
+      past: { jp: '昔の駅は', ro: 'Mukashi no eki wa ', id: 'Stasiun dulu ' }
+    };
+  }
+  // People / feelings / personality
+  if (['元気', '親切', '暇', '忙しい', '優しい', '厳しい', '真面目', '賑やか', '静か', '有名', 'ハンサム', 'きれい', '綺麗', '素直', '頑固'].includes(k) || a.includes('ramah') || a.includes('sehat') || a.includes('sibuk') || a.includes('terkenal') || a.includes('cantik') || a.includes('tampan')) {
+    return {
+      pres: { jp: '田中さんは', ro: 'Tanaka-san wa ', id: 'Tanaka-san ' },
+      past: { jp: '田中さんは昔', ro: 'Tanaka-san wa mukashi ', id: 'Tanaka-san dulu ' }
+    };
+  }
+  if (['好き', '嫌い', '大好き', '大嫌い', '欲しい'].includes(k)) {
+    return {
+      pres: { jp: '私はこれが', ro: 'Watashi wa kore ga ', id: 'Saya ' },
+      past: { jp: '私は昔これが', ro: 'Watashi wa mukashi kore ga ', id: 'Saya dulu ' }
+    };
+  }
+  if (['上手', '下手', '得意', '苦手'].includes(k)) {
+    return {
+      pres: { jp: '彼は日本語が', ro: 'Kare wa nihongo ga ', id: 'Dia dalam bahasa Jepang ' },
+      past: { jp: '彼は昔日本語が', ro: 'Kare wa mukashi nihongo ga ', id: 'Dia dulu dalam bahasa Jepang ' }
+    };
+  }
+  if (['便利', '不便', '必要', '簡単', '複雑'].includes(k)) {
+    return {
+      pres: { jp: 'このスマホは', ro: 'Kono sumaho wa ', id: 'Smartphone ini ' },
+      past: { jp: '昔の携帯は', ro: 'Mukashi no keitai wa ', id: 'HP zaman dulu ' }
+    };
+  }
+  // Default general room / item
+  return {
+    pres: { jp: 'この部屋は', ro: 'Kono heya wa ', id: 'Kamar ini ' },
+    past: { jp: 'あの部屋は', ro: 'Ano heya wa ', id: 'Kamar itu dulu ' }
+  };
+}
+
+function getAdjectiveSentences(item, isNa) {
+  const inf = getAdjectiveInflections(item.k, item.r, isNa);
+  const subj = getContextSubject(item, isNa);
+  const cleanArti = item.a.split(',')[0].replace(/\([^)]*\)/g, '').trim();
+
+  let sPresPos, sPresNeg, sPastPos, sPastNeg;
+
+  if (!isNa) {
+    sPresPos = {
+      jpPrefix: subj.pres.jp,
+      targetAdj: `${inf.presPos.kanji}です。`,
+      targetPlain: inf.presPos.kanji,
+      fullJp: `${subj.pres.jp}${inf.presPos.kanji}です。`,
+      ro: `${subj.pres.ro}${inf.presPos.hira} desu.`,
+      idPrefix: subj.pres.id,
+      targetMeaning: cleanArti,
+      fullId: `${subj.pres.id}${cleanArti}.`,
+      formLabel: 'Sekarang (+)'
+    };
+    sPresNeg = {
+      jpPrefix: subj.pres.jp,
+      targetAdj: `${inf.presNeg.kanji}です。`,
+      targetPlain: inf.presNeg.kanji,
+      fullJp: `${subj.pres.jp}${inf.presNeg.kanji}です。`,
+      ro: `${subj.pres.ro}${inf.presNeg.hira} desu.`,
+      idPrefix: subj.pres.id,
+      targetMeaning: `tidak ${cleanArti}`,
+      fullId: `${subj.pres.id}tidak ${cleanArti}.`,
+      formLabel: 'Negatif (-)'
+    };
+    sPastPos = {
+      jpPrefix: subj.past.jp,
+      targetAdj: `${inf.pastPos.kanji}です。`,
+      targetPlain: inf.pastPos.kanji,
+      fullJp: `${subj.past.jp}${inf.pastPos.kanji}です。`,
+      ro: `${subj.past.ro}${inf.pastPos.hira} desu.`,
+      idPrefix: subj.past.id,
+      targetMeaning: cleanArti,
+      fullId: `${subj.past.id}${cleanArti}.`,
+      formLabel: 'Lampau (+)'
+    };
+    sPastNeg = {
+      jpPrefix: subj.past.jp,
+      targetAdj: `${inf.pastNeg.kanji}です。`,
+      targetPlain: inf.pastNeg.kanji,
+      fullJp: `${subj.past.jp}${inf.pastNeg.kanji}です。`,
+      ro: `${subj.past.ro}${inf.pastNeg.hira} desu.`,
+      idPrefix: subj.past.id,
+      targetMeaning: `tidak ${cleanArti}`,
+      fullId: `${subj.past.id}tidak ${cleanArti}.`,
+      formLabel: 'Lampau Negatif (-)'
+    };
+  } else {
+    sPresPos = {
+      jpPrefix: subj.pres.jp,
+      targetAdj: `${item.k}です。`,
+      targetPlain: item.k,
+      fullJp: `${subj.pres.jp}${item.k}です。`,
+      ro: `${subj.pres.ro}${item.r} desu.`,
+      idPrefix: subj.pres.id,
+      targetMeaning: cleanArti,
+      fullId: `${subj.pres.id}${cleanArti}.`,
+      formLabel: 'Sekarang (+)'
+    };
+    sPresNeg = {
+      jpPrefix: subj.pres.jp,
+      targetAdj: `${item.k}じゃないです。`,
+      targetPlain: item.k + 'じゃない',
+      fullJp: `${subj.pres.jp}${item.k}じゃないです。`,
+      ro: `${subj.pres.ro}${item.r} ja nai desu.`,
+      idPrefix: subj.pres.id,
+      targetMeaning: `tidak ${cleanArti}`,
+      fullId: `${subj.pres.id}tidak ${cleanArti}.`,
+      formLabel: 'Negatif (-)'
+    };
+    sPastPos = {
+      jpPrefix: subj.past.jp,
+      targetAdj: `${item.k}でした。`,
+      targetPlain: item.k + 'だった',
+      fullJp: `${subj.past.jp}${item.k}でした。`,
+      ro: `${subj.past.ro}${item.r} deshita.`,
+      idPrefix: subj.past.id,
+      targetMeaning: cleanArti,
+      fullId: `${subj.past.id}${cleanArti}.`,
+      formLabel: 'Lampau (+)'
+    };
+    sPastNeg = {
+      jpPrefix: subj.past.jp,
+      targetAdj: `${item.k}じゃなかったです。`,
+      targetPlain: item.k + 'じゃなかった',
+      fullJp: `${subj.past.jp}${item.k}じゃなかったです。`,
+      ro: `${subj.past.ro}${item.r} ja nakatta desu.`,
+      idPrefix: subj.past.id,
+      targetMeaning: `tidak ${cleanArti}`,
+      fullId: `${subj.past.id}tidak ${cleanArti}.`,
+      formLabel: 'Lampau Negatif (-)'
+    };
+  }
+
+  return {
+    presPos: sPresPos,
+    presNeg: sPresNeg,
+    pastPos: sPastPos,
+    pastNeg: sPastNeg
+  };
+}
+
+// ==========================================
 // ENGINE MODUL KATA SIFAT KENSEI
 // ==========================================
 const Modul = {
   activeCategory: 'sifati', // 'sifati' or 'sifatna'
-  activeTab: 'flashcard',   // 'flashcard', 'quiz', 'tabel'
+  activeTab: 'flashcard',   // 'flashcard' or 'quiz'
   activeSesi: 0,
   cardIdx: 0,
   cardRevealed: false,
+  activeInflectionForm: 'presPos', // 'presPos', 'presNeg', 'pastPos', 'pastNeg'
   
   // Quiz
   idxQuiz: 0,
@@ -1774,6 +1934,14 @@ const Modul = {
           if (this.activeArray[this.cardIdx]) {
             this.speakText(this.activeArray[this.cardIdx].k || this.activeArray[this.cardIdx].r);
           }
+        } else if (e.key === '1') {
+          this.selectInflectionForm('presPos');
+        } else if (e.key === '2') {
+          this.selectInflectionForm('presNeg');
+        } else if (e.key === '3') {
+          this.selectInflectionForm('pastPos');
+        } else if (e.key === '4') {
+          this.selectInflectionForm('pastNeg');
         }
       }
     });
@@ -1857,6 +2025,7 @@ const Modul = {
     this.activeSesi = 0;
     this.cardIdx = 0;
     this.cardRevealed = false;
+    this.activeInflectionForm = 'presPos';
 
     document.getElementById('chip-cat-i').classList.toggle('active', cat === 'sifati');
     document.getElementById('chip-cat-na').classList.toggle('active', cat === 'sifatna');
@@ -1878,12 +2047,13 @@ const Modul = {
 
     const pages = (this.activeCategory === 'sifati') ? Pages_I : Pages_Na;
     const isNa = this.activeCategory === 'sifatna';
+    const catLabel = isNa ? 'Sifat-na' : 'Sifat-i';
 
     let html = '';
     pages.forEach((p, idx) => {
       const activeClass = (idx === this.activeSesi) ? 'active' : '';
       const naClass = isNa ? 'pill-na' : '';
-      html += `<button type="button" class="sesi-pill ${activeClass} ${naClass}" onclick="Modul.switchSesi(${idx})">${p.title.split(' ')[0]} ${idx+1}</button>`;
+      html += `<button type="button" class="sesi-pill ${activeClass} ${naClass}" onclick="Modul.switchSesi(${idx})">${catLabel} ${idx+1}</button>`;
     });
     wrap.innerHTML = html;
   },
@@ -1893,6 +2063,7 @@ const Modul = {
     this.activeSesi = s;
     this.cardIdx = 0;
     this.cardRevealed = false;
+    this.activeInflectionForm = 'presPos';
 
     const pills = document.querySelectorAll('.sesi-pill');
     pills.forEach((p, idx) => p.classList.toggle('active', idx === s));
@@ -1912,7 +2083,7 @@ const Modul = {
     this.playSfx('tap');
     this.activeTab = tab;
 
-    ['flashcard', 'quiz', 'tabel'].forEach(t => {
+    ['flashcard', 'quiz'].forEach(t => {
       const btn = document.getElementById('btn-tab-' + t);
       if (btn) btn.classList.toggle('active', t === tab);
       const sec = document.getElementById('sec-' + t);
@@ -1932,18 +2103,16 @@ const Modul = {
       this.scoreQuiz = 0;
       this.renderQuiz(false);
       this.triggerAnimation('sec-quiz', 'fade-in-up');
-    } else if (this.activeTab === 'tabel') {
-      this.renderTabel(false);
-      this.triggerAnimation('sec-tabel', 'fade-in-up');
     }
   },
 
   // ==========================================
-  // FLASHCARD RENDERING (UNBOXED RPG STAGE)
+  // FLASHCARD RENDERING & DYNAMIC SENTENCE MORPH
   // ==========================================
   renderFC: function(useSlideAnim = true) {
     const sec = document.getElementById('sec-flashcard');
     this.cardRevealed = false;
+    this.activeInflectionForm = 'presPos';
 
     if (this.cardIdx >= this.activeArray.length) {
       sec.innerHTML = `
@@ -1973,6 +2142,9 @@ const Modul = {
 
     // Inflections 4 Forms
     const inf = getAdjectiveInflections(item.k, item.r, isNa);
+    // Sentences 4 Forms
+    const sentences = getAdjectiveSentences(item, isNa);
+    const curSent = sentences[this.activeInflectionForm];
 
     // Antonym
     const antonyms = ANTONYM_MAP[item.k] || [];
@@ -2007,30 +2179,45 @@ const Modul = {
         <div class="fc-hira-text shield-blur" id="fc-hira">${item.r}</div>
         <div class="fc-arti-text shield-blur" id="fc-arti">${item.a}</div>
 
-        <!-- 4 Forms Matrix: Clean, Unboxed Glass Cells -->
+        <!-- 4 Forms Matrix: Interactive Tappable Glass Cells -->
         <div class="fc-grid-two shield-blur" id="fc-matrix">
-          <div class="inflection-cell" onclick="event.stopPropagation(); Modul.speakText('${inf.presPos.kanji}')">
+          <div class="inflection-cell active-cell ${isNa ? 'na-cell' : ''}" id="cell-presPos" onclick="Modul.selectInflectionForm('presPos', event)">
             <div class="inf-label"><span>☀️ Sekarang (+)</span> <span class="inf-speaker">🔊</span></div>
             <div class="inf-val">${inf.presPos.kanji} <span class="inf-sub">${inf.presPos.hira}</span></div>
           </div>
-          <div class="inflection-cell" onclick="event.stopPropagation(); Modul.speakText('${inf.presNeg.kanji}')">
+          <div class="inflection-cell" id="cell-presNeg" onclick="Modul.selectInflectionForm('presNeg', event)">
             <div class="inf-label"><span>❄️ Negatif (-)</span> <span class="inf-speaker">🔊</span></div>
             <div class="inf-val">${inf.presNeg.kanji} <span class="inf-sub">${inf.presNeg.hira}</span></div>
           </div>
-          <div class="inflection-cell" onclick="event.stopPropagation(); Modul.speakText('${inf.pastPos.kanji}')">
+          <div class="inflection-cell" id="cell-pastPos" onclick="Modul.selectInflectionForm('pastPos', event)">
             <div class="inf-label"><span>⏳ Lampau (+)</span> <span class="inf-speaker">🔊</span></div>
             <div class="inf-val">${inf.pastPos.kanji} <span class="inf-sub">${inf.pastPos.hira}</span></div>
           </div>
-          <div class="inflection-cell" onclick="event.stopPropagation(); Modul.speakText('${inf.pastNeg.kanji}')">
+          <div class="inflection-cell" id="cell-pastNeg" onclick="Modul.selectInflectionForm('pastNeg', event)">
             <div class="inf-label"><span>🚫 Lampau (-)</span> <span class="inf-speaker">🔊</span></div>
             <div class="inf-val">${inf.pastNeg.kanji} <span class="inf-sub">${inf.pastNeg.hira}</span></div>
           </div>
         </div>
 
         ${antonymHTML}
+
+        <!-- Dynamic Sentence Morph Shelf (Unboxed & Clean) -->
+        <div class="fc-sentence-shelf shield-blur" id="fc-sentence-shelf" onclick="event.stopPropagation()">
+          <div class="fss-top">
+            <div class="fss-badge-wrap">
+              <span class="fss-badge">💬 Contoh Kalimat:</span>
+              <span class="fss-form-pill ${isNa ? 'na-pill' : ''}" id="fss-active-tag">${curSent.formLabel}</span>
+            </div>
+            <button type="button" class="btn-sentence-audio" id="btn-audio-sent" onclick="Modul.speakActiveSentence()" title="Dengarkan Kalimat">🔊</button>
+          </div>
+          <div class="fss-jp" id="fss-jp-text">${curSent.jpPrefix}<span class="highlight-adj">${curSent.targetAdj}</span></div>
+          <div class="fss-romaji" id="fss-ro-text">${curSent.ro}</div>
+          <div class="fss-id" id="fss-id-text">${curSent.idPrefix}<span class="highlight-meaning">${curSent.targetMeaning}</span>.</div>
+        </div>
+
         ${item.note ? `<div class="fc-note-strip shield-blur" id="fc-note">💡 ${item.note}</div>` : ''}
 
-        <div class="tap-hint-pill" id="fc-tap-hint">👆 Sentuh kartu / tekan Spasi untuk buka 4 Bentuk Infleksi</div>
+        <div class="tap-hint-pill" id="fc-tap-hint">👆 Sentuh kartu / tekan Spasi untuk buka 4 Bentuk Infleksi & Contoh Kalimat</div>
       </div>
 
       <!-- Action Navigation Buttons -->
@@ -2043,12 +2230,57 @@ const Modul = {
     if (useSlideAnim) this.triggerAnimation('fc-stage-box', 'slide-in-right');
   },
 
+  selectInflectionForm: function(formKey, e) {
+    if (e) e.stopPropagation();
+    this.playSfx('tap');
+    this.activeInflectionForm = formKey;
+
+    const item = this.activeArray[this.cardIdx];
+    if (!item) return;
+
+    const isNa = this.activeCategory === 'sifatna';
+    const sentences = getAdjectiveSentences(item, isNa);
+    const curSent = sentences[formKey];
+
+    // Highlight the active cell
+    ['presPos', 'presNeg', 'pastPos', 'pastNeg'].forEach(f => {
+      const cell = document.getElementById('cell-' + f);
+      if (cell) {
+        cell.classList.toggle('active-cell', f === formKey);
+        if (isNa) cell.classList.toggle('na-cell', f === formKey);
+      }
+    });
+
+    // Morph the sentence shelf smoothly
+    const tagEl = document.getElementById('fss-active-tag');
+    const jpEl = document.getElementById('fss-jp-text');
+    const roEl = document.getElementById('fss-ro-text');
+    const idEl = document.getElementById('fss-id-text');
+
+    if (tagEl) tagEl.innerText = curSent.formLabel;
+    if (jpEl) jpEl.innerHTML = `${curSent.jpPrefix}<span class="highlight-adj">${curSent.targetAdj}</span>`;
+    if (roEl) roEl.innerText = curSent.ro;
+    if (idEl) idEl.innerHTML = `${curSent.idPrefix}<span class="highlight-meaning">${curSent.targetMeaning}</span>.`;
+
+    // Audio speak active form kanji
+    this.speakText(curSent.targetPlain);
+  },
+
+  speakActiveSentence: function() {
+    const item = this.activeArray[this.cardIdx];
+    if (!item) return;
+    const isNa = this.activeCategory === 'sifatna';
+    const sentences = getAdjectiveSentences(item, isNa);
+    const curSent = sentences[this.activeInflectionForm];
+    if (curSent) this.speakText(curSent.fullJp);
+  },
+
   revealCard: function() {
     if (this.cardRevealed) return;
     this.cardRevealed = true;
     this.playSfx('reveal');
 
-    const els = ['fc-hira', 'fc-arti', 'fc-matrix', 'fc-antonym-strip', 'fc-note'];
+    const els = ['fc-hira', 'fc-arti', 'fc-matrix', 'fc-antonym-strip', 'fc-sentence-shelf', 'fc-note'];
     els.forEach(id => {
       const el = document.getElementById(id);
       if (el) el.classList.add('revealed');
@@ -2389,79 +2621,6 @@ const Modul = {
         this.renderQuiz(true);
       }, 180);
     }, 1200);
-  },
-
-  // ==========================================
-  // TABEL BUKU SAKU VIEW
-  // ==========================================
-  renderTabel: function(useSlideAnim = true) {
-    const sec = document.getElementById('sec-tabel');
-    const isNa = this.activeCategory === 'sifatna';
-    const pages = isNa ? Pages_Na : Pages_I;
-    const pageData = pages[this.activeSesi];
-
-    let html = `
-      <div class="table-stage-box" id="table-stage-box">
-        <div class="table-header-row">
-          <div class="table-title ${isNa ? 'na-title' : ''}">${pageData.title} (${this.activeArray.length} Kata)</div>
-          <button type="button" class="btn-sensor-furi" id="btn-toggle-furi" onclick="Modul.toggleFurigana()">👁️ Furigana</button>
-        </div>
-        <div style="font-size:12px; color:var(--text-sub); margin-bottom:12px; line-height:1.45;">${pageData.narasi}</div>
-        <div id="table-waktu-container">
-          <table class="tabel-waktu ${isNa ? 'na-table' : ''}">
-            <tr>
-              <th style="width:42%;">Kanji & 4 Bentuk</th>
-              <th style="width:58%;">Arti & Lawan Kata</th>
-            </tr>
-    `;
-
-    this.activeArray.forEach(item => {
-      let rubyHTML = `<ruby>${item.k}<rt class="furi-anim">${item.r}</rt></ruby>`;
-      const inf = getAdjectiveInflections(item.k, item.r, isNa);
-      const antonyms = ANTONYM_MAP[item.k] || [];
-
-      html += `
-        <tr>
-          <td>
-            <span class="ruby-item" onclick="this.classList.toggle('revealed')">
-              ${rubyHTML}
-              <button type="button" class="btn-audio-inline" onclick="Modul.speakText('${item.k || item.r}', event)">🔊</button>
-            </span>
-            <div class="table-inf-grid">
-              <div class="tig-cell"><span class="tig-tag">(-):</span> ${inf.presNeg.kanji}</div>
-              <div class="tig-cell"><span class="tig-tag">(+L):</span> ${inf.pastPos.kanji}</div>
-              <div class="tig-cell" style="grid-column: span 2;"><span class="tig-tag">(-L):</span> ${inf.pastNeg.kanji}</div>
-            </div>
-          </td>
-          <td>
-            <span class="t-arti">${item.a}</span>
-            ${antonyms.length > 0 ? `<div style="font-size:11px; color:var(--gold); font-weight:700;">⚖️ Lawan: ${antonyms.join(', ')}</div>` : ''}
-            ${item.note ? `<div style="font-size:10.5px; color:#bae6fd; margin-top:2px;">💡 ${item.note}</div>` : ''}
-          </td>
-        </tr>
-      `;
-    });
-
-    html += `
-          </table>
-        </div>
-      </div>
-    `;
-
-    sec.innerHTML = html;
-    if (useSlideAnim) this.triggerAnimation('table-stage-box', 'fade-in-up');
-  },
-
-  toggleFurigana: function() {
-    this.playSfx('tap');
-    const container = document.getElementById('table-waktu-container');
-    const btn = document.getElementById('btn-toggle-furi');
-    if (!container || !btn) return;
-
-    const isHidden = !container.classList.contains('show-all-furi');
-    container.classList.toggle('show-all-furi', isHidden);
-    btn.classList.toggle('active', isHidden);
-    btn.innerText = isHidden ? '🙈 Furigana' : '👁️ Furigana';
   },
 
   // ==========================================
