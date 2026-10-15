@@ -317,40 +317,21 @@
     border-radius: 11px;
     outline: none;
     cursor: pointer;
-  .sidebar-deck-overview {
+    margin-bottom: 10px;
+    transition: all 0.2s;
+  }
+  .sidebar-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 14px var(--primary-glow);
+  }
+
+  .sidebar-room-actions {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 8px;
-    margin-bottom: 8px;
   }
-  .sdo-item {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid var(--border-glass);
-    border-radius: 10px;
-    padding: 8px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-  .sdo-label {
-    font-size: 10px;
-    color: var(--text-sub);
-    font-weight: 700;
-  }
-  .sdo-val {
-    font-size: 18px;
-    font-weight: 900;
-    color: var(--primary);
-    margin-top: 2px;
-  }
-  .sdo-mastered .sdo-val {
-    color: var(--gold);
-    text-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
-  }
-
   .btn-sidebar-action {
-    padding: 9px 12px;
+    padding: 8px 10px;
     border-radius: 10px;
     font-size: 11.5px;
     font-weight: 800;
@@ -359,19 +340,27 @@
     align-items: center;
     justify-content: center;
     gap: 6px;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-    background: linear-gradient(135deg, rgba(245, 158, 11, 0.18) 0%, rgba(217, 119, 6, 0.12) 100%);
-    border: 1px solid rgba(245, 158, 11, 0.4);
-    color: var(--gold);
+    transition: all 0.2s;
   }
-  .btn-sidebar-action:hover {
-    background: rgba(245, 158, 11, 0.3);
-    border-color: var(--gold);
-    box-shadow: 0 0 16px rgba(245, 158, 11, 0.35);
-    transform: translateY(-1px);
+  .btn-add-room {
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.2) 0%, rgba(16, 185, 129, 0.15) 100%);
+    border: 1px solid rgba(34, 197, 94, 0.45);
+    color: #86efac;
   }
-  .btn-sidebar-action:active {
-    transform: scale(0.97);
+  .btn-add-room:hover {
+    background: var(--success);
+    color: #000;
+    box-shadow: 0 0 16px var(--success-glow);
+  }
+  .btn-clear-room {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-glass);
+    color: #f1f5f9;
+  }
+  .btn-clear-room:hover {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: var(--danger);
+    color: #fca5a5;
   }
 
   .sidebar-stats-row {
@@ -784,27 +773,7 @@
     color: #fca5a5;
     box-shadow: 0 0 12px var(--danger-glow);
   }
-  .btn-cart-toggle.is-mastered {
-    background: rgba(245, 158, 11, 0.22);
-    border: 1px solid var(--gold);
-    color: #fde047;
-    box-shadow: 0 0 12px rgba(245, 158, 11, 0.35);
-  }
-  .btn-cart-toggle.is-mastered:hover {
-    background: rgba(245, 158, 11, 0.35);
-    color: #fff;
-    box-shadow: 0 0 16px rgba(245, 158, 11, 0.55);
-  }
-  .kanji-market-card.card-mastered {
-    border-color: rgba(245, 158, 11, 0.45);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45), 0 0 16px rgba(245, 158, 11, 0.2);
-  }
-  .filter-chip-mastered.active {
-    background: rgba(245, 158, 11, 0.22) !important;
-    border-color: var(--gold) !important;
-    color: var(--gold) !important;
-    box-shadow: 0 0 14px rgba(245, 158, 11, 0.35) !important;
-  }
+
   .btn-cart-toggle:active { transform: scale(0.95); }
 
   /* ==========================================
@@ -1901,33 +1870,45 @@
   </div>
 
   <div class="sidebar-body">
-    <!-- Section 1: Ringkasan Status Belajar -->
+    <!-- Section 1: Pemilihan & Pembuatan Ruang Dojo -->
     <div class="sidebar-card">
-      <div class="sc-label">⛩️ STATUS LATIHAN & PENGUASAAN</div>
-      <div class="sidebar-deck-overview">
-        <div class="sdo-item">
-          <span class="sdo-label">Sedang Dilatih</span>
-          <span class="sdo-val" id="sidebar-learning-count">0</span>
+      <div class="sc-label">⛩️ PILIH RUANG LATIHAN</div>
+      <select id="sidebar-room-select" class="sidebar-select" onchange="DojoEngine.switchRoom(this.value)">
+        <option value="default">Dojo Utama (Default)</option>
+      </select>
+      <div class="sidebar-room-actions">
+        <button type="button" class="btn-sidebar-action btn-add-room" onclick="DojoEngine.openRoomModal()">
+          <span>➕ Buat Ruang</span>
+        </button>
+        <button type="button" class="btn-sidebar-action btn-clear-room" onclick="DojoEngine.clearCurrentDojo()">
+          <span>🧹 Bersihkan</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Section 2: Statistik Penguasaan Ruang Aktif -->
+    <div class="sidebar-card">
+      <div class="sc-label">📊 STATISTIK PENGUASAAN</div>
+      <div class="sidebar-stats-row">
+        <div class="sidebar-stat-badge">
+          <span class="stat-icon">🎒</span>
+          <span id="dojo-card-count">0 Kanji di Ruang Ini</span>
         </div>
-        <div class="sdo-item sdo-mastered">
-          <span class="sdo-label">Telah Dikuasai ⭐</span>
-          <span class="sdo-val" id="sidebar-mastered-count">0</span>
+        <div class="sidebar-stat-badge badge-gold">
+          <span class="stat-icon">⭐</span>
+          <span id="dojo-master-count">0 Dikuasai</span>
         </div>
       </div>
       
-      <div class="sidebar-progress-container" style="margin-top:10px;">
+      <div class="sidebar-progress-container">
         <div class="sidebar-progress-meta">
-          <span>Progres dari 240 Kanji N5/N4</span>
+          <span>Tingkat Kelulusan</span>
           <span id="dojo-progress-text">0% Dikuasai</span>
         </div>
         <div class="dojo-progress-track">
           <div class="dojo-progress-fill" id="dojo-progress-fill" style="width: 0%;"></div>
         </div>
       </div>
-
-      <button type="button" class="btn-sidebar-action" style="width:100%; margin-top:12px;" onclick="DojoEngine.openMasteredGallery(); DojoEngine.closeSidebar();">
-        <span>⭐ Buka Galeri Kanji Dikuasai ➔</span>
-      </button>
     </div>
 
     <!-- Section 3: Pusat Edukasi & Bantuan -->
@@ -2034,6 +2015,26 @@
   </div>
 </div>
 
+<!-- ==========================================
+     MODAL 2: BUAT RUANG DOJO BARU
+     ========================================== -->
+<div id="room-modal" class="modal-overlay hidden" onclick="if(event.target === this) DojoEngine.closeRoomModal()">
+  <div class="guide-modal-card" style="max-width:400px;">
+    <div class="guide-header-row">
+      <div class="guide-title">
+        <span>⛩️</span>
+        <span>Buat Ruang Dojo Baru</span>
+      </div>
+      <button type="button" class="btn-modal-close" onclick="DojoEngine.closeRoomModal()">✕</button>
+    </div>
+    <p style="font-size:12.5px; color:var(--text-sub);">Beri nama ruang dojo untuk mengelompokkan kanji latihanmu (contoh: "Kanji Hari 1-5", "Kanji Target N5", dsb.)</p>
+    
+    <input type="text" class="input-room-name" id="new-room-input" placeholder="Nama Ruang Dojo..." maxlength="20">
+    
+    <button type="button" class="btn-jump-market" style="width:100%;" onclick="DojoEngine.createNewRoom()">+ Buat & Masuk ke Ruang</button>
+  </div>
+</div>
+
 <div class="container">
   
   <!-- MASTER TOP NAVBAR -->
@@ -2052,8 +2053,8 @@
     <div class="nav-right">
       <button type="button" class="btn-sidebar-toggle" onclick="DojoEngine.toggleSidebar()" title="Buka Pusat Kelola Dojo">
         <span class="torii-icon">⛩️</span>
-        <span class="sidebar-btn-label">Pusat Belajar</span>
-        <span class="sidebar-badge-count" id="nav-mastered-badge" title="Kanji Dikuasai">⭐ 0</span>
+        <span class="sidebar-btn-label" id="nav-active-room-name">Dojo Utama</span>
+        <span class="sidebar-badge-count" id="nav-active-room-count">4</span>
         <span class="hamburger-bars">☰</span>
       </button>
     </div>
@@ -2089,12 +2090,11 @@
       </div>
 
       <div class="filter-chips-stream">
-        <button type="button" class="filter-chip active" id="fchip-all" onclick="DojoEngine.setFilter('all')">Semua Kanji (240)</button>
+        <button type="button" class="filter-chip active" id="fchip-all" onclick="DojoEngine.setFilter('all')">Semua Kanji (N5 + N4)</button>
         <button type="button" class="filter-chip" id="fchip-unlocked" onclick="DojoEngine.setFilter('unlocked')">⛩️ Dari Ekspedisi</button>
-        <button type="button" class="filter-chip" id="fchip-n5" onclick="DojoEngine.setFilter('n5')">🔰 Level N5</button>
-        <button type="button" class="filter-chip" id="fchip-n4" onclick="DojoEngine.setFilter('n4')">⚔️ Level N4</button>
-        <button type="button" class="filter-chip" id="fchip-in-dojo" onclick="DojoEngine.setFilter('in-dojo')">🎒 Sedang Dilatih</button>
-        <button type="button" class="filter-chip filter-chip-mastered" id="fchip-mastered" onclick="DojoEngine.setFilter('mastered')">⭐ Sudah Dikuasai</button>
+        <button type="button" class="filter-chip" id="fchip-n5" onclick="DojoEngine.setFilter('n5')">🔰 Level N5 (Dasar)</button>
+        <button type="button" class="filter-chip" id="fchip-n4" onclick="DojoEngine.setFilter('n4')">⚔️ Level N4 (Lanjutan)</button>
+        <button type="button" class="filter-chip" id="fchip-in-dojo" onclick="DojoEngine.setFilter('in-dojo')">🎒 Di Dojo</button>
       </div>
     </div>
 
@@ -2249,14 +2249,12 @@
         <button type="button" class="btn-dn btn-dn-next" onclick="DojoEngine.nextDojoCard()">Lanjut ➔</button>
       </div>
 
-      <!-- Empty State / Victory State in Dojo -->
+      <!-- Empty State when 0 Kanji in Dojo -->
       <div id="dojo-empty-state" class="empty-dojo-box hidden">
-        <div class="empty-icon" id="empty-state-icon">🎒</div>
-        <div class="empty-title" id="empty-state-title">Antrean Belajar Kosong!</div>
-        <div class="empty-desc" id="empty-state-desc">Belum ada kanji yang kamu pilih untuk dilatih. Buka <b>Pasar Belanja Kanji</b> untuk memilih kanji-kanji yang ingin kamu kuasai.</div>
-        <div id="empty-state-actions" style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:14px;">
-          <button type="button" class="btn-jump-market" onclick="DojoEngine.switchMainTab('market')">🛒 Pergi Belanja Kanji ➔</button>
-        </div>
+        <div class="empty-icon">🎒</div>
+        <div class="empty-title">Ruang Dojo Masih Kosong!</div>
+        <div class="empty-desc">Ruang dojo ini belum memiliki kanji untuk dilatih. Buka <b>Pasar Belanja Kanji</b> untuk memilih kanji-kanji yang ingin kamu kuasai.</div>
+        <button type="button" class="btn-jump-market" onclick="DojoEngine.switchMainTab('market')">🛒 Pergi Belanja Kanji ➔</button>
       </div>
     </div>
   </div>
@@ -6741,26 +6739,20 @@ const KANJI_SENTENCES = {
 // ==========================================
 const DojoEngine = {
   playerUnlockedDay: 1,
-  activeMainTab: 'market', // 'market', 'flashcard', or 'quiz'
+  activeMainTab: 'market', // 'market' or 'training'
   activeFilter: 'all',
   searchQuery: '',
   
-  // Clean Leitner Study & Mastery System
-  myKanji: [], // Kanji currently in study deck
-  masteredKanji: [], // Kanji that have been starred / mastered (⭐)
+  // Custom Dojo Rooms System (Stored in LocalStorage)
+  rooms: {},
+  activeRoomId: 'default',
+  masteredKanji: [],
 
-  // Training Deck States (Unmastered active review queue)
+  // Training Deck States
   trainingList: [],
-  quizPool: [],
   deckIdx: 0,
   isRevealed: false,
   dojoMode: 'fc', // 'fc' or 'quiz'
-  
-  // Market Chunk / Lazy Batch Rendering States
-  filteredMarketList: [],
-  marketRenderedCount: 0,
-  _marketObserver: null,
-  _searchTimer: null,
   
   // Drill multi-variations & telemetry states
   quizTarget: null,
@@ -6768,47 +6760,53 @@ const DojoEngine = {
   drillStreak: 0,
   drillScore: 0,
   currentQuestionData: null,
-  currentSentenceText: '',
 
   init: function() {
-    // 1. Baca hari ekspedisi dari Yomikata utama
+    // 1. Baca hari ekspedisi dari Yomikata utama (support yk_unlocked & yk_unlocked_day)
     let savedDay = parseInt(localStorage.getItem('yk_unlocked')) || parseInt(localStorage.getItem('yk_unlocked_day')) || 1;
     this.playerUnlockedDay = Math.max(1, savedDay);
 
+    // Update filter chip label dengan hari aktif
     const chipUnlocked = document.getElementById('fchip-unlocked');
     if (chipUnlocked) {
       chipUnlocked.innerText = `⛩️ Dari Ekspedisi (Hari 1 - ${this.playerUnlockedDay})`;
     }
 
-    // 2. Baca kanji yang sudah dikuasai (⭐)
+    // 2. Baca data ruang dojo dari localStorage
+    let savedRooms = localStorage.getItem('yk_kanji_dojo_rooms');
+    if (savedRooms) {
+      try { this.rooms = JSON.parse(savedRooms); } catch(e) { this.rooms = {}; }
+    }
+    // Jika masih memakai default lama ['一', '二', '三', '人'], sinkronkan ke kanji Hari 1 resmi Yomikata ['私', '人', '日', '本']
+    if (this.rooms && this.rooms['default']) {
+      const oldDefault = ['一', '二', '三', '人'];
+      if (JSON.stringify(this.rooms['default'].kanji) === JSON.stringify(oldDefault)) {
+        this.rooms['default'].kanji = ['私', '人', '日', '本'];
+        this.saveRooms();
+      }
+    }
+    if (!this.rooms || Object.keys(this.rooms).length === 0) {
+      this.rooms = {
+        'default': { name: 'Dojo Latihan Utama', kanji: ['私', '人', '日', '本'] },
+        'n5_target': { name: 'Target Kanji N5', kanji: [] }
+      };
+      this.saveRooms();
+    }
+
+    let savedActiveId = localStorage.getItem('yk_active_dojo_id');
+    if (savedActiveId && this.rooms[savedActiveId]) {
+      this.activeRoomId = savedActiveId;
+    } else {
+      this.activeRoomId = Object.keys(this.rooms)[0] || 'default';
+    }
+
+    // 3. Baca kanji yang sudah dikuasai
     let savedMaster = localStorage.getItem('yk_kanji_mastered');
     if (savedMaster) {
       try { this.masteredKanji = JSON.parse(savedMaster); } catch(e) { this.masteredKanji = []; }
-    } else {
-      this.masteredKanji = [];
     }
 
-    // 3. Baca kanji yang sedang dipelajari (myKanji)
-    let savedMyKanji = localStorage.getItem('yk_my_kanji');
-    if (savedMyKanji) {
-      try { this.myKanji = JSON.parse(savedMyKanji); } catch(e) { this.myKanji = []; }
-    } else {
-      // Migrasi halus dari sistem room lama (jika ada)
-      let savedRooms = localStorage.getItem('yk_kanji_dojo_rooms');
-      if (savedRooms) {
-        try {
-          const r = JSON.parse(savedRooms);
-          const oldList = (r['default'] && r['default'].kanji) || [];
-          this.myKanji = [...new Set(oldList)];
-        } catch(e) { this.myKanji = []; }
-      }
-      // Jika masih kosong, beri starter pack N5 resmi Hari 1-2
-      if (!this.myKanji || this.myKanji.length === 0) {
-        this.myKanji = ['私', '人', '日', '本', '先', '生', '学', '校', '年', '大'];
-      }
-      this.saveStudyData();
-    }
-
+    this.renderRoomSelector();
     this.updateStats();
     this.renderMarket();
     this.loadTrainingDeck();
@@ -6819,6 +6817,7 @@ const DojoEngine = {
         DojoEngine.closeDrillDropdown();
         DojoEngine.closeSidebar();
         DojoEngine.closeGuide();
+        DojoEngine.closeRoomModal();
         return;
       }
 
@@ -6844,16 +6843,71 @@ const DojoEngine = {
         } else if (e.key === ' ') {
           e.preventDefault();
           DojoEngine.toggleFcReveal();
-        } else if (e.key.toLowerCase() === 'm' || e.key === '*') {
-          DojoEngine.toggleMasterCurrent();
         }
+      }
+    });
+
+    // 5. Tutup Dropdown Drill bila klik di luar
+    document.addEventListener('click', (e) => {
+      const dd = document.getElementById('drill-dropdown-menu');
+      const btn = document.getElementById('btn-drill-dropdown');
+      if (dd && !dd.classList.contains('hidden')) {
+        if (!dd.contains(e.target) && (!btn || !btn.contains(e.target))) {
+          DojoEngine.closeDrillDropdown();
+        }
+      }
+    });
+
+    // 5. Cegah touch scroll tembus ke background saat swipe di area overlay & modal backdrop
+    const ov = document.getElementById('sidebar-overlay');
+    if (ov) {
+      ov.addEventListener('touchmove', (e) => {
+        if (e.cancelable) e.preventDefault();
+      }, { passive: false });
+    }
+
+    const sbHeader = document.querySelector('#dojo-sidebar .sidebar-header');
+    if (sbHeader) {
+      sbHeader.addEventListener('touchmove', (e) => {
+        if (e.cancelable) e.preventDefault();
+      }, { passive: false });
+    }
+
+    ['room-modal', 'guide-modal'].forEach(mId => {
+      const el = document.getElementById(mId);
+      if (el) {
+        el.addEventListener('touchmove', (e) => {
+          if (e.target === el && e.cancelable) e.preventDefault();
+        }, { passive: false });
       }
     });
   },
 
-  saveStudyData: function() {
-    localStorage.setItem('yk_my_kanji', JSON.stringify(this.myKanji));
+  saveRooms: function() {
+    localStorage.setItem('yk_kanji_dojo_rooms', JSON.stringify(this.rooms));
+    localStorage.setItem('yk_active_dojo_id', this.activeRoomId);
+  },
+
+  saveMastered: function() {
     localStorage.setItem('yk_kanji_mastered', JSON.stringify(this.masteredKanji));
+  },
+
+  renderRoomSelector: function() {
+    const sel = document.getElementById('sidebar-room-select');
+    if (!sel) return;
+    sel.innerHTML = Object.keys(this.rooms).map(id => `
+      <option value="${id}" ${id === this.activeRoomId ? 'selected' : ''}>${this.rooms[id].name}</option>
+    `).join('');
+  },
+
+  switchRoom: function(roomId) {
+    if (!this.rooms[roomId]) return;
+    this.activeRoomId = roomId;
+    this.saveRooms();
+    this.updateStats();
+    this.renderMarket();
+    this.loadTrainingDeck();
+    this.showToast(`⛩️ Beralih ke: ${this.rooms[roomId].name}`);
   },
 
   toggleSidebar: function() {
@@ -6884,10 +6938,12 @@ const DojoEngine = {
   _savedScrollY: 0,
   syncBodyScrollLock: function() {
     const sb = document.getElementById('dojo-sidebar');
+    const rm = document.getElementById('room-modal');
     const gm = document.getElementById('guide-modal');
     const isSidebarActive = Boolean(sb && sb.classList.contains('active'));
+    const isRoomModalActive = Boolean(rm && !rm.classList.contains('hidden'));
     const isGuideModalActive = Boolean(gm && !gm.classList.contains('hidden'));
-    const shouldLock = isSidebarActive || isGuideModalActive;
+    const shouldLock = isSidebarActive || isRoomModalActive || isGuideModalActive;
 
     const isLocked = document.body.classList.contains('drawer-open');
     if (shouldLock && !isLocked) {
@@ -6905,55 +6961,107 @@ const DojoEngine = {
   },
 
   updateStats: function() {
-    const totalCatalog = KANJI_CATALOG.length;
-    const learningCount = this.myKanji.filter(k => !this.masteredKanji.includes(k)).length;
-    const masteredCount = this.masteredKanji.length;
-    const totalStudied = this.myKanji.length;
-    const pct = totalStudied > 0 ? Math.round((masteredCount / totalStudied) * 100) : 0;
-    const globalPct = Math.round((masteredCount / totalCatalog) * 100);
+    const activeRoom = this.rooms[this.activeRoomId] || { name: 'Dojo Latihan', kanji: [] };
+    const count = activeRoom.kanji.length;
+    const masteredCount = activeRoom.kanji.filter(k => this.masteredKanji.includes(k)).length;
+    const pct = count > 0 ? Math.round((masteredCount / count) * 100) : 0;
 
-    // Top Torii Mastered Badge
-    const navBadge = document.getElementById('nav-mastered-badge');
-    if (navBadge) navBadge.innerText = `⭐ ${masteredCount}`;
+    const cEl = document.getElementById('dojo-card-count');
+    if (cEl) cEl.innerText = `${count} Kanji`;
 
-    // Main Tab badge for Flashcard: shows remaining unmastered kanji in study list
+    const mEl = document.getElementById('dojo-master-count');
+    if (mEl) mEl.innerText = `${masteredCount} Dikuasai`;
+
     const bEl = document.getElementById('dojo-badge-num');
-    if (bEl) bEl.innerText = learningCount;
+    if (bEl) bEl.innerText = count;
 
-    // Sidebar indicators
-    const sbLearning = document.getElementById('sidebar-learning-count');
-    if (sbLearning) sbLearning.innerText = `${learningCount} Kanji`;
-
-    const sbMastered = document.getElementById('sidebar-mastered-count');
-    if (sbMastered) sbMastered.innerText = `${masteredCount} Kanji`;
+    const totalEl = document.getElementById('market-total-badge');
+    if (totalEl) totalEl.innerText = KANJI_CATALOG.length;
 
     const fillEl = document.getElementById('dojo-progress-fill');
-    if (fillEl) fillEl.style.width = `${globalPct}%`;
+    if (fillEl) fillEl.style.width = `${pct}%`;
 
     const pctEl = document.getElementById('dojo-progress-text');
-    if (pctEl) pctEl.innerText = `${masteredCount} / ${totalCatalog} (${globalPct}%)`;
+    if (pctEl) pctEl.innerText = `${pct}% Dikuasai`;
 
-    // Filter chip counts
-    const chipInDojo = document.getElementById('fchip-in-dojo');
-    if (chipInDojo) chipInDojo.innerText = `🎒 Sedang Dilatih (${learningCount})`;
+    // Sidebar & Top Nav Synchronizations
+    const navRoomName = document.getElementById('nav-active-room-name');
+    if (navRoomName) navRoomName.innerText = activeRoom.name;
 
-    const chipMastered = document.getElementById('fchip-mastered');
-    if (chipMastered) chipMastered.innerText = `⭐ Sudah Dikuasai (${masteredCount})`;
+    const navRoomCount = document.getElementById('nav-active-room-count');
+    if (navRoomCount) navRoomCount.innerText = count;
+
+    const sbMarketCount = document.getElementById('sidebar-market-count');
+    if (sbMarketCount) sbMarketCount.innerText = KANJI_CATALOG.length;
+
+    const sbDojoCount = document.getElementById('sidebar-dojo-count');
+    if (sbDojoCount) sbDojoCount.innerText = count;
+
+    // Flashcard top header room name sync
+    const fcRoomName = document.getElementById('fc-room-name-display');
+    if (fcRoomName) fcRoomName.innerText = activeRoom.name;
   },
 
-  openMasteredGallery: function() {
-    this.switchMainTab('market');
-    this.setFilter('mastered');
+  // --- ROOM MANAGEMENT MODAL ---
+  openRoomModal: function() {
+    const m = document.getElementById('room-modal');
+    if (m) {
+      m.classList.remove('hidden');
+      this.syncBodyScrollLock();
+      const input = document.getElementById('new-room-input');
+      if (input) { input.value = ''; input.focus(); }
+    }
   },
 
-  // --- PASAR BELANJA KANJI (CHUNK LAZY RENDERING ENGINE) ---
+  closeRoomModal: function() {
+    const m = document.getElementById('room-modal');
+    if (m) m.classList.add('hidden');
+    this.syncBodyScrollLock();
+  },
+
+  createNewRoom: function() {
+    const input = document.getElementById('new-room-input');
+    let name = input ? input.value.trim() : '';
+    if (!name) {
+      this.showToast('⚠️ Silakan masukkan nama ruang dojo!');
+      return;
+    }
+    let newId = 'room_' + Date.now();
+    this.rooms[newId] = { name: name, kanji: [] };
+    this.activeRoomId = newId;
+    this.saveRooms();
+    this.closeRoomModal();
+    this.renderRoomSelector();
+    this.updateStats();
+    this.renderMarket();
+    this.loadTrainingDeck();
+    this.showToast(`✨ Ruang "${name}" berhasil dibuat!`);
+  },
+
+  clearCurrentDojo: function() {
+    const activeRoom = this.rooms[this.activeRoomId];
+    if (!activeRoom || activeRoom.kanji.length === 0) {
+      this.showToast('ℹ️ Ruang dojo ini sudah kosong.');
+      return;
+    }
+    if (confirm(`Yakin ingin mengosongkan seluruh kanji dari "${activeRoom.name}"?`)) {
+      activeRoom.kanji = [];
+      this.saveRooms();
+      this.updateStats();
+      this.renderMarket();
+      this.loadTrainingDeck();
+      this.showToast('🧹 Ruang dojo telah dibersihkan.');
+    }
+  },
+
+  // --- PASAR BELANJA KANJI LOGIC ---
   setFilter: function(filterType) {
     this.activeFilter = filterType;
-    ['all', 'unlocked', 'n5', 'n4', 'in-dojo', 'mastered'].forEach(f => {
+    ['all', 'unlocked', 'n5', 'n4', 'in-dojo'].forEach(f => {
       const chip = document.getElementById(`fchip-${f}`);
       if (chip) chip.classList.toggle('active', f === filterType);
     });
-    this.renderMarket(true);
+    this.renderMarket();
   },
 
   onSearch: function(q) {
@@ -6962,7 +7070,7 @@ const DojoEngine = {
     if (clearBtn) clearBtn.classList.toggle('hidden', this.searchQuery.length === 0);
     clearTimeout(this._searchTimer);
     this._searchTimer = setTimeout(() => {
-      this.renderMarket(true);
+      this.renderMarket();
     }, 180);
   },
 
@@ -6972,13 +7080,14 @@ const DojoEngine = {
     const clearBtn = document.getElementById('market-search-clear');
     if (clearBtn) clearBtn.classList.add('hidden');
     this.searchQuery = '';
-    this.renderMarket(true);
+    this.renderMarket();
   },
 
-  renderMarket: function(resetScroll = true) {
+  renderMarket: function() {
     const container = document.getElementById('market-grid-container');
     if (!container) return;
 
+    const activeRoom = this.rooms[this.activeRoomId] || { kanji: [] };
     let list = [...KANJI_CATALOG];
 
     // Filter Kategori
@@ -6990,9 +7099,7 @@ const DojoEngine = {
     } else if (this.activeFilter === 'n4') {
       list = list.filter(item => item.lvl === 'N4');
     } else if (this.activeFilter === 'in-dojo') {
-      list = list.filter(item => this.myKanji.includes(item.k) && !this.masteredKanji.includes(item.k));
-    } else if (this.activeFilter === 'mastered') {
-      list = list.filter(item => this.masteredKanji.includes(item.k));
+      list = list.filter(item => activeRoom.kanji.includes(item.k));
     }
 
     // Filter Pencarian
@@ -7007,169 +7114,78 @@ const DojoEngine = {
       });
     }
 
-    this.filteredMarketList = list;
-    this.marketRenderedCount = 0;
-
     if (list.length === 0) {
-      let msg = "Tidak ada kanji yang sesuai dengan filter atau kata kunci.";
-      if (this.activeFilter === 'mastered') {
-        msg = "Belum ada kanji yang kamu kuasai. Buka Flashcard dan beri tanda ⭐ pada kanji yang sudah kamu hafal!";
-      } else if (this.activeFilter === 'in-dojo') {
-        msg = "Tidak ada kanji yang sedang dilatih. Tekan '+ Ambil' pada kanji yang ingin kamu pelajari!";
-      }
-      container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:40px; color:var(--text-sub);">${msg}</div>`;
+      container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:40px; color:var(--text-sub);">Tidak ada kanji yang sesuai dengan filter atau kata kunci.</div>`;
       return;
     }
 
-    // Render first batch of 24 cards (Lightning fast <10ms)
-    container.innerHTML = '';
-    this.renderMoreMarketCards();
-    this.setupMarketInfiniteScroll();
-  },
+    container.innerHTML = list.map(item => {
+      let inDojo = activeRoom.kanji.includes(item.k);
+      let isMaster = this.masteredKanji.includes(item.k);
+      let lvlClass = item.lvl === 'N5' ? 'tag-n5' : 'tag-n4';
+      let dayBadge = item.day <= this.playerUnlockedDay 
+        ? 'Hari ' + item.day 
+        : (item.day <= 30 ? 'Hari ' + item.day + ' 🔒' : 'Ekstra N4');
 
-  buildMarketCardHtml: function(item) {
-    let isMaster = this.masteredKanji.includes(item.k);
-    let inStudy = this.myKanji.includes(item.k);
-    let lvlClass = item.lvl === 'N5' ? 'tag-n5' : 'tag-n4';
-    let dayBadge = item.day <= this.playerUnlockedDay 
-      ? 'Hari ' + item.day 
-      : (item.day <= 30 ? 'Hari ' + item.day + ' 🔒' : 'Ekstra N4');
-
-    let btnText = '+ Ambil';
-    let btnClass = 'is-add';
-    if (isMaster) {
-      btnText = '⭐ Dikuasai';
-      btnClass = 'is-mastered';
-    } else if (inStudy) {
-      btnText = '✓ Di Latihan';
-      btnClass = 'is-in-dojo';
-    }
-
-    return `
-      <div class="kanji-market-card ${isMaster ? 'card-mastered' : ''}" data-kanji="${item.k}">
-        <div class="card-top-meta">
-          <span class="tag-level ${lvlClass}">${item.lvl}</span>
-          <div class="card-meta-right">
-            <span class="tag-source">${dayBadge}</span>
-            <button type="button" class="btn-card-audio" onclick="DojoEngine.speakKanji('${item.k}', '${(item.kun||item.on||'').replace(/'/g, "\\'")}', event)" title="Dengarkan Pengucapan">🔊</button>
+      return `
+        <div class="kanji-market-card">
+          <div class="card-top-meta">
+            <span class="tag-level ${lvlClass}">${item.lvl}</span>
+            <div class="card-meta-right">
+              <span class="tag-source">${dayBadge}</span>
+              <button type="button" class="btn-card-audio" onclick="DojoEngine.speakKanji('${item.k}', '${(item.kun||item.on||'').replace(/'/g, "\\'")}', event)" title="Dengarkan Pengucapan">🔊</button>
+            </div>
           </div>
+
+          <div class="card-kanji-hero">${item.k}</div>
+          <div class="card-arti-label">${item.a}</div>
+          <div class="card-readings-hint">${item.kun || item.on}</div>
+
+          <button type="button" class="btn-cart-toggle ${inDojo ? 'is-in-dojo' : 'is-add'}" onclick="DojoEngine.toggleKanjiToDojo('${item.k}', event)">
+            <span>${inDojo ? '✓ Di Dojo' : '+ Ambil'}</span>
+            ${isMaster ? '⭐' : ''}
+          </button>
         </div>
-
-        <div class="card-kanji-hero">${item.k}</div>
-        <div class="card-arti-label">${item.a}</div>
-        <div class="card-readings-hint">${item.kun || item.on}</div>
-
-        <button type="button" class="btn-cart-toggle ${btnClass}" onclick="DojoEngine.toggleKanjiCard('${item.k}', event)">
-          <span>${btnText}</span>
-        </button>
-      </div>
-    `;
+      `;
+    }).join('');
   },
 
-  renderMoreMarketCards: function() {
-    const container = document.getElementById('market-grid-container');
-    if (!container || !this.filteredMarketList) return;
-
-    const oldSentinel = document.getElementById('market-scroll-sentinel');
-    if (oldSentinel) oldSentinel.remove();
-
-    const batchSize = 24;
-    const nextBatch = this.filteredMarketList.slice(this.marketRenderedCount, this.marketRenderedCount + batchSize);
-    if (nextBatch.length === 0) return;
-
-    const html = nextBatch.map(item => this.buildMarketCardHtml(item)).join('');
-    container.insertAdjacentHTML('beforeend', html);
-    this.marketRenderedCount += nextBatch.length;
-
-    // Attach sentinel for next batch if remaining
-    if (this.marketRenderedCount < this.filteredMarketList.length) {
-      const sentinel = document.createElement('div');
-      sentinel.id = 'market-scroll-sentinel';
-      sentinel.style.cssText = 'grid-column: 1/-1; height: 35px; display: flex; align-items: center; justify-content: center; color: var(--text-sub); font-size: 11px;';
-      sentinel.innerHTML = '<span>Memuat kanji berikutnya...</span>';
-      container.appendChild(sentinel);
-
-      if (this._marketObserver) {
-        this._marketObserver.observe(sentinel);
-      }
-    }
-  },
-
-  setupMarketInfiniteScroll: function() {
-    if (this._marketObserver) return;
-    if ('IntersectionObserver' in window) {
-      this._marketObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            this.renderMoreMarketCards();
-          }
-        });
-      }, { rootMargin: '300px' });
-    } else {
-      window.addEventListener('scroll', () => {
-        if (this.activeMainTab !== 'market') return;
-        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 500) {
-          this.renderMoreMarketCards();
-        }
-      });
-    }
-  },
-
-  toggleKanjiCard: function(kanjiChar, evt) {
+  toggleKanjiToDojo: function(kanjiChar, evt) {
     if (evt) evt.stopPropagation();
-    let isMaster = this.masteredKanji.includes(kanjiChar);
-    let inStudy = this.myKanji.includes(kanjiChar);
+    const activeRoom = this.rooms[this.activeRoomId];
+    if (!activeRoom) return;
 
-    if (isMaster) {
-      // Re-study mastered kanji
-      this.masteredKanji = this.masteredKanji.filter(k => k !== kanjiChar);
-      if (!this.myKanji.includes(kanjiChar)) this.myKanji.push(kanjiChar);
-      this.showToast(`🔄 Kanji ${kanjiChar} dikembalikan ke antrean latihan.`);
-    } else if (inStudy) {
-      // Remove from active study
-      this.myKanji = this.myKanji.filter(k => k !== kanjiChar);
-      this.showToast(`🗑️ Kanji ${kanjiChar} dikeluarkan dari latihan.`);
+    let inDojoAfter = false;
+    let idx = activeRoom.kanji.indexOf(kanjiChar);
+    if (idx > -1) {
+      activeRoom.kanji.splice(idx, 1);
+      this.showToast(`🗑️ Dikeluarkan dari ${activeRoom.name}: ${kanjiChar}`);
+      inDojoAfter = false;
     } else {
-      // Add to active study
-      this.myKanji.push(kanjiChar);
-      this.showToast(`🛒 Kanji ${kanjiChar} ditambahkan ke latihan!`);
+      activeRoom.kanji.push(kanjiChar);
+      this.showToast(`🛒 Ditambahkan ke ${activeRoom.name}: ${kanjiChar}`);
+      inDojoAfter = true;
     }
 
-    this.saveStudyData();
+    this.saveRooms();
     this.updateStats();
     this.loadTrainingDeck();
 
-    // If currently filtered by 'in-dojo' or 'mastered', re-render view
-    if (this.activeFilter === 'in-dojo' || this.activeFilter === 'mastered') {
-      this.renderMarket(false);
+    // If currently filtered by 'in-dojo', re-render because the filtered set changed
+    if (this.activeFilter === 'in-dojo') {
+      this.renderMarket();
       return;
     }
 
-    // Targeted DOM mutation for instant 60fps response
-    const card = document.querySelector(`.kanji-market-card[data-kanji="${kanjiChar}"]`);
-    if (card) {
-      let nowMaster = this.masteredKanji.includes(kanjiChar);
-      let nowStudy = this.myKanji.includes(kanjiChar);
-      card.classList.toggle('card-mastered', nowMaster);
-      const btn = card.querySelector('.btn-cart-toggle');
-      if (btn) {
-        if (nowMaster) {
-          btn.className = 'btn-cart-toggle is-mastered';
-          btn.innerHTML = '<span>⭐ Dikuasai</span>';
-        } else if (nowStudy) {
-          btn.className = 'btn-cart-toggle is-in-dojo';
-          btn.innerHTML = '<span>✓ Di Latihan</span>';
-        } else {
-          btn.className = 'btn-cart-toggle is-add';
-          btn.innerHTML = '<span>+ Ambil</span>';
-        }
-      }
+    // Targeted DOM mutation for instant 60fps response (0ms lag, no full re-render)
+    const btn = evt ? (evt.currentTarget || (evt.target && evt.target.closest ? evt.target.closest('.btn-cart-toggle') : null)) : null;
+    if (btn) {
+      let isMaster = this.masteredKanji.includes(kanjiChar);
+      btn.className = `btn-cart-toggle ${inDojoAfter ? 'is-in-dojo' : 'is-add'}`;
+      btn.innerHTML = `<span>${inDojoAfter ? '✓ Di Dojo' : '+ Ambil'}</span>${isMaster ? '⭐' : ''}`;
+    } else {
+      this.renderMarket();
     }
-  },
-
-  // Backward compatibility alias for toggleKanjiToDojo
-  toggleKanjiToDojo: function(kanjiChar, evt) {
-    this.toggleKanjiCard(kanjiChar, evt);
   },
 
   // --- RUANG LATIHAN DOJO ENGINE ---
@@ -7207,85 +7223,37 @@ const DojoEngine = {
   },
 
   loadTrainingDeck: function() {
-    const unmastered = KANJI_CATALOG.filter(item => this.myKanji.includes(item.k) && !this.masteredKanji.includes(item.k));
-    const allStudied = KANJI_CATALOG.filter(item => this.myKanji.includes(item.k));
+    const activeRoom = this.rooms[this.activeRoomId] || { kanji: [] };
+    const chars = activeRoom.kanji;
 
-    // Flashcard deck only reviews unmastered kanji
-    this.trainingList = unmastered;
-    if (this.deckIdx >= this.trainingList.length) {
-      this.deckIdx = Math.max(0, this.trainingList.length - 1);
-    }
+    // Filter item dari katalog
+    this.trainingList = KANJI_CATALOG.filter(item => chars.includes(item.k));
+    this.deckIdx = 0;
 
     const emptyBox = document.getElementById('dojo-empty-state');
-    const emptyIcon = document.getElementById('empty-state-icon');
-    const emptyTitle = document.getElementById('empty-state-title');
-    const emptyDesc = document.getElementById('empty-state-desc');
-    const emptyActions = document.getElementById('empty-state-actions');
-
     const fcHeader = document.getElementById('dojo-fc-header');
     const fcBox = document.getElementById('dojo-fc-container');
     const quizBox = document.getElementById('dojo-quiz-container');
     const navStrip = document.getElementById('dojo-nav-strip');
 
+    if (this.trainingList.length === 0) {
+      if (emptyBox) emptyBox.classList.remove('hidden');
+      if (fcHeader) fcHeader.classList.add('hidden');
+      if (fcBox) fcBox.classList.add('hidden');
+      if (quizBox) quizBox.classList.add('hidden');
+      if (navStrip) navStrip.classList.add('hidden');
+      return;
+    }
+
+    if (emptyBox) emptyBox.classList.add('hidden');
+
     if (this.dojoMode === 'fc') {
-      if (this.trainingList.length === 0) {
-        if (fcHeader) fcHeader.classList.add('hidden');
-        if (fcBox) fcBox.classList.add('hidden');
-        if (quizBox) quizBox.classList.add('hidden');
-        if (navStrip) navStrip.classList.add('hidden');
-        if (emptyBox) emptyBox.classList.remove('hidden');
-
-        if (allStudied.length > 0) {
-          // All studied kanji are mastered! (Victory state)
-          if (emptyIcon) emptyIcon.innerText = '🎉';
-          if (emptyTitle) emptyTitle.innerText = 'Semua Kanji Telah Dikuasai!';
-          if (emptyDesc) emptyDesc.innerHTML = `Hebat sekali! Seluruh <b>${allStudied.length} kanji</b> dalam daftar latihanmu telah berhasil kamu kuasai (⭐). Ambil kanji baru dari pasar atau tinjau kembali koleksi mastermu.`;
-          if (emptyActions) {
-            emptyActions.innerHTML = `
-              <button type="button" class="btn-jump-market" onclick="DojoEngine.switchMainTab('market')">🛒 Ambil Kanji Tambahan ➔</button>
-              <button type="button" class="btn-jump-market" style="background:rgba(245,158,11,0.22); border-color:var(--gold); color:var(--gold);" onclick="DojoEngine.openMasteredGallery()">⭐ Buka Galeri Dikuasai</button>
-            `;
-          }
-        } else {
-          // No kanji in myKanji yet
-          if (emptyIcon) emptyIcon.innerText = '🎒';
-          if (emptyTitle) emptyTitle.innerText = 'Antrean Belajar Kosong!';
-          if (emptyDesc) emptyDesc.innerHTML = 'Belum ada kanji yang kamu pilih untuk dilatih. Buka <b>Pasar Belanja Kanji</b> untuk memilih kanji-kanji yang ingin kamu kuasai.';
-          if (emptyActions) {
-            emptyActions.innerHTML = `<button type="button" class="btn-jump-market" onclick="DojoEngine.switchMainTab('market')">🛒 Pergi Belanja Kanji ➔</button>`;
-          }
-        }
-        return;
-      }
-
-      if (emptyBox) emptyBox.classList.add('hidden');
       if (fcHeader) fcHeader.classList.remove('hidden');
       if (fcBox) fcBox.classList.remove('hidden');
       if (quizBox) quizBox.classList.add('hidden');
       if (navStrip) navStrip.classList.remove('hidden');
-
-      const roomNameEl = document.getElementById('fc-room-name-display');
-      if (roomNameEl) roomNameEl.innerText = `Antrean Belajar (${this.trainingList.length} Tersisa)`;
-
       this.renderFlashcardCard();
     } else {
-      // Quiz Drill uses all studied kanji for reinforcement
-      this.quizPool = allStudied;
-      if (this.quizPool.length === 0) {
-        if (fcHeader) fcHeader.classList.add('hidden');
-        if (fcBox) fcBox.classList.add('hidden');
-        if (quizBox) quizBox.classList.add('hidden');
-        if (navStrip) navStrip.classList.add('hidden');
-        if (emptyBox) emptyBox.classList.remove('hidden');
-        if (emptyIcon) emptyIcon.innerText = '🎒';
-        if (emptyTitle) emptyTitle.innerText = 'Belum Ada Kanji untuk Kuis!';
-        if (emptyDesc) emptyDesc.innerHTML = 'Silakan pilih kanji di <b>Pasar Belanja Kanji</b> terlebih dahulu untuk menguji kemampuanmu di Dojo Kuis.';
-        if (emptyActions) {
-          emptyActions.innerHTML = `<button type="button" class="btn-jump-market" onclick="DojoEngine.switchMainTab('market')">🛒 Pergi Belanja Kanji ➔</button>`;
-        }
-        return;
-      }
-      if (emptyBox) emptyBox.classList.add('hidden');
       if (fcHeader) fcHeader.classList.add('hidden');
       if (fcBox) fcBox.classList.add('hidden');
       if (quizBox) quizBox.classList.remove('hidden');
@@ -7311,7 +7279,7 @@ const DojoEngine = {
       'た':'ta','ち':'chi','つ':'tsu','て':'te','と':'to',
       'な':'na','に':'ni','ぬ':'nu','ね':'ne','の':'no',
       'は':'ha','ひ':'hi','ふ':'fu','へ':'he','ほ':'ho',
-      'ま':'ma','み':'mi','む':'mu','め':'me','モ':'mo',
+      'ま':'ma','み':'mi','む':'mu','め':'me','も':'mo',
       'や':'ya','ゆ':'yu','よ':'yo',
       'ら':'ra','り':'ri','る':'ru','れ':'re','ろ':'ro',
       'わ':'wa','を':'wo','ん':'n',
@@ -7327,7 +7295,7 @@ const DojoEngine = {
       'ひゃ':'hya','ひゅ':'hyu','ひょ':'hyo',
       'みゃ':'mya','みゅ':'myu','みょ':'myo',
       'りゃ':'rya','りゅ':'ryu','りょ':'ryo',
-      'ぎゃ':'gya','ギュ':'gyu','ぎょ':'gyo',
+      'ぎゃ':'gya','ぎゅ':'gyu','ぎょ':'gyo',
       'じゃ':'ja','じゅ':'ju','じょ':'jo',
       'びゃ':'bya','びゅ':'byu','びょ':'byo',
       'ぴゃ':'pya','ぴゅ':'pyu','ぴょ':'pyo',
@@ -7449,6 +7417,7 @@ const DojoEngine = {
     if (senData) {
       this.currentSentenceText = senData.jp;
       if (senJpEl) {
+        // Highlight the target kanji character
         const highlighted = senData.jp.split(item.k).join(`<span class="highlight-kanji">${item.k}</span>`);
         senJpEl.innerHTML = highlighted;
       }
@@ -7506,21 +7475,18 @@ const DojoEngine = {
   toggleMasterCurrent: function() {
     if (this.trainingList.length === 0) return;
     const item = this.trainingList[this.deckIdx];
-    if (!item) return;
-
-    // Tandai sebagai dikuasai (⭐)
-    if (!this.masteredKanji.includes(item.k)) {
+    let idx = this.masteredKanji.indexOf(item.k);
+    if (idx > -1) {
+      this.masteredKanji.splice(idx, 1);
+      this.showToast(`Belum dikuasai: ${item.k}`);
+    } else {
       this.masteredKanji.push(item.k);
+      this.showToast(`⭐ Hebat! Dikuasai: ${item.k}`);
     }
-    this.saveStudyData();
+    this.saveMastered();
     this.updateStats();
-
-    // Sound selebrasi & toast pencapaian
-    this.playSfx('combo');
-    this.showToast(`⭐ Sugoi! Kanji ${item.k} (${item.a}) resmi kamu kuasai!`);
-
-    // Kartu yang dikuasai otomatis keluar dari antrean aktif flashcard
-    this.loadTrainingDeck();
+    this.renderFlashcardCard();
+    this.renderMarket();
   },
 
   speakText: function(text) {
@@ -7686,11 +7652,7 @@ const DojoEngine = {
   },
 
   nextQuizQuestion: function() {
-    const pool = (this.quizPool && this.quizPool.length > 0) 
-      ? this.quizPool 
-      : (this.myKanji.length > 0 ? KANJI_CATALOG.filter(k => this.myKanji.includes(k.k)) : KANJI_CATALOG.slice(0, 10));
-
-    if (!pool || pool.length === 0) return;
+    if (!this.trainingList || this.trainingList.length === 0) return;
 
     const nextBtn = document.getElementById('btn-quiz-next');
     if (nextBtn) nextBtn.classList.add('hidden');
@@ -7708,8 +7670,8 @@ const DojoEngine = {
       setTimeout(() => stage.classList.remove('stage-enter'), 320);
     }
 
-    // Pilih kanji target dari pool studi
-    const target = pool[Math.floor(Math.random() * pool.length)];
+    // Pilih kanji target dari deck aktif
+    const target = this.trainingList[Math.floor(Math.random() * this.trainingList.length)];
     this.quizTarget = target;
 
     // Tentukan tipe soal
@@ -7736,120 +7698,183 @@ const DojoEngine = {
     this.renderQuestionUI(qData);
   },
 
+  // 1. Soal Tebak Arti (Kanji -> Arti)
   buildMeaningQuestion: function(target) {
-    const distractors = KANJI_CATALOG.filter(k => k.k !== target.k);
-    this.shuffle(distractors);
-    const choices = [target.a, distractors[0].a, distractors[1].a, distractors[2].a];
+    let correct = target.a;
+    let pool = this.trainingList.filter(x => x.a !== target.a);
+    if (pool.length < 3) {
+      pool = KANJI_CATALOG.filter(x => x.a !== target.a);
+    }
+    this.shuffle(pool);
+
+    let distractors = [];
+    for (let item of pool) {
+      if (!distractors.includes(item.a) && item.a !== correct) {
+        distractors.push(item.a);
+      }
+      if (distractors.length === 3) break;
+    }
+
+    let choices = [correct, ...distractors];
     this.shuffle(choices);
 
     return {
       type: 'meaning',
-      badge: '🎯 Tebak Arti Kanji',
+      badge: '🎯 TEBAK ARTI KANJI',
       promptKanji: target.k,
-      promptSub: 'Pilih arti bahasa Indonesia yang paling tepat:',
+      promptSub: 'Pilih arti bahasa Indonesia yang tepat:',
       choices: choices,
-      correct: target.a,
-      feedbackCorrect: `Tepat sekali! Kanji <b>${target.k}</b> berarti <b>${target.a}</b>.`,
-      feedbackWrong: `Kurang tepat! Kanji <b>${target.k}</b> berarti <b>${target.a}</b>.`,
-      audioToSpeak: target.k,
-      isKanjiChoices: false
+      correct: correct,
+      audioToSpeak: target.kun || target.on ? (target.kun||target.on).split(',')[0].replace(/[\.・\-]/g, '') : target.k,
+      feedbackCorrect: `Karakter <b>${target.k}</b> memang artinya adalah <b>"${target.a}"</b>.`,
+      feedbackWrong: `Karakter <b>${target.k}</b> artinya adalah <b>"${target.a}"</b>. Ingat bentuknya baik-baik ya!`,
+      isKanjiChoices: false,
+      isTwoColumns: false
     };
   },
 
+  // 2. Soal Tebak Cara Baca (Kanji -> Hiragana)
   buildReadingQuestion: function(target) {
-    const correctReading = target.kun ? target.kun.split(',')[0].trim() : target.on.split(',')[0].trim();
-    const distractors = KANJI_CATALOG.filter(k => k.k !== target.k);
-    this.shuffle(distractors);
+    let cleanR = (target.kun && target.kun !== '-' ? target.kun : target.on).split(',')[0].replace(/[\.・\-]/g, '').trim();
+    let correct = cleanR;
 
-    const getReading = k => (k.kun ? k.kun.split(',')[0].trim() : k.on.split(',')[0].trim());
-    const dReadings = [getReading(distractors[0]), getReading(distractors[1]), getReading(distractors[2])];
-    const choices = [correctReading, ...dReadings];
+    let pool = this.trainingList.filter(x => x.k !== target.k);
+    if (pool.length < 3) {
+      pool = KANJI_CATALOG.filter(x => x.k !== target.k);
+    }
+    this.shuffle(pool);
+
+    let distractors = [];
+    for (let item of pool) {
+      let r = (item.kun && item.kun !== '-' ? item.kun : item.on).split(',')[0].replace(/[\.・\-]/g, '').trim();
+      if (r && r !== '-' && r !== correct && !distractors.includes(r)) {
+        distractors.push(r);
+      }
+      if (distractors.length === 3) break;
+    }
+
+    let choices = [correct, ...distractors];
     this.shuffle(choices);
 
     return {
       type: 'reading',
-      badge: '🗣️ Tebak Bacaan Kanji',
+      badge: '🗣️ TEBAK CARA BACA (YOMIKATA)',
       promptKanji: target.k,
-      promptSub: `Bagaimana cara membaca kanji <b>${target.k}</b> (${target.a})?`,
+      promptSub: `Makna: <b style="color:var(--gold);">${target.a}</b> • Cara baca utama:`,
       choices: choices,
-      correct: correctReading,
-      feedbackCorrect: `Bagus! Kanji <b>${target.k}</b> dibaca <b>${correctReading}</b>.`,
-      feedbackWrong: `Salah tebas! Kanji <b>${target.k}</b> dibaca <b>${correctReading}</b>.`,
-      audioToSpeak: correctReading.replace(/[\.・\-]/g, ''),
-      isKanjiChoices: false
+      correct: correct,
+      audioToSpeak: cleanR,
+      feedbackCorrect: `Karakter <b>${target.k}</b> (${target.a}) tepat dibaca <b>${cleanR}</b>!`,
+      feedbackWrong: `Karakter <b>${target.k}</b> (${target.a}) cara bacanya adalah <b>${cleanR}</b>. Coba lafalkan berulang kali!`,
+      isKanjiChoices: false,
+      isTwoColumns: false
     };
   },
 
+  // 3. Soal Tebak Bentuk Kanji (Makna/Hiragana -> Pilih Kanji)
   buildKanjiQuestion: function(target) {
-    const distractors = KANJI_CATALOG.filter(k => k.k !== target.k);
-    this.shuffle(distractors);
-    const choices = [target.k, distractors[0].k, distractors[1].k, distractors[2].k];
+    let readingText = (target.kun && target.kun !== '-' ? target.kun : target.on).split(',')[0];
+    let correct = target.k;
+
+    let pool = this.trainingList.filter(x => x.k !== target.k);
+    if (pool.length < 3) {
+      pool = KANJI_CATALOG.filter(x => x.k !== target.k);
+    }
+    this.shuffle(pool);
+
+    let distractors = [];
+    for (let item of pool) {
+      if (item.k !== correct && !distractors.includes(item.k)) {
+        distractors.push(item.k);
+      }
+      if (distractors.length === 3) break;
+    }
+
+    let choices = [correct, ...distractors];
     this.shuffle(choices);
 
     return {
       type: 'kanji',
-      badge: '🈴 Tebak Bentuk Kanji',
-      customPromptHtml: `<div style="font-size: 26px; font-weight: 800; color: var(--gold); margin-bottom: 6px;">"${target.a}"</div>`,
-      promptSub: 'Manakah aksara kanji yang mewakili arti di atas?',
+      badge: '🈴 TEBAK BENTUK KANJI',
+      customPromptHtml: `<div style="font-size:clamp(22px, 5.5vw, 28px); font-weight:900; color:#fbbf24; margin:10px 0 6px;">"${target.a}"</div>`,
+      promptSub: `Pelafalan: <b style="color:#38bdf8;">${readingText}</b> • Manakah karakter kanjinya?`,
       choices: choices,
-      correct: target.k,
-      feedbackCorrect: `Benar! Kanji untuk "<b>${target.a}</b>" adalah <b>${target.k}</b>.`,
-      feedbackWrong: `Meleset! Kanji untuk "<b>${target.a}</b>" adalah <b>${target.k}</b>.`,
+      correct: correct,
       audioToSpeak: target.k,
-      isKanjiChoices: true
+      feedbackCorrect: `Karakter untuk makna <i>"${target.a}"</i> adalah <b>${target.k}</b> (dibaca: <b>${readingText}</b>).`,
+      feedbackWrong: `Karakter untuk makna <i>"${target.a}"</i> adalah <b>${target.k}</b> (dibaca: <b>${readingText}</b>). Perhatikan goresannya!`,
+      isKanjiChoices: true,
+      isTwoColumns: false
     };
   },
 
+  // 4. Soal Detektif Onyomi vs Kunyomi (Cina vs Jepang)
   buildOnKunQuestion: function(target) {
-    let askOnyomi = Math.random() > 0.5;
-    if (!target.on || target.on === '-') askOnyomi = false;
-    if (!target.kun || target.kun === '-') askOnyomi = true;
+    const isJukugo = target.ex && target.ex.length > 0 && Math.random() >= 0.45;
 
-    let targetReading = askOnyomi ? target.on : target.kun;
-    let label = askOnyomi ? 'ONYOMI (Bunyi Cina)' : 'KUNYOMI (Asli Jepang)';
-
-    const distractors = KANJI_CATALOG.filter(k => k.k !== target.k && (askOnyomi ? k.on : k.kun));
-    this.shuffle(distractors);
-
-    let d1 = askOnyomi ? distractors[0].on : distractors[0].kun;
-    let d2 = askOnyomi ? distractors[1].on : distractors[1].kun;
-    let d3 = askOnyomi ? distractors[2].on : distractors[2].kun;
-
-    const choices = [targetReading, d1, d2, d3];
-    this.shuffle(choices);
-
-    return {
-      type: 'onkun',
-      badge: `💡 ${label}`,
-      promptKanji: target.k,
-      promptSub: `Manakah bacaan <b>${label}</b> untuk kanji <b>${target.k}</b> (${target.a})?`,
-      choices: choices,
-      correct: targetReading,
-      feedbackCorrect: `Tepat! ${label} dari <b>${target.k}</b> adalah <b>${targetReading}</b>.`,
-      feedbackWrong: `Keliru! ${label} dari <b>${target.k}</b> adalah <b>${targetReading}</b>.`,
-      audioToSpeak: targetReading.split(',')[0].replace(/[\.・\-]/g, ''),
-      isKanjiChoices: false
-    };
+    if (isJukugo) {
+      const ex = target.ex[0];
+      let choices = ['🇨🇳 Onyomi (Bacaan Cina)', '🇯🇵 Kunyomi (Bacaan Jepang)'];
+      this.shuffle(choices);
+      return {
+        type: 'onkun',
+        badge: '💡 DETEKTIF ONYOMI VS KUNYOMI',
+        customPromptHtml: `<div style="font-size:clamp(26px, 7vw, 36px); font-family:'Noto Serif JP',serif; font-weight:700; color:#fff; margin:10px 0 4px; text-shadow:0 0 20px var(--primary-glow);">${ex.w}</div>`,
+        promptSub: `Dalam kata majemuk <b>"${ex.w}"</b> (${ex.r} - ${ex.a}), cara baca kanji [ <b style="color:var(--primary);">${target.k}</b> ] adalah:`,
+        choices: choices,
+        correct: '🇨🇳 Onyomi (Bacaan Cina)',
+        audioToSpeak: ex.w,
+        feedbackCorrect: `Rumus Sakti 80/20 terbukti! Gabungan kata majemuk <b>${ex.w}</b> hampir selalu memakai ONYOMI (Cina).`,
+        feedbackWrong: `Ingat Rumus Sakti 80/20: Gabungan dua kanji (<b>${ex.w}</b>) memakai ONYOMI (Cina)!`,
+        isKanjiChoices: false,
+        isTwoColumns: true
+      };
+    } else {
+      let kunR = (target.kun && target.kun !== '-') ? target.kun.split(',')[0].trim() : (target.on ? target.on.split(',')[0].trim() : '');
+      let choices = ['🇯🇵 Kunyomi (Bacaan Jepang)', '🇨🇳 Onyomi (Bacaan Cina)'];
+      this.shuffle(choices);
+      return {
+        type: 'onkun',
+        badge: '💡 DETEKTIF ONYOMI VS KUNYOMI',
+        promptKanji: target.k,
+        promptSub: `Ketika berdiri sendirian dibaca <b>"${kunR}"</b> (${target.a}), bacaan ini termasuk:`,
+        choices: choices,
+        correct: '🇯🇵 Kunyomi (Bacaan Jepang)',
+        audioToSpeak: target.k,
+        feedbackCorrect: `Rumus Sakti 80/20 terbukti! Kanji yang berdiri sendirian <b>${target.k}</b> (= ${kunR}) memakai KUNYOMI (Jepang).`,
+        feedbackWrong: `Ingat Rumus Sakti 80/20: Kanji yang berdiri sendirian (<b>${target.k}</b> = ${kunR}) memakai KUNYOMI (Jepang)!`,
+        isKanjiChoices: false,
+        isTwoColumns: true
+      };
+    }
   },
 
+  // 5. Soal Samurai Blitz (Benar atau Salah)
   buildBlitzQuestion: function(target) {
-    const isPairCorrect = Math.random() > 0.5;
-    let shownMeaning = target.a;
-    if (!isPairCorrect) {
-      const other = KANJI_CATALOG.find(k => k.k !== target.k);
-      shownMeaning = other ? other.a : 'Sesuatu yang lain';
+    const isTrue = Math.random() >= 0.5;
+    let statementMeaning = target.a;
+
+    if (!isTrue) {
+      const others = KANJI_CATALOG.filter(x => x.a !== target.a);
+      statementMeaning = others[Math.floor(Math.random() * others.length)].a;
     }
+
+    const correct = isTrue ? '🟢 BENAR (Maru ⭕)' : '🔴 SALAH (Batsu ❌)';
 
     return {
       type: 'blitz',
-      badge: '⚡ Refleks Benar / Salah',
+      badge: '⚡ SAMURAI BLITZ • BENAR ATAU SALAH',
       promptKanji: target.k,
-      promptSub: `Apakah kanji <b>${target.k}</b> memiliki arti: <br><b style="color:var(--primary); font-size:18px;">"${shownMeaning}"</b> ?`,
-      choices: ['BENAR (Seikai)', 'SALAH (Chigau)'],
-      correct: isPairCorrect ? 'BENAR (Seikai)' : 'SALAH (Chigau)',
-      feedbackCorrect: `Hebat! Pasangan arti tersebut memang <b>${isPairCorrect ? 'BENAR' : 'SALAH'}</b>! Kanji <b>${target.k}</b> = <b>${target.a}</b>.`,
-      feedbackWrong: `Kurang tepat! Pasangan arti tersebut seharusnya <b>${isPairCorrect ? 'BENAR' : 'SALAH'}</b>! Kanji <b>${target.k}</b> = <b>${target.a}</b>.`,
+      promptSub: `Apakah arti kanji di atas adalah: <b style="color:#fbbf24; font-size:15px;">"${statementMeaning}"</b>?`,
+      choices: ['🟢 BENAR (Maru ⭕)', '🔴 SALAH (Batsu ❌)'],
+      correct: correct,
       audioToSpeak: target.k,
+      feedbackCorrect: isTrue 
+        ? `Pernyataan 100% tepat! Karakter <b>${target.k}</b> memang artinya <b>"${target.a}"</b>.` 
+        : `Pernyataan tepat! Karakter <b>${target.k}</b> artinya adalah <b>"${target.a}"</b> (bukan "${statementMeaning}").`,
+      feedbackWrong: isTrue
+        ? `Karakter <b>${target.k}</b> memang benar artinya <b>"${target.a}"</b>.`
+        : `Karakter <b>${target.k}</b> artinya adalah <b>"${target.a}"</b> (bukan "${statementMeaning}").`,
       isKanjiChoices: false,
       isTwoColumns: true
     };
@@ -8026,6 +8051,7 @@ const DojoEngine = {
     this.toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
   }
 };
+
 
 
 window.addEventListener('DOMContentLoaded', () => {
