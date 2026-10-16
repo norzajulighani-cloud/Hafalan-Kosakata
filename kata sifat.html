@@ -842,33 +842,103 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    margin-bottom: 14px;
-    padding-bottom: 12px;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     position: relative;
     z-index: 20;
-  }
-  .quiz-telemetry-cluster {
-    display: flex;
-    align-items: center;
     gap: 8px;
   }
-  .quiz-stat-pill {
-    background: rgba(56, 189, 248, 0.12);
-    border: 1px solid rgba(56, 189, 248, 0.35);
-    color: var(--primary);
-    font-size: 11.5px;
+  .quiz-meta-line {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    flex-wrap: nowrap;
+    overflow: hidden;
+  }
+  .quiz-badge-target {
+    background: rgba(251, 191, 36, 0.15);
+    color: var(--gold);
+    border: 1px solid rgba(251, 191, 36, 0.35);
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-size: 11px;
     font-weight: 800;
-    padding: 4px 10px;
-    border-radius: 12px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    user-select: none;
     display: inline-flex;
     align-items: center;
     gap: 4px;
   }
-  .quiz-stat-pill.score-pill {
-    background: rgba(34, 197, 94, 0.14);
-    border-color: rgba(34, 197, 94, 0.35);
-    color: #86efac;
+  .quiz-badge-target:hover {
+    background: rgba(251, 191, 36, 0.25);
+    box-shadow: 0 0 12px rgba(251, 191, 36, 0.35);
+  }
+  .quiz-counter-text {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--text-sub);
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+  .quiz-counter-text b {
+    color: #fff;
+    font-weight: 800;
+  }
+  .quiz-sep {
+    color: rgba(255, 255, 255, 0.2);
+    font-size: 11px;
+  }
+  .quiz-score-text {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+  .quiz-score-text b {
+    color: #fff;
+    font-weight: 800;
+  }
+  .quiz-empty-mastery {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 24px 14px;
+    width: 100%;
+  }
+  .qem-icon {
+    font-size: 48px;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 0 16px rgba(251, 191, 36, 0.5));
+    animation: pulseGlow 2.4s infinite ease-in-out;
+  }
+  .qem-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+  .qem-desc {
+    font-size: 13px;
+    color: var(--text-sub);
+    line-height: 1.5;
+    max-width: 380px;
+    margin-bottom: 18px;
+  }
+  .qem-actions {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    max-width: 380px;
+    flex-direction: column;
+  }
+  @media (min-width: 480px) {
+    .qem-actions { flex-direction: row; }
   }
 
   /* Compact Drill Mode Dropdown */
@@ -973,22 +1043,35 @@
     padding: 10px 0;
   }
   .quiz-q-text {
-    font-size: 17px;
-    font-weight: 800;
+    font-size: 16.5px;
+    font-weight: 700;
     line-height: 1.45;
     color: var(--text-main);
     text-align: center;
     margin-bottom: 16px;
+    padding: 0 4px;
+  }
+  .quiz-q-text b {
+    color: var(--primary);
+    font-weight: 800;
+    padding: 0 1px;
+  }
+  .quiz-q-text .q-target-word {
+    color: var(--gold);
+    font-size: 1.25em;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+  }
+  .quiz-q-text .q-target-form {
+    color: var(--primary);
+    font-weight: 800;
   }
   .quiz-options-grid {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr !important;
     gap: 8px;
     width: 100%;
     max-width: 480px;
-  }
-  @media (min-width: 480px) {
-    .quiz-options-grid.grid-two { grid-template-columns: 1fr 1fr; }
   }
 
   .btn-quiz-opt {
@@ -1518,10 +1601,11 @@
   <div id="sec-quiz" class="dojo-arena-card hidden fade-in-up">
     <!-- Top Bar inside Quiz -->
     <div class="quiz-top-bar">
-      <div class="quiz-telemetry-cluster">
-        <span class="quiz-stat-pill" id="quiz-session-pill" style="color:var(--primary); border-color:rgba(56,189,248,0.35); font-weight:800;">🏷️ Sifat-i 1</span>
-        <span class="quiz-stat-pill" id="quiz-progress-pill">🎯 Soal: 1 / 15</span>
-        <span class="quiz-stat-pill score-pill" id="quiz-score-pill">⭐ Skor: 0</span>
+      <div class="quiz-meta-line">
+        <span class="quiz-badge-target" id="quiz-mode-pill" onclick="Modul.toggleQuizSourceMode()" title="Klik untuk beralih mode kuis">⭐ 0 DIKUASAI</span>
+        <span class="quiz-counter-text" id="quiz-progress-pill">SOAL <b>1</b> / 10</span>
+        <span class="quiz-sep">•</span>
+        <span class="quiz-score-text" id="quiz-score-pill">SKOR <b>0</b></span>
       </div>
 
       <!-- Compact Drill Mode Dropdown -->
@@ -3650,6 +3734,7 @@ const Modul = {
   idxQuiz: 0,
   scoreQuiz: 0,
   drillSubtype: 'mix', // 'mix', 'inflection', 'antonym', 'meaning', 'isian'
+  quizSourceMode: 'mastered', // 'mastered' (stars ⭐) or 'session'
   activeQuizData: [],
 
   activeArray: [],
@@ -4178,8 +4263,39 @@ const Modul = {
   },
 
   // ==========================================
-  // ARENA KUIS SYSTEM
+  // ARENA KUIS SYSTEM (BERBASIS KATA DIKUASAI PER SESI ⭐)
   // ==========================================
+  getMasteredAdjectives: function() {
+    const isNa = this.activeCategory === 'sifatna';
+    const seen = new Set();
+    // Scope strictly to the ACTIVE SESSION (this.activeArray) - TIDAK BOLEH NYEBRANG KE SESI LAIN!
+    return this.activeArray.filter(item => {
+      if (this.masteredList.includes(item.k) && !seen.has(item.k)) {
+        seen.add(item.k);
+        return true;
+      }
+      return false;
+    }).map(item => ({ ...item, isNa }));
+  },
+
+  toggleQuizSourceMode: function() {
+    this.playSfx('tap');
+    this.quizSourceMode = (this.quizSourceMode === 'mastered') ? 'session' : 'mastered';
+    this.activeQuizData = this.generateQuizQuestions();
+    this.idxQuiz = 0;
+    this.scoreQuiz = 0;
+    this.renderQuiz(true);
+  },
+
+  startSessionQuizFallback: function() {
+    this.playSfx('tap');
+    this.quizSourceMode = 'session';
+    this.activeQuizData = this.generateQuizQuestions();
+    this.idxQuiz = 0;
+    this.scoreQuiz = 0;
+    this.renderQuiz(true);
+  },
+
   toggleDrillDropdown: function(e) {
     if (e) e.stopPropagation();
     this.playSfx('tap');
@@ -4217,96 +4333,129 @@ const Modul = {
 
   generateQuizQuestions: function() {
     const isNa = this.activeCategory === 'sifatna';
-    const pool = this.activeArray;
+    const useMastered = (this.quizSourceMode === 'mastered');
+    let pool = [];
+
+    if (useMastered) {
+      pool = this.getMasteredAdjectives();
+      if (pool.length === 0) {
+        return []; // Triggers clean empty state in renderQuiz!
+      }
+    } else {
+      pool = this.activeArray.map(item => ({ ...item, isNa }));
+    }
+
+    // Distractor sources scoped to active session, fallback to active category DB (NEVER cross category!)
+    const sessionDb = this.activeArray.map(item => ({ ...item, isNa }));
+    const categoryDb = (isNa ? DB_Na_Adj : DB_I_Adj).map(item => ({ ...item, isNa }));
+
     const targetSubtype = this.drillSubtype;
     const generated = [];
-
     const shuffle = (arr) => arr.sort(() => Math.random() - 0.5);
 
-    // 1. INFLECTION DRILL
+    // 1. INFLECTION DRILL (4 Perubahan Bentuk)
     if (targetSubtype === 'inflection' || targetSubtype === 'mix') {
-      const infPool = shuffle([...pool]).slice(0, 5);
       const formTypes = ['presNeg', 'pastPos', 'pastNeg'];
+      const formNames = {
+        presNeg: 'Negatif Sekarang (-)',
+        pastPos: 'Lampau Positif (+)',
+        pastNeg: 'Lampau Negatif (-)'
+      };
 
-      infPool.forEach(item => {
+      const count = targetSubtype === 'inflection' ? Math.min(pool.length * 2, 12) : Math.min(pool.length, 5);
+      const infPool = shuffle([...pool]);
+
+      for (let i = 0; i < count; i++) {
+        const item = infPool[i % infPool.length];
         const inf = getAdjectiveInflections(item.k, item.r, isNa);
         const fKey = formTypes[Math.floor(Math.random() * formTypes.length)];
         const targetForm = inf[fKey];
-        const formNames = {
-          presNeg: 'Negatif Sekarang (-)',
-          pastPos: 'Lampau Positif (+)',
-          pastNeg: 'Lampau Negatif (-)'
-        };
-
         const ans = targetForm.kanji;
         const opts = [ans];
 
-        if (targetForm !== inf.presPos) opts.push(inf.presPos.kanji);
-        if (targetForm !== inf.presNeg && !opts.includes(inf.presNeg.kanji)) opts.push(inf.presNeg.kanji);
-        if (targetForm !== inf.pastPos && !opts.includes(inf.pastPos.kanji)) opts.push(inf.pastPos.kanji);
-        if (targetForm !== inf.pastNeg && !opts.includes(inf.pastNeg.kanji)) opts.push(inf.pastNeg.kanji);
+        if (inf.presPos.kanji !== ans && !opts.includes(inf.presPos.kanji)) opts.push(inf.presPos.kanji);
+        if (inf.presNeg.kanji !== ans && !opts.includes(inf.presNeg.kanji)) opts.push(inf.presNeg.kanji);
+        if (inf.pastPos.kanji !== ans && !opts.includes(inf.pastPos.kanji)) opts.push(inf.pastPos.kanji);
+        if (inf.pastNeg.kanji !== ans && !opts.includes(inf.pastNeg.kanji)) opts.push(inf.pastNeg.kanji);
 
-        const others = shuffle(pool.filter(o => o.k !== item.k));
+        // Distractor fallback from session first, then category DB
+        const others = shuffle([...sessionDb, ...categoryDb].filter(o => o.k !== item.k));
         for (const o of others) {
-          const oInf = getAdjectiveInflections(o.k, o.r, isNa);
+          const oInf = getAdjectiveInflections(o.k, o.r, o.isNa);
           if (oInf[fKey] && !opts.includes(oInf[fKey].kanji)) opts.push(oInf[fKey].kanji);
           if (opts.length >= 4) break;
         }
 
         generated.push({
           type: 'mc',
-          q: `Ubah kata <b>${item.k}</b> (${item.a}) ke bentuk <b>${formNames[fKey]}</b>!`,
+          q: `Ubah kata <b class="q-target-word">${item.k}</b> (${item.a}) ke bentuk <b class="q-target-form">${formNames[fKey]}</b>!`,
           audio: ans,
           opts: shuffle(opts.slice(0, 4)),
           ans: ans,
           badge: '🔄 4 Infleksi'
         });
-      });
+      }
     }
 
-    // 2. ANTONYM DRILL
+    // 2. ANTONYM DRILL (Lawan Kata) - STRICT, ZERO LEAK!
     if (targetSubtype === 'antonym' || targetSubtype === 'mix') {
-      const antPool = pool.filter(item => ANTONYM_MAP[item.k] && ANTONYM_MAP[item.k].length > 0);
-      const chosen = shuffle([...antPool]).slice(0, 4);
+      let antPool = pool.filter(item => ANTONYM_MAP[item.k] && ANTONYM_MAP[item.k].length > 0);
 
-      chosen.forEach(item => {
-        const targetAnt = ANTONYM_MAP[item.k][0];
-        const ans = targetAnt;
-        const opts = [ans];
-
-        const distractors = shuffle(pool.filter(d => d.k !== item.k && d.k !== targetAnt));
-        for (const d of distractors) {
-          if (!opts.includes(d.k)) opts.push(d.k);
-          if (opts.length >= 4) break;
+      // Fallback ONLY if user explicitly chose 'antonym' mode and pool has 0 antonym pairs
+      if (targetSubtype === 'antonym' && antPool.length === 0) {
+        antPool = sessionDb.filter(item => ANTONYM_MAP[item.k] && ANTONYM_MAP[item.k].length > 0);
+        if (antPool.length === 0) {
+          antPool = categoryDb.filter(item => ANTONYM_MAP[item.k] && ANTONYM_MAP[item.k].length > 0);
         }
+      }
 
-        generated.push({
-          type: 'mc',
-          q: `Manakah <b>LAWAN KATA</b> dari <b>${item.k}</b> (${item.a})?`,
-          audio: ans,
-          opts: shuffle(opts.slice(0, 4)),
-          ans: ans,
-          badge: '⚖️ Lawan Kata'
-        });
-      });
+      if (antPool.length > 0) {
+        const count = targetSubtype === 'antonym' ? Math.min(antPool.length * 2, 10) : Math.min(antPool.length, 4);
+        const shuffledAnt = shuffle([...antPool]);
+
+        for (let i = 0; i < count; i++) {
+          const item = shuffledAnt[i % shuffledAnt.length];
+          const targetAnt = ANTONYM_MAP[item.k][0];
+          const ans = targetAnt;
+          const opts = [ans];
+
+          const distractors = shuffle([...sessionDb, ...categoryDb].filter(d => d.k !== item.k && d.k !== targetAnt));
+          for (const d of distractors) {
+            if (!opts.includes(d.k)) opts.push(d.k);
+            if (opts.length >= 4) break;
+          }
+
+          generated.push({
+            type: 'mc',
+            q: `Manakah <b class="q-target-form">LAWAN KATA</b> dari <b class="q-target-word">${item.k}</b> (${item.a})?`,
+            audio: ans,
+            opts: shuffle(opts.slice(0, 4)),
+            ans: ans,
+            badge: '⚖️ Lawan Kata'
+          });
+        }
+      }
     }
 
-    // 3. MEANING & READING DRILL
-    if (targetSubtype === 'meaning' || targetSubtype === 'mix' || generated.length < 5) {
-      const meanPool = shuffle([...pool]).slice(0, 6);
-      meanPool.forEach(item => {
+    // 3. MEANING & READING DRILL - STRICT: ONLY WHEN 'meaning' OR 'mix'!
+    if (targetSubtype === 'meaning' || targetSubtype === 'mix') {
+      const count = targetSubtype === 'meaning' ? Math.min(pool.length * 2, 12) : Math.min(pool.length, 6);
+      const meanPool = shuffle([...pool]);
+
+      for (let i = 0; i < count; i++) {
+        const item = meanPool[i % meanPool.length];
         const isKanjiToHira = Math.random() > 0.5;
         if (isKanjiToHira) {
           const ans = item.r;
           const opts = [ans];
-          const distractors = shuffle(pool.filter(d => d.k !== item.k));
+          const distractors = shuffle([...sessionDb, ...categoryDb].filter(d => d.k !== item.k));
           for (const d of distractors) {
             if (!opts.includes(d.r)) opts.push(d.r);
             if (opts.length >= 4) break;
           }
           generated.push({
             type: 'mc',
-            q: `Bagaimana bacaan Hiragana dari <b>${item.k}</b> (${item.a})?`,
+            q: `Bagaimana bacaan Hiragana dari <b class="q-target-word">${item.k}</b> (${item.a})?`,
             audio: item.k,
             opts: shuffle(opts.slice(0, 4)),
             ans: ans,
@@ -4315,27 +4464,30 @@ const Modul = {
         } else {
           const ans = item.a;
           const opts = [ans];
-          const distractors = shuffle(pool.filter(d => d.k !== item.k));
+          const distractors = shuffle([...sessionDb, ...categoryDb].filter(d => d.k !== item.k));
           for (const d of distractors) {
             if (!opts.includes(d.a)) opts.push(d.a);
             if (opts.length >= 4) break;
           }
           generated.push({
             type: 'mc',
-            q: `Apa arti bahasa Indonesia dari <b>${item.k}</b> (${item.r})?`,
+            q: `Apa arti bahasa Indonesia dari <b class="q-target-word">${item.k}</b> (${item.r})?`,
             audio: item.k,
             opts: shuffle(opts.slice(0, 4)),
             ans: ans,
             badge: '🎯 Tebak Arti'
           });
         }
-      });
+      }
     }
 
-    // 4. ISIAN DRILL
+    // 4. ISIAN DRILL - STRICT: ONLY WHEN 'isian'!
     if (targetSubtype === 'isian') {
-      const isianPool = shuffle([...pool]).slice(0, 10);
-      isianPool.forEach(item => {
+      const count = Math.min(pool.length * 2, 10);
+      const isianPool = shuffle([...pool]);
+
+      for (let i = 0; i < count; i++) {
+        const item = isianPool[i % isianPool.length];
         const isArti = Math.random() > 0.5;
         if (isArti) {
           const cleanA = item.a.toLowerCase();
@@ -4364,10 +4516,11 @@ const Modul = {
             badge: '✍️ Isian Hiragana'
           });
         }
-      });
+      }
     }
 
-    return shuffle(generated).slice(0, 15);
+    const maxQ = targetSubtype === 'mix' ? 15 : Math.min(generated.length, 12);
+    return shuffle(generated).slice(0, maxQ);
   },
 
   renderQuiz: function(useSlideAnim = true) {
@@ -4375,26 +4528,72 @@ const Modul = {
     if (fb) { fb.innerHTML = ''; fb.style.opacity = '0'; }
     const pool = this.activeQuizData;
 
-    const sessPill = document.getElementById('quiz-session-pill');
-    if (sessPill) {
-      const isNa = this.activeCategory === 'sifatna';
-      const pages = isNa ? Pages_Na : Pages_I;
-      sessPill.innerText = `🏷️ ${pages[this.activeSesi].title.split(':')[0]}`;
+    const isNa = this.activeCategory === 'sifatna';
+    const pages = isNa ? Pages_Na : Pages_I;
+    const sessionName = pages[this.activeSesi].title.split(':')[0];
+    const masteredInSession = this.getMasteredAdjectives();
+
+    // Update Mode Badge (⭐ Mastered in this Session vs 🏷️ Sesi)
+    const modePill = document.getElementById('quiz-mode-pill');
+    if (modePill) {
+      if (this.quizSourceMode === 'mastered') {
+        modePill.innerHTML = `⭐ ${masteredInSession.length} DIKUASAI`;
+        modePill.title = `Kuis kata berbintang di ${sessionName}. Klik untuk kuis semua kata di sesi ini.`;
+        modePill.style.color = 'var(--gold)';
+        modePill.style.borderColor = 'rgba(251, 191, 36, 0.4)';
+        modePill.style.background = 'rgba(251, 191, 36, 0.15)';
+      } else {
+        modePill.innerHTML = `🏷️ ${sessionName}`;
+        modePill.title = `Kuis seluruh kata di ${sessionName}. Klik untuk kuis hanya kata berbintang.`;
+        modePill.style.color = 'var(--primary)';
+        modePill.style.borderColor = 'rgba(56, 189, 248, 0.4)';
+        modePill.style.background = 'rgba(56, 189, 248, 0.15)';
+      }
     }
 
     const progPill = document.getElementById('quiz-progress-pill');
     const scorePill = document.getElementById('quiz-score-pill');
-    if (scorePill) scorePill.innerText = `⭐ Skor: ${this.scoreQuiz} / ${pool.length}`;
+    if (scorePill) scorePill.innerHTML = `SKOR <b>${this.scoreQuiz}</b>`;
 
     const optContainer = document.getElementById('quiz-options-container');
     const isianContainer = document.getElementById('quiz-isian-container');
+    const qTextEl = document.getElementById('quiz-q-text');
 
+    // Check EMPTY STATE for Mastered Mode in this session
+    if (this.quizSourceMode === 'mastered' && pool.length === 0) {
+      if (progPill) progPill.innerHTML = `SOAL <b>0</b> / 0`;
+      qTextEl.innerHTML = `
+        <div class="quiz-empty-mastery">
+          <div class="qem-icon">⭐</div>
+          <div class="qem-title">Belum Ada Kata Dikuasai di ${sessionName}</div>
+          <div class="qem-desc">
+            Kamu belum menandai kata sifat dengan bintang <b>⭐</b> di <b>${sessionName}</b>.<br>
+            Beri bintang pada flashcard yang telah kamu pelajari untuk mengujinya di kuis ini!
+          </div>
+          <div class="qem-actions">
+            <button type="button" class="btn-dn btn-dn-next" onclick="Modul.switchTab('flashcard')">
+              📖 Buka Flashcard ${sessionName} ⭐
+            </button>
+            <button type="button" class="btn-dn" onclick="Modul.startSessionQuizFallback()">
+              🎯 Kuis Seluruh ${sessionName} (${this.activeArray.length} Kata)
+            </button>
+          </div>
+        </div>
+      `;
+      optContainer.classList.add('hidden');
+      isianContainer.classList.add('hidden');
+      return;
+    }
+
+    // Check QUIZ FINISHED
     if (this.idxQuiz >= pool.length) {
-      if (progPill) progPill.innerText = '🎉 KUIS SELESAI';
-      document.getElementById('quiz-q-text').innerHTML = `
+      if (progPill) progPill.innerHTML = `<b>🎉 SELESAI</b>`;
+      qTextEl.innerHTML = `
         <div style="font-size:42px; margin-bottom:8px;">🏆</div>
-        <div>Latihan Selesai!</div>
-        <div style="font-size:14px; font-weight:600; color:var(--text-sub); margin-top:4px;">Skor Akhir: ${this.scoreQuiz} / ${pool.length}</div>
+        <div style="font-size:20px; font-weight:800; color:#fff;">Latihan Kuis Selesai!</div>
+        <div style="font-size:14px; font-weight:600; color:var(--text-sub); margin-top:4px;">
+          Skor Akhir: <b style="color:var(--gold); font-size:16px;">${this.scoreQuiz} / ${pool.length}</b>
+        </div>
       `;
       optContainer.classList.remove('hidden');
       isianContainer.classList.add('hidden');
@@ -4402,14 +4601,14 @@ const Modul = {
       return;
     }
 
+    // Render Current Question
     const cur = pool[this.idxQuiz];
-    if (progPill) progPill.innerText = `${cur.badge}: ${this.idxQuiz + 1} / ${pool.length}`;
-    document.getElementById('quiz-q-text').innerHTML = cur.q;
+    if (progPill) progPill.innerHTML = `SOAL <b>${this.idxQuiz + 1}</b> / ${pool.length}`;
+    qTextEl.innerHTML = cur.q;
 
     if (cur.type === 'mc') {
       optContainer.classList.remove('hidden');
       isianContainer.classList.add('hidden');
-      optContainer.classList.toggle('grid-two', cur.opts.length > 2);
 
       let optsHTML = cur.opts.map(o => `<button type="button" class="btn-quiz-opt" onclick="Modul.checkMCOption(this, '${o}', '${cur.ans}', '${cur.audio || ''}')">${o}</button>`).join('');
       optContainer.innerHTML = optsHTML;
@@ -4447,7 +4646,7 @@ const Modul = {
     if (audio) this.speakText(audio);
 
     const scorePill = document.getElementById('quiz-score-pill');
-    if (scorePill) scorePill.innerText = `⭐ Skor: ${this.scoreQuiz} / ${this.activeQuizData.length}`;
+    if (scorePill) scorePill.innerHTML = `SKOR <b>${this.scoreQuiz}</b>`;
 
     setTimeout(() => {
       this.triggerAnimation('quiz-content-wrapper', 'slide-out-left');
@@ -4487,7 +4686,7 @@ const Modul = {
     if (cur.audio) this.speakText(cur.audio);
 
     const scorePill = document.getElementById('quiz-score-pill');
-    if (scorePill) scorePill.innerText = `⭐ Skor: ${this.scoreQuiz} / ${this.activeQuizData.length}`;
+    if (scorePill) scorePill.innerHTML = `SKOR <b>${this.scoreQuiz}</b>`;
 
     setTimeout(() => {
       this.triggerAnimation('quiz-content-wrapper', 'slide-out-left');
