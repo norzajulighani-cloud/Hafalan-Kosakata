@@ -308,9 +308,8 @@
     background: linear-gradient(170deg, rgba(22, 34, 68, 0.96) 0%, rgba(10, 16, 36, 0.98) 100%);
     border: 1px solid rgba(56, 189, 248, 0.35);
     border-radius: 24px;
-    padding: 22px 18px;
+    padding: 20px 18px;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75), 0 0 30px rgba(56, 189, 248, 0.12);
-    min-height: 500px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -318,7 +317,85 @@
     overflow: hidden;
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    transition: border-color 0.3s;
+    transition: border-color 0.3s, min-height 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+  }
+  #sec-quiz {
+    min-height: 480px;
+  }
+
+  /* Compact Mode (Sebelum Kartu Dipilih) */
+  #sec-flashcard.fc-mode-compact {
+    min-height: auto !important;
+    padding: 16px 18px 16px 18px;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.65), 0 0 20px rgba(56, 189, 248, 0.08);
+  }
+  #sec-flashcard.fc-mode-compact .fc-stage-box {
+    padding: 10px 0 6px 0;
+    cursor: pointer;
+  }
+  #sec-flashcard.fc-mode-compact .fc-kanji-big {
+    font-size: clamp(54px, 14vw, 76px);
+    margin: 10px 0 14px 0;
+    transition: transform 0.25s ease, text-shadow 0.25s ease;
+  }
+  #sec-flashcard.fc-mode-compact .fc-stage-box:hover .fc-kanji-big {
+    transform: scale(1.08);
+    text-shadow: 0 0 30px var(--primary-glow);
+  }
+  #sec-flashcard.fc-mode-compact .shield-blur {
+    display: none !important;
+  }
+  #sec-flashcard.fc-mode-compact .tap-hint-pill {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 6px;
+    background: rgba(56, 189, 248, 0.12);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    color: #bae6fd;
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-size: 12.5px;
+    font-weight: 700;
+    margin: 4px 0 10px 0;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+    transition: all 0.22s ease;
+  }
+  #sec-flashcard.fc-mode-compact .fc-stage-box:hover .tap-hint-pill {
+    background: rgba(56, 189, 248, 0.24);
+    border-color: var(--primary);
+    box-shadow: 0 0 18px var(--primary-glow);
+    color: #fff;
+    transform: translateY(-2px);
+  }
+
+  /* Expanded Mode (Setelah Kartu Dipilih) */
+  #sec-flashcard.fc-mode-expanded {
+    min-height: auto;
+    padding: 22px 18px 20px 18px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75), 0 0 30px rgba(56, 189, 248, 0.15);
+  }
+  #sec-flashcard.fc-mode-expanded .fc-stage-box {
+    cursor: default;
+  }
+  #sec-flashcard.fc-mode-expanded .fc-kanji-big {
+    font-size: clamp(46px, 11vw, 64px);
+    margin: 2px 0 2px 0;
+  }
+  #sec-flashcard.fc-mode-expanded .shield-blur {
+    display: block;
+    animation: fadeInUp 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  #sec-flashcard.fc-mode-expanded .shield-blur.fc-grid-two {
+    display: grid !important;
+  }
+  #sec-flashcard.fc-mode-expanded .shield-blur.fc-antonym-strip {
+    display: flex !important;
+  }
+  #sec-flashcard.fc-mode-expanded .shield-blur.fc-sentence-shelf {
+    display: block !important;
+  }
+  #sec-flashcard.fc-mode-expanded .tap-hint-pill {
+    display: none !important;
   }
   .dojo-arena-card.na-mode-border {
     border-color: rgba(34, 197, 94, 0.4);
@@ -1247,6 +1324,23 @@
     .dojo-arena-card {
       padding: 14px 12px 18px 12px !important;
     }
+    #sec-flashcard.fc-mode-compact {
+      padding: 12px 12px 14px 12px !important;
+    }
+    #sec-flashcard.fc-mode-compact .fc-kanji-big {
+      font-size: 56px !important;
+      margin: 8px 0 10px 0 !important;
+    }
+    #sec-flashcard.fc-mode-compact .tap-hint-pill {
+      font-size: 11.5px !important;
+      padding: 6px 14px !important;
+    }
+    #sec-flashcard.fc-mode-expanded {
+      padding: 14px 12px 18px 12px !important;
+    }
+    #sec-quiz {
+      min-height: 420px !important;
+    }
     .inflection-cell {
       padding: 8px 10px !important;
     }
@@ -1366,6 +1460,7 @@
     <!-- Top Bar inside Quiz -->
     <div class="quiz-top-bar">
       <div class="quiz-telemetry-cluster">
+        <span class="quiz-stat-pill" id="quiz-session-pill" style="color:var(--primary); border-color:rgba(56,189,248,0.35); font-weight:800;">🏷️ Sifat-i 1</span>
         <span class="quiz-stat-pill" id="quiz-progress-pill">🎯 Soal: 1 / 15</span>
         <span class="quiz-stat-pill score-pill" id="quiz-score-pill">⭐ Skor: 0</span>
       </div>
@@ -3575,7 +3670,11 @@ const Modul = {
       if (this.activeTab === 'flashcard') {
         if (e.key === ' ' || e.key === 'Enter') {
           e.preventDefault();
-          this.revealCard();
+          if (!this.cardRevealed) {
+            this.revealCard();
+          } else {
+            this.nextCard();
+          }
         } else if (e.key === 'ArrowRight') {
           e.preventDefault();
           this.nextCard();
@@ -3767,6 +3866,9 @@ const Modul = {
     this.cardRevealed = false;
     this.activeInflectionForm = 'presPos';
 
+    sec.classList.remove('fc-mode-expanded');
+    sec.classList.add('fc-mode-compact');
+
     if (this.cardIdx >= this.activeArray.length) {
       sec.innerHTML = `
         <div class="fc-header-bar">
@@ -3932,6 +4034,12 @@ const Modul = {
     if (this.cardRevealed) return;
     this.cardRevealed = true;
     this.playSfx('reveal');
+
+    const sec = document.getElementById('sec-flashcard');
+    if (sec) {
+      sec.classList.remove('fc-mode-compact');
+      sec.classList.add('fc-mode-expanded');
+    }
 
     const els = ['fc-hira', 'fc-arti', 'fc-matrix', 'fc-antonym-strip', 'fc-sentence-shelf', 'fc-note'];
     els.forEach(id => {
@@ -4159,6 +4267,13 @@ const Modul = {
     const fb = document.getElementById('quiz-feedback-bar');
     if (fb) { fb.innerHTML = ''; fb.style.opacity = '0'; }
     const pool = this.activeQuizData;
+
+    const sessPill = document.getElementById('quiz-session-pill');
+    if (sessPill) {
+      const isNa = this.activeCategory === 'sifatna';
+      const pages = isNa ? Pages_Na : Pages_I;
+      sessPill.innerText = `🏷️ ${pages[this.activeSesi].title.split(':')[0]}`;
+    }
 
     const progPill = document.getElementById('quiz-progress-pill');
     const scorePill = document.getElementById('quiz-score-pill');
