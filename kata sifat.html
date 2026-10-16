@@ -341,7 +341,7 @@
     overflow: hidden;
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    transition: border-color 0.3s, min-height 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+    transition: border-color 0.25s, box-shadow 0.25s;
   }
   #sec-quiz {
     min-height: 480px;
@@ -372,7 +372,7 @@
     transform: scale(1.06);
     text-shadow: 0 0 30px var(--primary-glow);
   }
-  #sec-flashcard.fc-mode-compact .shield-blur {
+  #sec-flashcard.fc-mode-compact .fc-details-shelf {
     display: none !important;
   }
   #sec-flashcard.fc-mode-compact .fc-tap-hint {
@@ -393,7 +393,7 @@
     opacity: 1;
   }
 
-  /* Expanded Mode (Setelah Kartu Dipilih) */
+  /* Expanded Mode (Setelah Kartu Dipilih) - Zero Lag Hardware Composited */
   #sec-flashcard.fc-mode-expanded {
     min-height: auto;
     padding: 18px 18px 18px 18px;
@@ -403,24 +403,22 @@
     cursor: default;
   }
   #sec-flashcard.fc-mode-expanded .fc-kanji-big {
-    font-size: clamp(46px, 11vw, 64px);
+    font-size: clamp(44px, 10vw, 60px);
     margin: 2px 0 2px 0;
   }
-  #sec-flashcard.fc-mode-expanded .shield-blur {
-    display: block;
-    animation: fadeInUp 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
-  #sec-flashcard.fc-mode-expanded .shield-blur.fc-grid-two {
-    display: grid !important;
-  }
-  #sec-flashcard.fc-mode-expanded .shield-blur.fc-antonym-strip {
-    display: flex !important;
-  }
-  #sec-flashcard.fc-mode-expanded .shield-blur.fc-sentence-shelf {
+  #sec-flashcard.fc-mode-expanded .fc-details-shelf {
     display: block !important;
+    width: 100%;
+    animation: revealFade 0.16s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    will-change: opacity, transform;
   }
   #sec-flashcard.fc-mode-expanded .fc-tap-hint {
     display: none !important;
+  }
+
+  @keyframes revealFade {
+    from { opacity: 0; transform: translate3d(0, 6px, 0); }
+    to { opacity: 1; transform: translate3d(0, 0, 0); }
   }
   .dojo-arena-card.na-mode-border {
     border-color: rgba(34, 197, 94, 0.4);
@@ -768,18 +766,8 @@
     opacity: 0.8;
   }
 
-  .shield-blur {
-    filter: blur(12px);
-    opacity: 0.12;
-    transform: translateY(10px) scale(0.96);
-    pointer-events: none;
-    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .shield-blur.revealed {
-    filter: blur(0);
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    pointer-events: auto;
+  .fc-details-shelf {
+    width: 100%;
   }
 
   /* Dojo Navigation Bottom Controls */
@@ -1312,18 +1300,7 @@
       animation: none !important; /* Stop continuous repainting on mobile */
     }
   /* Mobile Hardware Acceleration & Blur Relief (Eliminates Touch Lag) */
-    .shield-blur {
-      filter: none !important; /* Eliminate expensive 6-element Gaussian blur animation on mobile */
-      opacity: 0 !important;
-      transform: translateY(8px) !important;
-      transition: opacity 0.22s ease, transform 0.22s ease !important;
-      will-change: opacity, transform !important;
-    }
-    .shield-blur.revealed {
-      filter: none !important;
-      opacity: 1 !important;
-      transform: translateY(0) !important;
-    }
+
     /* Lightweight backdrop blur for mobile GPUs */
     .dojo-arena-card,
     .main-nav-tabs,
@@ -1340,18 +1317,73 @@
       padding: 14px 12px 18px 12px !important;
     }
     #sec-flashcard.fc-mode-compact {
-      padding: 12px 12px 14px 12px !important;
+      padding: 14px 14px 12px 14px !important;
     }
     #sec-flashcard.fc-mode-compact .fc-kanji-big {
       font-size: 56px !important;
-      margin: 8px 0 10px 0 !important;
+      margin: 6px 0 4px 0 !important;
     }
     #sec-flashcard.fc-mode-compact .fc-tap-hint {
       font-size: 11.5px !important;
-      margin: 4px 0 8px 0 !important;
+      margin: 4px 0 6px 0 !important;
     }
     #sec-flashcard.fc-mode-expanded {
-      padding: 14px 12px 18px 12px !important;
+      padding: 12px 12px 14px 12px !important;
+    }
+    #sec-flashcard.fc-mode-expanded .fc-kanji-big {
+      font-size: 38px !important;
+      margin: 0 0 2px 0 !important;
+    }
+    #sec-flashcard.fc-mode-expanded .fc-hira-text {
+      font-size: 15px !important;
+      margin-bottom: 1px !important;
+    }
+    #sec-flashcard.fc-mode-expanded .fc-arti-text {
+      font-size: 14px !important;
+      margin-bottom: 5px !important;
+    }
+    #sec-flashcard.fc-mode-expanded .fc-grid-two {
+      gap: 6px !important;
+      margin-top: 4px !important;
+    }
+    #sec-flashcard.fc-mode-expanded .inflection-cell {
+      padding: 6px 8px !important;
+    }
+    #sec-flashcard.fc-mode-expanded .inf-label {
+      font-size: 9px !important;
+    }
+    #sec-flashcard.fc-mode-expanded .inf-val {
+      font-size: 13.5px !important;
+    }
+    #sec-flashcard.fc-mode-expanded .inf-sub {
+      font-size: 9px !important;
+    }
+    #sec-flashcard.fc-mode-expanded .fc-antonym-strip {
+      padding: 4px 10px !important;
+      margin-top: 5px !important;
+    }
+    #sec-flashcard.fc-mode-expanded .fc-sentence-shelf {
+      padding: 8px 10px !important;
+      margin-top: 6px !important;
+    }
+    #sec-flashcard.fc-mode-expanded .fss-jp {
+      font-size: 14px !important;
+      line-height: 1.35 !important;
+    }
+    #sec-flashcard.fc-mode-expanded .fss-romaji {
+      font-size: 10.5px !important;
+      margin-top: 1px !important;
+    }
+    #sec-flashcard.fc-mode-expanded .fss-id {
+      font-size: 11.5px !important;
+      margin-top: 2px !important;
+    }
+    #sec-flashcard.fc-mode-expanded .dojo-nav-controls {
+      margin-top: 8px !important;
+    }
+    #sec-flashcard.fc-mode-expanded .btn-dn {
+      padding: 9px 12px !important;
+      font-size: 12.5px !important;
     }
     #sec-quiz {
       min-height: 420px !important;
@@ -4009,46 +4041,50 @@ const Modul = {
       <!-- Main Unboxed Flashcard Stage -->
       <div class="fc-stage-box" id="fc-stage-box" onclick="Modul.revealCard()">
         <div class="fc-kanji-big">${item.k}</div>
-        <div class="fc-hira-text shield-blur" id="fc-hira">${item.r}</div>
-        <div class="fc-arti-text shield-blur" id="fc-arti">${item.a}</div>
 
-        <!-- 4 Forms Matrix: Interactive Tappable Glass Cells -->
-        <div class="fc-grid-two shield-blur" id="fc-matrix">
-          <div class="inflection-cell active-cell ${isNa ? 'na-cell' : ''}" id="cell-presPos" onclick="Modul.selectInflectionForm('presPos', event)">
-            <div class="inf-label"><span>☀️ Sekarang (+)</span> <span class="inf-speaker">🔊</span></div>
-            <div class="inf-val">${inf.presPos.kanji} <span class="inf-sub">${inf.presPos.hira}</span></div>
-          </div>
-          <div class="inflection-cell" id="cell-presNeg" onclick="Modul.selectInflectionForm('presNeg', event)">
-            <div class="inf-label"><span>❄️ Negatif (-)</span> <span class="inf-speaker">🔊</span></div>
-            <div class="inf-val">${inf.presNeg.kanji} <span class="inf-sub">${inf.presNeg.hira}</span></div>
-          </div>
-          <div class="inflection-cell" id="cell-pastPos" onclick="Modul.selectInflectionForm('pastPos', event)">
-            <div class="inf-label"><span>⏳ Lampau (+)</span> <span class="inf-speaker">🔊</span></div>
-            <div class="inf-val">${inf.pastPos.kanji} <span class="inf-sub">${inf.pastPos.hira}</span></div>
-          </div>
-          <div class="inflection-cell" id="cell-pastNeg" onclick="Modul.selectInflectionForm('pastNeg', event)">
-            <div class="inf-label"><span>🚫 Lampau (-)</span> <span class="inf-speaker">🔊</span></div>
-            <div class="inf-val">${inf.pastNeg.kanji} <span class="inf-sub">${inf.pastNeg.hira}</span></div>
-          </div>
-        </div>
+        <!-- Details Shelf (Loaded instantly via single accelerated container) -->
+        <div class="fc-details-shelf" id="fc-details-shelf">
+          <div class="fc-hira-text" id="fc-hira">${item.r}</div>
+          <div class="fc-arti-text" id="fc-arti">${item.a}</div>
 
-        ${antonymHTML}
-
-        <!-- Dynamic Sentence Morph Shelf (Unboxed & Clean) -->
-        <div class="fc-sentence-shelf shield-blur" id="fc-sentence-shelf" onclick="event.stopPropagation()">
-          <div class="fss-top">
-            <div class="fss-badge-wrap">
-              <span class="fss-badge">💬 Contoh Kalimat:</span>
-              <span class="fss-form-pill ${isNa ? 'na-pill' : ''}" id="fss-active-tag">${curSent.formLabel}</span>
+          <!-- 4 Forms Matrix: Interactive Tappable Glass Cells -->
+          <div class="fc-grid-two" id="fc-matrix">
+            <div class="inflection-cell active-cell ${isNa ? 'na-cell' : ''}" id="cell-presPos" onclick="Modul.selectInflectionForm('presPos', event)">
+              <div class="inf-label"><span>☀️ Sekarang (+)</span> <span class="inf-speaker">🔊</span></div>
+              <div class="inf-val">${inf.presPos.kanji} <span class="inf-sub">${inf.presPos.hira}</span></div>
             </div>
-            <button type="button" class="btn-sentence-audio" id="btn-audio-sent" onclick="Modul.speakActiveSentence()" title="Dengarkan Kalimat">🔊</button>
+            <div class="inflection-cell" id="cell-presNeg" onclick="Modul.selectInflectionForm('presNeg', event)">
+              <div class="inf-label"><span>❄️ Negatif (-)</span> <span class="inf-speaker">🔊</span></div>
+              <div class="inf-val">${inf.presNeg.kanji} <span class="inf-sub">${inf.presNeg.hira}</span></div>
+            </div>
+            <div class="inflection-cell" id="cell-pastPos" onclick="Modul.selectInflectionForm('pastPos', event)">
+              <div class="inf-label"><span>⏳ Lampau (+)</span> <span class="inf-speaker">🔊</span></div>
+              <div class="inf-val">${inf.pastPos.kanji} <span class="inf-sub">${inf.pastPos.hira}</span></div>
+            </div>
+            <div class="inflection-cell" id="cell-pastNeg" onclick="Modul.selectInflectionForm('pastNeg', event)">
+              <div class="inf-label"><span>🚫 Lampau (-)</span> <span class="inf-speaker">🔊</span></div>
+              <div class="inf-val">${inf.pastNeg.kanji} <span class="inf-sub">${inf.pastNeg.hira}</span></div>
+            </div>
           </div>
-          <div class="fss-jp" id="fss-jp-text">${curSent.jpPrefix}<span class="highlight-adj">${curSent.targetAdj}</span></div>
-          <div class="fss-romaji" id="fss-ro-text">${curSent.ro}</div>
-          <div class="fss-id" id="fss-id-text">${curSent.idPrefix}<span class="highlight-meaning">${curSent.targetMeaning}</span>.</div>
-        </div>
 
-        ${item.note ? `<div class="fc-note-strip shield-blur" id="fc-note">💡 ${item.note}</div>` : ''}
+          ${antonymHTML}
+
+          <!-- Dynamic Sentence Morph Shelf (Unboxed & Clean) -->
+          <div class="fc-sentence-shelf" id="fc-sentence-shelf" onclick="event.stopPropagation()">
+            <div class="fss-top">
+              <div class="fss-badge-wrap">
+                <span class="fss-badge">💬 Contoh Kalimat:</span>
+                <span class="fss-form-pill ${isNa ? 'na-pill' : ''}" id="fss-active-tag">${curSent.formLabel}</span>
+              </div>
+              <button type="button" class="btn-sentence-audio" id="btn-audio-sent" onclick="Modul.speakActiveSentence()" title="Dengarkan Kalimat">🔊</button>
+            </div>
+            <div class="fss-jp" id="fss-jp-text">${curSent.jpPrefix}<span class="highlight-adj">${curSent.targetAdj}</span></div>
+            <div class="fss-romaji" id="fss-ro-text">${curSent.ro}</div>
+            <div class="fss-id" id="fss-id-text">${curSent.idPrefix}<span class="highlight-meaning">${curSent.targetMeaning}</span>.</div>
+          </div>
+
+          ${item.note ? `<div class="fc-note-strip" id="fc-note">💡 ${item.note}</div>` : ''}
+        </div>
 
         <div class="fc-tap-hint" id="fc-tap-hint">👆 Ketuk kartu untuk melihat detail & 4 bentuk infleksi</div>
       </div>
@@ -4116,7 +4152,6 @@ const Modul = {
     if (this._justSwiped) return;
     if (this.cardRevealed) return;
     this.cardRevealed = true;
-    this.playSfx('reveal');
 
     const sec = document.getElementById('sec-flashcard');
     if (sec) {
@@ -4124,14 +4159,25 @@ const Modul = {
       sec.classList.add('fc-mode-expanded');
     }
 
-    const els = ['fc-hira', 'fc-arti', 'fc-matrix', 'fc-antonym-strip', 'fc-sentence-shelf', 'fc-note'];
-    els.forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.classList.add('revealed');
-    });
+    // Auto-Scroll Seketika Menyamakan Tinggi Layar (Zero Manual Scroll)
+    this.scrollToCardFit();
 
-    const hint = document.getElementById('fc-tap-hint');
-    if (hint) hint.style.display = 'none';
+    // Sound effect (non-blocking)
+    setTimeout(() => this.playSfx('reveal'), 20);
+  },
+
+  scrollToCardFit: function() {
+    const sec = document.getElementById('sec-flashcard');
+    if (!sec) return;
+    requestAnimationFrame(() => {
+      const rect = sec.getBoundingClientRect();
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const targetY = scrollTop + rect.top - 8;
+      window.scrollTo({
+        top: Math.max(0, targetY),
+        behavior: 'smooth'
+      });
+    });
   },
 
   nextCard: function() {
