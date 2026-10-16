@@ -3644,7 +3644,6 @@ const Modul = {
   masteredList: [],
   csActiveTab: 'i',
   _audioCtx: null,
-  _justSwiped: false,
 
   init: function() {
     this.loadMastery();
@@ -3652,7 +3651,6 @@ const Modul = {
     this.loadActiveArray();
     this.switchTab('flashcard');
     this.bindKeyboardShortcuts();
-    this.bindSwipeGestures();
 
     // Fast mobile audio unlock
     const unlockAudio = () => {
@@ -3759,43 +3757,6 @@ const Modul = {
         }
       }
     });
-  },
-
-  bindSwipeGestures: function() {
-    // Touch Gesture Swipe (Sama persis seperti pada kode utama script.js)
-    let touchStartX = 0;
-    let touchStartY = 0;
-
-    document.addEventListener('touchstart', (e) => {
-      if (e.touches && e.touches[0]) {
-        touchStartX = e.touches[0].clientX;
-        touchStartY = e.touches[0].clientY;
-      }
-    }, { passive: true });
-
-    document.addEventListener('touchend', (e) => {
-      if (this.activeTab !== 'flashcard') return;
-      const csModal = document.getElementById('cheatsheet-modal');
-      if (csModal && !csModal.classList.contains('hidden')) return;
-      if (!e.changedTouches || !e.changedTouches[0]) return;
-
-      const diffX = e.changedTouches[0].clientX - touchStartX;
-      const diffY = e.changedTouches[0].clientY - touchStartY;
-
-      // Pastikan swipe horizontal dominan dan minimal 60px (sama persis dengan kode utama script.js)
-      if (Math.abs(diffX) > 60 && Math.abs(diffX) > Math.abs(diffY) * 1.5) {
-        this._justSwiped = true;
-        setTimeout(() => { this._justSwiped = false; }, 300);
-
-        if (diffX < 0) {
-          // Swipe kiri -> Kartu Selanjutnya
-          this.nextCard();
-        } else if (diffX > 0) {
-          // Swipe kanan -> Kartu Sebelumnya
-          this.prevCard();
-        }
-      }
-    }, { passive: true });
   },
 
   speakText: function(text, e) {
@@ -4103,7 +4064,6 @@ const Modul = {
   },
 
   selectInflectionForm: function(formKey, e) {
-    if (this._justSwiped) return;
     if (e) e.stopPropagation();
     this.playSfx('tap');
     this.activeInflectionForm = formKey;
@@ -4149,7 +4109,6 @@ const Modul = {
   },
 
   revealCard: function() {
-    if (this._justSwiped) return;
     if (this.cardRevealed) return;
     this.cardRevealed = true;
 
