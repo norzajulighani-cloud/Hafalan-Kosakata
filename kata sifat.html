@@ -36,13 +36,6 @@
   body {
     font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
     background-color: var(--bg-base);
-    background-image: 
-      radial-gradient(circle at 50% 0%, rgba(30, 58, 138, 0.38) 0%, transparent 60%),
-      radial-gradient(circle at 10% 35%, rgba(192, 132, 252, 0.12) 0%, transparent 40%),
-      radial-gradient(circle at 90% 70%, rgba(56, 189, 248, 0.12) 0%, transparent 40%),
-      linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-    background-size: 100% 100%, 100% 100%, 100% 100%, 36px 36px, 36px 36px;
     color: var(--text-main);
     min-height: 100vh;
     display: flex;
@@ -50,10 +43,41 @@
     align-items: center;
     padding: 14px 12px 60px 12px;
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 
-  .container { width: 100%; max-width: 680px; position: relative; }
-  button, input, select { touch-action: manipulation; font-family: inherit; }
+  /* GPU-Accelerated Fixed Ambient Background (Zero Scroll Repaint) */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-color: var(--bg-base);
+    background-image: 
+      radial-gradient(circle at 50% 0%, rgba(30, 58, 138, 0.38) 0%, transparent 60%),
+      radial-gradient(circle at 10% 35%, rgba(192, 132, 252, 0.12) 0%, transparent 40%),
+      radial-gradient(circle at 90% 70%, rgba(56, 189, 248, 0.12) 0%, transparent 40%),
+      linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 100% 100%, 36px 36px, 36px 36px;
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 680px;
+    position: relative;
+    contain: layout style;
+  }
+  button, input, select, .filter-pill, .sesi-pill, .inflection-cell, .tab-main-btn, .btn-dn, .tap-hint-pill {
+    touch-action: manipulation;
+    font-family: inherit;
+    -webkit-tap-highlight-color: transparent;
+  }
   .hidden { display: none !important; }
 
   /* Custom Scrollbar */
@@ -321,6 +345,36 @@
   }
   #sec-quiz {
     min-height: 480px;
+  }
+
+  /* Flashcard Arena Card & Mobile Swipe Pan-Y */
+  #sec-flashcard {
+    touch-action: pan-y;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .fc-swipe-badge {
+    display: none;
+  }
+  @media (max-width: 600px) {
+    .fc-swipe-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--primary);
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 2px 7px;
+      border-radius: 8px;
+      letter-spacing: 0.2px;
+    }
+    .na-mode-border .fc-swipe-badge {
+      color: var(--success);
+      background: rgba(34, 197, 94, 0.12);
+      border-color: rgba(34, 197, 94, 0.3);
+    }
   }
 
   /* Compact Mode (Sebelum Kartu Dipilih) */
@@ -1221,11 +1275,11 @@
   .slide-in-left { animation: slideInLeft 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
   .slide-out-right { animation: slideOutRight 0.2s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards; }
 
-  @keyframes fadeInUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes slideInRight { from { opacity: 0; transform: translateX(36px); } to { opacity: 1; transform: translateX(0); } }
-  @keyframes slideOutLeft { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(-36px); } }
-  @keyframes slideInLeft { from { opacity: 0; transform: translateX(-36px); } to { opacity: 1; transform: translateX(0); } }
-  @keyframes slideOutRight { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(36px); } }
+  @keyframes fadeInUp { from { opacity: 0; transform: translate3d(0, 14px, 0); } to { opacity: 1; transform: translate3d(0, 0, 0); } }
+  @keyframes slideInRight { from { opacity: 0; transform: translate3d(30px, 0, 0); } to { opacity: 1; transform: translate3d(0, 0, 0); } }
+  @keyframes slideOutLeft { from { opacity: 1; transform: translate3d(0, 0, 0); } to { opacity: 0; transform: translate3d(-30px, 0, 0); } }
+  @keyframes slideInLeft { from { opacity: 0; transform: translate3d(-30px, 0, 0); } to { opacity: 1; transform: translate3d(0, 0, 0); } }
+  @keyframes slideOutRight { from { opacity: 1; transform: translate3d(0, 0, 0); } to { opacity: 0; transform: translate3d(30px, 0, 0); } }
 
   /* ==========================================
      MOBILE RESPONSIVE & HIGH-PERFORMANCE TUNING
@@ -3597,6 +3651,7 @@ const Modul = {
   masteredList: [],
   csActiveTab: 'i',
   _audioCtx: null,
+  _justSwiped: false,
 
   init: function() {
     this.loadMastery();
@@ -3604,6 +3659,20 @@ const Modul = {
     this.loadActiveArray();
     this.switchTab('flashcard');
     this.bindKeyboardShortcuts();
+    this.bindSwipeGestures();
+
+    // Fast mobile audio unlock
+    const unlockAudio = () => {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!this._audioCtx && AudioCtx) this._audioCtx = new AudioCtx();
+        if (this._audioCtx && this._audioCtx.state === 'suspended') this._audioCtx.resume();
+      } catch(e) {}
+      window.removeEventListener('touchstart', unlockAudio);
+      window.removeEventListener('pointerdown', unlockAudio);
+    };
+    window.addEventListener('touchstart', unlockAudio, { passive: true });
+    window.addEventListener('pointerdown', unlockAudio, { passive: true });
 
     // Close dropdown on outside click
     document.addEventListener('click', () => {
@@ -3699,6 +3768,116 @@ const Modul = {
     });
   },
 
+  bindSwipeGestures: function() {
+    const card = document.getElementById('sec-flashcard');
+    if (!card) return;
+
+    let startX = 0;
+    let startY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    let isSwiping = false;
+    let isHorizontal = null;
+    let startTime = 0;
+
+    card.addEventListener('touchstart', (e) => {
+      if (this.activeTab !== 'flashcard') return;
+      if (e.touches.length !== 1) return;
+
+      const target = e.target;
+      if (target.closest('button, input, select, .btn-star-mark, .btn-sentence-audio, .btn-audio-inline')) {
+        return;
+      }
+
+      const touch = e.touches[0];
+      startX = touch.clientX;
+      startY = touch.clientY;
+      currentX = startX;
+      currentY = startY;
+      startTime = Date.now();
+      isSwiping = true;
+      isHorizontal = null;
+    }, { passive: true });
+
+    card.addEventListener('touchmove', (e) => {
+      if (!isSwiping || e.touches.length !== 1) return;
+
+      currentX = e.touches[0].clientX;
+      currentY = e.touches[0].clientY;
+      const diffX = currentX - startX;
+      const diffY = currentY - startY;
+
+      if (isHorizontal === null && (Math.abs(diffX) > 6 || Math.abs(diffY) > 6)) {
+        isHorizontal = Math.abs(diffX) > Math.abs(diffY) * 1.15;
+      }
+
+      if (isHorizontal) {
+        const stage = document.getElementById('fc-stage-box');
+        if (stage) {
+          const clampedDiff = Math.max(-80, Math.min(80, diffX * 0.42));
+          stage.style.transform = `translate3d(${clampedDiff}px, 0, 0)`;
+          stage.style.transition = 'none';
+        }
+      }
+    }, { passive: true });
+
+    const resetStage = () => {
+      const stage = document.getElementById('fc-stage-box');
+      if (stage) {
+        stage.style.transition = 'transform 0.22s cubic-bezier(0.16, 1, 0.3, 1)';
+        stage.style.transform = 'translate3d(0, 0, 0)';
+        setTimeout(() => {
+          if (stage) stage.style.transition = '';
+        }, 220);
+      }
+    };
+
+    const handleTouchEnd = () => {
+      if (!isSwiping) return;
+      isSwiping = false;
+
+      const diffX = currentX - startX;
+      const diffY = currentY - startY;
+      const duration = Date.now() - startTime;
+      const absX = Math.abs(diffX);
+      const absY = Math.abs(diffY);
+
+      const isFlick = absX > 22 && duration < 240;
+      const isDrag = absX > 38;
+
+      if (isHorizontal && (isDrag || isFlick) && absX > absY) {
+        this._justSwiped = true;
+        setTimeout(() => { this._justSwiped = false; }, 320);
+
+        if (diffX < 0) {
+          // Swipe Left -> Next Card
+          resetStage();
+          if (navigator.vibrate) { try { navigator.vibrate(14); } catch(err) {} }
+          this.nextCard();
+          return;
+        } else if (diffX > 0) {
+          // Swipe Right -> Prev Card
+          resetStage();
+          if (this.cardIdx > 0) {
+            if (navigator.vibrate) { try { navigator.vibrate(14); } catch(err) {} }
+            this.prevCard();
+          } else {
+            this.triggerAnimation('fc-stage-box', 'elasticShake');
+          }
+          return;
+        }
+      }
+
+      resetStage();
+    };
+
+    card.addEventListener('touchend', handleTouchEnd, { passive: true });
+    card.addEventListener('touchcancel', () => {
+      isSwiping = false;
+      resetStage();
+    }, { passive: true });
+  },
+
   speakText: function(text, e) {
     if (e) e.stopPropagation();
     try {
@@ -3708,9 +3887,11 @@ const Modul = {
       const utter = new SpeechSynthesisUtterance(cleanText);
       utter.lang = 'ja-JP';
       utter.rate = 0.88;
-      const voices = window.speechSynthesis.getVoices();
-      const jaVoice = voices.find(v => v.lang.startsWith('ja') || v.lang.includes('JP'));
-      if (jaVoice) utter.voice = jaVoice;
+      if (!this._cachedJaVoice) {
+        const voices = window.speechSynthesis.getVoices();
+        this._cachedJaVoice = voices.find(v => v.lang.startsWith('ja') || v.lang.includes('JP')) || null;
+      }
+      if (this._cachedJaVoice) utter.voice = this._cachedJaVoice;
       window.speechSynthesis.speak(utter);
     } catch (err) {}
   },
@@ -3766,8 +3947,11 @@ const Modul = {
     const el = document.getElementById(elementId);
     if (!el) return;
     el.classList.remove('slide-in-right', 'slide-out-left', 'slide-in-left', 'slide-out-right', 'fade-in-up');
-    void el.offsetWidth;
-    el.classList.add(animClass);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        el.classList.add(animClass);
+      });
+    });
   },
 
   // Switch Category (Sifat-i vs Sifat-na)
@@ -3818,7 +4002,13 @@ const Modul = {
     this.activeInflectionForm = 'presPos';
 
     const pills = document.querySelectorAll('.sesi-pill');
-    pills.forEach((p, idx) => p.classList.toggle('active', idx === s));
+    pills.forEach((p, idx) => {
+      const isAct = idx === s;
+      p.classList.toggle('active', isAct);
+      if (isAct) {
+        try { p.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }); } catch(e){}
+      }
+    });
 
     this.loadActiveArray();
     this.refreshCurrentTab();
@@ -3861,7 +4051,7 @@ const Modul = {
   // ==========================================
   // FLASHCARD RENDERING & DYNAMIC SENTENCE MORPH
   // ==========================================
-  renderFC: function(useSlideAnim = true) {
+  renderFC: function(useSlideAnim = true, animDirection = 'next') {
     const sec = document.getElementById('sec-flashcard');
     this.cardRevealed = false;
     this.activeInflectionForm = 'presPos';
@@ -3881,11 +4071,14 @@ const Modul = {
           <div style="font-size:13.5px; color:var(--text-sub); max-width:380px;">Semua kata sifat di sesi ini telah kamu pelajari. Ingin mengulangi atau lanjut menguji kemampuan di Arena Kuis?</div>
         </div>
         <div class="dojo-nav-controls">
-          <button type="button" class="btn-dn" onclick="Modul.cardIdx=0; Modul.renderFC(true)">Ulangi Sesi ↺</button>
+          <button type="button" class="btn-dn" onclick="Modul.cardIdx=0; Modul.renderFC(true, 'next')">Ulangi Sesi ↺</button>
           <button type="button" class="btn-dn btn-dn-next" onclick="Modul.switchTab('quiz')">Uji di Arena Kuis 🎯</button>
         </div>
       `;
-      if (useSlideAnim) this.triggerAnimation('sec-flashcard', 'slide-in-right');
+      if (useSlideAnim) {
+        const anim = animDirection === 'prev' ? 'slide-in-left' : 'slide-in-right';
+        this.triggerAnimation('sec-flashcard', anim);
+      }
       return;
     }
 
@@ -3918,9 +4111,12 @@ const Modul = {
     sec.innerHTML = `
       <!-- Top header inside arena card -->
       <div class="fc-header-bar">
-        <span class="fc-room-tag ${isNa ? 'na-tag' : ''}">
-          ${isNa ? 'な-Keiyoushi' : 'い-Keiyoushi'} • ${pageTitle}
-        </span>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <span class="fc-room-tag ${isNa ? 'na-tag' : ''}">
+            ${isNa ? 'な-Keiyoushi' : 'い-Keiyoushi'} • ${pageTitle}
+          </span>
+          <span class="fc-swipe-badge" title="Geser ke kiri / kanan untuk berganti kata">👈 Swipe 👉</span>
+        </div>
         <div class="fc-header-right">
           <span class="fc-counter-badge">${this.cardIdx + 1} / ${this.activeArray.length}</span>
           <button type="button" class="btn-star-mark ${isMastered ? 'is-mastered' : ''}" id="btn-star-${item.k}" onclick="Modul.toggleMastery('${item.k}', event)" title="${isMastered ? 'Dikuasai' : 'Tandai Dikuasai'}">⭐</button>
@@ -3972,7 +4168,7 @@ const Modul = {
 
         ${item.note ? `<div class="fc-note-strip shield-blur" id="fc-note">💡 ${item.note}</div>` : ''}
 
-        <div class="tap-hint-pill" id="fc-tap-hint">👆 Sentuh kartu / tekan Spasi untuk buka 4 Bentuk Infleksi & Contoh Kalimat</div>
+        <div class="tap-hint-pill" id="fc-tap-hint">👆 Sentuh kartu untuk detail • 👈 Geser untuk ganti kartu 👉</div>
       </div>
 
       <!-- Action Navigation Buttons -->
@@ -3982,10 +4178,14 @@ const Modul = {
       </div>
     `;
 
-    if (useSlideAnim) this.triggerAnimation('fc-stage-box', 'slide-in-right');
+    if (useSlideAnim) {
+      const anim = animDirection === 'prev' ? 'slide-in-left' : 'slide-in-right';
+      this.triggerAnimation('fc-stage-box', anim);
+    }
   },
 
   selectInflectionForm: function(formKey, e) {
+    if (this._justSwiped) return;
     if (e) e.stopPropagation();
     this.playSfx('tap');
     this.activeInflectionForm = formKey;
@@ -4031,6 +4231,7 @@ const Modul = {
   },
 
   revealCard: function() {
+    if (this._justSwiped) return;
     if (this.cardRevealed) return;
     this.cardRevealed = true;
     this.playSfx('reveal');
@@ -4052,21 +4253,24 @@ const Modul = {
   },
 
   nextCard: function() {
+    if (this.cardIdx >= this.activeArray.length) return;
     this.playSfx('tap');
-    this.triggerAnimation('fc-stage-box', 'slide-out-left');
+    const targetId = (this.cardIdx >= this.activeArray.length) ? 'sec-flashcard' : 'fc-stage-box';
+    this.triggerAnimation(targetId, 'slide-out-left');
     setTimeout(() => {
       this.cardIdx++;
-      this.renderFC(true);
+      this.renderFC(true, 'next');
     }, 180);
   },
 
   prevCard: function() {
     if (this.cardIdx <= 0) return;
     this.playSfx('tap');
-    this.triggerAnimation('fc-stage-box', 'slide-out-right');
+    const targetId = (this.cardIdx >= this.activeArray.length) ? 'sec-flashcard' : 'fc-stage-box';
+    this.triggerAnimation(targetId, 'slide-out-right');
     setTimeout(() => {
       this.cardIdx--;
-      this.renderFC(true);
+      this.renderFC(true, 'prev');
     }, 180);
   },
 
