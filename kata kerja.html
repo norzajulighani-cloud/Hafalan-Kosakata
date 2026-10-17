@@ -3,263 +3,1487 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Modul Kata Kerja - YOMIKATA</title>
+<title>Modul Kata Kerja Doushi - YOMIKATA N5</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Serif+JP:wght@600;700;900&display=swap" rel="stylesheet">
 <style>
-  :root { 
-    --bg-main: #0b1120;
-    --card-bg: #1e293b;
-    --primary: #38bdf8; 
-    --success: #22c55e; 
-    --danger: #ef4444; 
-    --warning: #eab308;
+  :root {
+    --bg-base: #050813;
+    --bg-surface: rgba(13, 22, 45, 0.82);
+    --bg-card: rgba(16, 26, 54, 0.75);
+    --bg-card-hover: rgba(24, 38, 76, 0.92);
+    --primary: #38bdf8;
+    --primary-glow: rgba(56, 189, 248, 0.35);
+    --success: #22c55e;
+    --success-glow: rgba(34, 197, 94, 0.35);
+    --warning: #f59e0b;
     --gold: #fbbf24;
-    --text-main: #f8fafc; 
+    --gold-glow: rgba(251, 191, 36, 0.45);
+    --danger: #ef4444;
+    --danger-glow: rgba(239, 68, 68, 0.4);
+    --purple: #c084fc;
+    --purple-glow: rgba(192, 132, 252, 0.35);
+    --text-main: #f8fafc;
     --text-sub: #94a3b8;
+    --text-muted: #64748b;
+    --border-glass: rgba(255, 255, 255, 0.08);
+    --border-accent: rgba(56, 189, 248, 0.35);
   }
-  
-  body { font-family: 'Segoe UI', sans-serif; background: var(--bg-main); color: var(--text-main); margin: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 15px 10px 80px 10px; overflow-x: hidden; }
-  .container { width: 100%; max-width: 550px; position: relative; }
-  button, input { touch-action: manipulation; font-family: inherit; }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: var(--bg-base);
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 14px 12px 60px 12px;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* GPU-Accelerated Fixed Ambient Background */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-color: var(--bg-base);
+    background-image: 
+      radial-gradient(circle at 50% 0%, rgba(30, 58, 138, 0.38) 0%, transparent 60%),
+      radial-gradient(circle at 10% 35%, rgba(192, 132, 252, 0.12) 0%, transparent 40%),
+      radial-gradient(circle at 90% 70%, rgba(56, 189, 248, 0.12) 0%, transparent 40%),
+      linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 100% 100%, 36px 36px, 36px 36px;
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 680px;
+    position: relative;
+    contain: layout style;
+  }
+  button, input, select, .filter-pill, .sesi-pill, .inflection-cell, .tab-main-btn, .btn-dn, .fc-tap-hint {
+    touch-action: manipulation;
+    font-family: inherit;
+    -webkit-tap-highlight-color: transparent;
+  }
   .hidden { display: none !important; }
 
-  /* HEADER MINIMALIS */
-  .top-header { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 20px; }
-  .btn-header { background: #1e293b; color: white; border: 1px solid #334155; width: 42px; height: 42px; border-radius: 12px; font-size: 20px; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); -webkit-tap-highlight-color: transparent; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
-  .btn-header:active { transform: scale(0.85); box-shadow: 0 2px 3px rgba(0,0,0,0.3); }
-  .btn-header.spin-anim { transform: rotate(180deg) scale(0.5); opacity: 0; }
-  .header-title { font-weight: 800; font-size: 18px; color: var(--gold); letter-spacing: 2px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); }
+  ::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.3); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(56, 189, 248, 0.6); }
 
-  /* BOTTOM NAVIGATION BAR */
-  .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); border-top: 1px solid #334155; display: flex; padding: 8px 0 15px 0; z-index: 100; justify-content: space-around; box-shadow: 0 -5px 15px rgba(0,0,0,0.5); }
-  .b-nav-btn { flex: 1; background: transparent; border: none; color: var(--text-sub); font-size: 11px; font-weight: bold; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); -webkit-tap-highlight-color: transparent; }
-  .b-nav-icon { font-size: 20px; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); filter: grayscale(100%); opacity: 0.5; margin-bottom: 2px;}
-  .b-nav-btn:active { transform: scale(0.92); }
-  
-  .b-nav-btn.active#btn-mode-kel1 { color: var(--primary); }
-  .b-nav-btn.active#btn-mode-kel1 .b-nav-icon { filter: none; opacity: 1; transform: translateY(-4px) scale(1.15); }
-  .b-nav-btn.active#btn-mode-kel2 { color: var(--success); }
-  .b-nav-btn.active#btn-mode-kel2 .b-nav-icon { filter: none; opacity: 1; transform: translateY(-4px) scale(1.15); }
-  .b-nav-btn.active#btn-mode-irr { color: var(--warning); }
-  .b-nav-btn.active#btn-mode-irr .b-nav-icon { filter: none; opacity: 1; transform: translateY(-4px) scale(1.15); }
-
-  /* Tab Menu Utama */
-  .nav-tabs { display: flex; gap: 5px; margin-bottom: 10px; justify-content: center; background: transparent;}
-  .tab-btn { background: #1e293b; color: var(--text-sub); border: 1px solid #334155; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 13px; flex-grow: 1; transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); text-align: center; -webkit-tap-highlight-color: transparent; }
-  .tab-btn:active { transform: scale(0.95); }
-  .tab-btn.active { color: var(--gold); border: 1px solid var(--gold); background: rgba(251, 191, 36, 0.1); box-shadow: 0 4px 12px rgba(251, 191, 36, 0.15); transform: translateY(-2px); }
-
-  /* Sub Navigasi Sesi */
-  .sub-nav { display: flex; gap: 5px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 5px; scrollbar-width: none; transition: opacity 0.3s ease; }
-  .sub-nav::-webkit-scrollbar { display: none; }
-  .sub-btn { background: rgba(255,255,255,0.05); color: var(--text-sub); border: 1px solid rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; cursor: pointer; white-space: nowrap; transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); -webkit-tap-highlight-color: transparent; }
-  .sub-btn:active { transform: scale(0.92); }
-  .sub-btn.active { background: var(--primary); color: #000; border-color: var(--primary); box-shadow: 0 0 10px rgba(56, 189, 248, 0.4); transform: translateY(-2px); }
-
-  /* Animasi Transisi Mulus */
-  .fade-in-up { animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-  .fade-out-down { animation: fadeOutDown 0.25s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards; }
-  .pop-in { animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-  .slide-in-right { animation: slideInRight 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
-  .slide-out-left { animation: slideOutLeft 0.25s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards; }
-  .slide-in-left { animation: slideInLeft 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
-  .slide-out-right { animation: slideOutRight 0.25s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards; }
-  
-  @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes fadeOutDown { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(20px); } }
-  @keyframes popIn { 0% { opacity: 0; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1); } }
-  @keyframes slideInRight { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: translateX(0); } }
-  @keyframes slideOutLeft { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(-50px); } }
-  @keyframes slideInLeft { from { opacity: 0; transform: translateX(-50px); } to { opacity: 1; transform: translateX(0); } }
-  @keyframes slideOutRight { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(50px); } }
-
-  /* Area Konten Umum */
-  .content-section { background: var(--card-bg); border-radius: 20px; padding: 25px 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); min-height: 400px; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid rgba(255,255,255,0.05); overflow: hidden; position: relative; }
-  .progress-text { font-size: 14px; font-weight: bold; letter-spacing: 1px; margin-bottom: 15px; text-transform: uppercase; }
-
-  /* Flashcard UI */
-  .content-hafalan { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; position: relative; padding-top: 20px; }
-  .kanji-text { font-size: clamp(35px, 8vw, 55px); font-weight: bold; margin: 5px 0 15px 0; color: var(--text-main); text-shadow: 0 4px 10px rgba(0,0,0,0.5); cursor: pointer; transition: all 0.3s ease; -webkit-tap-highlight-color: transparent; line-height: 1.2; }
-  .hira-text { font-size: clamp(14px, 4vw, 18px); color: var(--warning); margin-bottom: 5px; font-weight: bold; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-  .arti-text { font-size: clamp(15px, 4.5vw, 20px); color: var(--text-sub); font-style: italic; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); margin-bottom: 15px; }
-  
-  .blur-hide { filter: blur(8px); opacity: 0; transform: translateY(10px); pointer-events: none; }
-  .blur-show { filter: blur(0); opacity: 1; transform: translateY(0); pointer-events: auto; }
-  .fc-revealed { animation: popKanji 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; color: var(--gold); }
-  .hira-hide { opacity: 0; transform: translateY(15px) scale(0.5); pointer-events: none; }
-  .hira-show { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
-
-  .pulse-hint { animation: pulseHint 2s infinite; }
-  @keyframes pulseHint { 0%, 100% { transform: scale(1); color: var(--text-main); } 50% { transform: scale(1.05); color: var(--primary); } }
-
-  /* Konjugasi Box dalam Flashcard */
-  .konjugasi-box { background: rgba(0,0,0,0.2); border: 1px solid #334155; border-radius: 12px; padding: 12px; width: 90%; text-align: left; font-size: 15px; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-  .k-row { display: flex; justify-content: space-between; margin-bottom: 8px; border-bottom: 1px dashed rgba(255,255,255,0.05); padding-bottom: 6px; align-items: center; }
-  .k-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-
-  /* Floating Bubble UI */
-  .btn-bubble { position: absolute; right: 0px; top: -15px; width: 35px; height: 35px; border-radius: 50%; background: rgba(34, 197, 94, 0.2); border: 1px solid var(--success); color: white; font-size: 18px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 10; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); -webkit-tap-highlight-color: transparent;}
-  .btn-bubble:hover { background: rgba(34, 197, 94, 0.4); transform: scale(1.1); }
-  .btn-bubble:active { transform: scale(0.9); }
-  
-  .bubble-popup { 
-    position: absolute; top: 40px; right: 0px; background: rgba(15, 23, 42, 0.95); 
-    border: 2px solid var(--success); padding: 15px; border-radius: 12px; width: 260px; 
-    text-align: left; font-size: 13px; color: var(--text-main); z-index: 11; 
-    box-shadow: 0 10px 25px rgba(0,0,0,0.7); backdrop-filter: blur(5px); line-height: 1.5;
-    opacity: 0; visibility: hidden; transform: translateY(-15px) scale(0.9);
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    transform-origin: top right;
-    
-    /* FIX TERBARU: Menggunakan tinggi pasti agar aman dari potongan kartu */
-    max-height: 250px; 
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: var(--success) transparent;
+  /* ==========================================
+     1. MASTER TOP NAVIGATION & TELEMETRY
+     ========================================== */
+  .top-navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 6px 2px 14px 2px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: transparent;
   }
 
-  .bubble-popup.show-popup { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+  .nav-left { display: flex; align-items: center; gap: 8px; }
+  .btn-back {
+    color: var(--primary);
+    font-size: 13.5px;
+    font-weight: 800;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 10px;
+    background: rgba(56, 189, 248, 0.08);
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    text-decoration: none;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .btn-back:hover {
+    background: rgba(56, 189, 248, 0.18);
+    box-shadow: 0 0 12px var(--primary-glow);
+    transform: translateX(-2px);
+  }
 
-  /* Buku Tabel UI */
-  .book-container { flex-grow: 1; display: flex; flex-direction: column; width: 100%; height: 100%; text-align: left; }
-  .book-page { flex-grow: 1; overflow-y: auto; overflow-x: hidden; padding-right: 5px; scrollbar-width: thin; scrollbar-color: var(--success) transparent; }
-  .book-title { color: var(--success); font-size: 20px; font-weight: bold; margin-bottom: 10px; border-bottom: 2px dashed rgba(34, 197, 94, 0.3); padding-bottom: 8px;}
-  .book-narrative { font-size: 14px; line-height: 1.6; color: var(--text-main); margin-bottom: 15px; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 12px; border-left: 4px solid var(--success); }
-  
-  .tabel-waktu { width: 100%; border-collapse: collapse; font-size: 15px; margin-bottom: 10px; background: rgba(255,255,255,0.02); border-radius: 8px; table-layout: auto; min-width: 500px; text-align: center; }
-  .tabel-waktu th { background: rgba(34, 197, 94, 0.15); color: var(--success); padding: 10px; border-bottom: 2px solid var(--success); position: sticky; top: 0; backdrop-filter: blur(5px); z-index: 5; white-space: nowrap;}
-  .tabel-waktu td { padding: 12px 6px; border-bottom: 1px dashed rgba(255,255,255,0.05); vertical-align: middle; white-space: nowrap; }
-  .tabel-waktu tr:last-child td { border-bottom: none; }
-  
-  /* FURIGANA STYLES */
-  ruby { line-height: 1.5; white-space: nowrap; }
-  .ruby-item { font-weight: bold; color: var(--text-main); font-size: 17px; cursor: pointer; display: inline-block; padding: 6px 8px; border-radius: 8px; transition: background 0.3s, color 0.3s; -webkit-tap-highlight-color: transparent; border: 1px solid transparent; }
-  .ruby-item:active { opacity: 0.7; transform: scale(0.95); }
-  .furi-anim { opacity: 0; transform: translateY(10px) scale(0.5); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); color: var(--warning); font-size: 11px; font-weight: bold; pointer-events: none; }
-  .ruby-item.revealed { animation: popKanji 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; background: rgba(251, 191, 36, 0.15); border-color: rgba(251, 191, 36, 0.3); color: var(--gold); }
-  .ruby-item.revealed .furi-anim { opacity: 1; transform: translateY(0) scale(1); }
-  .show-all-furi .ruby-item { background: rgba(251, 191, 36, 0.15); border-color: rgba(251, 191, 36, 0.3); color: var(--gold); }
-  .show-all-furi .ruby-item .furi-anim { opacity: 1 !important; transform: translateY(0) scale(1) !important; }
-  
-  @keyframes popKanji { 0% { transform: scale(1); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
-  
-  .t-arti { color: var(--text-main); font-size: 14px; font-weight: bold; display: block; }
-  
-  .btn-sensor { background: #334155; color: white; border: 1px solid #475569; padding: 10px; border-radius: 8px; font-weight: bold; font-size: 13px; cursor: pointer; width: 100%; margin-bottom: 10px; transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); -webkit-tap-highlight-color: transparent; }
-  .btn-sensor:active { transform: scale(0.95); }
-  .btn-sensor.active { background: rgba(56, 189, 248, 0.2); color: var(--primary); border-color: var(--primary); }
+  .nav-title-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .nav-title {
+    font-size: 16px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    color: #fff;
+    text-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+  }
+  .nav-master-badge {
+    background: rgba(251, 191, 36, 0.15);
+    border: 1px solid rgba(251, 191, 36, 0.4);
+    color: var(--gold);
+    font-size: 11px;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    letter-spacing: 0.3px;
+  }
 
-  .book-nav { display: flex; justify-content: space-between; align-items: center; background: #0f172a; padding: 10px 15px; border-radius: 12px; border: 1px solid #334155; margin-top: 10px; }
-  .book-nav-btn { background: var(--success); color: #000; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); -webkit-tap-highlight-color: transparent; }
-  .book-nav-btn:disabled { background: #334155; color: var(--text-sub); cursor: not-allowed; }
-  .book-nav-btn:not(:disabled):hover { filter: brightness(1.2); transform: translateY(-2px); }
-  .book-nav-btn:not(:disabled):active { transform: scale(0.92) translateY(2px); box-shadow: none; }
-  .book-page-text { font-size: 13px; font-weight: bold; color: var(--text-sub); letter-spacing: 1px; }
+  .nav-right { display: flex; align-items: center; gap: 6px; }
+  .btn-rumus-toggle {
+    background: linear-gradient(135deg, rgba(192, 132, 252, 0.15) 0%, rgba(56, 189, 248, 0.15) 100%);
+    border: 1px solid rgba(192, 132, 252, 0.35);
+    color: #e2e8f0;
+    font-size: 12px;
+    font-weight: 800;
+    padding: 6px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+  }
+  .btn-rumus-toggle:hover {
+    background: rgba(192, 132, 252, 0.25);
+    border-color: var(--purple);
+    box-shadow: 0 0 14px var(--purple-glow);
+  }
 
-  /* Info & Evaluasi */
-  .eval-box { background: rgba(0,0,0,0.3); padding: 20px; border-radius: 15px; margin-top: 20px; text-align: center; line-height: 1.6; border: 1px solid rgba(255,255,255,0.1); }
-  .btn-next { background: #334155; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: bold; font-size: 18px; cursor: pointer; width: 100%; margin-top: 20px; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); -webkit-tap-highlight-color: transparent; }
-  .btn-next:hover { background: #475569; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-  .btn-next:active { transform: scale(0.94) translateY(2px); box-shadow: none; }
+  /* Progress bar strip */
+  .mastery-progress-strip {
+    width: 100%;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: -8px;
+    margin-bottom: 12px;
+  }
+  .mastery-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--primary) 0%, var(--gold) 100%);
+    transition: width 0.4s ease;
+  }
 
-  /* Kuis UI */
-  .kuis-q { font-size: 20px; font-weight: bold; margin-bottom: 25px; line-height: 1.4; color: var(--text-main); }
-  .pg-grid { display: grid; grid-template-columns: 1fr; gap: 10px; width: 100%; }
-  .btn-opt { background: #0f172a; color: white; border: 2px solid #334155; padding: 15px; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); -webkit-tap-highlight-color: transparent; }
-  .btn-opt:not(:disabled):hover { border-color: var(--primary); transform: translateY(-2px); }
-  .btn-opt:not(:disabled):active { transform: scale(0.94) translateY(2px); }
-  .btn-opt.correct { background: rgba(34, 197, 94, 0.2); border-color: var(--success); color: var(--success); transform: scale(1.02); }
-  .btn-opt.wrong { background: rgba(239, 68, 68, 0.2); border-color: var(--danger); color: var(--danger); animation: shake 0.4s ease; }
-  @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+  /* ==========================================
+     2. MASTER DUAL MODE TABS
+     ========================================== */
+  .main-nav-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 4px;
+    border-radius: 14px;
+    border: 1px solid var(--border-glass);
+    margin-bottom: 12px;
+    backdrop-filter: blur(10px);
+  }
 
-  .input-box { width: 100%; padding: 15px; border-radius: 12px; border: 2px solid #475569; background: #0f172a; color: white; font-size: 18px; text-align: center; margin-bottom: 15px; box-sizing: border-box; transition: all 0.3s ease; }
-  .input-box:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 15px rgba(56, 189, 248, 0.2); transform: scale(1.02); }
-  .btn-submit { background: var(--primary); color: #000; border: none; padding: 14px; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; width: 100%; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); -webkit-tap-highlight-color: transparent; }
-  .btn-submit:hover { filter: brightness(1.1); transform: translateY(-2px); }
-  .btn-submit:active { transform: scale(0.94) translateY(2px); }
-  .feedback { font-size: 18px; font-weight: bold; min-height: 25px; margin-top: 15px; opacity: 0; }
+  .tab-main-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-sub);
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 13.5px;
+    font-weight: 800;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .tab-main-btn:hover { color: #fff; background: rgba(255, 255, 255, 0.04); }
+  .tab-main-btn.active {
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.22) 0%, rgba(30, 58, 138, 0.3) 100%);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4), inset 0 0 10px rgba(56, 189, 248, 0.25);
+    border: 1px solid rgba(56, 189, 248, 0.4);
+  }
+  .tab-main-btn.active.mode-kel2-accent {
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.22) 0%, rgba(20, 83, 45, 0.3) 100%);
+    border-color: rgba(34, 197, 94, 0.4);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4), inset 0 0 10px rgba(34, 197, 94, 0.25);
+  }
+  .tab-main-btn.active.mode-irr-accent {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.22) 0%, rgba(120, 53, 15, 0.3) 100%);
+    border-color: rgba(245, 158, 11, 0.4);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4), inset 0 0 10px rgba(245, 158, 11, 0.25);
+  }
+
+  /* ==========================================
+     3. UNIFIED HORIZONTAL FILTER CHIP STREAM
+     ========================================== */
+  .filter-stream-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    overflow-x: auto;
+    padding: 2px 2px 10px 2px;
+    margin-bottom: 12px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .filter-stream-bar::-webkit-scrollbar { display: none; }
+
+  .filter-chip-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .filter-pill {
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-sub);
+    border: 1px solid var(--border-glass);
+    padding: 7px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .filter-pill:hover { color: #fff; border-color: rgba(255, 255, 255, 0.25); background: rgba(255, 255, 255, 0.08); }
+  .filter-pill:active { transform: scale(0.95); }
+
+  .filter-pill.active#chip-cat-kel1 {
+    background: rgba(56, 189, 248, 0.18);
+    color: var(--primary);
+    border-color: var(--primary);
+    box-shadow: 0 0 14px rgba(56, 189, 248, 0.3);
+  }
+  .filter-pill.active#chip-cat-kel2 {
+    background: rgba(34, 197, 94, 0.18);
+    color: var(--success);
+    border-color: var(--success);
+    box-shadow: 0 0 14px rgba(34, 197, 94, 0.3);
+  }
+  .filter-pill.active#chip-cat-irr {
+    background: rgba(245, 158, 11, 0.18);
+    color: var(--warning);
+    border-color: var(--warning);
+    box-shadow: 0 0 14px rgba(245, 158, 11, 0.3);
+  }
+
+  .filter-divider {
+    width: 1px;
+    height: 22px;
+    background: rgba(255, 255, 255, 0.15);
+    margin: 0 2px;
+    flex-shrink: 0;
+  }
+
+  .sesi-pill {
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--text-sub);
+    border: 1px solid var(--border-glass);
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 11.5px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .sesi-pill:hover { color: #fff; border-color: rgba(255, 255, 255, 0.2); }
+  .sesi-pill:active { transform: scale(0.95); }
+  .sesi-pill.active {
+    background: rgba(56, 189, 248, 0.16);
+    color: #fff;
+    border-color: var(--primary);
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+  }
+  .sesi-pill.pill-kel2.active {
+    background: rgba(34, 197, 94, 0.16);
+    border-color: var(--success);
+    box-shadow: 0 0 12px rgba(34, 197, 94, 0.25);
+  }
+  .sesi-pill.pill-irr.active {
+    background: rgba(245, 158, 11, 0.16);
+    border-color: var(--warning);
+    box-shadow: 0 0 12px rgba(245, 158, 11, 0.25);
+  }
+
+  /* ==========================================
+     4. DOJO ARENA CARD STAGE (RPG FEEL)
+     ========================================== */
+  .dojo-arena-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-accent);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65), 0 0 20px rgba(56, 189, 248, 0.12);
+    min-height: 480px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .dojo-arena-card.kel2-mode-border {
+    border-color: rgba(34, 197, 94, 0.35);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65), 0 0 20px rgba(34, 197, 94, 0.12);
+  }
+  .dojo-arena-card.irr-mode-border {
+    border-color: rgba(245, 158, 11, 0.35);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65), 0 0 20px rgba(245, 158, 11, 0.12);
+  }
+
+  /* Flashcard Top Bar Inside Card */
+  .fc-header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  .fc-header-left {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .fc-group-badge {
+    font-size: 10.5px;
+    font-weight: 800;
+    padding: 2px 7px;
+    border-radius: 12px;
+    background: rgba(56, 189, 248, 0.14);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    color: var(--primary);
+  }
+  .fc-group-badge.g2-badge {
+    background: rgba(34, 197, 94, 0.14);
+    border-color: rgba(34, 197, 94, 0.3);
+    color: var(--success);
+  }
+  .fc-group-badge.g3-badge {
+    background: rgba(245, 158, 11, 0.14);
+    border-color: rgba(245, 158, 11, 0.3);
+    color: var(--warning);
+  }
+  .fc-trap-badge {
+    font-size: 10px;
+    font-weight: 800;
+    padding: 2px 7px;
+    border-radius: 12px;
+    background: rgba(239, 68, 68, 0.16);
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    color: #fca5a5;
+  }
+  .fc-counter-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-sub);
+    letter-spacing: 0.5px;
+  }
+  .fc-counter-label b { color: #fff; font-weight: 800; }
+
+  .fc-header-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-star-mark {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: var(--text-muted);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .btn-star-mark:hover {
+    background: rgba(251, 191, 36, 0.2);
+    border-color: var(--gold);
+    color: var(--gold);
+    transform: scale(1.1);
+  }
+  .btn-star-mark.is-mastered {
+    background: rgba(251, 191, 36, 0.25);
+    border-color: var(--gold);
+    color: var(--gold);
+    box-shadow: 0 0 12px var(--gold-glow);
+  }
+
+  /* Main Flashcard Stage */
+  .fc-stage-box {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    cursor: pointer;
+  }
+
+  .fc-kanji-big {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 64px;
+    font-weight: 900;
+    color: #fff;
+    text-shadow: 0 0 25px rgba(255, 255, 255, 0.25);
+    margin: 8px 0;
+    letter-spacing: 2px;
+    line-height: 1.1;
+    text-align: center;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Unrevealed vs Revealed States */
+  .fc-details-shelf {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .fc-mode-compact .fc-details-shelf {
+    display: none;
+  }
+  .fc-mode-compact .fc-kanji-big {
+    font-size: 72px;
+    margin: 25px 0 15px 0;
+    animation: gentlePulse 2.8s infinite ease-in-out;
+  }
+  @keyframes gentlePulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.03); text-shadow: 0 0 35px rgba(56, 189, 248, 0.4); }
+  }
+
+  .fc-tap-hint {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-top: 10px;
+    letter-spacing: 0.3px;
+    animation: bounceTap 2s infinite ease-in-out;
+  }
+  @keyframes bounceTap {
+    0%, 100% { transform: translateY(0); opacity: 0.7; }
+    50% { transform: translateY(-4px); opacity: 1; color: var(--primary); }
+  }
+  .fc-mode-expanded .fc-tap-hint {
+    display: none;
+  }
+
+  /* Unified Reading & Meaning */
+  .fc-word-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .fc-hira-text {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--gold);
+  }
+  .fc-meta-sep { color: rgba(255, 255, 255, 0.2); }
+  .fc-arti-text {
+    font-size: 16px;
+    font-weight: 600;
+    color: #e2e8f0;
+    font-style: italic;
+  }
+
+  /* 4 Conjugation Cells (Matrix 2x2) */
+  .fc-grid-two {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    width: 100%;
+    margin-top: 6px;
+  }
+  .inflection-cell {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-glass);
+    border-radius: 12px;
+    padding: 10px 12px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    user-select: none;
+  }
+  .inflection-cell:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+  }
+  .inflection-cell.active-cell {
+    background: rgba(56, 189, 248, 0.15);
+    border-color: var(--primary);
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.3);
+  }
+  .inflection-cell.kel2-cell.active-cell {
+    background: rgba(34, 197, 94, 0.15);
+    border-color: var(--success);
+    box-shadow: 0 0 16px rgba(34, 197, 94, 0.3);
+  }
+  .inflection-cell.irr-cell.active-cell {
+    background: rgba(245, 158, 11, 0.15);
+    border-color: var(--warning);
+    box-shadow: 0 0 16px rgba(245, 158, 11, 0.3);
+  }
+
+  .inf-label {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--text-sub);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .inf-speaker {
+    font-size: 12px;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+  }
+  .inflection-cell:hover .inf-speaker { opacity: 1; }
+  .inf-val {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.25;
+  }
+  .inf-sub {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--text-sub);
+  }
+
+  /* Dynamic Sentence Morph Shelf */
+  .fc-sentence-shelf {
+    width: 100%;
+    margin-top: 10px;
+    background: rgba(0, 0, 0, 0.32);
+    border: 1px solid var(--border-glass);
+    border-radius: 12px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    position: relative;
+  }
+  .fss-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2px;
+  }
+  .fss-badge-wrap { display: flex; align-items: center; gap: 6px; }
+  .fss-badge {
+    font-size: 10.5px;
+    font-weight: 800;
+    color: var(--text-sub);
+    letter-spacing: 0.5px;
+  }
+  .fss-form-pill {
+    background: rgba(56, 189, 248, 0.18);
+    color: var(--primary);
+    font-size: 10.5px;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 10px;
+  }
+  .fss-form-pill.kel2-pill {
+    background: rgba(34, 197, 94, 0.18);
+    color: var(--success);
+  }
+  .fss-form-pill.irr-pill {
+    background: rgba(245, 158, 11, 0.18);
+    color: var(--warning);
+  }
+  .btn-sentence-audio {
+    background: transparent;
+    border: none;
+    color: var(--primary);
+    font-size: 15px;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .btn-sentence-audio:hover { transform: scale(1.15); }
+  .fss-jp {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.4;
+  }
+  .fss-jp .highlight-verb {
+    color: var(--gold);
+    font-weight: 900;
+    border-bottom: 2px solid rgba(251, 191, 36, 0.4);
+    padding-bottom: 1px;
+  }
+  .fss-romaji {
+    font-size: 11.5px;
+    color: var(--text-sub);
+    font-weight: 500;
+  }
+  .fss-id {
+    font-size: 12.5px;
+    color: #cbd5e1;
+    font-style: italic;
+  }
+
+  /* Action Navigation Buttons */
+  .dojo-nav-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 14px;
+    gap: 8px;
+  }
+  .btn-dn {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-glass);
+    color: var(--text-sub);
+    padding: 11px 16px;
+    border-radius: 12px;
+    font-size: 13.5px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .btn-dn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.25);
+  }
+  .btn-dn:disabled { opacity: 0.35; cursor: not-allowed; }
+  .btn-dn-next {
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.25) 0%, rgba(30, 58, 138, 0.4) 100%);
+    border-color: var(--primary);
+    color: #fff;
+  }
+  .btn-dn-next:hover {
+    background: linear-gradient(135deg, var(--primary) 0%, #0284c7 100%);
+    color: #000;
+    box-shadow: 0 0 24px var(--primary-glow);
+  }
+  .btn-dn-next.kel2-btn:hover {
+    background: linear-gradient(135deg, #22c55e 0%, #059669 100%);
+    color: #000;
+    box-shadow: 0 0 24px var(--success-glow);
+  }
+  .btn-dn-next.irr-btn:hover {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: #000;
+    box-shadow: 0 0 24px var(--gold-glow);
+  }
+
+  /* ==========================================
+     5. ARENA KUIS SYSTEM
+     ========================================== */
+  .quiz-top-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    position: relative;
+    z-index: 20;
+  }
+  .quiz-bar-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    gap: 8px;
+  }
+  .quiz-badge-target {
+    background: rgba(251, 191, 36, 0.14);
+    color: var(--gold);
+    border: 1px solid rgba(251, 191, 36, 0.35);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11.5px;
+    font-weight: 800;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    user-select: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .quiz-badge-target:hover {
+    background: rgba(251, 191, 36, 0.25);
+    box-shadow: 0 0 12px rgba(251, 191, 36, 0.35);
+  }
+
+  /* Compact Drill Mode Dropdown */
+  .drill-mode-dropdown-wrap { position: relative; }
+  .btn-drill-dropdown {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 14px;
+    font-size: 11.5px;
+    font-weight: 800;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+  .btn-drill-dropdown:hover, .btn-drill-dropdown.active {
+    background: rgba(56, 189, 248, 0.2);
+    border-color: var(--primary);
+    box-shadow: 0 0 14px rgba(56, 189, 248, 0.3);
+  }
+  .dropdown-caret {
+    font-size: 10px;
+    color: var(--primary);
+    transition: transform 0.2s;
+  }
+  .btn-drill-dropdown.active .dropdown-caret { transform: rotate(180deg); }
+
+  .drill-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 250px;
+    background: linear-gradient(165deg, rgba(16, 26, 56, 0.98) 0%, rgba(8, 14, 32, 0.99) 100%);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    border-radius: 16px;
+    padding: 8px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.9), 0 0 25px rgba(56, 189, 248, 0.2);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    z-index: 100;
+    animation: popDropdown 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes popDropdown {
+    from { opacity: 0; transform: translateY(-8px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .dd-header {
+    font-size: 9.5px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    color: var(--text-sub);
+    padding: 4px 8px 6px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    margin-bottom: 2px;
+  }
+  .dd-item {
+    background: transparent;
+    border: 1px solid transparent;
+    padding: 8px 10px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.18s;
+  }
+  .dd-item:hover { background: rgba(255, 255, 255, 0.08); }
+  .dd-item.active {
+    background: rgba(56, 189, 248, 0.18);
+    border-color: rgba(56, 189, 248, 0.45);
+  }
+  .dd-icon { font-size: 16px; width: 24px; text-align: center; }
+  .dd-text { flex: 1; }
+  .dd-title { font-size: 12px; font-weight: 800; color: #fff; }
+  .dd-item.active .dd-title { color: var(--primary); }
+  .dd-desc { font-size: 10px; color: var(--text-sub); line-height: 1.2; margin-top: 1px; }
+
+  .quiz-bar-bottom-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0 2px;
+  }
+  .quiz-telemetry-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--text-sub);
+    letter-spacing: 0.3px;
+  }
+  .quiz-telemetry-badge b { color: #fff; font-weight: 800; }
+  .quiz-telemetry-badge.score-badge .quiz-score-text { color: var(--gold); font-weight: 700; }
+  .quiz-telemetry-badge.score-badge b { color: #fff; font-weight: 800; }
+
+  /* Empty State */
+  .quiz-empty-mastery {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 16px 8px;
+    width: 100%;
+  }
+  .qem-icon {
+    font-size: 38px;
+    margin-bottom: 8px;
+    filter: drop-shadow(0 0 14px rgba(251, 191, 36, 0.45));
+    animation: pulseGlow 2.4s infinite ease-in-out;
+  }
+  @keyframes pulseGlow {
+    0%, 100% { transform: scale(1); filter: drop-shadow(0 0 12px rgba(251, 191, 36, 0.4)); }
+    50% { transform: scale(1.08); filter: drop-shadow(0 0 22px rgba(251, 191, 36, 0.8)); }
+  }
+  .qem-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--gold);
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+  .qem-desc {
+    font-size: 12.5px;
+    color: var(--text-sub);
+    line-height: 1.45;
+    max-width: 330px;
+    margin-bottom: 14px;
+  }
+  .qem-actions {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    max-width: 340px;
+    flex-direction: column;
+  }
+  .qem-actions .btn-dn { padding: 8px 12px !important; font-size: 12px !important; }
+  @media (min-width: 480px) { .qem-actions { flex-direction: row; } }
+
+  /* Quiz Question and Answers */
+  .quiz-stage-box {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 10px 0;
+  }
+  .quiz-q-text {
+    font-size: 16.5px;
+    font-weight: 700;
+    line-height: 1.45;
+    color: var(--text-main);
+    text-align: center;
+    margin-bottom: 16px;
+    padding: 0 4px;
+  }
+  .quiz-q-text b { color: var(--primary); font-weight: 800; padding: 0 1px; }
+  .quiz-q-text .q-target-word {
+    color: var(--gold);
+    font-size: 1.25em;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+  }
+  .quiz-q-text .q-target-form { color: var(--primary); font-weight: 800; }
+
+  /* 2x2 Option Grid on Mobile */
+  .quiz-options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    width: 100%;
+    max-width: 480px;
+  }
+
+  .btn-quiz-opt {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1.5px solid var(--border-glass);
+    border-radius: 12px;
+    padding: 10px 6px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    text-align: center;
+    word-break: break-word;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    line-height: 1.25;
+  }
+  .btn-quiz-opt:hover:not(:disabled) {
+    border-color: var(--primary);
+    background: rgba(56, 189, 248, 0.16);
+    transform: translateY(-2px);
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.25);
+  }
+  .btn-quiz-opt:active:not(:disabled) { transform: scale(0.96); }
+
+  @keyframes popCorrect {
+    0% { transform: scale(1); }
+    35% { transform: scale(1.06); }
+    65% { transform: scale(0.98); }
+    100% { transform: scale(1.02); }
+  }
+  .btn-quiz-opt.correct {
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.38) 0%, rgba(16, 185, 129, 0.48) 100%) !important;
+    border-color: #4ade80 !important;
+    color: #fff !important;
+    box-shadow: 0 0 25px rgba(74, 222, 128, 0.5) !important;
+    animation: popCorrect 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards !important;
+  }
+
+  @keyframes elasticShake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-8px) rotate(-1deg); }
+    40% { transform: translateX(7px) rotate(1deg); }
+    60% { transform: translateX(-5px); }
+    80% { transform: translateX(3px); }
+  }
+  .btn-quiz-opt.wrong {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.38) 0%, rgba(185, 28, 28, 0.48) 100%) !important;
+    border-color: #f87171 !important;
+    color: #fecaca !important;
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.45) !important;
+    animation: elasticShake 0.42s cubic-bezier(0.36, 0.07, 0.19, 0.97) forwards !important;
+  }
+
+  /* Isian Input Box */
+  .isian-input-box {
+    width: 100%;
+    max-width: 380px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 2px solid rgba(56, 189, 248, 0.4);
+    border-radius: 14px;
+    padding: 12px 16px;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 700;
+    text-align: center;
+    outline: none;
+    transition: all 0.2s;
+    margin-bottom: 12px;
+  }
+  .isian-input-box:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.35);
+    background: rgba(0, 0, 0, 0.6);
+  }
+  .btn-isian-submit {
+    background: linear-gradient(135deg, var(--primary) 0%, #0284c7 100%);
+    border: none;
+    color: #000;
+    font-weight: 800;
+    font-size: 14px;
+    padding: 11px 24px;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 0 16px var(--primary-glow);
+    transition: all 0.2s;
+  }
+  .btn-isian-submit:hover { transform: translateY(-2px); box-shadow: 0 0 22px var(--primary-glow); }
+
+  .quiz-feedback-bar {
+    font-size: 14.5px;
+    font-weight: 800;
+    min-height: 28px;
+    margin-top: 12px;
+    opacity: 0;
+    transition: opacity 0.2s;
+    text-align: center;
+  }
+
+  /* ==========================================
+     6. MODAL CHEATSHEET RUMUS & TE-KEI
+     ========================================== */
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    padding: 16px;
+    animation: fadeInModal 0.2s ease-out;
+  }
+  @keyframes fadeInModal {
+    from { opacity: 0; transform: scale(0.97); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .cheatsheet-card {
+    background: linear-gradient(165deg, rgba(16, 26, 56, 0.98) 0%, rgba(8, 14, 32, 0.99) 100%);
+    border: 1px solid rgba(56, 189, 248, 0.4);
+    border-radius: 20px;
+    width: 100%;
+    max-width: 580px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), 0 0 30px rgba(56, 189, 248, 0.2);
+    overflow: hidden;
+  }
+
+  .cs-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .cs-title-group { display: flex; align-items: center; gap: 8px; }
+  .cs-title { font-size: 15px; font-weight: 800; color: #fff; }
+  .btn-cs-close {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-glass);
+    color: var(--text-sub);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .btn-cs-close:hover { color: #fff; background: rgba(239, 68, 68, 0.3); border-color: var(--danger); }
+
+  .cs-tabs-row {
+    display: flex;
+    padding: 10px 18px 0;
+    gap: 6px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .cs-tab-btn {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-glass);
+    color: var(--text-sub);
+    padding: 8px 10px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .cs-tab-btn.active {
+    background: rgba(56, 189, 248, 0.18);
+    color: var(--primary);
+    border-color: var(--primary);
+  }
+
+  .cs-body {
+    padding: 16px 20px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary) transparent;
+    line-height: 1.55;
+    font-size: 13px;
+  }
+  .cs-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0 14px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.25);
+  }
+  .cs-table th {
+    background: rgba(56, 189, 248, 0.14);
+    color: var(--primary);
+    padding: 8px 10px;
+    font-size: 11px;
+    font-weight: 800;
+    text-align: left;
+    border-bottom: 1px solid rgba(56, 189, 248, 0.25);
+  }
+  .cs-table td {
+    padding: 8px 10px;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.06);
+    font-size: 12.5px;
+  }
+  .cs-table tr:last-child td { border-bottom: none; }
+
+  /* Animations */
+  .fade-in-up { animation: fadeInUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+  .slide-in-right { animation: slideInRight 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+  .slide-out-left { animation: slideOutLeft 0.2s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards; }
+  .slide-in-left { animation: slideInLeft 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+  .slide-out-right { animation: slideOutRight 0.2s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards; }
+
+  @keyframes fadeInUp { from { opacity: 0; transform: translate3d(0, 14px, 0); } to { opacity: 1; transform: translate3d(0, 0, 0); } }
+  @keyframes slideInRight { from { opacity: 0; transform: translate3d(30px, 0, 0); } to { opacity: 1; transform: translate3d(0, 0, 0); } }
+  @keyframes slideOutLeft { from { opacity: 1; transform: translate3d(0, 0, 0); } to { opacity: 0; transform: translate3d(-30px, 0, 0); } }
+  @keyframes slideInLeft { from { opacity: 0; transform: translate3d(-30px, 0, 0); } to { opacity: 1; transform: translate3d(0, 0, 0); } }
+  @keyframes slideOutRight { from { opacity: 1; transform: translate3d(0, 0, 0); } to { opacity: 0; transform: translate3d(30px, 0, 0); } }
+
+  /* ==========================================
+     MOBILE RESPONSIVE & HIGH-PERFORMANCE TUNING
+     ========================================== */
+  @media (max-width: 520px) {
+    .top-navbar {
+      display: grid !important;
+      grid-template-columns: 1fr auto !important;
+      grid-template-rows: auto auto !important;
+      align-items: center !important;
+      row-gap: 8px !important;
+      padding: 4px 2px 10px 2px !important;
+      margin-bottom: 10px !important;
+    }
+    .nav-left {
+      grid-column: 1 !important;
+      grid-row: 1 !important;
+      justify-self: start !important;
+    }
+    .nav-right {
+      grid-column: 2 !important;
+      grid-row: 1 !important;
+      justify-self: end !important;
+    }
+    .nav-title-group {
+      grid-column: 1 / span 2 !important;
+      grid-row: 2 !important;
+      display: flex !important;
+      flex-direction: row !important;
+      justify-content: center !important;
+      align-items: center !important;
+      gap: 8px !important;
+      width: 100% !important;
+      text-align: center !important;
+    }
+    .nav-title {
+      font-size: 15px !important;
+      white-space: nowrap !important;
+      letter-spacing: 0.5px !important;
+    }
+    .nav-master-badge {
+      font-size: 10.5px !important;
+      padding: 2px 8px !important;
+      white-space: nowrap !important;
+    }
+    .btn-back {
+      font-size: 13px !important;
+      padding: 4px 8px !important;
+      background: rgba(255, 255, 255, 0.04) !important;
+      border-radius: 8px !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    }
+    .btn-rumus-toggle {
+      font-size: 11.5px !important;
+      padding: 5px 10px !important;
+    }
+  }
+
+  @media (max-width: 600px) {
+    body {
+      padding: 10px 8px 50px 8px !important;
+    }
+    .fc-kanji-big {
+      font-size: 58px !important;
+      margin: 4px 0 2px !important;
+      animation: none !important;
+    }
+    .dojo-arena-card,
+    .main-nav-tabs,
+    .filter-stream-bar,
+    .inflection-cell,
+    .fc-sentence-shelf,
+    .drill-dropdown-menu {
+      backdrop-filter: blur(6px) !important;
+      -webkit-backdrop-filter: blur(6px) !important;
+      background-color: rgba(13, 22, 45, 0.94) !important;
+    }
+    .dojo-arena-card {
+      padding: 14px 12px 18px 12px !important;
+    }
+    #sec-quiz {
+      min-height: 380px !important;
+    }
+    .tab-main-btn {
+      padding: 9px 8px !important;
+      font-size: 12.5px !important;
+    }
+    .filter-pill {
+      padding: 5px 10px !important;
+      font-size: 11.5px !important;
+    }
+    .sesi-pill {
+      padding: 5px 11px !important;
+      font-size: 11.5px !important;
+    }
+  }
+
+  .dojo-arena-card,
+  .fc-stage-box,
+  .fc-sentence-shelf,
+  .inflection-cell {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+  .filter-stream-bar {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+  }
+
+  @keyframes audioPulse {
+    0% { transform: scale(1); filter: drop-shadow(0 0 4px var(--primary)); }
+    50% { transform: scale(1.22); filter: drop-shadow(0 0 16px var(--primary)); color: var(--primary); }
+    100% { transform: scale(1); }
+  }
+  .audio-playing-pulse {
+    animation: audioPulse 0.45s ease-in-out !important;
+    color: var(--primary) !important;
+  }
+
 </style>
 </head>
 <body>
 
 <div class="container">
   
-  <div class="top-header">
-    <button class="btn-header" onclick="window.location.href='index.html'">⬅️</button>
-    <div class="header-title">YOMIKATA</div>
-    <button class="btn-header" id="btn-toggle-view" onclick="Modul.toggleView()">📋</button>
+  <!-- 1. TOP NAVBAR & TELEMETRY -->
+  <header class="top-navbar">
+    <div class="nav-left">
+      <a href="index.html" class="btn-back" title="Kembali ke Yomikata Utama">
+        <span>←</span>
+        <span>Kembali</span>
+      </a>
+    </div>
+
+    <div class="nav-title-group">
+      <span class="nav-title">⚔️ KATA KERJA N5</span>
+      <span class="nav-master-badge" id="nav-mastered-text">⭐ 0 / 111 (0%)</span>
+    </div>
+
+    <div class="nav-right">
+      <button type="button" class="btn-rumus-toggle" onclick="Modul.openCheatsheet()" title="Buka Rumus Perubahan Bentuk & Lagu Te-Kei">
+        <span>📜</span>
+        <span>Rumus</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Progress bar under header -->
+  <div class="mastery-progress-strip">
+    <div class="mastery-progress-fill" id="mastery-progress-fill"></div>
   </div>
 
-  <div class="nav-tabs">
-    <button class="tab-btn active" id="btn-tab-hafalan" onclick="Modul.switchTab('hafalan')">📖 Hafalan</button>
-    <button class="tab-btn" id="btn-tab-pg" onclick="Modul.switchTab('pg')">🎯 Pilgan</button>
-    <button class="tab-btn" id="btn-tab-isian" onclick="Modul.switchTab('isian')">✍️ Isian</button>
-  </div>
+  <!-- 2. MASTER DUAL MODE TABS -->
+  <nav class="main-nav-tabs">
+    <button type="button" class="tab-main-btn active" id="btn-tab-flashcard" onclick="Modul.switchTab('flashcard')">
+      <span>🎴</span>
+      <span>Flashcard & Konjugasi</span>
+    </button>
+    <button type="button" class="tab-main-btn" id="btn-tab-quiz" onclick="Modul.switchTab('quiz')">
+      <span>🎯</span>
+      <span>Arena Kuis</span>
+    </button>
+  </nav>
 
-  <div class="sub-nav fade-in-up" id="sub-nav-kel1">
-    <button class="sub-btn active" id="btn-1-0" onclick="Modul.switchSesi(0)">I-1: ~U</button>
-    <button class="sub-btn" id="btn-1-1" onclick="Modul.switchSesi(1)">I-2: ~ARU</button>
-    <button class="sub-btn" id="btn-1-2" onclick="Modul.switchSesi(2)">I-3: ~URU</button>
-    <button class="sub-btn" id="btn-1-3" onclick="Modul.switchSesi(3)">I-4: ~ORU</button>
-    <button class="sub-btn" id="btn-1-4" onclick="Modul.switchSesi(4)">I-5: ~TSU</button>
-    <button class="sub-btn" id="btn-1-5" onclick="Modul.switchSesi(5)">I-6: ~KU</button>
-    <button class="sub-btn" id="btn-1-6" onclick="Modul.switchSesi(6)">I-7: ~SU</button>
-    <button class="sub-btn" id="btn-1-7" onclick="Modul.switchSesi(7)">I-8: ~BU/NU</button>
-    <button class="sub-btn" id="btn-1-8" onclick="Modul.switchSesi(8)">I-9: ~MU</button>
-    <button class="sub-btn" id="btn-1-9" onclick="Modul.switchSesi(9)">I-10: ~GU</button>
-    <button class="sub-btn" id="btn-1-10" onclick="Modul.switchSesi(10)">Pengecualian</button>
-  </div>
-
-  <div class="sub-nav fade-in-up hidden" id="sub-nav-kel2">
-    <button class="sub-btn active" id="btn-2-0" onclick="Modul.switchSesi(0)">II-11: ~IRU</button>
-    <button class="sub-btn" id="btn-2-1" onclick="Modul.switchSesi(1)">II-12: ~ERU</button>
-  </div>
-
-  <div class="sub-nav fade-in-up hidden" id="sub-nav-irr">
-    <button class="sub-btn active" id="btn-3-0" onclick="Modul.switchSesi(0)">III-13: ~KURU</button>
-    <button class="sub-btn" id="btn-3-1" onclick="Modul.switchSesi(1)">III-14: ~SURU</button>
-  </div>
-
-  <div id="sec-hafalan" class="content-section fade-in-up"></div>
-
-  <div id="sec-pg" class="content-section hidden fade-in-up">
-    <div class="progress-text" id="pg-progress" style="color:var(--gold);">KUIS PILGAN: 1 / 10</div>
-    <div class="content-hafalan" style="justify-content: flex-start; width: 100%; padding-top: 10px;">
-      <div id="pg-content-wrapper" style="width: 100%;">
-        <div class="kuis-q" id="pg-q">Memuat soal...</div>
-        <div class="pg-grid" id="pg-opts"></div>
-      </div>
-      <div class="feedback" id="pg-feedback"></div>
+  <!-- 3. UNIFIED HORIZONTAL FILTER CHIP STREAM -->
+  <div class="filter-stream-bar" id="filter-stream-bar">
+    <div class="filter-chip-group">
+      <button type="button" class="filter-pill active" id="chip-cat-kel1" onclick="Modul.switchCategory('kel1')">
+        <span>Ⅰ</span>
+        <span>Kelompok 1 (72)</span>
+      </button>
+      <button type="button" class="filter-pill" id="chip-cat-kel2" onclick="Modul.switchCategory('kel2')">
+        <span>Ⅱ</span>
+        <span>Kelompok 2 (28)</span>
+      </button>
+      <button type="button" class="filter-pill" id="chip-cat-irr" onclick="Modul.switchCategory('irr')">
+        <span>Ⅲ</span>
+        <span>Irregular (11)</span>
+      </button>
+    </div>
+    <div class="filter-divider"></div>
+    <div class="filter-chip-group" id="sesi-chips-wrap">
+      <!-- Generated dynamically -->
     </div>
   </div>
 
-  <div id="sec-isian" class="content-section hidden fade-in-up">
-    <div class="progress-text" id="isian-progress" style="color:var(--gold);">KUIS ISIAN: 1 / 10</div>
-    <div class="content-hafalan" style="justify-content: center; width: 100%; padding-top: 10px;">
-      <div id="isian-content-wrapper" style="width: 100%;">
-        <div class="kuis-q" id="isian-q">Memuat soal...</div>
-        <div style="font-size:12px; color:var(--text-sub); margin-top:-15px; margin-bottom:15px;" id="isian-hint-teks"></div>
-        <input type="text" id="isian-input" class="input-box" placeholder="Ketik jawabanmu..." autocomplete="off" onkeypress="if(event.key==='Enter') Modul.checkIsian()">
-        <button class="btn-submit" id="btn-submit-isian" onclick="Modul.checkIsian()">Kirim Jawaban</button>
+  <!-- 4. FLASHCARD STAGE -->
+  <div id="sec-flashcard" class="dojo-arena-card fade-in-up">
+    <!-- Generated dynamically via renderFC -->
+  </div>
+
+  <!-- 5. ARENA KUIS STAGE -->
+  <div id="sec-quiz" class="dojo-arena-card hidden fade-in-up">
+    <div class="quiz-top-bar">
+      <!-- Top Row: Mode selector & Drill dropdown -->
+      <div class="quiz-bar-top-row">
+        <button type="button" class="quiz-badge-target" id="quiz-mode-pill" onclick="Modul.toggleQuizSourceMode()" title="Klik untuk beralih mode kuis">
+          <span>⭐</span>
+          <span id="quiz-mode-text">0 DIKUASAI</span>
+        </button>
+
+        <div class="drill-mode-dropdown-wrap">
+          <button type="button" class="btn-drill-dropdown" id="btn-drill-dropdown" onclick="Modul.toggleDrillDropdown(event)">
+            <span id="drill-label-icon">🔀</span>
+            <span id="drill-label-text">Acak</span>
+            <span class="dropdown-caret">▾</span>
+          </button>
+
+          <div class="drill-dropdown-menu hidden" id="drill-dropdown-menu" onclick="event.stopPropagation()">
+            <div class="dd-header">MODE LATIHAN KUIS</div>
+            <div class="dd-item active" data-qtype="mix" onclick="Modul.selectDrillSubtype('mix', '🔀', 'Acak')">
+              <div class="dd-icon">🔀</div>
+              <div class="dd-text">
+                <div class="dd-title">Acak / Campuran</div>
+                <div class="dd-desc">Kombinasi bentuk Masu, Nai, Te, dan arti</div>
+              </div>
+            </div>
+            <div class="dd-item" data-qtype="masu" onclick="Modul.selectDrillSubtype('masu', '🌸', 'Bentuk Masu')">
+              <div class="dd-icon">🌸</div>
+              <div class="dd-text">
+                <div class="dd-title">Bentuk Masu (~ます)</div>
+                <div class="dd-desc">Latihan bentuk sopan kata kerja</div>
+              </div>
+            </div>
+            <div class="dd-item" data-qtype="nai" onclick="Modul.selectDrillSubtype('nai', '❄️', 'Bentuk Nai')">
+              <div class="dd-icon">❄️</div>
+              <div class="dd-text">
+                <div class="dd-title">Bentuk Nai (~ない)</div>
+                <div class="dd-desc">Latihan bentuk negatif kata kerja</div>
+              </div>
+            </div>
+            <div class="dd-item" data-qtype="te" onclick="Modul.selectDrillSubtype('te', '🔗', 'Bentuk Te')">
+              <div class="dd-icon">🔗</div>
+              <div class="dd-text">
+                <div class="dd-title">Bentuk Te (~て/で)</div>
+                <div class="dd-desc">Latihan bentuk sambung dan perintah</div>
+              </div>
+            </div>
+            <div class="dd-item" data-qtype="meaning" onclick="Modul.selectDrillSubtype('meaning', '🎯', 'Arti & Baca')">
+              <div class="dd-icon">🎯</div>
+              <div class="dd-text">
+                <div class="dd-title">Arti & Cara Baca</div>
+                <div class="dd-desc">Tebak arti bahasa Indonesia dan hiragana</div>
+              </div>
+            </div>
+            <div class="dd-item" data-qtype="isian" onclick="Modul.selectDrillSubtype('isian', '✍️', 'Isian')">
+              <div class="dd-icon">✍️</div>
+              <div class="dd-text">
+                <div class="dd-title">Tantangan Isian Bebas</div>
+                <div class="dd-desc">Ketik langsung tanpa pilihan ganda</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="feedback" id="isian-feedback"></div>
+
+      <!-- Bottom Row: Telemetry Progress & Score -->
+      <div class="quiz-bar-bottom-row">
+        <div class="quiz-telemetry-badge">
+          <span>🎯</span>
+          <span class="quiz-counter-text" id="quiz-progress-pill">SOAL <b>1</b> / 10</span>
+        </div>
+        <div class="quiz-telemetry-badge score-badge">
+          <span>⭐</span>
+          <span class="quiz-score-text" id="quiz-score-pill">SKOR <b>0</b></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Question Stage -->
+    <div class="quiz-stage-box" id="quiz-stage-box">
+      <div id="quiz-content-wrapper" style="width:100%; display:flex; flex-direction:column; align-items:center;">
+        <div class="quiz-q-text" id="quiz-q-text">Memuat soal...</div>
+        <div class="quiz-options-grid" id="quiz-options-container"></div>
+        <div id="quiz-isian-container" class="hidden" style="width:100%; display:flex; flex-direction:column; align-items:center;">
+          <input type="text" id="quiz-isian-input" class="isian-input-box" placeholder="Ketik jawabanmu..." autocomplete="off" onkeypress="if(event.key==='Enter') Modul.checkIsianSubmit()">
+          <button type="button" class="btn-isian-submit" id="btn-submit-isian" onclick="Modul.checkIsianSubmit()">Kirim Jawaban</button>
+        </div>
+      </div>
+      <div class="quiz-feedback-bar" id="quiz-feedback-bar"></div>
     </div>
   </div>
 
 </div>
 
-<div class="bottom-nav">
-  <button class="b-nav-btn active" id="btn-mode-kel1" onclick="Modul.switchMode('kel1')">
-    <span class="b-nav-icon">Ⅰ</span>
-    <span>Kelompok 1</span>
-  </button>
-  <button class="b-nav-btn" id="btn-mode-kel2" onclick="Modul.switchMode('kel2')">
-    <span class="b-nav-icon">Ⅱ</span>
-    <span>Kelompok 2</span>
-  </button>
-  <button class="b-nav-btn" id="btn-mode-irr" onclick="Modul.switchMode('irr')">
-    <span class="b-nav-icon">Ⅲ</span>
-    <span>Irregular</span>
-  </button>
+<!-- 6. MODAL CHEATSHEET RUMUS & TE-KEI -->
+<div id="cheatsheet-modal" class="modal-overlay hidden" onclick="if(event.target === this) Modul.closeCheatsheet()">
+  <div class="cheatsheet-card">
+    <div class="cs-header">
+      <div class="cs-title-group">
+        <span style="font-size:18px;">📜</span>
+        <span class="cs-title">Rumus Konjugasi Kata Kerja N5</span>
+      </div>
+      <button type="button" class="btn-cs-close" onclick="Modul.closeCheatsheet()" title="Tutup">✕</button>
+    </div>
+
+    <div class="cs-tabs-row">
+      <button type="button" class="cs-tab-btn active" id="cs-tab-te" onclick="Modul.switchCheatsheetTab('te')">🎵 Lagu Bentuk Te</button>
+      <button type="button" class="cs-tab-btn" id="cs-tab-kel" onclick="Modul.switchCheatsheetTab('kel')">🔍 3 Kelompok</button>
+      <button type="button" class="cs-tab-btn" id="cs-tab-trap" onclick="Modul.switchCheatsheetTab('trap')">⚠️ Pengecualian</button>
+    </div>
+
+    <div class="cs-body" id="cs-body-content">
+      <!-- Diisi via renderCheatsheetContent -->
+    </div>
+  </div>
 </div>
 
 <script>
@@ -361,8 +1585,6 @@ const DB_Kel_1 = [
   { k_kamus: "知る", r_kamus: "しる", k_masu: "知ります", r_masu: "しります", k_nai: "知らない", r_nai: "しらない", k_te: "知って", r_te: "しって", a: "mengetahui", grp: 10 },
   { k_kamus: "入る", r_kamus: "はいる", k_masu: "入ります", r_masu: "はいります", k_nai: "入らない", r_nai: "はいらない", k_te: "入って", r_te: "はいって", a: "masuk", grp: 10 }
 ];
-
-
 const DB_Kel_2 = [
   // II-11: ~IRU (Kolom い + る)
   { k_kamus: "浴びる", r_kamus: "あびる", k_masu: "浴びます", r_masu: "あびます", k_nai: "浴びない", r_nai: "あびない", k_te: "浴びて", r_te: "あびて", a: "mandi", grp: 0 },
@@ -396,8 +1618,6 @@ const DB_Kel_2 = [
   { k_kamus: "見せる", r_kamus: "みせる", k_masu: "見せます", r_masu: "みせます", k_nai: "見せない", r_nai: "みせない", k_te: "見せて", r_te: "みせて", a: "memperlihatkan", grp: 1 },
   { k_kamus: "忘れる", r_kamus: "わすれる", k_masu: "忘れます", r_masu: "わすれます", k_nai: "忘れない", r_nai: "わすれない", k_te: "忘れて", r_te: "わすれて", a: "lupa", grp: 1 }
 ];
-
-
 const DB_Kel_Irr = [
   // III-13: ~KURU (くる)
   { k_kamus: "来る", r_kamus: "くる", k_masu: "来ます", r_masu: "きます", k_nai: "来ない", r_nai: "こない", k_te: "来て", r_te: "きて", a: "datang", grp: 0 },
@@ -415,7 +1635,6 @@ const DB_Kel_Irr = [
   { k_kamus: "練習する", r_kamus: "れんしゅうする", k_masu: "練習します", r_masu: "れんしゅうします", k_nai: "練習しない", r_nai: "れんしゅうしない", k_te: "練習して", r_te: "れんしゅうして", a: "berlatih", grp: 1 }
 ];
 
-
 const Pages_K1 = [
   { title: "I-1: Akhiran ~U", narasi: "Berakhiran vokal ganda + <b>u (う)</b>. Hati-hati pada bentuk Nai, <b>u</b> berubah menjadi <b>wa</b>, bukan a.", groups: [0] },
   { title: "I-2: Akhiran ~ARU", narasi: "Berakhiran <b>aru (ある)</b>. Perubahannya: ri, ra, tte.", groups: [1] },
@@ -429,549 +1648,1258 @@ const Pages_K1 = [
   { title: "I-10: Akhiran ~GU", narasi: "Berakhiran <b>gu (ぐ)</b>. Bentuk Te-nya menjadi <b>~ide (いで)</b>.", groups: [9] },
   { title: "Pengecualian", narasi: "Secara fisik kata-kata ini berakhiran <b>-iru</b> atau <b>-eru</b>, TAPI mereka masuk ke Kelompok 1. Perubahannya mengikuti aturan ~ru biasa (ri, ra, tte).", groups: [10] }
 ];
-
 const Pages_K2 = [
   { title: "II-11: Akhiran ~IRU", narasi: "Kelompok 2 yang berakhiran <b>~iru</b> (Kolom い + る). Tinggal coret akhiran ~ru lalu tambahkan ~masu, ~nai, atau ~te.", groups: [0] },
   { title: "II-12: Akhiran ~ERU", narasi: "Kelompok 2 yang berakhiran <b>~eru</b> (Kolom え + る). Aturannya sangat mudah, coret akhiran ~ru lalu ganti dengan ~masu, ~nai, atau ~te.", groups: [1] }
 ];
-
 const Pages_Irr = [
   { title: "III-13: Akhiran ~KURU", narasi: "Hanya ada 1 kata kerja murni di kelompok ini, yaitu <b>来る / Kuru</b> (datang). Perubahannya adalah pengecualian dan wajib dihafal.", groups: [0] },
   { title: "III-14: Akhiran ~SURU", narasi: "Berpusat pada kata <b>する / Suru</b> (melakukan). Banyak kata benda bisa diubah menjadi kata kerja hanya dengan menambahkan <i>~suru</i> di belakangnya (cth: benkyou = pelajaran -> benkyou suru = belajar).", groups: [1] }
 ];
 
-const Teks_Perbedaan = `<b>🔍 Cara Cepat Membedakan Kelompok:</b><br><br>
-<b>1️⃣ Kelompok 1 (Paling banyak aturan):</b><br>
-Ciri khas: Sebelum <i>~masu</i>, hurufnya berbunyi <b>" i "</b>.<br>
-<i>Cth: ka<b>i</b>-masu (membeli), nom<b>i</b>-masu (minum).</i><br>
-Cara ubahnya bervariasi tergantung huruf terakhirnya.<br><br>
-<b>2️⃣ Kelompok 2 (Paling gampang):</b><br>
-Ciri khas: Sebelum <i>~masu</i>, umumnya berbunyi <b>" e "</b>. Bentuk kamusnya <b>pasti</b> berakhiran <b>~ru</b>.<br>
-<i>Cth: tab<b>e</b>-masu -> taberu (makan).</i><br>
-Cara ubahnya: Tinggal coret/buang <b>~ru</b> nya!<br><br>
-<b>3️⃣ Kelompok 3 (Irregular/Spesial):</b><br>
-Cuma ada 2 kata di bahasa Jepang: <b>来る / kuru</b> (datang) dan <b>する / suru</b> (melakukan). Karena tidak ada rumusnya, ini wajib dihafal mati.`;
+// ==========================================
+// 100% NATURAL CONTEXT SENTENCES DICTIONARY
+// ==========================================
+const VERB_SENTENCES = {"会う":{"kamus":{"jp":"駅の前で友達と会う約束があります。","ro":"Eki no mae de tomodachi to au yakusoku ga arimasu.","id":"Ada janji bertemu teman di depan stasiun."},"masu":{"jp":"明日学校で先生に会います。","ro":"Ashita gakkou de sensei ni aimasu.","id":"Besok saya bertemu guru di sekolah."},"nai":{"jp":"今日は忙しくて誰にも会わない。","ro":"Kyou wa isogashikute dare ni mo awanai.","id":"Hari ini sibuk jadi tidak bertemu siapa pun."},"te":{"jp":"友達に会って、一緒に食事をしました。","ro":"Tomodachi ni atte, issho ni shokuji o shimashita.","id":"Bertemu teman, lalu makan bersama."}},"洗う":{"kamus":{"jp":"食事の前に手を洗う。","ro":"Shokuji no mae ni te o arau.","id":"Mencuci tangan sebelum makan."},"masu":{"jp":"毎朝冷たい水で顔を洗います。","ro":"Maiasa tsumetai mizu de kao o araimasu.","id":"Setiap pagi mencuci muka dengan air dingin."},"nai":{"jp":"まだ汚れた服を洗わない。","ro":"Mada yogoreta fuku o arawanai.","id":"Belum mencuci pakaian yang kotor."},"te":{"jp":"野菜をきれいに洗ってください。","ro":"Yasai o kirei ni aratte kudasai.","id":"Tolong cuci sayuran sampai bersih."}},"言う":{"kamus":{"jp":"先生に本当のことを言う。","ro":"Sensei ni hontou no koto o iu.","id":"Mengatakan hal yang sebenarnya kepada guru."},"masu":{"jp":"日本語で「ありがとう」と言います。","ro":"Nihongo de \"arigatou\" to iimasu.","id":"Dalam bahasa Jepang berkata \"arigatou\"."},"nai":{"jp":"友達の悪口を言わないでください。","ro":"Tomodachi no warukuchi o iwanaide kudasai.","id":"Tolong jangan membicarakan keburukan teman."},"te":{"jp":"もう一度ゆっくり言ってください。","ro":"Mou ichido yukkuri itte kudasai.","id":"Tolong katakan sekali lagi dengan pelan."}},"歌う":{"kamus":{"jp":"カラオケで日本の歌を歌う。","ro":"Karaoke de Nihon no uta o utau.","id":"Menyanyikan lagu Jepang di karaoke."},"masu":{"jp":"みんなで楽しく歌います。","ro":"Minna de tanoshiku utaimasu.","id":"Bernyanyi bersama dengan riang."},"nai":{"jp":"人前ではあまり歌わない。","ro":"Hitomae de wa amari utawanai.","id":"Tidak begitu suka bernyanyi di depan orang."},"te":{"jp":"ギターに合わせて歌ってください。","ro":"Gitaa ni awasete utatte kudasai.","id":"Tolong bernyanyi diiringi gitar."}},"買う":{"kamus":{"jp":"新しい靴を買う予定です。","ro":"Atarashii kutsu o kau yotei desu.","id":"Rencana membeli sepatu baru."},"masu":{"jp":"スーパーでおいしい果物を買います。","ro":"Suupaa de oishii kudamono o kaimasu.","id":"Membeli buah yang lezat di supermarket."},"nai":{"jp":"高すぎる物は買わない。","ro":"Takasugiru mono wa kawanai.","id":"Tidak membeli barang yang terlalu mahal."},"te":{"jp":"切符を買って電車に乗りました。","ro":"Kippu o katte densha ni norimashita.","id":"Membeli tiket lalu naik kereta."}},"吸う":{"kamus":{"jp":"たばこを吸うのは体に悪いです。","ro":"Tabako o suu no wa karada ni warui desu.","id":"Merokok itu buruk bagi tubuh."},"masu":{"jp":"朝の新鮮な空気を吸います。","ro":"Asa no shinsen na kuuki o suimasu.","id":"Menghirup udara segar di pagi hari."},"nai":{"jp":"この部屋でたばこを吸わないでください。","ro":"Kono heya de tabako o suwanaide kudasai.","id":"Tolong jangan merokok di ruangan ini."},"te":{"jp":"深呼吸して息を吸ってください。","ro":"Shinkokyuu shite iki o sutte kudasai.","id":"Tarik napas dalam-dalam dan hirup udaranya."}},"違う":{"kamus":{"jp":"答えが違うようです。","ro":"Kotae ga chigau you desu.","id":"Sepertinya jawabannya berbeda/keliru."},"masu":{"jp":"この二つの単語は意味が違います。","ro":"Kono futatsu no tango wa imi ga chigaimasu.","id":"Dua kosakata ini artinya berbeda."},"nai":{"jp":"私の考えと違わない。","ro":"Watashi no kangae to chigawanai.","id":"Tidak berbeda dari pemikiran saya."},"te":{"jp":"写真と実物が違っていて驚きました。","ro":"Shashin to jitsubutsu ga chigatte ite odorokimashita.","id":"Foto dan aslinya berbeda sehingga terkejut."}},"使う":{"kamus":{"jp":"パソコンを使う仕事です。","ro":"Pasokon o tsukau shigoto desu.","id":"Pekerjaan yang menggunakan komputer."},"masu":{"jp":"授業で辞書を使います。","ro":"Jugyou de jisho o tsukaimasu.","id":"Menggunakan kamus di dalam kelas."},"nai":{"jp":"プラスチックの袋はあまり使わない。","ro":"Purasuchikku no fukuro wa amari tsukawanai.","id":"Tidak banyak memakai kantong plastik."},"te":{"jp":"このペンを使って書いてください。","ro":"Kono pen o tsukatte kaite kudasai.","id":"Tolong tulis menggunakan pulpen ini."}},"習う":{"kamus":{"jp":"先生から生け花を習う。","ro":"Sensei kara ikebana o narau.","id":"Belajar ikebana dari guru."},"masu":{"jp":"毎週火曜日に日本語を習います。","ro":"Maishuu kayoubi ni Nihongo o naraimasu.","id":"Setiap hari Selasa belajar bahasa Jepang."},"nai":{"jp":"まだこの文法を習わない。","ro":"Mada kono bunpou o narawanai.","id":"Belum mempelajari pola kalimat ini."},"te":{"jp":"料理を習って家族に作りました。","ro":"Ryouri o naratte kazoku ni tsukurimashita.","id":"Belajar memasak lalu memasakkannya untuk keluarga."}},"ある":{"kamus":{"jp":"机の上に本がある。","ro":"Tsukue no ue ni hon ga aru.","id":"Ada buku di atas meja."},"masu":{"jp":"駅の近くに郵便局があります。","ro":"Eki no chikaku ni yuubinkyoku ga arimasu.","id":"Ada kantor pos di dekat stasiun."},"nai":{"jp":"今日は宿題がない。","ro":"Kyou wa shukudai ga nai.","id":"Hari ini tidak ada pekerjaan rumah."},"te":{"jp":"部屋にテレビがあって便利です。","ro":"Heya ni terebi ga atte benri desu.","id":"Di kamar ada televisi sehingga praktis."}},"終わる":{"kamus":{"jp":"会議が終わる時間は四時です。","ro":"Kaigi ga owaru jikan wa yoji desu.","id":"Waktu rapat berakhir adalah jam 4."},"masu":{"jp":"今日の仕事はこれで終わります。","ro":"Kyou no shigoto wa kore de owarimasu.","id":"Pekerjaan hari ini selesai dengan ini."},"nai":{"jp":"宿題がまだ終わらない。","ro":"Shukudai ga mada owaranai.","id":"PR saya belum selesai."},"te":{"jp":"授業が終わってから図書館へ行きました。","ro":"Jugyou ga owatte kara toshokan e ikimashita.","id":"Setelah kelas selesai, pergi ke perpustakaan."}},"かかる":{"kamus":{"jp":"空港まで二時間かかる。","ro":"Kuukou made nijikan kakaru.","id":"Memerlukan waktu dua jam ke bandara."},"masu":{"jp":"東京まで新幹線で一時間かかります。","ro":"Toukyou made shinkansen de ichijikan kakarimasu.","id":"Memerlukan waktu satu jam ke Tokyo naik Shinkansen."},"nai":{"jp":"このアプリはお金がかからない。","ro":"Kono apuri wa okane ga kakaranai.","id":"Aplikasi ini tidak memakan biaya."},"te":{"jp":"時間がかかって疲れました。","ro":"Jikan ga kakatte tsukaremashita.","id":"Menghabiskan waktu dan melelahkan."}},"困る":{"kamus":{"jp":"道に迷って困る。","ro":"Michi ni mayotte komaru.","id":"Tersesat di jalan dan kebingungan."},"masu":{"jp":"財布を落として困ります。","ro":"Saifu o otoshite komarimasu.","id":"Dompet jatuh/hilang dan saya kesulitan."},"nai":{"jp":"お金に困らない生活を送りたい。","ro":"Okane ni komaranai seikatsu o okuritai.","id":"Ingin menjalani hidup tanpa kesulitan uang."},"te":{"jp":"傘がなくて困っています。","ro":"Kasa ga nakute komatte imasu.","id":"Tidak ada payung jadi sedang kesulitan."}},"閉まる":{"kamus":{"jp":"ドアが自動で閉まる。","ro":"Doa ga jidou de shimaru.","id":"Pintu tertutup secara otomatis."},"masu":{"jp":"デパートは夜八時に閉まります。","ro":"Depaato wa yoru hachiji ni shimarimasu.","id":"Toserba tutup pada jam 8 malam."},"nai":{"jp":"窓がしっかり閉まらない。","ro":"Mado ga shikkari shimaranai.","id":"Jendela tidak tertutup rapat."},"te":{"jp":"店が閉まっていて買えませんでした。","ro":"Mise ga shimatte ite kaemasendeshita.","id":"Tokonya tutup jadi tidak bisa beli."}},"座る":{"kamus":{"jp":"ベンチに座る。","ro":"Benchi ni suwaru.","id":"Duduk di bangku taman."},"masu":{"jp":"どうぞこちらの椅子に座ります。","ro":"Douzo kochira no isu ni suwarimasu.","id":"Silakan duduk di kursi sebelah sini."},"nai":{"jp":"床には座らないでください。","ro":"Yuka ni wa suwaranaide kudasai.","id":"Tolong jangan duduk di lantai."},"te":{"jp":"椅子に座って少し休んでください。","ro":"Isu ni suwatte sukoshi yasunde kudasai.","id":"Silakan duduk di kursi dan istirahat sebentar."}},"止まる":{"kamus":{"jp":"赤信号で車が止まる。","ro":"Akashingou de kuruma ga tomaru.","id":"Mobil berhenti di lampu merah."},"masu":{"jp":"電車がホームに止まります。","ro":"Densha ga hoomu ni tomarimasu.","id":"Kereta berhenti di peron."},"nai":{"jp":"雨がなかなか止まらない。","ro":"Ame ga nakanaka tomaranai.","id":"Hujan tidak kunjung reda/berhenti."},"te":{"jp":"時計が止まって動かない。","ro":"Tokei ga tomatte ugokanai.","id":"Jam berhenti dan tidak berdetak."}},"鳴る":{"kamus":{"jp":"電話のベルが鳴る。","ro":"Denwa no beru ga naru.","id":"Bel telepon berbunyi."},"masu":{"jp":"毎朝六時に目覚まし時計が鳴ります。","ro":"Maiasa rokuji ni mezamashidokei ga narimasu.","id":"Jam weker berdering setiap jam 6 pagi."},"nai":{"jp":"チャイムが鳴らない。","ro":"Chaimu ga naranai.","id":"Loncengnya tidak berbunyi."},"te":{"jp":"お腹が鳴って恥ずかしかったです。","ro":"Onaka ga natte hazukashikatta desu.","id":"Perut berbunyi dan merasa malu."}},"始まる":{"kamus":{"jp":"映画が始まる時間です。","ro":"Eiga ga hajimaru jikan desu.","id":"Waktunya film dimulai."},"masu":{"jp":"授業は朝九時に始まります。","ro":"Jugyou wa asa kuji ni hajimarimasu.","id":"Kelas dimulai jam 9 pagi."},"nai":{"jp":"試合がなかなか始まらない。","ro":"Shiai ga nakanaka hajimaranai.","id":"Pertandingan tidak kunjung dimulai."},"te":{"jp":"春が始まって暖かくなりました。","ro":"Haru ga hajimatte atatakaku narimashita.","id":"Musim semi dimulai dan cuaca menjadi hangat."}},"張る":{"kamus":{"jp":"封筒に切手を張る。","ro":"Fuutou ni kitte o haru.","id":"Menempelkan perangko pada amplop."},"masu":{"jp":"壁にポスターを張ります。","ro":"Kabe ni posutaa o harimasu.","id":"Memasang poster di dinding."},"nai":{"jp":"ここに紙を張らないでください。","ro":"Koko ni kami o haranaide kudasai.","id":"Tolong jangan menempel kertas di sini."},"te":{"jp":"写真を張って提出してください。","ro":"Shashin o hatte teishutsu shite kudasai.","id":"Tolong tempelkan foto lalu kumpulkan."}},"曲がる":{"kamus":{"jp":"次の角を右に曲がる。","ro":"Tsugi no kado o migi ni magaru.","id":"Belok ke kanan di sudut berikutnya."},"masu":{"jp":"交差点を左に曲がります。","ro":"Kousaten o hidari ni magarimasu.","id":"Belok ke kiri di persimpangan jalan."},"nai":{"jp":"まっすぐ進んで曲がらないでください。","ro":"Massugu susunde magaranaide kudasai.","id":"Lurus saja dan jangan berbelok."},"te":{"jp":"角を曲がって少し歩くと駅があります。","ro":"Kado o magatte sukoshi aruku to eki ga arimasu.","id":"Belok di sudut jalan lalu jalan sedikit ada stasiun."}},"やる":{"kamus":{"jp":"今から宿題をやる。","ro":"Ima kara shukudai o yaru.","id":"Mulai sekarang mengerjakan PR."},"masu":{"jp":"毎日筋トレをやります。","ro":"Mainichi kintore o yarimasu.","id":"Setiap hari melakukan latihan otot."},"nai":{"jp":"ゲームばかりやらないでください。","ro":"Geemu bakari yaranaide kudasai.","id":"Tolong jangan main game terus-menerus."},"te":{"jp":"宿題をやってから遊びに行きました。","ro":"Shukudai o yatte kara asobi ni ikimashita.","id":"Mengerjakan PR dulu baru pergi main."}},"わかる":{"kamus":{"jp":"意味がよくわかる。","ro":"Imi ga yoku wakaru.","id":"Mengerti artinya dengan baik."},"masu":{"jp":"日本語の文法がわかります。","ro":"Nihongo no bunpou ga wakarimasu.","id":"Saya mengerti tata bahasa Jepang."},"nai":{"jp":"この問題の答えがわからない。","ro":"Kono mondai no kotae ga wakaranai.","id":"Saya tidak mengerti jawaban soal ini."},"te":{"jp":"先生の説明を聞いてよくわかって安心しました。","ro":"Sensei no setsumei o kiite yoku wakatte anshin shimashita.","id":"Mendengar penjelasan guru menjadi paham dan lega."}},"渡る":{"kamus":{"jp":"信号を見て横断歩道を渡る。","ro":"Shingou o mite oudanhodou o wataru.","id":"Melihat lampu lalu lintas lalu menyeberang di zebra cross."},"masu":{"jp":"気をつけて橋を渡ります。","ro":"Ki o tsukete hashi o watarimasu.","id":"Menyeberangi jembatan dengan hati-hati."},"nai":{"jp":"赤信号の時は渡らないでください。","ro":"Akashingou no toki wa wataranaide kudasai.","id":"Saat lampu merah tolong jangan menyeberang."},"te":{"jp":"橋を渡って右に行くと公園です。","ro":"Hashi o watatte migi ni iku to kouen desu.","id":"Menyeberangi jembatan lalu ke kanan adalah taman."}},"売る":{"kamus":{"jp":"店で新鮮な魚を売る。","ro":"Mise de shinsen na sakana o uru.","id":"Menjual ikan segar di toko."},"masu":{"jp":"この店ではおいしいパンを売ります。","ro":"Kono mise de wa oishii pan o urimasu.","id":"Toko ini menjual roti yang lezat."},"nai":{"jp":"古い本は売らない。","ro":"Furui hon wa uranai.","id":"Tidak menjual buku lama."},"te":{"jp":"車を売って新しいバイクを買いました。","ro":"Kuruma o utte atarashii baiku o kaimashita.","id":"Menjual mobil lalu membeli motor baru."}},"送る":{"kamus":{"jp":"家族に手紙を送る。","ro":"Kazoku ni tegami o okuru.","id":"Mengirim surat kepada keluarga."},"masu":{"jp":"友達にプレゼントを送ります。","ro":"Tomodachi ni purezento o okurimasu.","id":"Mengirim kado kepada teman."},"nai":{"jp":"メールをまだ送らない。","ro":"Meeru o mada okuranai.","id":"Belum mengirim email."},"te":{"jp":"荷物を送って確認の電話をしました。","ro":"Nimotsu o okutte kakunin no denwa o shimashita.","id":"Mengirim paket lalu menelepon untuk memastikan."}},"作る":{"kamus":{"jp":"晩ご飯を作る予定です。","ro":"Bangohan o tsukuru yotei desu.","id":"Rencana membuat makan malam."},"masu":{"jp":"休日にケーキを作ります。","ro":"Kyuujitsu ni keeki o tsukurimasu.","id":"Membuat kue di hari libur."},"nai":{"jp":"今日は疲れたので料理を作らない。","ro":"Kyou wa tsukareta node ryouri o tsukuranai.","id":"Hari ini lelah jadi tidak memasak makanan."},"te":{"jp":"おいしい料理を作って友達を呼びました。","ro":"Oishii ryouri o tsukutte tomodachi o yobimashita.","id":"Membuat masakan lezat lalu mengundang teman."}},"かぶる":{"kamus":{"jp":"日差しが強いので帽子をかぶる。","ro":"Hizashi ga tsuyoi node boushi o kaburu.","id":"Mengenakan topi karena terik matahari kuat."},"masu":{"jp":"寒い日はニット帽をかぶります。","ro":"Samui hi wa nittobou o kaburimasu.","id":"Memakai topi rajut di hari dingin."},"nai":{"jp":"部屋の中では帽子をかぶらないでください。","ro":"Heya no naka de wa boushi o kaburanaide kudasai.","id":"Tolong jangan mengenakan topi di dalam ruangan."},"te":{"jp":"ヘルメットをかぶってバイクに乗ります。","ro":"Herumetto o kabutte baiku ni norimasu.","id":"Mengenakan helm lalu naik motor."}},"降る":{"kamus":{"jp":"午後から雨が降る予報です。","ro":"Gogo kara ame ga furu yohou desu.","id":"Prakiraan cuaca hujan akan turun mulai siang."},"masu":{"jp":"冬の北海道は雪がたくさん降ります。","ro":"Fuyu no Hokkaidou wa yuki ga takusan furimasu.","id":"Musim dingin di Hokkaido banyak turun salju."},"nai":{"jp":"今日は雨が降らないでほしい。","ro":"Kyou wa ame ga furanaide hoshii.","id":"Semoga hari ini tidak turun hujan."},"te":{"jp":"雨が降って道が滑りやすくなっています。","ro":"Ame ga futte michi ga suberiyasuku natte imasu.","id":"Turun hujan dan jalanan menjadi licin."}},"曇る":{"kamus":{"jp":"午後から空が曇るようです。","ro":"Gogo kara sora ga kumoru you desu.","id":"Sepertinya langit akan berawan mulai siang."},"masu":{"jp":"山の上はよく曇ります。","ro":"Yama no ue wa yoku kumorimasu.","id":"Di atas gunung sering mendung/berawan."},"nai":{"jp":"今日は一日中曇らないで晴れていました。","ro":"Kyou wa ichinichijuu kumoranaide harete imashita.","id":"Hari ini seharian tidak mendung dan cerah."},"te":{"jp":"空が曇って暗くなってきました。","ro":"Sora ga kumotte kuraku natte kimashita.","id":"Langit berawan dan mulai gelap."}},"取る":{"kamus":{"jp":"棚の上にある箱を取る。","ro":"Tana no ue ni aru hako o toru.","id":"Mengambil kotak yang ada di atas rak."},"masu":{"jp":"塩を取りますので少々お待ちください。","ro":"Shio o torimasu node shoushou omachi kudasai.","id":"Saya ambilkan garam, mohon tunggu sebentar."},"nai":{"jp":"人の物を勝手に取らないでください。","ro":"Hito no mono o katte ni toranaide kudasai.","id":"Tolong jangan mengambil barang orang tanpa izin."},"te":{"jp":"パスポートを取って準備をしました。","ro":"Pasupooto o totte junbi o shimashita.","id":"Mengambil paspor lalu bersiap-siap."}},"登る":{"kamus":{"jp":"夏休みに富士山に登る予定です。","ro":"Natsuyasumi ni Fujisan ni noboru yotei desu.","id":"Rencana mendaki Gunung Fuji saat libur musim panas."},"masu":{"jp":"友達と一緒に山に登ります。","ro":"Tomodachi to issho ni yama ni noborimasu.","id":"Mendaki gunung bersama teman."},"nai":{"jp":"天気が悪い日は山に登らない。","ro":"Tenki ga warui hi wa yama ni noboranai.","id":"Tidak mendaki gunung pada hari cuaca buruk."},"te":{"jp":"階段を登って二階へ行きました。","ro":"Kaidan o nobotte nikai e ikimashita.","id":"Menaiki tangga lalu pergi ke lantai dua."}},"乗る":{"kamus":{"jp":"朝八時の電車に乗る。","ro":"Asa hachiji no densha ni noru.","id":"Naik kereta jam 8 pagi."},"masu":{"jp":"毎日バスに乗って通勤します。","ro":"Mainichi basu ni notte tsuukin shimasu.","id":"Setiap hari naik bus untuk pergi kerja."},"nai":{"jp":"お酒を飲んだら車に乗らないでください。","ro":"Osake o nondara kuruma ni noranaide kudasai.","id":"Jika minum alkohol tolong jangan menyetir mobil."},"te":{"jp":"自転車に乗ってスーパーへ行きました。","ro":"Jitensha ni notte suupaa e ikimashita.","id":"Naik sepeda lalu pergi ke supermarket."}},"立つ":{"kamus":{"jp":"席から立ち上がる。","ro":"Seki kara tachiagaru.","id":"Bangkit berdiri dari kursi."},"masu":{"jp":"駅のホームで電車を待ちながら立ちます。","ro":"Eki no hoomu de densha o machinagara tachimasu.","id":"Berdiri di peron stasiun sambil menunggu kereta."},"nai":{"jp":"危ないですからここに立たないでください。","ro":"Abunai desu kara koko ni tatanaide kudasai.","id":"Karena berbahaya tolong jangan berdiri di sini."},"te":{"jp":"立って挨拶をしてください。","ro":"Tatte aisatsu o shite kudasai.","id":"Silakan berdiri dan berikan salam."}},"待つ":{"kamus":{"jp":"駅の改札で友達を待つ。","ro":"Eki no kaisatsu de tomodachi o matsu.","id":"Menunggu teman di gerbang tiket stasiun."},"masu":{"jp":"ロビーで座って待ちます。","ro":"Robii de suwatte machimasu.","id":"Menunggu sambil duduk di lobi."},"nai":{"jp":"寒いですから外で待たないでください。","ro":"Samui desu kara soto de matanaide kudasai.","id":"Karena dingin tolong jangan menunggu di luar."},"te":{"jp":"少々お待ちください。","ro":"Shoushou omachi kudasai.","id":"Tolong tunggu sebentar."}},"持つ":{"kamus":{"jp":"重い荷物を持つ。","ro":"Omoi nimotsu o motsu.","id":"Membawa barang yang berat."},"masu":{"jp":"私はスマートフォンを持っています。","ro":"Watashi wa sumaatofon o motte imasu.","id":"Saya mempunyai smartphone."},"nai":{"jp":"現金を持たないで出かけました。","ro":"Genkin o motanaide dekakemashita.","id":"Pergi keluar tanpa membawa uang tunai."},"te":{"jp":"荷物を持ってあげましょうか。","ro":"Nimotsu o motte agemashou ka.","id":"Bolehkah saya bawakan barang bawaanmu?"}},"開く":{"kamus":{"jp":"ドアが自然に開く。","ro":"Doa ga shizen ni aku.","id":"Pintunya terbuka dengan sendirinya."},"masu":{"jp":"銀行は朝九時に開きます。","ro":"Ginkou wa asa kuji ni akimasu.","id":"Bank buka jam 9 pagi."},"nai":{"jp":"鍵がないのでドアが開かない。","ro":"Kagi ga nai node doa ga akanai.","id":"Karena tidak ada kunci pintunya tidak terbuka."},"te":{"jp":"窓が開いていて涼しい風が入ります。","ro":"Mado ga aite ite suzushii kaze ga hairimasu.","id":"Jendela terbuka dan angin sejuk masuk."}},"歩く":{"kamus":{"jp":"毎朝健康のために歩く。","ro":"Maiasa kenkou no tame ni aruku.","id":"Setiap pagi berjalan kaki demi kesehatan."},"masu":{"jp":"駅から家まで歩きます。","ro":"Eki kara ie made arukimasu.","id":"Berjalan kaki dari stasiun ke rumah."},"nai":{"jp":"疲れたのでもう歩かない。","ro":"Tsukareta node mou arukanai.","id":"Karena lelah sudah tidak mau berjalan lagi."},"te":{"jp":"公園をゆっくり歩いて気分がいいです。","ro":"Kouen o yukkuri aruite kibun ga ii desu.","id":"Berjalan santai di taman terasa menyenangkan."}},"行く":{"kamus":{"jp":"来年日本へ行く予定です。","ro":"Rainen Nihon e iku yotei desu.","id":"Rencana pergi ke Jepang tahun depan."},"masu":{"jp":"毎朝八時に学校へ行きます。","ro":"Maiasa hachiji ni gakkou e ikimasu.","id":"Setiap pagi jam 8 pergi ke sekolah."},"nai":{"jp":"雨だからどこへも行かない。","ro":"Ame dakara doko e mo ikanai.","id":"Karena hujan tidak pergi ke mana-mana."},"te":{"jp":"スーパーへ行って買い物をしました。","ro":"Suupaa e itte kaimono o shimashita.","id":"Pergi ke supermarket lalu berbelanja."}},"置く":{"kamus":{"jp":"机の上に鍵を置く。","ro":"Tsukue no ue ni kagi o oku.","id":"Menaruh kunci di atas meja."},"masu":{"jp":"本棚に辞書を置きます。","ro":"Hondana ni jisho o okimasu.","id":"Menaruh kamus di rak buku."},"nai":{"jp":"通路に物を置かないでください。","ro":"Tsuuro ni mono o okanaide kudasai.","id":"Tolong jangan menaruh barang di lorong jalan."},"te":{"jp":"荷物をここに置いて休んでください。","ro":"Nimotsu o koko ni oite yasunde kudasai.","id":"Tolong taruh barang di sini dan beristirahatlah."}},"書く":{"kamus":{"jp":"手紙を書いて送る。","ro":"Tegami o kaite okuru.","id":"Menulis surat lalu mengirimkannya."},"masu":{"jp":"ノートに新しい漢字を書きます。","ro":"Nooto ni atarashii kanji o kakimasu.","id":"Menulis kanji baru di buku catatan."},"nai":{"jp":"答えをまだ書かない。","ro":"Kotae o mada kakanai.","id":"Belum menulis jawabannya."},"te":{"jp":"ここにお名前と住所を書いてください。","ro":"Koko ni onamae to juusho o kaite kudasai.","id":"Tolong tulis nama dan alamat Anda di sini."}},"聞く":{"kamus":{"jp":"部屋で音楽を聞くのが好きです。","ro":"Heya de ongaku o kiku no ga suki desu.","id":"Suka mendengarkan musik di kamar."},"masu":{"jp":"毎朝ラジオニュースを聞きます。","ro":"Maiasa rajio nyuusu o kikimasu.","id":"Setiap pagi mendengarkan berita radio."},"nai":{"jp":"人のアドバイスを聞かないのはよくないです。","ro":"Hito no adobaisu o kikanai no wa yoku nai desu.","id":"Tidak mendengarkan saran orang lain itu tidak baik."},"te":{"jp":"先生に質問を聞いて解決しました。","ro":"Sensei ni shitsumon o kiite kaiketsu shimashita.","id":"Bertanya kepada guru lalu masalah terselesaikan."}},"咲く":{"kamus":{"jp":"春に桜の花が咲く。","ro":"Haru ni sakura no hana ga saku.","id":"Bunga sakura mekar saat musim semi."},"masu":{"jp":"庭にきれいなチューリップが咲きます。","ro":"Niwa ni kirei na chuurippu ga sakimasu.","id":"Bunga tulip yang indah mekar di halaman."},"nai":{"jp":"日当たりが悪いと花が咲かない。","ro":"Hiatari ga warui to hana ga sakanai.","id":"Jika kurang sinar matahari bunga tidak akan mekar."},"te":{"jp":"花がたくさん咲いてとても美しいです。","ro":"Hana ga takusan saite totemo utsukushii desu.","id":"Bunga bermekaran banyak dan sangat indah."}},"着く":{"kamus":{"jp":"夕方五時に東京に着く予定です。","ro":"Yuugata goji ni Toukyou ni tsuku yotei desu.","id":"Rencana tiba di Tokyo jam 5 sore."},"masu":{"jp":"電車はあと十分で駅に着きます。","ro":"Densha wa ato juppun de eki ni tsukimasu.","id":"Kereta akan tiba di stasiun 10 menit lagi."},"nai":{"jp":"バスが遅れてなかなか着かない。","ro":"Basu ga okurete nakanaka tsukanai.","id":"Bus terlambat dan tidak kunjung tiba."},"te":{"jp":"ホテルに着いてシャワーを浴びました。","ro":"Hoteru ni tsuite shawaa o abimashita.","id":"Tiba di hotel lalu mandi shower."}},"鳴く":{"kamus":{"jp":"木の上で鳥が鳴く。","ro":"Ki no ue ni tori ga naku.","id":"Burung berkicau di atas pohon."},"masu":{"jp":"朝になると庭で鳥が鳴きます。","ro":"Asa ni naru to niwa de tori ga nakimasu.","id":"Saat pagi tiba burung berkicau di halaman."},"nai":{"jp":"この犬は夜はあまり鳴かない。","ro":"Kono inu wa yoru wa amari nakanai.","id":"Anjing ini jarang bersuara/menggonggong saat malam."},"te":{"jp":"子猫が可愛く鳴いて寄ってきました。","ro":"Koneko ga kawaiku naite yotte kimashita.","id":"Anak kucing mengeong lucu dan mendekat."}},"履く":{"kamus":{"jp":"新しいスニーカーを履く。","ro":"Atarashii suniikaa o haku.","id":"Memakai sepatu kets baru."},"masu":{"jp":"雨の日は長靴を履きます。","ro":"Ame no hi wa nagagutsu o hakimasu.","id":"Memakai sepatu bot di hari hujan."},"nai":{"jp":"家の中では靴を履かないでください。","ro":"Ie no naka de wa kutsu o hakanaide kudasai.","id":"Tolong jangan memakai sepatu di dalam rumah."},"te":{"jp":"暖かい靴下を履いて寝ます。","ro":"Atatakai kutsushita o haite nemasu.","id":"Memakai kaus kaki hangat lalu tidur."}},"働く":{"kamus":{"jp":"日本の会社で働くのが夢です。","ro":"Nihon no kaisha de hataraku no ga yume desu.","id":"Bekerja di perusahaan Jepang adalah impian saya."},"masu":{"jp":"月曜日から金曜日まで働きます。","ro":"Getsuyoubi kara kinyoubi made hatarakimasu.","id":"Bekerja dari hari Senin sampai Jumat."},"nai":{"jp":"日曜日は会社で働かない。","ro":"Nichiyoubi wa kaisha de hatarakanai.","id":"Hari Minggu tidak bekerja di kantor."},"te":{"jp":"一生懸命働いて貯金をしています。","ro":"Isshoukenmei hataraite chokin o shite imasu.","id":"Bekerja keras lalu menabung."}},"引く":{"kamus":{"jp":"ドアを押さずに引く。","ro":"Doa o osazu ni hiku.","id":"Menarik pintu tanpa mendorongnya."},"masu":{"jp":"重いカーテンを引きます。","ro":"Omoi kaaten o hikimasu.","id":"Menarik tirai yang berat."},"nai":{"jp":"このロープを強く引かないでください。","ro":"Kono roopu o tsuyoku hikanaide kudasai.","id":"Tolong jangan menarik tali ini terlalu kuat."},"te":{"jp":"辞書を引いて意味を調べました。","ro":"Jisho o hiite imi o shirabemashita.","id":"Membuka kamus lalu mencari artinya."}},"弾く":{"kamus":{"jp":"暇な時にピアノを弾く。","ro":"Hima na toki ni piano o hiku.","id":"Memainkan piano saat waktu senggang."},"masu":{"jp":"姉は上手にギターを弾きます。","ro":"Ane wa jouzu ni gitaa o hikimasu.","id":"Kakak perempuan mahir memainkan gitar."},"nai":{"jp":"バイオリンはまだ弾かない。","ro":"Baiorin wa mada hikanai.","id":"Belum memainkan biola."},"te":{"jp":"ピアノを弾いて歌を歌いました。","ro":"Piano o hiite uta o utaimashita.","id":"Memainkan piano lalu menyanyikan lagu."}},"吹く":{"kamus":{"jp":"外で強い風が吹く。","ro":"Soto de tsuyoi kaze ga fuku.","id":"Di luar berhembus angin kencang."},"masu":{"jp":"春になると暖かい風が吹きます。","ro":"Haru ni naru to atatakai kaze ga fukimasu.","id":"Saat musim semi tiba angin hangat bertiup."},"nai":{"jp":"今日は風が吹かないで穏やかです。","ro":"Kyou wa kaze ga fukanaide odayaka desu.","id":"Hari ini angin tidak berhembus dan cuaca tenang."},"te":{"jp":"風が吹いて桜の花びらが舞いました。","ro":"Kaze ga fuite sakura no hanabira ga maimashita.","id":"Angin bertiup dan kelopak sakura berterbangan."}},"磨く":{"kamus":{"jp":"寝る前に歯を磨く。","ro":"Neru mae ni ha o migaku.","id":"Menggosok gigi sebelum tidur."},"masu":{"jp":"毎食後きれいに歯を磨きます。","ro":"Maishokugo kirei ni ha o migakimasu.","id":"Menggosok gigi sampai bersih setelah makan."},"nai":{"jp":"靴をしばらく磨かない。","ro":"Kutsu o shibaraku migakanai.","id":"Sudah lama tidak menyemir/menggosok sepatu."},"te":{"jp":"鏡をきれいに磨いてピカピカにしました。","ro":"Kagami o kirei ni migaite pikapika ni shimashita.","id":"Mengelap cermin sampai bersih dan berkilau."}},"押す":{"kamus":{"jp":"ボタンを押す。","ro":"Botan o osu.","id":"Menekan tombol."},"masu":{"jp":"エレベーターのボタンを押します。","ro":"Erebeetaa no botan o oshimasu.","id":"Menekan tombol lift."},"nai":{"jp":"非常ボタンを勝手に押さないでください。","ro":"Hijou botan o katte ni oshanaide kudasai.","id":"Tolong jangan sembarangan menekan tombol darurat."},"te":{"jp":"ドアを押して中に入りました。","ro":"Doa o oshite naka ni hairimashita.","id":"Mendorong pintu lalu masuk ke dalam."}},"返す":{"kamus":{"jp":"借りた本を図書館に返す。","ro":"Karita hon o toshokan ni kaesu.","id":"Mengembalikan buku pinjaman ke perpustakaan."},"masu":{"jp":"明日友達にお金を返します。","ro":"Ashita tomodachi ni okane o kaeshimasu.","id":"Besok saya mengembalikan uang ke teman."},"nai":{"jp":"借りた物を返さないのはマナー違反です。","ro":"Karita mono o kaeshanai no wa manaa ihan desu.","id":"Tidak mengembalikan barang pinjaman itu melanggar etika."},"te":{"jp":"本を読んで期限までに返してください。","ro":"Hon o yonde kigen made ni kaeshite kudasai.","id":"Tolong baca buku lalu kembalikan sebelum tenggat waktu."}},"差す":{"kamus":{"jp":"雨が降ってきたので傘を差す。","ro":"Ame ga futte kita node kasa o sasu.","id":"Membuka payung karena hujan mulai turun."},"masu":{"jp":"日差しが強いので日傘を差します。","ro":"Hizashi ga tsuyoi node higasa o sashimasu.","id":"Memakai payung peneduh karena terik matahari."},"nai":{"jp":"小雨だから傘を差さない。","ro":"Kosame dakara kasa o sasanai.","id":"Karena hanya gerimis tidak memakai payung."},"te":{"jp":"傘を差して出かけました。","ro":"Kasa o sashite dekakemashita.","id":"Memakai payung lalu berangkat pergi."}},"消す":{"kamus":{"jp":"部屋を出る時は電気を消す。","ro":"Heya o deru toki wa denki o kesu.","id":"Mematikan lampu saat keluar ruangan."},"masu":{"jp":"寝る前にテレビの電源を消します。","ro":"Neru mae ni terebi no dengen o keshimasu.","id":"Mematikan daya televisi sebelum tidur."},"nai":{"jp":"エアコンを消さないで出かけてしまいました。","ro":"Eakon o keshanaide dekakete shimaimashita.","id":"Pergi keluar tanpa mematikan AC."},"te":{"jp":"黒板の字を消しゴムで消してください。","ro":"Kokuban no ji o keshigomu de keshite kudasai.","id":"Tolong hapus tulisan di papan tulis."}},"出す":{"kamus":{"jp":"カバンから教科書を出す。","ro":"Kaban kara kyoukasho o dasu.","id":"Mengeluarkan buku pelajaran dari dalam tas."},"masu":{"jp":"先生に宿題を提出して出します。","ro":"Sensei ni shukudai o teishutsu shite dashimasu.","id":"Mengumpulkan dan menyerahkan PR ke guru."},"nai":{"jp":"授業中はスマホを出さないでください。","ro":"Jugyouchuu wa sumaho o dashanaide kudasai.","id":"Tolong jangan mengeluarkan ponsel saat pelajaran."},"te":{"jp":"手紙をポストに出してきました。","ro":"Tegami o posuto ni dashite kimashita.","id":"Memasukkan/mengirim surat ke kotak pos."}},"無くす":{"kamus":{"jp":"大切な鍵を無くす。","ro":"Taisetsu na kagi o nakusu.","id":"Menghilangkan kunci penting."},"masu":{"jp":"うっかり傘を無くします。","ro":"Ukkari kasa o nakushimasu.","id":"Ceroboh sehingga menghilangkan payung."},"nai":{"jp":"パスポートを無くさないように気をつけてください。","ro":"Pasupooto o nakushanaide you ni ki o tsukete kudasai.","id":"Hati-hati agar tidak menghilangkan paspor."},"te":{"jp":"切符を無くして困ってしまいました。","ro":"Kippu o nakushite komatte shimaimashita.","id":"Menghilangkan tiket dan menjadi kebingungan."}},"話す":{"kamus":{"jp":"友達と日本語で話す。","ro":"Tomodachi to Nihongo de hanasu.","id":"Berbicara bahasa Jepang dengan teman."},"masu":{"jp":"先生と将来の夢について話します。","ro":"Sensei to shourai no yume ni tsuite hanashimasu.","id":"Berbicara tentang cita-cita masa depan dengan guru."},"nai":{"jp":"図書館では大きな声で話さないでください。","ro":"Toshokan de wa ookina koe de hanashanaide kudasai.","id":"Tolong jangan berbicara dengan suara keras di perpustakaan."},"te":{"jp":"家族と電話で話して安心しました。","ro":"Kazoku to denwa de hanashite anshin shimashita.","id":"Berbicara dengan keluarga di telepon lalu merasa lega."}},"渡す":{"kamus":{"jp":"友達にプレゼントを手渡す。","ro":"Tomodachi ni purezento o tewatasu.","id":"Menyerahkan kado ke tangan teman."},"masu":{"jp":"先生に書類を渡します。","ro":"Sensei ni shorui o watashimasu.","id":"Menyerahkan dokumen kepada guru."},"nai":{"jp":"見知らぬ人にお金を渡さないでください。","ro":"Mishiranu hito ni okane o watashanaide kudasai.","id":"Tolong jangan memberikan uang kepada orang asing."},"te":{"jp":"お土産を渡してとても喜ばれました。","ro":"Omiyage o watashite totemo yorokobaremashita.","id":"Menyerahkan oleh-oleh dan mereka sangat senang."}},"遊ぶ":{"kamus":{"jp":"公園で友達と遊ぶ。","ro":"Kouen de tomodachi to asobu.","id":"Bermain dengan teman di taman."},"masu":{"jp":"休日はゲームをして遊びます。","ro":"Kyuujitsu wa geemu o shite asobimasu.","id":"Bermain game di hari libur."},"nai":{"jp":"テストの前は遊ばないで勉強します。","ro":"Tesuto no mae wa asobanaide benkyou shimasu.","id":"Sebelum ujian tidak bermain dan belajar."},"te":{"jp":"テーマパークで一日中遊んで楽しかったです。","ro":"Teemapaaku de ichinichijuu asonde tanoshikatta desu.","id":"Bermain seharian di taman hiburan sangat menyenangkan."}},"呼ぶ":{"kamus":{"jp":"大声で友達を呼ぶ。","ro":"Oogoe de tomodachi o yobu.","id":"Memanggil teman dengan suara keras."},"masu":{"jp":"駅までタクシーを呼びます。","ro":"Eki made takushii o yobimasu.","id":"Memanggil taksi sampai ke stasiun."},"nai":{"jp":"先生をあだ名で呼ばないでください。","ro":"Sensei o adana de yobanaide kudasai.","id":"Tolong jangan memanggil guru dengan nama julukan."},"te":{"jp":"友達を呼んでホームパーティーをしました。","ro":"Tomodachi o yonde hoomupaatii o shimashita.","id":"Mengundang teman lalu mengadakan pesta di rumah."}},"死ぬ":{"kamus":{"jp":"魚は水がないと死ぬ。","ro":"Sakana wa mizu ga nai to shinu.","id":"Ikan akan mati jika tidak ada air."},"masu":{"jp":"寒さで植物が死にます。","ro":"Samusa de shokubutsu ga shinimasu.","id":"Tanaman mati karena kedinginan."},"nai":{"jp":"花が死なないように毎日水をあげます。","ro":"Hana ga shinanaide you ni mainichi mizu o agemasu.","id":"Menyiram air setiap hari agar bunga tidak layu/mati."},"te":{"jp":"ペットが死んでとても寂しいです。","ro":"Petto ga shinde totemo sabishii desu.","id":"Hewan peliharaan mati dan saya merasa sangat kesepian."}},"噛む":{"kamus":{"jp":"ご飯をよく噛むのは健康にいいです。","ro":"Gohan o yoku kamu no wa kenkou ni ii desu.","id":"Mengunyah makanan dengan baik itu bagus untuk kesehatan."},"masu":{"jp":"集中したい時にガムを噛みます。","ro":"Shuuchuu shitai toki ni gamu o kamimasu.","id":"Mengunyah permen karet saat ingin berkonsentrasi."},"nai":{"jp":"爪を噛まないでください。","ro":"Tsume o kamanaide kudasai.","id":"Tolong jangan menggigit kuku."},"te":{"jp":"よく噛んで食べてください。","ro":"Yoku kande tabete kudasai.","id":"Tolong kunyah dengan baik lalu makanlah."}},"込む":{"kamus":{"jp":"朝の通勤電車が込む。","ro":"Asa no tsuukin densha ga komu.","id":"Kereta komuter pagi hari penuh sesak."},"masu":{"jp":"週末のショッピングモールはとても込みます。","ro":"Shuumatsu no shoppingumooru wa totemo komimasu.","id":"Pusat perbelanjaan di akhir pekan sangat padat."},"nai":{"jp":"平日の昼間は道が混まない。","ro":"Heijitsu no hiruma wa michi ga komanai.","id":"Siang hari kerja jalannya tidak macet/padat."},"te":{"jp":"店が混んでいて席がありませんでした。","ro":"Mise ga konde ite seki ga arimasendeshita.","id":"Tokonya penuh sesak jadi tidak ada tempat duduk."}},"住む":{"kamus":{"jp":"いつか東京に住むのが夢です。","ro":"Itsuka Toukyou ni sumu no ga yume desu.","id":"Bermimpi suatu saat tinggal di Tokyo."},"masu":{"jp":"私は現在大阪に住んでいます。","ro":"Watashi wa genzai Oosaka ni sunde imasu.","id":"Saya saat ini tinggal di Osaka."},"nai":{"jp":"不便な場所には住まない。","ro":"Fuben na basho ni wa sumanai.","id":"Tidak ingin tinggal di tempat yang tidak praktis."},"te":{"jp":"日本に住んで日本語が上手になりました。","ro":"Nihon ni sunde Nihongo ga jouzu ni narimashita.","id":"Tinggal di Jepang dan bahasa Jepang saya menjadi mahir."}},"頼む":{"kamus":{"jp":"レストランで料理を頼む。","ro":"Resutoran de ryouri o tanomu.","id":"Memesan makanan di restoran."},"masu":{"jp":"店員さんにコーヒーを頼みます。","ro":"Ten'in-san ni koohii o tanomimasu.","id":"Memesan kopi kepada pelayan toko."},"nai":{"jp":"無理なお願いは頼まない。","ro":"Muri na onegai wa tanomanai.","id":"Tidak meminta bantuan yang mustahil."},"te":{"jp":"友達に頼んで宿題を手伝ってもらいました。","ro":"Tomodachi ni tanonde shukudai o tetsudatte moraimashita.","id":"Meminta tolong teman untuk membantu PR."}},"飲む":{"kamus":{"jp":"冷たい水を飲む。","ro":"Tsumetai mizu o nomu.","id":"Minum air dingin."},"masu":{"jp":"毎朝温かいお茶を飲みます。","ro":"Maiasa atatakai ocha o nomimasu.","id":"Setiap pagi minum teh hangat."},"nai":{"jp":"私はお酒をまったく飲まない。","ro":"Watashi wa osake o mattaku nomanai.","id":"Saya sama sekali tidak minum alkohol."},"te":{"jp":"薬を飲んでゆっくり休んでください。","ro":"Kusuri o nonde yukkuri yasunde kudasai.","id":"Minum obat lalu istirahatlah dengan santai."}},"休む":{"kamus":{"jp":"疲れたので少し休む。","ro":"Tsukareta node sukoshi yasumu.","id":"Karena lelah beristirahat sebentar."},"masu":{"jp":"日曜日は仕事を休みます。","ro":"Nichiyoubi wa shigoto o yasumimasu.","id":"Hari Minggu libur bekerja."},"nai":{"jp":"試験の前は授業を休まない。","ro":"Shiken no mae wa jugyou o yasumanai.","id":"Tidak bolos/absen kelas sebelum ujian."},"te":{"jp":"ベンチで休んでから歩き始めました。","ro":"Benchi de yasunde kara arukihajimemashita.","id":"Istirahat di bangku lalu mulai berjalan."}},"読む":{"kamus":{"jp":"毎晩ベッドで本を読む。","ro":"Maiban beddo de hon o yomu.","id":"Setiap malam membaca buku di tempat tidur."},"masu":{"jp":"朝ご飯を食べながら新聞を読みます。","ro":"Asagohan o tabenagara shinbun o yomimasu.","id":"Membaca koran sambil sarapan."},"nai":{"jp":"忙しくて最近雑誌を読まない。","ro":"Isogashikute saikin zasshi o yomanai.","id":"Sibuk jadi akhir-akhir ini tidak membaca majalah."},"te":{"jp":"説明書をよく読んで使ってください。","ro":"Setsumeisho o yoku yonde tsukatte kudasai.","id":"Tolong baca petunjuk penggunaan dengan baik lalu gunakanlah."}},"泳ぐ":{"kamus":{"jp":"夏休みに海で泳ぐ。","ro":"Natsuyasumi ni umi de oyogu.","id":"Berenang di laut saat liburan musim panas."},"masu":{"jp":"市民プールで毎週泳ぎます。","ro":"Shimin puuru de maishuu oyogimasu.","id":"Setiap minggu berenang di kolam renang umum."},"nai":{"jp":"水が冷たいので今日は泳がない。","ro":"Mizu ga tsumetai node kyou wa oyoganai.","id":"Karena airnya dingin hari ini tidak berenang."},"te":{"jp":"たくさん泳いでお腹がすきました。","ro":"Takusan oyoide onaka ga sukimashita.","id":"Banyak berenang lalu perut menjadi lapar."}},"脱ぐ":{"kamus":{"jp":"玄関で靴を脱ぐ。","ro":"Genkan de kutsu o nugu.","id":"Melepas sepatu di pintu masuk (genkan)."},"masu":{"jp":"部屋に入る前にコートを脱ぎます。","ro":"Heya ni hairu mae ni kooto o nugimasu.","id":"Melepas mantel sebelum masuk kamar."},"nai":{"jp":"寒いので上着を脱がないでください。","ro":"Samui node uwagi o nuganaide kudasai.","id":"Karena dingin tolong jangan melepas jaket."},"te":{"jp":"靴を脱いでスリッパを履いてください。","ro":"Kutsu o nuide surippa o haite kudasai.","id":"Tolong lepas sepatu dan pakailah sandal."}},"急ぐ":{"kamus":{"jp":"電車に遅れないように急ぐ。","ro":"Densha ni okurenai you ni isogu.","id":"Buru-buru agar tidak terlambat naik kereta."},"masu":{"jp":"約束の時間なので急ぎます。","ro":"Yakusoku no jikan nanode isogimasu.","id":"Karena sudah waktu janji saya bergegas."},"nai":{"jp":"まだ時間があるから急がない。","ro":"Mada jikan ga aru kara isoganai.","id":"Masih ada waktu jadi tidak perlu buru-buru."},"te":{"jp":"急いで駅へ向かいました。","ro":"Isoide eki e mukaimashita.","id":"Bergegas menuju stasiun."}},"要る":{"kamus":{"jp":"旅行にはパスポートが要る。","ro":"Ryokou ni wa pasupooto ga iru.","id":"Perlu paspor untuk bepergian."},"masu":{"jp":"ビザの申請には写真が要ります。","ro":"Biza no shinsei ni wa shashin ga irimasu.","id":"Perlu foto untuk pengajuan visa."},"nai":{"jp":"レシートは要りません。","ro":"Reshiito wa irimasen.","id":"Tidak perlu struk belanja."},"te":{"jp":"この書類が要って探しています。","ro":"Kono shorui ga itte sagashite imasu.","id":"Dokumen ini dibutuhkan dan saya sedang mencarinya."}},"帰る":{"kamus":{"jp":"夕方五時に家に帰る。","ro":"Yuugata goji ni ie ni kaeru.","id":"Pulang ke rumah jam 5 sore."},"masu":{"jp":"仕事が終わったらすぐ帰ります。","ro":"Shigoto ga owattara sugu kaerimasu.","id":"Langsung pulang begitu selesai bekerja."},"nai":{"jp":"今日は残業だから早く帰らない。","ro":"Kyou wa zangyou dakara hayaku kaeranai.","id":"Hari ini lembur jadi tidak pulang cepat."},"te":{"jp":"家に帰ってゆっくりお風呂に入りました。","ro":"Ie ni kaette yukkuri ofuro ni hairimashita.","id":"Pulang ke rumah lalu berendam santai di bak mandi."}},"切る":{"kamus":{"jp":"ハサミで紙を切る。","ro":"Hasami de kami o kiru.","id":"Memotong kertas dengan gunting."},"masu":{"jp":"包丁で野菜を切ります。","ro":"Houchou de yasai o kirimasu.","id":"Memotong sayuran dengan pisau dapur."},"nai":{"jp":"大切な書類は切らないでください。","ro":"Taisetsu na shorui wa kiranaide kudasai.","id":"Tolong jangan memotong dokumen penting."},"te":{"jp":"ケーキをきれいに切ってみんなで食べました。","ro":"Keeki o kirei ni kitte minna de tabemashita.","id":"Memotong kue dengan rapi lalu makan bersama."}},"知る":{"kamus":{"jp":"新しいニュースを知る。","ro":"Atarashii nyuusu o shiru.","id":"Mengetahui berita terbaru."},"masu":{"jp":"その先生の連絡先を知っています。","ro":"Sono sensei no renrakusaki o shitte imasu.","id":"Saya mengetahui kontak guru tersebut."},"nai":{"jp":"私はその事実をまったく知らない。","ro":"Watashi wa sono jijitsu o mattaku shiranai.","id":"Saya sama sekali tidak mengetahui fakta itu."},"te":{"jp":"真実を知ってとても驚きました。","ro":"Shinjitsu o shitte totemo odorokimashita.","id":"Mengetahui kebenarannya dan sangat terkejut."}},"入る":{"kamus":{"jp":"お風呂に入る。","ro":"Ofuro ni hairu.","id":"Masuk/berendam di bak mandi."},"masu":{"jp":"寒い日は温かい温泉に入ります。","ro":"Samui hi wa atatakai onsen ni hairimasu.","id":"Masuk ke pemandian air panas saat hari dingin."},"nai":{"jp":"関係者以外は入らないでください。","ro":"Kankeisha igai wa hairanaide kudasai.","id":"Selain yang berkepentingan dilarang masuk."},"te":{"jp":"喫茶店に入ってコーヒーを飲みました。","ro":"Kissaten ni haitte koohii o nomimashita.","id":"Masuk ke kedai kopi lalu minum kopi."}},"走る":{"kamus":{"jp":"毎朝公園を走る。","ro":"Maiasa kouen o hashiru.","id":"Setiap pagi berlari di taman."},"masu":{"jp":"遅刻しそうなので走ります。","ro":"Chikoku shisou nanode hashirimasu.","id":"Karena hampir terlambat saya berlari."},"nai":{"jp":"滑りやすいので廊下を走らないでください。","ro":"Suberiyasui node rouka o hashiranaide kudasai.","id":"Karena licin tolong jangan berlari di lorong."},"te":{"jp":"走って駅に向かいました。","ro":"Hashitte eki e mukaimashita.","id":"Berlari menuju stasiun."}},"浴びる":{"kamus":{"jp":"朝起きてシャワーを浴びる。","ro":"Asa okite shawaa o abiru.","id":"Bangun pagi lalu mandi shower."},"masu":{"jp":"運動した後にシャワーを浴びます。","ro":"Undou shita ato ni shawaa o abimasu.","id":"Mandi shower setelah berolahraga."},"nai":{"jp":"風邪を引いたので今日は浴びない。","ro":"Kaze o hiita node kyou wa abinai.","id":"Karena masuk angin hari ini tidak mandi."},"te":{"jp":"シャワーを浴びてすっきりしました。","ro":"Shawaa o abite sukkiri shimashita.","id":"Mandi shower dan badan terasa segar."}},"起きる":{"kamus":{"jp":"毎朝六時に起きる習慣です。","ro":"Maiasa rokuji ni okiru shuukan desu.","id":"Kebiasaan bangun jam 6 setiap pagi."},"masu":{"jp":"明日は早く起きます。","ro":"Ashita wa hayaku okimasu.","id":"Besok saya bangun pagi-pagi."},"nai":{"jp":"日曜日は早く起きない。","ro":"Nichiyoubi wa hayaku okinai.","id":"Hari Minggu tidak bangun pagi."},"te":{"jp":"起きてすぐに水を一杯飲みました。","ro":"Okite sugu ni mizu o ippai nomimashita.","id":"Bangun tidur lalu segera minum segelas air."}},"下りる":{"kamus":{"jp":"次の駅で電車を下りる。","ro":"Tsugi no eki de densha o oriru.","id":"Turun dari kereta di stasiun berikutnya."},"masu":{"jp":"三階から階段を下ります。","ro":"Sangai kara kaidan o orimasu.","id":"Turun tangga dari lantai 3."},"nai":{"jp":"まだ目的地ではないので下りない。","ro":"Mada mokutekichi dewa nai node orinai.","id":"Karena belum tujuan tidak turun."},"te":{"jp":"バスを下りて歩いて行きました。","ro":"Basu o orite aruite ikimashita.","id":"Turun dari bus lalu berjalan kaki."}},"借りる":{"kamus":{"jp":"図書館で面白い本を借りる。","ro":"Toshokan de omoshiroi hon o kariru.","id":"Meminjam buku menarik di perpustakaan."},"masu":{"jp":"友達からノートを借ります。","ro":"Tomodachi kara nooto o karimasu.","id":"Meminjam buku catatan dari teman."},"nai":{"jp":"人のお金をあまり借りない。","ro":"Hito no okane o amari karinai.","id":"Tidak suka meminjam uang orang."},"te":{"jp":"傘を借りて雨の中を帰りました。","ro":"Kasa o karite ame no naka o kaerimashita.","id":"Meminjam payung lalu pulang di tengah hujan."}},"着る":{"kamus":{"jp":"新しいジャケットを着る。","ro":"Atarashii jaketto o kiru.","id":"Mengenakan jaket baru."},"masu":{"jp":"パーティーに着物を着ます。","ro":"Paatii ni kimono o kimasu.","id":"Mengenakan kimono ke pesta."},"nai":{"jp":"暑いのでコートを着ない。","ro":"Atsui node kooto o kinai.","id":"Karena panas tidak memakai mantel."},"te":{"jp":"スーツを着て面接へ行きました。","ro":"Suutsu o kite mensetsu e ikimashita.","id":"Mengenakan setelan jas lalu pergi wawancara."}},"できる":{"kamus":{"jp":"日本語を話すことができる。","ro":"Nihongo o hanasu koto ga dekiru.","id":"Bisa berbicara bahasa Jepang."},"masu":{"jp":"一人で料理ができます。","ro":"Hitori de ryouri ga dekimasu.","id":"Bisa memasak sendiri."},"nai":{"jp":"難しくてまだできない。","ro":"Muzukashikute mada dekinai.","id":"Karena sulit masih belum bisa."},"te":{"jp":"宿題ができてよかったです。","ro":"Shukudai ga dekite yokatta desu.","id":"PR sudah selesai/bisa dibuat dan saya senang."}},"見る":{"kamus":{"jp":"映画館で映画を見る。","ro":"Eigakan de eiga o miru.","id":"Menonton film di bioskop."},"masu":{"jp":"毎晩日本のニュースを見ます。","ro":"Maiban Nihon no nyuusu o mimasu.","id":"Setiap malam menonton berita Jepang."},"nai":{"jp":"勉強中はテレビを見ない。","ro":"Benkyouchuu wa terebi o minai.","id":"Tidak menonton TV saat belajar."},"te":{"jp":"時計を見て時間を確かめました。","ro":"Tokei o mite jikan o tashikamemashita.","id":"Melihat jam untuk memastikan waktu."}},"いる":{"kamus":{"jp":"公園に猫がいる。","ro":"Kouen ni neko ga iru.","id":"Ada kucing di taman."},"masu":{"jp":"教室に先生と学生がいます。","ro":"Kyoushitsu ni sensei to gakusei ga imasu.","id":"Di kelas ada guru dan murid."},"nai":{"jp":"部屋には誰もいない。","ro":"Heya ni wa dare mo inai.","id":"Di kamar tidak ada siapa-siapa."},"te":{"jp":"友達がそばにいてくれて安心しました。","ro":"Tomodachi ga soba ni ite kurete anshin shimashita.","id":"Ada teman di samping saya sehingga merasa tenang."}},"開ける":{"kamus":{"jp":"部屋の窓を開ける。","ro":"Heya no mado o akeru.","id":"Membuka jendela kamar."},"masu":{"jp":"暑いのでエアコンをつけて窓を開けます。","ro":"Atsui node eakon o tsukete mado o akemasu.","id":"Karena panas menyalakan AC dan membuka jendela."},"nai":{"jp":"寒い時は窓を開けないでください。","ro":"Samui toki wa mado o akenaide kudasai.","id":"Tolong jangan buka jendela saat dingin."},"te":{"jp":"ドアを開けて換気をしました。","ro":"Doa o akete kanki o shimashita.","id":"Membuka pintu lalu melakukan ventilasi udara."}},"あげる":{"kamus":{"jp":"友達に誕生日プレゼントをあげる。","ro":"Tomodachi ni tanjoubi purezento o ageru.","id":"Memberikan hadiah ulang tahun ke teman."},"masu":{"jp":"母の日に花をあげます。","ro":"Haha no hi ni hana o agemasu.","id":"Memberikan bunga pada Hari Ibu."},"nai":{"jp":"ペットにお菓子をあげないでください。","ro":"Petto ni okashi o agenaide kudasai.","id":"Tolong jangan memberi camilan kepada hewan peliharaan."},"te":{"jp":"お土産をあげて喜ばれました。","ro":"Omiyage o agete yorokobaremashita.","id":"Memberikan oleh-oleh dan membuat mereka senang."}},"入れる":{"kamus":{"jp":"カバンにノートを入れる。","ro":"Kaban ni nooto o ireru.","id":"Memasukkan buku catatan ke dalam tas."},"masu":{"jp":"紅茶に砂糖を入れます。","ro":"Koucha ni satou o iremasu.","id":"Memasukkan gula ke dalam teh."},"nai":{"jp":"コーヒーにミルクを入れない。","ro":"Koohii ni miruku o irenai.","id":"Tidak memasukkan susu ke dalam kopi."},"te":{"jp":"冷蔵庫に入れて冷やしてください。","ro":"Reizouko ni irete hiyashite kudasai.","id":"Tolong masukkan ke kulkas dan dinginkan."}},"生まれる":{"kamus":{"jp":"春にかわいい子犬が生まれる。","ro":"Haru ni kawaii koinu ga umareru.","id":"Anak anjing lucu lahir di musim semi."},"masu":{"jp":"私はインドネシアで生まれました。","ro":"Watashi wa Indoneshia de umaremashita.","id":"Saya lahir di Indonesia."},"nai":{"jp":"この地域ではあまり生まれない。","ro":"Kono chiiki de wa amari umarenai.","id":"Jarang ada kelahiran di wilayah ini."},"te":{"jp":"赤ちゃんが生まれて家族みんなが大喜びしました。","ro":"Akachan ga umarete kazoku minna ga ooyorokobi shimashita.","id":"Bayi lahir dan seluruh keluarga bergembira."}},"教える":{"kamus":{"jp":"友達に英語を教える。","ro":"Tomodachi ni eigo o oshieru.","id":"Mengajarkan bahasa Inggris kepada teman."},"masu":{"jp":"先生が親切に文法を教えます。","ro":"Sensei ga shinsetsu ni bunpou o oshiemasu.","id":"Guru mengajarkan tata bahasa dengan ramah."},"nai":{"jp":"秘密だから誰にも教えない。","ro":"Himitsu dakara dare ni mo oshienai.","id":"Karena rahasia tidak memberitahu siapa pun."},"te":{"jp":"駅への行き方を教えてください。","ro":"Eki e no ikikata o oshiete kudasai.","id":"Tolong beritahukan cara pergi ke stasiun."}},"覚える":{"kamus":{"jp":"毎日五つの単語を覚える。","ro":"Mainichi itsutsu no tango o oboeru.","id":"Menghafal lima kosakata setiap hari."},"masu":{"jp":"漢字の書き方をしっかり覚えます。","ro":"Kanji no kakikata o shikkari oboemasu.","id":"Mengingat cara menulis kanji dengan baik."},"nai":{"jp":"人の名前がなかなか覚えない。","ro":"Hito no namae ga nakanaka oboenai.","id":"Sulit menghafal nama orang."},"te":{"jp":"暗記カードを使って覚えてください。","ro":"Anki kaado o tsukatte oboete kudasai.","id":"Tolong gunakan kartu hafalan dan hafalkan."}},"掛ける":{"kamus":{"jp":"日差しが強いので眼鏡を掛ける。","ro":"Hizashi ga tsuyoi node megane o kakeru.","id":"Mengenakan kacamata karena terik matahari."},"masu":{"jp":"本を読む時は眼鏡を掛けます。","ro":"Hon o yomu toki wa megane o kakemasu.","id":"Memakai kacamata saat membaca buku."},"nai":{"jp":"普段は眼鏡を掛けない。","ro":"Fudan wa megane o kakenai.","id":"Biasanya tidak memakai kacamata."},"te":{"jp":"サングラスを掛けて海へ行きました。","ro":"Sangurasu o kakete umi e ikimashita.","id":"Memakai kacamata hitam lalu pergi ke laut."}},"消える":{"kamus":{"jp":"停電で部屋の電気が消える。","ro":"Teiden de heya no denki ga kieru.","id":"Lampu kamar padam karena mati listrik."},"masu":{"jp":"時間が経つとろうそくの火が消えます。","ro":"Jikan ga tatsu to rousoku no hi ga kiemasu.","id":"Seiring waktu api lilin padam."},"nai":{"jp":"この明かりは朝まで消えない。","ro":"Kono akari wa asa made kienai.","id":"Lampu ini tidak padam sampai pagi."},"te":{"jp":"雪が消えて春が来ました。","ro":"Yuki ga kiete haru ga kimashita.","id":"Salju lenyap dan musim semi tiba."}},"答える":{"kamus":{"jp":"先生の質問に答える。","ro":"Sensei no shitsumon ni kotaeru.","id":"Menjawab pertanyaan guru."},"masu":{"jp":"自信を持って質問に答えます。","ro":"Jishin o motte shitsumon ni kotaemasu.","id":"Menjawab pertanyaan dengan percaya diri."},"nai":{"jp":"わからないので答えられない。","ro":"Wakaranai node kotaerarenai.","id":"Karena tidak paham tidak bisa menjawab."},"te":{"jp":"大きな声で答えてください。","ro":"Ookina koe de kotaete kudasai.","id":"Tolong jawab dengan suara lantang."}},"閉める":{"kamus":{"jp":"出かける前に窓を閉める。","ro":"Dekakeru mae ni mado o shimeru.","id":"Menutup jendela sebelum berangkat pergi."},"masu":{"jp":"寒いのでドアを閉めます。","ro":"Samui node doa o shimemasu.","id":"Menutup pintu karena dingin."},"nai":{"jp":"窓を閉めないで寝て風邪を引きました。","ro":"Mado o shimenaide nete kaze o hikimashita.","id":"Tidur tanpa menutup jendela lalu masuk angin."},"te":{"jp":"ドアを閉めて鍵を掛けてください。","ro":"Doa o shimete kagi o kakete kudasai.","id":"Tolong tutup pintu dan kunci."}},"食べる":{"kamus":{"jp":"日本のラーメンを食べるのが好きです。","ro":"Nihon no raamen o taberu no ga suki desu.","id":"Suka makan ramen Jepang."},"masu":{"jp":"毎朝パンと卵を食べます。","ro":"Maiasa pan to tamago o tabemasu.","id":"Setiap pagi makan roti dan telur."},"nai":{"jp":"辛い物はあまり食べない。","ro":"Karai mono wa amari tabenai.","id":"Tidak begitu suka makan makanan pedas."},"te":{"jp":"ご飯を食べてから薬を飲みました。","ro":"Gohan o tabete kara kusuri o nomimashita.","id":"Makan nasi dulu baru minum obat."}},"疲れる":{"kamus":{"jp":"たくさん歩くと疲れる。","ro":"Takusan aruku to tsukareru.","id":"Banyak berjalan kaki membuat lelah."},"masu":{"jp":"残業が続くと体が疲れます。","ro":"Zangyou ga tsuzuku to karada ga tsukaremasu.","id":"Badan lelah jika lembur terus-menerus."},"nai":{"jp":"軽い運動ならあまり疲れない。","ro":"Karui undou nara amari tsukarenai.","id":"Kalau olahraga ringan tidak begitu lelah."},"te":{"jp":"疲れてすぐに眠ってしまいました。","ro":"Tsukarete sugu ni nemutte shimaimashita.","id":"Kelelahan dan langsung tertidur lelap."}},"勤める":{"kamus":{"jp":"将来日本のIT企業に勤める。","ro":"Shourai Nihon no aitii kigyou ni tsutomeru.","id":"Di masa depan bekerja di perusahaan IT Jepang."},"masu":{"jp":"父は銀行に勤めています。","ro":"Chichi wa ginkou ni tsutomete imasu.","id":"Ayah bekerja di bank."},"nai":{"jp":"合わない会社には長く勤めない。","ro":"Awanai kaisha ni wa nagaku tsutomenai.","id":"Tidak bekerja lama di perusahaan yang tidak cocok."},"te":{"jp":"十年間会社に勤めて退職しました。","ro":"Juunenkan kaisha ni tsutomete taishoku shimashita.","id":"Bekerja di perusahaan selama 10 tahun lalu pensiun."}},"出かける":{"kamus":{"jp":"休日に友達と出かける。","ro":"Kyuujitsu ni tomodachi to dekakeru.","id":"Pergi keluar dengan teman di hari libur."},"masu":{"jp":"今から買い物に出かけます。","ro":"Ima kara kaimono ni dekakemasu.","id":"Mulai sekarang saya pergi berbelanja."},"nai":{"jp":"雨の日はどこへも出かけない。","ro":"Ame no hi wa doko e mo dekakenai.","id":"Di hari hujan tidak pergi ke mana pun."},"te":{"jp":"準備をして出かけてください。","ro":"Junbi o shite dekakete kudasai.","id":"Silakan bersiap-siap lalu berangkat."}},"出る":{"kamus":{"jp":"毎朝七時に家を出る。","ro":"Maiasa shichiji ni ie o deru.","id":"Keluar rumah jam 7 setiap pagi."},"masu":{"jp":"今から部屋を出ます。","ro":"Ima kara heya o demasu.","id":"Mulai sekarang saya keluar dari kamar."},"nai":{"jp":"今日は一日中外に出ない。","ro":"Kyou wa ichinichijuu soto ni denai.","id":"Hari ini seharian tidak keluar rumah."},"te":{"jp":"お風呂を出て温かい牛乳を飲みました。","ro":"Ofuro o dete atatakai gyuunyuu o nomimashita.","id":"Keluar dari bak mandi lalu minum susu hangat."}},"電気をつける":{"kamus":{"jp":"部屋が暗いので電気をつける。","ro":"Heya ga kurai node denki o tsukeru.","id":"Menyalakan lampu karena kamar gelap."},"masu":{"jp":"夜になったら電気をつけます。","ro":"Yoru ni nattara denki o tsukemasu.","id":"Menyalakan lampu saat malam tiba."},"nai":{"jp":"まだ明るいので電気をつけない。","ro":"Mada akarui node denki o tsukenai.","id":"Karena masih terang tidak menyalakan lampu."},"te":{"jp":"電気をつけて明るくしてください。","ro":"Denki o tsukete akaruku shite kudasai.","id":"Tolong nyalakan lampu agar terang."}},"電話をかける":{"kamus":{"jp":"家族に電話をかける。","ro":"Kazoku ni denwa o kakeru.","id":"Menelepon keluarga."},"masu":{"jp":"先生に確認の電話をかけます。","ro":"Sensei ni kakunin no denwa o kakemasu.","id":"Menelepon guru untuk konfirmasi."},"nai":{"jp":"夜遅くには電話をかけないでください。","ro":"Yoru osoku ni wa denwa o kakenaide kudasai.","id":"Tolong jangan menelepon saat larut malam."},"te":{"jp":"電話をかけて予約をしました。","ro":"Denwa o kakete yoyaku o shimashita.","id":"Menelepon lalu membuat reservasi."}},"並べる":{"kamus":{"jp":"机の上に本をきれいに並べる。","ro":"Tsukue no ue ni hon o kirei ni naraberu.","id":"Menata/menjejerkan buku dengan rapi di atas meja."},"masu":{"jp":"棚にお皿を並べます。","ro":"Tana ni osara o narabemasu.","id":"Menata piring di rak."},"nai":{"jp":"物を通路に並べないでください。","ro":"Mono o tsuuro ni narabenaide kudasai.","id":"Tolong jangan menaruh barang berjejer di lorong."},"te":{"jp":"椅子を丸く並べて座ってください。","ro":"Isu o maruku narabete suwatte kudasai.","id":"Tolong tata kursi melingkar lalu duduklah."}},"晴れる":{"kamus":{"jp":"明日は天気が晴れる予報です。","ro":"Ashita wa tenki ga hareru yohou desu.","id":"Prakiraan cuaca besok akan cerah."},"masu":{"jp":"午後から空が晴れます。","ro":"Gogo kara sora ga haremasu.","id":"Langit cerah mulai siang nanti."},"nai":{"jp":"今週はずっと晴れない。","ro":"Konshuu wa zutto harenai.","id":"Minggu ini sama sekali tidak cerah."},"te":{"jp":"空が晴れて気持ちがいいです。","ro":"Sora ga harete kimochi ga ii desu.","id":"Langit cerah dan rasanya sangat menyenangkan."}},"見せる":{"kamus":{"jp":"友達に旅行の写真を見せる。","ro":"Tomodachi ni ryokou no shashin o miseru.","id":"Memperlihatkan foto liburan kepada teman."},"masu":{"jp":"先生に宿題を見せます。","ro":"Sensei ni shukudai o misemasu.","id":"Memperlihatkan PR kepada guru."},"nai":{"jp":"パスワードは誰にも見せないでください。","ro":"Pasuwaado wa dare ni mo misenaide kudasai.","id":"Tolong jangan memperlihatkan kata sandi ke siapa pun."},"te":{"jp":"パスポートを見せてください。","ro":"Pasupooto o misete kudasai.","id":"Tolong perlihatkan paspor Anda."}},"忘れる":{"kamus":{"jp":"宿題を家に忘れる。","ro":"Shukudai o ie ni wasureru.","id":"Meninggalkan/lupa PR di rumah."},"masu":{"jp":"たまに傘を忘れます。","ro":"Tamani kasa o wasuremasu.","id":"Kadang-kadang lupa membawa payung."},"nai":{"jp":"約束を忘れないでください。","ro":"Yakusoku o wasurenaide kudasai.","id":"Tolong jangan lupakan janji kita."},"te":{"jp":"財布を忘れて出かけてしまいました。","ro":"Saifu o wasurete dekakete shimaimashita.","id":"Lupa membawa dompet dan sudah telanjur pergi."}},"来る":{"kamus":{"jp":"友達が家に遊びに来る。","ro":"Tomodachi ga ie ni asobi ni kuru.","id":"Teman datang main ke rumah."},"masu":{"jp":"毎朝八時に学校へ来ます。","ro":"Maiasa hachiji ni gakkou e kimasu.","id":"Datang ke sekolah jam 8 setiap pagi."},"nai":{"jp":"雨だから彼は来ない。","ro":"Ame dakara kare wa konai.","id":"Karena hujan dia tidak datang."},"te":{"jp":"ここに来て座ってください。","ro":"Koko ni kite suwatte kudasai.","id":"Silakan datang ke sini dan duduklah."}},"する":{"kamus":{"jp":"放課後にサッカーをする。","ro":"Houkago ni sakkaa o suru.","id":"Bermain sepak bola sepulang sekolah."},"masu":{"jp":"毎晩日本語の勉強をします。","ro":"Maiban Nihongo no benkyou o shimasu.","id":"Setiap malam belajar bahasa Jepang."},"nai":{"jp":"授業中は無駄話をしない。","ro":"Jugyouchuu wa mudabanashi o shinai.","id":"Tidak mengobrol sia-sia saat pelajaran."},"te":{"jp":"宿題をして早く寝ました。","ro":"Shukudai o shite hayaku nemashita.","id":"Mengerjakan PR lalu tidur cepat."}},"結婚する":{"kamus":{"jp":"来年好きな人と結婚する予定です。","ro":"Rainen suki na hito to kekkon suru yotei desu.","id":"Rencana menikah dengan orang yang disukai tahun depan."},"masu":{"jp":"兄は来月結婚します。","ro":"Ani wa raigetsu kekkon shimasu.","id":"Kakak laki-laki menikah bulan depan."},"nai":{"jp":"若い時はまだ結婚しない。","ro":"Wakai toki wa mada kekkon shinai.","id":"Saat masih muda belum menikah."},"te":{"jp":"結婚して幸せな家庭を築きました。","ro":"Kekkon shite shiawase na katei o kizukimashita.","id":"Menikah lalu membangun keluarga yang bahagia."}},"コピーする":{"kamus":{"jp":"会議の資料をコピーする。","ro":"Kaigi no shiryou o kopii suru.","id":"Memfotokopi materi rapat."},"masu":{"jp":"必要な書類をコピーします。","ro":"Hitsuyou na shorui o kopii shimasu.","id":"Memfotokopi dokumen yang diperlukan."},"nai":{"jp":"この本はコピーしない。","ro":"Kono hon wa kopii shinai.","id":"Tidak memfotokopi buku ini."},"te":{"jp":"十枚コピーして配ってください。","ro":"Juumai kopii shite kubatte kudasai.","id":"Tolong fotokopi 10 lembar lalu bagikan."}},"質問する":{"kamus":{"jp":"わからない言葉を質問する。","ro":"Wakaranai kotoba o shitsumon suru.","id":"Menanyakan kata yang tidak dimengerti."},"masu":{"jp":"授業の後に先生に質問します。","ro":"Jugyou no ato ni sensei ni shitsumon shimasu.","id":"Bertanya kepada guru setelah kelas."},"nai":{"jp":"恥ずかしがって質問しないのはよくないです。","ro":"Hazukashigatte shitsumon shinai no wa yoku nai desu.","id":"Malu dan tidak bertanya itu tidak baik."},"te":{"jp":"手を挙げて質問してください。","ro":"Te o agete shitsumon shite kudasai.","id":"Silakan angkat tangan dan bertanyalah."}},"洗濯する":{"kamus":{"jp":"休日にまとめて服を洗濯する。","ro":"Kyuujitsu ni matomete fuku o sentaku suru.","id":"Mencuci pakaian sekaligus di hari libur."},"masu":{"jp":"晴れた日にシーツを洗濯します。","ro":"Hareta hi ni shiitsu o sentaku shimasu.","id":"Mencuci sprei di hari yang cerah."},"nai":{"jp":"雨の日は洗濯しない。","ro":"Ame no hi wa sentaku shinai.","id":"Hari hujan tidak mencuci pakaian."},"te":{"jp":"洗濯して外に干しました。","ro":"Sentaku shite soto ni hoshimashita.","id":"Mencuci lalu menjemurnya di luar."}},"掃除する":{"kamus":{"jp":"年末に自分の部屋を掃除する。","ro":"Nenmatsu ni jibun no heya o souji suru.","id":"Membersihkan kamar sendiri di akhir tahun."},"masu":{"jp":"毎朝リビングを掃除します。","ro":"Maiasa ribingu o souji shimasu.","id":"Setiap pagi membersihkan ruang tamu."},"nai":{"jp":"忙しくて今週は掃除しない。","ro":"Isogashikute konshuu wa souji shinai.","id":"Sibuk jadi minggu ini tidak bersih-bersih."},"te":{"jp":"部屋をきれいに掃除して気持ちがいいです。","ro":"Heya o kirei ni souji shite kimochi ga ii desu.","id":"Membersihkan kamar sampai bersih dan rasanya nyaman."}},"遅刻する":{"kamus":{"jp":"寝坊して学校に遅刻する。","ro":"Nebou shite gakkou ni chikoku suru.","id":"Kesiangan lalu terlambat ke sekolah."},"masu":{"jp":"電車が遅れて遅刻します。","ro":"Densha ga okurete chikoku shimasu.","id":"Kereta terlambat sehingga saya terlambat."},"nai":{"jp":"絶対に会議に遅刻しないようにします。","ro":"Zettai ni kaigi ni chikoku shinai you ni shimasu.","id":"Memastikan agar mutlak tidak terlambat rapat."},"te":{"jp":"遅刻して先生に謝りました。","ro":"Chikoku shite sensei ni ayamarimashita.","id":"Terlambat lalu meminta maaf kepada guru."}},"勉強する":{"kamus":{"jp":"図書館で日本語を勉強する。","ro":"Toshokan de Nihongo o benkyou suru.","id":"Belajar bahasa Jepang di perpustakaan."},"masu":{"jp":"毎晩二時間勉強します。","ro":"Maiban nijikan benkyou shimasu.","id":"Setiap malam belajar selama dua jam."},"nai":{"jp":"休日はあまり勉強しない。","ro":"Kyuujitsu wa amari benkyou shinai.","id":"Hari libur tidak banyak belajar."},"te":{"jp":"しっかり勉強して合格しました。","ro":"Shikkari benkyou shite goukaku shimashita.","id":"Belajar dengan sungguh-sungguh lalu lulus."}},"料理する":{"kamus":{"jp":"新鮮な魚を料理する。","ro":"Shinsen na sakana o ryouri suru.","id":"Memasak ikan yang segar."},"masu":{"jp":"週末に家族のために料理します。","ro":"Shuumatsu ni kazoku no tame ni ryourishimasu.","id":"Memasak untuk keluarga di akhir pekan."},"nai":{"jp":"外食が多いので家で料理しない。","ro":"Gaishoku ga ooi node ie de ryourishinai.","id":"Banyak makan di luar jadi tidak masak di rumah."},"te":{"jp":"おいしく料理してみんなで食べました。","ro":"Oishiku ryouri shite minna de tabemashita.","id":"Memasak dengan lezat lalu makan bersama."}},"練習する":{"kamus":{"jp":"毎日発音を練習する。","ro":"Mainichi hatsuon o renshuu suru.","id":"Berlatih pelafalan setiap hari."},"masu":{"jp":"放課後にピアノを練習します。","ro":"Houkago ni piano o renshuushimasu.","id":"Berlatih piano sepulang sekolah."},"nai":{"jp":"テスト前に練習しないのは危険です。","ro":"Tesuto mae ni renshuushinai no wa kiken desu.","id":"Tidak berlatih sebelum ujian itu berisiko."},"te":{"jp":"何度も練習して上手に話せるようになりました。","ro":"Nandomo renshuu shite jouzu ni hanaseru you ni narimashita.","id":"Berlatih berkali-kali sampai bisa berbicara dengan mahir."}}};
 
+function hiraToRomaji(str) {
+  if (!str) return '';
+  const map = {
+    'きゃ':'kya','きゅ':'kyu','きょ':'kyo','しゃ':'sha','しゅ':'shu','しょ':'sho',
+    'ちゃ':'cha','ちゅ':'chu','ちょ':'cho','にゃ':'nya','にゅ':'nyu','にょ':'nyo',
+    'ひゃ':'hya','ひゅ':'hyu','ひょ':'hyo','みゃ':'mya','みゅ':'myu','みょ':'myo',
+    'りゃ':'rya','りゅ':'ryu','りょ':'ryo','ぎゃ':'gya','ぎゅ':'gyu','ぎょ':'gyo',
+    'じゃ':'ja','じゅ':'ju','じょ':'jo','びゃ':'bya','びゅ':'byu','びょ':'byo',
+    'ぴゃ':'pya','ぴゅ':'pyu','ぴょ':'pyo',
+    'あ':'a','い':'i','う':'u','え':'e','お':'o',
+    'か':'ka','き':'ki','く':'ku','け':'ke','こ':'ko',
+    'さ':'sa','し':'shi','す':'su','せ':'se','そ':'so',
+    'た':'ta','ち':'chi','つ':'tsu','て':'te','と':'to',
+    'な':'na','に':'ni','ぬ':'nu','ね':'ne','の':'no',
+    'は':'ha','ひ':'hi','ふ':'fu','へ':'he','ほ':'ho',
+    'ま':'ma','み':'mi','む':'mu','め':'me','mo':'mo','も':'mo',
+    'や':'ya','ゆ':'yu','よ':'yo',
+    'ら':'ra','り':'ri','る':'ru','れ':'re','ろ':'ro',
+    'わ':'wa','を':'o','ん':'n',
+    'が':'ga','ぎ':'gi','ぐ':'gu','げ':'ge','ご':'go',
+    'ざ':'za','じ':'ji','ず':'zu','ぜ':'ze','ぞ':'zo',
+    'だ':'da','ぢ':'ji','づ':'zu','de':'de','で':'de','ど':'do',
+    'ば':'ba','び':'bi','ぶ':'bu','べ':'be','ぼ':'bo',
+    'ぱ':'pa','ぴ':'pi','ぷ':'pu','ぺ':'pe','ぽ':'po'
+  };
+  let res = '';
+  let i = 0;
+  while (i < str.length) {
+    if (str[i] === 'っ') {
+      const nextChar = str.slice(i+1, i+3);
+      const nextOne = str.slice(i+1, i+2);
+      const mapped = map[nextChar] || map[nextOne];
+      if (mapped) {
+        res += (mapped.startsWith('ch') ? 't' : mapped[0]);
+      }
+      i++;
+      continue;
+    }
+    const two = str.slice(i, i+2);
+    if (map[two]) { res += map[two]; i += 2; continue; }
+    const one = str.slice(i, i+1);
+    if (map[one]) { res += map[one]; i += 1; continue; }
+    res += one;
+    i++;
+  }
+  return res;
+}
+
+// Helper: Contextual natural sentences generator for each verb form
+function getVerbSentences(item) {
+  const k = item.k_kamus;
+  const formDict = VERB_SENTENCES[k];
+  const formLabels = {
+    kamus: '📖 Bentuk Kamus',
+    masu: '🌸 Bentuk Masu',
+    nai: '❄️ Bentuk Nai',
+    te: '🔗 Bentuk Te'
+  };
+
+  const res = {};
+  ['kamus', 'masu', 'nai', 'te'].forEach(fKey => {
+    let entry = formDict ? formDict[fKey] : null;
+    const targetVerb = (fKey === 'kamus') ? item.k_kamus : (fKey === 'masu' ? item.k_masu : (fKey === 'nai' ? item.k_nai : item.k_te));
+    const targetRo = (fKey === 'kamus') ? hiraToRomaji(item.r_kamus) : (fKey === 'masu' ? hiraToRomaji(item.r_masu) : (fKey === 'nai' ? hiraToRomaji(item.r_nai) : hiraToRomaji(item.r_te)));
+    
+    if (!entry) {
+      entry = {
+        jp: targetVerb + '。',
+        ro: targetRo + '.',
+        id: item.a + '.'
+      };
+    }
+
+    let jpDisplay = entry.jp;
+    if (entry.jp.includes(targetVerb)) {
+      const parts = entry.jp.split(targetVerb);
+      jpDisplay = `${parts[0]}<span class="highlight-verb">${targetVerb}</span>${parts.slice(1).join(targetVerb)}`;
+    } else {
+      jpDisplay = `<span class="highlight-verb">${entry.jp}</span>`;
+    }
+
+    res[fKey] = {
+      formLabel: formLabels[fKey],
+      jpDisplay: jpDisplay,
+      fullJp: entry.jp,
+      ro: entry.ro,
+      id: entry.id,
+      targetPlain: targetVerb
+    };
+  });
+  return res;
+}
 
 // ==========================================
-// ENGINE MODUL
+// ENGINE MODUL KATA KERJA
 // ==========================================
 const Modul = {
-  activeMode: 'kel1', activeTab: 'hafalan', viewMode: 'flashcard',
-  activeSesi: 0, cardIdx: 0, 
-  idxPG: 0, scorePG: 0, idxIsian: 0, scoreIsian: 0,
-  activeArray: [], activePGData: [], activeIsianData: [],
+  activeCategory: 'kel1', // 'kel1', 'kel2', 'irr'
+  activeTab: 'flashcard',   // 'flashcard', 'quiz'
+  activeSesi: 0,
+  cardIdx: 0,
+  cardRevealed: false,
+  activeFormKey: 'kamus',   // 'kamus', 'masu', 'nai', 'te'
+  
+  // Quiz
+  idxQuiz: 0,
+  scoreQuiz: 0,
+  drillSubtype: 'mix',      // 'mix', 'masu', 'nai', 'te', 'meaning', 'isian'
+  quizSourceMode: 'mastered', // 'mastered' or 'session'
+  activeQuizData: [],
 
-  init: function() { this.switchMode('kel1'); },
+  activeArray: [],
+  masteredList: [],
+  csActiveTab: 'te',
+  _audioCtx: null,
+
+  init: function() {
+    this.loadMastery();
+    this.renderSessionChips();
+    this.loadActiveArray();
+    this.switchTab('flashcard');
+    this.bindKeyboardShortcuts();
+
+    // Unlock audio on first mobile interaction
+    const unlockAudio = () => {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!this._audioCtx && AudioCtx) this._audioCtx = new AudioCtx();
+        if (this._audioCtx && this._audioCtx.state === 'suspended') this._audioCtx.resume();
+      } catch(e) {}
+      window.removeEventListener('touchstart', unlockAudio);
+      window.removeEventListener('pointerdown', unlockAudio);
+    };
+    window.addEventListener('touchstart', unlockAudio, { passive: true });
+    window.addEventListener('pointerdown', unlockAudio, { passive: true });
+
+    // Close dropdown on outside click
+    document.addEventListener('click', () => {
+      const dd = document.getElementById('drill-dropdown-menu');
+      const btn = document.getElementById('btn-drill-dropdown');
+      if (dd && !dd.classList.contains('hidden')) {
+        dd.classList.add('hidden');
+        if (btn) btn.classList.remove('active');
+      }
+    });
+  },
+
+  loadMastery: function() {
+    try {
+      const saved = localStorage.getItem('yk_verbs_mastered');
+      this.masteredList = saved ? JSON.parse(saved) : [];
+    } catch(e) {
+      this.masteredList = [];
+    }
+    this.updateMasteryUI();
+  },
+
+  toggleMastery: function(k, e) {
+    if (e) e.stopPropagation();
+    this.playSfx('tap');
+    const idx = this.masteredList.indexOf(k);
+    if (idx > -1) {
+      this.masteredList.splice(idx, 1);
+    } else {
+      this.masteredList.push(k);
+    }
+    localStorage.setItem('yk_verbs_mastered', JSON.stringify(this.masteredList));
+    this.updateMasteryUI();
+
+    const starBtn = document.getElementById('btn-star-' + k);
+    if (starBtn) {
+      const isM = this.masteredList.includes(k);
+      starBtn.classList.toggle('is-mastered', isM);
+      starBtn.title = isM ? 'Telah Dikuasai' : 'Tandai Dikuasai';
+    }
+  },
+
+  updateMasteryUI: function() {
+    const totalAll = DB_Kel_1.length + DB_Kel_2.length + DB_Kel_Irr.length;
+    const count = this.masteredList.length;
+    const pct = Math.round((count / totalAll) * 100);
+
+    const textEl = document.getElementById('nav-mastered-text');
+    if (textEl) textEl.innerText = `⭐ ${count} / ${totalAll} (${pct}%)`;
+
+    const fillEl = document.getElementById('mastery-progress-fill');
+    if (fillEl) fillEl.style.width = `${pct}%`;
+  },
+
+  bindKeyboardShortcuts: function() {
+    window.addEventListener('keydown', (e) => {
+      if (document.activeElement && document.activeElement.tagName === 'INPUT') return;
+
+      if (e.key === 'Escape') {
+        this.closeCheatsheet();
+        return;
+      }
+
+      if (this.activeTab === 'flashcard') {
+        if (e.key === ' ' || e.key === 'Enter') {
+          e.preventDefault();
+          if (!this.cardRevealed) this.revealCard();
+          else this.nextCard();
+        } else if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          this.nextCard();
+        } else if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          this.prevCard();
+        } else if (e.key.toLowerCase() === 's' || e.key.toLowerCase() === 'a') {
+          e.preventDefault();
+          if (this.activeArray[this.cardIdx]) {
+            this.speakText(this.activeArray[this.cardIdx].k_kamus || this.activeArray[this.cardIdx].r_kamus);
+          }
+        } else if (e.key === '1') this.selectFormKey('kamus');
+        else if (e.key === '2') this.selectFormKey('masu');
+        else if (e.key === '3') this.selectFormKey('nai');
+        else if (e.key === '4') this.selectFormKey('te');
+      }
+    });
+  },
+
+  speakText: function(text, e) {
+    if (e && e.stopPropagation) e.stopPropagation();
+    if (!text) return;
+
+    const cleanText = text.replace(/[\.・\-\(\)\/\,"'「」]/g, '').trim();
+    if (!cleanText) return;
+
+    // Visual pulse feedback on button if clicked
+    if (e && e.currentTarget) {
+      const btn = e.currentTarget;
+      btn.classList.add('audio-playing-pulse');
+      setTimeout(() => btn.classList.remove('audio-playing-pulse'), 450);
+    }
+
+    // LAYER 1: Authentic Japanese Audio stream via Google Translate TTS
+    // Guarantees native pronunciation on all devices and Windows without Japanese Language Pack!
+    const ttsUrl = 'https://translate.google.com/translate_tts?ie=UTF-8&tl=ja&client=tw-ob&q=' + encodeURIComponent(cleanText);
+
+    try {
+      if (!this._ttsAudio) {
+        this._ttsAudio = new Audio();
+      }
+      this._ttsAudio.pause();
+      this._ttsAudio.currentTime = 0;
+      this._ttsAudio.src = ttsUrl;
+      
+      const playPromise = this._ttsAudio.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // Fall back to SpeechSynthesis if offline or audio play is blocked
+          this.fallbackSpeechSynthesis(cleanText);
+        });
+      }
+    } catch(err) {
+      this.fallbackSpeechSynthesis(cleanText);
+    }
+  },
+
+  fallbackSpeechSynthesis: function(cleanText) {
+    try {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.resume();
+
+      if (window._activeUtterance) {
+        window._activeUtterance.onend = null;
+        window._activeUtterance.onerror = null;
+      }
+
+      const utter = new SpeechSynthesisUtterance(cleanText);
+      utter.lang = 'ja-JP';
+      utter.rate = 0.88;
+
+      const voices = window.speechSynthesis.getVoices();
+      const jaVoice = voices.find(v => v.lang && (v.lang.startsWith('ja') || v.lang.includes('JP')));
+      if (jaVoice) utter.voice = jaVoice;
+
+      window._activeUtterance = utter;
+      utter.onend = () => { window._activeUtterance = null; };
+      utter.onerror = () => { window._activeUtterance = null; };
+
+      window.speechSynthesis.speak(utter);
+    } catch(err) {}
+  },
+
+  playSfx: function(type) {
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+      if (!this._audioCtx) this._audioCtx = new AudioCtx();
+      if (this._audioCtx.state === 'suspended') this._audioCtx.resume();
+      const ctx = this._audioCtx;
+      const now = ctx.currentTime;
+
+      if (type === 'correct') {
+        const osc1 = ctx.createOscillator();
+        const osc2 = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc1.type = 'sine'; osc2.type = 'triangle';
+        osc1.frequency.setValueAtTime(523.25, now);
+        osc1.frequency.exponentialRampToValueAtTime(659.25, now + 0.09);
+        osc2.frequency.setValueAtTime(659.25, now + 0.09);
+        osc2.frequency.exponentialRampToValueAtTime(783.99, now + 0.2);
+        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.24);
+        osc1.connect(gain); osc2.connect(gain); gain.connect(ctx.destination);
+        osc1.start(now); osc2.start(now + 0.09);
+        osc1.stop(now + 0.24); osc2.stop(now + 0.24);
+      } else if (type === 'wrong') {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(175, now);
+        osc.frequency.exponentialRampToValueAtTime(95, now + 0.2);
+        gain.gain.setValueAtTime(0.14, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.start(now); osc.stop(now + 0.22);
+      } else if (type === 'tap' || type === 'reveal') {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(type === 'reveal' ? 620 : 440, now);
+        osc.frequency.exponentialRampToValueAtTime(type === 'reveal' ? 880 : 540, now + 0.07);
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.start(now); osc.stop(now + 0.09);
+      }
+    } catch(e) {}
+  },
 
   triggerAnimation: function(elementId, animClass) {
     const el = document.getElementById(elementId);
-    if(!el) return;
-    el.classList.remove('slide-in-right', 'slide-out-left', 'slide-in-left', 'slide-out-right', 'pop-in', 'fade-in-up', 'fade-out-down');
-    void el.offsetWidth;
-    el.classList.add(animClass);
+    if (!el) return;
+    el.classList.remove('slide-in-right', 'slide-out-left', 'slide-in-left', 'slide-out-right', 'fade-in-up');
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        el.classList.add(animClass);
+      });
+    });
   },
 
-  switchMode: function(mode) {
-    this.activeMode = mode;
-    this.cardIdx = 0; 
-    
-    ['kel1', 'kel2', 'irr'].forEach(m => {
-        document.getElementById('btn-mode-'+m).classList.toggle('active', mode === m);
-        document.getElementById('sub-nav-'+m).classList.toggle('hidden', mode !== m);
-    });
-    
-    let btnSubmit = document.getElementById('btn-submit-isian');
-    if (mode === 'kel1') btnSubmit.style.background = 'var(--primary)';
-    else if (mode === 'kel2') btnSubmit.style.background = 'var(--success)';
-    else btnSubmit.style.background = 'var(--warning)';
-    
+  // Category switching (Kelompok 1, 2, Irregular)
+  switchCategory: function(cat) {
+    this.playSfx('tap');
+    this.activeCategory = cat;
     this.activeSesi = 0;
-    this.switchTab('hafalan');
-  },
+    this.cardIdx = 0;
+    this.cardRevealed = false;
+    this.activeFormKey = 'kamus';
 
-  toggleView: function() {
-    const btn = document.getElementById('btn-toggle-view');
-    btn.classList.add('spin-anim'); 
-    
-    this.triggerAnimation('sec-hafalan', 'fade-out-down');
-
-    setTimeout(() => {
-        this.viewMode = (this.viewMode === 'flashcard') ? 'tabel' : 'flashcard';
-        this.cardIdx = 0;
-        btn.innerHTML = (this.viewMode === 'flashcard') ? '📋' : '🎴';
-        btn.classList.remove('spin-anim'); 
-        
-        if (this.activeTab === 'hafalan') {
-            this.renderHafalan(false); 
-            this.triggerAnimation('sec-hafalan', 'fade-in-up'); 
-        }
-    }, 250); 
-  },
-
-  switchTab: function(tab) {
-    this.activeTab = tab;
-    ['hafalan', 'pg', 'isian'].forEach(t => {
-      document.getElementById('btn-tab-'+t).classList.remove('active');
-      document.getElementById('sec-'+t).classList.add('hidden');
+    ['kel1', 'kel2', 'irr'].forEach(c => {
+      const chip = document.getElementById('chip-cat-' + c);
+      if (chip) chip.classList.toggle('active', c === cat);
     });
-    
-    document.getElementById('btn-tab-'+tab).classList.add('active');
-    
-    document.getElementById('btn-toggle-view').style.visibility = (tab === 'hafalan') ? 'visible' : 'hidden';
-    
-    if (tab === 'hafalan') { 
-      document.getElementById('sec-hafalan').classList.remove('hidden');
-      this.triggerAnimation('sec-hafalan', 'fade-in-up');
-      this.switchSesi(this.activeSesi);
-    } 
-    else if (tab === 'pg') { 
-      document.getElementById('sec-pg').classList.remove('hidden');
-      this.triggerAnimation('sec-pg', 'fade-in-up');
-      this.activePGData = this.generatePG();
-      this.idxPG = 0; this.scorePG = 0; this.renderPG(false); 
-    }
-    else if (tab === 'isian') { 
-      document.getElementById('sec-isian').classList.remove('hidden');
-      this.triggerAnimation('sec-isian', 'fade-in-up');
-      this.activeIsianData = this.generateIsian();
-      this.idxIsian = 0; this.scoreIsian = 0; this.renderIsian(false); 
-    }
+
+    const arenaCards = document.querySelectorAll('.dojo-arena-card');
+    arenaCards.forEach(c => {
+      c.classList.toggle('kel2-mode-border', cat === 'kel2');
+      c.classList.toggle('irr-mode-border', cat === 'irr');
+    });
+
+    const tabBtns = document.querySelectorAll('.tab-main-btn');
+    tabBtns.forEach(b => {
+      b.classList.toggle('mode-kel2-accent', cat === 'kel2');
+      b.classList.toggle('mode-irr-accent', cat === 'irr');
+    });
+
+    this.renderSessionChips();
+    this.loadActiveArray();
+    this.refreshCurrentTab();
   },
 
-  getDBInfo: function() {
-      if (this.activeMode === 'kel1') return { db: DB_Kel_1, pages: Pages_K1, prefix: 'btn-1-' };
-      if (this.activeMode === 'kel2') return { db: DB_Kel_2, pages: Pages_K2, prefix: 'btn-2-' };
-      return { db: DB_Kel_Irr, pages: Pages_Irr, prefix: 'btn-3-' };
+  renderSessionChips: function() {
+    const wrap = document.getElementById('sesi-chips-wrap');
+    if (!wrap) return;
+
+    const info = this.getDBInfo();
+    const pages = info.pages;
+    const cat = this.activeCategory;
+
+    let html = '';
+    pages.forEach((p, idx) => {
+      const activeClass = (idx === this.activeSesi) ? 'active' : '';
+      const catClass = cat === 'kel2' ? 'pill-kel2' : (cat === 'irr' ? 'pill-irr' : '');
+      const shortTitle = p.title.split(':')[0].replace(/Kelompok\s*/i, '');
+      html += `<button type="button" class="sesi-pill ${activeClass} ${catClass}" onclick="Modul.switchSesi(${idx})">${shortTitle}</button>`;
+    });
+    wrap.innerHTML = html;
   },
 
   switchSesi: function(s) {
+    this.playSfx('tap');
     this.activeSesi = s;
-    let info = this.getDBInfo();
-    
-    for(let i = 0; i < info.pages.length; i++) {
-        let btn = document.getElementById(info.prefix + i);
-        if(btn) btn.classList.remove('active');
-    }
-    let activeBtn = document.getElementById(info.prefix + s);
-    if(activeBtn) activeBtn.classList.add('active');
-    
-    let grps = info.pages[s].groups;
-    this.activeArray = info.db.filter(item => grps.includes(item.grp));
     this.cardIdx = 0;
+    this.cardRevealed = false;
+    this.activeFormKey = 'kamus';
 
-    if (this.activeTab === 'hafalan') this.renderHafalan(false);
-    else if (this.activeTab === 'pg') { this.activePGData = this.generatePG(); this.idxPG = 0; this.scorePG = 0; this.renderPG(false); } 
-    else if (this.activeTab === 'isian') { this.activeIsianData = this.generateIsian(); this.idxIsian = 0; this.scoreIsian = 0; this.renderIsian(false); }
+    const pills = document.querySelectorAll('.sesi-pill');
+    pills.forEach((p, idx) => {
+      const isAct = idx === s;
+      p.classList.toggle('active', isAct);
+      if (isAct) {
+        try { p.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }); } catch(e){}
+      }
+    });
+
+    this.loadActiveArray();
+    this.refreshCurrentTab();
   },
 
-  renderHafalan: function(useSlideAnim = true) {
-    if (this.viewMode === 'flashcard') this.renderFC(useSlideAnim);
-    else this.renderBook(useSlideAnim ? 'right' : 'none');
+  getDBInfo: function() {
+    if (this.activeCategory === 'kel1') return { db: DB_Kel_1, pages: Pages_K1, label: 'Kelompok 1' };
+    if (this.activeCategory === 'kel2') return { db: DB_Kel_2, pages: Pages_K2, label: 'Kelompok 2' };
+    return { db: DB_Kel_Irr, pages: Pages_Irr, label: 'Irregular' };
   },
 
-  renderFC: function(useSlideAnim = true) {
-    const sec = document.getElementById('sec-hafalan');
-    sec.style.padding = "25px 20px";
-    
+  loadActiveArray: function() {
+    const info = this.getDBInfo();
+    const grps = info.pages[this.activeSesi].groups;
+    this.activeArray = info.db.filter(item => grps.includes(item.grp));
+  },
+
+  switchTab: function(tab) {
+    this.playSfx('tap');
+    this.activeTab = tab;
+
+    ['flashcard', 'quiz'].forEach(t => {
+      const btn = document.getElementById('btn-tab-' + t);
+      if (btn) btn.classList.toggle('active', t === tab);
+      const sec = document.getElementById('sec-' + t);
+      if (sec) sec.classList.toggle('hidden', t !== tab);
+    });
+
+    this.refreshCurrentTab();
+
+    if (window.innerWidth <= 600) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  },
+
+  refreshCurrentTab: function() {
+    if (this.activeTab === 'flashcard') {
+      this.renderFC(false);
+      this.triggerAnimation('sec-flashcard', 'fade-in-up');
+    } else if (this.activeTab === 'quiz') {
+      this.activeQuizData = this.generateQuizQuestions();
+      this.idxQuiz = 0;
+      this.scoreQuiz = 0;
+      this.renderQuiz(false);
+      this.triggerAnimation('sec-quiz', 'fade-in-up');
+    }
+  },
+
+  // ==========================================
+  // FLASHCARD RENDERING & 4 CONJUGATION MATRIX
+  // ==========================================
+  renderFC: function(useSlideAnim = true, animDirection = 'next') {
+    const sec = document.getElementById('sec-flashcard');
+    this.cardRevealed = false;
+    this.activeFormKey = 'kamus';
+
+    sec.classList.remove('fc-mode-expanded');
+    sec.classList.add('fc-mode-compact');
+
     if (this.cardIdx >= this.activeArray.length) {
-      sec.innerHTML = `<div class="content-hafalan"><div class="kanji-text" style="cursor:default;">🎉 Tuntas!</div></div>
-      <button class="btn-next" onclick="Modul.cardIdx=0; Modul.renderFC(true)">Ulangi Hafalan</button>`;
-      if(useSlideAnim) this.triggerAnimation('sec-hafalan', 'slide-in-right');
+      sec.innerHTML = `
+        <div class="fc-header-bar">
+          <span class="fc-counter-label" style="color:var(--gold);">🏆 SELESAI</span>
+          <span class="fc-counter-label">${this.activeArray.length} / ${this.activeArray.length}</span>
+        </div>
+        <div style="flex-grow:1; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;">
+          <div style="font-size:48px; margin-bottom:12px;">🌟</div>
+          <div style="font-size:22px; font-weight:800; color:var(--gold); margin-bottom:6px;">Sesi Ini Tuntas!</div>
+          <div style="font-size:13.5px; color:var(--text-sub); max-width:380px;">Semua kata kerja di sesi ini telah kamu pelajari. Ingin mengulangi atau lanjut menguji kemampuan di Arena Kuis?</div>
+        </div>
+        <div class="dojo-nav-controls">
+          <button type="button" class="btn-dn" onclick="Modul.cardIdx=0; Modul.renderFC(true, 'next')">Ulangi Sesi ↺</button>
+          <button type="button" class="btn-dn btn-dn-next" onclick="Modul.switchTab('quiz')">Uji di Arena Kuis 🎯</button>
+        </div>
+      `;
+      if (useSlideAnim) {
+        const anim = animDirection === 'prev' ? 'slide-in-left' : 'slide-in-right';
+        this.triggerAnimation('sec-flashcard', anim);
+      }
       return;
     }
 
     const item = this.activeArray[this.cardIdx];
-    let info = this.getDBInfo();
-    let pageTitle = info.pages[this.activeSesi].title.split(':')[0];
-    let narasi = info.pages[this.activeSesi].narasi;
-    
-    // Gabungkan narasi grup dengan teks pola perubahan umum ke dalam lampu 💡
-    let gabunganNarasi = narasi + "<br><br>" + Teks_Perbedaan + "<br><br><b>💡 Pola Perubahan Makna:</b><br>• <b>Kamus:</b> [Arti Dasar] <i>(cth: membeli)</i><br>• <b>Masu:</b> Sopan <i>(cth: membeli)</i><br>• <b>Nai:</b> Negatif <i>(cth: tidak membeli)</i><br>• <b>Te:</b> Sambung/Perintah <i>(cth: sedang/silakan beli)</i>";
+    const cat = this.activeCategory;
+    const isMastered = this.masteredList.includes(item.k_kamus);
 
-    let bubbleHTML = `
-        <button class="btn-bubble" onclick="document.getElementById('fc-popup-narasi').classList.toggle('show-popup')">💡</button>
-        <div id="fc-popup-narasi" class="bubble-popup">${gabunganNarasi}</div>
-    `;
-    
+    // Group Badge Label
+    let groupBadge = 'G1 • Godan';
+    let gBadgeClass = '';
+    if (cat === 'kel2') { groupBadge = 'G2 • Ichidan'; gBadgeClass = 'g2-badge'; }
+    else if (cat === 'irr') { groupBadge = 'G3 • Irregular'; gBadgeClass = 'g3-badge'; }
+
+    // Trap badge
+    const isTrap = (cat === 'kel1' && item.grp === 10);
+    const trapBadgeHTML = isTrap ? '<span class="fc-trap-badge" title="Berakhiran -iru/-eru tapi masuk Kelompok 1!">⚠️ Pengecualian Kel. 1</span>' : '';
+
+    const sentences = getVerbSentences(item, cat);
+    const curSent = sentences[this.activeFormKey];
+    const prevDisabled = this.cardIdx === 0 ? 'disabled' : '';
+
     sec.innerHTML = `
-      <div class="progress-text" style="color:var(--primary);">HAFALAN KATA KERJA: ${this.cardIdx+1} / ${this.activeArray.length}</div>
-      <div id="fc-content" class="content-hafalan">
-        ${bubbleHTML}
-        <div class="hira-text hira-hide" id="fc-hira">${item.r_kamus}</div>
-        <div class="kanji-text pulse-hint" id="fc-kanji" onclick="Modul.revealCard()">${item.k_kamus}</div>
-        <div id="fc-hint" style="font-size:12px; color:var(--text-sub); margin-top:-10px; margin-bottom:10px;">(Sentuh Kamus untuk membuka konjugasi)</div>
-        <div class="arti-text blur-hide" id="fc-arti">${item.a}</div>
-        
-        <div class="konjugasi-box blur-hide" id="fc-note">
-            <div class="k-row">
-                <span style="color:var(--success); font-weight:bold;">Masu</span> 
-                <span style="text-align:right;">
-                    ${item.k_masu} <span style="font-size:12px;">(${item.r_masu})</span><br>
-                    <span style="font-size:12px; color:var(--text-sub); font-style:italic;">${item.a} (sopan)</span>
-                </span>
-            </div>
-            <div class="k-row">
-                <span style="color:var(--danger); font-weight:bold;">Nai</span> 
-                <span style="text-align:right;">
-                    ${item.k_nai} <span style="font-size:12px;">(${item.r_nai})</span><br>
-                    <span style="font-size:12px; color:var(--text-sub); font-style:italic;">tidak ${item.a}</span>
-                </span>
-            </div>
-            <div class="k-row">
-                <span style="color:var(--primary); font-weight:bold;">Te</span> 
-                <span style="text-align:right;">
-                    ${item.k_te} <span style="font-size:12px;">(${item.r_te})</span><br>
-                    <span style="font-size:12px; color:var(--text-sub); font-style:italic;">sedang/silakan ${item.a}</span>
-                </span>
-            </div>
+      <!-- Top header bar inside arena card -->
+      <div class="fc-header-bar">
+        <div class="fc-header-left">
+          <span class="fc-group-badge ${gBadgeClass}">${groupBadge}</span>
+          ${trapBadgeHTML}
+          <span class="fc-counter-label">KATA <b>${this.cardIdx + 1}</b> / ${this.activeArray.length}</span>
+        </div>
+        <div class="fc-header-right">
+          <button type="button" class="btn-star-mark ${isMastered ? 'is-mastered' : ''}" id="btn-star-${item.k_kamus}" onclick="Modul.toggleMastery('${item.k_kamus}', event)" title="${isMastered ? 'Dikuasai' : 'Tandai Dikuasai'}">⭐</button>
+          <button type="button" class="btn-star-mark" onclick="Modul.speakText('${item.k_kamus || item.r_kamus}', event)" title="Dengarkan Suara (ja-JP)">🔊</button>
         </div>
       </div>
-      <button class="btn-next" onclick="Modul.nextCard()">Selanjutnya →</button>
+
+      <!-- Main Unboxed Flashcard Stage -->
+      <div class="fc-stage-box" id="fc-stage-box" onclick="Modul.revealCard()">
+        <div class="fc-kanji-big">${item.k_kamus}</div>
+
+        <!-- Details Shelf -->
+        <div class="fc-details-shelf" id="fc-details-shelf">
+          <!-- Reading & Meaning -->
+          <div class="fc-word-meta">
+            <span class="fc-hira-text" id="fc-hira">${item.r_kamus}</span>
+            <span class="fc-meta-sep">•</span>
+            <span class="fc-arti-text" id="fc-arti">${item.a}</span>
+          </div>
+
+          <!-- 4 Conjugation Matrix (Tappable Cells) -->
+          <div class="fc-grid-two" id="fc-matrix">
+            <div class="inflection-cell active-cell ${cat === 'kel2' ? 'kel2-cell' : (cat === 'irr' ? 'irr-cell' : '')}" id="cell-kamus" onclick="Modul.selectFormKey('kamus', event)">
+              <div class="inf-label"><span>📖 Kamus (Jisho)</span> <span class="inf-speaker">🔊</span></div>
+              <div class="inf-val">${item.k_kamus} <span class="inf-sub">${item.r_kamus}</span></div>
+            </div>
+            <div class="inflection-cell ${cat === 'kel2' ? 'kel2-cell' : (cat === 'irr' ? 'irr-cell' : '')}" id="cell-masu" onclick="Modul.selectFormKey('masu', event)">
+              <div class="inf-label"><span>🌸 Masu (Sopan)</span> <span class="inf-speaker">🔊</span></div>
+              <div class="inf-val">${item.k_masu} <span class="inf-sub">${item.r_masu}</span></div>
+            </div>
+            <div class="inflection-cell ${cat === 'kel2' ? 'kel2-cell' : (cat === 'irr' ? 'irr-cell' : '')}" id="cell-nai" onclick="Modul.selectFormKey('nai', event)">
+              <div class="inf-label"><span>❄️ Nai (Negatif)</span> <span class="inf-speaker">🔊</span></div>
+              <div class="inf-val">${item.k_nai} <span class="inf-sub">${item.r_nai}</span></div>
+            </div>
+            <div class="inflection-cell ${cat === 'kel2' ? 'kel2-cell' : (cat === 'irr' ? 'irr-cell' : '')}" id="cell-te" onclick="Modul.selectFormKey('te', event)">
+              <div class="inf-label"><span>🔗 Te (Sambung)</span> <span class="inf-speaker">🔊</span></div>
+              <div class="inf-val">${item.k_te} <span class="inf-sub">${item.r_te}</span></div>
+            </div>
+          </div>
+
+          <!-- Dynamic Sentence Morph Shelf -->
+          <div class="fc-sentence-shelf" id="fc-sentence-shelf" onclick="event.stopPropagation()">
+            <div class="fss-top">
+              <div class="fss-badge-wrap">
+                <span class="fss-badge">💬 Contoh Kalimat:</span>
+                <span class="fss-form-pill ${cat === 'kel2' ? 'kel2-pill' : (cat === 'irr' ? 'irr-pill' : '')}" id="fss-active-tag">${curSent.formLabel}</span>
+              </div>
+              <button type="button" class="btn-sentence-audio" id="btn-audio-sent" onclick="Modul.speakActiveSentence(event)" title="Dengarkan Kalimat Utuh">🔊</button>
+            </div>
+            <div class="fss-jp" id="fss-jp-text">${curSent.jpDisplay}</div>
+            <div class="fss-romaji" id="fss-ro-text">${curSent.ro}</div>
+            <div class="fss-id" id="fss-id-text">${curSent.id}</div>
+          </div>
+        </div>
+
+        <div class="fc-tap-hint" id="fc-tap-hint">👆 Ketuk kartu untuk melihat 4 konjugasi kata kerja</div>
+      </div>
+
+      <!-- Action Navigation Buttons -->
+      <div class="dojo-nav-controls">
+        <button type="button" class="btn-dn" ${prevDisabled} onclick="Modul.prevCard()">← Sebelumnya</button>
+        <button type="button" class="btn-dn btn-dn-next ${cat === 'kel2' ? 'kel2-btn' : (cat === 'irr' ? 'irr-btn' : '')}" onclick="Modul.nextCard()">Selanjutnya →</button>
+      </div>
     `;
-    
-    if(useSlideAnim) this.triggerAnimation('fc-content', 'slide-in-right');
+
+    if (useSlideAnim) {
+      const anim = animDirection === 'prev' ? 'slide-in-left' : 'slide-in-right';
+      this.triggerAnimation('fc-stage-box', anim);
+    }
+  },
+
+  selectFormKey: function(key, e) {
+    if (e) e.stopPropagation();
+    this.playSfx('tap');
+    this.activeFormKey = key;
+
+    ['kamus', 'masu', 'nai', 'te'].forEach(k => {
+      const cell = document.getElementById('cell-' + k);
+      if (cell) cell.classList.toggle('active-cell', k === key);
+    });
+
+    const item = this.activeArray[this.cardIdx];
+    if (!item) return;
+    const sentences = getVerbSentences(item);
+    const curSent = sentences[key];
+
+    const tagEl = document.getElementById('fss-active-tag');
+    const jpEl = document.getElementById('fss-jp-text');
+    const roEl = document.getElementById('fss-ro-text');
+    const idEl = document.getElementById('fss-id-text');
+
+    if (tagEl) tagEl.innerText = curSent.formLabel;
+    if (jpEl) jpEl.innerHTML = curSent.jpDisplay;
+    if (roEl) roEl.innerText = curSent.ro;
+    if (idEl) idEl.innerHTML = curSent.id;
+
+    this.speakText(curSent.targetPlain, e);
+  },
+
+  speakActiveSentence: function(e) {
+    if (e) e.stopPropagation();
+    const item = this.activeArray[this.cardIdx];
+    if (!item) return;
+    const sentences = getVerbSentences(item);
+    const curSent = sentences[this.activeFormKey];
+    if (curSent) this.speakText(curSent.fullJp, e);
   },
 
   revealCard: function() {
-    document.getElementById('fc-hira').classList.replace('hira-hide', 'hira-show');
-    document.getElementById('fc-arti').classList.replace('blur-hide', 'blur-show');
-    document.getElementById('fc-kanji').classList.remove('pulse-hint');
-    document.getElementById('fc-kanji').classList.add('fc-revealed');
-    document.getElementById('fc-hint').style.display = 'none';
-    if(document.getElementById('fc-note')) document.getElementById('fc-note').classList.replace('blur-hide', 'blur-show');
-    
-    let popup = document.getElementById('fc-popup-narasi');
-    if(popup) popup.classList.remove('show-popup');
+    if (this.cardRevealed) return;
+    this.cardRevealed = true;
+
+    const sec = document.getElementById('sec-flashcard');
+    if (sec) {
+      sec.classList.remove('fc-mode-compact');
+      sec.classList.add('fc-mode-expanded');
+    }
+
+    this.scrollToCardFit();
+    setTimeout(() => this.playSfx('reveal'), 20);
   },
 
-  nextCard: function() { 
-    this.triggerAnimation('fc-content', 'slide-out-left');
-    setTimeout(() => { this.cardIdx++; this.renderFC(true); }, 250);
+  scrollToCardFit: function() {
+    const sec = document.getElementById('sec-flashcard');
+    if (!sec) return;
+    requestAnimationFrame(() => {
+      const rect = sec.getBoundingClientRect();
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const targetY = scrollTop + rect.top - 8;
+      window.scrollTo({
+        top: Math.max(0, targetY),
+        behavior: 'smooth'
+      });
+    });
   },
 
-  renderBook: function(dir = 'right') {
-    const sec = document.getElementById('sec-hafalan');
-    sec.style.padding = "15px 15px 5px 15px"; 
-    
-    let info = this.getDBInfo();
-    const pageData = info.pages[this.activeSesi];
-    
-    let html = `<div class="book-container" id="book-wrapper">`;
-    html += `<div class="book-page" id="book-page">`;
-    html += `<div class="book-title">${pageData.title}</div>`;
-html += `<div class="book-narrative">${pageData.narasi}<br><br><div style="font-size:13px; margin-top:10px; background:rgba(0,0,0,0.2); padding:10px; border-radius:8px;">${Teks_Perbedaan}</div></div>`;
+  nextCard: function() {
+    if (this.cardIdx >= this.activeArray.length) return;
+    this.playSfx('tap');
+    const targetId = (this.cardIdx >= this.activeArray.length) ? 'sec-flashcard' : 'fc-stage-box';
+    this.triggerAnimation(targetId, 'slide-out-left');
+    setTimeout(() => {
+      this.cardIdx++;
+      this.renderFC(true, 'next');
+    }, 180);
+  },
 
-    
-    html += `<button id="btn-sensor" class="btn-sensor" onclick="Modul.toggleFurigana()">👁️ Tampilkan Semua Furigana</button>
-             <div id="waktu-table-container" style="overflow-x:auto; padding-bottom:10px;">`;
+  prevCard: function() {
+    if (this.cardIdx <= 0) return;
+    this.playSfx('tap');
+    const targetId = (this.cardIdx >= this.activeArray.length) ? 'sec-flashcard' : 'fc-stage-box';
+    this.triggerAnimation(targetId, 'slide-out-right');
+    setTimeout(() => {
+      this.cardIdx--;
+      this.renderFC(true, 'prev');
+    }, 180);
+  },
 
-    html += `<table class="tabel-waktu">
-                <tr>
-                    <th>Arti Dasar</th>
-                    <th>Bentuk Kamus</th>
-                    <th>Bentuk Masu</th>
-                    <th>Bentuk Nai</th>
-                    <th>Bentuk Te</th>
-                </tr>`;
-    
-    const makeRuby = (kanji, hiragana) => {
-        if (kanji === hiragana) return `<span class="ruby-item" style="cursor:default; border:none; background:transparent;">${hiragana}</span>`;
-        return `<span class="ruby-item" onclick="this.classList.toggle('revealed')"><ruby>${kanji}<rt class="furi-anim">${hiragana}</rt></ruby></span>`;
+  // ==========================================
+  // ARENA KUIS SYSTEM (BERBASIS KATA DIKUASAI ⭐)
+  // ==========================================
+  getMasteredVerbs: function() {
+    const seen = new Set();
+    return this.activeArray.filter(item => {
+      if (this.masteredList.includes(item.k_kamus) && !seen.has(item.k_kamus)) {
+        seen.add(item.k_kamus);
+        return true;
+      }
+      return false;
+    });
+  },
+
+  toggleQuizSourceMode: function() {
+    this.playSfx('tap');
+    this.quizSourceMode = (this.quizSourceMode === 'mastered') ? 'session' : 'mastered';
+    this.activeQuizData = this.generateQuizQuestions();
+    this.idxQuiz = 0;
+    this.scoreQuiz = 0;
+    this.renderQuiz(true);
+  },
+
+  startSessionQuizFallback: function() {
+    this.playSfx('tap');
+    this.quizSourceMode = 'session';
+    this.activeQuizData = this.generateQuizQuestions();
+    this.idxQuiz = 0;
+    this.scoreQuiz = 0;
+    this.renderQuiz(true);
+  },
+
+  toggleDrillDropdown: function(e) {
+    if (e) e.stopPropagation();
+    this.playSfx('tap');
+    const menu = document.getElementById('drill-dropdown-menu');
+    const btn = document.getElementById('btn-drill-dropdown');
+    if (menu && btn) {
+      menu.classList.toggle('hidden');
+      btn.classList.toggle('active');
+    }
+  },
+
+  selectDrillSubtype: function(st, icon, label) {
+    this.drillSubtype = st;
+    this.playSfx('tap');
+
+    const iconEl = document.getElementById('drill-label-icon');
+    const labelEl = document.getElementById('drill-label-text');
+    if (iconEl) iconEl.innerText = icon;
+    if (labelEl) labelEl.innerText = label;
+
+    document.querySelectorAll('.dd-item').forEach(item => {
+      item.classList.toggle('active', item.getAttribute('data-qtype') === st);
+    });
+
+    const menu = document.getElementById('drill-dropdown-menu');
+    const btn = document.getElementById('btn-drill-dropdown');
+    if (menu) menu.classList.add('hidden');
+    if (btn) btn.classList.remove('active');
+
+    this.activeQuizData = this.generateQuizQuestions();
+    this.idxQuiz = 0;
+    this.scoreQuiz = 0;
+    this.renderQuiz(true);
+  },
+
+  generateQuizQuestions: function() {
+    const useMastered = (this.quizSourceMode === 'mastered');
+    let pool = [];
+
+    if (useMastered) {
+      pool = this.getMasteredVerbs();
+      if (pool.length === 0) return [];
+    } else {
+      pool = [...this.activeArray];
+    }
+
+    const info = this.getDBInfo();
+    const sessionDb = [...this.activeArray];
+    const categoryDb = [...info.db];
+
+    const targetSubtype = this.drillSubtype;
+    const generated = [];
+    const shuffle = (arr) => arr.sort(() => Math.random() - 0.5);
+
+    const formMeta = {
+      masu: { keyK: 'k_masu', keyR: 'r_masu', label: 'Bentuk Masu (~ます)', badge: '🌸 Bentuk Masu' },
+      nai: { keyK: 'k_nai', keyR: 'r_nai', label: 'Bentuk Nai (~ない)', badge: '❄️ Bentuk Nai' },
+      te: { keyK: 'k_te', keyR: 'r_te', label: 'Bentuk Te (~て/で)', badge: '🔗 Bentuk Te' }
     };
 
-    this.activeArray.forEach(item => {
-        html += `<tr>
-            <td><span class="t-arti">${item.a}</span></td>
-            <td>${makeRuby(item.k_kamus, item.r_kamus)}</td>
-            <td>${makeRuby(item.k_masu, item.r_masu)}</td>
-            <td>${makeRuby(item.k_nai, item.r_nai)}</td>
-            <td>${makeRuby(item.k_te, item.r_te)}</td>
-        </tr>`;
-    });
-    
-    html += `</table></div></div>`;
+    // 1. CONJUGATION DRILLS (Masu, Nai, Te, or Mix)
+    const formsToTest = (targetSubtype === 'masu' || targetSubtype === 'nai' || targetSubtype === 'te')
+      ? [targetSubtype]
+      : (targetSubtype === 'mix' ? ['masu', 'nai', 'te'] : []);
 
-    let prevDis = (this.activeSesi === 0) ? 'disabled' : '';
-    let nextDis = (this.activeSesi === info.pages.length - 1) ? 'disabled' : '';
-    html += `
-      <div class="book-nav">
-        <button class="book-nav-btn" ${prevDis} onclick="Modul.turnPage(-1)">◀ Prev</button>
-        <span class="book-page-text">Hal ${this.activeSesi + 1} dari ${info.pages.length}</span>
-        <button class="book-nav-btn" ${nextDis} onclick="Modul.turnPage(1)">Next ▶</button>
-      </div>
-    </div>`;
+    if (formsToTest.length > 0) {
+      const count = targetSubtype === 'mix' ? Math.min(pool.length, 6) : Math.min(pool.length * 2, 12);
+      const shuffledPool = shuffle([...pool]);
 
-    sec.innerHTML = html;
+      for (let i = 0; i < count; i++) {
+        const item = shuffledPool[i % shuffledPool.length];
+        const fKey = formsToTest[Math.floor(Math.random() * formsToTest.length)];
+        const fm = formMeta[fKey];
 
-    if (dir === 'right') this.triggerAnimation('book-page', 'slide-in-right');
-    else if (dir === 'left') this.triggerAnimation('book-page', 'slide-in-left');
-    else if (dir !== 'none') this.triggerAnimation('book-wrapper', 'fade-in-up');
-  },
+        const ans = item[fm.keyK];
+        const opts = [ans];
 
-  turnPage: function(step) {
-    let info = this.getDBInfo();
-    let targetSesi = this.activeSesi + step;
-    
-    if (targetSesi >= 0 && targetSesi < info.pages.length) {
-        let animOut = (step === 1) ? 'slide-out-left' : 'slide-out-right';
-        this.triggerAnimation('book-page', animOut);
-        
-        setTimeout(() => {
-            this.switchSesi(targetSesi);
-        }, 250);
-    }
-  },
-
-  toggleFurigana: function() {
-    const container = document.getElementById('waktu-table-container');
-    const btn = document.getElementById('btn-sensor');
-    const isHidden = !container.classList.contains('show-all-furi');
-    
-    if (isHidden) {
-        container.classList.add('show-all-furi');
-        btn.innerHTML = "🙈 Sembunyikan Semua Furigana";
-        btn.classList.add('active');
-    } else {
-        container.classList.remove('show-all-furi');
-        btn.innerHTML = "👁️ Tampilkan Semua Furigana";
-        btn.classList.remove('active');
-    }
-  },
-
-    // 1. TAMBAHKAN FUNGSI PENGACAK MURNI INI (Bisa ditaruh tepat di atas generatePG)
-  shuffleArray: function(array) {
-    let newArr = [...array];
-    for (let i = newArr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
-    }
-    return newArr;
-  },
-
-  // 2. GANTI generatePG MENJADI SEPERTI INI
-  generatePG: function() {
-    let info = this.getDBInfo();
-    let pool = info.db.filter(item => info.pages[this.activeSesi].groups.includes(item.grp));
-    let limit = pool.length;
-    
-    // Gunakan fungsi pengacak murni
-    let shuffledPool = this.shuffleArray(pool);
-    let half = Math.ceil(limit / 2);
-    
-    let part1 = shuffledPool.slice(0, half);
-    let part2 = shuffledPool.slice(half, limit);
-    let generated = [];
-
-    const forms = [
-        { k: 'k_masu', r: 'r_masu', n: 'Bentuk Masu' },
-        { k: 'k_nai', r: 'r_nai', n: 'Bentuk Nai' },
-        { k: 'k_te', r: 'r_te', n: 'Bentuk Te' }
-    ];
-
-    // Part 1: Hiragana Kamus -> Hiragana Target
-    part1.forEach(item => {
-        let targetForm = forms[Math.floor(Math.random() * forms.length)];
-        let ans = item[targetForm.r]; 
-        let opts = [ans]; 
-        
-        let distractors = this.shuffleArray([...info.db]);
-        for(let d of distractors) {
-            let dText = d[targetForm.r];
-            if(!opts.includes(dText)) opts.push(dText);
-            if(opts.length === 4) break;
-        }
-        
-        generated.push({ 
-            q: `Apa <b style='color:var(--primary);'>${targetForm.n}</b> dari kata di bawah ini?<br><br><span style="font-size:35px; color:var(--text-main);">${item.r_kamus}</span>`, 
-            opts: this.shuffleArray(opts), 
-            ans: ans 
+        // Include other forms of the SAME verb as primary distractors (great test of understanding!)
+        ['k_kamus', 'k_masu', 'k_nai', 'k_te'].forEach(fk => {
+          if (item[fk] && item[fk] !== ans && !opts.includes(item[fk])) {
+            opts.push(item[fk]);
+          }
         });
-    });
 
-    // Part 2: Hiragana -> Menebak Kanji
-    part2.forEach(item => {
-        let allForms = [{k: 'k_kamus', r: 'r_kamus', n: 'Kamus'}, ...forms];
-        let targetForm = allForms[Math.floor(Math.random() * allForms.length)];
-        
-        let ans = item[targetForm.k];
-        let opts = [ans];
-        let distractors = this.shuffleArray([...info.db]);
-        for(let d of distractors) {
-            let dText = d[targetForm.k];
-            if(!opts.includes(dText)) opts.push(dText);
-            if(opts.length === 4) break;
+        // Distractor fallback from session, then category DB
+        const others = shuffle([...sessionDb, ...categoryDb].filter(o => o.k_kamus !== item.k_kamus));
+        for (const o of others) {
+          const dVal = o[fm.keyK];
+          if (dVal && !opts.includes(dVal)) opts.push(dVal);
+          if (opts.length >= 4) break;
         }
 
         generated.push({
-            q: `Pilih penulisan <b style='color:var(--gold);'>Kanji</b> yang tepat untuk:<br><br><span style="font-size:35px; color:var(--warning);">${item[targetForm.r]}</span>`,
-            opts: this.shuffleArray(opts),
-            ans: ans
+          type: 'mc',
+          q: `Ubah kata <b class="q-target-word">${item.k_kamus}</b> (${item.a}) ke <b class="q-target-form">${fm.label}</b>!`,
+          audio: ans,
+          opts: shuffle(opts.slice(0, 4)),
+          ans: ans,
+          badge: fm.badge
         });
-    });
+      }
+    }
 
-    return this.shuffleArray(generated);
-  },
+    // 2. MEANING & READING DRILL
+    if (targetSubtype === 'meaning' || targetSubtype === 'mix') {
+      const count = targetSubtype === 'meaning' ? Math.min(pool.length * 2, 12) : Math.min(pool.length, 5);
+      const meanPool = shuffle([...pool]);
 
-  // 3. GANTI generateIsian MENJADI SEPERTI INI
-  generateIsian: function() {
-    let info = this.getDBInfo();
-    let pool = info.db.filter(item => info.pages[this.activeSesi].groups.includes(item.grp));
-    let limit = pool.length;
-    
-    // Gunakan fungsi pengacak murni
-    let shuffledPool = this.shuffleArray(pool);
-    let half = Math.ceil(limit / 2);
-    
-    let part1 = shuffledPool.slice(0, half);
-    let part2 = shuffledPool.slice(half, limit);
-    let generated = [];
-    
-    const forms = [
-        { k: 'k_kamus', r: 'r_kamus', n: 'Bentuk Kamus' },
-        { k: 'k_masu', r: 'r_masu', n: 'Bentuk Masu' },
-        { k: 'k_nai', r: 'r_nai', n: 'Bentuk Nai' },
-        { k: 'k_te', r: 'r_te', n: 'Bentuk Te' }
-    ];
+      for (let i = 0; i < count; i++) {
+        const item = meanPool[i % meanPool.length];
+        const isKanjiToHira = Math.random() > 0.5;
 
-    // Part 1: Hiragana -> Hiragana / Kanji (Tuliskan bentuk)
-    part1.forEach(item => {
-        let targetForm = forms[Math.floor(Math.random() * forms.length)];
-        
-        let ansArray = [item[targetForm.r].replace(/[\s]/g, '')];
-        if (item[targetForm.k] !== item[targetForm.r]) {
-            ansArray.push(item[targetForm.k].replace(/[\s]/g, ''));
+        if (isKanjiToHira) {
+          const ans = item.r_kamus;
+          const opts = [ans];
+          const distractors = shuffle([...sessionDb, ...categoryDb].filter(d => d.k_kamus !== item.k_kamus));
+          for (const d of distractors) {
+            if (!opts.includes(d.r_kamus)) opts.push(d.r_kamus);
+            if (opts.length >= 4) break;
+          }
+          generated.push({
+            type: 'mc',
+            q: `Bagaimana bacaan Hiragana dari kata <b class="q-target-word">${item.k_kamus}</b> (${item.a})?`,
+            audio: item.k_kamus,
+            opts: shuffle(opts.slice(0, 4)),
+            ans: ans,
+            badge: '🎯 Cara Baca'
+          });
+        } else {
+          const ans = item.a;
+          const opts = [ans];
+          const distractors = shuffle([...sessionDb, ...categoryDb].filter(d => d.k_kamus !== item.k_kamus));
+          for (const d of distractors) {
+            if (!opts.includes(d.a)) opts.push(d.a);
+            if (opts.length >= 4) break;
+          }
+          generated.push({
+            type: 'mc',
+            q: `Apa arti bahasa Indonesia dari kata <b class="q-target-word">${item.k_kamus}</b> (${item.r_kamus})?`,
+            audio: item.k_kamus,
+            opts: shuffle(opts.slice(0, 4)),
+            ans: ans,
+            badge: '🎯 Tebak Arti'
+          });
         }
+      }
+    }
 
-        generated.push({ 
-            q: `Ketik <b style='color:var(--gold);'>${targetForm.n}</b> dari:<br><span style="font-size:35px; color:var(--text-main);">${item.r_kamus}</span>`, 
+    // 3. ISIAN DRILL
+    if (targetSubtype === 'isian') {
+      const count = Math.min(pool.length * 2, 10);
+      const isianPool = shuffle([...pool]);
+
+      for (let i = 0; i < count; i++) {
+        const item = isianPool[i % isianPool.length];
+        const isArti = Math.random() > 0.5;
+
+        if (isArti) {
+          const cleanA = item.a.toLowerCase();
+          const ansArray = [cleanA.replace(/[\s-]/g, '').replace(/\([^)]*\)/g, '')];
+          cleanA.split(',').forEach(p => {
+            const cp = p.replace(/\([^)]*\)/g, '').replace(/[\s-]/g, '');
+            if (cp && !ansArray.includes(cp)) ansArray.push(cp);
+          });
+          generated.push({
+            type: 'isian',
+            isArti: true,
+            q: `Ketik arti bahasa Indonesia dari kata dasar:<br><span style="font-size:36px; font-weight:800; color:var(--gold);">${item.k_kamus}</span>`,
+            audio: item.k_kamus,
             ans: ansArray,
-            type: 'bentuk'
-        });
-    });
-
-    // Part 2: Kanji/Hiragana -> Menerjemahkan makna
-    part2.forEach(item => {
-        let cleanA = item.a.toLowerCase();
-        let ansArray = [];
-
-        ansArray.push(cleanA.replace(/[\s-]/g, '').replace(/\([^)]*\)/g, ''));
-        let parts = cleanA.split(',');
-        parts.forEach(p => {
-            let cleanP = p.replace(/\([^)]*\)/g, '').replace(/[\s-]/g, '');
-            if(cleanP && !ansArray.includes(cleanP)) ansArray.push(cleanP);
-        });
-
-        let targetForm = forms[Math.floor(Math.random() * forms.length)];
-        let displayWord = Math.random() > 0.5 ? item[targetForm.k] : item[targetForm.r];
-
-        generated.push({ 
-            q: `Apa arti (kata dasar) dari kata ini:<br><span style="font-size:35px; color:var(--warning);">${displayWord}</span>`, 
+            badge: '✍️ Isian Arti'
+          });
+        } else {
+          // Ketik Hiragana kamus
+          const ansArray = [item.r_kamus.replace(/[\s]/g, '')];
+          if (item.k_kamus !== item.r_kamus) ansArray.push(item.k_kamus.replace(/[\s]/g, ''));
+          generated.push({
+            type: 'isian',
+            isArti: false,
+            q: `Ketik bacaan Hiragana dari kata dasar:<br><span style="font-size:36px; font-weight:800; color:#fff;">${item.k_kamus}</span>`,
+            audio: item.k_kamus,
             ans: ansArray,
-            type: 'arti'
-        });
-    });
+            badge: '✍️ Isian Hiragana'
+          });
+        }
+      }
+    }
 
-    return this.shuffleArray(generated);
+    const maxQ = targetSubtype === 'mix' ? 15 : Math.min(generated.length, 12);
+    return shuffle(generated).slice(0, maxQ);
   },
 
+  renderQuiz: function(useSlideAnim = true) {
+    const fb = document.getElementById('quiz-feedback-bar');
+    if (fb) { fb.innerHTML = ''; fb.style.opacity = '0'; }
+    const pool = this.activeQuizData;
 
-  getEvaluasiHTML: function(score, total) {
-    let pct = score / total;
-    if (pct === 1) return `<div class="eval-box">🌟 <b>SEMPURNA!</b><br>Insting konjugasi Sensei sangat tajam!</div>`;
-    return `<div class="eval-box">💪 <b>TETAP SEMANGAT!</b><br>Hafalkan perubahan bunyi pada akhiran kata kerja.</div>`;
-  },
+    const info = this.getDBInfo();
+    const sessionName = info.pages[this.activeSesi].title.split(':')[0];
+    const masteredInSession = this.getMasteredVerbs();
 
-  renderPG: function(useSlideAnim = true) {
-    const fb = document.getElementById('pg-feedback'); fb.innerHTML = ""; fb.style.opacity = "0";
-    const pool = this.activePGData;
-    
-    if (this.idxPG >= pool.length) {
-      document.getElementById('pg-q').innerHTML = `🎉 Kuis Selesai!<br>Skor: ${this.scorePG} / ${pool.length}`;
-      let evalHTML = this.getEvaluasiHTML(this.scorePG, pool.length);
-      document.getElementById('pg-opts').innerHTML = evalHTML + `<button class="btn-next" onclick="Modul.switchTab('pg')">Acak & Ulangi Kuis</button>`;
-      if(useSlideAnim) this.triggerAnimation('pg-content-wrapper', 'slide-in-right');
+    // Mode Pill (⭐ Mastered in this Session vs 🏷️ Sesi)
+    const modePill = document.getElementById('quiz-mode-pill');
+    if (modePill) {
+      if (this.quizSourceMode === 'mastered') {
+        modePill.innerHTML = `<span>⭐</span> <span>${masteredInSession.length} DIKUASAI</span>`;
+        modePill.title = `Kuis kata berbintang di ${sessionName}. Klik untuk kuis semua kata di sesi ini.`;
+        modePill.style.color = 'var(--gold)';
+        modePill.style.borderColor = 'rgba(251, 191, 36, 0.4)';
+        modePill.style.background = 'rgba(251, 191, 36, 0.15)';
+      } else {
+        modePill.innerHTML = `<span>🏷️</span> <span>${sessionName}</span>`;
+        modePill.title = `Kuis seluruh kata di ${sessionName}. Klik untuk kuis hanya kata berbintang.`;
+        modePill.style.color = 'var(--primary)';
+        modePill.style.borderColor = 'rgba(56, 189, 248, 0.4)';
+        modePill.style.background = 'rgba(56, 189, 248, 0.15)';
+      }
+    }
+
+    const progPill = document.getElementById('quiz-progress-pill');
+    const scorePill = document.getElementById('quiz-score-pill');
+    if (scorePill) scorePill.innerHTML = `SKOR <b>${this.scoreQuiz}</b>`;
+
+    const optContainer = document.getElementById('quiz-options-container');
+    const isianContainer = document.getElementById('quiz-isian-container');
+    const qTextEl = document.getElementById('quiz-q-text');
+
+    // Empty state for Mastered mode in this session
+    if (this.quizSourceMode === 'mastered' && pool.length === 0) {
+      if (progPill) progPill.innerHTML = `SOAL <b>0</b> / 0`;
+      qTextEl.innerHTML = `
+        <div class="quiz-empty-mastery">
+          <div class="qem-icon">⭐</div>
+          <div class="qem-title">Belum Ada Kata Dikuasai di ${sessionName}</div>
+          <div class="qem-desc">
+            Kamu belum menandai kata kerja dengan bintang <b>⭐</b> di <b>${sessionName}</b>.<br>
+            Beri bintang pada flashcard yang telah kamu pelajari untuk mengujinya di kuis ini!
+          </div>
+          <div class="qem-actions">
+            <button type="button" class="btn-dn btn-dn-next" onclick="Modul.switchTab('flashcard')">
+              📖 Buka Flashcard ${sessionName} ⭐
+            </button>
+            <button type="button" class="btn-dn" onclick="Modul.startSessionQuizFallback()">
+              🎯 Kuis Seluruh ${sessionName} (${this.activeArray.length} Kata)
+            </button>
+          </div>
+        </div>
+      `;
+      optContainer.classList.add('hidden');
+      isianContainer.classList.add('hidden');
       return;
     }
 
-    const target = pool[this.idxPG];
-    document.getElementById('pg-progress').innerText = `KUIS PILGAN: ${this.idxPG+1} / ${pool.length}`;
-    document.getElementById('pg-q').innerHTML = target.q;
-    
-    let optsHTML = target.opts.map(o => `<button class="btn-opt" onclick="Modul.checkPG(this,'${o}','${target.ans}')">${o}</button>`).join('');
-    document.getElementById('pg-opts').innerHTML = optsHTML;
+    // Quiz finished
+    if (this.idxQuiz >= pool.length) {
+      if (progPill) progPill.innerHTML = `<b>🎉 SELESAI</b>`;
+      qTextEl.innerHTML = `
+        <div style="font-size:42px; margin-bottom:8px;">🏆</div>
+        <div style="font-size:20px; font-weight:800; color:#fff;">Latihan Kuis Selesai!</div>
+        <div style="font-size:14px; font-weight:600; color:var(--text-sub); margin-top:4px;">
+          Skor Akhir: <b style="color:var(--gold); font-size:16px;">${this.scoreQuiz} / ${pool.length}</b>
+        </div>
+      `;
+      optContainer.classList.remove('hidden');
+      isianContainer.classList.add('hidden');
+      optContainer.innerHTML = `<button type="button" class="btn-dn btn-dn-next" style="grid-column: span 2;" onclick="Modul.refreshCurrentTab()">Ulangi Kuis ↺</button>`;
+      return;
+    }
 
-    if(useSlideAnim) this.triggerAnimation('pg-content-wrapper', 'slide-in-right');
+    // Render Current Question
+    const cur = pool[this.idxQuiz];
+    if (progPill) progPill.innerHTML = `SOAL <b>${this.idxQuiz + 1}</b> / ${pool.length}`;
+    qTextEl.innerHTML = cur.q;
+
+    if (cur.type === 'mc') {
+      optContainer.classList.remove('hidden');
+      isianContainer.classList.add('hidden');
+
+      let optsHTML = cur.opts.map(o => `<button type="button" class="btn-quiz-opt" onclick="Modul.checkMCOption(this, '${o}', '${cur.ans}', '${cur.audio || ''}')">${o}</button>`).join('');
+      optContainer.innerHTML = optsHTML;
+    } else {
+      optContainer.classList.add('hidden');
+      isianContainer.classList.remove('hidden');
+      const input = document.getElementById('quiz-isian-input');
+      input.value = '';
+      input.disabled = false;
+      input.placeholder = cur.isArti ? 'Ketik arti bahasa Indonesia...' : 'Ketik Hiragana atau Romaji...';
+      input.focus();
+    }
+
+    if (useSlideAnim) this.triggerAnimation('quiz-content-wrapper', 'slide-in-right');
   },
 
-  checkPG: function(btn, sel, cor) {
-    const fb = document.getElementById('pg-feedback');
-    document.querySelectorAll('.btn-opt').forEach(b => b.disabled = true);
-    fb.style.opacity = "1"; this.triggerAnimation('pg-feedback', 'pop-in');
+  checkMCOption: function(btn, sel, cor, audio) {
+    const fb = document.getElementById('quiz-feedback-bar');
+    document.querySelectorAll('.btn-quiz-opt').forEach(b => b.disabled = true);
+    fb.style.opacity = '1';
 
-    if(sel === cor) { btn.classList.add('correct'); fb.innerHTML = "BENAR! ✅"; fb.style.color = "var(--success)"; this.scorePG++; } 
-    else { btn.classList.add('wrong'); fb.innerHTML = "SALAH! ❌"; fb.style.color = "var(--danger)"; }
-    
-    setTimeout(() => { 
-      this.triggerAnimation('pg-content-wrapper', 'slide-out-left');
-      setTimeout(() => { this.idxPG++; this.renderPG(true); }, 1200);
+    if (sel === cor) {
+      this.playSfx('correct');
+      btn.classList.add('correct');
+      fb.innerHTML = 'BENAR SEKALI! ✅';
+      fb.style.color = 'var(--success)';
+      this.scoreQuiz++;
+    } else {
+      this.playSfx('wrong');
+      btn.classList.add('wrong');
+      fb.innerHTML = `KURANG TEPAT! ❌ Kunci: <b>${cor}</b>`;
+      fb.style.color = 'var(--danger)';
+    }
+
+    if (audio) this.speakText(audio);
+
+    const scorePill = document.getElementById('quiz-score-pill');
+    if (scorePill) scorePill.innerHTML = `SKOR <b>${this.scoreQuiz}</b>`;
+
+    setTimeout(() => {
+      this.triggerAnimation('quiz-content-wrapper', 'slide-out-left');
+      setTimeout(() => {
+        this.idxQuiz++;
+        this.renderQuiz(true);
+      }, 180);
+    }, 1100);
+  },
+
+  checkIsianSubmit: function() {
+    const input = document.getElementById('quiz-isian-input');
+    const fb = document.getElementById('quiz-feedback-bar');
+    const rawVal = input.value.trim().toLowerCase();
+    if (!rawVal) return;
+
+    input.disabled = true;
+    const cur = this.activeQuizData[this.idxQuiz];
+    const correctAns = cur.ans.map(a => a.toLowerCase().replace(/[\s-]/g, ''));
+    const cleanUser = rawVal.replace(/[\s-]/g, '');
+
+    const isCorrect = correctAns.includes(cleanUser);
+
+    fb.style.opacity = '1';
+    if (isCorrect) {
+      this.playSfx('correct');
+      fb.innerHTML = 'BENAR! ✅';
+      fb.style.color = 'var(--success)';
+      this.scoreQuiz++;
+    } else {
+      this.playSfx('wrong');
+      fb.innerHTML = `SALAH! ❌ Jawaban: <b>${cur.ans[0]}</b>`;
+      fb.style.color = 'var(--danger)';
+    }
+
+    if (cur.audio) this.speakText(cur.audio);
+
+    const scorePill = document.getElementById('quiz-score-pill');
+    if (scorePill) scorePill.innerHTML = `SKOR <b>${this.scoreQuiz}</b>`;
+
+    setTimeout(() => {
+      this.triggerAnimation('quiz-content-wrapper', 'slide-out-left');
+      setTimeout(() => {
+        this.idxQuiz++;
+        this.renderQuiz(true);
+      }, 180);
     }, 1200);
   },
 
-  renderIsian: function(useSlideAnim = true) {
-    const fb = document.getElementById('isian-feedback'); fb.innerHTML = ""; fb.style.opacity = "0";
-    const input = document.getElementById('isian-input'); input.value = ""; input.disabled = false;
-    document.getElementById('btn-submit-isian').classList.remove('hidden');
-    
-    const pool = this.activeIsianData;
-
-    if (this.idxIsian >= pool.length) {
-      document.getElementById('isian-q').innerHTML = `🎉 Latihan Tuntas!<br>Skor: ${this.scoreIsian} / ${pool.length}`;
-      input.classList.add('hidden'); document.getElementById('btn-submit-isian').classList.add('hidden');
-      
-      let evalHTML = this.getEvaluasiHTML(this.scoreIsian, pool.length);
-      fb.style.opacity = "1";
-      fb.innerHTML = evalHTML + `<button class="btn-next" onclick="Modul.switchTab('isian')">Acak & Ulangi Kuis</button>`;
-      
-      if(useSlideAnim) this.triggerAnimation('isian-content-wrapper', 'slide-in-right');
-      return;
+  // ==========================================
+  // CHEATSHEET RUMUS & TE-KEI
+  // ==========================================
+  openCheatsheet: function() {
+    this.playSfx('tap');
+    const modal = document.getElementById('cheatsheet-modal');
+    if (modal) {
+      modal.classList.remove('hidden');
+      this.renderCheatsheetContent();
     }
-
-    const target = pool[this.idxIsian];
-    document.getElementById('isian-progress').innerText = `KUIS ISIAN: ${this.idxIsian+1} / ${pool.length}`;
-    document.getElementById('isian-q').innerHTML = target.q;
-    
-    let hintTeks = document.getElementById('isian-hint-teks');
-    if (target.type === 'arti') {
-        hintTeks.innerText = "(Ketik terjemahan artinya, contoh: membeli)";
-    } else {
-        hintTeks.innerText = "(Gunakan keyboard Jepang, Boleh Hiragana atau Kanji)";
-    }
-    
-    input.classList.remove('hidden'); input.focus();
-    if(useSlideAnim) this.triggerAnimation('isian-content-wrapper', 'slide-in-right');
   },
 
-  checkIsian: function() {
-    const fb = document.getElementById('isian-feedback');
-    const input = document.getElementById('isian-input');
-    const answer = input.value.toLowerCase().replace(/[\s-]/g, '');
-    if(!answer) return;
+  closeCheatsheet: function() {
+    this.playSfx('tap');
+    const modal = document.getElementById('cheatsheet-modal');
+    if (modal) modal.classList.add('hidden');
+  },
 
-    input.disabled = true; document.getElementById('btn-submit-isian').classList.add('hidden');
-    
-    const target = this.activeIsianData[this.idxIsian];
-    const correctAns = target.ans.map(a => a.toLowerCase().replace(/[\s-]/g, ''));
+  switchCheatsheetTab: function(tab) {
+    this.playSfx('tap');
+    this.csActiveTab = tab;
+    ['te', 'kel', 'trap'].forEach(t => {
+      const btn = document.getElementById('cs-tab-' + t);
+      if (btn) btn.classList.toggle('active', t === tab);
+    });
+    this.renderCheatsheetContent();
+  },
 
-    fb.style.opacity = "1"; this.triggerAnimation('isian-feedback', 'pop-in');
+  renderCheatsheetContent: function() {
+    const box = document.getElementById('cs-body-content');
+    if (!box) return;
 
-    if(correctAns.includes(answer)) { fb.innerHTML = "BENAR! ✅"; fb.style.color = "var(--success)"; this.scoreIsian++; } 
-    else { fb.innerHTML = `SALAH! ❌<br><span style="font-size:14px; color:var(--text-sub);">Kunci: ${target.ans[0]}</span>`; fb.style.color = "var(--danger)"; }
-    
-    setTimeout(() => { 
-      this.triggerAnimation('isian-content-wrapper', 'slide-out-left');
-      setTimeout(() => { this.idxIsian++; this.renderIsian(true); }, 1500);
-    }, 1500);
+    if (this.csActiveTab === 'te') {
+      box.innerHTML = `
+        <div style="font-weight:800; color:var(--primary); margin-bottom:6px;">🎵 Lagu & Trik Cepat Bentuk Te (Te-Kei)</div>
+        <p style="color:var(--text-sub); margin-bottom:12px;">
+          Bentuk Te (~て) adalah fondasi terbesar tata bahasa Jepang N5. Hafalkan rumus irama lagunya berikut:
+        </p>
+
+        <table class="cs-table">
+          <tr>
+            <th>Akhiran Kamus</th>
+            <th>Ubah Menjadi</th>
+            <th>Contoh Kata</th>
+          </tr>
+          <tr>
+            <td><b>う、つ、る</b> (u, tsu, ru)</td>
+            <td><b style="color:var(--primary);">~って</b> (~tte)</td>
+            <td>買う → <b>買って</b> (katte)<br>待つ → <b>待って</b> (matte)<br>終わる → <b>終わって</b> (owatte)</td>
+          </tr>
+          <tr>
+            <td><b>む、ぶ、ぬ</b> (mu, bu, nu)</td>
+            <td><b style="color:var(--success);">~んで</b> (~nde)</td>
+            <td>飲む → <b>飲んで</b> (nonde)<br>遊ぶ → <b>遊んで</b> (asonde)<br>死ぬ → <b>死んで</b> (shinde)</td>
+          </tr>
+          <tr>
+            <td><b>く</b> (ku)</td>
+            <td><b style="color:var(--warning);">~いて</b> (~ite)</td>
+            <td>書く → <b>書いて</b> (kaite)<br><span style="color:var(--danger); font-size:11px;">⚠️ Pengecualian: 行く → <b>行って</b> (itte)</span></td>
+          </tr>
+          <tr>
+            <td><b>ぐ</b> (gu)</td>
+            <td><b style="color:var(--warning);">~いで</b> (~ide)</td>
+            <td>泳ぐ → <b>泳いで</b> (oyoide)</td>
+          </tr>
+          <tr>
+            <td><b>す</b> (su)</td>
+            <td><b style="color:var(--purple);">~して</b> (~shite)</td>
+            <td>話す → <b>話して</b> (hanashite)</td>
+          </tr>
+          <tr>
+            <td><b>Kelompok 2</b> (~iru / ~eru)</td>
+            <td><b style="color:#4ade80;">Coret ~る + て</b></td>
+            <td>食べる → <b>食べて</b> (tabete)<br>見る → <b>見て</b> (mite)</td>
+          </tr>
+          <tr>
+            <td><b>Kelompok 3</b> (Irregular)</td>
+            <td><b style="color:var(--gold);">Hafalkan Langsung</b></td>
+            <td>来る (kuru) → <b>来て</b> (kite)<br>する (suru) → <b>して</b> (shite)</td>
+          </tr>
+        </table>
+      `;
+    } else if (this.csActiveTab === 'kel') {
+      box.innerHTML = `
+        <div style="font-weight:800; color:var(--primary); margin-bottom:6px;">🔍 Cara Membedakan 3 Kelompok Kata Kerja</div>
+        <p style="color:var(--text-sub); margin-bottom:12px;">
+          Setiap kata kerja dalam bahasa Jepang terbagi menjadi 3 kelompok besar:
+        </p>
+
+        <div style="margin-bottom:12px; padding:10px; background:rgba(56,189,248,0.1); border-left:3px solid var(--primary); border-radius:8px;">
+          <b style="color:var(--primary);">1️⃣ Kelompok 1 (五段動詞 - Godan Doushi)</b><br>
+          <span style="color:var(--text-sub); font-size:12px;">
+            • Sebelum akhiran <b>~ます (~masu)</b>, bunyinya selalu berakhiran vokal <b>" i "</b> (cth: ka<b>i</b>-masu, nom<b>i</b>-masu).<br>
+            • Bentuk kamusnya memiliki 9 variasi akhiran: <i>u, tsu, ru, mu, bu, nu, ku, gu, su</i>.
+          </span>
+        </div>
+
+        <div style="margin-bottom:12px; padding:10px; background:rgba(34,197,94,0.1); border-left:3px solid var(--success); border-radius:8px;">
+          <b style="color:var(--success);">2️⃣ Kelompok 2 (一段動詞 - Ichidan Doushi)</b><br>
+          <span style="color:var(--text-sub); font-size:12px;">
+            • Bentuk kamusnya <b>PASTI</b> berakhiran <b>~る (~ru)</b>.<br>
+            • Huruf sebelum ~ru berbunyi vokal <b>" i "</b> (~iru) atau <b>" e "</b> (~eru) (cth: m<b>i</b>-ru, tab<b>e</b>-ru).<br>
+            • Konjugasinya paling mudah: cukup buang <b>~る</b> lalu tempelkan akhiran yang diinginkan (cth: tabe-masu, tabe-nai, tabe-te).
+          </span>
+        </div>
+
+        <div style="padding:10px; background:rgba(245,158,11,0.1); border-left:3px solid var(--warning); border-radius:8px;">
+          <b style="color:var(--warning);">3️⃣ Kelompok 3 (不規則動詞 - Fukisoku / Irregular)</b><br>
+          <span style="color:var(--text-sub); font-size:12px;">
+            Hanya ada 2 kata dasar di seluruh bahasa Jepang:<br>
+            • <b>来る (kuru)</b>: kimasu, konai, kite.<br>
+            • <b>する (suru)</b>: shimasu, shinai, shite.<br>
+            Termasuk kata benda yang digabung dengan ~suru (cth: 勉強する / benkyou suru = belajar).
+          </span>
+        </div>
+      `;
+    } else {
+      box.innerHTML = `
+        <div style="font-weight:800; color:var(--danger); margin-bottom:6px;">⚠️ Kata Jebakan: Pengecualian Kelompok 1</div>
+        <p style="color:var(--text-sub); margin-bottom:12px;">
+          Kata-kata ini secara fisik berakhiran <b>-iru</b> atau <b>-eru</b> (mirip Kelompok 2), <b>TETAPI sebenarnya masuk ke Kelompok 1</b>! Konjugasinya wajib mengikuti aturan Kelompok 1:
+        </p>
+
+        <table class="cs-table">
+          <tr>
+            <th>Kata (Kamus)</th>
+            <th>Arti</th>
+            <th>Bentuk Masu</th>
+            <th>Bentuk Te</th>
+          </tr>
+          <tr>
+            <td><b>帰る (かえる)</b></td>
+            <td>Pulang</td>
+            <td>帰ります (kaerimasu)</td>
+            <td><b>帰って (kaette)</b></td>
+          </tr>
+          <tr>
+            <td><b>入る (はいる)</b></td>
+            <td>Masuk</td>
+            <td>入ります (hairimasu)</td>
+            <td><b>入って (haitte)</b></td>
+          </tr>
+          <tr>
+            <td><b>切る (きる)</b></td>
+            <td>Memotong</td>
+            <td>切ります (kirimasu)</td>
+            <td><b>切って (kitte)</b></td>
+          </tr>
+          <tr>
+            <td><b>知る (しる)</b></td>
+            <td>Tahu, kenal</td>
+            <td>知ります (shirimasu)</td>
+            <td><b>知って (shitte)</b></td>
+          </tr>
+          <tr>
+            <td><b>要る (いる)</b></td>
+            <td>Perlu, butuh</td>
+            <td>要ります (irimasu)</td>
+            <td><b>要って (itte)</b></td>
+          </tr>
+          <tr>
+            <td><b>走る (はしる)</b></td>
+            <td>Berlari</td>
+            <td>走ります (hashirimasu)</td>
+            <td><b>走って (hashitte)</b></td>
+          </tr>
+        </table>
+      `;
+    }
   }
 };
 
