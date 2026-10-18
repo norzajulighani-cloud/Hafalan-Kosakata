@@ -240,95 +240,108 @@
   /* ==========================================
      3. CLEAN UNIFIED SESSION NAV BAR
      ========================================== */
+  /* ==========================================
+     3. CLEAN UNIFIED SESSION NAV BAR (Zero Redundancy)
+     ========================================== */
   .session-nav-bar {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     width: 100%;
-    gap: 10px;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
     padding: 0 2px;
   }
-  .btn-sidebar-chip {
-    background: rgba(56, 189, 248, 0.12);
-    color: var(--primary);
+  .active-session-indicator {
+    background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(56, 189, 248, 0.35);
-    padding: 8px 14px;
-    border-radius: 14px;
-    font-size: 12.5px;
-    font-weight: 800;
+    padding: 8px 18px;
+    border-radius: 16px;
     cursor: pointer;
-    white-space: nowrap;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     display: inline-flex;
     align-items: center;
-    gap: 7px;
-    flex-shrink: 0;
-  }
-  .btn-sidebar-chip:hover {
-    background: rgba(56, 189, 248, 0.22);
-    color: #fff;
-    border-color: var(--primary);
-    box-shadow: 0 0 14px rgba(56, 189, 248, 0.3);
-    transform: translateY(-1px);
-  }
-  .btn-sidebar-chip:active { transform: scale(0.96); }
-
-  .active-session-indicator {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid var(--border-glass);
-    padding: 7px 14px;
-    border-radius: 14px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-    max-width: calc(100% - 130px);
-    overflow: hidden;
+    gap: 9px;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
   }
   .active-session-indicator:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(56, 189, 248, 0.4);
-    box-shadow: 0 0 14px rgba(56, 189, 248, 0.15);
+    background: rgba(56, 189, 248, 0.16);
+    border-color: var(--primary);
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.35);
+    transform: translateY(-1px);
   }
   .active-session-indicator:active { transform: scale(0.97); }
 
+  .asi-menu-icon {
+    font-size: 13px;
+    color: var(--primary);
+    display: inline-flex;
+    align-items: center;
+    transition: color 0.25s;
+  }
   .asi-dot {
-    width: 7px;
-    height: 7px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
     background: var(--primary);
     box-shadow: 0 0 8px var(--primary);
     flex-shrink: 0;
     transition: background 0.25s, box-shadow 0.25s;
   }
-  .badge-kel2 .asi-dot {
-    background: var(--success);
-    box-shadow: 0 0 8px var(--success);
-  }
-  .badge-irr .asi-dot {
-    background: var(--warning);
-    box-shadow: 0 0 8px var(--warning);
-  }
-
   .asi-title {
-    font-size: 12.5px;
+    font-size: 13px;
     font-weight: 800;
     color: #fff;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    letter-spacing: 0.3px;
   }
   .asi-caret {
-    font-size: 10px;
+    font-size: 11px;
     color: var(--primary);
     margin-left: 2px;
-    transition: transform 0.2s;
+    transition: transform 0.2s, color 0.25s;
     flex-shrink: 0;
   }
   .active-session-indicator:hover .asi-caret {
-    transform: translateY(1px);
+    transform: translateY(1.5px);
+  }
+
+  /* Group dynamic accents for session pill */
+  .active-session-indicator.badge-kel2 {
+    border-color: rgba(34, 197, 94, 0.35);
+  }
+  .active-session-indicator.badge-kel2:hover {
+    background: rgba(34, 197, 94, 0.16);
+    border-color: var(--success);
+    box-shadow: 0 0 16px rgba(34, 197, 94, 0.35);
+  }
+  .badge-kel2 .asi-menu-icon,
+  .badge-kel2 .asi-caret {
+    color: var(--success);
+  }
+  .badge-kel2 .asi-dot {
+    background: var(--success);
+    box-shadow: 0 0 8px var(--success);
+  }
+
+  .active-session-indicator.badge-irr {
+    border-color: rgba(245, 158, 11, 0.35);
+  }
+  .active-session-indicator.badge-irr:hover {
+    background: rgba(245, 158, 11, 0.16);
+    border-color: var(--warning);
+    box-shadow: 0 0 16px rgba(245, 158, 11, 0.35);
+  }
+  .badge-irr .asi-menu-icon,
+  .badge-irr .asi-caret {
+    color: var(--warning);
+  }
+  .badge-irr .asi-dot {
+    background: var(--warning);
+    box-shadow: 0 0 8px var(--warning);
   }
 
   /* ==========================================
@@ -855,18 +868,23 @@
   }
 
   /* ==========================================
-     6. ARENA KUIS BERVARIASI
+     6. ARENA KUIS BERVARIASI - REFINED TELEMETRY BAR
      ========================================== */
   .quiz-top-bar {
     display: flex;
     flex-direction: column;
     gap: 8px;
     width: 100%;
-    margin-bottom: 12px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    margin-bottom: 14px;
+    padding: 10px 14px;
+    background: rgba(15, 23, 42, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
     position: relative;
     z-index: 20;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
   }
   .quiz-bar-top-row {
     display: flex;
@@ -876,10 +894,10 @@
     gap: 8px;
   }
   .quiz-badge-target {
-    background: rgba(251, 191, 36, 0.14);
+    background: rgba(251, 191, 36, 0.12);
     color: var(--gold);
     border: 1px solid rgba(251, 191, 36, 0.35);
-    padding: 4px 10px;
+    padding: 5px 12px;
     border-radius: 20px;
     font-size: 11.5px;
     font-weight: 800;
@@ -889,17 +907,22 @@
     user-select: none;
     display: inline-flex;
     align-items: center;
-    gap: 5px;
+    gap: 6px;
+    -webkit-tap-highlight-color: transparent;
   }
   .quiz-badge-target:hover {
-    background: rgba(251, 191, 36, 0.25);
-    box-shadow: 0 0 12px rgba(251, 191, 36, 0.35);
+    background: rgba(251, 191, 36, 0.22);
+    border-color: var(--gold);
+    box-shadow: 0 0 14px rgba(251, 191, 36, 0.35);
+    transform: translateY(-1px);
   }
+  .quiz-badge-target:active { transform: scale(0.97); }
+
   .btn-drill-dropdown {
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(56, 189, 248, 0.35);
     color: #fff;
-    padding: 4px 10px;
+    padding: 5px 12px;
     border-radius: 14px;
     font-size: 11.5px;
     font-weight: 800;
@@ -910,25 +933,30 @@
     white-space: nowrap;
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    -webkit-tap-highlight-color: transparent;
   }
   .btn-drill-dropdown:hover,
   .btn-drill-dropdown.active {
     background: rgba(56, 189, 248, 0.2);
     border-color: var(--primary);
     box-shadow: 0 0 14px rgba(56, 189, 248, 0.3);
+    transform: translateY(-1px);
   }
+  .btn-drill-dropdown:active { transform: scale(0.97); }
+
   .quiz-bar-bottom-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    padding: 0 2px;
+    padding: 6px 2px 0 2px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
   }
   .quiz-telemetry-badge {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
-    font-size: 11.5px;
+    gap: 6px;
+    font-size: 12px;
     font-weight: 700;
     color: var(--text-sub);
     letter-spacing: 0.3px;
@@ -1575,12 +1603,6 @@
     backface-visibility: hidden;
   }
 
-  .btn-sidebar-chip:hover {
-    background: rgba(56, 189, 248, 0.25);
-    color: #fff;
-    border-color: var(--primary);
-    box-shadow: 0 0 14px rgba(56, 189, 248, 0.35);
-  }
   /* SIDEBAR DRAWER STYLES (Zero-Lag 60fps GPU Accelerated) */
   .sidebar-overlay {
     position: fixed;
@@ -1837,18 +1859,14 @@
     </button>
   </nav>
 
-  <!-- 3. CLEAN SESSION CONTROL BAR (Zero Redundancy - Full Access via Sidebar) -->
+  <!-- 3. CLEAN UNIFIED SESSION CONTROL BAR (Single Unified Trigger) -->
   <div class="session-nav-bar">
-    <button type="button" class="btn-sidebar-chip" onclick="Modul.openSidebar()" title="Buka Daftar Sesi (111 Kata)">
-      <span>☰</span>
-      <span>Daftar Sesi</span>
-    </button>
-
-    <div class="active-session-indicator" id="active-session-indicator" onclick="Modul.openSidebar()" title="Klik untuk berganti sesi">
+    <button type="button" class="active-session-indicator" id="active-session-indicator" onclick="Modul.openSidebar()" title="Klik untuk membuka daftar sesi (111 Kata)">
+      <span class="asi-menu-icon">☰</span>
       <span class="asi-dot"></span>
       <span class="asi-title" id="active-session-label">I-1: Akhiran ~U</span>
       <span class="asi-caret">▾</span>
-    </div>
+    </button>
   </div>
 
   <!-- 4. FLASHCARD STAGE -->
@@ -1921,10 +1939,16 @@
         </div>
       </div>
 
-      <!-- Bottom Row: Telemetry counters -->
+      <!-- Bottom Row: Telemetry Progress & Score (Never clipped!) -->
       <div class="quiz-bar-bottom-row">
-        <span class="quiz-badge-target" id="quiz-progress-pill">SOAL <b>1</b> / 10</span>
-        <span class="quiz-badge-target" id="quiz-score-pill">SKOR <b>0</b></span>
+        <div class="quiz-telemetry-badge">
+          <span>🎯</span>
+          <span class="quiz-counter-text" id="quiz-progress-pill">SOAL <b>1</b> / 10</span>
+        </div>
+        <div class="quiz-telemetry-badge score-badge">
+          <span>⭐</span>
+          <span class="quiz-score-text" id="quiz-score-pill">SKOR <b>0</b></span>
+        </div>
       </div>
     </div>
 
@@ -4805,7 +4829,7 @@ const Modul = {
   idxQuiz: 0,
   scoreQuiz: 0,
   drillSubtype: 'mix',      // 'mix', 'masu', 'nai', 'te', 'meaning', 'isian'
-  quizSourceMode: 'mastered', // 'mastered' or 'session'
+  quizSourceMode: 'session', // Default to active session words so users aren't met with 0/0 empty state
   activeQuizData: [],
 
   activeArray: [],
@@ -5694,13 +5718,13 @@ const Modul = {
     const modePill = document.getElementById('quiz-mode-pill');
     if (modePill) {
       if (this.quizSourceMode === 'mastered') {
-        modePill.innerHTML = `<span>⭐</span> <span>${masteredInSession.length} DIKUASAI</span>`;
-        modePill.title = `Kuis kata berbintang di ${sessionName}. Klik untuk kuis semua kata di sesi ini.`;
+        modePill.innerHTML = `<span>⭐</span> <span id="quiz-mode-text">${masteredInSession.length} DIKUASAI</span>`;
+        modePill.title = `Kuis kata berbintang di ${sessionName}. Klik untuk kuis seluruh kata di sesi ini.`;
         modePill.style.color = 'var(--gold)';
         modePill.style.borderColor = 'rgba(251, 191, 36, 0.4)';
         modePill.style.background = 'rgba(251, 191, 36, 0.15)';
       } else {
-        modePill.innerHTML = `<span>🏷️</span> <span>${sessionName}</span>`;
+        modePill.innerHTML = `<span>🏷️</span> <span id="quiz-mode-text">Sesi ${sessionName}</span>`;
         modePill.title = `Kuis seluruh kata di ${sessionName}. Klik untuk kuis hanya kata berbintang.`;
         modePill.style.color = 'var(--primary)';
         modePill.style.borderColor = 'rgba(56, 189, 248, 0.4)';
@@ -5731,7 +5755,7 @@ const Modul = {
               📖 Buka Flashcard ${sessionName} ⭐
             </button>
             <button type="button" class="btn-dn" onclick="Modul.toggleQuizSourceMode()">
-              🏷️ Uji Seluruh Kata di ${sessionName}
+              🏷️ Uji Seluruh Kata di ${sessionName} (${this.activeArray.length} Kata)
             </button>
           </div>
         </div>
@@ -5742,7 +5766,7 @@ const Modul = {
     }
 
     if (this.idxQuiz >= pool.length) {
-      if (progPill) progPill.innerHTML = `SOAL <b>${pool.length}</b> / ${pool.length}`;
+      if (progPill) progPill.innerHTML = `<b>🎉 SELESAI</b>`;
       const pct = Math.round((this.scoreQuiz / Math.max(1, pool.length)) * 100);
       let remark = pct >= 80 ? '🌟 Luar Biasa! Daya ingat konjugasimu sangat tajam!' : pct >= 50 ? '👍 Bagus! Terus latih bentuk yang masih keliru!' : '💪 Jangan menyerah! Buka flashcard dan ulangi kembali!';
 
