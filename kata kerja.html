@@ -536,36 +536,38 @@
     margin-top: 6px;
   }
   .inflection-cell {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid var(--border-glass);
+    background: rgba(255, 255, 255, 0.035);
+    border: 1px solid rgba(255, 255, 255, 0.07);
     border-radius: 12px;
-    padding: 10px 12px;
+    padding: 8px 11px;
     cursor: pointer;
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     gap: 3px;
     user-select: none;
+    position: relative;
   }
   .inflection-cell:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.2);
-    transform: translateY(-2px);
+    background: rgba(56, 189, 248, 0.09);
+    border-color: rgba(56, 189, 248, 0.35);
+    transform: translateY(-1px);
   }
   .inflection-cell.active-cell {
-    background: rgba(56, 189, 248, 0.15);
-    border-color: var(--primary);
-    box-shadow: 0 0 16px rgba(56, 189, 248, 0.3);
+    border-color: rgba(56, 189, 248, 0.6) !important;
+    background: linear-gradient(145deg, rgba(56, 189, 248, 0.2) 0%, rgba(14, 165, 233, 0.12) 100%) !important;
+    box-shadow: 0 4px 18px rgba(56, 189, 248, 0.22);
   }
   .inflection-cell.kel2-cell.active-cell {
-    background: rgba(34, 197, 94, 0.15);
-    border-color: var(--success);
-    box-shadow: 0 0 16px rgba(34, 197, 94, 0.3);
+    border-color: rgba(34, 197, 94, 0.6) !important;
+    background: linear-gradient(145deg, rgba(34, 197, 94, 0.2) 0%, rgba(16, 185, 129, 0.12) 100%) !important;
+    box-shadow: 0 4px 18px rgba(34, 197, 94, 0.22);
   }
   .inflection-cell.irr-cell.active-cell {
-    background: rgba(245, 158, 11, 0.15);
-    border-color: var(--warning);
-    box-shadow: 0 0 16px rgba(245, 158, 11, 0.3);
+    border-color: rgba(245, 158, 11, 0.6) !important;
+    background: linear-gradient(145deg, rgba(245, 158, 11, 0.2) 0%, rgba(217, 119, 6, 0.12) 100%) !important;
+    box-shadow: 0 4px 18px rgba(245, 158, 11, 0.22);
   }
 
   .inf-label {
@@ -1287,14 +1289,342 @@
     overscroll-behavior-x: contain;
   }
 
-  @keyframes audioPulse {
-    0% { transform: scale(1); filter: drop-shadow(0 0 4px var(--primary)); }
-    50% { transform: scale(1.22); filter: drop-shadow(0 0 16px var(--primary)); color: var(--primary); }
-    100% { transform: scale(1); }
+
+  /* ==========================================
+     3. CLEAN DUAL-ROW NAVIGATION & SUB-SESSION HUB (OPTION A)
+     ========================================== */
+  .category-tabs-row {
+    display: flex;
+    gap: 6px;
+    width: 100%;
+    margin-bottom: 8px;
   }
-  .audio-playing-pulse {
-    animation: audioPulse 0.45s ease-in-out !important;
-    color: var(--primary) !important;
+  .cat-pill {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-glass);
+    color: var(--text-sub);
+    padding: 9px 6px;
+    border-radius: 14px;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    white-space: nowrap;
+    user-select: none;
+  }
+  .cat-pill:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+  .cat-pill.active#chip-cat-kel1 {
+    background: rgba(56, 189, 248, 0.16);
+    color: var(--primary);
+    border-color: var(--primary);
+    box-shadow: 0 0 14px rgba(56, 189, 248, 0.25);
+  }
+  .cat-pill.active#chip-cat-kel2 {
+    background: rgba(34, 197, 94, 0.16);
+    color: var(--success);
+    border-color: var(--success);
+    box-shadow: 0 0 14px rgba(34, 197, 94, 0.25);
+  }
+  .cat-pill.active#chip-cat-irr {
+    background: rgba(245, 158, 11, 0.16);
+    color: var(--warning);
+    border-color: var(--warning);
+    box-shadow: 0 0 14px rgba(245, 158, 11, 0.25);
+  }
+  .cat-num {
+    font-size: 13px;
+    font-weight: 900;
+    opacity: 0.8;
+  }
+
+  /* Sub-Session Selector Bar */
+  .session-selector-bar {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    margin-bottom: 12px;
+    align-items: center;
+  }
+  .btn-session-dropdown {
+    flex: 1;
+    background: rgba(16, 26, 54, 0.75);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    border-radius: 14px;
+    padding: 8px 12px;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+  }
+  .btn-session-dropdown:hover {
+    background: rgba(56, 189, 248, 0.14);
+    border-color: var(--primary);
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.25);
+  }
+  .bsd-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    overflow: hidden;
+  }
+  .bsd-icon { font-size: 15px; }
+  .bsd-title {
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .bsd-count-tag {
+    font-size: 10.5px;
+    font-weight: 800;
+    background: rgba(255, 255, 255, 0.08);
+    padding: 1px 6px;
+    border-radius: 8px;
+    color: var(--text-sub);
+    white-space: nowrap;
+  }
+  .bsd-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .bsd-star-badge {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--gold);
+    background: rgba(251, 191, 36, 0.12);
+    border: 1px solid rgba(251, 191, 36, 0.3);
+    padding: 1px 7px;
+    border-radius: 10px;
+    white-space: nowrap;
+  }
+  .bsd-caret {
+    font-size: 11px;
+    color: var(--primary);
+  }
+
+  .btn-toggle-all {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-glass);
+    color: var(--text-sub);
+    padding: 8px 12px;
+    border-radius: 14px;
+    font-size: 11.5px;
+    font-weight: 800;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 0;
+  }
+  .btn-toggle-all:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.25);
+  }
+  .btn-toggle-all.active {
+    background: rgba(251, 191, 36, 0.15);
+    border-color: var(--gold);
+    color: var(--gold);
+    box-shadow: 0 0 14px rgba(251, 191, 36, 0.25);
+  }
+
+  /* Session Hub Modal / Sheet */
+  .session-hub-card {
+    background: linear-gradient(165deg, rgba(16, 26, 56, 0.98) 0%, rgba(8, 14, 32, 0.99) 100%);
+    border: 1px solid rgba(56, 189, 248, 0.4);
+    border-radius: 20px;
+    width: 100%;
+    max-width: 520px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), 0 0 30px rgba(56, 189, 248, 0.2);
+    overflow: hidden;
+  }
+  .sh-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .sh-title-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .sh-title { font-size: 15px; font-weight: 800; color: #fff; }
+  .sh-subtitle { font-size: 11px; color: var(--text-sub); margin-top: 1px; }
+
+  .sh-all-opt {
+    margin: 12px 18px 4px 18px;
+    background: rgba(251, 191, 36, 0.08);
+    border: 1px solid rgba(251, 191, 36, 0.3);
+    border-radius: 12px;
+    padding: 10px 14px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s;
+  }
+  .sh-all-opt:hover {
+    background: rgba(251, 191, 36, 0.16);
+    border-color: var(--gold);
+    box-shadow: 0 0 16px rgba(251, 191, 36, 0.25);
+  }
+  .sh-all-opt.active {
+    background: rgba(251, 191, 36, 0.22);
+    border-color: var(--gold);
+    box-shadow: 0 0 16px rgba(251, 191, 36, 0.35);
+  }
+  .sh-all-left { display: flex; align-items: center; gap: 10px; }
+  .sh-all-icon { font-size: 18px; }
+  .sh-all-title { font-size: 12.5px; font-weight: 800; color: #fff; }
+  .sh-all-desc { font-size: 10.5px; color: var(--text-sub); margin-top: 1px; }
+  .sh-all-badge {
+    font-size: 10.5px;
+    font-weight: 800;
+    color: var(--gold);
+    background: rgba(251, 191, 36, 0.15);
+    padding: 2px 7px;
+    border-radius: 10px;
+  }
+
+  .sh-divider-label {
+    font-size: 9.5px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    padding: 10px 18px 4px 18px;
+  }
+  .sh-list {
+    padding: 6px 18px 16px 18px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 52vh;
+  }
+  .sh-item {
+    background: rgba(255, 255, 255, 0.035);
+    border: 1px solid var(--border-glass);
+    border-radius: 12px;
+    padding: 10px 14px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.18s;
+  }
+  .sh-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+  .sh-item.active {
+    background: rgba(56, 189, 248, 0.14);
+    border-color: var(--primary);
+    box-shadow: 0 0 14px rgba(56, 189, 248, 0.22);
+  }
+  .sh-item-left { flex: 1; }
+  .sh-item-title-row { display: flex; align-items: center; gap: 8px; }
+  .sh-item-title { font-size: 12.5px; font-weight: 800; color: #fff; }
+  .sh-item.active .sh-item-title { color: var(--primary); }
+  .sh-item-count { font-size: 10.5px; color: var(--text-sub); }
+  .sh-badge-active {
+    font-size: 9.5px;
+    font-weight: 800;
+    color: var(--primary);
+    background: rgba(56, 189, 248, 0.18);
+    padding: 1px 6px;
+    border-radius: 8px;
+  }
+  .sh-item-samples {
+    font-size: 10.5px;
+    color: var(--text-muted);
+    font-family: 'Noto Sans JP', sans-serif;
+    margin-top: 3px;
+  }
+  .sh-star-tag {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--gold);
+    background: rgba(251, 191, 36, 0.1);
+    border: 1px solid rgba(251, 191, 36, 0.25);
+    padding: 2px 7px;
+    border-radius: 10px;
+    white-space: nowrap;
+  }
+
+  /* Completion screen styles */
+  .fc-finish-body {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 16px 8px;
+  }
+  .fc-finish-icon {
+    font-size: 48px;
+    margin-bottom: 8px;
+    filter: drop-shadow(0 0 16px rgba(251, 191, 36, 0.45));
+  }
+  .fc-finish-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+  .fc-finish-desc {
+    font-size: 13px;
+    color: var(--text-sub);
+    line-height: 1.5;
+    max-width: 360px;
+    margin-bottom: 18px;
+  }
+  .fc-finish-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    max-width: 340px;
+  }
+  .fc-finish-secondary-row {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+  }
+  .btn-dn-advance {
+    font-size: 13.5px !important;
+    padding: 12px 16px !important;
+    background: linear-gradient(135deg, var(--primary) 0%, #0284c7 100%) !important;
+    color: #000 !important;
+    font-weight: 900 !important;
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.4) !important;
+  }
+  .btn-dn-advance:hover {
+    box-shadow: 0 0 28px rgba(56, 189, 248, 0.6) !important;
+    transform: translateY(-2px);
   }
 
 </style>
@@ -1342,26 +1672,39 @@
     </button>
   </nav>
 
-  <!-- 3. UNIFIED HORIZONTAL FILTER CHIP STREAM -->
-  <div class="filter-stream-bar" id="filter-stream-bar">
-    <div class="filter-chip-group">
-      <button type="button" class="filter-pill active" id="chip-cat-kel1" onclick="Modul.switchCategory('kel1')">
-        <span>Ⅰ</span>
-        <span>Kelompok 1 (72)</span>
-      </button>
-      <button type="button" class="filter-pill" id="chip-cat-kel2" onclick="Modul.switchCategory('kel2')">
-        <span>Ⅱ</span>
-        <span>Kelompok 2 (28)</span>
-      </button>
-      <button type="button" class="filter-pill" id="chip-cat-irr" onclick="Modul.switchCategory('irr')">
-        <span>Ⅲ</span>
-        <span>Irregular (11)</span>
-      </button>
-    </div>
-    <div class="filter-divider"></div>
-    <div class="filter-chip-group" id="sesi-chips-wrap">
-      <!-- Generated dynamically -->
-    </div>
+  <!-- 3. DUAL-ROW CATEGORY & SUB-SESSION DASHBOARD -->
+  <div class="category-tabs-row">
+    <button type="button" class="cat-pill active" id="chip-cat-kel1" onclick="Modul.switchCategory('kel1')">
+      <span class="cat-num">Ⅰ</span>
+      <span>Kelompok 1 (72)</span>
+    </button>
+    <button type="button" class="cat-pill" id="chip-cat-kel2" onclick="Modul.switchCategory('kel2')">
+      <span class="cat-num">Ⅱ</span>
+      <span>Kelompok 2 (28)</span>
+    </button>
+    <button type="button" class="cat-pill" id="chip-cat-irr" onclick="Modul.switchCategory('irr')">
+      <span class="cat-num">Ⅲ</span>
+      <span>Irregular (11)</span>
+    </button>
+  </div>
+
+  <!-- SUB-SESSION SELECTOR BAR -->
+  <div class="session-selector-bar">
+    <button type="button" class="btn-session-dropdown" id="btn-session-dropdown" onclick="Modul.openSessionHub()" title="Buka Dashboard Pilihan Sub-Kelompok">
+      <div class="bsd-left">
+        <span class="bsd-icon">📂</span>
+        <span class="bsd-title" id="bsd-current-title">Sesi I-1: Akhiran ~U</span>
+        <span class="bsd-count-tag" id="bsd-current-count">9 Kata</span>
+      </div>
+      <div class="bsd-right">
+        <span class="bsd-star-badge" id="bsd-star-badge">⭐ 0/9</span>
+        <span class="bsd-caret">▾</span>
+      </div>
+    </button>
+
+    <button type="button" class="btn-toggle-all" id="btn-toggle-all" onclick="Modul.toggleAllMode()" title="Pelajari Semua Kata Sekaligus">
+      <span>🚀 Semua (72)</span>
+    </button>
   </div>
 
   <!-- 4. FLASHCARD STAGE -->
@@ -1780,8 +2123,8 @@ const Modul = {
 
   init: function() {
     this.loadMastery();
-    this.renderSessionChips();
     this.loadActiveArray();
+    this.updateSessionSelectorUI();
     this.switchTab('flashcard');
     this.bindKeyboardShortcuts();
 
@@ -1891,13 +2234,6 @@ const Modul = {
     const cleanText = text.replace(/[\.・\-\(\)\/\,"'「」]/g, '').trim();
     if (!cleanText) return;
 
-    // Visual pulse feedback on button if clicked
-    if (e && e.currentTarget) {
-      const btn = e.currentTarget;
-      btn.classList.add('audio-playing-pulse');
-      setTimeout(() => btn.classList.remove('audio-playing-pulse'), 450);
-    }
-
     // LAYER 1: Authentic Japanese Audio stream via Google Translate TTS
     // Guarantees native pronunciation on all devices and Windows without Japanese Language Pack!
     const ttsUrl = 'https://translate.google.com/translate_tts?ie=UTF-8&tl=ja&client=tw-ob&q=' + encodeURIComponent(cleanText);
@@ -2006,6 +2342,12 @@ const Modul = {
     });
   },
 
+  getDBInfo: function() {
+    if (this.activeCategory === 'kel1') return { db: DB_Kel_1, pages: Pages_K1, label: 'Kelompok 1' };
+    if (this.activeCategory === 'kel2') return { db: DB_Kel_2, pages: Pages_K2, label: 'Kelompok 2' };
+    return { db: DB_Kel_Irr, pages: Pages_Irr, label: 'Irregular' };
+  },
+
   // Category switching (Kelompok 1, 2, Irregular)
   switchCategory: function(cat) {
     this.playSfx('tap');
@@ -2032,59 +2374,162 @@ const Modul = {
       b.classList.toggle('mode-irr-accent', cat === 'irr');
     });
 
-    this.renderSessionChips();
     this.loadActiveArray();
+    this.updateSessionSelectorUI();
     this.refreshCurrentTab();
   },
 
-  renderSessionChips: function() {
-    const wrap = document.getElementById('sesi-chips-wrap');
-    if (!wrap) return;
+  openSessionHub: function() {
+    this.playSfx('tap');
+    const modal = document.getElementById('session-hub-modal');
+    if (modal) {
+      modal.classList.remove('hidden');
+      this.renderSessionHubList();
+    }
+  },
 
+  closeSessionHub: function() {
+    this.playSfx('tap');
+    const modal = document.getElementById('session-hub-modal');
+    if (modal) modal.classList.add('hidden');
+  },
+
+  renderSessionHubList: function() {
+    const listEl = document.getElementById('sh-session-list');
+    if (!listEl) return;
     const info = this.getDBInfo();
     const pages = info.pages;
-    const cat = this.activeCategory;
+    const isAll = (this.activeSesi === 'all');
+
+    const titleEl = document.getElementById('sh-modal-title');
+    const subtitleEl = document.getElementById('sh-modal-subtitle');
+    if (titleEl) titleEl.innerText = `Sub-Kelompok ${info.label}`;
+    if (subtitleEl) subtitleEl.innerText = `${info.db.length} Kosakata N5 • ${pages.length} Sub-Kategori`;
+
+    const allDesc = document.getElementById('sh-all-desc');
+    if (allDesc) allDesc.innerText = `Mode maraton: pelajari semua ${info.db.length} kata tanpa dipotong per sesi`;
+    const allBadge = document.getElementById('sh-all-badge');
+    if (allBadge) allBadge.innerText = `${info.db.length} Kata`;
+
+    const allOpt = document.getElementById('sh-all-opt');
+    if (allOpt) allOpt.classList.toggle('active', isAll);
 
     let html = '';
     pages.forEach((p, idx) => {
-      const activeClass = (idx === this.activeSesi) ? 'active' : '';
-      const catClass = cat === 'kel2' ? 'pill-kel2' : (cat === 'irr' ? 'pill-irr' : '');
-      const shortTitle = p.title.split(':')[0].replace(/Kelompok\s*/i, '');
-      html += `<button type="button" class="sesi-pill ${activeClass} ${catClass}" onclick="Modul.switchSesi(${idx})">${shortTitle}</button>`;
+      const grps = p.groups;
+      const verbsInPage = info.db.filter(v => grps.includes(v.grp));
+      const mCount = verbsInPage.filter(v => this.masteredList.includes(v.k_kamus)).length;
+      const sampleVerbs = verbsInPage.slice(0, 4).map(v => v.k_kamus).join(', ') + (verbsInPage.length > 4 ? '...' : '');
+      const isActive = (!isAll && this.activeSesi === idx);
+
+      html += `
+        <div class="sh-item ${isActive ? 'active' : ''}" onclick="Modul.selectSessionFromHub(${idx})">
+          <div class="sh-item-left">
+            <div class="sh-item-title-row">
+              <span class="sh-item-title">${p.title}</span>
+              <span class="sh-item-count">${verbsInPage.length} Kata</span>
+              ${isActive ? '<span class="sh-badge-active">● Aktif</span>' : ''}
+            </div>
+            <div class="sh-item-samples">Cth: ${sampleVerbs}</div>
+          </div>
+          <div class="sh-item-right">
+            <span class="sh-star-tag">⭐ ${mCount}/${verbsInPage.length}</span>
+          </div>
+        </div>
+      `;
     });
-    wrap.innerHTML = html;
+    listEl.innerHTML = html;
   },
 
-  switchSesi: function(s) {
+  selectSessionFromHub: function(idxOrAll) {
     this.playSfx('tap');
-    this.activeSesi = s;
+    this.activeSesi = idxOrAll;
     this.cardIdx = 0;
     this.cardRevealed = false;
     this.activeFormKey = 'kamus';
-
-    const pills = document.querySelectorAll('.sesi-pill');
-    pills.forEach((p, idx) => {
-      const isAct = idx === s;
-      p.classList.toggle('active', isAct);
-      if (isAct) {
-        try { p.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }); } catch(e){}
-      }
-    });
-
     this.loadActiveArray();
+    this.updateSessionSelectorUI();
+    this.closeSessionHub();
     this.refreshCurrentTab();
   },
 
-  getDBInfo: function() {
-    if (this.activeCategory === 'kel1') return { db: DB_Kel_1, pages: Pages_K1, label: 'Kelompok 1' };
-    if (this.activeCategory === 'kel2') return { db: DB_Kel_2, pages: Pages_K2, label: 'Kelompok 2' };
-    return { db: DB_Kel_Irr, pages: Pages_Irr, label: 'Irregular' };
+  toggleAllMode: function() {
+    this.playSfx('tap');
+    if (this.activeSesi === 'all') {
+      this.activeSesi = 0;
+    } else {
+      this.activeSesi = 'all';
+    }
+    this.cardIdx = 0;
+    this.cardRevealed = false;
+    this.activeFormKey = 'kamus';
+    this.loadActiveArray();
+    this.updateSessionSelectorUI();
+    this.refreshCurrentTab();
+  },
+
+  advanceToNextSession: function() {
+    this.playSfx('tap');
+    const info = this.getDBInfo();
+    if (this.activeSesi !== 'all' && this.activeSesi < info.pages.length - 1) {
+      this.activeSesi++;
+    } else {
+      this.activeSesi = 0;
+    }
+    this.cardIdx = 0;
+    this.cardRevealed = false;
+    this.activeFormKey = 'kamus';
+    this.loadActiveArray();
+    this.updateSessionSelectorUI();
+    this.renderFC(true, 'next');
+  },
+
+  advanceToNextCategory: function(nextCat) {
+    this.playSfx('tap');
+    this.switchCategory(nextCat);
+  },
+
+  updateSessionSelectorUI: function() {
+    const info = this.getDBInfo();
+    const isAll = (this.activeSesi === 'all');
+    const titleEl = document.getElementById('bsd-current-title');
+    const countEl = document.getElementById('bsd-current-count');
+    const starEl = document.getElementById('bsd-star-badge');
+    const btnAll = document.getElementById('btn-toggle-all');
+
+    const totalCatVerbs = info.db.length;
+
+    if (isAll) {
+      if (titleEl) titleEl.innerText = `Semua ${info.label}`;
+      if (countEl) countEl.innerText = `${totalCatVerbs} Kata`;
+      const mCount = info.db.filter(v => this.masteredList.includes(v.k_kamus)).length;
+      if (starEl) starEl.innerText = `⭐ ${mCount}/${totalCatVerbs}`;
+      if (btnAll) {
+        btnAll.classList.add('active');
+        btnAll.innerHTML = `<span>✓ Mode Semua</span>`;
+      }
+    } else {
+      const page = info.pages[this.activeSesi] || info.pages[0];
+      if (titleEl) titleEl.innerText = page.title;
+      if (countEl) countEl.innerText = `${this.activeArray.length} Kata`;
+      const mCount = this.activeArray.filter(v => this.masteredList.includes(v.k_kamus)).length;
+      if (starEl) starEl.innerText = `⭐ ${mCount}/${this.activeArray.length}`;
+      if (btnAll) {
+        btnAll.classList.remove('active');
+        btnAll.innerHTML = `<span>🚀 Semua (${totalCatVerbs})</span>`;
+      }
+    }
   },
 
   loadActiveArray: function() {
     const info = this.getDBInfo();
-    const grps = info.pages[this.activeSesi].groups;
-    this.activeArray = info.db.filter(item => grps.includes(item.grp));
+    if (this.activeSesi === 'all') {
+      this.activeArray = [...info.db];
+    } else {
+      const page = info.pages[this.activeSesi] || info.pages[0];
+      const grps = page.groups;
+      this.activeArray = info.db.filter(item => grps.includes(item.grp));
+    }
   },
 
   switchTab: function(tab) {
@@ -2130,19 +2575,61 @@ const Modul = {
     sec.classList.add('fc-mode-compact');
 
     if (this.cardIdx >= this.activeArray.length) {
+      const info = this.getDBInfo();
+      const isAllMode = (this.activeSesi === 'all');
+      const isLastSession = isAllMode || (this.activeSesi >= info.pages.length - 1);
+      const nextSessionIdx = this.activeSesi + 1;
+
+      let advanceButtonHTML = '';
+      if (!isAllMode && !isLastSession) {
+        const nextSub = info.pages[nextSessionIdx];
+        advanceButtonHTML = `
+          <button type="button" class="btn-dn btn-dn-next btn-dn-advance" onclick="Modul.advanceToNextSession()">
+            Lanjut ke ${nextSub.title} ➔
+          </button>
+        `;
+      } else if (this.activeCategory === 'kel1') {
+        advanceButtonHTML = `
+          <button type="button" class="btn-dn btn-dn-next btn-dn-advance" onclick="Modul.advanceToNextCategory('kel2')">
+            Lanjut ke Kelompok 2 (Ichidan) ➔
+          </button>
+        `;
+      } else if (this.activeCategory === 'kel2') {
+        advanceButtonHTML = `
+          <button type="button" class="btn-dn btn-dn-next btn-dn-advance" onclick="Modul.advanceToNextCategory('irr')">
+            Lanjut ke Kelompok 3 (Irregular) ➔
+          </button>
+        `;
+      } else {
+        advanceButtonHTML = `
+          <button type="button" class="btn-dn btn-dn-next btn-dn-advance" onclick="Modul.switchTab('quiz')">
+            Uji Semua di Arena Kuis 🏆
+          </button>
+        `;
+      }
+
+      const currentTitle = isAllMode ? `Semua ${info.label}` : info.pages[this.activeSesi].title;
+      const masteredCount = this.activeArray.filter(v => this.masteredList.includes(v.k_kamus)).length;
+
       sec.innerHTML = `
         <div class="fc-header-bar">
-          <span class="fc-counter-label" style="color:var(--gold);">🏆 SELESAI</span>
+          <span class="fc-counter-label" style="color:var(--gold);">🎉 SESI SELESAI</span>
           <span class="fc-counter-label">${this.activeArray.length} / ${this.activeArray.length}</span>
         </div>
-        <div style="flex-grow:1; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;">
-          <div style="font-size:48px; margin-bottom:12px;">🌟</div>
-          <div style="font-size:22px; font-weight:800; color:var(--gold); margin-bottom:6px;">Sesi Ini Tuntas!</div>
-          <div style="font-size:13.5px; color:var(--text-sub); max-width:380px;">Semua kata kerja di sesi ini telah kamu pelajari. Ingin mengulangi atau lanjut menguji kemampuan di Arena Kuis?</div>
-        </div>
-        <div class="dojo-nav-controls">
-          <button type="button" class="btn-dn" onclick="Modul.cardIdx=0; Modul.renderFC(true, 'next')">Ulangi Sesi ↺</button>
-          <button type="button" class="btn-dn btn-dn-next" onclick="Modul.switchTab('quiz')">Uji di Arena Kuis 🎯</button>
+        <div class="fc-finish-body">
+          <div class="fc-finish-icon">🌟</div>
+          <div class="fc-finish-title">${currentTitle} Tuntas!</div>
+          <div class="fc-finish-desc">
+            Kamu telah mempelajari seluruh <b>${this.activeArray.length} kata kerja</b> di sesi ini.<br>
+            Penguasaan: <b style="color:var(--gold);">⭐ ${masteredCount} / ${this.activeArray.length} kata dikuasai</b>.
+          </div>
+          <div class="fc-finish-actions">
+            ${advanceButtonHTML}
+            <div class="fc-finish-secondary-row">
+              <button type="button" class="btn-dn" onclick="Modul.cardIdx=0; Modul.renderFC(true, 'next')">Ulangi Sesi ↺</button>
+              <button type="button" class="btn-dn" onclick="Modul.switchTab('quiz')">Arena Kuis ⚔️</button>
+            </div>
+          </div>
         </div>
       `;
       if (useSlideAnim) {
@@ -2273,7 +2760,7 @@ const Modul = {
     if (roEl) roEl.innerText = curSent.ro;
     if (idEl) idEl.innerHTML = curSent.id;
 
-    this.speakText(curSent.targetPlain, e);
+    this.speakText(curSent.targetPlain);
   },
 
   speakActiveSentence: function(e) {
@@ -2565,7 +3052,9 @@ const Modul = {
     const pool = this.activeQuizData;
 
     const info = this.getDBInfo();
-    const sessionName = info.pages[this.activeSesi].title.split(':')[0];
+    const sessionName = (this.activeSesi === 'all')
+      ? `Semua ${info.label}`
+      : (info.pages[this.activeSesi] ? info.pages[this.activeSesi].title.split(':')[0] : info.pages[0].title.split(':')[0]);
     const masteredInSession = this.getMasteredVerbs();
 
     // Mode Pill (⭐ Mastered in this Session vs 🏷️ Sesi)
@@ -2905,5 +3394,40 @@ const Modul = {
 
 window.onload = () => Modul.init();
 </script>
+
+<!-- 7. MODAL DASHBOARD SUB-KELOMPOK (SESSION HUB) -->
+<div id="session-hub-modal" class="modal-overlay hidden" onclick="if(event.target === this) Modul.closeSessionHub()">
+  <div class="session-hub-card">
+    <div class="sh-header">
+      <div class="sh-title-group">
+        <span style="font-size:20px;">📂</span>
+        <div>
+          <div class="sh-title" id="sh-modal-title">Sub-Kelompok Kata Kerja</div>
+          <div class="sh-subtitle" id="sh-modal-subtitle">Kelompok 1 (Godan) • 72 Kosakata</div>
+        </div>
+      </div>
+      <button type="button" class="btn-cs-close" onclick="Modul.closeSessionHub()" title="Tutup">✕</button>
+    </div>
+
+    <!-- Quick All-Mode Option at Top of Hub -->
+    <div class="sh-all-opt" id="sh-all-opt" onclick="Modul.selectSessionFromHub('all')">
+      <div class="sh-all-left">
+        <span class="sh-all-icon">🚀</span>
+        <div>
+          <div class="sh-all-title">Pelajari Seluruh Kata Sekaligus</div>
+          <div class="sh-all-desc" id="sh-all-desc">Mode maraton: pelajari semua 72 kata tanpa dipotong per sesi</div>
+        </div>
+      </div>
+      <span class="sh-all-badge" id="sh-all-badge">72 Kata</span>
+    </div>
+
+    <div class="sh-divider-label">PILIH BERDASARKAN AKHIRAN BUNYI:</div>
+
+    <div class="sh-list" id="sh-session-list">
+      <!-- Generated dynamically via renderSessionHubList -->
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
