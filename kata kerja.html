@@ -476,6 +476,14 @@
     color: #000;
     box-shadow: 0 0 16px var(--gold-glow);
   }
+  .btn-star-mark.btn-audio-speak {
+    background: rgba(56, 189, 248, 0.12);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    color: var(--primary);
+  }
+  .btn-star-mark.btn-audio-speak:hover {
+    box-shadow: 0 0 12px var(--primary-glow);
+  }
 
   /* Body of Flashcard (Floating, Unboxed) */
   .fc-stage-box {
@@ -528,6 +536,12 @@
     color: var(--gold);
     font-weight: 800;
     text-shadow: 0 0 12px rgba(251, 191, 36, 0.3);
+  }
+  .fc-ro-text {
+    font-size: clamp(14px, 3.8vw, 16px);
+    color: var(--text-sub);
+    font-weight: 700;
+    letter-spacing: 0.3px;
   }
   .fc-arti-text {
     font-size: clamp(15.5px, 4.2vw, 18.5px);
@@ -5276,13 +5290,10 @@ const Modul = {
     const info = this.getDBInfo();
     const pageTitle = info.pages[this.activeSesi].title.split(':')[0];
 
-    // Narasi hint
-    const narasiHint = info.pages[this.activeSesi].narasi;
-
     // Sentence for active form key
     const sentData = (VERB_SENTENCES_DB[item.k_kamus] && VERB_SENTENCES_DB[item.k_kamus][this.activeFormKey])
       ? VERB_SENTENCES_DB[item.k_kamus][this.activeFormKey]
-      : { jp: `毎日${item.k_kamus}。敬語では${item.k_masu}と言います。`, romaji: `Mainichi ${item.r_kamus}. Keigo de wa ${item.r_masu} to iimasu.`, id: `Setiap hari ${item.a}.` };
+      : { jp: `毎日${item.k_kamus}。敬語では${item.k_masu}と言います。`, ro: `Mainichi ${hiraToRomaji(item.r_kamus)}. Keigo de wa ${hiraToRomaji(item.r_masu)} to iimasu.`, id: `Setiap hari ${item.a}.` };
 
     const formBadges = {
       kamus: 'Bentuk Kamus',
@@ -5291,28 +5302,28 @@ const Modul = {
       te: 'Bentuk Te (~て/で)'
     };
 
+    const prevDisabled = this.cardIdx === 0 ? 'disabled' : '';
+
     sec.innerHTML = `
-      <!-- Top Meta Bar -->
+      <!-- Top header inside arena card (Clean & Sleek) -->
       <div class="fc-header-bar">
-        <div class="fc-meta-left">
-          <span class="fc-cat-badge">${pageTitle}</span>
-          <span class="fc-counter-label">KATA ${this.cardIdx + 1} / ${this.activeArray.length}</span>
-        </div>
-        <div class="fc-meta-right">
-          <button type="button" class="btn-fc-star ${isMastered ? 'is-mastered' : ''}" id="btn-star-${item.k_kamus}" onclick="Modul.toggleMastery('${item.k_kamus}', event)" title="Tandai Dikuasai">★</button>
-          <button type="button" class="btn-fc-audio" onclick="Modul.speakText('${item.k_kamus}')" title="Dengarkan Suara">🔊</button>
+        <span class="fc-counter-label">KATA <b>${this.cardIdx + 1}</b> / ${this.activeArray.length}</span>
+        <div class="fc-header-right">
+          <button type="button" class="btn-star-mark ${isMastered ? 'is-mastered' : ''}" id="btn-star-${item.k_kamus}" onclick="Modul.toggleMastery('${item.k_kamus}', event)" title="${isMastered ? 'Dikuasai' : 'Tandai Dikuasai'}">⭐</button>
+          <button type="button" class="btn-star-mark btn-audio-speak" onclick="Modul.speakText('${item.k_kamus || item.r_kamus}', event)" title="Dengarkan Suara (ja-JP)">🔊</button>
         </div>
       </div>
 
       <!-- Main Flashcard Stage Box (Tap to Reveal) -->
-      <div class="fc-stage-box" onclick="Modul.revealCard()">
+      <div class="fc-stage-box" id="fc-stage-box" onclick="Modul.revealCard()">
         <div class="fc-kanji-big">${item.k_kamus}</div>
         <div class="fc-word-meta">
           <span class="fc-hira-text">${item.r_kamus}</span>
-          <span class="fc-meta-dot">•</span>
+          <span class="fc-ro-text" style="color:var(--text-sub); font-size:14.5px; font-weight:700;">(${hiraToRomaji(item.r_kamus)})</span>
+          <span class="fc-meta-sep">•</span>
           <span class="fc-arti-text">${item.a}</span>
         </div>
-        <div class="fc-tap-hint">👆 Ketuk kartu untuk melihat 4 konjugasi kata kerja</div>
+        <div class="fc-tap-hint" id="fc-tap-hint">👆 Ketuk kartu untuk melihat 4 konjugasi kata kerja</div>
       </div>
 
       <!-- 4 Conjugations Grid (Expanded Only) -->
@@ -5321,58 +5332,58 @@ const Modul = {
           <div class="inflection-cell ${this.activeFormKey === 'kamus' ? 'active-cell' : ''}" onclick="Modul.selectFormKey('kamus')">
             <div class="inf-label">
               <span>■ Kamus (Jisho)</span>
-              <span class="btn-cell-speak" onclick="event.stopPropagation(); Modul.speakText('${item.k_kamus}')" title="Dengarkan">🔊</span>
+              <span class="inf-speaker" onclick="event.stopPropagation(); Modul.speakText('${item.k_kamus}')" title="Dengarkan">🔊</span>
             </div>
             <div class="inf-val">${item.k_kamus}</div>
-            <div class="inf-sub">${item.r_kamus}</div>
+            <div class="inf-sub">${item.r_kamus} (${hiraToRomaji(item.r_kamus)})</div>
           </div>
 
           <div class="inflection-cell ${this.activeFormKey === 'masu' ? 'active-cell' : ''}" onclick="Modul.selectFormKey('masu')">
             <div class="inf-label">
               <span>🌸 Masu (Sopan)</span>
-              <span class="btn-cell-speak" onclick="event.stopPropagation(); Modul.speakText('${item.k_masu}')" title="Dengarkan">🔊</span>
+              <span class="inf-speaker" onclick="event.stopPropagation(); Modul.speakText('${item.k_masu}')" title="Dengarkan">🔊</span>
             </div>
             <div class="inf-val">${item.k_masu}</div>
-            <div class="inf-sub">${item.r_masu}</div>
+            <div class="inf-sub">${item.r_masu} (${hiraToRomaji(item.r_masu)})</div>
           </div>
 
           <div class="inflection-cell ${this.activeFormKey === 'nai' ? 'active-cell' : ''}" onclick="Modul.selectFormKey('nai')">
             <div class="inf-label">
               <span>❄️ Nai (Negatif)</span>
-              <span class="btn-cell-speak" onclick="event.stopPropagation(); Modul.speakText('${item.k_nai}')" title="Dengarkan">🔊</span>
+              <span class="inf-speaker" onclick="event.stopPropagation(); Modul.speakText('${item.k_nai}')" title="Dengarkan">🔊</span>
             </div>
             <div class="inf-val">${item.k_nai}</div>
-            <div class="inf-sub">${item.r_nai}</div>
+            <div class="inf-sub">${item.r_nai} (${hiraToRomaji(item.r_nai)})</div>
           </div>
 
           <div class="inflection-cell ${this.activeFormKey === 'te' ? 'active-cell' : ''}" onclick="Modul.selectFormKey('te')">
             <div class="inf-label">
               <span>🔗 Te (Sambung)</span>
-              <span class="btn-cell-speak" onclick="event.stopPropagation(); Modul.speakText('${item.k_te}')" title="Dengarkan">🔊</span>
+              <span class="inf-speaker" onclick="event.stopPropagation(); Modul.speakText('${item.k_te}')" title="Dengarkan">🔊</span>
             </div>
             <div class="inf-val">${item.k_te}</div>
-            <div class="inf-sub">${item.r_te}</div>
+            <div class="inf-sub">${item.r_te} (${hiraToRomaji(item.r_te)})</div>
           </div>
         </div>
 
         <!-- Authentic Sentence Shelf -->
-        <div class="fc-sentence-shelf">
-          <div class="fss-header">
-            <div class="fss-header-left">
-              <span>💬 Contoh Kalimat:</span>
-              <span class="fss-badge">${formBadges[this.activeFormKey]}</span>
+        <div class="fc-sentence-shelf" onclick="event.stopPropagation()">
+          <div class="fss-top">
+            <div class="fss-badge-wrap">
+              <span class="fss-badge">💬 Contoh Kalimat:</span>
+              <span class="fss-form-pill" id="fss-active-tag">${formBadges[this.activeFormKey]}</span>
             </div>
-            <button type="button" class="btn-sent-speak" onclick="Modul.speakText('${sentData.jp.replace(/'/g, "\\'")}')" title="Dengarkan Kalimat">🔊</button>
+            <button type="button" class="btn-sentence-audio" id="btn-audio-sent" onclick="Modul.speakActiveSentence()" title="Dengarkan Kalimat">🔊</button>
           </div>
-          <div class="fss-jp">${sentData.jp}</div>
-          <div class="fss-romaji">${sentData.romaji}</div>
-          <div class="fss-id">${sentData.id}</div>
+          <div class="fss-jp" id="fss-jp-text">${sentData.jp}</div>
+          <div class="fss-romaji" id="fss-ro-text">${sentData.ro || sentData.romaji || ''}</div>
+          <div class="fss-id" id="fss-id-text">${sentData.id}</div>
         </div>
       </div>
 
       <!-- Bottom Navigation Controls -->
       <div class="dojo-nav-controls">
-        <button type="button" class="btn-dn" onclick="Modul.prevCard()">← Sebelumnya</button>
+        <button type="button" class="btn-dn" onclick="Modul.prevCard()" ${prevDisabled}>← Sebelumnya</button>
         <button type="button" class="btn-dn btn-dn-next" onclick="Modul.nextCard()">Selanjutnya →</button>
       </div>
     `;
@@ -5385,13 +5396,37 @@ const Modul = {
 
   revealCard: function() {
     if (this.cardRevealed) return;
-    this.playSfx('reveal');
     this.cardRevealed = true;
     const sec = document.getElementById('sec-flashcard');
     if (sec) {
       sec.classList.remove('fc-mode-compact');
       sec.classList.add('fc-mode-expanded');
     }
+    this.scrollToCardFit();
+    setTimeout(() => this.playSfx('reveal'), 20);
+  },
+
+  scrollToCardFit: function() {
+    const sec = document.getElementById('sec-flashcard');
+    if (!sec) return;
+    requestAnimationFrame(() => {
+      const rect = sec.getBoundingClientRect();
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const targetY = scrollTop + rect.top - 8;
+      window.scrollTo({
+        top: Math.max(0, targetY),
+        behavior: 'smooth'
+      });
+    });
+  },
+
+  speakActiveSentence: function() {
+    const item = this.activeArray[this.cardIdx];
+    if (!item) return;
+    const sentData = (VERB_SENTENCES_DB[item.k_kamus] && VERB_SENTENCES_DB[item.k_kamus][this.activeFormKey])
+      ? VERB_SENTENCES_DB[item.k_kamus][this.activeFormKey]
+      : null;
+    if (sentData && sentData.jp) this.speakText(sentData.jp);
   },
 
   selectFormKey: function(key) {
@@ -5412,7 +5447,7 @@ const Modul = {
     // Update sentence shelf
     const sentData = (VERB_SENTENCES_DB[item.k_kamus] && VERB_SENTENCES_DB[item.k_kamus][key])
       ? VERB_SENTENCES_DB[item.k_kamus][key]
-      : { jp: item.k_kamus, romaji: item.r_kamus, id: item.a };
+      : { jp: item.k_kamus, ro: hiraToRomaji(item.r_kamus), id: item.a };
 
     const formBadges = {
       kamus: 'Bentuk Kamus',
@@ -5421,31 +5456,36 @@ const Modul = {
       te: 'Bentuk Te (~て/で)'
     };
 
-    const badgeEl = document.querySelector('.fss-badge');
-    const jpEl = document.querySelector('.fss-jp');
-    const romajiEl = document.querySelector('.fss-romaji');
-    const idEl = document.querySelector('.fss-id');
-    const speakBtn = document.querySelector('.btn-sent-speak');
+    const badgeEl = document.getElementById('fss-active-tag') || document.querySelector('.fss-badge');
+    const jpEl = document.getElementById('fss-jp-text') || document.querySelector('.fss-jp');
+    const romajiEl = document.getElementById('fss-ro-text') || document.querySelector('.fss-romaji');
+    const idEl = document.getElementById('fss-id-text') || document.querySelector('.fss-id');
 
     if (badgeEl) badgeEl.innerText = formBadges[key];
     if (jpEl) jpEl.innerHTML = sentData.jp;
-    if (romajiEl) romajiEl.innerText = sentData.romaji;
+    if (romajiEl) romajiEl.innerText = sentData.ro || sentData.romaji || '';
     if (idEl) idEl.innerText = sentData.id;
-    if (speakBtn) speakBtn.setAttribute('onclick', `Modul.speakText('${sentData.jp.replace(/'/g, "\\'")}')`);
   },
 
   nextCard: function() {
+    if (this.cardIdx >= this.activeArray.length) return;
     this.playSfx('tap');
-    this.cardIdx++;
-    this.renderFC(true, 'next');
+    const targetId = (this.cardIdx >= this.activeArray.length) ? 'sec-flashcard' : 'fc-stage-box';
+    this.triggerAnimation(targetId, 'slide-out-left');
+    setTimeout(() => {
+      this.cardIdx++;
+      this.renderFC(true, 'next');
+    }, 180);
   },
 
   prevCard: function() {
+    if (this.cardIdx <= 0) return;
     this.playSfx('tap');
-    if (this.cardIdx > 0) {
+    this.triggerAnimation('fc-stage-box', 'slide-out-right');
+    setTimeout(() => {
       this.cardIdx--;
       this.renderFC(true, 'prev');
-    }
+    }, 180);
   },
 
   refreshCurrentTab: function() {
