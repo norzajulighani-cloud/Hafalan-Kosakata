@@ -238,9 +238,6 @@
   }
 
   /* ==========================================
-     3. CLEAN UNIFIED SESSION NAV BAR
-     ========================================== */
-  /* ==========================================
      3. CLEAN UNIFIED SESSION NAV BAR (Zero Redundancy)
      ========================================== */
   .session-nav-bar {
@@ -1150,25 +1147,61 @@
     max-width: 480px;
   }
 
-  .btn-quiz-opt {
+  .btn-quiz-opt,
+  .quiz-opt-btn {
     background: rgba(255, 255, 255, 0.05);
     border: 1.5px solid var(--border-glass);
     border-radius: 14px;
-    padding: 12px 14px;
+    padding: 10px 14px;
     color: #fff;
-    font-size: 15px;
+    font-size: 14.5px;
     font-weight: 700;
     cursor: pointer;
     transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    min-height: 52px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
   }
-  .btn-quiz-opt:hover:not(:disabled) {
+  .btn-quiz-opt:hover:not(:disabled),
+  .quiz-opt-btn:hover:not(:disabled) {
     border-color: var(--primary);
     background: rgba(56, 189, 248, 0.16);
     transform: translateY(-2px);
-    box-shadow: 0 0 16px rgba(56, 189, 248, 0.25);
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.3);
   }
-  .btn-quiz-opt:active:not(:disabled) { transform: scale(0.96); }
+  .btn-quiz-opt:active:not(:disabled),
+  .quiz-opt-btn:active:not(:disabled) {
+    transform: scale(0.96);
+  }
+
+  .opt-key {
+    background: rgba(56, 189, 248, 0.14);
+    color: var(--primary);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+  .opt-text {
+    flex: 1;
+    text-align: left;
+    white-space: normal;
+    word-break: break-word;
+    color: #f8fafc;
+    line-height: 1.35;
+  }
 
   @keyframes popCorrect {
     0% { transform: scale(1); }
@@ -1176,12 +1209,19 @@
     65% { transform: scale(0.98); }
     100% { transform: scale(1.02); }
   }
-  .btn-quiz-opt.correct {
+  .btn-quiz-opt.correct,
+  .quiz-opt-btn.correct {
     background: linear-gradient(135deg, rgba(34, 197, 94, 0.38) 0%, rgba(16, 185, 129, 0.48) 100%) !important;
     border-color: #4ade80 !important;
     color: #fff !important;
     box-shadow: 0 0 25px rgba(74, 222, 128, 0.5) !important;
     animation: popCorrect 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards !important;
+  }
+  .btn-quiz-opt.correct .opt-key,
+  .quiz-opt-btn.correct .opt-key {
+    background: rgba(74, 222, 128, 0.25);
+    border-color: #4ade80;
+    color: #fff;
   }
 
   @keyframes elasticShake {
@@ -1191,12 +1231,19 @@
     60% { transform: translateX(-5px); }
     80% { transform: translateX(3px); }
   }
-  .btn-quiz-opt.wrong {
+  .btn-quiz-opt.wrong,
+  .quiz-opt-btn.wrong {
     background: linear-gradient(135deg, rgba(239, 68, 68, 0.38) 0%, rgba(185, 28, 28, 0.48) 100%) !important;
     border-color: #f87171 !important;
     color: #fecaca !important;
     box-shadow: 0 0 20px rgba(239, 68, 68, 0.45) !important;
     animation: elasticShake 0.42s cubic-bezier(0.36, 0.07, 0.19, 0.97) forwards !important;
+  }
+  .btn-quiz-opt.wrong .opt-key,
+  .quiz-opt-btn.wrong .opt-key {
+    background: rgba(239, 68, 68, 0.25);
+    border-color: #f87171;
+    color: #fecaca;
   }
 
   .quiz-feedback-bar {
@@ -4829,7 +4876,7 @@ const Modul = {
   idxQuiz: 0,
   scoreQuiz: 0,
   drillSubtype: 'mix',      // 'mix', 'masu', 'nai', 'te', 'meaning', 'isian'
-  quizSourceMode: 'session', // Default to active session words so users aren't met with 0/0 empty state
+  quizSourceMode: 'mastered', // Default to 'mastered' (stars ⭐) so unmastered words never leak into quiz
   activeQuizData: [],
 
   activeArray: [],
@@ -5628,11 +5675,18 @@ const Modul = {
       for (let i = 0; i < count; i++) {
         const item = shuffledPool[i % shuffledPool.length];
         const ans = item.a;
-        const otherVerbs = shuffle(categoryDb.filter(v => v.k_kamus !== item.k_kamus));
+        const otherVerbs = shuffle(sessionDb.filter(v => v.k_kamus !== item.k_kamus));
         const distractors = [ans];
         for (let ov of otherVerbs) {
           if (distractors.length >= 4) break;
           if (!distractors.includes(ov.a)) distractors.push(ov.a);
+        }
+        if (distractors.length < 4) {
+          const catVerbs = shuffle(categoryDb.filter(v => v.k_kamus !== item.k_kamus));
+          for (let ov of catVerbs) {
+            if (distractors.length >= 4) break;
+            if (!distractors.includes(ov.a)) distractors.push(ov.a);
+          }
         }
 
         const isJpToId = Math.random() > 0.4;
@@ -5650,6 +5704,13 @@ const Modul = {
           for (let ov of otherVerbs) {
             if (jpOpts.length >= 4) break;
             if (!jpOpts.includes(ov.k_kamus)) jpOpts.push(ov.k_kamus);
+          }
+          if (jpOpts.length < 4) {
+            const catVerbs = shuffle(categoryDb.filter(v => v.k_kamus !== item.k_kamus));
+            for (let ov of catVerbs) {
+              if (jpOpts.length >= 4) break;
+              if (!jpOpts.includes(ov.k_kamus)) jpOpts.push(ov.k_kamus);
+            }
           }
           generated.push({
             type: 'mc',
@@ -5742,6 +5803,7 @@ const Modul = {
 
     if (this.quizSourceMode === 'mastered' && pool.length === 0) {
       if (progPill) progPill.innerHTML = `SOAL <b>0</b> / 0`;
+      if (scorePill) scorePill.innerHTML = `SKOR <b>0</b>`;
       qTextEl.innerHTML = `
         <div class="quiz-empty-mastery">
           <div class="qem-icon">⭐</div>
@@ -5805,7 +5867,7 @@ const Modul = {
       if (optContainer) {
         optContainer.classList.remove('hidden');
         optContainer.innerHTML = currentQ.opts.map((opt, oIdx) => `
-          <button type="button" class="quiz-opt-btn" onclick="Modul.checkMcAnswer(${oIdx}, this)">
+          <button type="button" class="btn-quiz-opt quiz-opt-btn" onclick="Modul.checkMcAnswer(${oIdx}, this)">
             <span class="opt-key">${['A','B','C','D'][oIdx]}</span>
             <span class="opt-text">${opt}</span>
           </button>
@@ -5838,10 +5900,10 @@ const Modul = {
     const isCorrect = (chosen === currentQ.ans);
     const fb = document.getElementById('quiz-feedback-bar');
 
-    document.querySelectorAll('.quiz-opt-btn').forEach(b => {
+    document.querySelectorAll('.btn-quiz-opt, .quiz-opt-btn').forEach(b => {
       b.disabled = true;
-      const t = b.querySelector('.opt-text').innerText;
-      if (t === currentQ.ans) b.classList.add('correct');
+      const t = b.querySelector('.opt-text') ? b.querySelector('.opt-text').innerText : b.innerText;
+      if (t.trim() === currentQ.ans.trim()) b.classList.add('correct');
       else if (b === btnEl && !isCorrect) b.classList.add('wrong');
     });
 
