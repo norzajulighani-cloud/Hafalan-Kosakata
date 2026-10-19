@@ -369,67 +369,25 @@
     -webkit-user-select: none;
   }
 
-  /* Compact Mode (Sebelum Kartu Dipilih) - Bersih Tanpa Kotak Bertumpuk */
-  #sec-flashcard.fc-mode-compact {
-    min-height: auto !important;
-    padding: 16px 18px 16px 18px;
-    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.65), 0 0 20px rgba(56, 189, 248, 0.08);
-  }
-  #sec-flashcard.fc-mode-compact .fc-stage-box {
-    padding: 8px 0 4px 0;
-    cursor: pointer;
-  }
-  #sec-flashcard.fc-mode-compact .fc-kanji-big {
-    font-size: clamp(56px, 15vw, 78px);
-    margin: 10px 0 6px 0;
-    transition: transform 0.25s ease, text-shadow 0.25s ease;
-  }
-  #sec-flashcard.fc-mode-compact .fc-stage-box:hover .fc-kanji-big {
-    transform: scale(1.06);
-    text-shadow: 0 0 30px var(--primary-glow);
-  }
-  #sec-flashcard.fc-mode-compact .fc-details-shelf {
-    display: none !important;
-  }
-  #sec-flashcard.fc-mode-compact .fc-tap-hint {
-    display: flex !important;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--text-sub);
-    margin: 6px 0 10px 0;
-    opacity: 0.8;
-    transition: all 0.2s;
-    letter-spacing: 0.3px;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-  }
-  #sec-flashcard.fc-mode-compact .fc-stage-box:hover .fc-tap-hint {
-    color: var(--primary);
-    opacity: 1;
-  }
-
-  /* Expanded Mode (Setelah Kartu Dipilih) - Zero Lag Hardware Composited */
-  #sec-flashcard.fc-mode-expanded {
+  /* Dojo Conjugation Module - Unboxed Floating Arena */
+  #sec-flashcard {
     min-height: auto;
     padding: 18px 18px 18px 18px;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75), 0 0 30px rgba(56, 189, 248, 0.15);
+    user-select: none;
+    -webkit-user-select: none;
   }
-  #sec-flashcard.fc-mode-expanded .fc-stage-box {
+  #sec-flashcard .fc-stage-box {
     cursor: default;
+    padding: 4px 0 8px 0;
   }
-  #sec-flashcard.fc-mode-expanded .fc-kanji-big {
-    font-size: clamp(44px, 10vw, 60px);
+  #sec-flashcard .fc-kanji-big {
+    font-size: clamp(48px, 12vw, 68px);
     margin: 2px 0 2px 0;
   }
-  #sec-flashcard.fc-mode-expanded .fc-details-shelf {
+  #sec-flashcard .fc-details-shelf {
     display: block !important;
     width: 100%;
-    animation: revealFade 0.16s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    will-change: opacity, transform;
-  }
-  #sec-flashcard.fc-mode-expanded .fc-tap-hint {
-    display: none !important;
   }
 
   @keyframes revealFade {
@@ -598,56 +556,81 @@
     color: #fff;
   }
 
-  /* 4 Forms Matrix: Clean Floating Glass Tiles (Bebas Kotak Kaku) */
+  /* 8 Forms Conjugation Matrix: Clean Floating Glass Tiles (Zero Kotak-dalam-Kotak) */
   .fc-grid-two {
     width: 100%;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, 1fr);
     gap: 8px;
-    margin-top: 4px;
+    margin-top: 6px;
     text-align: left;
   }
 
   .inflection-cell {
-    background: rgba(255, 255, 255, 0.035);
-    border: 1px solid rgba(255, 255, 255, 0.07);
+    background: rgba(255, 255, 255, 0.032);
+    border: 1px solid rgba(255, 255, 255, 0.075);
     border-radius: 12px;
     padding: 8px 11px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
   }
   .inflection-cell:hover {
     background: rgba(56, 189, 248, 0.09);
     border-color: rgba(56, 189, 248, 0.35);
     transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
   }
   .inflection-cell.active-cell {
-    border-color: rgba(56, 189, 248, 0.6) !important;
-    background: linear-gradient(145deg, rgba(56, 189, 248, 0.2) 0%, rgba(14, 165, 233, 0.12) 100%) !important;
-    box-shadow: 0 4px 16px rgba(56, 189, 248, 0.22) !important;
+    border-color: rgba(56, 189, 248, 0.75) !important;
+    background: linear-gradient(145deg, rgba(56, 189, 248, 0.22) 0%, rgba(14, 165, 233, 0.12) 100%) !important;
+    box-shadow: 0 4px 18px rgba(56, 189, 248, 0.25) !important;
     transform: translateY(-1px);
-  }
-  .inflection-cell.active-cell.na-cell {
-    border-color: rgba(34, 197, 94, 0.6) !important;
-    background: linear-gradient(145deg, rgba(34, 197, 94, 0.2) 0%, rgba(16, 185, 129, 0.12) 100%) !important;
-    box-shadow: 0 4px 16px rgba(34, 197, 94, 0.22) !important;
   }
 
   .inf-label {
     font-size: 10px;
     font-weight: 800;
-    letter-spacing: 0.6px;
+    letter-spacing: 0.5px;
     color: var(--text-sub);
     margin-bottom: 2px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 4px;
   }
-  .inf-label span:first-child { color: var(--primary); }
+  .inf-label-left {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    min-width: 0;
+  }
+  .inf-label-title {
+    color: var(--primary);
+    font-weight: 800;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .inf-nuance-tag {
+    font-size: 8px;
+    font-weight: 800;
+    padding: 1px 5px;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-sub);
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+  }
+  .active-cell .inf-nuance-tag {
+    background: rgba(56, 189, 248, 0.3);
+    color: #fff;
+  }
   .inf-val {
     font-family: 'Noto Sans JP', sans-serif;
     font-size: 13.5px;
@@ -655,20 +638,61 @@
     color: #fff;
     display: flex;
     align-items: baseline;
-    gap: 5px;
+    gap: 4px;
     flex-wrap: wrap;
+    line-height: 1.25;
   }
   .inf-sub {
-    font-size: 10px;
+    font-size: 9.5px;
     color: var(--gold);
     font-weight: 700;
+    line-height: 1.2;
+  }
+  .inf-meaning {
+    font-size: 10px;
+    color: #cbd5e1;
+    font-weight: 600;
+    margin-top: 2px;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .inf-speaker {
     font-size: 10px;
-    opacity: 0.6;
-    transition: opacity 0.2s;
+    opacity: 0.55;
+    transition: opacity 0.2s, transform 0.2s;
+    cursor: pointer;
+    flex-shrink: 0;
   }
-  .inflection-cell:hover .inf-speaker { opacity: 1; }
+  .inf-speaker:hover {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+  .active-cell .inf-speaker {
+    opacity: 0.9;
+  }
+
+  /* Highlight spans in live sentence shelf */
+  .sent-hl-verb {
+    color: var(--gold);
+    background: rgba(251, 191, 36, 0.16);
+    padding: 1px 4px;
+    border-radius: 4px;
+    border-bottom: 1.8px solid var(--gold);
+    font-weight: 800;
+  }
+  .sent-hl-ro {
+    color: #fff;
+    font-weight: 800;
+  }
+  .sent-hl-id {
+    color: #fff;
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-color: var(--primary);
+    text-underline-offset: 3px;
+  }
 
   /* ==========================================
      5. DYNAMIC SENTENCE MORPH SHELF
@@ -1052,7 +1076,10 @@
     position: absolute;
     top: calc(100% + 8px);
     right: 0;
-    width: 250px;
+    width: 260px;
+    max-height: calc(100vh - 140px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
     background: linear-gradient(165deg, rgba(16, 26, 56, 0.98) 0%, rgba(8, 14, 32, 0.99) 100%);
     border: 1px solid rgba(56, 189, 248, 0.35);
     border-radius: 16px;
@@ -1142,9 +1169,11 @@
   .quiz-options-grid {
     display: grid;
     grid-template-columns: 1fr 1fr !important;
-    gap: 8px;
+    gap: 10px;
     width: 100%;
-    max-width: 480px;
+    max-width: 520px;
+    margin: 12px auto 0 auto;
+    align-self: center;
   }
 
   .btn-quiz-opt,
@@ -1152,20 +1181,22 @@
     background: rgba(255, 255, 255, 0.05);
     border: 1.5px solid var(--border-glass);
     border-radius: 14px;
-    padding: 10px 14px;
+    padding: 12px 16px 12px 46px;
     color: #fff;
-    font-size: 14.5px;
+    font-size: 15px;
     font-weight: 700;
     cursor: pointer;
     transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    gap: 10px;
+    justify-content: center;
     min-height: 52px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     -webkit-tap-highlight-color: transparent;
     user-select: none;
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
   }
   .btn-quiz-opt:hover:not(:disabled),
   .quiz-opt-btn:hover:not(:disabled) {
@@ -1180,23 +1211,27 @@
   }
 
   .opt-key {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
     background: rgba(56, 189, 248, 0.14);
     color: var(--primary);
     border: 1px solid rgba(56, 189, 248, 0.35);
-    width: 26px;
-    height: 26px;
-    border-radius: 8px;
+    width: 24px;
+    height: 24px;
+    border-radius: 7px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 800;
     flex-shrink: 0;
     transition: all 0.2s;
   }
   .opt-text {
-    flex: 1;
-    text-align: left;
+    width: 100%;
+    text-align: center;
     white-space: normal;
     word-break: break-word;
     color: #f8fafc;
@@ -1257,40 +1292,79 @@
   }
 
   /* Isian Input Box */
-  .isian-input-box {
+  .quiz-isian-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     width: 100%;
     max-width: 440px;
-    padding: 13px 16px;
+    margin: 16px auto 0 auto;
+    gap: 12px;
+    align-self: center;
+  }
+  .quiz-isian-input,
+  .isian-input-box {
+    width: 100%;
+    padding: 14px 18px;
     border-radius: 14px;
-    border: 1.5px solid rgba(255, 255, 255, 0.18);
-    background: rgba(10, 18, 38, 0.9);
+    border: 1.5px solid rgba(56, 189, 248, 0.35);
+    background: rgba(10, 18, 38, 0.85);
     color: #fff;
     font-size: 16px;
     font-weight: 700;
     text-align: center;
-    margin-bottom: 12px;
     outline: none;
-    transition: all 0.2s;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3), inset 0 2px 4px rgba(0, 0, 0, 0.25);
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    box-sizing: border-box;
   }
+  .quiz-isian-input::placeholder,
+  .isian-input-box::placeholder {
+    color: rgba(148, 163, 184, 0.55);
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .quiz-isian-input:focus,
   .isian-input-box:focus {
     border-color: var(--primary);
-    box-shadow: 0 0 16px rgba(56, 189, 248, 0.35);
+    background: rgba(12, 22, 48, 0.98);
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.45), inset 0 2px 4px rgba(0, 0, 0, 0.2);
   }
+  .quiz-isian-submit,
   .btn-isian-submit {
-    background: linear-gradient(135deg, var(--primary) 0%, #0284c7 100%);
+    background: linear-gradient(135deg, #0284c7 0%, var(--primary) 100%);
     color: #020617;
     border: none;
-    padding: 12px 24px;
+    padding: 13px 24px;
     border-radius: 12px;
     font-weight: 800;
     font-size: 14.5px;
     cursor: pointer;
     width: 100%;
     max-width: 440px;
-    transition: all 0.2s;
-    box-shadow: 0 4px 16px rgba(56, 189, 248, 0.25);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 16px rgba(56, 189, 248, 0.3);
+    box-sizing: border-box;
   }
-  .btn-isian-submit:hover { filter: brightness(1.1); transform: translateY(-1px); }
+  .quiz-isian-submit:hover:not(:disabled),
+  .btn-isian-submit:hover {
+    filter: brightness(1.12);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(56, 189, 248, 0.5);
+  }
+  .quiz-isian-submit:active:not(:disabled),
+  .btn-isian-submit:active {
+    transform: scale(0.97);
+  }
+  .quiz-isian-submit:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 
   /* ==========================================
      7. MODAL CHEATSHEET RUMUS 4 BENTUK INFLEKSI
@@ -1606,6 +1680,11 @@
     #sec-quiz {
       min-height: 380px !important;
     }
+    .quiz-options-grid {
+      grid-template-columns: 1fr !important;
+      gap: 8px !important;
+      max-width: 440px !important;
+    }
     .inflection-cell {
       padding: 8px 10px !important;
     }
@@ -1898,7 +1977,7 @@
   <nav class="main-nav-tabs">
     <button type="button" class="tab-main-btn active" id="btn-tab-flashcard" onclick="Modul.switchTab('flashcard')">
       <span>🎴</span>
-      <span>Flashcard & Konjugasi</span>
+      <span>Konjugasi & Kalimat</span>
     </button>
     <button type="button" class="tab-main-btn" id="btn-tab-quiz" onclick="Modul.switchTab('quiz')">
       <span>🎯</span>
@@ -1940,39 +2019,25 @@
 
           <div class="drill-dropdown-menu hidden" id="drill-dropdown-menu" onclick="event.stopPropagation()">
             <div class="dd-header">MODE LATIHAN KUIS</div>
-            <div class="dd-item active" data-qtype="mix" onclick="Modul.selectDrillSubtype('mix', '🔀', 'Acak')">
+            <div class="dd-item active" data-qtype="mix" onclick="Modul.selectDrillSubtype('mix', '🔀', 'Acak Campuran')">
               <div class="dd-icon">🔀</div>
               <div class="dd-text">
                 <div class="dd-title">Acak / Campuran</div>
-                <div class="dd-desc">Kombinasi bentuk Masu, Nai, Te, dan arti</div>
+                <div class="dd-desc">Kombinasi 8 konjugasi dan tebak arti</div>
               </div>
             </div>
-            <div class="dd-item" data-qtype="masu" onclick="Modul.selectDrillSubtype('masu', '🌸', 'Bentuk Masu')">
-              <div class="dd-icon">🌸</div>
+            <div class="dd-item" data-qtype="conjugation" onclick="Modul.selectDrillSubtype('conjugation', '🎴', 'Konjugasi')">
+              <div class="dd-icon">🎴</div>
               <div class="dd-text">
-                <div class="dd-title">Bentuk Masu (~ます)</div>
-                <div class="dd-desc">Uji perubahan bentuk sopan positif</div>
-              </div>
-            </div>
-            <div class="dd-item" data-qtype="nai" onclick="Modul.selectDrillSubtype('nai', '❄️', 'Bentuk Nai')">
-              <div class="dd-icon">❄️</div>
-              <div class="dd-text">
-                <div class="dd-title">Bentuk Nai (~ない)</div>
-                <div class="dd-desc">Uji bentuk negatif biasa</div>
-              </div>
-            </div>
-            <div class="dd-item" data-qtype="te" onclick="Modul.selectDrillSubtype('te', '🔗', 'Bentuk Te')">
-              <div class="dd-icon">🔗</div>
-              <div class="dd-text">
-                <div class="dd-title">Bentuk Te (~て/で)</div>
-                <div class="dd-desc">Uji bentuk sambung/perintah</div>
+                <div class="dd-title">Konjugasi (Semua Bentuk)</div>
+                <div class="dd-desc">Uji Masu, Te, Ta, Nai, Nakatta, Te-iru, Tai</div>
               </div>
             </div>
             <div class="dd-item" data-qtype="meaning" onclick="Modul.selectDrillSubtype('meaning', '📖', 'Tebak Arti')">
               <div class="dd-icon">📖</div>
               <div class="dd-text">
                 <div class="dd-title">Tebak Arti Indonesia</div>
-                <div class="dd-desc">Uji pemahaman makna kata kerja</div>
+                <div class="dd-desc">Pilihan ganda makna kata kerja</div>
               </div>
             </div>
             <div class="dd-item" data-qtype="isian" onclick="Modul.selectDrillSubtype('isian', '✍️', 'Isian Singkat')">
@@ -2012,7 +2077,7 @@
 
     <!-- Isian Container -->
     <div class="quiz-isian-box hidden" id="quiz-isian-container">
-      <input type="text" class="quiz-isian-input" id="quiz-isian-input" placeholder="Ketik jawabanmu di sini..." autocomplete="off" autocapitalize="none">
+      <input type="text" class="quiz-isian-input" id="quiz-isian-input" placeholder="Ketik jawabanmu di sini..." autocomplete="off" autocapitalize="none" onkeydown="if(event.key==='Enter') Modul.submitIsianAnswer()">
       <button type="button" class="quiz-isian-submit" id="quiz-isian-submit" onclick="Modul.submitIsianAnswer()">Jawab ➔</button>
     </div>
 
@@ -4599,7 +4664,6 @@ const VERB_SENTENCES_DB = {
     "masu": {
       "jp": "毎晩日本語の勉強をします。",
       "ro": "Maiban Nihongo no benkyou o shimasu.",
-      "id": "Setiap malam belajar bahasa Jepang."
     },
     "nai": {
       "jp": "授業中は無駄話をしない。",
@@ -4833,9 +4897,9 @@ function hiraToRomaji(str) {
     'わ':'wa','を':'wo','ん':'n',
     'が':'ga','ぎ':'gi','ぐ':'gu','げ':'ge','ご':'go',
     'ざ':'za','じ':'ji','ず':'zu','ぜ':'ze','ぞ':'zo',
-    'だ':'da','ぢ':'ji','づ':'zu','で':'de','ど':'do',
+    'だ':'da','ぢ':'ji','づ':'zu','de':'de','ど':'do',
     'ば':'ba','び':'bi','ぶ':'bu','べ':'be','ぼ':'bo',
-    'ぱ':'pa','ぴ':'pi','ぷ':'pu','ぺ':'pe','ぽ':'po'
+    'ぱ':'pa','pi':'pi','ぷ':'pu','ぺ':'pe','ぽ':'po'
   };
 
   let res = '';
@@ -4875,7 +4939,7 @@ const Modul = {
   // Quiz
   idxQuiz: 0,
   scoreQuiz: 0,
-  drillSubtype: 'mix',      // 'mix', 'masu', 'nai', 'te', 'meaning', 'isian'
+  drillSubtype: 'mix',      // 'mix', 'conjugation', 'meaning', 'isian'
   quizSourceMode: 'mastered', // Default to 'mastered' (stars ⭐) so unmastered words never leak into quiz
   activeQuizData: [],
 
@@ -5185,15 +5249,206 @@ const Modul = {
     this.activeArray = info.db.filter(item => grps.includes(item.grp));
   },
 
+  getVerbForms: function(item) {
+    if (!item) return null;
+    const k_ta = (item.k_te || '').replace(/て$/, 'た').replace(/で$/, 'だ');
+    const r_ta = (item.r_te || '').replace(/て$/, 'た').replace(/で$/, 'だ');
+    const k_nakatta = (item.k_nai || '').replace(/ない$/, 'なかった');
+    const r_nakatta = (item.r_nai || '').replace(/ない$/, 'なかった');
+    const k_teiru = (item.k_te || '') + 'いる';
+    const r_teiru = (item.r_te || '') + 'いる';
+    const k_tai = (item.k_masu || '').replace(/ます$/, 'たい');
+    const r_tai = (item.r_masu || '').replace(/ます$/, 'たい');
+
+    return {
+      kamus: {
+        key: 'kamus',
+        title: 'Kamus',
+        sublabel: 'Jisho / Biasa',
+        tag: 'Biasa',
+        k: item.k_kamus,
+        r: item.r_kamus,
+        ro: hiraToRomaji(item.r_kamus),
+        meaning: item.a,
+        badge: '■ Bentuk Kamus'
+      },
+      masu: {
+        key: 'masu',
+        title: 'Masu',
+        sublabel: 'Sopan Positif',
+        tag: 'Sopan',
+        k: item.k_masu,
+        r: item.r_masu,
+        ro: hiraToRomaji(item.r_masu),
+        meaning: `${item.a} (sopan)`,
+        badge: '🌸 Bentuk Masu'
+      },
+      nai: {
+        key: 'nai',
+        title: 'Nai',
+        sublabel: 'Negatif Biasa',
+        tag: 'Negatif',
+        k: item.k_nai,
+        r: item.r_nai,
+        ro: hiraToRomaji(item.r_nai),
+        meaning: `Tidak ${item.a.toLowerCase()}`,
+        badge: '❄️ Bentuk Nai'
+      },
+      te: {
+        key: 'te',
+        title: 'Te',
+        sublabel: 'Sambung / Tolong',
+        tag: 'Sambung',
+        k: item.k_te,
+        r: item.r_te,
+        ro: hiraToRomaji(item.r_te),
+        meaning: `${item.a} dan... / Tolong ${item.a.toLowerCase()}`,
+        badge: '🔗 Bentuk Te'
+      },
+      ta: {
+        key: 'ta',
+        title: 'Ta',
+        sublabel: 'Lampau Positif',
+        tag: 'Lampau',
+        k: k_ta,
+        r: r_ta,
+        ro: hiraToRomaji(r_ta),
+        meaning: `Sudah / telah ${item.a.toLowerCase()}`,
+        badge: '⏳ Bentuk Ta'
+      },
+      nakatta: {
+        key: 'nakatta',
+        title: 'Nakatta',
+        sublabel: 'Lampau Negatif',
+        tag: 'Dulu Tidak',
+        k: k_nakatta,
+        r: r_nakatta,
+        ro: hiraToRomaji(r_nakatta),
+        meaning: `Dulu tidak ${item.a.toLowerCase()}`,
+        badge: '🍂 Bentuk Nakatta'
+      },
+      teiru: {
+        key: 'teiru',
+        title: 'Te-iru',
+        sublabel: 'Sedang Berlangsung',
+        tag: 'Sedang',
+        k: k_teiru,
+        r: r_teiru,
+        ro: hiraToRomaji(r_teiru),
+        meaning: `Sedang ${item.a.toLowerCase()}`,
+        badge: '🔄 Bentuk Te-iru'
+      },
+      tai: {
+        key: 'tai',
+        title: 'Tai',
+        sublabel: 'Keinginan Pribadi',
+        tag: 'Ingin',
+        k: k_tai,
+        r: r_tai,
+        ro: hiraToRomaji(r_tai),
+        meaning: `Ingin / mau ${item.a.toLowerCase()}`,
+        badge: '✨ Bentuk Tai'
+      }
+    };
+  },
+
+  getSentenceForForm: function(item, formKey) {
+    if (!item) return { jpRaw: '', jpHtml: '', roHtml: '', idHtml: '', badge: '' };
+    const forms = this.getVerbForms(item);
+    const targetForm = forms[formKey] || forms.kamus;
+    const s = VERB_SENTENCES_DB[item.k_kamus] || {};
+
+    let raw = null;
+    if (s[formKey]) {
+      raw = { ...s[formKey] };
+    } else {
+      const baseMasu = s.masu || { jp: item.k_masu + '。', ro: forms.masu.ro + '.', id: item.a };
+      const baseNai = s.nai || { jp: item.k_nai + '。', ro: forms.nai.ro + '.', id: 'Tidak ' + item.a };
+
+      if (formKey === 'ta') {
+        let jp = baseMasu.jp.replace(/明日/g, '昨日').replace(item.k_masu, targetForm.k);
+        if (!jp.includes(targetForm.k)) jp = `昨日、${targetForm.k}。`;
+        let ro = baseMasu.ro.replace(/Ashita/gi, 'Kinou').replace(new RegExp(forms.masu.ro, 'gi'), targetForm.ro);
+        if (!ro.toLowerCase().includes(targetForm.ro.toLowerCase())) ro = `Kinou, ${targetForm.ro}.`;
+        let id = baseMasu.id.replace(/Besok/gi, 'Kemarin').replace(/Setiap pagi|Setiap hari/gi, 'Tadi');
+        if (!id.toLowerCase().includes('sudah') && !id.toLowerCase().includes('telah') && !id.toLowerCase().includes('kemarin') && !id.toLowerCase().includes('tadi')) {
+          id = 'Sudah ' + id.charAt(0).toLowerCase() + id.slice(1);
+        }
+        raw = { jp, ro, id };
+      } else if (formKey === 'nakatta') {
+        let jp = baseNai.jp.replace(/今日/g, '昨日').replace(/まだ/g, '昨日は').replace(item.k_nai, targetForm.k);
+        if (!jp.includes(targetForm.k)) jp = `昨日は${targetForm.k}。`;
+        let ro = baseNai.ro.replace(/Kyou/gi, 'Kinou').replace(/Mada/gi, 'Kinou wa').replace(new RegExp(forms.nai.ro, 'gi'), targetForm.ro);
+        if (!ro.toLowerCase().includes(targetForm.ro.toLowerCase())) ro = `Kinou wa ${targetForm.ro}.`;
+        let id = baseNai.id.replace(/Hari ini/gi, 'Kemarin').replace(/Belum/gi, 'Kemarin tidak');
+        if (!id.toLowerCase().includes('kemarin') && !id.toLowerCase().includes('dulu')) {
+          id = 'Dulu ' + id.charAt(0).toLowerCase() + id.slice(1);
+        }
+        raw = { jp, ro, id };
+      } else if (formKey === 'teiru') {
+        let jp = baseMasu.jp.replace(/明日|毎朝|毎日/g, '今').replace(item.k_masu, targetForm.k);
+        if (!jp.includes(targetForm.k)) jp = `今、${targetForm.k}。`;
+        if (!jp.startsWith('今')) jp = '今、' + jp;
+        let ro = baseMasu.ro.replace(/Ashita|Maiasa|Mainichi/gi, 'Ima').replace(new RegExp(forms.masu.ro, 'gi'), targetForm.ro);
+        if (!ro.toLowerCase().includes(targetForm.ro.toLowerCase())) ro = `Ima, ${targetForm.ro}.`;
+        if (!ro.toLowerCase().startsWith('ima')) ro = 'Ima, ' + ro.charAt(0).toLowerCase() + ro.slice(1);
+        let id = baseMasu.id.replace(/Besok saya|Besok|Setiap pagi|Setiap hari/gi, 'Sekarang');
+        if (!id.toLowerCase().includes('sedang')) {
+          id = id.replace(/Sekarang\s*/gi, 'Sekarang sedang ');
+          if (!id.toLowerCase().includes('sedang')) id = 'Sedang ' + id.charAt(0).toLowerCase() + id.slice(1);
+        }
+        raw = { jp, ro, id };
+      } else if (formKey === 'tai') {
+        let jp = baseMasu.jp.replace(/明日/g, 'いつか').replace(item.k_masu, targetForm.k);
+        if (!jp.includes(targetForm.k)) jp = `${targetForm.k}です。`;
+        let ro = baseMasu.ro.replace(/Ashita/gi, 'Itsuka').replace(new RegExp(forms.masu.ro, 'gi'), targetForm.ro);
+        if (!ro.toLowerCase().includes(targetForm.ro.toLowerCase())) ro = `${targetForm.ro} desu.`;
+        let id = baseMasu.id.replace(/Besok saya|Besok/gi, 'Suatu hari').replace(/Setiap pagi|Setiap hari/gi, '');
+        if (!id.toLowerCase().includes('ingin') && !id.toLowerCase().includes('mau')) {
+          id = 'Ingin ' + id.trim().charAt(0).toLowerCase() + id.trim().slice(1);
+        }
+        raw = { jp, ro, id };
+      } else {
+        raw = baseMasu;
+      }
+    }
+
+    const targetK = targetForm.k;
+    const targetR = targetForm.r;
+    const targetRo = targetForm.ro;
+
+    let hlJp = raw.jp || '';
+    if (hlJp && !hlJp.includes('sent-hl-verb')) {
+      if (targetK && hlJp.includes(targetK)) {
+        hlJp = hlJp.replace(targetK, `<span class="sent-hl-verb">${targetK}</span>`);
+      } else if (targetR && hlJp.includes(targetR)) {
+        hlJp = hlJp.replace(targetR, `<span class="sent-hl-verb">${targetR}</span>`);
+      }
+    }
+
+    let hlRo = raw.ro || '';
+    if (hlRo && !hlRo.includes('sent-hl-ro') && targetRo) {
+      const regRo = new RegExp('(' + targetRo + ')', 'i');
+      hlRo = hlRo.replace(regRo, `<span class="sent-hl-ro">$1</span>`);
+    }
+
+    let hlId = raw.id || '';
+
+    return {
+      jpRaw: raw.jp || '',
+      jpHtml: hlJp,
+      roHtml: hlRo,
+      idHtml: hlId,
+      badge: targetForm.badge,
+      title: targetForm.title,
+      tag: targetForm.tag,
+      meaning: targetForm.meaning
+    };
+  },
+
   renderFC: function(useSlideAnim = true, animDirection = 'next') {
     const sec = document.getElementById('sec-flashcard');
     if (!sec) return;
-
-    this.cardRevealed = false;
-    this.activeFormKey = 'kamus';
-
-    sec.classList.remove('fc-mode-expanded');
-    sec.classList.add('fc-mode-compact');
 
     if (this.cardIdx >= this.activeArray.length) {
       const info = this.getDBInfo();
@@ -5240,7 +5495,7 @@ const Modul = {
           <div class="fc-finish-icon">🌟</div>
           <div class="fc-finish-title">${currentTitle} Tuntas!</div>
           <div class="fc-finish-desc">
-            Kamu telah mempelajari seluruh <b>${this.activeArray.length} kata kerja</b> di sesi ini.<br>
+            Kamu telah mempelajari seluruh <b>${this.activeArray.length} kata kerja</b> beserta 8 konjugasinya.<br>
             Penguasaan: <b style="color:var(--gold);">⭐ ${masteredCount} / ${this.activeArray.length} kata dikuasai</b>.
           </div>
           <div class="fc-finish-actions">
@@ -5262,97 +5517,71 @@ const Modul = {
 
     const item = this.activeArray[this.cardIdx];
     const isMastered = this.masteredList.includes(item.k_kamus);
-    const info = this.getDBInfo();
-    const pageTitle = info.pages[this.activeSesi].title.split(':')[0];
-
-    // Sentence for active form key
-    const sentData = (VERB_SENTENCES_DB[item.k_kamus] && VERB_SENTENCES_DB[item.k_kamus][this.activeFormKey])
-      ? VERB_SENTENCES_DB[item.k_kamus][this.activeFormKey]
-      : { jp: `毎日${item.k_kamus}。敬語では${item.k_masu}と言います。`, ro: `Mainichi ${hiraToRomaji(item.r_kamus)}. Keigo de wa ${hiraToRomaji(item.r_masu)} to iimasu.`, id: `Setiap hari ${item.a}.` };
-
-    const formBadges = {
-      kamus: 'Bentuk Kamus',
-      masu: 'Bentuk Masu (~ます)',
-      nai: 'Bentuk Nai (~ない)',
-      te: 'Bentuk Te (~て/で)'
-    };
-
+    const forms = this.getVerbForms(item);
+    const activeFormKey = this.activeFormKey || 'kamus';
+    const sentData = this.getSentenceForForm(item, activeFormKey);
     const prevDisabled = this.cardIdx === 0 ? 'disabled' : '';
 
+    const formKeys = ['kamus', 'masu', 'nai', 'te', 'ta', 'nakatta', 'teiru', 'tai'];
+
+    const cellsHtml = formKeys.map((key, idx) => {
+      const f = forms[key];
+      const isActive = (key === activeFormKey);
+      return `
+        <div class="inflection-cell ${isActive ? 'active-cell' : ''}" id="cell-form-${key}" onclick="Modul.selectFormKey('${key}')">
+          <div class="inf-label">
+            <div class="inf-label-left">
+              <span class="inf-label-title">${idx + 1}. ${f.title}</span>
+              <span class="inf-nuance-tag">${f.tag}</span>
+            </div>
+            <span class="inf-speaker" onclick="event.stopPropagation(); Modul.speakText('${f.k || f.r}')" title="Dengarkan (${f.title})">🔊</span>
+          </div>
+          <div class="inf-val">${f.k}</div>
+          <div class="inf-sub">${f.r} (${f.ro})</div>
+          <div class="inf-meaning" title="${f.meaning}">${f.meaning}</div>
+        </div>
+      `;
+    }).join('');
+
     sec.innerHTML = `
-      <!-- Top header inside arena card (Clean & Sleek) -->
+      <!-- Top header inside card (Zero Redundancy, Pure Mastery Control) -->
       <div class="fc-header-bar">
         <span class="fc-counter-label">KATA <b>${this.cardIdx + 1}</b> / ${this.activeArray.length}</span>
         <div class="fc-header-right">
-          <button type="button" class="btn-star-mark ${isMastered ? 'is-mastered' : ''}" id="btn-star-${item.k_kamus}" onclick="Modul.toggleMastery('${item.k_kamus}', event)" title="${isMastered ? 'Dikuasai' : 'Tandai Dikuasai'}">⭐</button>
-          <button type="button" class="btn-star-mark btn-audio-speak" onclick="Modul.speakText('${item.k_kamus || item.r_kamus}', event)" title="Dengarkan Suara (ja-JP)">🔊</button>
+          <button type="button" class="btn-star-mark ${isMastered ? 'is-mastered' : ''}" id="btn-star-${item.k_kamus}" onclick="Modul.toggleMastery('${item.k_kamus}', event)" title="${isMastered ? 'Telah Dikuasai (Klik untuk batal)' : 'Tandai Dikuasai (Masukkan ke Kuis)'}">⭐</button>
+          <button type="button" class="btn-star-mark btn-audio-speak" onclick="Modul.speakText('${item.k_kamus || item.r_kamus}', event)" title="Dengarkan Pengucapan Dasar">🔊</button>
         </div>
       </div>
 
-      <!-- Main Flashcard Stage Box (Tap to Reveal) -->
-      <div class="fc-stage-box" id="fc-stage-box" onclick="Modul.revealCard()">
+      <!-- Main Verb Identity Hero (Unboxed, Sleek Floating Layout) -->
+      <div class="fc-stage-box" id="fc-stage-box">
         <div class="fc-kanji-big">${item.k_kamus}</div>
         <div class="fc-word-meta">
           <span class="fc-hira-text">${item.r_kamus}</span>
-          <span class="fc-ro-text" style="color:var(--text-sub); font-size:14.5px; font-weight:700;">(${hiraToRomaji(item.r_kamus)})</span>
+          <span class="fc-ro-text">(${hiraToRomaji(item.r_kamus)})</span>
           <span class="fc-meta-sep">•</span>
           <span class="fc-arti-text">${item.a}</span>
         </div>
-        <div class="fc-tap-hint" id="fc-tap-hint">👆 Ketuk kartu untuk melihat 4 konjugasi kata kerja</div>
       </div>
 
-      <!-- 4 Conjugations Grid (Expanded Only) -->
+      <!-- 8 Forms Morph Matrix (2 Columns x 4 Rows, All Visible, Zero Sub-Tabs!) -->
       <div class="fc-details-shelf">
         <div class="fc-grid-two">
-          <div class="inflection-cell ${this.activeFormKey === 'kamus' ? 'active-cell' : ''}" onclick="Modul.selectFormKey('kamus')">
-            <div class="inf-label">
-              <span>■ Kamus (Jisho)</span>
-              <span class="inf-speaker" onclick="event.stopPropagation(); Modul.speakText('${item.k_kamus}')" title="Dengarkan">🔊</span>
-            </div>
-            <div class="inf-val">${item.k_kamus}</div>
-            <div class="inf-sub">${item.r_kamus} (${hiraToRomaji(item.r_kamus)})</div>
-          </div>
-
-          <div class="inflection-cell ${this.activeFormKey === 'masu' ? 'active-cell' : ''}" onclick="Modul.selectFormKey('masu')">
-            <div class="inf-label">
-              <span>🌸 Masu (Sopan)</span>
-              <span class="inf-speaker" onclick="event.stopPropagation(); Modul.speakText('${item.k_masu}')" title="Dengarkan">🔊</span>
-            </div>
-            <div class="inf-val">${item.k_masu}</div>
-            <div class="inf-sub">${item.r_masu} (${hiraToRomaji(item.r_masu)})</div>
-          </div>
-
-          <div class="inflection-cell ${this.activeFormKey === 'nai' ? 'active-cell' : ''}" onclick="Modul.selectFormKey('nai')">
-            <div class="inf-label">
-              <span>❄️ Nai (Negatif)</span>
-              <span class="inf-speaker" onclick="event.stopPropagation(); Modul.speakText('${item.k_nai}')" title="Dengarkan">🔊</span>
-            </div>
-            <div class="inf-val">${item.k_nai}</div>
-            <div class="inf-sub">${item.r_nai} (${hiraToRomaji(item.r_nai)})</div>
-          </div>
-
-          <div class="inflection-cell ${this.activeFormKey === 'te' ? 'active-cell' : ''}" onclick="Modul.selectFormKey('te')">
-            <div class="inf-label">
-              <span>🔗 Te (Sambung)</span>
-              <span class="inf-speaker" onclick="event.stopPropagation(); Modul.speakText('${item.k_te}')" title="Dengarkan">🔊</span>
-            </div>
-            <div class="inf-val">${item.k_te}</div>
-            <div class="inf-sub">${item.r_te} (${hiraToRomaji(item.r_te)})</div>
-          </div>
+          ${cellsHtml}
         </div>
 
-        <!-- Authentic Sentence Shelf -->
+        <!-- Live Nuance & Context Sentence Shelf (Synchronized Live) -->
         <div class="fc-sentence-shelf" onclick="event.stopPropagation()">
           <div class="fss-top">
             <div class="fss-badge-wrap">
-              <span class="fss-badge">💬 Contoh Kalimat:</span>
-              <span class="fss-form-pill" id="fss-active-tag">${formBadges[this.activeFormKey]}</span>
+              <span class="fss-badge">💬 Nuansa Kalimat:</span>
+              <span class="fss-form-pill" id="fss-active-tag">${sentData.badge}</span>
             </div>
-            <button type="button" class="btn-sentence-audio" id="btn-audio-sent" onclick="Modul.speakActiveSentence()" title="Dengarkan Kalimat">🔊</button>
+            <button type="button" class="btn-sentence-audio" id="btn-audio-sent" onclick="Modul.speakActiveSentence()" title="Dengarkan Kalimat Lengkap">🔊</button>
           </div>
-          <div class="fss-jp" id="fss-jp-text">${sentData.jp}</div>
-          <div class="fss-romaji" id="fss-ro-text">${sentData.ro || sentData.romaji || ''}</div>
-          <div class="fss-id" id="fss-id-text">${sentData.id}</div>
+          <div class="fss-jp" id="fss-jp-text">${sentData.jpHtml}</div>
+          <div class="fss-romaji" id="fss-ro-text">${sentData.roHtml}</div>
+          <div class="fss-id" id="fss-id-text">${sentData.idHtml}</div>
         </div>
       </div>
 
@@ -5369,84 +5598,45 @@ const Modul = {
     }
   },
 
-  revealCard: function() {
-    if (this.cardRevealed) return;
-    this.cardRevealed = true;
-    const sec = document.getElementById('sec-flashcard');
-    if (sec) {
-      sec.classList.remove('fc-mode-compact');
-      sec.classList.add('fc-mode-expanded');
-    }
-    this.scrollToCardFit();
-    setTimeout(() => this.playSfx('reveal'), 20);
-  },
-
-  scrollToCardFit: function() {
-    const sec = document.getElementById('sec-flashcard');
-    if (!sec) return;
-    requestAnimationFrame(() => {
-      const rect = sec.getBoundingClientRect();
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      const targetY = scrollTop + rect.top - 8;
-      window.scrollTo({
-        top: Math.max(0, targetY),
-        behavior: 'smooth'
-      });
-    });
-  },
-
   speakActiveSentence: function() {
     const item = this.activeArray[this.cardIdx];
     if (!item) return;
-    const sentData = (VERB_SENTENCES_DB[item.k_kamus] && VERB_SENTENCES_DB[item.k_kamus][this.activeFormKey])
-      ? VERB_SENTENCES_DB[item.k_kamus][this.activeFormKey]
-      : null;
-    if (sentData && sentData.jp) this.speakText(sentData.jp);
+    const sentData = this.getSentenceForForm(item, this.activeFormKey || 'kamus');
+    if (sentData && sentData.jpRaw) this.speakText(sentData.jpRaw);
   },
 
   selectFormKey: function(key) {
     this.playSfx('tap');
     this.activeFormKey = key;
     const item = this.activeArray[this.cardIdx];
-    if (item) {
-      const targetWord = (key === 'kamus') ? item.k_kamus : (key === 'masu') ? item.k_masu : (key === 'nai') ? item.k_nai : item.k_te;
-      this.speakText(targetWord);
-    }
+    if (!item) return;
 
-    const cells = document.querySelectorAll('.inflection-cell');
-    const order = ['kamus', 'masu', 'nai', 'te'];
-    cells.forEach((c, idx) => {
-      c.classList.toggle('active-cell', order[idx] === key);
+    const forms = this.getVerbForms(item);
+    const targetForm = forms[key] || forms.kamus;
+    this.speakText(targetForm.k || targetForm.r);
+
+    const formKeys = ['kamus', 'masu', 'nai', 'te', 'ta', 'nakatta', 'teiru', 'tai'];
+    formKeys.forEach(k => {
+      const cell = document.getElementById('cell-form-' + k);
+      if (cell) cell.classList.toggle('active-cell', k === key);
     });
 
-    // Update sentence shelf
-    const sentData = (VERB_SENTENCES_DB[item.k_kamus] && VERB_SENTENCES_DB[item.k_kamus][key])
-      ? VERB_SENTENCES_DB[item.k_kamus][key]
-      : { jp: item.k_kamus, ro: hiraToRomaji(item.r_kamus), id: item.a };
+    const sentData = this.getSentenceForForm(item, key);
+    const badgeEl = document.getElementById('fss-active-tag');
+    const jpEl = document.getElementById('fss-jp-text');
+    const roEl = document.getElementById('fss-ro-text');
+    const idEl = document.getElementById('fss-id-text');
 
-    const formBadges = {
-      kamus: 'Bentuk Kamus',
-      masu: 'Bentuk Masu (~ます)',
-      nai: 'Bentuk Nai (~ない)',
-      te: 'Bentuk Te (~て/で)'
-    };
-
-    const badgeEl = document.getElementById('fss-active-tag') || document.querySelector('.fss-badge');
-    const jpEl = document.getElementById('fss-jp-text') || document.querySelector('.fss-jp');
-    const romajiEl = document.getElementById('fss-ro-text') || document.querySelector('.fss-romaji');
-    const idEl = document.getElementById('fss-id-text') || document.querySelector('.fss-id');
-
-    if (badgeEl) badgeEl.innerText = formBadges[key];
-    if (jpEl) jpEl.innerHTML = sentData.jp;
-    if (romajiEl) romajiEl.innerText = sentData.ro || sentData.romaji || '';
-    if (idEl) idEl.innerText = sentData.id;
+    if (badgeEl) badgeEl.innerText = sentData.badge;
+    if (jpEl) jpEl.innerHTML = sentData.jpHtml;
+    if (roEl) roEl.innerHTML = sentData.roHtml;
+    if (idEl) idEl.innerHTML = sentData.idHtml;
   },
 
   nextCard: function() {
     if (this.cardIdx >= this.activeArray.length) return;
     this.playSfx('tap');
-    const targetId = (this.cardIdx >= this.activeArray.length) ? 'sec-flashcard' : 'fc-stage-box';
-    this.triggerAnimation(targetId, 'slide-out-left');
+    this.triggerAnimation('sec-flashcard', 'slide-out-left');
     setTimeout(() => {
       this.cardIdx++;
       this.renderFC(true, 'next');
@@ -5456,7 +5646,7 @@ const Modul = {
   prevCard: function() {
     if (this.cardIdx <= 0) return;
     this.playSfx('tap');
-    this.triggerAnimation('fc-stage-box', 'slide-out-right');
+    this.triggerAnimation('sec-flashcard', 'slide-out-right');
     setTimeout(() => {
       this.cardIdx--;
       this.renderFC(true, 'prev');
@@ -5529,8 +5719,7 @@ const Modul = {
       if (this.activeTab === 'flashcard') {
         if (e.key === ' ' || e.key === 'Enter') {
           e.preventDefault();
-          if (!this.cardRevealed) this.revealCard();
-          else this.nextCard();
+          this.nextCard();
         } else if (e.key === 'ArrowRight') {
           this.nextCard();
         } else if (e.key === 'ArrowLeft') {
@@ -5543,6 +5732,14 @@ const Modul = {
           this.selectFormKey('nai');
         } else if (e.key === '4') {
           this.selectFormKey('te');
+        } else if (e.key === '5') {
+          this.selectFormKey('ta');
+        } else if (e.key === '6') {
+          this.selectFormKey('nakatta');
+        } else if (e.key === '7') {
+          this.selectFormKey('teiru');
+        } else if (e.key === '8') {
+          this.selectFormKey('tai');
         }
       }
     });
@@ -5621,37 +5818,36 @@ const Modul = {
     const generated = [];
     const shuffle = (arr) => arr.sort(() => Math.random() - 0.5);
 
-    const formMeta = {
-      masu: { keyK: 'k_masu', keyR: 'r_masu', label: 'Bentuk Masu (~ます)', badge: '🌸 Bentuk Masu' },
-      nai: { keyK: 'k_nai', keyR: 'r_nai', label: 'Bentuk Nai (~ない)', badge: '❄️ Bentuk Nai' },
-      te: { keyK: 'k_te', keyR: 'r_te', label: 'Bentuk Te (~て/で)', badge: '🔗 Bentuk Te' }
-    };
-
-    const formsToTest = (targetSubtype === 'masu' || targetSubtype === 'nai' || targetSubtype === 'te')
-      ? [targetSubtype]
-      : (targetSubtype === 'mix' ? ['masu', 'nai', 'te'] : []);
+    let formsToTest = [];
+    if (targetSubtype === 'conjugation' || targetSubtype === 'mix') {
+      formsToTest = ['masu', 'te', 'ta', 'nai', 'nakatta', 'teiru', 'tai'];
+    }
 
     if (formsToTest.length > 0) {
-      const count = targetSubtype === 'mix' ? Math.min(pool.length, 6) : Math.min(pool.length * 2, 12);
+      const count = targetSubtype === 'mix' ? Math.min(pool.length * 2, 8) : Math.min(pool.length * 2, 14);
       const shuffledPool = shuffle([...pool]);
 
       for (let i = 0; i < count; i++) {
         const item = shuffledPool[i % shuffledPool.length];
+        const forms = this.getVerbForms(item);
         const fKey = formsToTest[Math.floor(Math.random() * formsToTest.length)];
-        const fm = formMeta[fKey];
+        const fm = forms[fKey];
 
-        const ans = item[fm.keyK];
+        const ans = fm.k;
         const distractors = new Set();
         distractors.add(item.k_kamus);
 
-        ['k_masu', 'k_nai', 'k_te'].forEach(k => {
-          if (item[k] !== ans) distractors.add(item[k]);
+        // Add other forms of this same verb
+        ['masu', 'nai', 'te', 'ta', 'nakatta', 'teiru', 'tai'].forEach(k => {
+          if (forms[k] && forms[k].k !== ans) distractors.add(forms[k].k);
         });
 
+        // Add matching form from other verbs in sessionDb
         const otherVerbs = shuffle(sessionDb.filter(v => v.k_kamus !== item.k_kamus));
         for (let ov of otherVerbs) {
-          if (distractors.size >= 4) break;
-          distractors.add(ov[fm.keyK]);
+          if (distractors.size >= 5) break;
+          const ovForms = this.getVerbForms(ov);
+          if (ovForms && ovForms[fKey] && ovForms[fKey].k) distractors.add(ovForms[fKey].k);
         }
 
         const opts = shuffle(Array.from(distractors)).slice(0, 4);
@@ -5659,7 +5855,7 @@ const Modul = {
 
         generated.push({
           type: 'mc',
-          q: `Ubah kata <b class="q-target-word">${item.k_kamus}</b> (${item.a}) ke <b class="q-target-form">${fm.label}</b>!`,
+          q: `Ubah kata <b class="q-target-word">${item.k_kamus}</b> (${item.a}) ke <b class="q-target-form">${fm.badge}</b>!`,
           audio: ans,
           opts: shuffle(opts),
           ans: ans,
