@@ -917,12 +917,13 @@
     width: 100%;
     gap: 8px;
   }
+  .btn-quiz-config,
   .quiz-badge-target {
     background: rgba(251, 191, 36, 0.12);
     color: var(--gold);
     border: 1px solid rgba(251, 191, 36, 0.35);
     padding: 5px 12px;
-    border-radius: 20px;
+    border-radius: 14px;
     font-size: 11.5px;
     font-weight: 800;
     cursor: pointer;
@@ -932,14 +933,18 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     -webkit-tap-highlight-color: transparent;
   }
+  .btn-quiz-config:hover,
+  .btn-quiz-config.active,
   .quiz-badge-target:hover {
     background: rgba(251, 191, 36, 0.22);
     border-color: var(--gold);
     box-shadow: 0 0 14px rgba(251, 191, 36, 0.35);
     transform: translateY(-1px);
   }
+  .btn-quiz-config:active,
   .quiz-badge-target:active { transform: scale(0.97); }
 
   .btn-drill-dropdown {
@@ -1619,6 +1624,188 @@
   }
   .cs-table tr:last-child td { border-bottom: none; }
 
+  /* ==========================================
+     MODAL PENGATURAN TARGET & SUMBER SOAL KUIS
+     ========================================== */
+  .qc-card {
+    background: linear-gradient(165deg, rgba(16, 26, 56, 0.98) 0%, rgba(8, 14, 32, 0.99) 100%);
+    border: 1px solid rgba(251, 191, 36, 0.38);
+    border-radius: 20px;
+    width: 100%;
+    max-width: 460px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.85), 0 0 18px rgba(251, 191, 36, 0.12);
+    overflow: hidden;
+    transform: translateZ(0);
+    will-change: transform, opacity;
+    animation: popModal 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .qc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 18px 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .qc-title-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .qc-title {
+    font-size: 15px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .qc-body {
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    overflow-y: auto;
+    max-height: 75vh;
+  }
+  .qc-group-label {
+    font-size: 11.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--gold);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .qc-options-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .qc-opt-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 9px 12px;
+    background: rgba(255, 255, 255, 0.035);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 11px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .qc-opt-row:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(251, 191, 36, 0.3);
+  }
+  .qc-opt-row.active {
+    background: rgba(251, 191, 36, 0.14);
+    border-color: var(--gold);
+    box-shadow: 0 0 10px rgba(251, 191, 36, 0.2);
+  }
+  .qc-opt-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .qc-radio-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+    flex-shrink: 0;
+  }
+  .qc-opt-row.active .qc-radio-dot {
+    border-color: var(--gold);
+  }
+  .qc-radio-dot::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--gold);
+    opacity: 0;
+    transform: scale(0.4);
+    transition: all 0.15s ease;
+  }
+  .qc-opt-row.active .qc-radio-dot::after {
+    opacity: 1;
+    transform: scale(1);
+  }
+  .qc-opt-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #e2e8f0;
+  }
+  .qc-opt-row.active .qc-opt-title {
+    color: #fff;
+  }
+  .qc-opt-badge {
+    font-size: 11px;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text-sub);
+    flex-shrink: 0;
+  }
+  .qc-opt-row.active .qc-opt-badge {
+    background: rgba(251, 191, 36, 0.2);
+    color: var(--gold);
+  }
+  .qc-custom-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+    padding-left: 26px;
+  }
+  .qc-custom-input {
+    width: 80px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(251, 191, 36, 0.4);
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 800;
+    text-align: center;
+    outline: none;
+  }
+  .qc-custom-input:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
+  }
+  .qc-footer {
+    padding: 12px 18px 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+  .btn-qc-apply {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: #0b1120;
+    border: none;
+    padding: 9px 20px;
+    border-radius: 11px;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .btn-qc-apply:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(245, 158, 11, 0.5);
+  }
+  .btn-qc-apply:active {
+    transform: scale(0.97);
+  }
+
   /* Animations */
   .fade-in-up { animation: fadeInUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
   .slide-in-right { animation: slideInRight 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
@@ -1879,6 +2066,34 @@
     .cs-item-example {
       font-size: 11px !important;
       padding: 5px 8px !important;
+    }
+
+    .btn-quiz-config {
+      font-size: 11px !important;
+      padding: 5px 9px !important;
+    }
+    .qc-card {
+      max-height: 92vh !important;
+      border-radius: 18px !important;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9) !important;
+      animation: none !important;
+    }
+    .qc-header {
+      padding: 12px 14px 10px !important;
+    }
+    .qc-body {
+      padding: 12px 14px 14px !important;
+      gap: 12px !important;
+    }
+    .qc-opt-row {
+      padding: 8px 10px !important;
+    }
+    .qc-opt-title {
+      font-size: 12.5px !important;
+    }
+    .btn-qc-apply {
+      width: 100% !important;
+      padding: 10px 14px !important;
     }
   }
 
@@ -2164,9 +2379,10 @@
     <div class="quiz-top-bar">
       <!-- Top Row: Mode selector & Drill dropdown -->
       <div class="quiz-bar-top-row">
-        <button type="button" class="quiz-badge-target" id="quiz-mode-pill" onclick="Modul.toggleQuizSourceMode()" title="Klik untuk beralih mode kuis">
-          <span>⭐</span>
-          <span id="quiz-mode-text">0 DIKUASAI</span>
+        <button type="button" class="btn-quiz-config" id="btn-quiz-config" onclick="Modul.openQuizConfigModal()" title="Pengaturan Target Jumlah Soal & Sumber Kata">
+          <span id="quiz-config-icon">🎯</span>
+          <span id="quiz-config-label">Target: Semua</span>
+          <span class="dropdown-caret">▾</span>
         </button>
 
         <div class="drill-mode-dropdown-wrap">
@@ -2292,6 +2508,116 @@
 
     <div class="cs-body" id="cs-body-content">
       <!-- Content populated via JS -->
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PENGATURAN TARGET & SUMBER SOAL KUIS -->
+<div id="quiz-config-modal" class="modal-overlay hidden" onclick="if(event.target === this) Modul.closeQuizConfigModal()">
+  <div class="qc-card">
+    <div class="qc-header">
+      <div class="qc-title-group">
+        <span style="font-size:18px;">⚙️</span>
+        <span class="qc-title">Pengaturan Latihan Kuis</span>
+      </div>
+      <button type="button" class="btn-cs-close" onclick="Modul.closeQuizConfigModal()" title="Tutup">✕</button>
+    </div>
+
+    <div class="qc-body">
+      <!-- Section 1: Target Jumlah Soal -->
+      <div>
+        <div class="qc-group-label">
+          <span>🎯</span>
+          <span>Target Jumlah Butir Soal</span>
+        </div>
+        <div class="qc-options-list">
+          <div class="qc-opt-row active" id="qc-target-all" onclick="Modul.selectQuizTargetMode('all')">
+            <div class="qc-opt-left">
+              <div class="qc-radio-dot"></div>
+              <div>
+                <div class="qc-opt-title">🔥 Semua Kata Bolak-Balik</div>
+                <div style="font-size:11px; color:var(--text-sub);">Uji seluruh kosakata dari dua arah (tanpa batas)</div>
+              </div>
+            </div>
+            <span class="qc-opt-badge" id="qc-count-badge-all">18 Soal</span>
+          </div>
+
+          <div class="qc-opt-row" id="qc-target-10" onclick="Modul.selectQuizTargetMode('10')">
+            <div class="qc-opt-left">
+              <div class="qc-radio-dot"></div>
+              <div>
+                <div class="qc-opt-title">⚡ 10 Soal (Latihan Kilat)</div>
+                <div style="font-size:11px; color:var(--text-sub);">Review cepat harian 1–2 menit</div>
+              </div>
+            </div>
+            <span class="qc-opt-badge">10 Soal</span>
+          </div>
+
+          <div class="qc-opt-row" id="qc-target-25" onclick="Modul.selectQuizTargetMode('25')">
+            <div class="qc-opt-left">
+              <div class="qc-radio-dot"></div>
+              <div>
+                <div class="qc-opt-title">🏃 25 Soal (Maraton)</div>
+                <div style="font-size:11px; color:var(--text-sub);">Latihan mendalam menguji daya ingat</div>
+              </div>
+            </div>
+            <span class="qc-opt-badge">25 Soal</span>
+          </div>
+
+          <div class="qc-opt-row" id="qc-target-custom" onclick="Modul.selectQuizTargetMode('custom')">
+            <div class="qc-opt-left">
+              <div class="qc-radio-dot"></div>
+              <div>
+                <div class="qc-opt-title">✏️ Kustomisasi Jumlah</div>
+                <div style="font-size:11px; color:var(--text-sub);">Tentukan sendiri jumlah soal yang diinginkan</div>
+              </div>
+            </div>
+            <span class="qc-opt-badge" id="qc-count-badge-custom">20 Soal</span>
+          </div>
+
+          <div class="qc-custom-input-wrap hidden" id="qc-custom-input-box">
+            <span style="font-size:12px; color:var(--text-sub);">Masukkan jumlah butir soal:</span>
+            <input type="number" class="qc-custom-input" id="qc-custom-count-input" value="20" min="5" max="250" oninput="Modul.onCustomCountInput(this.value)">
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Sumber Kosakata -->
+      <div>
+        <div class="qc-group-label">
+          <span>📚</span>
+          <span>Sumber Kosakata Soal</span>
+        </div>
+        <div class="qc-options-list">
+          <div class="qc-opt-row active" id="qc-src-mastered" onclick="Modul.selectQuizSourceMode('mastered')">
+            <div class="qc-opt-left">
+              <div class="qc-radio-dot"></div>
+              <div>
+                <div class="qc-opt-title">⭐ Hanya Kata yang Dikuasai</div>
+                <div style="font-size:11px; color:var(--text-sub);">Menguji kata-kata yang telah Anda tandai bintang</div>
+              </div>
+            </div>
+            <span class="qc-opt-badge" id="qc-src-badge-mastered">0 Kata</span>
+          </div>
+
+          <div class="qc-opt-row" id="qc-src-session" onclick="Modul.selectQuizSourceMode('session')">
+            <div class="qc-opt-left">
+              <div class="qc-radio-dot"></div>
+              <div>
+                <div class="qc-opt-title">📚 Seluruh Kata Sesi Ini</div>
+                <div style="font-size:11px; color:var(--text-sub);">Menguji seluruh kata pada sesi/kelompok yang aktif</div>
+              </div>
+            </div>
+            <span class="qc-opt-badge" id="qc-src-badge-session">0 Kata</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qc-footer">
+      <button type="button" class="btn-qc-apply" onclick="Modul.applyQuizConfig()">
+        🚀 Terapkan & Mulai Kuis
+      </button>
     </div>
   </div>
 </div>
@@ -5107,6 +5433,8 @@ const Modul = {
   scoreQuiz: 0,
   drillSubtype: 'mix',      // 'mix', 'conjugation', 'kanji', 'meaning', 'isian'
   quizSourceMode: 'mastered', // Default to 'mastered' (stars ⭐) so unmastered words never leak into quiz
+  quizTargetMode: 'all',    // 'all', '10', '25', 'custom'
+  quizCustomCount: 20,
   activeQuizData: [],
 
   activeArray: [],
@@ -5878,6 +6206,7 @@ const Modul = {
 
       if (e.key === 'Escape') {
         this.closeCheatsheet();
+        this.closeQuizConfigModal();
         this.closeSidebar();
         return;
       }
@@ -5956,9 +6285,135 @@ const Modul = {
     });
   },
 
+  // QUIZ CONFIG MODAL & POP-UP METHODS
+  openQuizConfigModal: function() {
+    this.playSfx('tap');
+    const m = document.getElementById('quiz-config-modal');
+    if (m) {
+      this.updateQuizConfigUI();
+      m.classList.remove('hidden');
+    }
+  },
+
+  closeQuizConfigModal: function() {
+    this.playSfx('tap');
+    const m = document.getElementById('quiz-config-modal');
+    if (m) m.classList.add('hidden');
+  },
+
+  selectQuizTargetMode: function(mode) {
+    this.playSfx('tap');
+    this.quizTargetMode = mode;
+    this.updateQuizConfigUI();
+  },
+
+  selectQuizSourceMode: function(src) {
+    this.playSfx('tap');
+    this.quizSourceMode = src;
+    this.updateQuizConfigUI();
+  },
+
+  onCustomCountInput: function(val) {
+    let num = parseInt(val, 10);
+    if (!isNaN(num)) {
+      this.quizCustomCount = Math.max(5, Math.min(num, 250));
+      const badge = document.getElementById('qc-count-badge-custom');
+      if (badge) badge.innerText = `${this.quizCustomCount} Soal`;
+    }
+  },
+
+  updateQuizConfigUI: function() {
+    // 1. Update Target Options active state
+    ['all', '10', '25', 'custom'].forEach(t => {
+      const el = document.getElementById('qc-target-' + t);
+      if (el) el.classList.toggle('active', this.quizTargetMode === t);
+    });
+
+    const customBox = document.getElementById('qc-custom-input-box');
+    if (customBox) customBox.classList.toggle('hidden', this.quizTargetMode !== 'custom');
+
+    const customInput = document.getElementById('qc-custom-count-input');
+    if (customInput) customInput.value = this.quizCustomCount;
+
+    // 2. Update Source Options active state
+    ['mastered', 'session'].forEach(s => {
+      const el = document.getElementById('qc-src-' + s);
+      if (el) el.classList.toggle('active', this.quizSourceMode === s);
+    });
+
+    // 3. Update dynamic counts
+    const masteredVerbs = this.getMasteredVerbs();
+    const sessionVerbs = this.activeArray;
+    const pool = (this.quizSourceMode === 'mastered') ? masteredVerbs : sessionVerbs;
+    const poolCount = pool.length;
+
+    const badgeMastered = document.getElementById('qc-src-badge-mastered');
+    if (badgeMastered) badgeMastered.innerText = `${masteredVerbs.length} Kata`;
+
+    const badgeSession = document.getElementById('qc-src-badge-session');
+    if (badgeSession) badgeSession.innerText = `${sessionVerbs.length} Kata`;
+
+    // Calculate "All (Bolak-balik)" question count
+    let allCount = 0;
+    if (this.drillSubtype === 'kanji') {
+      const kanjiVerbs = pool.filter(v => v.k_kamus !== v.r_kamus);
+      allCount = (kanjiVerbs.length > 0 ? kanjiVerbs.length : poolCount) * 2;
+    } else {
+      allCount = poolCount * 2;
+    }
+
+    const badgeAll = document.getElementById('qc-count-badge-all');
+    if (badgeAll) badgeAll.innerText = poolCount > 0 ? `${allCount} Soal` : '0 Soal';
+
+    const badgeCustom = document.getElementById('qc-count-badge-custom');
+    if (badgeCustom) badgeCustom.innerText = `${this.quizCustomCount} Soal`;
+  },
+
+  updateQuizConfigButtonLabel: function() {
+    const iconEl = document.getElementById('quiz-config-icon');
+    const labelEl = document.getElementById('quiz-config-label');
+    const pool = (this.quizSourceMode === 'mastered') ? this.getMasteredVerbs() : this.activeArray;
+
+    let targetLabel = '';
+    let targetIcon = '🎯';
+
+    if (this.quizTargetMode === 'all') {
+      targetIcon = '🔥';
+      let totalQ = pool.length * 2;
+      if (this.drillSubtype === 'kanji') {
+        const kanjiVerbs = pool.filter(v => v.k_kamus !== v.r_kamus);
+        totalQ = (kanjiVerbs.length > 0 ? kanjiVerbs.length : pool.length) * 2;
+      }
+      targetLabel = pool.length > 0 ? `Target: Semua (${totalQ})` : 'Target: Semua';
+    } else if (this.quizTargetMode === '10') {
+      targetIcon = '⚡';
+      targetLabel = 'Target: 10 Soal';
+    } else if (this.quizTargetMode === '25') {
+      targetIcon = '🏃';
+      targetLabel = 'Target: 25 Soal';
+    } else if (this.quizTargetMode === 'custom') {
+      targetIcon = '✏️';
+      targetLabel = `Target: ${this.quizCustomCount} Soal`;
+    }
+
+    if (iconEl) iconEl.innerText = targetIcon;
+    if (labelEl) labelEl.innerText = targetLabel;
+  },
+
+  applyQuizConfig: function() {
+    this.playSfx('tap');
+    this.closeQuizConfigModal();
+    this.updateQuizConfigButtonLabel();
+    this.activeQuizData = this.generateQuizQuestions();
+    this.idxQuiz = 0;
+    this.scoreQuiz = 0;
+    this.renderQuiz(true);
+  },
+
   toggleQuizSourceMode: function() {
     this.playSfx('tap');
     this.quizSourceMode = (this.quizSourceMode === 'mastered') ? 'session' : 'mastered';
+    this.updateQuizConfigButtonLabel();
     this.activeQuizData = this.generateQuizQuestions();
     this.idxQuiz = 0;
     this.scoreQuiz = 0;
@@ -5984,19 +6439,36 @@ const Modul = {
     const generated = [];
     const shuffle = (arr) => arr.sort(() => Math.random() - 0.5);
 
+    // Hitung total target pertanyaan
+    let targetCount = 0;
+    if (this.quizTargetMode === 'all') {
+      if (targetSubtype === 'kanji') {
+        const kanjiVerbs = pool.filter(v => v.k_kamus !== v.r_kamus);
+        targetCount = (kanjiVerbs.length > 0 ? kanjiVerbs.length : pool.length) * 2;
+      } else {
+        targetCount = pool.length * 2;
+      }
+    } else if (this.quizTargetMode === '10') {
+      targetCount = 10;
+    } else if (this.quizTargetMode === '25') {
+      targetCount = 25;
+    } else if (this.quizTargetMode === 'custom') {
+      targetCount = Math.max(5, Math.min(this.quizCustomCount || 20, 250));
+    }
+
     let formsToTest = [];
     if (targetSubtype === 'conjugation' || targetSubtype === 'mix') {
       formsToTest = ['masu', 'te', 'ta', 'nai', 'nakatta', 'teiru', 'tai'];
     }
 
     if (formsToTest.length > 0) {
-      const count = targetSubtype === 'mix' ? Math.min(pool.length * 2, 6) : Math.min(pool.length * 2, 14);
+      const count = (targetSubtype === 'mix') ? Math.max(4, Math.round(targetCount * 0.4)) : targetCount;
       const shuffledPool = shuffle([...pool]);
 
       for (let i = 0; i < count; i++) {
         const item = shuffledPool[i % shuffledPool.length];
         const forms = this.getVerbForms(item);
-        const fKey = formsToTest[Math.floor(Math.random() * formsToTest.length)];
+        const fKey = formsToTest[i % formsToTest.length];
         const fm = forms[fKey];
 
         const ans = fm.k;
@@ -6040,7 +6512,7 @@ const Modul = {
       }
 
       if (kanjiPool.length > 0) {
-        const count = targetSubtype === 'mix' ? 4 : Math.min(kanjiPool.length * 2, 12);
+        const count = (targetSubtype === 'mix') ? Math.max(2, Math.round(targetCount * 0.25)) : targetCount;
         const shuffledPool = shuffle([...kanjiPool]);
 
         for (let i = 0; i < count; i++) {
@@ -6101,7 +6573,7 @@ const Modul = {
     }
 
     if (targetSubtype === 'meaning' || targetSubtype === 'mix') {
-      const count = targetSubtype === 'mix' ? 3 : Math.min(pool.length * 2, 12);
+      const count = (targetSubtype === 'mix') ? Math.max(2, Math.round(targetCount * 0.25)) : targetCount;
       const shuffledPool = shuffle([...pool]);
 
       for (let i = 0; i < count; i++) {
@@ -6121,7 +6593,7 @@ const Modul = {
           }
         }
 
-        const isJpToId = Math.random() > 0.4;
+        const isJpToId = (i % 2 === 0);
         if (isJpToId) {
           generated.push({
             type: 'mc',
@@ -6158,11 +6630,11 @@ const Modul = {
 
     if (targetSubtype === 'isian' || targetSubtype === 'mix') {
       const isianPool = shuffle([...pool]);
-      const count = targetSubtype === 'mix' ? 2 : Math.min(isianPool.length, 10);
+      const count = (targetSubtype === 'mix') ? Math.max(2, Math.round(targetCount * 0.1)) : targetCount;
 
       for (let i = 0; i < count; i++) {
         const item = isianPool[i % isianPool.length];
-        const isArti = Math.random() > 0.5;
+        const isArti = (i % 2 === 0);
 
         if (isArti) {
           const cleanA = item.a.toLowerCase();
@@ -6194,8 +6666,7 @@ const Modul = {
       }
     }
 
-    const maxQ = targetSubtype === 'mix' ? 15 : Math.min(generated.length, 12);
-    return shuffle(generated).slice(0, maxQ);
+    return shuffle(generated).slice(0, targetCount);
   },
 
   renderQuiz: function(useSlideAnim = true) {
@@ -6207,7 +6678,10 @@ const Modul = {
     const sessionName = info.pages[this.activeSesi].title.split(':')[0];
     const masteredInSession = this.getMasteredVerbs();
 
-    // Mode Pill (⭐ Mastered in this Session vs 🏷️ Sesi)
+    // Perbarui label & ikon tombol pengaturan kuis
+    this.updateQuizConfigButtonLabel();
+
+    // Mode Pill backward compatibility if present
     const modePill = document.getElementById('quiz-mode-pill');
     if (modePill) {
       if (this.quizSourceMode === 'mastered') {
