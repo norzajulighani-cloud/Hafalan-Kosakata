@@ -1378,16 +1378,16 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(2, 6, 23, 0.88);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    background: rgba(3, 7, 18, 0.92);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
     z-index: 200;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 14px;
     opacity: 1;
-    transition: opacity 0.2s;
+    transition: opacity 0.18s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .modal-overlay.hidden {
     opacity: 0;
@@ -1397,18 +1397,20 @@
   .cheatsheet-card {
     background: linear-gradient(165deg, rgba(16, 26, 56, 0.98) 0%, rgba(8, 14, 32, 0.99) 100%);
     border: 1px solid rgba(56, 189, 248, 0.35);
-    border-radius: 22px;
+    border-radius: 20px;
     width: 100%;
-    max-width: 560px;
+    max-width: 580px;
     max-height: 88vh;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9), 0 0 35px rgba(56, 189, 248, 0.2);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8), 0 0 15px rgba(56, 189, 248, 0.12);
     overflow: hidden;
-    animation: popModal 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateZ(0);
+    will-change: transform, opacity;
+    animation: popModal 0.22s cubic-bezier(0.16, 1, 0.3, 1);
   }
   @keyframes popModal {
-    from { opacity: 0; transform: translateY(16px) scale(0.96); }
+    from { opacity: 0; transform: translateY(12px) scale(0.97); }
     to { opacity: 1; transform: translateY(0) scale(1); }
   }
 
@@ -1459,15 +1461,135 @@
     color: var(--success);
     border-color: var(--success);
   }
+  .cs-tab-btn.active.trap-tab {
+    background: rgba(239, 68, 68, 0.18);
+    color: var(--danger);
+    border-color: var(--danger);
+  }
 
   .cs-body {
     padding: 16px 20px;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    contain: content;
     scrollbar-width: thin;
     scrollbar-color: var(--primary) transparent;
     line-height: 1.55;
     font-size: 13px;
   }
+  .cs-panel {
+    display: flex;
+    flex-direction: column;
+  }
+  .cs-panel.hidden {
+    display: none !important;
+  }
+
+  /* Unboxed Tips & Guide Layout (No nested container boxes) */
+  .cs-section-intro {
+    font-size: 12.5px;
+    color: var(--text-sub);
+    line-height: 1.55;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .cs-item-row {
+    padding: 11px 2px 13px 2px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .cs-item-row:last-child {
+    border-bottom: none;
+    padding-bottom: 2px;
+  }
+  .cs-item-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .cs-badge-pill {
+    font-size: 11.5px;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 6px;
+    background: rgba(56, 189, 248, 0.12);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    color: var(--primary);
+    letter-spacing: 0.3px;
+  }
+  .cs-badge-pill.gold {
+    background: rgba(251, 191, 36, 0.12);
+    border-color: rgba(251, 191, 36, 0.35);
+    color: var(--gold);
+  }
+  .cs-badge-pill.success {
+    background: rgba(34, 197, 94, 0.12);
+    border-color: rgba(34, 197, 94, 0.35);
+    color: var(--success);
+  }
+  .cs-badge-pill.purple {
+    background: rgba(192, 132, 252, 0.12);
+    border-color: rgba(192, 132, 252, 0.35);
+    color: var(--purple);
+  }
+  .cs-badge-pill.danger {
+    background: rgba(239, 68, 68, 0.12);
+    border-color: rgba(239, 68, 68, 0.35);
+    color: var(--danger);
+  }
+  .cs-badge-pill.warning {
+    background: rgba(245, 158, 11, 0.12);
+    border-color: rgba(245, 158, 11, 0.35);
+    color: var(--warning);
+  }
+  .cs-nuance-tag {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--text-sub);
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2px 7px;
+    border-radius: 4px;
+  }
+  .cs-item-purpose {
+    font-size: 12.5px;
+    color: #e2e8f0;
+    line-height: 1.5;
+  }
+  .cs-item-purpose b {
+    color: #fff;
+  }
+  .cs-item-when {
+    font-size: 12px;
+    color: #cbd5e1;
+    line-height: 1.5;
+  }
+  .cs-item-when b {
+    color: var(--primary);
+  }
+  .cs-item-when b.gold {
+    color: var(--gold);
+  }
+  .cs-item-when b.success {
+    color: var(--success);
+  }
+  .cs-item-example {
+    font-size: 11.5px;
+    color: #94a3b8;
+    background: rgba(0, 0, 0, 0.22);
+    padding: 6px 10px;
+    border-radius: 6px;
+    margin-top: 2px;
+    line-height: 1.45;
+  }
+  .cs-item-example b {
+    color: #38bdf8;
+  }
+
   .cs-table {
     width: 100%;
     border-collapse: collapse;
@@ -1496,21 +1618,6 @@
     font-size: 12.5px;
   }
   .cs-table tr:last-child td { border-bottom: none; }
-
-  .cs-alert-box {
-    background: rgba(251, 191, 36, 0.1);
-    border-left: 3px solid var(--gold);
-    padding: 10px 12px;
-    border-radius: 8px;
-    color: #fef08a;
-    font-size: 12px;
-    margin-top: 10px;
-  }
-  .cs-alert-box.danger-box {
-    background: rgba(239, 68, 68, 0.1);
-    border-left-color: var(--danger);
-    color: #fca5a5;
-  }
 
   /* Animations */
   .fade-in-up { animation: fadeInUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
@@ -1712,6 +1819,66 @@
     .quiz-isian-submit {
       padding: 11px 20px !important;
       font-size: 14px !important;
+    }
+
+    /* Tips Modal Mobile Zero-Lag Tuning */
+    .modal-overlay {
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      background: rgba(3, 7, 18, 0.95) !important;
+      padding: 8px !important;
+    }
+    .cheatsheet-card {
+      max-height: 92vh !important;
+      border-radius: 18px !important;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9) !important;
+      animation: none !important; /* Instant open on mobile without animation hitch */
+    }
+    .cs-header {
+      padding: 12px 14px 10px !important;
+    }
+    .cs-title {
+      font-size: 14.5px !important;
+    }
+    .cs-tab-row {
+      padding: 10px 12px 0 !important;
+      gap: 5px !important;
+    }
+    .cs-tab-btn {
+      padding: 7px 6px !important;
+      font-size: 11px !important;
+    }
+    .cs-body {
+      padding: 12px 14px 16px !important;
+    }
+    .cs-section-intro {
+      font-size: 11.5px !important;
+      margin-bottom: 8px !important;
+      padding-bottom: 8px !important;
+    }
+    .cs-item-row {
+      padding: 9px 0 11px 0 !important;
+      gap: 4px !important;
+    }
+    .cs-badge-pill {
+      font-size: 10.5px !important;
+      padding: 1px 7px !important;
+    }
+    .cs-nuance-tag {
+      font-size: 9.5px !important;
+      padding: 1px 5px !important;
+    }
+    .cs-item-purpose {
+      font-size: 12px !important;
+      line-height: 1.45 !important;
+    }
+    .cs-item-when {
+      font-size: 11.5px !important;
+      line-height: 1.45 !important;
+    }
+    .cs-item-example {
+      font-size: 11px !important;
+      padding: 5px 8px !important;
     }
   }
 
@@ -1953,9 +2120,9 @@
       <span class="nav-master-badge" id="nav-mastered-text">⭐ Dikuasai: 0 / 111</span>
     </div>
     <div class="nav-right">
-      <button type="button" class="btn-rumus-toggle" onclick="Modul.openCheatsheet()" title="Panduan Rumus Konjugasi">
-        <span>📜</span>
-        <span>Rumus</span>
+      <button type="button" class="btn-rumus-toggle" onclick="Modul.openCheatsheet()" title="Tips & Panduan Konjugasi">
+        <span>💡</span>
+        <span>Tips</span>
       </button>
     </div>
   </header>
@@ -2106,21 +2273,21 @@
   </div>
 </div>
 
-<!-- MODAL CHEATSHEET RUMUS KONJUGASI -->
+<!-- MODAL TIPS & PANDUAN KONJUGASI -->
 <div id="cheatsheet-modal" class="modal-overlay hidden" onclick="if(event.target === this) Modul.closeCheatsheet()">
   <div class="cheatsheet-card">
     <div class="cs-header">
       <div class="cs-title-group">
-        <span class="cs-title-icon">📜</span>
-        <span class="cs-title">Rumus Konjugasi & Lagu Bentuk-Te</span>
+        <span class="cs-title-icon">💡</span>
+        <span class="cs-title">Tips & Panduan Konjugasi</span>
       </div>
       <button type="button" class="btn-cs-close" onclick="Modul.closeCheatsheet()" title="Tutup">✕</button>
     </div>
 
     <div class="cs-tab-row">
-      <button type="button" class="cs-tab-btn active i-tab" id="cs-tab-te" onclick="Modul.switchCSTab('te')">🎵 Lagu Bentuk Te</button>
+      <button type="button" class="cs-tab-btn active i-tab" id="cs-tab-te" onclick="Modul.switchCSTab('te')">💡 Konjugasi & Fungsi</button>
       <button type="button" class="cs-tab-btn na-tab" id="cs-tab-rules" onclick="Modul.switchCSTab('rules')">⚖️ 3 Kelompok Kata Kerja</button>
-      <button type="button" class="cs-tab-btn" id="cs-tab-trap" onclick="Modul.switchCSTab('trap')">⚠️ Jebakan Pengecualian</button>
+      <button type="button" class="cs-tab-btn trap-tab" id="cs-tab-trap" onclick="Modul.switchCSTab('trap')">⚠️ Jebakan Pengecualian</button>
     </div>
 
     <div class="cs-body" id="cs-body-content">
@@ -6242,10 +6409,12 @@ const Modul = {
   },
 
   // CHEATSHEET RUMUS MODAL
+  // TIPS & PANDUAN KONJUGASI MODAL (Zero-Lag Pre-Rendered Architecture)
   openCheatsheet: function() {
     this.playSfx('tap');
     const m = document.getElementById('cheatsheet-modal');
     if (m) {
+      this.ensureCheatsheetPanels();
       m.classList.remove('hidden');
       this.renderCheatsheetContent();
     }
@@ -6268,135 +6437,350 @@ const Modul = {
     this.renderCheatsheetContent();
   },
 
+  ensureCheatsheetPanels: function() {
+    const box = document.getElementById('cs-body-content');
+    if (!box || box.dataset.initialized === 'true') return;
+
+    box.innerHTML = `
+      <div class="cs-panel" id="cs-panel-te">${this.getTipsHTML('te')}</div>
+      <div class="cs-panel hidden" id="cs-panel-rules">${this.getTipsHTML('rules')}</div>
+      <div class="cs-panel hidden" id="cs-panel-trap">${this.getTipsHTML('trap')}</div>
+    `;
+    box.dataset.initialized = 'true';
+  },
+
   renderCheatsheetContent: function() {
+    this.ensureCheatsheetPanels();
     const box = document.getElementById('cs-body-content');
     if (!box) return;
 
-    if (this.csActiveTab === 'te') {
-      box.innerHTML = `
-        <div style="font-weight:800; color:var(--primary); margin-bottom:8px; font-size:14.5px;">
-          🎵 Lagu Rumus Bentuk-Te (Melodi: Twinkle Little Star / Doraemon)
+    const targetTab = this.csActiveTab || 'te';
+    const panels = ['te', 'rules', 'trap'];
+    panels.forEach(p => {
+      const el = document.getElementById('cs-panel-' + p);
+      if (el) el.classList.toggle('hidden', p !== targetTab);
+    });
+    box.scrollTop = 0;
+  },
+
+  getTipsHTML: function(tab) {
+    if (tab === 'te') {
+      return `
+        <div class="cs-section-intro">
+          <b style="color:#fff;">💡 8 Bentuk Konjugasi Kata Kerja N5</b><br>
+          Panduan lengkap memahami <i>maksud, tujuan</i>, dan <i>kapan</i> masing-masing bentuk perubahan digunakan dalam percakapan dan tata bahasa:
         </div>
-        <p style="color:var(--text-sub); margin-bottom:12px; font-size:12px;">
-          Hafalkan melodi ritme ini untuk mengingat perubahan bentuk Te Kelompok 1 (Godan) secara instan:
-        </p>
 
-        <div style="display:flex; flex-direction:column; gap:8px;">
-          <div style="padding:10px 14px; background:rgba(56,189,248,0.12); border-left:3px solid var(--primary); border-radius:10px;">
-            <b style="color:var(--primary); font-size:14px;">1. U - TSU - RU ➔ TTE (って)</b><br>
-            <span style="font-size:12px; color:var(--text-sub);">
-              Contoh: 会<b>う</b> ➔ 会<b>って</b> | 待<b>つ</b> ➔ 待<b>って</b> | 取<b>る</b> ➔ 取<b>って</b>
-            </span>
+        <div class="cs-item-row">
+          <div class="cs-item-header">
+            <span class="cs-badge-pill gold">1. Bentuk Kamus (辞書形 - Jisho-kei)</span>
+            <span class="cs-nuance-tag">Bentuk Asli • Kasual</span>
           </div>
-
-          <div style="padding:10px 14px; background:rgba(192,132,252,0.12); border-left:3px solid var(--purple); border-radius:10px;">
-            <b style="color:var(--purple); font-size:14px;">2. MU - BU - NU ➔ NDE (んで)</b><br>
-            <span style="font-size:12px; color:var(--text-sub);">
-              Contoh: 飲<b>む</b> ➔ 飲<b>んで</b> | 遊<b>ぶ</b> ➔ 遊<b>んで</b> | 死<b>ぬ</b> ➔ 死<b>んで</b>
-            </span>
+          <div class="cs-item-purpose">
+            <b>Maksud & Tujuan:</b> Bentuk dasar (asal) kata kerja yang belum mengalami perubahan. Bersifat netral dan bernuansa kasual (*Futsuugo*).
           </div>
-
-          <div style="padding:10px 14px; background:rgba(34,197,94,0.12); border-left:3px solid var(--success); border-radius:10px;">
-            <b style="color:var(--success); font-size:14px;">3. KU ➔ ITE (いて) & GU ➔ IDE (いで)</b><br>
-            <span style="font-size:12px; color:var(--text-sub);">
-              Contoh: 書<b>く</b> ➔ 書<b>いて</b> | 泳<b>ぐ</b> ➔ 泳<b>いで</b><br>
-              <b style="color:var(--danger);">Pengecualian:</b> 行く (iku) ➔ <b>行って (itte)</b>
-            </span>
+          <div class="cs-item-when">
+            <b class="gold">Kapan Digunakan:</b><br>
+            • Percakapan santai dengan teman sebaya atau keluarga.<br>
+            • Bentuk kata yang dicari di dalam kamus bahasa Jepang.<br>
+            • Tata bahasa khusus seperti <i>~ ことができる</i> (bisa/mampu) dan <i>~ 前に</i> (sebelum melakukan sesuatu).
           </div>
+          <div class="cs-item-example">
+            Contoh: 飲む (minum) • 食べる (makan) • 行く (pergi)
+          </div>
+        </div>
 
-          <div style="padding:10px 14px; background:rgba(251,191,36,0.12); border-left:3px solid var(--gold); border-radius:10px;">
-            <b style="color:var(--gold); font-size:14px;">4. SU ➔ SHITE (して)</b><br>
-            <span style="font-size:12px; color:var(--text-sub);">
-              Contoh: 話<b>す</b> ➔ 話<b>して</b> | 出<b>す</b> ➔ 出<b>して</b>
-            </span>
+        <div class="cs-item-row">
+          <div class="cs-item-header">
+            <span class="cs-badge-pill">2. Bentuk Masu (ます形 - Masu-kei)</span>
+            <span class="cs-nuance-tag">Sopan & Formal</span>
+          </div>
+          <div class="cs-item-purpose">
+            <b>Maksud & Tujuan:</b> Bentuk sopan (*Teineigo*) masa kini/mendatang untuk menunjukkan rasa hormat dan etika kepada lawan bicara.
+          </div>
+          <div class="cs-item-when">
+            <b>Kapan Digunakan:</b><br>
+            • Berbicara kepada orang yang baru dikenal, atasan, guru, rekan kerja, atau orang yang lebih tua.<br>
+            • Bahasa percakapan standar dalam situasi publik, perkantoran, dan interaksi resmi sehari-hari.
+          </div>
+          <div class="cs-item-example">
+            Contoh: 飲みます (minum) • 食べます (makan) • 行きます (pergi)
+          </div>
+        </div>
+
+        <div class="cs-item-row">
+          <div class="cs-item-header">
+            <span class="cs-badge-pill danger">3. Bentuk Nai (ない形 - Nai-kei)</span>
+            <span class="cs-nuance-tag">Negatif Masa Kini • Kasual</span>
+          </div>
+          <div class="cs-item-purpose">
+            <b>Maksud & Tujuan:</b> Menyangkal suatu tindakan di masa sekarang atau masa mendatang (tidak / belum melakukan).
+          </div>
+          <div class="cs-item-when">
+            <b style="color:var(--danger);">Kapan Digunakan:</b><br>
+            • Percakapan akrab saat menolak atau menyatakan tidak melakukan hal tertentu.<br>
+            • Pola tata bahasa larangan halus <i>~ ないでください</i> (tolong jangan...) dan keharusan <i>~ なければなりません</i> (harus melakukan...).
+          </div>
+          <div class="cs-item-example">
+            Contoh: 飲まない (tidak minum) • 食べない (tidak makan) • 行かない (tidak pergi)
+          </div>
+        </div>
+
+        <div class="cs-item-row">
+          <div class="cs-item-header">
+            <span class="cs-badge-pill danger">4. Bentuk Nakatta (なかった形 - Nakatta-kei)</span>
+            <span class="cs-nuance-tag">Negatif Masa Lampau • Kasual</span>
+          </div>
+          <div class="cs-item-purpose">
+            <b>Maksud & Tujuan:</b> Menyatakan bahwa suatu tindakan tidak dilakukan di masa lampau (tadi tidak / kemarin tidak).
+          </div>
+          <div class="cs-item-when">
+            <b style="color:var(--danger);">Kapan Digunakan:</b><br>
+            • Menceritakan hal atau kejadian yang tidak dilakukan di masa lalu kepada teman akrab atau kerabat.<br>
+            • Bentuk kasual (*Futsuugo*) dari <i>~ ませんでした (~masen deshita)</i>.
+          </div>
+          <div class="cs-item-example">
+            Contoh: 飲まなかった (tadi tidak minum) • 食べなかった (kemarin tidak makan)
+          </div>
+        </div>
+
+        <div class="cs-item-row">
+          <div class="cs-item-header">
+            <span class="cs-badge-pill success">5. Bentuk Te (て形 - Te-kei)</span>
+            <span class="cs-nuance-tag">Bentuk Sambung • Perintah Halus</span>
+          </div>
+          <div class="cs-item-purpose">
+            <b>Maksud & Tujuan:</b> Bentuk penghubung (*connecting form*) untuk merangkai beberapa aktivitas atau menjadi jembatan berbagai pola kalimat penting.
+          </div>
+          <div class="cs-item-when">
+            <b class="success">Kapan Digunakan:</b><br>
+            • Menyambung kegiatan berurutan: "melakukan A lalu B lalu C".<br>
+            • Memohon pertolongan/perintah halus: <i>~ てください</i> (tolong...).<br>
+            • Meminta izin: <i>~ てもいいですか</i> (bolehkah...?).<br>
+            • Larangan: <i>~ てはいけません</i> (dilarang...).
+          </div>
+          <div class="cs-item-example">
+            Contoh: 飲んで (minum lalu...) • 食べて (makan lalu...) • 行って (pergi lalu...)<br>
+            <span style="color:#64748b; font-size:11px;">💡 Rumus Kilat Kel. 1: U-Tsu-Ru ➔ ~tte | Mu-Bu-Nu ➔ ~nde | Ku ➔ ~ite (Gu ➔ ~ide) | Su ➔ ~shite</span>
+          </div>
+        </div>
+
+        <div class="cs-item-row">
+          <div class="cs-item-header">
+            <span class="cs-badge-pill success">6. Bentuk Ta (た形 - Ta-kei)</span>
+            <span class="cs-nuance-tag">Positif Masa Lampau • Kasual</span>
+          </div>
+          <div class="cs-item-purpose">
+            <b>Maksud & Tujuan:</b> Menyatakan tindakan yang telah selesai terjadi di masa lalu (sudah / telah).
+          </div>
+          <div class="cs-item-when">
+            <b class="success">Kapan Digunakan:</b><br>
+            • Percakapan kasual untuk menceritakan hal yang sudah dilakukan (*Futsuugo* dari *~mashita*).<br>
+            • Pola tata bahasa menyatakan pengalaman: <i>~ たことがある</i> (pernah melakukan...).<br>
+            • Menyebutkan beberapa kegiatan contoh secara acak: <i>~ たり ~ たりする</i>.
+          </div>
+          <div class="cs-item-example">
+            Contoh: 飲んだ (sudah minum) • 食べた (sudah makan) • 行った (sudah pergi)
+          </div>
+        </div>
+
+        <div class="cs-item-row">
+          <div class="cs-item-header">
+            <span class="cs-badge-pill">7. Bentuk Te-iru (ている形 - Teiru-kei)</span>
+            <span class="cs-nuance-tag">Sedang Berlangsung / Kondisi Status</span>
+          </div>
+          <div class="cs-item-purpose">
+            <b>Maksud & Tujuan:</b> Menyatakan kegiatan yang sedang berlangsung (*progressive*) atau kondisi/status yang berkelanjutan (*state of being*).
+          </div>
+          <div class="cs-item-when">
+            <b>Kapan Digunakan:</b><br>
+            • Kegiatan yang sedang terjadi sekarang: <i>今本を読んでいる</i> (sedang membaca buku sekarang).<br>
+            • Pekerjaan/kebiasaan rutin: <i>大学で教えている</i> (bekerja mengajar di universitas).<br>
+            • Hasil tindakan yang statusnya masih bertahan: <i>知っている</i> (tahu/kenal), <i>住んでいる</i> (tinggal di...), <i>結婚している</i> (sudah menikah).
+          </div>
+          <div class="cs-item-example">
+            Contoh: 食べている (sedang makan) • 読んでいる (sedang membaca)
+          </div>
+        </div>
+
+        <div class="cs-item-row">
+          <div class="cs-item-header">
+            <span class="cs-badge-pill purple">8. Bentuk Tai (たい形 - Tai-kei)</span>
+            <span class="cs-nuance-tag">Keinginan Pribadi (Ingin / Mau)</span>
+          </div>
+          <div class="cs-item-purpose">
+            <b>Maksud & Tujuan:</b> Menyatakan keinginan diri sendiri sebagai pembicara untuk melakukan suatu perbuatan (ingin / berhasrat).
+          </div>
+          <div class="cs-item-when">
+            <b style="color:var(--purple);">Kapan Digunakan:</b><br>
+            • Mengungkapkan keinginan pribadi: <i>日本へ行きたい</i> (aku ingin pergi ke Jepang).<br>
+            • Menanyakan atau menawarkan keinginan lawan bicara secara sopan: <i>何が飲みたいですか</i> (ingin minum apa?).
+          </div>
+          <div class="cs-item-example">
+            Contoh: 飲みたい (ingin minum) • 食べたい (ingin makan) • 行きたい (ingin pergi)
           </div>
         </div>
       `;
-    } else if (this.csActiveTab === 'rules') {
-      box.innerHTML = `
-        <div style="font-weight:800; color:var(--success); margin-bottom:8px; font-size:14.5px;">
-          ⚖️ Klasifikasi 3 Kelompok Kata Kerja Jepang
+    } else if (tab === 'rules') {
+      return `
+        <div class="cs-section-intro">
+          <b style="color:#fff;">⚖️ Klasifikasi 3 Kelompok Kata Kerja Jepang</b><br>
+          Semua kata kerja dalam bahasa Jepang dikelompokkan ke dalam 3 golongan berdasarkan pola perubahan bunyinya:
         </div>
-        <div style="display:flex; flex-direction:column; gap:10px;">
-          <div style="padding:10px; background:rgba(56,189,248,0.1); border-left:3px solid var(--primary); border-radius:8px;">
-            <b style="color:var(--primary);">1️⃣ Kelompok 1 (五段動詞 - Godan) • 72 Kata</b><br>
-            <span style="color:var(--text-sub); font-size:12px;">
-              Memiliki 5 variasi bunyi vokal akhir (a-i-u-e-o):<br>
-              • Vokal <b>~u</b> (Kamus) ➔ Vokal <b>~i</b> (Masu) ➔ Vokal <b>~a</b> (Nai) ➔ <b>~te / ~de</b> (Te).
-            </span>
-          </div>
 
-          <div style="padding:10px; background:rgba(34,197,94,0.1); border-left:3px solid var(--success); border-radius:8px;">
-            <b style="color:var(--success);">2️⃣ Kelompok 2 (一段動詞 - Ichidan) • 28 Kata</b><br>
-            <span style="color:var(--text-sub); font-size:12px;">
-              • Bentuk kamusnya <b>PASTI</b> berakhiran <b>~る (~ru)</b>.<br>
-              • Didahului vokal <b>" i "</b> (~iru) atau <b>" e "</b> (~eru).<br>
-              • Konjugasi: cukup buang <b>~る</b> lalu tempelkan akhiran (~masu, ~nai, ~te).
-            </span>
+        <div class="cs-item-row">
+          <div class="cs-item-header">
+            <span class="cs-badge-pill">1️⃣ Kelompok 1: Godan Doushi (五段動詞)</span>
+            <span class="cs-nuance-tag">72 Kosakata di N5</span>
           </div>
+          <div class="cs-item-purpose">
+            <b>Ciri Khas:</b> Memiliki 9 variasi akhiran konsonan-vokal <b>~u</b>: <i>-u, -ku, -gu, -su, -tsu, -nu, -bu, -mu, -ru</i> (dengan vokal sebelum -ru adalah a/u/o).
+          </div>
+          <div class="cs-item-when">
+            <b>Prinsip Perubahan (Memutar 5 Baris Vokal A-I-U-E-O):</b><br>
+            • Bentuk Kamus (baris <b>u</b>) ➔ 会<b>う</b> (au)<br>
+            • Bentuk Masu (bergeser ke baris <b>i</b>) ➔ 会<b>い</b>ます (aimasu)<br>
+            • Bentuk Nai (bergeser ke baris <b>a</b>) ➔ 会<b>わ</b>ない (awanai)<br>
+            • Bentuk Te & Ta (peleburan bunyi khusus) ➔ 会<b>って</b> (atte) / 会<b>った</b> (atta)
+          </div>
+          <div class="cs-item-example">
+            Contoh: 書く ➔ 書きます ➔ 書かない • 待つ ➔ 待ちます ➔ 待たない • 飲む ➔ 飲みます ➔ 飲まない
+          </div>
+        </div>
 
-          <div style="padding:10px; background:rgba(245,158,11,0.1); border-left:3px solid var(--warning); border-radius:8px;">
-            <b style="color:var(--warning);">3️⃣ Kelompok 3 (不規則動詞 - Fukisoku) • 11 Kata</b><br>
-            <span style="color:var(--text-sub); font-size:12px;">
-              Kata kerja tidak beraturan:<br>
-              • <b>来る (kuru)</b>: kimasu, konai, kite.<br>
-              • <b>する (suru)</b>: shimasu, shinai, shite.<br>
-              Termasuk kata benda yang digabung dengan ~suru (cth: 勉強する = belajar).
-            </span>
+        <div class="cs-item-row">
+          <div class="cs-item-header">
+            <span class="cs-badge-pill success">2️⃣ Kelompok 2: Ichidan Doushi (一段動詞)</span>
+            <span class="cs-nuance-tag">28 Kosakata di N5</span>
+          </div>
+          <div class="cs-item-purpose">
+            <b>Ciri Khas:</b> Bentuk kamusnya <b>selalu berakhiran ~る (~ru)</b> dan huruf sebelum ~る berbunyi vokal <b>" i "</b> (<i>~iru</i>) atau vokal <b>" e "</b> (<i>~eru</i>).
+          </div>
+          <div class="cs-item-when">
+            <b class="success">Prinsip Perubahan (Paling Sederhana):</b><br>
+            Cukup <b>buang akhiran ~る (~ru)</b>, lalu tempelkan akhiran yang diinginkan secara langsung:<br>
+            • ~る dibuang + <b>ます</b> ➔ 食べ<b>ます</b> (tabemasu)<br>
+            • ~る dibuang + <b>ない</b> ➔ 食べ<b>ない</b> (tabenai)<br>
+            • ~る dibuang + <b>て / た</b> ➔ 食べ<b>て</b> (tabete) / 食べ<b>た</b> (tabeta)<br>
+            • ~る dibuang + <b>たい</b> ➔ 食べ<b>たい</b> (tabetai)
+          </div>
+          <div class="cs-item-example">
+            Contoh: 食べる (taberu) • 見る (miru) • 起きる (okiru) • 寝る (neru) • 開ける (akeru)
+          </div>
+        </div>
+
+        <div class="cs-item-row">
+          <div class="cs-item-header">
+            <span class="cs-badge-pill warning">3️⃣ Kelompok 3: Fukisoku Doushi (不規則動詞 / Irregular)</span>
+            <span class="cs-nuance-tag">11 Kosakata di N5</span>
+          </div>
+          <div class="cs-item-purpose">
+            <b>Ciri Khas:</b> Kata kerja tidak beraturan. Hanya ada <b>2 kata dasar</b> di seluruh bahasa Jepang: <b>来る (kuru)</b> dan <b>する (suru)</b>, ditambah kata benda yang dilekati <b>~する</b>.
+          </div>
+          <div class="cs-item-when">
+            <b style="color:var(--warning);">Hafalan Perubahan Wajib:</b><br>
+            • <b>来る (kuru - datang):</b> 来ます (kimasu) • 来ない (konai) • 来て (kite) • 来た (kita) • 来たい (kitai)<br>
+            • <b>する (suru - melakukan):</b> します (shimasu) • しない (shinai) • して (shite) • した (shita) • したい (shitai)<br>
+            • <i>Kata Benda + する:</i> 勉強する (belajar), 散歩する (jalan-jalan), 掃除する (bersih-bersih), 買い物する (berbelanja)
+          </div>
+          <div class="cs-item-example">
+            Contoh: 来る (kuru) ➔ 来てください (tolong datang) • 勉強する ➔ 勉強しました (sudah belajar)
           </div>
         </div>
       `;
     } else {
-      box.innerHTML = `
-        <div style="font-weight:800; color:var(--danger); margin-bottom:6px;">⚠️ Kata Jebakan: Pengecualian Kelompok 1</div>
-        <p style="color:var(--text-sub); margin-bottom:12px; font-size:12px;">
-          Kata-kata ini secara fisik berakhiran <b>-iru</b> atau <b>-eru</b> (mirip Kelompok 2), <b>TETAPI sebenarnya masuk ke Kelompok 1</b>! Konjugasinya wajib mengikuti aturan Kelompok 1 (~tte):
-        </p>
+      return `
+        <div class="cs-section-intro">
+          <b style="color:var(--danger);">⚠️ Jebakan & Pengecualian Kata Kerja N5</b><br>
+          Kunci lulus JLPT N5: jangan sampai terkecoh oleh bentuk fisik kata kerja yang menyerupai Kelompok 2 padahal sebenarnya adalah Kelompok 1 (Godan).
+        </div>
 
-        <table class="cs-table">
-          <tr>
-            <th>Kata (Kamus)</th>
-            <th>Arti</th>
-            <th>Bentuk Masu</th>
-            <th>Bentuk Te</th>
-          </tr>
-          <tr>
-            <td><b>帰る (かえる)</b></td>
-            <td>Pulang</td>
-            <td>帰ります (kaerimasu)</td>
-            <td><b>帰って (kaette)</b></td>
-          </tr>
-          <tr>
-            <td><b>入る (はいる)</b></td>
-            <td>Masuk</td>
-            <td>入ります (hairimasu)</td>
-            <td><b>入って (haitte)</b></td>
-          </tr>
-          <tr>
-            <td><b>切る (きる)</b></td>
-            <td>Memotong</td>
-            <td>切ります (kirimasu)</td>
-            <td><b>切って (kitte)</b></td>
-          </tr>
-          <tr>
-            <td><b>知る (しる)</b></td>
-            <td>Tahu, kenal</td>
-            <td>知ります (shirimasu)</td>
-            <td><b>知って (shitte)</b></td>
-          </tr>
-          <tr>
-            <td><b>要る (いる)</b></td>
-            <td>Perlu, butuh</td>
-            <td>要ります (irimasu)</td>
-            <td><b>要って (itte)</b></td>
-          </tr>
-          <tr>
-            <td><b>走る (はしる)</b></td>
-            <td>Berlari</td>
-            <td>走ります (hashirimasu)</td>
-            <td><b>走って (hashitte)</b></td>
-          </tr>
-        </table>
+        <div class="cs-item-row">
+          <div class="cs-item-header">
+            <span class="cs-badge-pill danger">1. Jebakan Fisik Akhiran -IRU / -ERU</span>
+            <span class="cs-nuance-tag">Sebenarnya Kelompok 1</span>
+          </div>
+          <div class="cs-item-purpose">
+            Kata-kata di bawah ini berakhiran <b>-iru</b> atau <b>-eru</b>, sehingga sering disangka Kelompok 2. Padahal mereka adalah <b>Kelompok 1 (Godan) tulen</b>! Konjugasi bentuk Te dan Ta-nya wajib mengikuti aturan godan (berubah menjadi <b>~って / ~った</b>, bukan sekadar membuang ~ru).
+          </div>
+
+          <table class="cs-table">
+            <tr>
+              <th>Kata Dasar</th>
+              <th>Arti</th>
+              <th>Bentuk Masu</th>
+              <th>Bentuk Te (Bukan ~te biasa!)</th>
+            </tr>
+            <tr>
+              <td><b>帰る (かえる)</b></td>
+              <td>Pulang</td>
+              <td>帰ります (kaerimasu)</td>
+              <td><b style="color:var(--primary);">帰って (kaette)</b></td>
+            </tr>
+            <tr>
+              <td><b>入る (はいる)</b></td>
+              <td>Masuk</td>
+              <td>入ります (hairimasu)</td>
+              <td><b style="color:var(--primary);">入って (haitte)</b></td>
+            </tr>
+            <tr>
+              <td><b>走る (はしる)</b></td>
+              <td>Berlari</td>
+              <td>走ります (hashirimasu)</td>
+              <td><b style="color:var(--primary);">走って (hashitte)</b></td>
+            </tr>
+            <tr>
+              <td><b>知る (しる)</b></td>
+              <td>Tahu, kenal</td>
+              <td>知ります (shirimasu)</td>
+              <td><b style="color:var(--primary);">知って (shitte)</b></td>
+            </tr>
+            <tr>
+              <td><b>切る (きる)</b></td>
+              <td>Memotong</td>
+              <td>切ります (kirimasu)</td>
+              <td><b style="color:var(--primary);">切って (kitte)</b></td>
+            </tr>
+            <tr>
+              <td><b>要る (いる)</b></td>
+              <td>Butuh, perlu</td>
+              <td>要ります (irimasu)</td>
+              <td><b style="color:var(--primary);">要って (itte)</b></td>
+            </tr>
+            <tr>
+              <td><b>しゃべる</b></td>
+              <td>Mengobrol</td>
+              <td>しゃべります (shaberimasu)</td>
+              <td><b style="color:var(--primary);">しゃべって (shabette)</b></td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="cs-item-row">
+          <div class="cs-item-header">
+            <span class="cs-badge-pill danger">2. Pengecualian Khusus: 行く (iku - pergi)</span>
+            <span class="cs-nuance-tag">Pengecualian Rumus ~KU</span>
+          </div>
+          <div class="cs-item-purpose">
+            Menurut rumus umum Kelompok 1, akhiran <b>~く (~ku)</b> berubah menjadi <b>~いて (~ite)</b> (seperti 書く ➔ 書いて).<br>
+            <b>TETAPI KHUSUS kata 行く (iku):</b> Bentuk Te dan Ta-nya adalah <b style="color:var(--primary);">行って (itte)</b> dan <b style="color:var(--primary);">行った (itta)</b> (menggunakan sokuon っ, BUKAN <i>iite</i>).
+          </div>
+        </div>
+
+        <div class="cs-item-row">
+          <div class="cs-item-header">
+            <span class="cs-badge-pill warning">3. Pembedaan Pasangan Kata Homofon (Bunyi Sama)</span>
+            <span class="cs-nuance-tag">Golongan & Kanji Berbeda</span>
+          </div>
+          <div class="cs-item-purpose">
+            Hati-hati dengan kata yang bacaannya persis sama tetapi masuk kelompok yang berbeda:<br>
+            • <b>切る (kiru - memotong)</b>: Kel. 1 ➔ 切って (kitte) | 切った (kitta)<br>
+            • <b>着る (kiru - memakai baju)</b>: Kel. 2 ➔ 着て (kite) | 着た (kita)<br>
+            • <b>要る (iru - perlu/butuh)</b>: Kel. 1 ➔ 要って (itte) | 要った (itta)<br>
+            • <b>居る (iru - ada makhluk hidup)</b>: Kel. 2 ➔ 居て (ite) | 居た (ita)<br>
+            • <b>見る (miru - melihat)</b>: Kel. 2 ➔ 見て (mite) | 見た (mita)
+          </div>
+        </div>
       `;
     }
   },
