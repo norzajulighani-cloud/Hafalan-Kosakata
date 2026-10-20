@@ -807,6 +807,23 @@
     text-decoration-color: var(--primary);
   }
 
+  .fss-note {
+    margin-top: 8px;
+    padding: 6px 11px;
+    background: rgba(56, 189, 248, 0.08);
+    border-left: 3px solid var(--primary);
+    border-radius: 4px 8px 8px 4px;
+    font-size: 11.5px;
+    color: #bae6fd;
+    line-height: 1.45;
+    text-align: left;
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    transition: all 0.2s ease;
+  }
+  .fss-note b { color: var(--gold); }
+
   /* Note banner */
   .fc-note-strip {
     width: 100%;
@@ -5156,6 +5173,7 @@ const VERB_SENTENCES_DB = {
     "masu": {
       "jp": "毎晩日本語の勉強をします。",
       "ro": "Maiban Nihongo no benkyou o shimasu.",
+      "id": "Setiap malam belajar bahasa Jepang."
     },
     "nai": {
       "jp": "授業中は無駄話をしない。",
@@ -5364,6 +5382,555 @@ const VERB_SENTENCES_DB = {
       "jp": "何度も練習して上手に話せるようになりました。",
       "ro": "Nandomo renshuu shite jouzu ni hanaseru you ni narimashita.",
       "id": "Berlatih berkali-kali sampai bisa berbicara dengan mahir."
+    }
+  }
+};
+
+const CURATED_SENTENCES_EXT = {
+  "会う": {
+    "ta": {
+      "jp": "昨日、駅の前で友達に会った。",
+      "ro": "Kinou, eki no mae de tomodachi ni atta.",
+      "id": "Kemarin saya bertemu teman di depan stasiun.",
+      "note": "Menyatakan pertemuan yang telah selesai terjadi di masa lalu (kasual)."
+    },
+    "nakatta": {
+      "jp": "昨日は忙しくて誰にも会わなかった。",
+      "ro": "Kinou wa isogashikute dare ni mo awanakatta.",
+      "id": "Kemarin sibuk sehingga tidak bertemu siapa pun.",
+      "note": "Menyatakan bahwa tidak ada pertemuan di masa lampau (kasual)."
+    },
+    "teiru": {
+      "jp": "今、カフェで昔の友達と会っている。",
+      "ro": "Ima, kafe de mukashi no tomodachi to atteiru.",
+      "id": "Sekarang sedang bertemu teman lama di kafe.",
+      "note": "Menyatakan pertemuan yang sedang berlangsung secara aktif saat ini."
+    },
+    "tai": {
+      "jp": "日本へ行って昔の先生に会いたい。",
+      "ro": "Nihon e itte mukashi no sensei ni aitai.",
+      "id": "Saya ingin pergi ke Jepang dan bertemu guru lama.",
+      "note": "Menyatakan keinginan pribadi pembicara untuk bertemu seseorang."
+    }
+  },
+  "洗う": {
+    "ta": {
+      "jp": "ご飯を食べる前にしっかり手を洗った。",
+      "ro": "Gohan o taberu mae ni shikkari te o aratta.",
+      "id": "Sebelum makan, saya mencuci tangan dengan bersih.",
+      "note": "Menyatakan tindakan mencuci tangan yang telah selesai dilakukan."
+    },
+    "nakatta": {
+      "jp": "昨日は疲れていたので車を洗わなかった。",
+      "ro": "Kinou wa tsukareteita node kuruma o arawanakatta.",
+      "id": "Kemarin tidak mencuci mobil karena kelelahan.",
+      "note": "Menyatakan bahwa kegiatan mencuci tidak dilakukan di masa lampau."
+    },
+    "teiru": {
+      "jp": "母は今、台所で野菜を洗っている。",
+      "ro": "Haha wa ima, daidokoro de yasai o aratteiru.",
+      "id": "Ibu sekarang sedang mencuci sayuran di dapur.",
+      "note": "Menyatakan kegiatan mencuci yang sedang berlangsung saat ini."
+    },
+    "tai": {
+      "jp": "泥で汚れたスニーカーを洗いたい。",
+      "ro": "Doro de yogoreta suniikaa o arawaitai.",
+      "id": "Saya ingin mencuci sepatu kets yang kotor terkena lumpur ini.",
+      "note": "Menyatakan keinginan pribadi pembicara untuk mencuci sesuatu."
+    }
+  },
+  "言う": {
+    "ta": {
+      "jp": "彼はさっき大事なことを言った。",
+      "ro": "Kare wa sakki daiji na koto o itta.",
+      "id": "Dia tadi telah mengatakan hal yang penting.",
+      "note": "Menyatakan perkataan yang telah selesai diucapkan pada waktu lampau."
+    },
+    "nakatta": {
+      "jp": "昨日は会議で何も言わなかった。",
+      "ro": "Kinou wa kaigi de nanimo iwanakatta.",
+      "id": "Kemarin saya tidak mengatakan apa pun di rapat.",
+      "note": "Menyatakan bahwa suatu perkataan tidak diucapkan di masa lalu (kasual)."
+    },
+    "teiru": {
+      "jp": "彼は今、電話で何か言っている。",
+      "ro": "Kare wa ima, denwa de nanika itteiru.",
+      "id": "Dia sekarang sedang membicarakan sesuatu di telepon.",
+      "note": "Menyatakan aktivitas orang lain yang sedang berbicara atau berlangsung saat ini."
+    },
+    "tai": {
+      "jp": "先生に感謝の気持ちを言いたい。",
+      "ro": "Sensei ni kansha no kimochi o iitai.",
+      "id": "Saya ingin menyampaikan rasa terima kasih kepada guru.",
+      "note": "Menyatakan keinginan pribadi pembicara untuk mengucapkan atau menyampaikan sesuatu."
+    }
+  },
+  "歌う": {
+    "ta": {
+      "jp": "カラオケでみんなと日本の歌を歌った。",
+      "ro": "Karaoke de minna to Nihon no uta o utatta.",
+      "id": "Kemarin kami bernyanyi lagu Jepang bersama di karaoke.",
+      "note": "Menyatakan aktivitas bernyanyi yang telah tuntas dilakukan di masa lampau."
+    },
+    "nakatta": {
+      "jp": "恥ずかしかったので歌わなかった。",
+      "ro": "Hazukashikatta node utawanakatta.",
+      "id": "Dulu saya tidak bernyanyi karena merasa malu.",
+      "note": "Menyatakan tindakan tidak bernyanyi di waktu lampau."
+    },
+    "teiru": {
+      "jp": "妹は部屋で楽しそうに歌っている。",
+      "ro": "Imouto wa heya de tanoshisou ni utatteiru.",
+      "id": "Adik perempuan sekarang sedang bernyanyi ceria di kamar.",
+      "note": "Menyatakan kegiatan bernyanyi yang sedang berlangsung saat ini."
+    },
+    "tai": {
+      "jp": "ステージの上で上手に歌いたい。",
+      "ro": "Suteeji no ue de jouzu ni utaitai.",
+      "id": "Saya ingin bernyanyi dengan merdu di atas panggung.",
+      "note": "Menyatakan keinginan pribadi pembicara untuk bernyanyi."
+    }
+  },
+  "買う": {
+    "ta": {
+      "jp": "昨日デパートで新しい靴を買った。",
+      "ro": "Kinou depaato de atarashii kutsu o katta.",
+      "id": "Kemarin saya membeli sepatu baru di department store.",
+      "note": "Menyatakan kegiatan membeli yang sudah selesai terjadi di masa lalu."
+    },
+    "nakatta": {
+      "jp": "高すぎたので何も買わなかった。",
+      "ro": "Takasugita node nanimo kawanakatta.",
+      "id": "Kemarin tidak membeli apa pun karena terlalu mahal.",
+      "note": "Menyatakan keputusan tidak membeli di masa lampau."
+    },
+    "teiru": {
+      "jp": "彼は今、コンビニで飲み物を買っている。",
+      "ro": "Kare wa ima, konbini de nomimono o katteiru.",
+      "id": "Dia sekarang sedang membeli minuman di minimarket.",
+      "note": "Menyatakan tindakan membeli yang sedang berlangsung saat ini."
+    },
+    "tai": {
+      "jp": "日本へ旅行に行ってアニメのグッズを買いたい。",
+      "ro": "Nihon e ryokou ni itte anime no guzzu o kaitai.",
+      "id": "Saya ingin berwisata ke Jepang dan membeli merchandise anime.",
+      "note": "Menyatakan hasrat atau keinginan pembicara untuk membeli sesuatu."
+    }
+  },
+  "吸う": {
+    "ta": {
+      "jp": "山の上で新鮮な空気を深く吸った。",
+      "ro": "Yama no ue de shinsen na kuuki o fukaku sutta.",
+      "id": "Di puncak gunung tadi, saya menghirup udara segar dalam-dalam.",
+      "note": "Menyatakan tindakan menghirup yang telah selesai dilakukan."
+    },
+    "nakatta": {
+      "jp": "健康のために昔からタバコを吸わなかった。",
+      "ro": "Kenkou no tame ni mukashi kara tabako o suwanakatta.",
+      "id": "Demi kesehatan, dulu saya tidak pernah merokok.",
+      "note": "Menyatakan kebiasaan tidak merokok di masa lampau."
+    },
+    "teiru": {
+      "jp": "あそこでタバコを吸っている人は誰ですか。",
+      "ro": "Asoko de tabako o sutteiru hito wa dare desu ka.",
+      "id": "Siapakah orang yang sedang merokok di sebelah sana itu?",
+      "note": "Menerangkan orang yang saat ini sedang melakukan perbuatan merokok."
+    },
+    "tai": {
+      "jp": "森の中で澄んだ空気を吸いたい。",
+      "ro": "Mori no naka de sunda kuuki o suitai.",
+      "id": "Saya ingin menghirup udara bersih di dalam hutan.",
+      "note": "Menyatakan keinginan pribadi untuk menghirup udara segar."
+    }
+  },
+  "違う": {
+    "ta": {
+      "jp": "私の答えは先生の模範解答と違った。",
+      "ro": "Watashi no kotae wa sensei no mohan kaitou to chigatta.",
+      "id": "Jawaban saya tadi ternyata berbeda dari kunci jawaban guru.",
+      "note": "Menyatakan kondisi perbedaan yang telah diketahui pada masa lampau."
+    },
+    "nakatta": {
+      "jp": "私の予想と結果は違わなかった。",
+      "ro": "Watashi no yosou to kekka wa chigawanakatta.",
+      "id": "Hasilnya kemarin tidak berbeda dari perkiraan saya.",
+      "note": "Menyatakan ketiadaan perbedaan di masa lampau."
+    },
+    "teiru": {
+      "jp": "この二つの単語の意味は少し違っている。",
+      "ro": "Kono futatsu no tango no imi wa sukoshi chigatteiru.",
+      "id": "Makna dari kedua kosakata ini statusnya sedikit berbeda.",
+      "note": "Menyatakan kondisi/status perbedaan yang menetap antar dua hal."
+    },
+    "tai": {
+      "jp": "他の人とは少し違っていたい。",
+      "ro": "Hoka no hito to wa sukoshi chigatteitai.",
+      "id": "Saya ingin memiliki perbedaan tersendiri dari orang lain.",
+      "note": "Menyatakan keinginan pribadi untuk menjadi berbeda/unik."
+    }
+  },
+  "使う": {
+    "ta": {
+      "jp": "今日の料理にたくさんの野菜を使った。",
+      "ro": "Kyou no ryouri ni takusan no yasai o tsukatta.",
+      "id": "Untuk masakan hari ini, saya memakai banyak sayuran.",
+      "note": "Menyatakan perbuatan memakai yang telah selesai di masa lampau."
+    },
+    "nakatta": {
+      "jp": "昨日は一日中スマホを使わなかった。",
+      "ro": "Kinou wa ichinichijuu sumaho o tsukawanakatta.",
+      "id": "Kemarin saya seharian penuh tidak menggunakan ponsel.",
+      "note": "Menyatakan bahwa barang tidak digunakan di waktu lampau."
+    },
+    "teiru": {
+      "jp": "父は今、庭でそのハサミを使っている。",
+      "ro": "Chichi wa ima, niwa de sono hasami o tsukatteiru.",
+      "id": "Ayah sekarang sedang menggunakan gunting itu di halaman.",
+      "note": "Menyatakan aktivitas penggunaan yang sedang berlangsung saat ini."
+    },
+    "tai": {
+      "jp": "日本語をもっと自然に使いたい。",
+      "ro": "Nihon-go o motto shizen ni tsukaitai.",
+      "id": "Saya ingin menggunakan bahasa Jepang dengan lebih alami.",
+      "note": "Menyatakan keinginan pembicara untuk menggunakan suatu kemampuan."
+    }
+  },
+  "習う": {
+    "ta": {
+      "jp": "子供のころ５年間ピアノを習った。",
+      "ro": "Kodomo no koro gonenkan piano o naratta.",
+      "id": "Waktu kecil dulu, saya belajar piano selama 5 tahun.",
+      "note": "Menyatakan pengalaman belajar/les yang telah tuntas di masa lalu."
+    },
+    "nakatta": {
+      "jp": "学校でその文法を習わなかった。",
+      "ro": "Gakkou de sono bunpou o naranakatta.",
+      "id": "Dulu di sekolah kami tidak mempelajari tata bahasa itu.",
+      "note": "Menyatakan bahwa materi tersebut tidak dipelajari di masa lalu."
+    },
+    "teiru": {
+      "jp": "今、毎週水曜日に生け花を習っている。",
+      "ro": "Ima, maishuu suiyoubi ni ikebana o naratteiru.",
+      "id": "Sekarang saya sedang rutin belajar ikebana setiap hari Rabu.",
+      "note": "Menyatakan kegiatan kursus/les yang sedang aktif dijalani saat ini."
+    },
+    "tai": {
+      "jp": "日本へ留学する前に柔道を習いたい。",
+      "ro": "Nihon e ryuugaku suru mae ni juudou o naraitai.",
+      "id": "Saya ingin belajar judo sebelum berangkat kuliah ke Jepang.",
+      "note": "Menyatakan keinginan pribadi pembicara untuk mempelajari suatu keahlian."
+    }
+  },
+  "終わる": {
+    "ta": {
+      "jp": "期末試験は無事に終わった。",
+      "ro": "Kimatsu shiken wa buji ni owatta.",
+      "id": "Ujian akhir semester sudah selesai dengan lancar.",
+      "note": "Menyatakan bahwa peristiwa ujian telah rampung terjadi di masa lalu."
+    },
+    "nakatta": {
+      "jp": "時間までに宿題が終わらなかった。",
+      "ro": "Jikan made ni shukudai ga owaranakatta.",
+      "id": "PR tidak sempat selesai sampai batas waktunya.",
+      "note": "Menyatakan bahwa kegiatan belum sempat tuntas di masa lampau."
+    },
+    "teiru": {
+      "jp": "今日の宿題はもう終わっている。",
+      "ro": "Kyou no shukudai wa mou owatteiru.",
+      "id": "PR hari ini sudah selesai (semuanya beres).",
+      "note": "Menyatakan status/kondisi hasil bahwa pekerjaan telah tuntas dan selesai."
+    },
+    "tai": {
+      "jp": "早くこの面倒な仕事を終わりたい。",
+      "ro": "Hayaku kono mendou na shigoto o owaritai.",
+      "id": "Saya ingin pekerjaan yang merepotkan ini segera selesai.",
+      "note": "Menyatakan keinginan pembicara agar pekerjaan segera usai."
+    }
+  },
+  "始まる": {
+    "ta": {
+      "jp": "朝９時に日本語の試験が始まった。",
+      "ro": "Asa kuji ni Nihon-go no shiken ga hajimatta.",
+      "id": "Ujian bahasa Jepang tadi pagi sudah dimulai pukul 9.",
+      "note": "Menyatakan awal mula peristiwa yang telah terjadi di masa lalu."
+    },
+    "nakatta": {
+      "jp": "先生が来なくて授業が始まらなかった。",
+      "ro": "Sensei ga konakute jugyou ga hajimaranakatta.",
+      "id": "Pelajaran tadi tidak kunjung dimulai karena guru belum datang.",
+      "note": "Menyatakan peristiwa yang belum dimulai di masa lampau."
+    },
+    "teiru": {
+      "jp": "映画はもう始まっているから急ごう。",
+      "ro": "Eiga wa mou hajimatteiru kara isogou.",
+      "id": "Filmnya sudah mulai (sedang tayang), mari kita bergegas.",
+      "note": "Menyatakan kondisi bahwa penayangan film sudah dimulai dan sedang berlangsung."
+    },
+    "tai": {
+      "jp": "早く春休みが始まってほしい。",
+      "ro": "Hayaku haruyasumi ga hajimatte hoshii.",
+      "id": "Saya ingin liburan musim semi segera dimulai.",
+      "note": "Menyatakan harapan agar suatu periode baru segera dimulai."
+    }
+  },
+  "閉まる": {
+    "ta": {
+      "jp": "強い風で玄関のドアがバタンと閉まった。",
+      "ro": "Tsuyoi kaze de genkan no doa ga batan to shimatta.",
+      "id": "Pintu depan tadi terbanting tertutup karena angin kencang.",
+      "note": "Menyatakan peristiwa pintu menutup yang telah terjadi (intransitif)."
+    },
+    "nakatta": {
+      "jp": "鍵が引っかかって窓が閉まらなかった。",
+      "ro": "Kagi ga hikkakatte mado ga shimaranakatta.",
+      "id": "Jendela tadi tidak bisa tertutup rapat karena kuncinya tersangkut.",
+      "note": "Menyatakan pintu/jendela yang gagal menutup di masa lalu."
+    },
+    "teiru": {
+      "jp": "銀行の窓口はもう閉まっている。",
+      "ro": "Ginkou no madoguchi wa mou shimatteiru.",
+      "id": "Loket bank saat ini sudah berstatus tutup.",
+      "note": "Menyatakan kondisi/status pintu/loket yang saat ini sedang tertutup."
+    },
+    "tai": {
+      "jp": "エアコンが効くように早くドアが閉まってほしい。",
+      "ro": "Eakon ga kiku you ni hayaku doa ga shimatte hoshii.",
+      "id": "Saya ingin pintunya segera tertutup agar AC terasa dingin.",
+      "note": "Menyatakan keinginan agar kondisi tertutup segera terwujud."
+    }
+  },
+  "止まる": {
+    "ta": {
+      "jp": "駅の前に黄色いタクシーが止まった。",
+      "ro": "Eki no mae ni kiiroi takushii ga tomatta.",
+      "id": "Taksi kuning tadi sudah berhenti di depan stasiun.",
+      "note": "Menyatakan kendaraan yang telah berhenti di masa lampau."
+    },
+    "nakatta": {
+      "jp": "昨日は雨が一晩中ずっと止まらなかった。",
+      "ro": "Kinou wa ame ga hitobanjuu zutto tomaranakatta.",
+      "id": "Hujan kemarin malam tidak kunjung berhenti semalaman.",
+      "note": "Menyatakan bahwa peristiwa tidak berhenti di masa lalu."
+    },
+    "teiru": {
+      "jp": "あそこに白い車が止まっている。",
+      "ro": "Asoko ni shiroi kuruma ga tomatteiru.",
+      "id": "Ada mobil putih yang sedang terparkir berhenti di sana.",
+      "note": "Menyatakan kondisi kendaraan yang sedang berhenti/parkir (kondisi menetap)."
+    },
+    "tai": {
+      "jp": "京都の伝統的な温泉旅館に泊まりたい。",
+      "ro": "Kyouto no dentouteki na onsen ryokan ni tomaritai.",
+      "id": "Saya ingin menginap di penginapan onsen tradisional di Kyoto.",
+      "note": "Menyatakan keinginan pribadi untuk menginap/berhenti singgah."
+    }
+  },
+  "帰る": {
+    "ta": {
+      "jp": "父は仕事が終わってさっき家に帰った。",
+      "ro": "Chichi wa shigoto ga owatte sakki ie ni kaetta.",
+      "id": "Ayah tadi sudah pulang ke rumah setelah pekerjaan selesai.",
+      "note": "Menyatakan kepulangan yang telah selesai terjadi di masa lalu."
+    },
+    "nakatta": {
+      "jp": "昨日は仕事が忙しくて早く帰らなかった。",
+      "ro": "Kinou wa shigoto ga isogashikute hayaku kaeranakatta.",
+      "id": "Kemarin saya tidak pulang cepat karena pekerjaan sibuk.",
+      "note": "Menyatakan bahwa kepulangan cepat tidak dilakukan kemarin."
+    },
+    "teiru": {
+      "jp": "兄は今、電車で家に帰っている途中です。",
+      "ro": "Ani wa ima, densha de ie ni kaetteiru tochuu desu.",
+      "id": "Kakak sekarang sedang dalam perjalanan pulang ke rumah naik kereta.",
+      "note": "Menyatakan proses kepulangan yang sedang berlangsung saat ini."
+    },
+    "tai": {
+      "jp": "疲れたから早く自分の部屋に帰りたい。",
+      "ro": "Tsukareta kara hayaku jibun no heya ni kaeritai.",
+      "id": "Saya ingin segera pulang ke kamar sendiri karena lelah.",
+      "note": "Menyatakan hasrat pribadi untuk segera pulang."
+    }
+  },
+  "知る": {
+    "ta": {
+      "jp": "昨日ニュースを見て初めてその事実を知った。",
+      "ro": "Kinou nyuusu o mite hajimete sono jijitsu o shitta.",
+      "id": "Kemarin saya baru pertama kali mengetahui fakta itu lewat berita.",
+      "note": "Menyatakan momen ketika suatu informasi baru disadari di masa lalu."
+    },
+    "nakatta": {
+      "jp": "そんな大切なことを昨日は知らなかった。",
+      "ro": "Sonna taisetsu na koto o kinou wa shiranakatta.",
+      "id": "Kemarin saya belum mengetahui hal sepenting itu.",
+      "note": "Menyatakan bahwa informasi tersebut belum diketahui pada masa lampau."
+    },
+    "teiru": {
+      "jp": "田中さんの電話番号を知っている。",
+      "ro": "Tanaka-san no denwa bangou o shitteiru.",
+      "id": "Saya mengetahui nomor telepon Tanaka.",
+      "note": "Menyatakan status pengetahuan/pengenalan yang saat ini sudah dimiliki (bukan sedang tahu)."
+    },
+    "tai": {
+      "jp": "日本の歴史と文化をもっと深く知りたい。",
+      "ro": "Nihon no rekishi to bunka o motto fukaku shiritai.",
+      "id": "Saya ingin mengetahui sejarah dan budaya Jepang lebih mendalam.",
+      "note": "Menyatakan keinginan pembicara untuk memperluas pengetahuan."
+    }
+  },
+  "食べる": {
+    "ta": {
+      "jp": "お昼休みに友達と美味しい寿司を食べた。",
+      "ro": "Ohiruyasumi ni tomodachi to oishii sushi o tabeta.",
+      "id": "Saat istirahat siang tadi, saya makan sushi lezat bersama teman.",
+      "note": "Menyatakan kegiatan makan yang telah selesai di masa lampau."
+    },
+    "nakatta": {
+      "jp": "今朝は時間がなくて朝ご飯を食べなかった。",
+      "ro": "Kesa wa jikan ga nakute asagohan o tabenakatta.",
+      "id": "Tadi pagi saya tidak sarapan karena tidak sempat.",
+      "note": "Menyatakan bahwa kegiatan makan tidak dilakukan di waktu lampau."
+    },
+    "teiru": {
+      "jp": "弟は今、居間でリンゴを食べている。",
+      "ro": "Otouto wa ima, ima de ringo o tabeteiru.",
+      "id": "Adik laki-laki sekarang sedang makan apel di ruang keluarga.",
+      "note": "Menyatakan kegiatan makan yang sedang berlangsung secara aktif saat ini."
+    },
+    "tai": {
+      "jp": "日本に行ったら本場のラーメンを食べたい。",
+      "ro": "Nihon ni ittara honba no raamen o tabetai.",
+      "id": "Jika pergi ke Jepang nanti, saya ingin makan ramen asli di sana.",
+      "note": "Menyatakan keinginan pribadi pembicara untuk menyantap makanan."
+    }
+  },
+  "見る": {
+    "ta": {
+      "jp": "昨日の夜、テレビで面白い映画を見た。",
+      "ro": "Kinou no yoru, terebi de omoshiroi eiga o mita.",
+      "id": "Tadi malam saya menonton film yang menarik di televisi.",
+      "note": "Menyatakan kegiatan menonton/melihat yang telah selesai di masa lalu."
+    },
+    "nakatta": {
+      "jp": "忙しくてそのドラマを昨日は見なかった。",
+      "ro": "Isogashikute sono dorama o kinou wa minakatta.",
+      "id": "Kemarin saya tidak menonton drama itu karena sibuk.",
+      "note": "Menyatakan tontonan yang tidak disaksikan di waktu lampau."
+    },
+    "teiru": {
+      "jp": "父は今、リビングでニュースを見ている。",
+      "ro": "Chichi wa ima, ribingu de nyuusu o miteiru.",
+      "id": "Ayah sekarang sedang menonton siaran berita di ruang tamu.",
+      "note": "Menyatakan kegiatan menonton yang sedang berlangsung saat ini."
+    },
+    "tai": {
+      "jp": "富士山の頂上から朝日を見たい。",
+      "ro": "Fujisan no choujou kara asahi o mitai.",
+      "id": "Saya ingin menyaksikan matahari terbit dari puncak Gunung Fuji.",
+      "note": "Menyatakan keinginan pribadi pembicara untuk menyaksikan suatu pemandangan."
+    }
+  },
+  "着る": {
+    "ta": {
+      "jp": "パーティーのために新しいスーツを着た。",
+      "ro": "Paatii no tame ni atarashii suutsu o kita.",
+      "id": "Tadi saya mengenakan setelan jas baru untuk pesta.",
+      "note": "Menyatakan tindakan mengenakan baju yang telah selesai dilakukan."
+    },
+    "nakatta": {
+      "jp": "昨日は暖かかったのでセーターを着なかった。",
+      "ro": "Kinou wa atatakakatta node seetaa o kinakatta.",
+      "id": "Kemarin tidak memakai sweater karena cuacanya hangat.",
+      "note": "Menyatakan pakaian yang tidak dikenakan di masa lampau."
+    },
+    "teiru": {
+      "jp": "田中さんは素敵な黒いジャケットを着ている。",
+      "ro": "Tanaka-san wa suteki na kuroi jaketto o kiteiru.",
+      "id": "Tanaka sedang mengenakan jaket hitam yang menawan.",
+      "note": "Menyatakan pakaian yang saat ini sedang melekat pada tubuh seseorang (kondisi berpakaian)."
+    },
+    "tai": {
+      "jp": "夏祭りの日にきれいな浴衣を着たい。",
+      "ro": "Natsumatsuri no hi ni kirei na yukata o kitai.",
+      "id": "Saya ingin mengenakan yukata yang cantik pada hari festival musim panas.",
+      "note": "Menyatakan keinginan pembicara untuk mengenakan suatu busana."
+    }
+  },
+  "来る": {
+    "ta": {
+      "jp": "昨日、遠くから友達が家に遊びに来た。",
+      "ro": "Kinou, tooku kara tomodachi ga ie ni asobi ni kita.",
+      "id": "Kemarin seorang teman datang dari jauh untuk bermain ke rumah.",
+      "note": "Menyatakan kedatangan yang telah terjadi di masa lalu."
+    },
+    "nakatta": {
+      "jp": "雨がひどかったので昨日は誰も来なかった。",
+      "ro": "Ame ga hidokatta node kinou wa daremo konakatta.",
+      "id": "Kemarin tidak ada yang datang karena hujan lebat.",
+      "note": "Menyatakan ketiadaan kedatangan pada waktu lampau."
+    },
+    "teiru": {
+      "jp": "ほら、あっちからバスが来ているよ。",
+      "ro": "Hora, acchi kara basu ga kiteiru yo.",
+      "id": "Lihat, busnya sedang datang mendekat dari arah sana.",
+      "note": "Menyatakan pergerakan datang yang sedang berlangsung saat ini."
+    },
+    "tai": {
+      "jp": "いつか家族と一緒にまた日本へ来たい。",
+      "ro": "Itsuka kazoku to issho ni mata Nihon e kitai.",
+      "id": "Suatu hari nanti saya ingin datang lagi ke Jepang bersama keluarga.",
+      "note": "Menyatakan keinginan pembicara untuk berkunjung atau datang kembali."
+    }
+  },
+  "する": {
+    "ta": {
+      "jp": "昨日たくさん日本語の勉強をした。",
+      "ro": "Kinou takusan Nihon-go no benkyou o shita.",
+      "id": "Kemarin saya banyak belajar bahasa Jepang.",
+      "note": "Menyatakan aktivitas yang telah selesai dilakukan di masa lalu."
+    },
+    "nakatta": {
+      "jp": "昨夜は疲れていたので宿題をしなかった。",
+      "ro": "Sakuya wa tsukareteita node shukudai o shinakatta.",
+      "id": "Tadi malam saya tidak mengerjakan PR karena lelah.",
+      "note": "Menyatakan bahwa pekerjaan tidak dilakukan di waktu lampau."
+    },
+    "teiru": {
+      "jp": "父は今、庭で草取りをしている。",
+      "ro": "Chichi wa ima, niwa de kusatori o shiteiru.",
+      "id": "Ayah sekarang sedang mencabuti rumput di halaman.",
+      "note": "Menyatakan kegiatan yang sedang berlangsung secara aktif saat ini."
+    },
+    "tai": {
+      "jp": "来月、友達と一緒に京都を旅行したい。",
+      "ro": "Raigetsu, tomodachi to issho ni Kyouto o ryokou shitai.",
+      "id": "Bulan depan saya ingin berwisata ke Kyoto bersama teman.",
+      "note": "Menyatakan hasrat atau rencana yang ingin dilakukan pembicara."
+    }
+  },
+  "結婚する": {
+    "ta": {
+      "jp": "兄は去年の秋に結婚した。",
+      "ro": "Ani wa kyonen no aki ni kekkon shita.",
+      "id": "Kakak laki-laki saya sudah menikah pada musim gugur tahun lalu.",
+      "note": "Menyatakan peristiwa pernikahan yang telah terjadi di masa lalu."
+    },
+    "nakatta": {
+      "jp": "叔父は若いころは結婚しなかった。",
+      "ro": "Oji wa wakai koro wa kekkon shinakatta.",
+      "id": "Paman saya dulu tidak menikah saat masih muda.",
+      "note": "Menyatakan ketiadaan pernikahan pada periode masa lalu."
+    },
+    "teiru": {
+      "jp": "私の姉はすでに結婚している。",
+      "ro": "Watashi no ane wa sude ni kekkon shiteiru.",
+      "id": "Kakak perempuan saya saat ini berstatus sudah menikah.",
+      "note": "Menyatakan status pernikahan yang sah dan bertahan saat ini (bukan sedang melaksanakan akad)."
+    },
+    "tai": {
+      "jp": "将来、優しくて誠実な人と結婚したい。",
+      "ro": "Shourai, yasashikute seijitsu na hito to kekkon shitai.",
+      "id": "Di masa depan saya ingin menikah dengan orang yang baik dan tulus.",
+      "note": "Menyatakan impian atau keinginan pembicara untuk menikah."
     }
   }
 };
@@ -5754,6 +6321,46 @@ const Modul = {
     const k_tai = (item.k_masu || '').replace(/ます$/, 'たい');
     const r_tai = (item.r_masu || '').replace(/ます$/, 'たい');
 
+    const k = item.k_kamus;
+    const primaryA = item.a.split(',')[0].trim();
+    const lowerA = primaryA.toLowerCase();
+
+    const isStateVerb = [
+      '終わる', '知る', '住む', '持つ', '太る', '痩せる', '覚える', '忘れる',
+      '着る', '履く', 'かぶる', '掛ける', '結婚する', '開く', '閉まる', '消える',
+      '電気をつける', '並べる', '壊れる', '落ちる', '死ぬ', '曲がる', '止まる',
+      '直る', '曇る', '晴れる', '生まれる', '勤める', 'できる'
+    ].includes(k);
+
+    const isIntransitive = [
+      '終わる', '行く', '来る', '帰る', '入る', '出る', '下りる', '死ぬ',
+      '咲く', '降る', '吹く', '鳴く', '曇る', '晴れる', '消える', '落ちる',
+      '壊れる', '曲がる', '止まる', '直る', '生まれる', '歩く', '走る', '泳ぐ',
+      '登る', '渡る', 'できる'
+    ].includes(k);
+
+    let teMeaning = `${primaryA} lalu... / Tolong ${lowerA}`;
+    if (isIntransitive) {
+      teMeaning = `${primaryA} lalu... / Setelah ${lowerA}`;
+    }
+
+    let teiruTag = 'Sedang';
+    let teiruSublabel = 'Sedang Berlangsung';
+    let teiruMeaning = `Sedang ${lowerA}`;
+
+    if (isStateVerb) {
+      teiruTag = 'Status';
+      teiruSublabel = 'Kondisi Menetap';
+      if (k === '終わる') teiruMeaning = 'Sudah rampung / berstatus selesai';
+      else if (k === '知る') teiruMeaning = 'Sudah tahu / kenal';
+      else if (k === '住む') teiruMeaning = 'Tinggal / berdomisili di...';
+      else if (k === '持つ') teiruMeaning = 'Punya / memiliki';
+      else if (k === '結婚する') teiruMeaning = 'Berstatus sudah menikah';
+      else if (['着る', '履く', 'かぶる'].includes(k)) teiruMeaning = 'Sedang mengenakan pakaian';
+      else if (['開く', '閉まる', '消える', '壊れる'].includes(k)) teiruMeaning = `Dalam keadaan ${lowerA}`;
+      else teiruMeaning = `Berstatus ${lowerA} (kondisi menetap)`;
+    }
+
     return {
       kamus: {
         key: 'kamus',
@@ -5774,7 +6381,7 @@ const Modul = {
         k: item.k_masu,
         r: item.r_masu,
         ro: hiraToRomaji(item.r_masu),
-        meaning: `${item.a} (sopan)`,
+        meaning: `${primaryA} (sopan)`,
         badge: '🌸 Bentuk Masu'
       },
       nai: {
@@ -5785,18 +6392,18 @@ const Modul = {
         k: item.k_nai,
         r: item.r_nai,
         ro: hiraToRomaji(item.r_nai),
-        meaning: `Tidak ${item.a.toLowerCase()}`,
+        meaning: `Tidak ${lowerA}`,
         badge: '❄️ Bentuk Nai'
       },
       te: {
         key: 'te',
         title: 'Te',
-        sublabel: 'Sambung / Tolong',
+        sublabel: isIntransitive ? 'Sambung / Urutan' : 'Sambung / Tolong',
         tag: 'Sambung',
         k: item.k_te,
         r: item.r_te,
         ro: hiraToRomaji(item.r_te),
-        meaning: `${item.a} dan... / Tolong ${item.a.toLowerCase()}`,
+        meaning: teMeaning,
         badge: '🔗 Bentuk Te'
       },
       ta: {
@@ -5807,7 +6414,7 @@ const Modul = {
         k: k_ta,
         r: r_ta,
         ro: hiraToRomaji(r_ta),
-        meaning: `Sudah / telah ${item.a.toLowerCase()}`,
+        meaning: `Sudah / telah ${lowerA}`,
         badge: '⏳ Bentuk Ta'
       },
       nakatta: {
@@ -5818,18 +6425,18 @@ const Modul = {
         k: k_nakatta,
         r: r_nakatta,
         ro: hiraToRomaji(r_nakatta),
-        meaning: `Dulu tidak ${item.a.toLowerCase()}`,
+        meaning: `Tadi / dulu tidak ${lowerA}`,
         badge: '🍂 Bentuk Nakatta'
       },
       teiru: {
         key: 'teiru',
         title: 'Te-iru',
-        sublabel: 'Sedang Berlangsung',
-        tag: 'Sedang',
+        sublabel: teiruSublabel,
+        tag: teiruTag,
         k: k_teiru,
         r: r_teiru,
         ro: hiraToRomaji(r_teiru),
-        meaning: `Sedang ${item.a.toLowerCase()}`,
+        meaning: teiruMeaning,
         badge: '🔄 Bentuk Te-iru'
       },
       tai: {
@@ -5840,68 +6447,108 @@ const Modul = {
         k: k_tai,
         r: r_tai,
         ro: hiraToRomaji(r_tai),
-        meaning: `Ingin / mau ${item.a.toLowerCase()}`,
+        meaning: `Ingin / mau ${lowerA}`,
         badge: '✨ Bentuk Tai'
       }
     };
   },
 
+  getNuanceNote: function(formKey, k_kamus, isStateVerb, isIntransitive) {
+    if (formKey === 'kamus') return 'Bentuk dasar netral/kasual untuk percakapan akrab atau pola tata bahasa formal.';
+    if (formKey === 'masu') return 'Bentuk sopan (~masu) yang digunakan saat berbicara santun kepada orang lain dalam situasi formal.';
+    if (formKey === 'nai') return 'Bentuk negatif biasa/kasual untuk menyatakan tidak melakukan sesuatu di masa sekarang atau masa mendatang.';
+    if (formKey === 'te') {
+      if (isIntransitive) return 'Bentuk sambung (~te) untuk urutan kejadian: setelah selesai/terjadi, lalu lanjut ke kegiatan berikutnya.';
+      return 'Bentuk sambung (~te) untuk urutan kegiatan atau memohon bantuan halus (~te kudasai).';
+    }
+    if (formKey === 'ta') return 'Menyatakan tindakan atau peristiwa yang telah selesai terjadi di masa lampau secara kasual (sudah / tadi).';
+    if (formKey === 'nakatta') return 'Menyatakan bahwa suatu perbuatan tidak dilakukan pada masa lampau secara santai (kemarin tidak / tadi tidak).';
+    if (formKey === 'teiru') {
+      if (isStateVerb) return 'Menyatakan status/kondisi hasil yang telah selesai tuntas dan keadaannya masih bertahan hingga saat ini.';
+      return 'Menyatakan aktivitas atau perbuatan yang sedang berlangsung secara aktif saat ini.';
+    }
+    if (formKey === 'tai') return 'Mengungkapkan keinginan pribadi pembicara untuk melakukan suatu hal (ingin / mau).';
+    return '';
+  },
+
   getSentenceForForm: function(item, formKey) {
-    if (!item) return { jpRaw: '', jpHtml: '', roHtml: '', idHtml: '', badge: '' };
+    if (!item) return { jpRaw: '', jpHtml: '', roHtml: '', idHtml: '', noteHtml: '', badge: '' };
     const forms = this.getVerbForms(item);
     const targetForm = forms[formKey] || forms.kamus;
     const s = VERB_SENTENCES_DB[item.k_kamus] || {};
 
+    const k = item.k_kamus;
+    const primaryA = item.a.split(',')[0].trim();
+    const lowerA = primaryA.toLowerCase();
+
+    const isStateVerb = [
+      '終わる', '知る', '住む', '持つ', '太る', '痩せる', '覚える', '忘れる',
+      '着る', '履く', 'かぶる', '掛ける', '結婚する', '開く', '閉まる', '消える',
+      '電気をつける', '並べる', '壊れる', '落ちる', '死ぬ', '曲がる', '止まる',
+      '直る', '曇る', '晴れる', '生まれる', '勤める', 'できる'
+    ].includes(k);
+
+    const isIntransitive = [
+      '終わる', '行く', '来る', '帰る', '入る', '出る', '下りる', '死ぬ',
+      '咲く', '降る', '吹く', '鳴く', '曇る', '晴れる', '消える', '落ちる',
+      '壊れる', '曲がる', '止まる', '直る', '生まれる', '歩く', '走る', '泳ぐ',
+      '登る', '渡る', 'できる'
+    ].includes(k);
+
     let raw = null;
-    if (s[formKey]) {
+    if (typeof CURATED_SENTENCES_EXT !== 'undefined' && CURATED_SENTENCES_EXT[k] && CURATED_SENTENCES_EXT[k][formKey]) {
+      raw = { ...CURATED_SENTENCES_EXT[k][formKey] };
+    } else if (s[formKey]) {
       raw = { ...s[formKey] };
     } else {
-      const baseMasu = s.masu || { jp: item.k_masu + '。', ro: forms.masu.ro + '.', id: item.a };
-      const baseNai = s.nai || { jp: item.k_nai + '。', ro: forms.nai.ro + '.', id: 'Tidak ' + item.a };
+      const baseMasu = s.masu || { jp: item.k_masu + '。', ro: forms.masu.ro + '.', id: primaryA };
+      const baseNai = s.nai || { jp: item.k_nai + '。', ro: forms.nai.ro + '.', id: 'Tidak ' + lowerA };
 
       if (formKey === 'ta') {
-        let jp = baseMasu.jp.replace(/明日/g, '昨日').replace(item.k_masu, targetForm.k);
-        if (!jp.includes(targetForm.k)) jp = `昨日、${targetForm.k}。`;
-        let ro = baseMasu.ro.replace(/Ashita/gi, 'Kinou').replace(new RegExp(forms.masu.ro, 'gi'), targetForm.ro);
-        if (!ro.toLowerCase().includes(targetForm.ro.toLowerCase())) ro = `Kinou, ${targetForm.ro}.`;
-        let id = baseMasu.id.replace(/Besok/gi, 'Kemarin').replace(/Setiap pagi|Setiap hari/gi, 'Tadi');
-        if (!id.toLowerCase().includes('sudah') && !id.toLowerCase().includes('telah') && !id.toLowerCase().includes('kemarin') && !id.toLowerCase().includes('tadi')) {
-          id = 'Sudah ' + id.charAt(0).toLowerCase() + id.slice(1);
-        }
-        raw = { jp, ro, id };
+        let jp = `昨日、${targetForm.k}。`;
+        let ro = `Kinou, ${targetForm.ro}.`;
+        let id = `Kemarin sudah ${lowerA}.`;
+        raw = {
+          jp, ro, id,
+          note: 'Menyatakan tindakan atau peristiwa yang telah selesai terjadi di masa lampau secara kasual (sudah / tadi).'
+        };
       } else if (formKey === 'nakatta') {
-        let jp = baseNai.jp.replace(/今日/g, '昨日').replace(/まだ/g, '昨日は').replace(item.k_nai, targetForm.k);
-        if (!jp.includes(targetForm.k)) jp = `昨日は${targetForm.k}。`;
-        let ro = baseNai.ro.replace(/Kyou/gi, 'Kinou').replace(/Mada/gi, 'Kinou wa').replace(new RegExp(forms.nai.ro, 'gi'), targetForm.ro);
-        if (!ro.toLowerCase().includes(targetForm.ro.toLowerCase())) ro = `Kinou wa ${targetForm.ro}.`;
-        let id = baseNai.id.replace(/Hari ini/gi, 'Kemarin').replace(/Belum/gi, 'Kemarin tidak');
-        if (!id.toLowerCase().includes('kemarin') && !id.toLowerCase().includes('dulu')) {
-          id = 'Dulu ' + id.charAt(0).toLowerCase() + id.slice(1);
-        }
-        raw = { jp, ro, id };
+        let jp = `昨日は${targetForm.k}。`;
+        let ro = `Kinou wa ${targetForm.ro}.`;
+        let id = `Kemarin tidak ${lowerA}.`;
+        raw = {
+          jp, ro, id,
+          note: 'Menyatakan bahwa suatu perbuatan tidak dilakukan pada masa lampau secara santai (kemarin tidak / tadi tidak).'
+        };
       } else if (formKey === 'teiru') {
-        let jp = baseMasu.jp.replace(/明日|毎朝|毎日/g, '今').replace(item.k_masu, targetForm.k);
-        if (!jp.includes(targetForm.k)) jp = `今、${targetForm.k}。`;
-        if (!jp.startsWith('今')) jp = '今、' + jp;
-        let ro = baseMasu.ro.replace(/Ashita|Maiasa|Mainichi/gi, 'Ima').replace(new RegExp(forms.masu.ro, 'gi'), targetForm.ro);
-        if (!ro.toLowerCase().includes(targetForm.ro.toLowerCase())) ro = `Ima, ${targetForm.ro}.`;
-        if (!ro.toLowerCase().startsWith('ima')) ro = 'Ima, ' + ro.charAt(0).toLowerCase() + ro.slice(1);
-        let id = baseMasu.id.replace(/Besok saya|Besok|Setiap pagi|Setiap hari/gi, 'Sekarang');
-        if (!id.toLowerCase().includes('sedang')) {
-          id = id.replace(/Sekarang\s*/gi, 'Sekarang sedang ');
-          if (!id.toLowerCase().includes('sedang')) id = 'Sedang ' + id.charAt(0).toLowerCase() + id.slice(1);
+        if (isStateVerb) {
+          let jp = `もう${targetForm.k}。`;
+          let ro = `Mou ${targetForm.ro}.`;
+          let id = (k === '終わる') ? 'Pekerjaan hari ini sudah selesai (semuanya beres).' :
+                   (k === '知る') ? 'Sudah mengetahui informasi tersebut.' :
+                   (k === '住む') ? 'Sedang bertempat tinggal di sana.' :
+                   `Kondisinya sudah ${lowerA} (status hasil menetap).`;
+          raw = {
+            jp, ro, id,
+            note: 'Menyatakan status/kondisi hasil yang telah selesai tuntas dan keadaannya masih bertahan hingga kini.'
+          };
+        } else {
+          let jp = `今、${targetForm.k}。`;
+          let ro = `Ima, ${targetForm.ro}.`;
+          let id = `Sekarang sedang ${lowerA}.`;
+          raw = {
+            jp, ro, id,
+            note: 'Menyatakan aktivitas atau perbuatan yang sedang berlangsung secara aktif saat ini.'
+          };
         }
-        raw = { jp, ro, id };
       } else if (formKey === 'tai') {
-        let jp = baseMasu.jp.replace(/明日/g, 'いつか').replace(item.k_masu, targetForm.k);
-        if (!jp.includes(targetForm.k)) jp = `${targetForm.k}です。`;
-        let ro = baseMasu.ro.replace(/Ashita/gi, 'Itsuka').replace(new RegExp(forms.masu.ro, 'gi'), targetForm.ro);
-        if (!ro.toLowerCase().includes(targetForm.ro.toLowerCase())) ro = `${targetForm.ro} desu.`;
-        let id = baseMasu.id.replace(/Besok saya|Besok/gi, 'Suatu hari').replace(/Setiap pagi|Setiap hari/gi, '');
-        if (!id.toLowerCase().includes('ingin') && !id.toLowerCase().includes('mau')) {
-          id = 'Ingin ' + id.trim().charAt(0).toLowerCase() + id.trim().slice(1);
-        }
-        raw = { jp, ro, id };
+        let jp = `早く${targetForm.k}です。`;
+        let ro = `Hayaku ${targetForm.ro} desu.`;
+        let id = `Ingin segera ${lowerA}.`;
+        raw = {
+          jp, ro, id,
+          note: 'Mengungkapkan keinginan pribadi pembicara untuk melakukan suatu hal (ingin / mau).'
+        };
       } else {
         raw = baseMasu;
       }
@@ -5927,12 +6574,14 @@ const Modul = {
     }
 
     let hlId = raw.id || '';
+    const noteText = raw.note || this.getNuanceNote(formKey, k, isStateVerb, isIntransitive);
 
     return {
       jpRaw: raw.jp || '',
       jpHtml: hlJp,
       roHtml: hlRo,
       idHtml: hlId,
+      noteHtml: noteText,
       badge: targetForm.badge,
       title: targetForm.title,
       tag: targetForm.tag,
@@ -6076,6 +6725,7 @@ const Modul = {
           <div class="fss-jp" id="fss-jp-text">${sentData.jpHtml}</div>
           <div class="fss-romaji" id="fss-ro-text">${sentData.roHtml}</div>
           <div class="fss-id" id="fss-id-text">${sentData.idHtml}</div>
+          <div class="fss-note" id="fss-note-text">💡 <b>Nuansa:</b> ${sentData.noteHtml}</div>
         </div>
       </div>
 
@@ -6120,11 +6770,13 @@ const Modul = {
     const jpEl = document.getElementById('fss-jp-text');
     const roEl = document.getElementById('fss-ro-text');
     const idEl = document.getElementById('fss-id-text');
+    const noteEl = document.getElementById('fss-note-text');
 
     if (badgeEl) badgeEl.innerText = sentData.badge;
     if (jpEl) jpEl.innerHTML = sentData.jpHtml;
     if (roEl) roEl.innerHTML = sentData.roHtml;
     if (idEl) idEl.innerHTML = sentData.idHtml;
+    if (noteEl) noteEl.innerHTML = `💡 <b>Nuansa:</b> ${sentData.noteHtml}`;
   },
 
   nextCard: function() {
