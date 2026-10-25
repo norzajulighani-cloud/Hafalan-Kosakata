@@ -1,1051 +1,1129 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>YOMIKATA V10.6</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>YOMIKATA V10.6</title>
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<div id="toast"></div>
+  <div id="toast"></div>
 
-<div id="result-screen" class="hidden">
-  <div class="result-box" id="result-box">
-    <div class="result-title">MISSION CLEAR! 🎉</div>
-    <div class="result-subtitle">Hari <span id="res-day">X</span> Diselesaikan</div>
-    
-    <div class="result-stats">
-      <div class="stat-row"><span>✨ EXP Diraih:</span> <span class="stat-val" id="res-exp">0</span></div>
-      <div class="stat-row"><span>🪙 Koin Diraih:</span> <span class="stat-val" id="res-coin">0</span></div>
-      <div class="stat-row"><span>🔥 Max Combo:</span> <span class="stat-val" id="res-combo">0</span></div>
-    </div>
-    
-    <button class="btn" style="background: var(--success); color: #000; box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);" onclick="UI.nextDayFromResult()">Gass Hari Berikutnya! 🚀</button>
-    <button class="btn btn-alt" style="margin-top: 10px; margin-bottom: 0;" onclick="UI.closeModal('result-screen')">Tutup & Ulas Materi</button>
-  </div>
-</div>
+  <div id="result-screen" class="hidden">
+    <div class="result-box" id="result-box">
+      <div class="result-title">MISSION CLEAR! 🎉</div>
+      <div class="result-subtitle">Hari <span id="res-day">X</span> Diselesaikan</div>
 
-<div id="promotion-screen" class="hidden">
-  <div class="result-box" id="promotion-box" style="border-color: var(--primary); box-shadow: 0 0 40px rgba(56, 189, 248, 0.3);">
-    <div style="font-size: 50px; margin-bottom: 10px;">🌟</div>
-    <div class="result-title" style="color: var(--primary);">PROMOSI GELAR!</div>
-    <div class="result-subtitle">Kerja Kerasmu Terbayar</div>
-    <div style="font-size: 28px; font-weight: bold; color: var(--gold); margin: 20px 0; text-shadow: 0 0 15px rgba(251, 191, 36, 0.8);" id="promo-rank">SAMURAI</div>
-    <button class="btn" style="background: var(--primary); color: #000; box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4);" onclick="UI.closeModal('promotion-screen')">Lanjutkan Perjalanan ⚔️</button>
-  </div>
-</div>
-
-<div id="jumpscare-overlay">
-  <div class="jumpscare-hazard-tape">⚠️ PERINGATAN DARURAT ⚠️</div>
-  <div class="jumpscare-title">PENYERGAPAN MUSUH!</div>
-  <div class="jumpscare-subtitle">Kuis Kilat Dadakan • Hadiah 2x EXP & Koin! ⚡</div>
-</div>
-
-<div id="setup-screen" class="hidden">
-  <!-- Atmospheric Torii & Kanji Watermark Backdrop -->
-  <div class="setup-torii-watermark" aria-hidden="true">道</div>
-  <div class="setup-ambient-glow" aria-hidden="true"></div>
-
-  <div class="setup-canvas">
-    <!-- Grand Header -->
-    <div class="setup-header-area">
-      <div class="setup-portal-badge">
-        <span class="portal-badge-icon">⛩️</span>
-        <span class="portal-badge-text">KENSEI EXPEDITION PORTAL</span>
-        <span class="portal-ver-pill">v10.6</span>
-      </div>
-      <h1 class="setup-hero-title">YOMIKATA</h1>
-      <p class="setup-hero-sub">読み方 • Jalan Pedang Penguasaan Bahasa Jepang</p>
-
-      <!-- Player Live Telemetry Strip -->
-      <div class="setup-player-telemetry" id="setup-telemetry">
-        <div class="telemetry-item">
-          <span class="telemetry-label">PENDEKAR</span>
-          <span class="telemetry-val" id="setup-player-rank">Kensei Lv.1</span>
-        </div>
-        <div class="telemetry-divider">•</div>
-        <div class="telemetry-item">
-          <span class="telemetry-label">EXP</span>
-          <span class="telemetry-val" id="setup-player-exp">0 ✨</span>
-        </div>
-        <div class="telemetry-divider">•</div>
-        <div class="telemetry-item">
-          <span class="telemetry-label">TABUNGAN</span>
-          <span class="telemetry-val" id="setup-player-coins">0 🪙</span>
-        </div>
-        <div class="telemetry-divider">•</div>
-        <div class="telemetry-item">
-          <span class="telemetry-label">SEKTOR</span>
-          <span class="telemetry-val" id="setup-player-day">Hari 1</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- The Torii Pathway (Vertical Energy Conduit connecting Kana -> N5 -> N4) -->
-    <div class="torii-pathway">
-      <div class="pathway-conduit-line"></div>
-
-      <!-- Node 0: Kana (Fondasi) -->
-      <div class="pathway-node node-kana" onclick="UI.showKanaModuleNotice()">
-        <div class="node-marker marker-kana">
-          <span class="node-num">00</span>
-          <div class="node-pulse"></div>
-        </div>
-        <div class="node-body">
-          <div class="node-meta">
-            <span class="node-stage-tag">TAHAP 0 • FONDASI DASAR</span>
-            <span class="node-status-pill status-dev">● SEGERA DIBUKA</span>
-          </div>
-          <div class="node-title-row">
-            <h2 class="node-title">Penguasaan Huruf Kana</h2>
-            <span class="node-kanji-glyph">仮名</span>
-          </div>
-          <p class="node-desc">Hiragana & Katakana dasar, dakuten, handakuten, serta kombinasi bunyi yoon.</p>
-        </div>
+      <div class="result-stats">
+        <div class="stat-row"><span>✨ EXP Diraih:</span> <span class="stat-val" id="res-exp">0</span></div>
+        <div class="stat-row"><span>🪙 Koin Diraih:</span> <span class="stat-val" id="res-coin">0</span></div>
+        <div class="stat-row"><span>🔥 Max Combo:</span> <span class="stat-val" id="res-combo">0</span></div>
       </div>
 
-      <!-- Node 1: HERO GATE - JLPT N5 (Aktif) -->
-      <div class="pathway-node node-hero-n5" onclick="Game.init('pemula')">
-        <div class="node-marker marker-n5 active">
-          <span class="node-num">01</span>
-          <div class="node-pulse-active"></div>
-        </div>
-        <div class="node-body hero-body">
-          <!-- Ambient Watermark Glyph inside N5 Gate -->
-          <div class="hero-gate-watermark">伍</div>
-          
-          <div class="hero-gate-top">
-            <span class="hero-gate-badge">⛩️ GERBANG UTAMA • EKSPEDISI AKTIF</span>
-            <span class="hero-status-pill">● SIAP DIMASUKI</span>
-          </div>
-
-          <div class="hero-title-row">
-            <h2 class="hero-title">Ekspedisi Silabus JLPT N5</h2>
-            <span class="hero-kanji-sub">五級 • 初級</span>
-          </div>
-          
-          <p class="hero-desc">
-            Kurikulum bertingkat komprehensif: ratusan kosakata terstruktur, pola tata bahasa, kuis partikel interaktif, serta pertarungan survival di Dungeon Ingatan.
-          </p>
-
-          <div class="hero-specs-grid">
-            <div class="spec-pill"><span>🗡️</span> 400+ Kosakata</div>
-            <div class="spec-pill"><span>📜</span> Sektor Terpadu</div>
-            <div class="spec-pill"><span>🏰</span> Dungeon Ingatan</div>
-            <div class="spec-pill"><span>⚡</span> Ambush Battle</div>
-          </div>
-
-          <div class="hero-cta-row">
-            <button type="button" class="btn-torii-enter" onclick="event.stopPropagation(); Game.init('pemula');">
-              <span class="cta-jp">進入</span>
-              <span class="cta-main">MASUKI GERBANG N5</span>
-              <span class="cta-arrow">➔</span>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Node 2: N4 (Terkunci) -->
-      <div class="pathway-node node-n4 locked" onclick="UI.showN4ModuleNotice()">
-        <div class="node-marker marker-n4">
-          <span class="node-num">02</span>
-          <div class="node-lock-icon">🔒</div>
-        </div>
-        <div class="node-body">
-          <div class="node-meta">
-            <span class="node-stage-tag">TAHAP 2 • MENENGAH BAWAH</span>
-            <span class="node-status-pill status-locked">🔒 TERKUNCI</span>
-          </div>
-          <div class="node-title-row">
-            <h2 class="node-title">Modul JLPT N4</h2>
-            <span class="node-kanji-glyph">四級</span>
-          </div>
-          <p class="node-desc">Konjugasi lanjutan, bentuk pasif, kausatif, syarat (tara/ba/to) & ekspedisi N4.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Back to Battle Zone Option (if returning from active game) -->
-    <div class="setup-bottom-nav" id="setup-return-btn-wrap" style="display: none;">
-      <button type="button" class="btn-setup-back" onclick="UI.closeSetupScreen()">
-        « Kembali ke Zona Tempur Saat Ini
-      </button>
+      <button class="btn"
+        style="background: var(--success); color: #000; box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);"
+        onclick="UI.nextDayFromResult()">Gass Hari Berikutnya! 🚀</button>
+      <button class="btn btn-alt" style="margin-top: 10px; margin-bottom: 0;"
+        onclick="UI.closeModal('result-screen')">Tutup & Ulas Materi</button>
     </div>
   </div>
-</div>
 
-<div id="cooldown-screen" class="hidden">
-  <h2>SISTEM TERKUNCI ☠️</h2>
-  <div style="font-size: 64px; color: var(--danger); font-weight: bold; margin: 20px 0;" id="cd-timer">15:00</div>
-</div>
-
-<div id="level-modal" class="hidden" onclick="if(event.target === this) UI.closeModal('level-modal')">
-  <div class="level-modal-card">
-    <div class="level-modal-header">
-      <div class="level-header-top">
-        <span class="level-header-badge">🎖️ REPUTASI & PERK HIERARKI</span>
-        <button type="button" class="level-close-btn" onclick="UI.closeModal('level-modal')" title="Tutup Log">✕</button>
-      </div>
-      <h2 class="level-modal-title">Hierarki Pendekar Kensei</h2>
-      <p class="level-modal-subtitle">Capai level baru untuk membuka gelar prestisius & bonus pasif permanen</p>
-    </div>
-
-    <div class="level-modal-content">
-      <!-- Player Rank Summary Dashboard -->
-      <div class="player-rank-dashboard" id="hierarchy-player-card"></div>
-
-      <!-- Rank Tier List Section -->
-      <div class="hierarchy-section-label">⚡ DAFTAR TIER GELAR & BONUS PASIF</div>
-      <div class="hierarchy-tiers-container" id="hierarchy-tiers-container"></div>
-    </div>
-
-    <div class="level-modal-footer">
-      <button type="button" class="btn btn-alt" style="max-width:240px; margin:0;" onclick="UI.closeModal('level-modal')">Tutup Log Hierarki</button>
+  <div id="promotion-screen" class="hidden">
+    <div class="result-box" id="promotion-box"
+      style="border-color: var(--primary); box-shadow: 0 0 40px rgba(56, 189, 248, 0.3);">
+      <div style="font-size: 50px; margin-bottom: 10px;">🌟</div>
+      <div class="result-title" style="color: var(--primary);">PROMOSI GELAR!</div>
+      <div class="result-subtitle">Kerja Kerasmu Terbayar</div>
+      <div
+        style="font-size: 28px; font-weight: bold; color: var(--gold); margin: 20px 0; text-shadow: 0 0 15px rgba(251, 191, 36, 0.8);"
+        id="promo-rank">SAMURAI</div>
+      <button class="btn"
+        style="background: var(--primary); color: #000; box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4);"
+        onclick="UI.closeModal('promotion-screen')">Lanjutkan Perjalanan ⚔️</button>
     </div>
   </div>
-</div>
 
-<div id="shop-modal" class="hidden" onclick="if(event.target === this) UI.closeModal('shop-modal')">
-  <div class="shop-modal-card">
-    <div class="shop-modal-header">
-      <div class="shop-header-top">
-        <span class="shop-header-badge">🛒 CYBER-MARKET</span>
-        <button type="button" class="shop-close-btn" onclick="UI.closeModal('shop-modal')" title="Tutup Toko">✕</button>
-      </div>
-      <h2 class="shop-title">Terminal Suplai Pasar Gelap</h2>
-      <p class="shop-subtitle">Beli suplai infiltrasi & simpan di tas perlengkapan</p>
-
-      <div class="shop-balance-bar">
-        <div class="shop-balance-info">
-          <span class="shop-balance-label">KREDIT TERSEDIA:</span>
-          <span class="shop-balance-amount"><span id="shop-coin-display">0</span> 🪙</span>
-        </div>
-        <button type="button" class="shop-btn-bag" onclick="UI.closeModal('shop-modal'); UI.openModal('inventory-modal');">🎒 Buka Tas</button>
-      </div>
-    </div>
-
-    <!-- Scrollable Shop Catalog Grid -->
-    <div class="shop-catalog-grid">
-      <!-- Item 1: Nano-Repair -->
-      <div class="shop-card">
-        <div class="shop-card-icon">❤️</div>
-        <div class="shop-card-info">
-          <div class="shop-card-title-row">
-            <span class="shop-card-name">Nano-Repair</span>
-            <span class="shop-card-owned" id="owned-hp">Tas: 0</span>
-          </div>
-          <div class="shop-card-desc">Restorasi 1 HP yang hilang. Beli untuk disimpan ke tas.</div>
-        </div>
-        <div class="shop-card-action">
-          <button class="btn-buy" onclick="RPG.buyToInventory('hp', 150)">150 🪙</button>
-        </div>
-      </div>
-
-      <!-- Item 2: Aegis Shield -->
-      <div class="shop-card">
-        <div class="shop-card-icon">🛡️</div>
-        <div class="shop-card-info">
-          <div class="shop-card-title-row">
-            <span class="shop-card-name">Aegis Shield</span>
-            <span class="shop-card-owned" id="owned-shield">Tas: 0</span>
-          </div>
-          <div class="shop-card-desc">Proteksi 1x kesalahan kuis & cegah combo pecah di Zona Tempur.</div>
-        </div>
-        <div class="shop-card-action">
-          <button class="btn-buy" onclick="RPG.buyToInventory('shield', 350)">350 🪙</button>
-        </div>
-      </div>
-
-      <!-- Item 3: Gulungan Intel -->
-      <div class="shop-card">
-        <div class="shop-card-icon">📜</div>
-        <div class="shop-card-info">
-          <div class="shop-card-title-row">
-            <span class="shop-card-name">Gulungan Intel</span>
-            <span class="shop-card-owned" id="owned-intel">Tas: 0</span>
-          </div>
-          <div class="shop-card-desc">Bocorkan arti kalimat bahasa Indonesia pada Tab Partikel.</div>
-        </div>
-        <div class="shop-card-action">
-          <button class="btn-buy" onclick="RPG.buyToInventory('intel', 200)">200 🪙</button>
-        </div>
-      </div>
-
-      <!-- Item 4: Mata Kensei -->
-      <div class="shop-card">
-        <div class="shop-card-icon">👁️</div>
-        <div class="shop-card-info">
-          <div class="shop-card-title-row">
-            <span class="shop-card-name">Mata Kensei</span>
-            <span class="shop-card-owned" id="owned-mata">Tas: 0</span>
-          </div>
-          <div class="shop-card-desc">Ungkap teks kalimat Jepang asli pada Tab Arti.</div>
-        </div>
-        <div class="shop-card-action">
-          <button class="btn-buy" onclick="RPG.buyToInventory('mata', 500)">500 🪙</button>
-        </div>
-      </div>
-
-      <!-- Item 5: Akses Peta -->
-      <div class="shop-card">
-        <div class="shop-card-icon">🗺️</div>
-        <div class="shop-card-info">
-          <div class="shop-card-title-row">
-            <span class="shop-card-name">Bypass Sektor Peta</span>
-          </div>
-          <div class="shop-card-desc">Buka akses sektor infiltrasi hari berikutnya secara instan.</div>
-        </div>
-        <div class="shop-card-action">
-          <button class="btn-buy btn-unlock" onclick="RPG.buyUnlock(2100)">2100 🪙</button>
-        </div>
-      </div>
-
-      <!-- Item 6: Kotak Pandora -->
-      <div class="shop-card gacha-card">
-        <div class="shop-card-icon">🎁</div>
-        <div class="shop-card-info">
-          <div class="shop-card-title-row">
-            <span class="shop-card-name" style="color:var(--warning);">Kotak Pandora (Gacha)</span>
-            <span class="shop-card-owned" id="owned-pandora">Tas: 0</span>
-          </div>
-          <div class="shop-card-desc">Uji nasib: Peluang dapat Full HP, Shield, Koin Cashback, atau Zonk!</div>
-        </div>
-        <div class="shop-card-action">
-          <button class="btn-buy btn-gacha" onclick="RPG.buyToInventory('pandora', 100)">100 🪙</button>
-        </div>
-      </div>
-
-      <!-- Item: Ekspansi Tas Ninja -->
-      <div class="shop-card bag-expand-card">
-        <div class="shop-card-icon icon-bag">🎒</div>
-        <div class="shop-card-info">
-          <div class="shop-card-title-row">
-            <span class="shop-card-name">Ekspansi Tas Ninja (+3 Slot)</span>
-            <span class="shop-card-owned" id="shop-bag-cap-status">Kapasitas: 6 Slot</span>
-          </div>
-          <div class="shop-card-desc">Tingkatkan kapasitas penyimpanan suplai obat, perisai, dan intel di zona tempur.</div>
-        </div>
-        <div class="shop-card-action">
-          <button class="btn-buy btn-bag-upgrade" id="btn-buy-bag-expand" onclick="RPG.upgradeBagCapacity()">250 🪙</button>
-        </div>
-      </div>
-
-      <!-- Item: Jimat Pembeku Api (Streak Freeze) -->
-      <div class="shop-card freeze-card">
-        <div class="shop-card-icon icon-ice">❄️</div>
-        <div class="shop-card-info">
-          <div class="shop-card-title-row">
-            <span class="shop-card-name" style="color:#38bdf8;">Jimat Pembeku Api</span>
-            <span class="shop-card-owned" id="owned-streak-freeze">Miliki: 0 / 2</span>
-          </div>
-          <div class="shop-card-desc">Melindungi api streak kamu jika terlewat 1 hari tidak berlatih. Otomatis aktif saat dibutuhkan.</div>
-        </div>
-        <div class="shop-card-action">
-          <button class="btn-buy btn-freeze" id="btn-buy-freeze" onclick="Streak.buyFreeze(150)">150 🪙</button>
-        </div>
-      </div>
-
-      <!-- Section Divider: Relik Permanen -->
-      <div class="shop-section-divider">
-        <span class="shop-section-label">⚔️ RELIK PERMANEN KENSEI (EQUIPMENT)</span>
-        <span class="shop-section-sub">Pasif abadi yang melekat selamanya pada pendekar</span>
-      </div>
-
-      <!-- Relik 1: Pedang Muramasa -->
-      <div class="shop-card relic-card">
-        <div class="shop-card-icon icon-relic">🗡️</div>
-        <div class="shop-card-info">
-          <div class="shop-card-title-row">
-            <span class="shop-card-name">Pedang Muramasa</span>
-            <span class="shop-card-owned badge-relic">Relik Pasif</span>
-          </div>
-          <div class="shop-card-desc">Bonus permanen <b>+10% EXP</b> setiap kali kuis dijawab dengan benar.</div>
-        </div>
-        <div class="shop-card-action">
-          <button class="btn-buy btn-relic" id="btn-buy-relic-muramasa" onclick="RPG.buyRelic('muramasa', 600)">600 🪙</button>
-        </div>
-      </div>
-
-      <!-- Relik 2: Jimat Omamori -->
-      <div class="shop-card relic-card">
-        <div class="shop-card-icon icon-relic">📿</div>
-        <div class="shop-card-info">
-          <div class="shop-card-title-row">
-            <span class="shop-card-name">Jimat Omamori</span>
-            <span class="shop-card-owned badge-relic">Relik Pasif</span>
-          </div>
-          <div class="shop-card-desc">Peluang <b>10% kebal kesalahan</b> di Zona Tempur (HP & combo aman).</div>
-        </div>
-        <div class="shop-card-action">
-          <button class="btn-buy btn-relic" id="btn-buy-relic-omamori" onclick="RPG.buyRelic('omamori', 750)">750 🪙</button>
-        </div>
-      </div>
-
-      <!-- Relik 3: Lensa Scouter -->
-      <div class="shop-card relic-card">
-        <div class="shop-card-icon icon-relic">👓</div>
-        <div class="shop-card-info">
-          <div class="shop-card-title-row">
-            <span class="shop-card-name">Lensa Scouter</span>
-            <span class="shop-card-owned badge-relic">Relik Pasif</span>
-          </div>
-          <div class="shop-card-desc">Mendeteksi & menyorot <b>partikel benar</b> otomatis 1x setiap sesi harian.</div>
-        </div>
-        <div class="shop-card-action">
-          <button class="btn-buy btn-relic" id="btn-buy-relic-scouter" onclick="RPG.buyRelic('scouter', 500)">500 🪙</button>
-        </div>
-      </div>
-
-      <!-- Dev Override Item -->
-      <div class="shop-card dev-card">
-        <div class="shop-card-icon">🔓</div>
-        <div class="shop-card-info">
-          <div class="shop-card-name" style="color:var(--danger);">Override Admin</div>
-          <div class="shop-card-desc">Bypass sandi dev koin & level tak terbatas.</div>
-        </div>
-        <div class="shop-card-action">
-          <button class="btn-buy btn-danger" onclick="RPG.adminUnlock()">Bypass</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="shop-modal-footer">
-      <button type="button" class="btn btn-alt" style="max-width:260px; margin:0;" onclick="UI.closeModal('shop-modal')">Tutup Terminal</button>
-    </div>
+  <div id="jumpscare-overlay">
+    <div class="jumpscare-hazard-tape">⚠️ PERINGATAN DARURAT ⚠️</div>
+    <div class="jumpscare-title">PENYERGAPAN MUSUH!</div>
+    <div class="jumpscare-subtitle">Kuis Kilat Dadakan • Hadiah 2x EXP & Koin! ⚡</div>
   </div>
-</div>
 
-<div id="inventory-modal" class="hidden" onclick="if(event.target === this) UI.closeModal('inventory-modal')">
-  <div class="inv-modal-card">
-    <div class="inv-modal-header">
-      <div class="inv-header-top">
-        <span class="inv-badge">🎒 PERLENGKAPAN NINJA</span>
-        <button type="button" class="inv-close-btn" onclick="UI.closeModal('inventory-modal')" title="Tutup Tas">✕</button>
-      </div>
-      <h2 class="inv-title">Tas Inventori Suplai</h2>
-      <p class="inv-subtitle">Gunakan item suplai saat situasi genting di zona tempur</p>
+  <div id="setup-screen" class="hidden">
+    <!-- Atmospheric Torii & Kanji Watermark Backdrop -->
+    <div class="setup-torii-watermark" aria-hidden="true">道</div>
+    <div class="setup-ambient-glow" aria-hidden="true"></div>
 
-      <!-- Live Status Indicators -->
-      <div class="inv-status-panel">
-        <div class="inv-status-box">
-          <span class="inv-status-label">KESEHATAN (HP):</span>
-          <div class="inv-hp-row" id="inv-hp-display">❤️❤️❤️</div>
+    <div class="setup-canvas">
+      <!-- Grand Header -->
+      <div class="setup-header-area">
+        <div class="setup-portal-badge">
+          <span class="portal-badge-icon">⛩️</span>
+          <span class="portal-badge-text">KENSEI EXPEDITION PORTAL</span>
+          <span class="portal-ver-pill">v10.6</span>
         </div>
-        <div class="inv-status-box">
-          <span class="inv-status-label">AEGIS SHIELD:</span>
-          <span class="inv-buff-badge" id="inv-buff-shield">TIDAK AKTIF</span>
-        </div>
-      </div>
+        <h1 class="setup-hero-title">YOMIKATA</h1>
+        <p class="setup-hero-sub">読み方 • Jalan Pedang Penguasaan Bahasa Jepang</p>
 
-      <!-- Bag Capacity Meter -->
-      <div class="inv-capacity-panel">
-        <div class="inv-capacity-header">
-          <span class="inv-capacity-label">🎒 KAPASITAS TAS: <b id="inv-capacity-text">0 / 6 Slot</b></span>
-          <button type="button" class="btn-upgrade-bag" id="btn-upgrade-bag-inv" onclick="RPG.upgradeBagCapacity()">+ Upgrade Slot (250 🪙)</button>
-        </div>
-        <div class="inv-capacity-bar">
-          <div class="inv-capacity-fill" id="inv-capacity-fill" style="width: 0%;"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Inventory Grid -->
-    <div class="inv-grid-container" id="inv-grid-container">
-      <!-- Generated dynamically by UI.renderInventory() -->
-    </div>
-
-    <!-- Active Relics Panel -->
-    <div class="inv-relic-section">
-      <div class="inv-relic-header">
-        <span>⚔️ RELIK AKTIF (PASIF PERMANEN)</span>
-      </div>
-      <div class="inv-relic-grid" id="inv-relic-container">
-        <!-- Rendered dynamically by UI.renderInventory() -->
-      </div>
-    </div>
-
-    <div class="inv-modal-footer">
-      <button type="button" class="btn btn-shop-link" onclick="UI.closeModal('inventory-modal'); UI.openModal('shop-modal');">🛒 Beli Suplai (Ke Toko)</button>
-      <button type="button" class="btn btn-alt" style="max-width:200px; margin:0;" onclick="UI.closeModal('inventory-modal')">Tutup Tas</button>
-    </div>
-  </div>
-</div>
-
-<!-- Gacha Pandora Portal Modal -->
-<div id="gacha-modal" class="hidden">
-  <div class="gacha-modal-card">
-    <div class="gacha-header">
-      <div class="gacha-header-top">
-        <span class="gacha-badge">🎁 KOTAK PANDORA • GACHA PORTAL</span>
-        <button type="button" class="gacha-close-btn" onclick="UI.closeGachaModal()" title="Tutup">✕</button>
-      </div>
-      <h2 class="gacha-title">Portal Pemanggilan Takdir</h2>
-      <p class="gacha-subtitle">Buka segel kuno untuk memperoleh berkah harta legendaris</p>
-    </div>
-
-    <div class="gacha-stage-canvas" id="gacha-canvas">
-      <!-- Stage 1: Chest Animation -->
-      <div class="gacha-chest-wrap" id="gacha-chest-wrap">
-        <div class="gacha-ambient-halo"></div>
-        <div class="gacha-chest-icon" id="gacha-chest-icon">🎁</div>
-        <div class="gacha-status-text" id="gacha-status-text">MEMBUKA SEGEL PANDORA...</div>
-      </div>
-
-      <!-- Stage 2: Reveal Card (hidden initially) -->
-      <div class="gacha-result-card hidden" id="gacha-result-card">
-        <div class="gacha-rarity-banner" id="gacha-rarity-banner">LEGENDARY 🟡</div>
-        <div class="gacha-item-icon" id="gacha-item-icon">👑</div>
-        <h3 class="gacha-item-title" id="gacha-item-title">Hadiah Pandora</h3>
-        <p class="gacha-item-desc" id="gacha-item-desc">Deskripsi hadiah</p>
-        <div class="gacha-action-row">
-          <button type="button" class="btn-gacha-claim" id="btn-gacha-claim" onclick="UI.claimGachaReward()">KLAIM HADIAH ➔</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div id="map-modal" class="hidden" onclick="if(event.target === this) UI.closeModal('map-modal')">
-  <div class="map-modal-card">
-    <div class="map-modal-header">
-      <div class="map-header-top">
-        <div class="map-title-group">
-          <div class="map-badge-row">
-            <span class="map-header-badge">🗺️ EXPEDITION MAP</span>
-            <span class="map-level-badge" id="map-sector-badge">SEKTOR EKSPEDISI</span>
+        <!-- Player Live Telemetry Strip -->
+        <div class="setup-player-telemetry" id="setup-telemetry">
+          <div class="telemetry-item">
+            <span class="telemetry-label">PENDEKAR</span>
+            <span class="telemetry-val" id="setup-player-rank">Kensei Lv.1</span>
           </div>
-          <h2 class="map-title">Peta Infiltrasi Sektor</h2>
-        </div>
-        <button type="button" class="map-close-btn" onclick="UI.closeModal('map-modal')" title="Tutup Peta">✕</button>
-      </div>
-
-      <!-- Breathable RPG Mission Progress Dashboard -->
-      <div class="map-progress-panel">
-        <div class="map-progress-top-row">
-          <span class="map-progress-tag">⚡ PROGRESS EKSPEDISI</span>
-          <span id="map-progress-text" class="map-progress-pct">0% SELESAI</span>
-        </div>
-        <div class="map-progress-track">
-          <div id="map-progress-fill" class="map-progress-fill" style="width: 0%;"></div>
-        </div>
-        <div class="map-progress-bottom-row">
-          <span id="map-progress-detail" class="map-progress-info">Zona Terbuka: Memuat...</span>
-          <button type="button" class="map-btn-jump" onclick="UI.scrollToCurrentMission()" title="Lompat ke Misi Aktif">🎯 Fokus Misi</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Scrollable Mission Cards Container -->
-    <div id="map-day-list" class="map-cards-container"></div>
-
-    <div class="map-modal-footer">
-      <button type="button" class="btn btn-alt map-bottom-close" onclick="UI.closeModal('map-modal')">Tutup Peta</button>
-    </div>
-  </div>
-</div>
-
-<div id="kamus-modal" class="hidden">
-  <div class="kamus-modal-card">
-    <div class="kamus-modal-header">
-      <div class="kamus-header-top">
-        <div class="kamus-badge-row">
-          <span class="kamus-header-badge">📖 ARSIP KOSAKATA KENSEI</span>
-          <span class="kamus-count-badge" id="kamus-count-badge">0 Terbuka</span>
-        </div>
-        <button type="button" class="kamus-close-btn" onclick="UI.closeModal('kamus-modal')" title="Tutup Kamus">✕</button>
-      </div>
-      <h2 class="kamus-modal-title">Kamus Kensei N5</h2>
-      <p class="kamus-modal-subtitle">Gudang perbendaharaan kata Jepang dari seluruh ekspedisi yang telah Anda taklukkan</p>
-
-      <!-- Search & Filters -->
-      <div class="kamus-search-bar">
-        <span class="kamus-search-icon">🔍</span>
-        <input type="text" id="kamus-search" class="kamus-search-input" placeholder="Cari kanji, romaji, atau terjemahan..." oninput="UI.searchKamus()" autocomplete="off">
-        <button type="button" id="kamus-search-clear" class="kamus-clear-btn hidden" onclick="UI.clearKamusSearch()">✕</button>
-      </div>
-
-      <div class="kamus-filter-chips">
-        <button type="button" class="kamus-chip active" id="kchip-unlocked" onclick="UI.setKamusFilter('unlocked')">Terbuka (<span id="kchip-unlocked-count">0</span>)</button>
-        <button type="button" class="kamus-chip" id="kchip-today" onclick="UI.setKamusFilter('today')">Hari Ini (<span id="kchip-today-count">0</span>)</button>
-        <button type="button" class="kamus-chip" id="kchip-all" onclick="UI.setKamusFilter('all')">Semua N5 (<span id="kchip-all-count">0</span>)</button>
-        <button type="button" class="kamus-chip" id="kchip-kanji" onclick="UI.setKamusFilter('kanji')">Hanya Kanji</button>
-      </div>
-    </div>
-
-    <!-- Cards Container -->
-    <div class="kamus-list-container" id="kamus-list"></div>
-
-    <div class="kamus-modal-footer">
-      <span class="kamus-footer-tip">💡 Ketuk kartu untuk menyalin kosakata ke papan klip</span>
-      <button type="button" class="btn btn-alt kamus-bottom-close" onclick="UI.closeModal('kamus-modal')">Tutup Kamus</button>
-    </div>
-  </div>
-</div>
-
-
-<div id="dojo-modal" class="hidden">
-  <div class="dojo-modal-card">
-    <div class="dojo-modal-header">
-      <div class="dojo-header-top">
-        <div class="dojo-badge-row">
-          <span class="dojo-header-badge">🥋 DOJO KENSEI • BANK KESALAHAN</span>
-          <span class="dojo-count-badge" id="dojo-pending-badge">0 Perlu Dilatih</span>
-        </div>
-        <button type="button" class="dojo-close-btn" onclick="UI.closeModal('dojo-modal')" title="Tutup Dojo">✕</button>
-      </div>
-      <h2 class="dojo-modal-title">Dojo Remedial</h2>
-      <p class="dojo-modal-subtitle">Pertajam refleks dan tempa materi yang pernah keliru melalui repetisi spasi hingga akurasi 100%</p>
-
-      <!-- Unboxed Metrics Bar -->
-      <div class="dojo-metrics-bar">
-        <div class="dojo-metric-item">
-          <span class="dojo-metric-val" id="dojo-stat-total">0</span>
-          <span class="dojo-metric-lbl">TOTAL KESALAHAN</span>
-        </div>
-        <div class="dojo-metric-divider"></div>
-        <div class="dojo-metric-item">
-          <span class="dojo-metric-val text-amber" id="dojo-stat-pending">0</span>
-          <span class="dojo-metric-lbl">BELUM LULUS</span>
-        </div>
-        <div class="dojo-metric-divider"></div>
-        <div class="dojo-metric-item">
-          <span class="dojo-metric-val text-emerald" id="dojo-stat-mastered">0</span>
-          <span class="dojo-metric-lbl">DIKUASAI (LULUS)</span>
+          <div class="telemetry-divider">•</div>
+          <div class="telemetry-item">
+            <span class="telemetry-label">EXP</span>
+            <span class="telemetry-val" id="setup-player-exp">0 ✨</span>
+          </div>
+          <div class="telemetry-divider">•</div>
+          <div class="telemetry-item">
+            <span class="telemetry-label">TABUNGAN</span>
+            <span class="telemetry-val" id="setup-player-coins">0 🪙</span>
+          </div>
+          <div class="telemetry-divider">•</div>
+          <div class="telemetry-item">
+            <span class="telemetry-label">SEKTOR</span>
+            <span class="telemetry-val" id="setup-player-day">Hari 1</span>
+          </div>
         </div>
       </div>
 
-      <!-- Action Hero Row -->
-      <div class="dojo-action-row">
-        <button type="button" class="btn-dojo-start" id="btn-dojo-start" onclick="Dojo.startSession()">
-          <span class="dojo-btn-jp">修練</span>
-          <span class="dojo-btn-text" id="btn-dojo-start-text">MULAI LATIHAN REMEDIAL</span>
-          <span class="dojo-btn-arrow">➔</span>
-        </button>
-        <button type="button" class="btn-dojo-clean" onclick="Dojo.clearMastered()" title="Bersihkan soal yang sudah lulus 100%">
-          🧹 Bersihkan Lulus
+      <!-- The Torii Pathway (Vertical Energy Conduit connecting Kana -> N5 -> N4) -->
+      <div class="torii-pathway">
+        <div class="pathway-conduit-line"></div>
+
+        <!-- Node 0: Kana (Fondasi) -->
+        <div class="pathway-node node-kana" onclick="UI.showKanaModuleNotice()">
+          <div class="node-marker marker-kana">
+            <span class="node-num">00</span>
+            <div class="node-pulse"></div>
+          </div>
+          <div class="node-body">
+            <div class="node-meta">
+              <span class="node-stage-tag">TAHAP 0 • FONDASI DASAR</span>
+              <span class="node-status-pill status-dev">● SEGERA DIBUKA</span>
+            </div>
+            <div class="node-title-row">
+              <h2 class="node-title">Penguasaan Huruf Kana</h2>
+              <span class="node-kanji-glyph">仮名</span>
+            </div>
+            <p class="node-desc">Hiragana & Katakana dasar, dakuten, handakuten, serta kombinasi bunyi yoon.</p>
+          </div>
+        </div>
+
+        <!-- Node 1: HERO GATE - JLPT N5 (Aktif) -->
+        <div class="pathway-node node-hero-n5" onclick="Game.init('pemula')">
+          <div class="node-marker marker-n5 active">
+            <span class="node-num">01</span>
+            <div class="node-pulse-active"></div>
+          </div>
+          <div class="node-body hero-body">
+            <!-- Ambient Watermark Glyph inside N5 Gate -->
+            <div class="hero-gate-watermark">伍</div>
+
+            <div class="hero-gate-top">
+              <span class="hero-gate-badge">⛩️ GERBANG UTAMA • EKSPEDISI AKTIF</span>
+              <span class="hero-status-pill">● SIAP DIMASUKI</span>
+            </div>
+
+            <div class="hero-title-row">
+              <h2 class="hero-title">Ekspedisi Silabus JLPT N5</h2>
+              <span class="hero-kanji-sub">五級 • 初級</span>
+            </div>
+
+            <p class="hero-desc">
+              Kurikulum bertingkat komprehensif: ratusan kosakata terstruktur, pola tata bahasa, kuis partikel
+              interaktif, serta pertarungan survival di Dungeon Ingatan.
+            </p>
+
+            <div class="hero-specs-grid">
+              <div class="spec-pill"><span>🗡️</span> 400+ Kosakata</div>
+              <div class="spec-pill"><span>📜</span> Sektor Terpadu</div>
+              <div class="spec-pill"><span>🏰</span> Dungeon Ingatan</div>
+              <div class="spec-pill"><span>⚡</span> Ambush Battle</div>
+            </div>
+
+            <div class="hero-cta-row">
+              <button type="button" class="btn-torii-enter" onclick="event.stopPropagation(); Game.init('pemula');">
+                <span class="cta-jp">進入</span>
+                <span class="cta-main">MASUKI GERBANG N5</span>
+                <span class="cta-arrow">➔</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Node 2: N4 (Terkunci) -->
+        <div class="pathway-node node-n4 locked" onclick="UI.showN4ModuleNotice()">
+          <div class="node-marker marker-n4">
+            <span class="node-num">02</span>
+            <div class="node-lock-icon">🔒</div>
+          </div>
+          <div class="node-body">
+            <div class="node-meta">
+              <span class="node-stage-tag">TAHAP 2 • MENENGAH BAWAH</span>
+              <span class="node-status-pill status-locked">🔒 TERKUNCI</span>
+            </div>
+            <div class="node-title-row">
+              <h2 class="node-title">Modul JLPT N4</h2>
+              <span class="node-kanji-glyph">四級</span>
+            </div>
+            <p class="node-desc">Konjugasi lanjutan, bentuk pasif, kausatif, syarat (tara/ba/to) & ekspedisi N4.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Back to Battle Zone Option (if returning from active game) -->
+      <div class="setup-bottom-nav" id="setup-return-btn-wrap" style="display: none;">
+        <button type="button" class="btn-setup-back" onclick="UI.closeSetupScreen()">
+          « Kembali ke Zona Tempur Saat Ini
         </button>
       </div>
-
-      <!-- Filter Chips -->
-      <div class="dojo-filter-chips">
-        <button type="button" class="dojo-chip active" id="dchip-all" onclick="Dojo.setFilter('all')">Semua (<span id="dchip-all-count">0</span>)</button>
-        <button type="button" class="dojo-chip" id="dchip-partikel" onclick="Dojo.setFilter('partikel')">Partikel (<span id="dchip-partikel-count">0</span>)</button>
-        <button type="button" class="dojo-chip" id="dchip-arti" onclick="Dojo.setFilter('arti')">Arti (<span id="dchip-arti-count">0</span>)</button>
-        <button type="button" class="dojo-chip" id="dchip-hafalan" onclick="Dojo.setFilter('hafalan')">Kosakata (<span id="dchip-hafalan-count">0</span>)</button>
-      </div>
-    </div>
-
-    <!-- Cards Container -->
-    <div class="dojo-list-container" id="dojo-list"></div>
-
-    <div class="dojo-modal-footer">
-      <span class="dojo-footer-tip">💡 Soal dianggap lulus setelah dijawab benar 2 kali beruntun</span>
-      <button type="button" class="btn btn-alt dojo-bottom-close" onclick="UI.closeModal('dojo-modal')">Tutup Dojo</button>
-    </div>
-  </div>
-</div>
-
-<div id="tips-modal" class="hidden">
-  <h2 style="color:var(--warning); margin-bottom:15px;">💡 INFO PENYANGKALAN</h2>
-  <div style="background:#1e293b; padding:20px; border-radius:12px; border:1px solid #334155; margin-bottom:20px; font-size:15px; color:var(--text-main); line-height: 1.6; text-align: left; max-width: 400px; max-height: 65vh; overflow-y: auto;">
-    Dalam bahasa Jepang, ada 3 tingkat kesopanan untuk mengatakan <b>"Bukan"</b>:<br><br>
-    
-    <span style="color:var(--primary); font-weight:bold;">1. ... dewa arimasen (ではありません)</span><br>
-    <span style="color:var(--text-sub); font-size:13px;">Sangat sopan dan formal. Sering dipakai di pidato, tulisan resmi, atau ke orang yang sangat dihormati.</span><br><br>
-    
-    <span style="color:var(--success); font-weight:bold;">2. ... jaa arimasen (じゃありません)</span><br>
-    <span style="color:var(--text-sub); font-size:13px;">Sopan dan standar. Paling umum dipakai dalam percakapan sehari-hari dengan orang yang belum terlalu akrab.</span><br><br>
-    
-    <span style="color:var(--danger); font-weight:bold;">3. ... jaa nai (じゃない)</span><br>
-    <span style="color:var(--text-sub); font-size:13px;">Bentuk kasual/santai. Hanya dipakai ke teman akrab, keluarga, atau orang yang statusnya di bawah kita.</span><br><br>
-    
-    <i style="color:var(--gold); font-size:13px;">Catatan: Fokus kita di kuis nanti adalah bentuk sopan (dewa/jaa arimasen) ya! Bentuk kasual hanya untuk pengetahuan tambahan saat belajar pola.</i>
-  </div>
-  <button class="btn btn-alt" style="max-width:400px;" onclick="UI.closeModal('tips-modal')">Tutup Info</button>
-</div>
-
-<!-- Pilar 5: Cloud Save & Transfer Code Modal -->
-<div id="cloud-modal" class="hidden" onclick="if(event.target === this) UI.closeModal('cloud-modal')">
-  <div class="cloud-modal-card">
-    <div class="cloud-modal-header">
-      <div class="cloud-header-top">
-        <span class="cloud-badge">☁️ KENSEI CLOUD SAVE // FIRESTORE</span>
-        <button type="button" class="level-close-btn" onclick="UI.closeModal('cloud-modal')" title="Tutup">✕</button>
-      </div>
-      <h2 class="cloud-title">Akun & Cloud Save</h2>
-      <p class="cloud-subtitle">Simpan progres Anda ke Firebase agar tidak hilang saat berganti ponsel atau browser</p>
-    </div>
-
-    <div class="cloud-modal-content">
-      <!-- Nickname Edit Row -->
-      <div class="cloud-profile-section">
-        <label style="font-size:11px; font-weight:800; color:var(--text-sub); letter-spacing:1px; text-transform:uppercase;">NICKNAME PENDEKAR</label>
-        <div class="cloud-nickname-row">
-          <input type="text" id="cloud-nickname-input" class="cloud-input-nickname" maxlength="16" placeholder="Nama Pendekar..." />
-          <button type="button" class="btn-save-nickname" onclick="Cloud.setNickname(document.getElementById('cloud-nickname-input').value)">Simpan 💾</button>
-        </div>
-      </div>
-
-      <!-- Kensei Code Transfer Card -->
-      <div class="cloud-code-banner">
-        <div>
-          <div class="cloud-code-label">KODE TRANSFER KENSEI (ID UNIK)</div>
-          <div class="cloud-code-value" id="cloud-code-display">YK-XXXXXX</div>
-        </div>
-        <button type="button" class="btn-copy-code" onclick="Cloud.copyCode()">Salin Kode 📋</button>
-      </div>
-
-      <!-- Live Sync Action -->
-      <div style="display:flex; flex-direction:column; gap:8px;">
-        <div class="cloud-sync-status-row">
-          <span>Status Sinkronisasi:</span>
-          <span id="cloud-sync-status"><span style="color:var(--warning);">○ Belum Pernah Disinkron</span></span>
-        </div>
-        <button type="button" class="btn-sync-now" onclick="Cloud.syncToCloud(true)">⚡ SINKRONKAN PROGRES KE CLOUD</button>
-      </div>
-
-      <!-- Restore From Device Section -->
-      <div class="cloud-restore-section">
-        <div class="cloud-restore-title">PINDAH PERANGKAT? PULIHKAN DATA</div>
-        <div class="cloud-restore-row">
-          <input type="text" id="cloud-restore-input" class="cloud-input-restore" placeholder="YK-XXXXXX" maxlength="12" />
-          <button type="button" class="btn-restore-data" onclick="Cloud.restoreFromCloud(document.getElementById('cloud-restore-input').value)">Pulihkan ➔</button>
-        </div>
-        <span style="font-size:11px; color:var(--text-sub); line-height:1.4;">Masukkan kode 6 digit dari perangkat lama Anda untuk mengembalikan seluruh level, koin, relik, dan tas.</span>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Pilar 5: Global Leaderboard (Hall of Fame) Modal -->
-<div id="leaderboard-modal" class="hidden" onclick="if(event.target === this) UI.closeModal('leaderboard-modal')">
-  <div class="leaderboard-modal-card">
-    <div class="lb-modal-header">
-      <div class="lb-header-top">
-        <span class="lb-header-badge">🏆 HALL OF FAME GLOBAL</span>
-        <button type="button" class="level-close-btn" onclick="UI.closeModal('leaderboard-modal')" title="Tutup">✕</button>
-      </div>
-      <h2 class="lb-modal-title">Papan Peringkat Pendekar</h2>
-      <p class="lb-modal-subtitle">Kompetisi sehat seluruh murid Kensei di dunia</p>
-    </div>
-
-    <!-- Filter Tabs -->
-    <div class="lb-tabs-row">
-      <button type="button" class="lb-tab-btn active" data-tab="exp" onclick="Leaderboard.setTab('exp')">✨ Total EXP</button>
-      <button type="button" class="lb-tab-btn" data-tab="streak" onclick="Leaderboard.setTab('streak')">🔥 Daily Streak</button>
-      <button type="button" class="lb-tab-btn" data-tab="combo" onclick="Leaderboard.setTab('combo')">⚡ Rekor Combo</button>
-    </div>
-
-    <!-- Top 3 Podium (Unboxed) -->
-    <div class="lb-podium-wrap" id="lb-podium-container"></div>
-
-    <!-- Rest of Rankings Stream -->
-    <div class="lb-content-stream" id="lb-list-stream"></div>
-
-    <!-- Sticky Live Player Status Row -->
-    <div class="lb-sticky-player-bar" id="lb-sticky-player"></div>
-  </div>
-</div>
-
-<!-- Pilar 5: Daily Streak & Absensi Ninja Modal -->
-<div id="streak-modal" class="hidden" onclick="if(event.target === this) UI.closeModal('streak-modal')">
-  <div class="streak-modal-card">
-    <div class="streak-modal-header">
-      <button type="button" class="streak-close-btn" onclick="UI.closeModal('streak-modal')" title="Tutup">✕</button>
-      <div class="streak-hero-flame">🔥</div>
-      <h2 class="streak-hero-title" id="streak-modal-count">1 Hari Beruntun!</h2>
-      <p class="streak-hero-sub" id="streak-modal-status">Nyalakan apimu dengan mengklaim bonus hari ini!</p>
-    </div>
-
-    <div class="streak-modal-content">
-      <!-- 7-Day Flame Track -->
-      <div class="streak-timeline-grid" id="streak-timeline"></div>
-
-      <!-- Streak Freeze Status -->
-      <div class="streak-status-box">
-        <div class="streak-freeze-info">
-          <span>❄️ Jimat Pembeku Api:</span>
-          <span id="streak-freeze-count" style="color:#fff;">0 / 2 Tersedia</span>
-        </div>
-        <button type="button" class="btn" style="padding:4px 10px; font-size:11px; margin:0; max-width:120px;" onclick="UI.closeModal('streak-modal'); UI.openModal('shop-modal');">Beli di Toko</button>
-      </div>
-
-      <!-- Action Button -->
-      <button type="button" class="btn-streak-claim" id="streak-claim-btn" onclick="Streak.claimReward()">KLAIM BONUS HARIAN ➔</button>
-    </div>
-  </div>
-</div>
-
-<div class="sidebar" id="sidebar">
-  <div class="sidebar-header">
-    <div class="sidebar-header-top">
-      <div class="sidebar-brand">
-        <span class="sidebar-badge">⛩️ KENSEI TERMINAL</span>
-        <span class="sidebar-version">v10.6</span>
-      </div>
-      <button type="button" class="sidebar-close-btn" onclick="UI.toggleSidebar()" title="Tutup Navigasi">✕</button>
-    </div>
-    <h2 class="sidebar-title">Peta Navigasi & Saku</h2>
-    <p class="sidebar-subtitle">Pusat kendali mode belajar & referensi intel N5</p>
-  </div>
-
-  <div class="sidebar-content">
-    <!-- Group 1: Sistem & Petualangan -->
-    <div class="sidebar-group">
-      <div class="sidebar-group-label">🎮 MODE & FITUR UTAMA</div>
-      
-      <div class="sidebar-tile" onclick="UI.toggleSidebar(); UI.openModal('level-modal');" style="border-left: 3px solid #c084fc;">
-        <div class="sidebar-tile-icon icon-cyan">🔰</div>
-        <div class="sidebar-tile-info">
-          <div class="sidebar-tile-title">Hierarki Gelar (Level)</div>
-          <div class="sidebar-tile-desc">Cek progres exp, pangkat & bonus pasif</div>
-        </div>
-        <div class="sidebar-tile-arrow">›</div>
-      </div>
-
-      <div class="sidebar-tile" onclick="UI.toggleSidebar(); UI.openModal('inventory-modal');" style="border-left: 3px solid var(--primary);">
-        <div class="sidebar-tile-icon icon-cyan">🎒</div>
-        <div class="sidebar-tile-info">
-          <div class="sidebar-tile-title">Tas Inventori Suplai</div>
-          <div class="sidebar-tile-desc">Gunakan nano-repair & aegis shield</div>
-        </div>
-        <div class="sidebar-tile-arrow">›</div>
-      </div>
-
-      <div class="sidebar-tile" onclick="UI.toggleSidebar(); UI.openModal('shop-modal');" style="border-left: 3px solid var(--gold);">
-        <div class="sidebar-tile-icon icon-gold">🛒</div>
-        <div class="sidebar-tile-info">
-          <div class="sidebar-tile-title">Pasar Gelap (Toko)</div>
-          <div class="sidebar-tile-desc">Beli suplai infiltrasi & relik</div>
-        </div>
-        <div class="sidebar-tile-arrow">›</div>
-      </div>
-
-      <div class="sidebar-tile" onclick="UI.toggleSidebar(); UI.openSetupScreen();">
-        <div class="sidebar-tile-icon icon-cyan">⚙️</div>
-        <div class="sidebar-tile-info">
-          <div class="sidebar-tile-title">Menu Awal</div>
-          <div class="sidebar-tile-desc">Ganti gaya & mode pembelajaran</div>
-        </div>
-        <div class="sidebar-tile-arrow">›</div>
-      </div>
-
-      <div class="sidebar-tile" id="btn-hardcore" onclick="UI.toggleHardcore()">
-        <div class="sidebar-tile-icon icon-red">🥷</div>
-        <div class="sidebar-tile-info">
-          <div class="sidebar-tile-title">Mode Hardcore</div>
-          <div class="sidebar-tile-desc">Sembunyikan furigana kanji</div>
-        </div>
-        <span class="sidebar-tile-status status-off" id="hardcore-badge">OFF</span>
-      </div>
-
-      <div class="sidebar-tile" onclick="UI.toggleSidebar(); UI.openKamus();">
-        <div class="sidebar-tile-icon icon-green">📖</div>
-        <div class="sidebar-tile-info">
-          <div class="sidebar-tile-title">Kamus Kensei</div>
-          <div class="sidebar-tile-desc">Koleksi kosakata yang sudah terbuka</div>
-        </div>
-        <div class="sidebar-tile-arrow">›</div>
-      </div>
-
-      <div class="sidebar-tile" onclick="Game.startDungeon()">
-        <div class="sidebar-tile-icon icon-gold">🏰</div>
-        <div class="sidebar-tile-info">
-          <div class="sidebar-tile-title">Dungeon Ingatan</div>
-          <div class="sidebar-tile-desc">Mode survival kosakata tanpa batas</div>
-        </div>
-        <div class="sidebar-tile-arrow">›</div>
-      </div>
-
-      <div class="sidebar-tile" onclick="UI.toggleSidebar(); Dojo.openModal();">
-        <div class="sidebar-tile-icon icon-crimson">🥋</div>
-        <div class="sidebar-tile-info">
-          <div class="sidebar-tile-title">Dojo Remedial</div>
-          <div class="sidebar-tile-desc">Bank kesalahan & repetisi spasi</div>
-        </div>
-        <span class="sidebar-tile-status status-count" id="dojo-badge">0 Soal</span>
-      </div>
-    </div>
-
-    <!-- Group: Ekosistem Online & Kompetisi -->
-    <div class="sidebar-group">
-      <div class="sidebar-group-label">🌐 EKOSISTEM CLOUD & KOMPETISI</div>
-      <div class="sidebar-tile" onclick="UI.toggleSidebar(); Leaderboard.openModal();">
-        <div class="sidebar-tile-icon icon-gold">🏆</div>
-        <div class="sidebar-tile-info">
-          <div class="sidebar-tile-title">Hall of Fame Global</div>
-          <div class="sidebar-tile-desc">Papan peringkat pendekar Kensei</div>
-        </div>
-        <div class="sidebar-tile-arrow">›</div>
-      </div>
-
-      <div class="sidebar-tile" onclick="UI.toggleSidebar(); Streak.openModal();">
-        <div class="sidebar-tile-icon icon-red">🔥</div>
-        <div class="sidebar-tile-info">
-          <div class="sidebar-tile-title">Absensi Ninja (Streak)</div>
-          <div class="sidebar-tile-desc">Bonus login harian & api latihan</div>
-        </div>
-        <span class="sidebar-tile-status status-count" id="sidebar-streak-badge">🔥 1</span>
-      </div>
-
-      <div class="sidebar-tile" onclick="UI.toggleSidebar(); UI.openModal('cloud-modal');">
-        <div class="sidebar-tile-icon icon-cyan">☁️</div>
-        <div class="sidebar-tile-info">
-          <div class="sidebar-tile-title">Akun & Cloud Save</div>
-          <div class="sidebar-tile-desc">Sinkronisasi data & pindah perangkat</div>
-        </div>
-        <span class="sidebar-tile-status" id="sidebar-cloud-badge" style="color:var(--primary); font-size:10px;">ID: #YK-XXXX</span>
-      </div>
-    </div>
-
-    <!-- Group 2: Buku Saku Referensi -->
-    <div class="sidebar-group">
-      <div class="sidebar-group-label">📚 REFERENSI BUKU SAKU N5</div>
-
-      <a class="sidebar-tile" href="kanji.html">
-        <div class="sidebar-tile-icon icon-cyan">⛩️</div>
-        <div class="sidebar-tile-info">
-          <div class="sidebar-tile-title">Pasar & Dojo Kanji</div>
-          <div class="sidebar-tile-desc">Belanja kanji N5/N4 & latihan di dojo kustom</div>
-        </div>
-        <div class="sidebar-tile-arrow">›</div>
-      </a>
-
-      <a class="sidebar-tile" href="kata sifat.html">
-        <div class="sidebar-tile-icon icon-cyan">🏷️</div>
-        <div class="sidebar-tile-info">
-          <div class="sidebar-tile-title">Kata Sifat</div>
-          <div class="sidebar-tile-desc">I-Keiyoushi & Na-Keiyoushi</div>
-        </div>
-        <div class="sidebar-tile-arrow">›</div>
-      </a>
-
-      <a class="sidebar-tile" href="kata kerja.html">
-        <div class="sidebar-tile-icon icon-cyan">🏃🏻‍♂️</div>
-        <div class="sidebar-tile-info">
-          <div class="sidebar-tile-title">Kata Kerja</div>
-          <div class="sidebar-tile-desc">Bentuk kamus, masu & aturan grup</div>
-        </div>
-        <div class="sidebar-tile-arrow">›</div>
-      </a>
-
-      <a class="sidebar-tile" href="nomor.html">
-        <div class="sidebar-tile-icon icon-cyan">🔢</div>
-        <div class="sidebar-tile-info">
-          <div class="sidebar-tile-title">Angka & Waktu</div>
-          <div class="sidebar-tile-desc">Bilangan, jam, menit & hitungan</div>
-        </div>
-        <div class="sidebar-tile-arrow">›</div>
-      </a>
-
-      <a class="sidebar-tile" href="tanggal.html">
-        <div class="sidebar-tile-icon icon-green">📅</div>
-        <div class="sidebar-tile-info">
-          <div class="sidebar-tile-title">Kalender & Waktu</div>
-          <div class="sidebar-tile-desc">Hari, bulan, tanggal & keterangan</div>
-        </div>
-        <div class="sidebar-tile-arrow">›</div>
-      </a>
     </div>
   </div>
 
-  <div class="sidebar-footer">
-    <div class="sidebar-footer-info">
-      <div class="sidebar-footer-engine">
-        <span>YOMIKATA // JLPT ENGINE</span>
-      </div>
-      <span class="sidebar-footer-status"><span class="radar-dot"></span> ONLINE</span>
-    </div>
+  <div id="cooldown-screen" class="hidden">
+    <h2>SISTEM TERKUNCI ☠️</h2>
+    <div style="font-size: 64px; color: var(--danger); font-weight: bold; margin: 20px 0;" id="cd-timer">15:00</div>
   </div>
-</div>
-<div class="overlay" id="overlay" onclick="UI.toggleSidebar()"></div>
 
-<button id="btn-tips" class="hidden" onclick="UI.openModal('tips-modal')">💡 Tips</button>
-<div id="tips-bubble" class="hidden">Ada info baru, nih! ✨</div>
-<div class="container hidden" id="main-app">
-  
-  <!-- MASTER TOP HUD (Unified Sleek Single-Row JRPG Bar - Duolingo Essential Style) -->
-  <div class="master-hud animate-slide">
-    <div class="hud-content-row">
-      <!-- Left Cluster: Hamburger, Day Selector, Zone Status -->
-      <div class="hud-cluster-left">
-        <button type="button" class="hud-btn-toggle" onclick="UI.toggleSidebar()" title="Menu Utama" aria-label="Menu">☰</button>
-        <button type="button" id="ui-day" class="hud-btn-day" onclick="UI.openModal('map-modal')" title="Peta & Sektor Ekspedisi">🗺️ Hari 1 ▾</button>
-        <div id="ui-zone" class="zone-badge zone-aman" title="Status Zona">🟢 ZONA AMAN</div>
+  <div id="level-modal" class="hidden" onclick="if(event.target === this) UI.closeModal('level-modal')">
+    <div class="level-modal-card">
+      <div class="level-modal-header">
+        <div class="level-header-top">
+          <span class="level-header-badge">🎖️ REPUTASI & PERK HIERARKI</span>
+          <button type="button" class="level-close-btn" onclick="UI.closeModal('level-modal')"
+            title="Tutup Log">✕</button>
+        </div>
+        <h2 class="level-modal-title">Hierarki Pendekar Kensei</h2>
+        <p class="level-modal-subtitle">Capai level baru untuk membuka gelar prestisius & bonus pasif permanen</p>
       </div>
 
-      <!-- Right Cluster: Streak, Coins (Shop), HP Hearts -->
-      <div class="hud-cluster-right">
-        <!-- Daily Streak Flame -->
-        <button type="button" class="hud-pill hud-pill-streak" id="ui-streak-hud" onclick="Streak.openModal()" title="Absensi Ninja / Daily Streak">
-          <span class="hud-pill-icon">🔥</span>
-          <span id="ui-streak" class="hud-pill-val">1</span>
-        </button>
+      <div class="level-modal-content">
+        <!-- Player Rank Summary Dashboard -->
+        <div class="player-rank-dashboard" id="hierarchy-player-card"></div>
 
-        <!-- Coins (Opens Shop on click!) -->
-        <button type="button" class="hud-pill hud-pill-coin" onclick="UI.openModal('shop-modal')" title="Saldo Koin • Ketuk untuk Buka Toko">
-          <span class="hud-pill-icon">🪙</span>
-          <span id="ui-coin" class="hud-pill-val">0</span>
-        </button>
+        <!-- Rank Tier List Section -->
+        <div class="hierarchy-section-label">⚡ DAFTAR TIER GELAR & BONUS PASIF</div>
+        <div class="hierarchy-tiers-container" id="hierarchy-tiers-container"></div>
+      </div>
 
-        <!-- Player HP Hearts -->
-        <div class="hp-container hud-hp-container" id="ui-hp" title="Sisa Nyawa (HP)"></div>
+      <div class="level-modal-footer">
+        <button type="button" class="btn btn-alt" style="max-width:240px; margin:0;"
+          onclick="UI.closeModal('level-modal')">Tutup Log Hierarki</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="shop-modal" class="hidden" onclick="if(event.target === this) UI.closeModal('shop-modal')">
+    <div class="shop-modal-card">
+      <div class="shop-modal-header">
+        <div class="shop-header-top">
+          <span class="shop-header-badge">🛒 CYBER-MARKET</span>
+          <button type="button" class="shop-close-btn" onclick="UI.closeModal('shop-modal')"
+            title="Tutup Toko">✕</button>
+        </div>
+        <h2 class="shop-title">Terminal Suplai Pasar Gelap</h2>
+        <p class="shop-subtitle">Beli suplai infiltrasi & simpan di tas perlengkapan</p>
+
+        <div class="shop-balance-bar">
+          <div class="shop-balance-info">
+            <span class="shop-balance-label">KREDIT TERSEDIA:</span>
+            <span class="shop-balance-amount"><span id="shop-coin-display">0</span> 🪙</span>
+          </div>
+          <button type="button" class="shop-btn-bag"
+            onclick="UI.closeModal('shop-modal'); UI.openModal('inventory-modal');">🎒 Buka Tas</button>
+        </div>
+      </div>
+
+      <!-- Scrollable Shop Catalog Grid -->
+      <div class="shop-catalog-grid">
+        <!-- Item 1: Nano-Repair -->
+        <div class="shop-card">
+          <div class="shop-card-icon">❤️</div>
+          <div class="shop-card-info">
+            <div class="shop-card-title-row">
+              <span class="shop-card-name">Nano-Repair</span>
+              <span class="shop-card-owned" id="owned-hp">Tas: 0</span>
+            </div>
+            <div class="shop-card-desc">Restorasi 1 HP yang hilang. Beli untuk disimpan ke tas.</div>
+          </div>
+          <div class="shop-card-action">
+            <button class="btn-buy" onclick="RPG.buyToInventory('hp', 150)">150 🪙</button>
+          </div>
+        </div>
+
+        <!-- Item 2: Aegis Shield -->
+        <div class="shop-card">
+          <div class="shop-card-icon">🛡️</div>
+          <div class="shop-card-info">
+            <div class="shop-card-title-row">
+              <span class="shop-card-name">Aegis Shield</span>
+              <span class="shop-card-owned" id="owned-shield">Tas: 0</span>
+            </div>
+            <div class="shop-card-desc">Proteksi 1x kesalahan kuis & cegah combo pecah di Zona Tempur.</div>
+          </div>
+          <div class="shop-card-action">
+            <button class="btn-buy" onclick="RPG.buyToInventory('shield', 350)">350 🪙</button>
+          </div>
+        </div>
+
+        <!-- Item 3: Gulungan Intel -->
+        <div class="shop-card">
+          <div class="shop-card-icon">📜</div>
+          <div class="shop-card-info">
+            <div class="shop-card-title-row">
+              <span class="shop-card-name">Gulungan Intel</span>
+              <span class="shop-card-owned" id="owned-intel">Tas: 0</span>
+            </div>
+            <div class="shop-card-desc">Bocorkan arti kalimat bahasa Indonesia pada Tab Partikel.</div>
+          </div>
+          <div class="shop-card-action">
+            <button class="btn-buy" onclick="RPG.buyToInventory('intel', 200)">200 🪙</button>
+          </div>
+        </div>
+
+        <!-- Item 4: Mata Kensei -->
+        <div class="shop-card">
+          <div class="shop-card-icon">👁️</div>
+          <div class="shop-card-info">
+            <div class="shop-card-title-row">
+              <span class="shop-card-name">Mata Kensei</span>
+              <span class="shop-card-owned" id="owned-mata">Tas: 0</span>
+            </div>
+            <div class="shop-card-desc">Ungkap teks kalimat Jepang asli pada Tab Arti.</div>
+          </div>
+          <div class="shop-card-action">
+            <button class="btn-buy" onclick="RPG.buyToInventory('mata', 500)">500 🪙</button>
+          </div>
+        </div>
+
+        <!-- Item 5: Akses Peta -->
+        <div class="shop-card">
+          <div class="shop-card-icon">🗺️</div>
+          <div class="shop-card-info">
+            <div class="shop-card-title-row">
+              <span class="shop-card-name">Bypass Sektor Peta</span>
+            </div>
+            <div class="shop-card-desc">Buka akses sektor infiltrasi hari berikutnya secara instan.</div>
+          </div>
+          <div class="shop-card-action">
+            <button class="btn-buy btn-unlock" onclick="RPG.buyUnlock(2100)">2100 🪙</button>
+          </div>
+        </div>
+
+        <!-- Item 6: Kotak Pandora -->
+        <div class="shop-card gacha-card">
+          <div class="shop-card-icon">🎁</div>
+          <div class="shop-card-info">
+            <div class="shop-card-title-row">
+              <span class="shop-card-name" style="color:var(--warning);">Kotak Pandora (Gacha)</span>
+              <span class="shop-card-owned" id="owned-pandora">Tas: 0</span>
+            </div>
+            <div class="shop-card-desc">Uji nasib: Peluang dapat Full HP, Shield, Koin Cashback, atau Zonk!</div>
+          </div>
+          <div class="shop-card-action">
+            <button class="btn-buy btn-gacha" onclick="RPG.buyToInventory('pandora', 100)">100 🪙</button>
+          </div>
+        </div>
+
+        <!-- Item: Ekspansi Tas Ninja -->
+        <div class="shop-card bag-expand-card">
+          <div class="shop-card-icon icon-bag">🎒</div>
+          <div class="shop-card-info">
+            <div class="shop-card-title-row">
+              <span class="shop-card-name">Ekspansi Tas Ninja (+3 Slot)</span>
+              <span class="shop-card-owned" id="shop-bag-cap-status">Kapasitas: 6 Slot</span>
+            </div>
+            <div class="shop-card-desc">Tingkatkan kapasitas penyimpanan suplai obat, perisai, dan intel di zona tempur.
+            </div>
+          </div>
+          <div class="shop-card-action">
+            <button class="btn-buy btn-bag-upgrade" id="btn-buy-bag-expand" onclick="RPG.upgradeBagCapacity()">250
+              🪙</button>
+          </div>
+        </div>
+
+        <!-- Item: Jimat Pembeku Api (Streak Freeze) -->
+        <div class="shop-card freeze-card">
+          <div class="shop-card-icon icon-ice">❄️</div>
+          <div class="shop-card-info">
+            <div class="shop-card-title-row">
+              <span class="shop-card-name" style="color:#38bdf8;">Jimat Pembeku Api</span>
+              <span class="shop-card-owned" id="owned-streak-freeze">Miliki: 0 / 2</span>
+            </div>
+            <div class="shop-card-desc">Melindungi api streak kamu jika terlewat 1 hari tidak berlatih. Otomatis aktif
+              saat dibutuhkan.</div>
+          </div>
+          <div class="shop-card-action">
+            <button class="btn-buy btn-freeze" id="btn-buy-freeze" onclick="Streak.buyFreeze(150)">150 🪙</button>
+          </div>
+        </div>
+
+        <!-- Section Divider: Relik Permanen -->
+        <div class="shop-section-divider">
+          <span class="shop-section-label">⚔️ RELIK PERMANEN KENSEI (EQUIPMENT)</span>
+          <span class="shop-section-sub">Pasif abadi yang melekat selamanya pada pendekar</span>
+        </div>
+
+        <!-- Relik 1: Pedang Muramasa -->
+        <div class="shop-card relic-card">
+          <div class="shop-card-icon icon-relic">🗡️</div>
+          <div class="shop-card-info">
+            <div class="shop-card-title-row">
+              <span class="shop-card-name">Pedang Muramasa</span>
+              <span class="shop-card-owned badge-relic">Relik Pasif</span>
+            </div>
+            <div class="shop-card-desc">Bonus permanen <b>+10% EXP</b> setiap kali kuis dijawab dengan benar.</div>
+          </div>
+          <div class="shop-card-action">
+            <button class="btn-buy btn-relic" id="btn-buy-relic-muramasa" onclick="RPG.buyRelic('muramasa', 600)">600
+              🪙</button>
+          </div>
+        </div>
+
+        <!-- Relik 2: Jimat Omamori -->
+        <div class="shop-card relic-card">
+          <div class="shop-card-icon icon-relic">📿</div>
+          <div class="shop-card-info">
+            <div class="shop-card-title-row">
+              <span class="shop-card-name">Jimat Omamori</span>
+              <span class="shop-card-owned badge-relic">Relik Pasif</span>
+            </div>
+            <div class="shop-card-desc">Peluang <b>10% kebal kesalahan</b> di Zona Tempur (HP & combo aman).</div>
+          </div>
+          <div class="shop-card-action">
+            <button class="btn-buy btn-relic" id="btn-buy-relic-omamori" onclick="RPG.buyRelic('omamori', 750)">750
+              🪙</button>
+          </div>
+        </div>
+
+        <!-- Relik 3: Lensa Scouter -->
+        <div class="shop-card relic-card">
+          <div class="shop-card-icon icon-relic">👓</div>
+          <div class="shop-card-info">
+            <div class="shop-card-title-row">
+              <span class="shop-card-name">Lensa Scouter</span>
+              <span class="shop-card-owned badge-relic">Relik Pasif</span>
+            </div>
+            <div class="shop-card-desc">Mendeteksi & menyorot <b>partikel benar</b> otomatis 1x setiap sesi harian.
+            </div>
+          </div>
+          <div class="shop-card-action">
+            <button class="btn-buy btn-relic" id="btn-buy-relic-scouter" onclick="RPG.buyRelic('scouter', 500)">500
+              🪙</button>
+          </div>
+        </div>
+
+        <!-- Dev Override Item -->
+        <div class="shop-card dev-card">
+          <div class="shop-card-icon">🔓</div>
+          <div class="shop-card-info">
+            <div class="shop-card-name" style="color:var(--danger);">Override Admin</div>
+            <div class="shop-card-desc">Bypass sandi dev koin & level tak terbatas.</div>
+          </div>
+          <div class="shop-card-action">
+            <button class="btn-buy btn-danger" onclick="RPG.adminUnlock()">Bypass</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="shop-modal-footer">
+        <button type="button" class="btn btn-alt" style="max-width:260px; margin:0;"
+          onclick="UI.closeModal('shop-modal')">Tutup Terminal</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="inventory-modal" class="hidden" onclick="if(event.target === this) UI.closeModal('inventory-modal')">
+    <div class="inv-modal-card">
+      <div class="inv-modal-header">
+        <div class="inv-header-top">
+          <span class="inv-badge">🎒 PERLENGKAPAN NINJA</span>
+          <button type="button" class="inv-close-btn" onclick="UI.closeModal('inventory-modal')"
+            title="Tutup Tas">✕</button>
+        </div>
+        <h2 class="inv-title">Tas Inventori Suplai</h2>
+        <p class="inv-subtitle">Gunakan item suplai saat situasi genting di zona tempur</p>
+
+        <!-- Live Status Indicators -->
+        <div class="inv-status-panel">
+          <div class="inv-status-box">
+            <span class="inv-status-label">KESEHATAN (HP):</span>
+            <div class="inv-hp-row" id="inv-hp-display">❤️❤️❤️</div>
+          </div>
+          <div class="inv-status-box">
+            <span class="inv-status-label">AEGIS SHIELD:</span>
+            <span class="inv-buff-badge" id="inv-buff-shield">TIDAK AKTIF</span>
+          </div>
+        </div>
+
+        <!-- Bag Capacity Meter -->
+        <div class="inv-capacity-panel">
+          <div class="inv-capacity-header">
+            <span class="inv-capacity-label">🎒 KAPASITAS TAS: <b id="inv-capacity-text">0 / 6 Slot</b></span>
+            <button type="button" class="btn-upgrade-bag" id="btn-upgrade-bag-inv" onclick="RPG.upgradeBagCapacity()">+
+              Upgrade Slot (250 🪙)</button>
+          </div>
+          <div class="inv-capacity-bar">
+            <div class="inv-capacity-fill" id="inv-capacity-fill" style="width: 0%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Inventory Grid -->
+      <div class="inv-grid-container" id="inv-grid-container">
+        <!-- Generated dynamically by UI.renderInventory() -->
+      </div>
+
+      <!-- Active Relics Panel -->
+      <div class="inv-relic-section">
+        <div class="inv-relic-header">
+          <span>⚔️ RELIK AKTIF (PASIF PERMANEN)</span>
+        </div>
+        <div class="inv-relic-grid" id="inv-relic-container">
+          <!-- Rendered dynamically by UI.renderInventory() -->
+        </div>
+      </div>
+
+      <div class="inv-modal-footer">
+        <button type="button" class="btn btn-shop-link"
+          onclick="UI.closeModal('inventory-modal'); UI.openModal('shop-modal');">🛒 Beli Suplai (Ke Toko)</button>
+        <button type="button" class="btn btn-alt" style="max-width:200px; margin:0;"
+          onclick="UI.closeModal('inventory-modal')">Tutup Tas</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gacha Pandora Portal Modal -->
+  <div id="gacha-modal" class="hidden">
+    <div class="gacha-modal-card">
+      <div class="gacha-header">
+        <div class="gacha-header-top">
+          <span class="gacha-badge">🎁 KOTAK PANDORA • GACHA PORTAL</span>
+          <button type="button" class="gacha-close-btn" onclick="UI.closeGachaModal()" title="Tutup">✕</button>
+        </div>
+        <h2 class="gacha-title">Portal Pemanggilan Takdir</h2>
+        <p class="gacha-subtitle">Buka segel kuno untuk memperoleh berkah harta legendaris</p>
+      </div>
+
+      <div class="gacha-stage-canvas" id="gacha-canvas">
+        <!-- Stage 1: Chest Animation -->
+        <div class="gacha-chest-wrap" id="gacha-chest-wrap">
+          <div class="gacha-ambient-halo"></div>
+          <div class="gacha-chest-icon" id="gacha-chest-icon">🎁</div>
+          <div class="gacha-status-text" id="gacha-status-text">MEMBUKA SEGEL PANDORA...</div>
+        </div>
+
+        <!-- Stage 2: Reveal Card (hidden initially) -->
+        <div class="gacha-result-card hidden" id="gacha-result-card">
+          <div class="gacha-rarity-banner" id="gacha-rarity-banner">LEGENDARY 🟡</div>
+          <div class="gacha-item-icon" id="gacha-item-icon">👑</div>
+          <h3 class="gacha-item-title" id="gacha-item-title">Hadiah Pandora</h3>
+          <p class="gacha-item-desc" id="gacha-item-desc">Deskripsi hadiah</p>
+          <div class="gacha-action-row">
+            <button type="button" class="btn-gacha-claim" id="btn-gacha-claim" onclick="UI.claimGachaReward()">KLAIM
+              HADIAH ➔</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="map-modal" class="hidden" onclick="if(event.target === this) UI.closeModal('map-modal')">
+    <div class="map-modal-card">
+      <div class="map-modal-header">
+        <div class="map-header-top">
+          <div class="map-title-group">
+            <div class="map-badge-row">
+              <span class="map-header-badge">🗺️ EXPEDITION MAP</span>
+              <span class="map-level-badge" id="map-sector-badge">SEKTOR EKSPEDISI</span>
+            </div>
+            <h2 class="map-title">Peta Infiltrasi Sektor</h2>
+          </div>
+          <button type="button" class="map-close-btn" onclick="UI.closeModal('map-modal')" title="Tutup Peta">✕</button>
+        </div>
+
+        <!-- Breathable RPG Mission Progress Dashboard -->
+        <div class="map-progress-panel">
+          <div class="map-progress-top-row">
+            <span class="map-progress-tag">⚡ PROGRESS EKSPEDISI</span>
+            <span id="map-progress-text" class="map-progress-pct">0% SELESAI</span>
+          </div>
+          <div class="map-progress-track">
+            <div id="map-progress-fill" class="map-progress-fill" style="width: 0%;"></div>
+          </div>
+          <div class="map-progress-bottom-row">
+            <span id="map-progress-detail" class="map-progress-info">Zona Terbuka: Memuat...</span>
+            <button type="button" class="map-btn-jump" onclick="UI.scrollToCurrentMission()"
+              title="Lompat ke Misi Aktif">🎯 Fokus Misi</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scrollable Mission Cards Container -->
+      <div id="map-day-list" class="map-cards-container"></div>
+
+      <div class="map-modal-footer">
+        <button type="button" class="btn btn-alt map-bottom-close" onclick="UI.closeModal('map-modal')">Tutup
+          Peta</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="kamus-modal" class="hidden">
+    <div class="kamus-modal-card">
+      <div class="kamus-modal-header">
+        <div class="kamus-header-top">
+          <div class="kamus-badge-row">
+            <span class="kamus-header-badge">📖 ARSIP KOSAKATA KENSEI</span>
+            <span class="kamus-count-badge" id="kamus-count-badge">0 Terbuka</span>
+          </div>
+          <button type="button" class="kamus-close-btn" onclick="UI.closeModal('kamus-modal')"
+            title="Tutup Kamus">✕</button>
+        </div>
+        <h2 class="kamus-modal-title">Kamus Kensei N5</h2>
+        <p class="kamus-modal-subtitle">Gudang perbendaharaan kata Jepang dari seluruh ekspedisi yang telah Anda
+          taklukkan</p>
+
+        <!-- Search & Filters -->
+        <div class="kamus-search-bar">
+          <span class="kamus-search-icon">🔍</span>
+          <input type="text" id="kamus-search" class="kamus-search-input"
+            placeholder="Cari kanji, romaji, atau terjemahan..." oninput="UI.searchKamus()" autocomplete="off">
+          <button type="button" id="kamus-search-clear" class="kamus-clear-btn hidden"
+            onclick="UI.clearKamusSearch()">✕</button>
+        </div>
+
+        <div class="kamus-filter-chips">
+          <button type="button" class="kamus-chip active" id="kchip-unlocked"
+            onclick="UI.setKamusFilter('unlocked')">Terbuka (<span id="kchip-unlocked-count">0</span>)</button>
+          <button type="button" class="kamus-chip" id="kchip-today" onclick="UI.setKamusFilter('today')">Hari Ini (<span
+              id="kchip-today-count">0</span>)</button>
+          <button type="button" class="kamus-chip" id="kchip-all" onclick="UI.setKamusFilter('all')">Semua N5 (<span
+              id="kchip-all-count">0</span>)</button>
+          <button type="button" class="kamus-chip" id="kchip-kanji" onclick="UI.setKamusFilter('kanji')">Hanya
+            Kanji</button>
+        </div>
+      </div>
+
+      <!-- Cards Container -->
+      <div class="kamus-list-container" id="kamus-list"></div>
+
+      <div class="kamus-modal-footer">
+        <span class="kamus-footer-tip">💡 Ketuk kartu untuk menyalin kosakata ke papan klip</span>
+        <button type="button" class="btn btn-alt kamus-bottom-close" onclick="UI.closeModal('kamus-modal')">Tutup
+          Kamus</button>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="dojo-modal" class="hidden">
+    <div class="dojo-modal-card">
+      <div class="dojo-modal-header">
+        <div class="dojo-header-top">
+          <div class="dojo-badge-row">
+            <span class="dojo-header-badge">🥋 DOJO KENSEI • BANK KESALAHAN</span>
+            <span class="dojo-count-badge" id="dojo-pending-badge">0 Perlu Dilatih</span>
+          </div>
+          <button type="button" class="dojo-close-btn" onclick="UI.closeModal('dojo-modal')"
+            title="Tutup Dojo">✕</button>
+        </div>
+        <h2 class="dojo-modal-title">Dojo Remedial</h2>
+        <p class="dojo-modal-subtitle">Pertajam refleks dan tempa materi yang pernah keliru melalui repetisi spasi
+          hingga akurasi 100%</p>
+
+        <!-- Unboxed Metrics Bar -->
+        <div class="dojo-metrics-bar">
+          <div class="dojo-metric-item">
+            <span class="dojo-metric-val" id="dojo-stat-total">0</span>
+            <span class="dojo-metric-lbl">TOTAL KESALAHAN</span>
+          </div>
+          <div class="dojo-metric-divider"></div>
+          <div class="dojo-metric-item">
+            <span class="dojo-metric-val text-amber" id="dojo-stat-pending">0</span>
+            <span class="dojo-metric-lbl">BELUM LULUS</span>
+          </div>
+          <div class="dojo-metric-divider"></div>
+          <div class="dojo-metric-item">
+            <span class="dojo-metric-val text-emerald" id="dojo-stat-mastered">0</span>
+            <span class="dojo-metric-lbl">DIKUASAI (LULUS)</span>
+          </div>
+        </div>
+
+        <!-- Action Hero Row -->
+        <div class="dojo-action-row">
+          <button type="button" class="btn-dojo-start" id="btn-dojo-start" onclick="Dojo.startSession()">
+            <span class="dojo-btn-jp">修練</span>
+            <span class="dojo-btn-text" id="btn-dojo-start-text">MULAI LATIHAN REMEDIAL</span>
+            <span class="dojo-btn-arrow">➔</span>
+          </button>
+          <button type="button" class="btn-dojo-clean" onclick="Dojo.clearMastered()"
+            title="Bersihkan soal yang sudah lulus 100%">
+            🧹 Bersihkan Lulus
+          </button>
+        </div>
+
+        <!-- Filter Chips -->
+        <div class="dojo-filter-chips">
+          <button type="button" class="dojo-chip active" id="dchip-all" onclick="Dojo.setFilter('all')">Semua (<span
+              id="dchip-all-count">0</span>)</button>
+          <button type="button" class="dojo-chip" id="dchip-partikel" onclick="Dojo.setFilter('partikel')">Partikel
+            (<span id="dchip-partikel-count">0</span>)</button>
+          <button type="button" class="dojo-chip" id="dchip-arti" onclick="Dojo.setFilter('arti')">Arti (<span
+              id="dchip-arti-count">0</span>)</button>
+          <button type="button" class="dojo-chip" id="dchip-hafalan" onclick="Dojo.setFilter('hafalan')">Kosakata (<span
+              id="dchip-hafalan-count">0</span>)</button>
+        </div>
+      </div>
+
+      <!-- Cards Container -->
+      <div class="dojo-list-container" id="dojo-list"></div>
+
+      <div class="dojo-modal-footer">
+        <span class="dojo-footer-tip">💡 Soal dianggap lulus setelah dijawab benar 2 kali beruntun</span>
+        <button type="button" class="btn btn-alt dojo-bottom-close" onclick="UI.closeModal('dojo-modal')">Tutup
+          Dojo</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="tips-modal" class="hidden">
+    <h2 style="color:var(--warning); margin-bottom:15px;">💡 INFO PENYANGKALAN</h2>
+    <div
+      style="background:#1e293b; padding:20px; border-radius:12px; border:1px solid #334155; margin-bottom:20px; font-size:15px; color:var(--text-main); line-height: 1.6; text-align: left; max-width: 400px; max-height: 65vh; overflow-y: auto;">
+      Dalam bahasa Jepang, ada 3 tingkat kesopanan untuk mengatakan <b>"Bukan"</b>:<br><br>
+
+      <span style="color:var(--primary); font-weight:bold;">1. ... dewa arimasen (ではありません)</span><br>
+      <span style="color:var(--text-sub); font-size:13px;">Sangat sopan dan formal. Sering dipakai di pidato, tulisan
+        resmi, atau ke orang yang sangat dihormati.</span><br><br>
+
+      <span style="color:var(--success); font-weight:bold;">2. ... jaa arimasen (じゃありません)</span><br>
+      <span style="color:var(--text-sub); font-size:13px;">Sopan dan standar. Paling umum dipakai dalam percakapan
+        sehari-hari dengan orang yang belum terlalu akrab.</span><br><br>
+
+      <span style="color:var(--danger); font-weight:bold;">3. ... jaa nai (じゃない)</span><br>
+      <span style="color:var(--text-sub); font-size:13px;">Bentuk kasual/santai. Hanya dipakai ke teman akrab, keluarga,
+        atau orang yang statusnya di bawah kita.</span><br><br>
+
+      <i style="color:var(--gold); font-size:13px;">Catatan: Fokus kita di kuis nanti adalah bentuk sopan (dewa/jaa
+        arimasen) ya! Bentuk kasual hanya untuk pengetahuan tambahan saat belajar pola.</i>
+    </div>
+    <button class="btn btn-alt" style="max-width:400px;" onclick="UI.closeModal('tips-modal')">Tutup Info</button>
+  </div>
+
+  <!-- Pilar 5: Cloud Save & Transfer Code Modal -->
+  <div id="cloud-modal" class="hidden" onclick="if(event.target === this) UI.closeModal('cloud-modal')">
+    <div class="cloud-modal-card">
+      <div class="cloud-modal-header">
+        <div class="cloud-header-top">
+          <span class="cloud-badge">☁️ KENSEI CLOUD SAVE // FIRESTORE</span>
+          <button type="button" class="level-close-btn" onclick="UI.closeModal('cloud-modal')" title="Tutup">✕</button>
+        </div>
+        <h2 class="cloud-title">Akun & Cloud Save</h2>
+        <p class="cloud-subtitle">Simpan progres Anda ke Firebase agar tidak hilang saat berganti ponsel atau browser
+        </p>
+      </div>
+
+      <div class="cloud-modal-content">
+        <!-- Nickname Edit Row -->
+        <div class="cloud-profile-section">
+          <label
+            style="font-size:11px; font-weight:800; color:var(--text-sub); letter-spacing:1px; text-transform:uppercase;">NICKNAME
+            PENDEKAR</label>
+          <div class="cloud-nickname-row">
+            <input type="text" id="cloud-nickname-input" class="cloud-input-nickname" maxlength="16"
+              placeholder="Nama Pendekar..." />
+            <button type="button" class="btn-save-nickname"
+              onclick="Cloud.setNickname(document.getElementById('cloud-nickname-input').value)">Simpan 💾</button>
+          </div>
+        </div>
+
+        <!-- Kensei Code Transfer Card -->
+        <div class="cloud-code-banner">
+          <div>
+            <div class="cloud-code-label">KODE TRANSFER KENSEI (ID UNIK)</div>
+            <div class="cloud-code-value" id="cloud-code-display">YK-XXXXXX</div>
+          </div>
+          <button type="button" class="btn-copy-code" onclick="Cloud.copyCode()">Salin Kode 📋</button>
+        </div>
+
+        <!-- Live Sync Action -->
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <div class="cloud-sync-status-row">
+            <span>Status Sinkronisasi:</span>
+            <span id="cloud-sync-status"><span style="color:var(--warning);">○ Belum Pernah Disinkron</span></span>
+          </div>
+          <button type="button" class="btn-sync-now" onclick="Cloud.syncToCloud(true)">⚡ SINKRONKAN PROGRES KE
+            CLOUD</button>
+        </div>
+
+        <!-- Restore From Device Section -->
+        <div class="cloud-restore-section">
+          <div class="cloud-restore-title">PINDAH PERANGKAT? PULIHKAN DATA</div>
+          <div class="cloud-restore-row">
+            <input type="text" id="cloud-restore-input" class="cloud-input-restore" placeholder="YK-XXXXXX"
+              maxlength="12" />
+            <button type="button" class="btn-restore-data"
+              onclick="Cloud.restoreFromCloud(document.getElementById('cloud-restore-input').value)">Pulihkan ➔</button>
+          </div>
+          <span style="font-size:11px; color:var(--text-sub); line-height:1.4;">Masukkan kode 6 digit dari perangkat
+            lama Anda untuk mengembalikan seluruh level, koin, relik, dan tas.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pilar 5: Global Leaderboard (Hall of Fame) Modal -->
+  <div id="leaderboard-modal" class="hidden" onclick="if(event.target === this) UI.closeModal('leaderboard-modal')">
+    <div class="leaderboard-modal-card">
+      <div class="lb-modal-header">
+        <div class="lb-header-top">
+          <span class="lb-header-badge">🏆 HALL OF FAME GLOBAL</span>
+          <button type="button" class="level-close-btn" onclick="UI.closeModal('leaderboard-modal')"
+            title="Tutup">✕</button>
+        </div>
+        <h2 class="lb-modal-title">Papan Peringkat Pendekar</h2>
+        <p class="lb-modal-subtitle">Kompetisi sehat seluruh murid Kensei di dunia</p>
+      </div>
+
+      <!-- Filter Tabs -->
+      <div class="lb-tabs-row">
+        <button type="button" class="lb-tab-btn active" data-tab="exp" onclick="Leaderboard.setTab('exp')">✨ Total
+          EXP</button>
+        <button type="button" class="lb-tab-btn" data-tab="streak" onclick="Leaderboard.setTab('streak')">🔥 Daily
+          Streak</button>
+        <button type="button" class="lb-tab-btn" data-tab="combo" onclick="Leaderboard.setTab('combo')">⚡ Rekor
+          Combo</button>
+      </div>
+
+      <!-- Top 3 Podium (Unboxed) -->
+      <div class="lb-podium-wrap" id="lb-podium-container"></div>
+
+      <!-- Rest of Rankings Stream -->
+      <div class="lb-content-stream" id="lb-list-stream"></div>
+
+      <!-- Sticky Live Player Status Row -->
+      <div class="lb-sticky-player-bar" id="lb-sticky-player"></div>
+    </div>
+  </div>
+
+  <!-- Pilar 5: Daily Streak & Absensi Ninja Modal -->
+  <div id="streak-modal" class="hidden" onclick="if(event.target === this) UI.closeModal('streak-modal')">
+    <div class="streak-modal-card">
+      <div class="streak-modal-header">
+        <button type="button" class="streak-close-btn" onclick="UI.closeModal('streak-modal')" title="Tutup">✕</button>
+        <div class="streak-hero-flame">🔥</div>
+        <h2 class="streak-hero-title" id="streak-modal-count">1 Hari Beruntun!</h2>
+        <p class="streak-hero-sub" id="streak-modal-status">Nyalakan apimu dengan mengklaim bonus hari ini!</p>
+      </div>
+
+      <div class="streak-modal-content">
+        <!-- 7-Day Flame Track -->
+        <div class="streak-timeline-grid" id="streak-timeline"></div>
+
+        <!-- Streak Freeze Status -->
+        <div class="streak-status-box">
+          <div class="streak-freeze-info">
+            <span>❄️ Jimat Pembeku Api:</span>
+            <span id="streak-freeze-count" style="color:#fff;">0 / 2 Tersedia</span>
+          </div>
+          <button type="button" class="btn" style="padding:4px 10px; font-size:11px; margin:0; max-width:120px;"
+            onclick="UI.closeModal('streak-modal'); UI.openModal('shop-modal');">Beli di Toko</button>
+        </div>
+
+        <!-- Action Button -->
+        <button type="button" class="btn-streak-claim" id="streak-claim-btn" onclick="Streak.claimReward()">KLAIM BONUS
+          HARIAN ➔</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-header-top">
+        <div class="sidebar-brand">
+          <span class="sidebar-badge">⛩️ KENSEI TERMINAL</span>
+          <span class="sidebar-version">v10.6</span>
+        </div>
+        <button type="button" class="sidebar-close-btn" onclick="UI.toggleSidebar()" title="Tutup Navigasi">✕</button>
+      </div>
+      <h2 class="sidebar-title">Peta Navigasi & Saku</h2>
+      <p class="sidebar-subtitle">Pusat kendali mode belajar & referensi intel N5</p>
+    </div>
+
+    <div class="sidebar-content">
+      <!-- Group 1: Sistem & Petualangan -->
+      <div class="sidebar-group">
+        <div class="sidebar-group-label">🎮 MODE & FITUR UTAMA</div>
+
+        <div class="sidebar-tile" onclick="UI.toggleSidebar(); UI.openModal('level-modal');"
+          style="border-left: 3px solid #c084fc;">
+          <div class="sidebar-tile-icon icon-cyan">🔰</div>
+          <div class="sidebar-tile-info">
+            <div class="sidebar-tile-title">Hierarki Gelar (Level)</div>
+            <div class="sidebar-tile-desc">Cek progres exp, pangkat & bonus pasif</div>
+          </div>
+          <div class="sidebar-tile-arrow">›</div>
+        </div>
+
+        <div class="sidebar-tile" onclick="UI.toggleSidebar(); UI.openModal('inventory-modal');"
+          style="border-left: 3px solid var(--primary);">
+          <div class="sidebar-tile-icon icon-cyan">🎒</div>
+          <div class="sidebar-tile-info">
+            <div class="sidebar-tile-title">Tas Inventori Suplai</div>
+            <div class="sidebar-tile-desc">Gunakan nano-repair & aegis shield</div>
+          </div>
+          <div class="sidebar-tile-arrow">›</div>
+        </div>
+
+        <div class="sidebar-tile" onclick="UI.toggleSidebar(); UI.openModal('shop-modal');"
+          style="border-left: 3px solid var(--gold);">
+          <div class="sidebar-tile-icon icon-gold">🛒</div>
+          <div class="sidebar-tile-info">
+            <div class="sidebar-tile-title">Pasar Gelap (Toko)</div>
+            <div class="sidebar-tile-desc">Beli suplai infiltrasi & relik</div>
+          </div>
+          <div class="sidebar-tile-arrow">›</div>
+        </div>
+
+        <div class="sidebar-tile" onclick="UI.toggleSidebar(); UI.openSetupScreen();">
+          <div class="sidebar-tile-icon icon-cyan">⚙️</div>
+          <div class="sidebar-tile-info">
+            <div class="sidebar-tile-title">Menu Awal</div>
+            <div class="sidebar-tile-desc">Ganti gaya & mode pembelajaran</div>
+          </div>
+          <div class="sidebar-tile-arrow">›</div>
+        </div>
+
+        <div class="sidebar-tile" id="btn-hardcore" onclick="UI.toggleHardcore()">
+          <div class="sidebar-tile-icon icon-red">🥷</div>
+          <div class="sidebar-tile-info">
+            <div class="sidebar-tile-title">Mode Hardcore</div>
+            <div class="sidebar-tile-desc">Sembunyikan furigana kanji</div>
+          </div>
+          <span class="sidebar-tile-status status-off" id="hardcore-badge">OFF</span>
+        </div>
+
+        <div class="sidebar-tile" onclick="UI.toggleSidebar(); UI.openKamus();">
+          <div class="sidebar-tile-icon icon-green">📖</div>
+          <div class="sidebar-tile-info">
+            <div class="sidebar-tile-title">Kamus Kensei</div>
+            <div class="sidebar-tile-desc">Koleksi kosakata yang sudah terbuka</div>
+          </div>
+          <div class="sidebar-tile-arrow">›</div>
+        </div>
+
+        <div class="sidebar-tile" onclick="Game.startDungeon()">
+          <div class="sidebar-tile-icon icon-gold">🏰</div>
+          <div class="sidebar-tile-info">
+            <div class="sidebar-tile-title">Dungeon Ingatan</div>
+            <div class="sidebar-tile-desc">Mode survival kosakata tanpa batas</div>
+          </div>
+          <div class="sidebar-tile-arrow">›</div>
+        </div>
+
+        <div class="sidebar-tile" onclick="UI.toggleSidebar(); Dojo.openModal();">
+          <div class="sidebar-tile-icon icon-crimson">🥋</div>
+          <div class="sidebar-tile-info">
+            <div class="sidebar-tile-title">Dojo Remedial</div>
+            <div class="sidebar-tile-desc">Bank kesalahan & repetisi spasi</div>
+          </div>
+          <span class="sidebar-tile-status status-count" id="dojo-badge">0 Soal</span>
+        </div>
+      </div>
+
+      <!-- Group: Ekosistem Online & Kompetisi -->
+      <div class="sidebar-group">
+        <div class="sidebar-group-label">🌐 EKOSISTEM CLOUD & KOMPETISI</div>
+        <div class="sidebar-tile" onclick="UI.toggleSidebar(); Leaderboard.openModal();">
+          <div class="sidebar-tile-icon icon-gold">🏆</div>
+          <div class="sidebar-tile-info">
+            <div class="sidebar-tile-title">Hall of Fame Global</div>
+            <div class="sidebar-tile-desc">Papan peringkat pendekar Kensei</div>
+          </div>
+          <div class="sidebar-tile-arrow">›</div>
+        </div>
+
+        <div class="sidebar-tile" onclick="UI.toggleSidebar(); Streak.openModal();">
+          <div class="sidebar-tile-icon icon-red">🔥</div>
+          <div class="sidebar-tile-info">
+            <div class="sidebar-tile-title">Absensi Ninja (Streak)</div>
+            <div class="sidebar-tile-desc">Bonus login harian & api latihan</div>
+          </div>
+          <span class="sidebar-tile-status status-count" id="sidebar-streak-badge">🔥 1</span>
+        </div>
+
+        <div class="sidebar-tile" onclick="UI.toggleSidebar(); UI.openModal('cloud-modal');">
+          <div class="sidebar-tile-icon icon-cyan">☁️</div>
+          <div class="sidebar-tile-info">
+            <div class="sidebar-tile-title">Akun & Cloud Save</div>
+            <div class="sidebar-tile-desc">Sinkronisasi data & pindah perangkat</div>
+          </div>
+          <span class="sidebar-tile-status" id="sidebar-cloud-badge" style="color:var(--primary); font-size:10px;">ID:
+            #YK-XXXX</span>
+        </div>
+      </div>
+
+      <!-- Group 2: Buku Saku Referensi -->
+      <div class="sidebar-group">
+        <div class="sidebar-group-label">📚 REFERENSI BUKU SAKU N5</div>
+
+        <a class="sidebar-tile" href="kanji.html">
+          <div class="sidebar-tile-icon icon-cyan">⛩️</div>
+          <div class="sidebar-tile-info">
+            <div class="sidebar-tile-title">Pasar & Dojo Kanji</div>
+            <div class="sidebar-tile-desc">Belanja kanji N5/N4 & latihan di dojo kustom</div>
+          </div>
+          <div class="sidebar-tile-arrow">›</div>
+        </a>
+
+        <a class="sidebar-tile" href="kata sifat.html">
+          <div class="sidebar-tile-icon icon-cyan">🏷️</div>
+          <div class="sidebar-tile-info">
+            <div class="sidebar-tile-title">Kata Sifat</div>
+            <div class="sidebar-tile-desc">I-Keiyoushi & Na-Keiyoushi</div>
+          </div>
+          <div class="sidebar-tile-arrow">›</div>
+        </a>
+
+        <a class="sidebar-tile" href="kata kerja.html">
+          <div class="sidebar-tile-icon icon-cyan">🏃🏻‍♂️</div>
+          <div class="sidebar-tile-info">
+            <div class="sidebar-tile-title">Kata Kerja</div>
+            <div class="sidebar-tile-desc">Bentuk kamus, masu & aturan grup</div>
+          </div>
+          <div class="sidebar-tile-arrow">›</div>
+        </a>
+
+        <a class="sidebar-tile" href="nomor.html">
+          <div class="sidebar-tile-icon icon-cyan">🕒</div>
+          <div class="sidebar-tile-info">
+            <div class="sidebar-tile-title">Bilangan, Waktu & Kalender</div>
+            <div class="sidebar-tile-desc">Angka, jam, menit, tanggal & kalender relatif</div>
+          </div>
+          <div class="sidebar-tile-arrow">›</div>
+        </a>
       </div>
     </div>
 
-    <!-- Hidden elements for complete JS logic compatibility -->
-    <div style="display:none !important;" aria-hidden="true">
-      <span id="ui-exp">0</span>
-      <span class="combo-text" id="ui-combo">x2</span>
-      <div id="ui-lvl"><span class="lvl-num">Lv.1</span> <span class="lvl-icon">🔰</span> <span class="lvl-name">Pemula</span></div>
-      <span class="bag-pill" id="ui-bag-count">0</span>
-    </div>
-
-    <!-- Hairline Laser EXP Progress Bar along the bottom border of Master HUD -->
-    <div class="hud-exp-track" title="Progress Menuju Level Berikutnya">
-      <div class="hud-exp-fill" id="ui-exp-fill" style="width: 0%;"></div>
+    <div class="sidebar-footer">
+      <div class="sidebar-footer-info">
+        <div class="sidebar-footer-engine">
+          <span>YOMIKATA // JLPT ENGINE</span>
+        </div>
+        <span class="sidebar-footer-status"><span class="radar-dot"></span> ONLINE</span>
+      </div>
     </div>
   </div>
+  <div class="overlay" id="overlay" onclick="UI.toggleSidebar()"></div>
 
-  <div class="nav-tabs animate-slide" style="animation-delay: 0.2s;">
-    <button class="tab-btn active" id="tab-hafalan" onclick="UI.switchTab('hafalan')">📖 Hafalan</button>
-    <button class="tab-btn" id="tab-belajar" onclick="UI.switchTab('belajar')">📚 Pola</button>
-    <button class="tab-btn locked" id="tab-partikel" onclick="UI.switchTab('partikel')">🧩 Partikel</button>
-    <button class="tab-btn locked" id="tab-arti" onclick="UI.switchTab('arti')">🇮🇩 Arti</button>
-  </div>
+  <button id="btn-tips" class="hidden" onclick="UI.openModal('tips-modal')">💡 Tips</button>
+  <div id="tips-bubble" class="hidden">Ada info baru, nih! ✨</div>
+  <div class="container hidden" id="main-app">
 
-  <div class="progress-container animate-slide" style="animation-delay: 0.3s;">
-    <div class="progress-fill" id="ui-progress"></div>
-  </div>
+    <!-- MASTER TOP HUD (Unified Sleek Single-Row JRPG Bar - Duolingo Essential Style) -->
+    <div class="master-hud animate-slide">
+      <div class="hud-content-row">
+        <!-- Left Cluster: Hamburger, Day Selector, Zone Status -->
+        <div class="hud-cluster-left">
+          <button type="button" class="hud-btn-toggle" onclick="UI.toggleSidebar()" title="Menu Utama"
+            aria-label="Menu">☰</button>
+          <button type="button" id="ui-day" class="hud-btn-day" onclick="UI.openModal('map-modal')"
+            title="Peta & Sektor Ekspedisi">🗺️ Hari 1 ▾</button>
+          <div id="ui-zone" class="zone-badge zone-aman" title="Status Zona">🟢 ZONA AMAN</div>
+        </div>
 
-  <div class="card animate-slide" style="animation-delay: 0.4s;" id="card-main">
-    <div class="card-content-wrapper" id="card-content">
-      <div id="stage-indicator"></div>
-      
-      <div class="jp-text" id="ui-jp"></div>
-      <div class="arti-text" id="ui-arti" onclick="this.classList.toggle('revealed')"></div>
-      <div id="input-area" style="width:100%;"></div>
-      <div class="feedback" id="ui-feedback"></div>
-      <button class="btn btn-alt hidden" id="btn-next" style="margin-top:20px;">Lanjut →</button>
+        <!-- Right Cluster: Streak, Coins (Shop), HP Hearts -->
+        <div class="hud-cluster-right">
+          <!-- Daily Streak Flame -->
+          <button type="button" class="hud-pill hud-pill-streak" id="ui-streak-hud" onclick="Streak.openModal()"
+            title="Absensi Ninja / Daily Streak">
+            <span class="hud-pill-icon">🔥</span>
+            <span id="ui-streak" class="hud-pill-val">1</span>
+          </button>
+
+          <!-- Coins (Opens Shop on click!) -->
+          <button type="button" class="hud-pill hud-pill-coin" onclick="UI.openModal('shop-modal')"
+            title="Saldo Koin • Ketuk untuk Buka Toko">
+            <span class="hud-pill-icon">🪙</span>
+            <span id="ui-coin" class="hud-pill-val">0</span>
+          </button>
+
+          <!-- Player HP Hearts -->
+          <div class="hp-container hud-hp-container" id="ui-hp" title="Sisa Nyawa (HP)"></div>
+        </div>
+      </div>
+
+      <!-- Hidden elements for complete JS logic compatibility -->
+      <div style="display:none !important;" aria-hidden="true">
+        <span id="ui-exp">0</span>
+        <span class="combo-text" id="ui-combo">x2</span>
+        <div id="ui-lvl"><span class="lvl-num">Lv.1</span> <span class="lvl-icon">🔰</span> <span
+            class="lvl-name">Pemula</span></div>
+        <span class="bag-pill" id="ui-bag-count">0</span>
+      </div>
+
+      <!-- Hairline Laser EXP Progress Bar along the bottom border of Master HUD -->
+      <div class="hud-exp-track" title="Progress Menuju Level Berikutnya">
+        <div class="hud-exp-fill" id="ui-exp-fill" style="width: 0%;"></div>
+      </div>
+    </div>
+
+    <div class="nav-tabs animate-slide" style="animation-delay: 0.2s;">
+      <button class="tab-btn active" id="tab-hafalan" onclick="UI.switchTab('hafalan')">📖 Hafalan</button>
+      <button class="tab-btn" id="tab-belajar" onclick="UI.switchTab('belajar')">📚 Pola</button>
+      <button class="tab-btn locked" id="tab-partikel" onclick="UI.switchTab('partikel')">🧩 Partikel</button>
+      <button class="tab-btn locked" id="tab-arti" onclick="UI.switchTab('arti')">🇮🇩 Arti</button>
+    </div>
+
+    <div class="progress-container animate-slide" style="animation-delay: 0.3s;">
+      <div class="progress-fill" id="ui-progress"></div>
+    </div>
+
+    <div class="card animate-slide" style="animation-delay: 0.4s;" id="card-main">
+      <div class="card-content-wrapper" id="card-content">
+        <div id="stage-indicator"></div>
+
+        <div class="jp-text" id="ui-jp"></div>
+        <div class="arti-text" id="ui-arti" onclick="this.classList.toggle('revealed')"></div>
+        <div id="input-area" style="width:100%;"></div>
+        <div class="feedback" id="ui-feedback"></div>
+        <button class="btn btn-alt hidden" id="btn-next" style="margin-top:20px;">Lanjut →</button>
+      </div>
     </div>
   </div>
-</div>
 
-    <!-- Firebase Compat SDKs (Cocok untuk Vanilla JS dan GitHub Pages) -->
-    <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore-compat.js"></script>
-    <script>
-        const firebaseConfig = {
-          apiKey: "AIzaSyA0AoLYt8EADO9q6Xh2gYTNJxkjQuVED68",
-          authDomain: "wkwkjapan-n5.firebaseapp.com",
-          projectId: "wkwkjapan-n5",
-          storageBucket: "wkwkjapan-n5.firebasestorage.app",
-          messagingSenderId: "473863267447",
-          appId: "1:473863267447:web:81c3a6bbebf5bc7fe35272"
-        };
-        firebase.initializeApp(firebaseConfig);
-    </script>
-    <script src="script.js"></script>
+  <!-- Firebase Compat SDKs (Cocok untuk Vanilla JS dan GitHub Pages) -->
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyA0AoLYt8EADO9q6Xh2gYTNJxkjQuVED68",
+      authDomain: "wkwkjapan-n5.firebaseapp.com",
+      projectId: "wkwkjapan-n5",
+      storageBucket: "wkwkjapan-n5.firebasestorage.app",
+      messagingSenderId: "473863267447",
+      appId: "1:473863267447:web:81c3a6bbebf5bc7fe35272"
+    };
+    firebase.initializeApp(firebaseConfig);
+  </script>
+  <script src="script.js"></script>
 </body>
+
+</html>
+storageBucket: "wkwkjapan-n5.firebasestorage.app",
+messagingSenderId: "473863267447",
+appId: "1:473863267447:web:81c3a6bbebf5bc7fe35272"
+};
+firebase.initializeApp(firebaseConfig);
+</script>
+<script src="script.js"></script>
+</body>
+
 </html>
