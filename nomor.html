@@ -76,7 +76,7 @@
 
     .container {
       width: 100%;
-      max-width: 580px;
+      max-width: 680px;
       position: relative;
       display: flex;
       flex-direction: column;
@@ -161,208 +161,134 @@
       gap: 6px;
     }
 
-    /* MASTER TWO-TAB HEADER */
+    /* MASTER THREE-TAB HEADER (OPSI 2A: ZERO SUB-TABS) */
     .master-tab-bar {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
       width: 100%;
-      background: rgba(13, 22, 45, 0.6);
-      padding: 4px;
-      border-radius: 14px;
+      background: rgba(10, 16, 34, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      padding: 5px;
+      border-radius: 16px;
       border: 1px solid var(--border-glass);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+      margin-bottom: 8px;
     }
 
     .master-tab-btn {
       background: transparent;
-      border: none;
+      border: 1px solid transparent;
       color: var(--text-sub);
-      padding: 10px 14px;
-      border-radius: 10px;
+      padding: 10px 6px;
+      border-radius: 12px;
       font-weight: 800;
       font-size: 13px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 7px;
-      transition: all 0.2s ease;
+      gap: 6px;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      user-select: none;
+      white-space: nowrap;
     }
 
     .master-tab-btn:hover {
-      color: var(--text-main);
+      color: #fff;
+      background: rgba(255, 255, 255, 0.05);
     }
 
     .master-tab-btn.active {
-      background: linear-gradient(135deg, rgba(56, 189, 248, 0.22) 0%, rgba(14, 165, 233, 0.35) 100%);
-      color: #fff;
-      border: 1px solid var(--border-accent);
-      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.25);
-    }
-
-    /* 4 CATEGORY SELECTOR BUTTONS */
-    .category-selector-row {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 6px;
-      width: 100%;
-    }
-
-    .cat-btn {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-glass);
-      color: var(--text-sub);
-      padding: 8px 6px;
-      border-radius: 12px;
-      font-size: 11px;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      transition: all 0.2s ease;
-    }
-
-    .cat-btn .cat-icon {
-      font-size: 18px;
-    }
-
-    .cat-btn:hover {
-      border-color: rgba(255, 255, 255, 0.2);
-      color: var(--text-main);
-    }
-
-    .cat-btn.active {
-      background: linear-gradient(145deg, rgba(56, 189, 248, 0.18) 0%, rgba(13, 22, 45, 0.9) 100%);
-      border-color: var(--primary);
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.22) 0%, rgba(99, 102, 241, 0.2) 100%);
       color: var(--primary);
-      box-shadow: 0 2px 10px var(--primary-glow);
+      border-color: rgba(56, 189, 248, 0.45);
+      box-shadow: 0 4px 16px rgba(56, 189, 248, 0.22);
+      transform: translateY(-1px);
     }
 
-    /* UNIFIED SESSION INDICATOR PILL */
-    .session-bar-wrap {
-      width: 100%;
-      position: relative;
-      z-index: 30;
-    }
-
-    .session-indicator-pill {
-      width: 100%;
-      background: var(--bg-surface);
-      border: 1px solid var(--border-glass);
-      border-radius: 14px;
-      padding: 10px 14px;
+    /* UNIFIED SESSION CONTROL BAR (Identik Kata Kerja) */
+    .session-nav-bar {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: center;
+      width: 100%;
+      margin: 4px 0 10px 0;
+      padding: 0 2px;
+    }
+
+    .active-session-indicator {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      padding: 8px 18px;
+      border-radius: 16px;
       cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .session-indicator-pill:hover {
-      border-color: var(--primary);
-    }
-
-    .sip-left {
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      gap: 8px;
+      gap: 9px;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      max-width: 100%;
     }
 
-    .sip-icon {
-      font-size: 15px;
+    .active-session-indicator:hover {
+      background: rgba(56, 189, 248, 0.16);
+      border-color: var(--primary);
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.35);
+      transform: translateY(-1px);
+    }
+
+    .active-session-indicator:active {
+      transform: scale(0.97);
+    }
+
+    .asi-menu-icon {
+      font-size: 13px;
       color: var(--primary);
     }
 
-    .sip-title {
+    .asi-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--primary);
+      box-shadow: 0 0 8px var(--primary);
+      flex-shrink: 0;
+    }
+
+    .asi-title {
       font-size: 13px;
       font-weight: 800;
       color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
       letter-spacing: 0.3px;
     }
 
-    .sip-caret {
-      font-size: 12px;
-      color: var(--text-sub);
+    .asi-caret {
+      font-size: 11px;
+      color: var(--primary);
       transition: transform 0.2s ease;
     }
 
-    .session-indicator-pill.open .sip-caret {
-      transform: rotate(180deg);
-    }
-
-    .session-dropdown-menu {
-      position: absolute;
-      top: calc(100% + 6px);
-      left: 0;
-      right: 0;
-      background: rgba(10, 17, 36, 0.98);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--border-accent);
-      border-radius: 14px;
-      padding: 8px;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      max-height: 280px;
-      overflow-y: auto;
-    }
-
-    .sd-item {
-      padding: 9px 12px;
-      border-radius: 10px;
-      font-size: 12.5px;
-      font-weight: 700;
-      color: var(--text-sub);
-      cursor: pointer;
-      transition: all 0.15s ease;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .sd-item:hover {
-      background: rgba(56, 189, 248, 0.12);
-      color: #fff;
-    }
-
-    .sd-item.active {
-      background: linear-gradient(135deg, rgba(56, 189, 248, 0.25) 0%, rgba(14, 165, 233, 0.2) 100%);
-      color: var(--primary);
-      border: 1px solid rgba(56, 189, 248, 0.3);
-    }
-
-    /* NARASI & ATURAN TIP BANNER */
-    .narasi-box {
-      background: rgba(251, 191, 36, 0.08);
-      border-left: 3px solid var(--gold);
-      border-radius: 4px 12px 12px 4px;
-      padding: 10px 14px;
-      font-size: 12px;
-      color: #fef08a;
-      line-height: 1.5;
-      text-align: left;
-    }
-
-    .narasi-box b {
-      color: #fff;
-    }
-
-    /* TOOL LAUNCHER BUTTON ROW */
-    .tool-launcher-row {
-      display: flex;
-      gap: 8px;
+    /* LAB ALAT INTERAKTIF SEGMENTED BAR */
+    .tools-segmented-bar {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
       width: 100%;
+      margin: 4px 0 12px 0;
     }
 
-    .btn-tool-toggle {
-      flex: 1;
-      background: linear-gradient(135deg, rgba(192, 132, 252, 0.15) 0%, rgba(13, 22, 45, 0.8) 100%);
-      border: 1px solid rgba(192, 132, 252, 0.3);
-      color: var(--purple);
-      padding: 8px 12px;
+    .tool-seg-btn {
+      background: rgba(13, 22, 45, 0.7);
+      border: 1px solid var(--border-glass);
+      color: var(--text-sub);
+      padding: 9px 6px;
       border-radius: 12px;
       font-size: 12px;
       font-weight: 800;
@@ -374,16 +300,16 @@
       transition: all 0.2s ease;
     }
 
-    .btn-tool-toggle:hover {
-      border-color: var(--purple);
-      box-shadow: 0 2px 10px var(--purple-glow);
+    .tool-seg-btn:hover {
       color: #fff;
+      border-color: rgba(255, 255, 255, 0.2);
     }
 
-    .btn-tool-toggle.active {
-      background: linear-gradient(135deg, rgba(192, 132, 252, 0.3) 0%, rgba(147, 51, 234, 0.3) 100%);
-      border-color: var(--purple);
+    .tool-seg-btn.active {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.22) 0%, rgba(14, 165, 233, 0.35) 100%);
+      border-color: var(--primary);
       color: #fff;
+      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.25);
     }
 
     /* ==============================================================
@@ -1355,7 +1281,7 @@
       top: 0;
       left: 0;
       bottom: 0;
-      width: 290px;
+      width: clamp(290px, 86vw, 360px);
       background: rgba(10, 18, 40, 0.98);
       border-right: 1px solid var(--border-accent);
       z-index: 610;
@@ -1363,54 +1289,226 @@
       transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
       display: flex;
       flex-direction: column;
-      padding: 20px 16px;
-      box-shadow: 10px 0 30px rgba(0, 0, 0, 0.7);
+      padding: 0;
+      box-shadow: 10px 0 35px rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
     }
 
     .sidebar-drawer.active {
       transform: translateX(0);
     }
 
-    .sb-brand {
-      font-size: 16px;
-      font-weight: 900;
-      color: #fff;
-      letter-spacing: 1px;
-      margin-bottom: 18px;
+    .sd-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(13, 22, 45, 0.6);
     }
 
-    .sb-brand span {
+    .sd-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sd-icon {
+      font-size: 20px;
+    }
+
+    .sd-title {
+      font-size: 14px;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: 0.5px;
+    }
+
+    .sd-subtitle {
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+
+    .btn-sd-close {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--text-sub);
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .btn-sd-close:hover {
+      color: #fff;
+      border-color: var(--danger);
+      background: rgba(239, 68, 68, 0.15);
+    }
+
+    .sd-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      overscroll-behavior: contain;
+    }
+
+    .sd-section {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .sd-section-title {
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      padding: 6px 10px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.04);
+      border-left: 3px solid var(--primary);
+      color: #fff;
+    }
+
+    .sd-section-title.title-waktu { border-left-color: var(--gold); }
+    .sd-section-title.title-kalender { border-left-color: var(--success); }
+    .sd-section-title.title-relatif { border-left-color: var(--purple); }
+
+    .sd-session-list {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .sd-item {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 9px 12px;
+      border-radius: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .sd-item:hover {
+      background: rgba(56, 189, 248, 0.12);
+      border-color: rgba(56, 189, 248, 0.35);
+      transform: translateX(3px);
+    }
+
+    .sd-item.active {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.22) 0%, rgba(14, 165, 233, 0.15) 100%);
+      border-color: var(--primary);
+      box-shadow: 0 0 12px var(--primary-glow);
+    }
+
+    .sd-item-left {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .sd-item-title {
+      font-size: 12px;
+      font-weight: 800;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sd-item.active .sd-item-title { color: var(--primary); }
+
+    .sd-item-samples {
+      font-size: 10px;
+      color: var(--text-sub);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sd-item-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+      margin-left: 8px;
+    }
+
+    .sd-count-badge {
+      font-size: 9.5px;
+      font-weight: 700;
+      color: var(--text-sub);
+      background: rgba(255, 255, 255, 0.06);
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+
+    .sd-star-tag {
+      font-size: 9.5px;
+      font-weight: 800;
       color: var(--gold);
+      background: rgba(251, 191, 36, 0.12);
+      padding: 2px 7px;
+      border-radius: 6px;
+      border: 1px solid rgba(251, 191, 36, 0.3);
+    }
+
+    .sb-nav-footer {
+      padding: 12px 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(13, 22, 45, 0.5);
+    }
+
+    .sb-footer-title {
+      font-size: 9.5px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
     }
 
     .sb-menu-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
     }
 
     .sb-menu-item {
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 10px 12px;
-      border-radius: 12px;
+      gap: 6px;
+      padding: 7px 10px;
+      border-radius: 8px;
       color: var(--text-sub);
       text-decoration: none;
-      font-size: 13px;
+      font-size: 11px;
       font-weight: 700;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
       transition: all 0.15s ease;
     }
 
     .sb-menu-item:hover {
       background: rgba(56, 189, 248, 0.12);
       color: #fff;
-    }
-
-    .sb-menu-item.active {
-      background: rgba(56, 189, 248, 0.2);
-      color: var(--primary);
+      border-color: rgba(56, 189, 248, 0.3);
     }
 
     /* ANIMATIONS */
@@ -1524,73 +1622,33 @@
       </div>
     </div>
 
-    <!-- MASTER TWO-TAB HEADER -->
+    <!-- MASTER THREE-TAB HEADER (OPSI 2A: ZERO SUB-TABS) -->
     <div class="master-tab-bar">
-      <button type="button" class="master-tab-btn active" id="btn-tab-learn" onclick="Modul.switchMasterTab('learn')">
+      <button type="button" class="master-tab-btn active" id="btn-tab-fc" onclick="Modul.switchMainMode('fc')">
         <span>🎴</span>
-        <span>Belajar & Eksplorasi</span>
+        <span>Flashcard Kata</span>
       </button>
-      <button type="button" class="master-tab-btn" id="btn-tab-quiz" onclick="Modul.switchMasterTab('quiz')">
+      <button type="button" class="master-tab-btn" id="btn-tab-tools" onclick="Modul.switchMainMode('tools')">
+        <span>🛠️</span>
+        <span>Lab Alat Interaktif</span>
+      </button>
+      <button type="button" class="master-tab-btn" id="btn-tab-quiz" onclick="Modul.switchMainMode('quiz')">
         <span>🎯</span>
         <span>Arena Kuis</span>
       </button>
     </div>
 
-    <!-- SECTION 1: BELAJAR & EKSPLORASI -->
-    <div id="sec-learn">
-      <!-- 4 Category Selector Buttons -->
-      <div class="category-selector-row">
-        <button type="button" class="cat-btn active" id="cat-btn-angka" onclick="Modul.switchCategory('angka')">
-          <span class="cat-icon">🔢</span>
-          <span>Bilangan</span>
-        </button>
-        <button type="button" class="cat-btn" id="cat-btn-waktu" onclick="Modul.switchCategory('waktu')">
-          <span class="cat-icon">⏰</span>
-          <span>Jam & Menit</span>
-        </button>
-        <button type="button" class="cat-btn" id="cat-btn-kalender" onclick="Modul.switchCategory('kalender')">
-          <span class="cat-icon">📅</span>
-          <span>Kalender</span>
-        </button>
-        <button type="button" class="cat-btn" id="cat-btn-relatif" onclick="Modul.switchCategory('relatif')">
-          <span class="cat-icon">⏳</span>
-          <span>Relatif</span>
+    <!-- SECTION 1: FLASHCARD KATA (HERO STAGE) -->
+    <div id="sec-fc">
+      <!-- Clean Single Session Control Bar (Identik Kata Kerja) -->
+      <div class="session-nav-bar">
+        <button type="button" class="active-session-indicator" id="active-session-indicator" onclick="Modul.openSidebar()" title="Klik untuk membuka daftar sesi (278 Kosakata)">
+          <span class="asi-menu-icon">☰</span>
+          <span class="asi-dot"></span>
+          <span class="asi-title" id="active-session-label">🔢 Sesi 1: 0 ~ 10 (Angka Dasar)</span>
+          <span class="asi-caret">▾</span>
         </button>
       </div>
-
-      <!-- Unified Session Indicator Pill with Dropdown -->
-      <div class="session-bar-wrap" style="margin-top: 8px;">
-        <div class="session-indicator-pill" id="session-indicator-pill" onclick="Modul.toggleSessionDropdown(event)">
-          <div class="sip-left">
-            <span class="sip-icon" id="sip-category-icon">🔢</span>
-            <span class="sip-title" id="sip-session-title">Sesi 1: Angka Dasar 0 - 10</span>
-          </div>
-          <span class="sip-caret" id="sip-caret">▾</span>
-        </div>
-        <div class="session-dropdown-menu hidden" id="session-dropdown-menu" onclick="event.stopPropagation()">
-          <!-- Populated via JS -->
-        </div>
-      </div>
-
-      <!-- Narasi / Rule Box -->
-      <div class="narasi-box" id="narasi-box" style="margin-top: 8px;">
-        <!-- Populated via JS -->
-      </div>
-
-      <!-- Tool Mode Switcher Row -->
-      <div class="tool-launcher-row" style="margin-top: 8px;">
-        <button type="button" class="btn-tool-toggle active" id="btn-view-fc" onclick="Modul.switchViewMode('fc')">
-          <span>🎴</span>
-          <span>Flashcard Kartu</span>
-        </button>
-        <button type="button" class="btn-tool-toggle" id="btn-view-tools" onclick="Modul.switchViewMode('tools')">
-          <span>🛠️</span>
-          <span id="tool-toggle-label">Lab Alat Interaktif</span>
-        </button>
-      </div>
-
-      <!-- MAIN FLASHCARD HERO STAGE -->
-      <div id="sub-fc-view" style="margin-top: 8px;">
         <div class="dojo-arena-card" id="fc-arena-card">
           <div class="fc-header-bar">
             <span class="fc-counter-label">KATA <b id="fc-counter-current">1</b> / <span
@@ -1622,17 +1680,23 @@
         </div>
       </div>
 
-      <!-- INTERACTIVE TOOLS PANEL -->
-      <div id="sub-tools-view" class="hidden" style="margin-top: 8px;">
-        <div class="tools-panel">
-          <div class="tools-nav-row">
-            <button type="button" class="tool-tab-btn active" id="tab-tool-clock" onclick="Modul.switchTool('clock')">⏰
-              Jam Interaktif</button>
-            <button type="button" class="tool-tab-btn" id="tab-tool-cal" onclick="Modul.switchTool('cal')">📅 Kalender
-              1-31</button>
-            <button type="button" class="tool-tab-btn" id="tab-tool-conv" onclick="Modul.switchTool('conv')">🔢
-              Konverter Angka</button>
-          </div>
+    <!-- SECTION 2: LAB ALAT INTERAKTIF -->
+    <div id="sec-tools" class="hidden">
+      <!-- 3 Segmented Tool Buttons -->
+      <div class="tools-segmented-bar">
+        <button type="button" class="tool-seg-btn active" id="tab-tool-clock" onclick="Modul.switchTool('clock')">
+          <span>⏰</span>
+          <span>Jam & Menit</span>
+        </button>
+        <button type="button" class="tool-seg-btn" id="tab-tool-cal" onclick="Modul.switchTool('cal')">
+          <span>📅</span>
+          <span>Kalender 1-31</span>
+        </button>
+        <button type="button" class="tool-seg-btn" id="tab-tool-conv" onclick="Modul.switchTool('conv')">
+          <span>🔢</span>
+          <span>Konverter Angka</span>
+        </button>
+      </div>
 
           <!-- TOOL 1: CLOCK BUILDER -->
           <div id="tool-clock-content">
@@ -1723,10 +1787,8 @@
             </div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <!-- SECTION 2: ARENA KUIS -->
+    <!-- SECTION 3: ARENA KUIS -->
     <div id="sec-quiz" class="hidden">
       <div class="dojo-arena-card">
         <div class="quiz-top-bar">
@@ -1897,17 +1959,33 @@
     </div>
   </div>
 
-  <!-- SIDEBAR DRAWER -->
+  <!-- SIDEBAR DRAWER (DAFTAR SESI & MATERI) -->
   <div class="sidebar-overlay" id="sidebar-overlay" onclick="Modul.closeSidebar()"></div>
   <div class="sidebar-drawer" id="sidebar-drawer">
-    <div class="sb-brand">YOMIKATA <span>// N5</span></div>
-    <div class="sb-menu-list">
-      <a class="sb-menu-item" href="index.html">🏠 Beranda Modul</a>
-      <a class="sb-menu-item" href="kata kerja.html">🏃🏻‍♂️ Modul Kata Kerja (Doushi)</a>
-      <a class="sb-menu-item" href="kata sifat.html">🏷️ Modul Kata Sifat (Keiyoushi)</a>
-      <a class="sb-menu-item" href="kanji.html">🈶 Modul Kanji N5/N4</a>
-      <a class="sb-menu-item active" href="nomor.html">🕒 Bilangan, Waktu & Kalender</a>
-      <a class="sb-menu-item" href="admin.html">⚙️ Pengaturan & Admin</a>
+    <div class="sd-header">
+      <div class="sd-title-wrap">
+        <span class="sd-icon">📚</span>
+        <div>
+          <div class="sd-title">Daftar Sesi & Materi</div>
+          <div class="sd-subtitle">278 Kosakata Bilangan, Waktu & Kalender</div>
+        </div>
+      </div>
+      <button type="button" class="btn-sd-close" onclick="Modul.closeSidebar()" title="Tutup">✕</button>
+    </div>
+
+    <div class="sd-body" id="sd-body-content">
+      <!-- Generated dynamically via renderSidebarContent -->
+    </div>
+
+    <!-- Quick Navigation to Other Modules -->
+    <div class="sb-nav-footer">
+      <div class="sb-footer-title">PINTASAN MODUL LAIN</div>
+      <div class="sb-menu-list">
+        <a class="sb-menu-item" href="index.html">🏠 Beranda</a>
+        <a class="sb-menu-item" href="kata kerja.html">🏃🏻‍♂️ Kata Kerja</a>
+        <a class="sb-menu-item" href="kata sifat.html">🏷️ Kata Sifat</a>
+        <a class="sb-menu-item" href="kanji.html">🈶 Kanji N5/N4</a>
+      </div>
     </div>
   </div>
 
@@ -3884,11 +3962,10 @@
 
     // MAIN APP CONTROLLER
     const Modul = {
-      activeTab: 'learn',         // 'learn' or 'quiz'
+      mainMode: 'fc',             // 'fc', 'tools', 'quiz'
       activeCategory: 'angka',    // 'angka', 'waktu', 'kalender', 'relatif'
       activeSesi: 0,
       cardIdx: 0,
-      viewMode: 'fc',             // 'fc' or 'tools'
       activeTool: 'clock',        // 'clock', 'cal', 'conv'
 
       // Clock widget state
@@ -3916,36 +3993,38 @@
       init: function () {
         this.loadMastery();
         this.loadActiveArray();
-        this.renderCategoryUI();
+        this.updateActiveSessionUI();
+        this.renderSidebarContent();
         this.renderFC();
         this.initCalendarTool();
         this.updateClockWidget();
         this.bindKeyboardShortcuts();
         this.updateMasteryCounter();
+        this.switchMainMode('fc');
       },
 
-      getCategoryData: function () {
-        if (this.activeCategory === 'angka') {
-          const page = Pages_Angka[this.activeSesi] || Pages_Angka[0];
+      getCategoryData: function (catKey = this.activeCategory, sesiIdx = this.activeSesi) {
+        if (catKey === 'angka') {
+          const page = Pages_Angka[sesiIdx] || Pages_Angka[0];
           const items = DB_Angka[page.key] || [];
-          return { pages: Pages_Angka, items, icon: '🔢', name: 'Bilangan' };
+          return { pages: Pages_Angka, items, icon: '🔢', name: 'Bilangan', key: 'angka' };
         }
-        if (this.activeCategory === 'waktu') {
-          const page = Pages_Waktu[this.activeSesi] || Pages_Waktu[0];
+        if (catKey === 'waktu') {
+          const page = Pages_Waktu[sesiIdx] || Pages_Waktu[0];
           const items = DB_Waktu.filter(i => page.groups.includes(i.grp));
-          return { pages: Pages_Waktu, items, icon: '⏰', name: 'Jam & Menit' };
+          return { pages: Pages_Waktu, items, icon: '⏰', name: 'Jam & Menit', key: 'waktu' };
         }
-        if (this.activeCategory === 'kalender') {
-          const page = Pages_Kalender[this.activeSesi] || Pages_Kalender[0];
+        if (catKey === 'kalender') {
+          const page = Pages_Kalender[sesiIdx] || Pages_Kalender[0];
           const items = DB_Kalender.filter(i => page.groups.includes(i.grp));
-          return { pages: Pages_Kalender, items, icon: '📅', name: 'Kalender' };
+          return { pages: Pages_Kalender, items, icon: '📅', name: 'Kalender', key: 'kalender' };
         }
-        if (this.activeCategory === 'relatif') {
-          const page = Pages_Relatif[this.activeSesi] || Pages_Relatif[0];
+        if (catKey === 'relatif') {
+          const page = Pages_Relatif[sesiIdx] || Pages_Relatif[0];
           const items = DB_Relatif.filter(i => page.groups.includes(i.grp));
-          return { pages: Pages_Relatif, items, icon: '⏳', name: 'Waktu Relatif' };
+          return { pages: Pages_Relatif, items, icon: '⏳', name: 'Waktu Relatif', key: 'relatif' };
         }
-        return { pages: [], items: [], icon: '🔢', name: '' };
+        return { pages: [], items: [], icon: '🔢', name: '', key: '' };
       },
 
       loadActiveArray: function () {
@@ -3954,92 +4033,107 @@
         if (this.cardIdx >= this.activeArray.length) this.cardIdx = 0;
       },
 
-      switchMasterTab: function (tab) {
+      switchMainMode: function (mode) {
         this.playSfx('tap');
-        this.activeTab = tab;
-        document.getElementById('btn-tab-learn').classList.toggle('active', tab === 'learn');
-        document.getElementById('btn-tab-quiz').classList.toggle('active', tab === 'quiz');
-        document.getElementById('sec-learn').classList.toggle('hidden', tab !== 'learn');
-        document.getElementById('sec-quiz').classList.toggle('hidden', tab !== 'quiz');
+        this.mainMode = mode;
+        const modes = ['fc', 'tools', 'quiz'];
+        modes.forEach(m => {
+          const btn = document.getElementById('btn-tab-' + m);
+          const sec = document.getElementById('sec-' + m);
+          if (btn) btn.classList.toggle('active', m === mode);
+          if (sec) sec.classList.toggle('hidden', m !== mode);
+        });
 
-        if (tab === 'quiz') {
+        if (mode === 'quiz') {
           this.activeQuizData = this.generateQuizQuestions();
           this.idxQuiz = 0;
           this.scoreQuiz = 0;
           this.renderQuiz(true);
+        } else if (mode === 'fc') {
+          this.renderFC();
         }
       },
 
-      switchCategory: function (cat) {
-        this.playSfx('tap');
-        this.activeCategory = cat;
-        this.activeSesi = 0;
-        this.cardIdx = 0;
-        this.renderCategoryUI();
-        this.loadActiveArray();
-        this.renderFC();
-      },
-
-      renderCategoryUI: function () {
-        ['angka', 'waktu', 'kalender', 'relatif'].forEach(c => {
-          const btn = document.getElementById('cat-btn-' + c);
-          if (btn) btn.classList.toggle('active', c === this.activeCategory);
-        });
-
+      updateActiveSessionUI: function () {
         const data = this.getCategoryData();
         const curPage = data.pages[this.activeSesi] || data.pages[0];
-
-        document.getElementById('sip-category-icon').innerText = data.icon;
-        document.getElementById('sip-session-title').innerText = curPage.title;
-
-        const narasiBox = document.getElementById('narasi-box');
-        if (narasiBox) narasiBox.innerHTML = curPage.narasi || '';
-
-        // Render dropdown menu items
-        const menuEl = document.getElementById('session-dropdown-menu');
-        if (menuEl) {
-          menuEl.innerHTML = data.pages.map((p, idx) => `
-        <div class="sd-item ${idx === this.activeSesi ? 'active' : ''}" onclick="Modul.selectSession(${idx})">
-          <span>${data.icon}</span>
-          <span>${p.title}</span>
-        </div>
-      `).join('');
+        const lbl = document.getElementById('active-session-label');
+        if (lbl && curPage) {
+          lbl.innerText = `${data.icon} ${curPage.title}`;
         }
       },
 
-      toggleSessionDropdown: function (e) {
-        if (e) e.stopPropagation();
-        this.playSfx('tap');
-        const pill = document.getElementById('session-indicator-pill');
-        const menu = document.getElementById('session-dropdown-menu');
-        pill.classList.toggle('open');
-        menu.classList.toggle('hidden');
+      renderSidebarContent: function () {
+        const container = document.getElementById('sd-body-content');
+        if (!container) return;
+
+        const categories = [
+          { key: 'angka', name: 'Bilangan (Angka)', icon: '🔢', pages: Pages_Angka, titleCls: '' },
+          { key: 'waktu', name: 'Jam, Menit & Detik', icon: '⏰', pages: Pages_Waktu, titleCls: 'title-waktu' },
+          { key: 'kalender', name: 'Hari, Tanggal, Bulan & Tahun', icon: '📅', pages: Pages_Kalender, titleCls: 'title-kalender' },
+          { key: 'relatif', name: 'Keterangan Waktu Relatif', icon: '⏳', pages: Pages_Relatif, titleCls: 'title-relatif' }
+        ];
+
+        let html = '';
+
+        categories.forEach(cat => {
+          let catTotal = 0;
+          let catMastered = 0;
+
+          const sessionData = cat.pages.map((p, idx) => {
+            let items = [];
+            if (cat.key === 'angka') items = DB_Angka[p.key] || [];
+            else if (cat.key === 'waktu') items = DB_Waktu.filter(i => p.groups.includes(i.grp));
+            else if (cat.key === 'kalender') items = DB_Kalender.filter(i => p.groups.includes(i.grp));
+            else if (cat.key === 'relatif') items = DB_Relatif.filter(i => p.groups.includes(i.grp));
+
+            const mCount = items.filter(i => this.masteredList.includes(i.k)).length;
+            catTotal += items.length;
+            catMastered += mCount;
+            const samples = items.slice(0, 3).map(i => i.k).join(' · ');
+            const isActive = (this.activeCategory === cat.key && this.activeSesi === idx);
+
+            return { title: p.title, items, mCount, samples, isActive, idx };
+          });
+
+          html += `
+          <div class="sd-section">
+            <div class="sd-section-title ${cat.titleCls}">
+              <span>${cat.icon} ${cat.name}</span>
+              <span style="font-size:10px; color:var(--text-sub); font-weight:700;">${catMastered}/${catTotal}</span>
+            </div>
+            <div class="sd-session-list">
+              ${sessionData.map(s => `
+                <div class="sd-item ${s.isActive ? 'active' : ''}" onclick="Modul.selectSessionFromSidebar('${cat.key}', ${s.idx})">
+                  <div class="sd-item-left">
+                    <div class="sd-item-title">${s.title}</div>
+                    <div class="sd-item-samples">${s.samples || '...'}</div>
+                  </div>
+                  <div class="sd-item-right">
+                    <span class="sd-count-badge">${s.items.length} kata</span>
+                    ${s.mCount > 0 ? `<span class="sd-star-tag">⭐ ${s.mCount}</span>` : ''}
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+          `;
+        });
+
+        container.innerHTML = html;
       },
 
-      closeSessionDropdown: function () {
-        const pill = document.getElementById('session-indicator-pill');
-        const menu = document.getElementById('session-dropdown-menu');
-        if (pill) pill.classList.remove('open');
-        if (menu) menu.classList.add('hidden');
-      },
-
-      selectSession: function (idx) {
+      selectSessionFromSidebar: function (catKey, idx) {
         this.playSfx('tap');
+        this.activeCategory = catKey;
         this.activeSesi = idx;
         this.cardIdx = 0;
-        this.closeSessionDropdown();
-        this.renderCategoryUI();
         this.loadActiveArray();
+        this.updateActiveSessionUI();
+        this.renderSidebarContent();
         this.renderFC();
-      },
-
-      switchViewMode: function (mode) {
-        this.playSfx('tap');
-        this.viewMode = mode;
-        document.getElementById('btn-view-fc').classList.toggle('active', mode === 'fc');
-        document.getElementById('btn-view-tools').classList.toggle('active', mode === 'tools');
-        document.getElementById('sub-fc-view').classList.toggle('hidden', mode !== 'fc');
-        document.getElementById('sub-tools-view').classList.toggle('hidden', mode !== 'tools');
+        this.switchMainMode('fc');
+        this.closeSidebar();
       },
 
       switchTool: function (tool) {
@@ -4128,6 +4222,7 @@
         localStorage.setItem('yk_suji_mastered', JSON.stringify(this.masteredList));
         this.renderFC('none');
         this.updateMasteryCounter();
+        this.renderSidebarContent();
       },
 
       loadMastery: function () {
@@ -4758,10 +4853,9 @@
             this.closeCheatsheet();
             this.closeQuizConfigModal();
             this.closeSidebar();
-            this.closeSessionDropdown();
             return;
           }
-          if (this.activeTab === 'learn' && this.viewMode === 'fc') {
+          if (this.mainMode === 'fc') {
             if (e.key === ' ' || e.key === 'Enter') {
               e.preventDefault();
               this.nextCard();
@@ -4774,7 +4868,6 @@
         });
 
         document.addEventListener('click', () => {
-          this.closeSessionDropdown();
           const dd = document.getElementById('drill-dropdown-menu');
           if (dd) dd.classList.add('hidden');
         });
