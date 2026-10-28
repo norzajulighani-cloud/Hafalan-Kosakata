@@ -57,6 +57,7 @@
       text-rendering: optimizeLegibility;
     }
 
+    /* GPU-Accelerated Fixed Ambient Background (Symmetrical & Zero Vignette Smudge) */
     body::before {
       content: '';
       position: fixed;
@@ -68,10 +69,14 @@
       pointer-events: none;
       background-color: var(--bg-base);
       background-image:
-        radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.12) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(251, 191, 36, 0.08) 0px, transparent 50%),
-        radial-gradient(at 50% 50%, rgba(13, 22, 45, 0.5) 0px, transparent 100%);
-      transform: translateZ(0);
+        radial-gradient(circle at 50% 0%, rgba(30, 58, 138, 0.38) 0%, transparent 60%),
+        radial-gradient(circle at 10% 35%, rgba(192, 132, 252, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 90% 70%, rgba(56, 189, 248, 0.12) 0%, transparent 40%),
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 100% 100%, 36px 36px, 36px 36px;
+      transform: translate3d(0, 0, 0);
+      will-change: transform;
     }
 
     .container {
@@ -1695,8 +1700,6 @@
         </div>
       </div>
       <div class="nav-right-group">
-        <button type="button" class="btn-nav-icon" id="btn-sound-toggle" onclick="Modul.toggleSound()"
-          title="Efek Suara">🔊</button>
         <button type="button" class="btn-nav-icon" onclick="Modul.openCheatsheet()" title="Panduan Rumus">💡</button>
         <button type="button" class="btn-nav-icon" onclick="Modul.openSidebar()" title="Menu">☰</button>
       </div>
