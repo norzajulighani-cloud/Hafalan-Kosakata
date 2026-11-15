@@ -43,6 +43,11 @@
       -webkit-tap-highlight-color: transparent;
     }
 
+    html {
+      background-color: var(--bg-base);
+      overflow-x: hidden;
+    }
+
     body {
       font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
       background-color: var(--bg-base);
@@ -57,7 +62,7 @@
       text-rendering: optimizeLegibility;
     }
 
-    /* GPU-Accelerated Fixed Ambient Background (Symmetrical & Zero Vignette Smudge) */
+    /* GPU-Accelerated Fixed Ambient Background (100% Symmetrical Center & Zero Vignette Smudge) */
     body::before {
       content: '';
       position: fixed;
@@ -69,11 +74,11 @@
       pointer-events: none;
       background-color: var(--bg-base);
       background-image:
-        radial-gradient(circle at 50% 0%, rgba(30, 58, 138, 0.38) 0%, transparent 60%),
-        radial-gradient(circle at 10% 35%, rgba(192, 132, 252, 0.12) 0%, transparent 40%),
-        radial-gradient(circle at 90% 70%, rgba(56, 189, 248, 0.12) 0%, transparent 40%),
-        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        radial-gradient(circle at 50% 0%, rgba(30, 58, 138, 0.38) 0%, transparent 70%),
+        radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.08) 0%, transparent 65%),
+        radial-gradient(circle at 50% 100%, rgba(13, 22, 45, 0.6) 0%, transparent 70%),
+        linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
       background-size: 100% 100%, 100% 100%, 100% 100%, 36px 36px, 36px 36px;
       transform: translate3d(0, 0, 0);
       will-change: transform;
@@ -158,6 +163,22 @@
     .mastery-counter-pill b {
       color: #fff;
       font-weight: 800;
+    }
+
+    .mastery-progress-track {
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 0 0 4px 0;
+    }
+
+    .mastery-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--primary) 0%, var(--gold) 100%);
+      transition: width 0.4s ease;
     }
 
     .nav-right-group {
@@ -497,6 +518,116 @@
       background: rgba(255, 255, 255, 0.04);
       padding: 5px 10px;
       border-radius: 8px;
+    }
+
+    /* CONTEXT SENTENCE SHELF (Identik Kata Kerja - Visual & UX Kaya) */
+    .fc-sentence-shelf {
+      width: 100%;
+      margin-top: 10px;
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 12px 14px;
+      text-align: left;
+      transition: all 0.25s ease;
+    }
+
+    .fc-sentence-shelf:hover {
+      border-color: rgba(56, 189, 248, 0.35);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .fss-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .fss-badge-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .fss-badge {
+      font-size: 10px;
+      font-weight: 900;
+      color: var(--primary);
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+
+    .fss-form-pill {
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: var(--primary);
+      font-size: 9.5px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+
+    .btn-sentence-audio {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-glass);
+      color: var(--primary);
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .btn-sentence-audio:hover {
+      background: var(--primary);
+      color: #000;
+      transform: scale(1.08);
+    }
+
+    .btn-sentence-audio:active {
+      transform: scale(0.92);
+    }
+
+    .fss-jp {
+      font-family: 'Noto Serif JP', 'Noto Sans JP', serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.45;
+      transition: all 0.2s ease;
+    }
+
+    .sent-hl-num {
+      color: var(--gold);
+      background: rgba(251, 191, 36, 0.16);
+      padding: 1px 6px;
+      border-radius: 4px;
+      border-bottom: 1.5px solid var(--gold);
+      font-weight: 800;
+    }
+
+    .fss-romaji {
+      font-size: 11.5px;
+      color: var(--text-sub);
+      font-style: italic;
+      margin-top: 3px;
+      line-height: 1.35;
+    }
+
+    .fss-id {
+      font-size: 13px;
+      color: #cbd5e1;
+      margin-top: 3px;
+      font-weight: 600;
+      line-height: 1.35;
     }
 
     .dojo-nav-controls {
@@ -1401,24 +1532,78 @@
       font-weight: 900;
       letter-spacing: 0.8px;
       text-transform: uppercase;
-      padding: 6px 10px;
+      padding: 7px 10px;
       border-radius: 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       background: rgba(255, 255, 255, 0.04);
-      border-left: 3px solid var(--primary);
+      border-left: 3.5px solid var(--primary);
       color: #fff;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s ease;
     }
 
+    .sd-section-title:hover {
+      background: rgba(255, 255, 255, 0.08);
+      filter: brightness(1.1);
+    }
+
+    .sd-title-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .sd-acc-arrow {
+      font-size: 10px;
+      color: var(--primary);
+      display: inline-block;
+      width: 12px;
+      text-align: center;
+    }
+
+    .sd-title-badge {
+      font-size: 10px;
+      color: var(--text-sub);
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 1px 7px;
+      border-radius: 10px;
+    }
+
+    .sd-section-title.title-hitung { border-left-color: var(--primary); }
+    .sd-section-title.title-hitung .sd-acc-arrow { color: var(--primary); }
+
     .sd-section-title.title-waktu { border-left-color: var(--gold); }
+    .sd-section-title.title-waktu .sd-acc-arrow { color: var(--gold); }
+
     .sd-section-title.title-kalender { border-left-color: var(--success); }
+    .sd-section-title.title-kalender .sd-acc-arrow { color: var(--success); }
+
     .sd-section-title.title-relatif { border-left-color: var(--purple); }
+    .sd-section-title.title-relatif .sd-acc-arrow { color: var(--purple); }
 
     .sd-session-list {
       display: flex;
       flex-direction: column;
       gap: 5px;
+      overflow: hidden;
+      transition: max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+    }
+
+    .sd-section.is-collapsed .sd-session-list {
+      max-height: 0 !important;
+      opacity: 0;
+      pointer-events: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .sd-section.is-open .sd-session-list {
+      max-height: 1200px;
+      opacity: 1;
     }
 
     .sd-item {
@@ -1696,13 +1881,17 @@
         <a class="btn-nav-icon" href="index.html" title="Kembali ke Beranda">🏠</a>
         <div class="mastery-counter-pill" id="nav-mastery-pill">
           <span>⭐</span>
-          <span>Dikuasai: <b id="mastery-count-text">0</b> / 278</span>
+          <span>Dikuasai: <b id="mastery-count-text">0</b> / <span id="mastery-total-text">389</span></span>
         </div>
       </div>
       <div class="nav-right-group">
         <button type="button" class="btn-nav-icon" onclick="Modul.openCheatsheet()" title="Panduan Rumus">💡</button>
-        <button type="button" class="btn-nav-icon" onclick="Modul.openSidebar()" title="Menu">☰</button>
       </div>
+    </div>
+
+    <!-- REAL-TIME MASTERY PROGRESS TRACK -->
+    <div class="mastery-progress-track">
+      <div class="mastery-progress-fill" id="mastery-progress-fill"></div>
     </div>
 
     <!-- MASTER THREE-TAB HEADER (OPSI 2A: ZERO SUB-TABS) -->
@@ -1725,11 +1914,11 @@
     <div id="sec-fc">
       <!-- Clean Single Session Control Bar (Identik Kata Kerja) -->
       <div class="session-nav-bar">
-        <button type="button" class="active-session-indicator" id="active-session-indicator" onclick="Modul.openSidebar()" title="Klik untuk membuka daftar sesi (278 Kosakata)">
+        <button type="button" class="active-session-indicator" id="active-session-indicator" onclick="Modul.toggleSidebar()" title="Klik untuk membuka/menutup daftar sesi materi">
           <span class="asi-menu-icon">☰</span>
           <span class="asi-dot"></span>
           <span class="asi-title" id="active-session-label">🔢 Sesi 1: 0 ~ 10 (Angka Dasar)</span>
-          <span class="asi-caret">▾</span>
+          <span class="asi-caret" id="active-session-caret">▾</span>
         </button>
       </div>
         <div class="dojo-arena-card" id="fc-arena-card">
@@ -1753,6 +1942,20 @@
             <div class="fc-arti-main" id="fc-arti-text">1 (Satu)</div>
             <div class="fc-alert-box hidden" id="fc-alert-box"></div>
             <div class="fc-note-box hidden" id="fc-note-box"></div>
+          </div>
+
+          <!-- Interactive Sentence & Context Shelf (Identik Kata Kerja) -->
+          <div class="fc-sentence-shelf" id="fc-sentence-shelf">
+            <div class="fss-top">
+              <div class="fss-badge-wrap">
+                <span class="fss-badge">💬 CONTOH PENGGUNAAN</span>
+                <span class="fss-form-pill" id="fss-form-pill">Konteks N5</span>
+              </div>
+              <button type="button" class="btn-sentence-audio" id="btn-sentence-audio" onclick="Modul.speakCurrentSentence()" title="Dengarkan Contoh Kalimat">🔊</button>
+            </div>
+            <div class="fss-jp" id="fss-jp-text">...</div>
+            <div class="fss-romaji" id="fss-ro-text">...</div>
+            <div class="fss-id" id="fss-id-text">...</div>
           </div>
 
           <div class="dojo-nav-controls">
@@ -2027,14 +2230,11 @@
         <button type="button" class="btn-cs-close" onclick="Modul.closeCheatsheet()">✕</button>
       </div>
       <div class="cs-tab-row">
-        <button type="button" class="cs-tab-btn active" id="cstab-angka" onclick="Modul.switchCSTab('angka')">🔢
-          Bilangan</button>
-        <button type="button" class="cs-tab-btn" id="cstab-waktu" onclick="Modul.switchCSTab('waktu')">⏰ Jam &
-          Menit</button>
-        <button type="button" class="cs-tab-btn" id="cstab-kalender" onclick="Modul.switchCSTab('kalender')">📅
-          Tanggal</button>
-        <button type="button" class="cs-tab-btn" id="cstab-relatif" onclick="Modul.switchCSTab('relatif')">⏳ Waktu
-          Relatif</button>
+        <button type="button" class="cs-tab-btn active" id="cstab-angka" onclick="Modul.switchCSTab('angka')">🔢 Bilangan</button>
+        <button type="button" class="cs-tab-btn" id="cstab-hitung" onclick="Modul.switchCSTab('hitung')">📦 Satuan Hitung</button>
+        <button type="button" class="cs-tab-btn" id="cstab-waktu" onclick="Modul.switchCSTab('waktu')">⏰ Jam & Menit</button>
+        <button type="button" class="cs-tab-btn" id="cstab-kalender" onclick="Modul.switchCSTab('kalender')">📅 Tanggal</button>
+        <button type="button" class="cs-tab-btn" id="cstab-relatif" onclick="Modul.switchCSTab('relatif')">⏳ Waktu Relatif</button>
       </div>
       <div class="cs-body" id="cs-body-content">
         <!-- Populated via JS -->
@@ -2050,7 +2250,7 @@
         <span class="sd-icon">📚</span>
         <div>
           <div class="sd-title">Daftar Sesi & Materi</div>
-          <div class="sd-subtitle">278 Kosakata Bilangan, Waktu & Kalender</div>
+          <div class="sd-subtitle" id="sd-total-subtitle">389 Kosakata Bilangan, Satuan & Waktu</div>
         </div>
       </div>
       <button type="button" class="btn-sd-close" onclick="Modul.closeSidebar()" title="Tutup">✕</button>
@@ -2518,6 +2718,121 @@
         }
       ]
     };
+
+    const DB_Hitung = [
+      {"k": "一つ", "r": "ひとつ", "ro": "hitotsu", "a": "1 buah", "grp": "tsu", "ex_jp": "リンゴを<span class=\"sent-hl-num\">一つ</span>ください。", "ex_ro": "Ringo o hitotsu kudasai.", "ex_id": "Tolong beri saya satu buah apel."},
+      {"k": "二つ", "r": "ふたつ", "ro": "futatsu", "a": "2 buah", "grp": "tsu", "ex_jp": "みかんを<span class=\"sent-hl-num\">二つ</span>食べました。", "ex_ro": "Mikan o futatsu tabemashita.", "ex_id": "Saya makan dua buah jeruk mandarin."},
+      {"k": "三つ", "r": "みっつ", "ro": "mittsu", "a": "3 buah", "grp": "tsu", "ex_jp": "パンを<span class=\"sent-hl-num\">三つ</span>買いました。", "ex_ro": "Pan o mittsu kaimashita.", "ex_id": "Saya membeli tiga buah roti."},
+      {"k": "四つ", "r": "よっつ", "ro": "yottsu", "a": "4 buah", "grp": "tsu", "ex_jp": "角を<span class=\"sent-hl-num\">四つ</span>曲がります。", "ex_ro": "Kado o yottsu magarimasu.", "ex_id": "Belok di empat sudut jalan."},
+      {"k": "五つ", "r": "いつつ", "ro": "itsutsu", "a": "5 buah", "grp": "tsu", "ex_jp": "トマトを<span class=\"sent-hl-num\">五つ</span>選びました。", "ex_ro": "Tomato o itsutsu erabimashita.", "ex_id": "Saya memilih lima buah tomat."},
+      {"k": "六つ", "r": "むっつ", "ro": "muttsu", "a": "6 buah", "grp": "tsu", "ex_jp": "箱の中にケーキが<span class=\"sent-hl-num\">六つ</span>あります。", "ex_ro": "Hako no naka ni keeki ga muttsu arimasu.", "ex_id": "Ada enam buah kue di dalam kotak."},
+      {"k": "七つ", "r": "ななつ", "ro": "nanatsu", "a": "7 buah", "grp": "tsu", "ex_jp": "星が空に<span class=\"sent-hl-num\">七つ</span>見えます。", "ex_ro": "Hoshi ga sora ni nanatsu miemasu.", "ex_id": "Tampak tujuh buah bintang di langit."},
+      {"k": "八つ", "r": "やっつ", "ro": "yattsu", "a": "8 buah", "grp": "tsu", "ex_jp": "お菓子を<span class=\"sent-hl-num\">八つ</span>分けました。", "ex_ro": "Okashi o yattsu wakemashita.", "ex_id": "Membagikan delapan buah kue camilan."},
+      {"k": "九つ", "r": "ここのつ", "ro": "kokonotsu", "a": "9 buah", "grp": "tsu", "ex_jp": "皿の上にいちごが<span class=\"sent-hl-num\">九つ</span>あります。", "ex_ro": "Sara no ue ni ichigo ga kokonotsu arimasu.", "ex_id": "Ada sembilan buah stroberi di atas piring."},
+      {"k": "十", "r": "とお", "ro": "too", "a": "10 buah", "grp": "tsu", "note": "Tidak memakai akhiran -tsu!", "ex_jp": "たまごを<span class=\"sent-hl-num\">十</span>買いました。", "ex_ro": "Tamago o too kaimashita.", "ex_id": "Saya membeli sepuluh butir telur."},
+      {"k": "幾つ", "r": "いくつ", "ro": "ikutsu", "a": "Berapa buah?", "grp": "tsu", "ex_jp": "みかんは<span class=\"sent-hl-num\">幾つ</span>ありますか。", "ex_ro": "Mikan wa ikutsu arimasu ka.", "ex_id": "Ada berapa buah jeruk mandarin?"},
+      {"k": "一人", "r": "ひとり", "ro": "hitori", "a": "1 orang", "grp": "nin", "ex_jp": "<span class=\"sent-hl-num\">一人</span>で日本へ旅行に行きます。", "ex_ro": "Hitori de Nihon e ryokou ni ikimasu.", "ex_id": "Pergi berwisata ke Jepang sendirian (1 orang)."},
+      {"k": "二人", "r": "ふたり", "ro": "futari", "a": "2 orang", "grp": "nin", "ex_jp": "<span class=\"sent-hl-num\">二人</span>で映画を見ました。", "ex_ro": "Futari de eiga o mimashita.", "ex_id": "Menonton film berdua (2 orang)."},
+      {"k": "三人", "r": "さんにん", "ro": "sannin", "a": "3 orang", "grp": "nin", "ex_jp": "<span class=\"sent-hl-num\">三人</span>で喫茶店に入りました。", "ex_ro": "Sannin de kissaten ni hairimashita.", "ex_id": "Masuk ke kafe bertiga (3 orang)."},
+      {"k": "四人", "r": "よにん", "ro": "yonin", "a": "4 orang", "grp": "nin", "alert": "Hati-hati! Dibaca yo-nin (bukan yon-nin)", "ex_jp": "家族は<span class=\"sent-hl-num\">四人</span>です。", "ex_ro": "Kazoku wa yonin desu.", "ex_id": "Keluarga saya ada empat orang."},
+      {"k": "五人", "r": "ごにん", "ro": "gonin", "a": "5 orang", "grp": "nin", "ex_jp": "<span class=\"sent-hl-num\">五人</span>でグループを作りました。", "ex_ro": "Gonin de guruupu o tsukurimashita.", "ex_id": "Membuat kelompok beranggotakan lima orang."},
+      {"k": "六人", "r": "ろくにん", "ro": "rokunin", "a": "6 orang", "grp": "nin", "ex_jp": "部屋に学生が<span class=\"sent-hl-num\">六人</span>います。", "ex_ro": "Heya ni gakusei ga rokunin imasu.", "ex_id": "Ada enam orang siswa di dalam ruangan."},
+      {"k": "七人", "r": "しちにん", "alt": "ななにん", "ro": "shichinin", "a": "7 orang", "grp": "nin", "note": "Bisa shichinin atau nananin", "ex_jp": "チームは<span class=\"sent-hl-num\">七人</span>います。", "ex_ro": "Chiimu wa shichinin imasu.", "ex_id": "Tim kami terdiri dari tujuh orang."},
+      {"k": "八人", "r": "はちにん", "ro": "hachinin", "a": "8 orang", "grp": "nin", "ex_jp": "<span class=\"sent-hl-num\">八人</span>で晩ご飯を食べました。", "ex_ro": "Hachinin de bangohan o tabemashita.", "ex_id": "Makan malam bersama berdelapan."},
+      {"k": "九人", "r": "きゅうにん", "alt": "くにん", "ro": "kyuunin", "a": "9 orang", "grp": "nin", "ex_jp": "バスに客が<span class=\"sent-hl-num\">九人</span>乗っています。", "ex_ro": "Basu ni kyaku ga kyuunin notte imasu.", "ex_id": "Ada sembilan orang penumpang naik bus."},
+      {"k": "十人", "r": "じゅうにん", "ro": "juunin", "a": "10 orang", "grp": "nin", "ex_jp": "会議に<span class=\"sent-hl-num\">十人</span>集まりました。", "ex_ro": "Kaigi ni juunin atsumarimashita.", "ex_id": "Sepuluh orang berkumpul untuk rapat."},
+      {"k": "何人", "r": "なんにん", "ro": "nannin", "a": "Berapa orang?", "grp": "nin", "ex_jp": "教室に学生が<span class=\"sent-hl-num\">何人</span>いますか。", "ex_ro": "Kyoushitsu ni gakusei ga nannin imasu ka.", "ex_id": "Ada berapa orang siswa di kelas?"},
+      {"k": "一歳", "r": "いっさい", "ro": "issai", "a": "1 tahun (umur)", "grp": "sai", "alert": "Perubahan bunyi geminate (issai)", "ex_jp": "赤ちゃんは<span class=\"sent-hl-num\">一歳</span>になりました。", "ex_ro": "Akachan wa issai ni narimashita.", "ex_id": "Bayi itu telah berusia satu tahun."},
+      {"k": "二歳", "r": "にさい", "ro": "nisai", "a": "2 tahun (umur)", "grp": "sai", "ex_jp": "弟は<span class=\"sent-hl-num\">二歳</span>です。", "ex_ro": "Otouto wa nisai desu.", "ex_id": "Adik laki-laki saya berumur dua tahun."},
+      {"k": "三歳", "r": "さんさい", "ro": "sansai", "a": "3 tahun (umur)", "grp": "sai", "ex_jp": "妹は<span class=\"sent-hl-num\">三歳</span>です。", "ex_ro": "Imouto wa sansai desu.", "ex_id": "Adik perempuan saya berumur tiga tahun."},
+      {"k": "四歳", "r": "よんさい", "ro": "yonsai", "a": "4 tahun (umur)", "grp": "sai", "ex_jp": "子供は<span class=\"sent-hl-num\">四歳</span>になりました。", "ex_ro": "Kodomo wa yonsai ni narimashita.", "ex_id": "Anak itu genap berusia empat tahun."},
+      {"k": "五歳", "r": "ごさい", "ro": "gosai", "a": "5 tahun (umur)", "grp": "sai", "ex_jp": "甥は<span class=\"sent-hl-num\">五歳</span>で幼稚園に通っています。", "ex_ro": "Oi wa gosai de youchien ni kayotte imasu.", "ex_id": "Keponakan saya berumur 5 tahun dan bersekolah di TK."},
+      {"k": "六歳", "r": "ろくさい", "ro": "rokusai", "a": "6 tahun (umur)", "grp": "sai", "ex_jp": "<span class=\"sent-hl-num\">六歳</span>で小学校に入学します。", "ex_ro": "Rokusai de shougakkou ni nyuugaku shimasu.", "ex_id": "Masuk SD pada usia enam tahun."},
+      {"k": "七歳", "r": "ななさい", "ro": "nanasai", "a": "7 tahun (umur)", "grp": "sai", "ex_jp": "七五三で<span class=\"sent-hl-num\">七歳</span>のお祝いをします。", "ex_ro": "Shichigosan de nanasai no oiwai o shimasu.", "ex_id": "Merayakan perayaan usia 7 tahun saat festival Shichigosan."},
+      {"k": "八歳", "r": "はっさい", "ro": "hassai", "a": "8 tahun (umur)", "grp": "sai", "alert": "Perubahan bunyi geminate (hassai)", "ex_jp": "息子は今年<span class=\"sent-hl-num\">八歳</span>です。", "ex_ro": "Musuko wa kotoshi hassai desu.", "ex_id": "Anak laki-laki saya tahun ini berusia delapan tahun."},
+      {"k": "九歳", "r": "きゅうさい", "ro": "kyuusai", "a": "9 tahun (umur)", "grp": "sai", "ex_jp": "娘は<span class=\"sent-hl-num\">九歳</span>です。", "ex_ro": "Musume wa kyuusai desu.", "ex_id": "Anak perempuan saya berumur sembilan tahun."},
+      {"k": "十歳", "r": "じゅっさい", "alt": "じっさい", "ro": "jussai", "a": "10 tahun (umur)", "grp": "sai", "alert": "Perubahan bunyi geminate (jussai/jissai)", "ex_jp": "十分の一成人式で<span class=\"sent-hl-num\">十歳</span>を祝います。", "ex_ro": "1/2 seijinshiki de jussai o iwaimasu.", "ex_id": "Merayakan usia sepuluh tahun pada upacara setengah dewasa."},
+      {"k": "二十歳", "r": "はたち", "ro": "hatachi", "a": "20 tahun (dewasa)", "grp": "sai", "note": "Cara baca istimewa Jepang untuk usia 20 tahun!", "ex_jp": "来年<span class=\"sent-hl-num\">二十歳</span>になります。", "ex_ro": "Rainen hatachi ni narimasu.", "ex_id": "Tahun depan saya berusia 20 tahun (dewasa)."},
+      {"k": "何歳", "r": "なんさい", "ro": "nansai", "a": "Berapa tahun? (usia)", "grp": "sai", "note": "Bisa juga ditanyakan sopan: おいくつ (oikutsu)?", "ex_jp": "失礼ですが、お年は<span class=\"sent-hl-num\">何歳</span>ですか。", "ex_ro": "Shitsurei desu ga, otoshi wa nansai desu ka.", "ex_id": "Mohon maaf, usia Anda berapa tahun?"},
+      {"k": "一枚", "r": "いちまい", "ro": "ichimai", "a": "1 lembar/helai", "grp": "mai", "ex_jp": "紙を<span class=\"sent-hl-num\">一枚</span>取ってください。", "ex_ro": "Kami o ichimai totte kudasai.", "ex_id": "Tolong ambilkan selembar kertas."},
+      {"k": "二枚", "r": "にまい", "ro": "nimai", "a": "2 lembar/helai", "grp": "mai", "ex_jp": "シャツを<span class=\"sent-hl-num\">二枚</span>買いました。", "ex_ro": "Shatsu o nimai kaimashita.", "ex_id": "Saya membeli dua helai kemeja."},
+      {"k": "三枚", "r": "さんまい", "ro": "sanmai", "a": "3 lembar/helai", "grp": "mai", "ex_jp": "切符を<span class=\"sent-hl-num\">三枚</span>予約しました。", "ex_ro": "Kippu o sanmai yoyaku shimashita.", "ex_id": "Memesan tiga lembar tiket."},
+      {"k": "四枚", "r": "よんまい", "ro": "yonmai", "a": "4 lembar/helai", "grp": "mai", "ex_jp": "お皿を<span class=\"sent-hl-num\">四枚</span>並べてください。", "ex_ro": "Osara o yonmai narabete kudasai.", "ex_id": "Tolong susun empat buah piring."},
+      {"k": "五枚", "r": "ごまい", "ro": "gomai", "a": "5 lembar/helai", "grp": "mai", "ex_jp": "写真を<span class=\"sent-hl-num\">五枚</span>プリントしました。", "ex_ro": "Shashin o gomai purinto shimashita.", "ex_id": "Mencetak lima lembar foto."},
+      {"k": "六枚", "r": "ろくまい", "ro": "rokumai", "a": "6 lembar/helai", "grp": "mai", "ex_jp": "シールを<span class=\"sent-hl-num\">六枚</span>集めました。", "ex_ro": "Shiiru o rokumai atsumemashita.", "ex_id": "Mengumpulkan enam lembar stiker."},
+      {"k": "七枚", "r": "ななまい", "ro": "nanamai", "a": "7 lembar/helai", "grp": "mai", "ex_jp": "カードが<span class=\"sent-hl-num\">七枚</span>あります。", "ex_ro": "Kaado ga nanamai arimasu.", "ex_id": "Ada tujuh lembar kartu."},
+      {"k": "八枚", "r": "はちまい", "ro": "hachimai", "a": "8 lembar/helai", "grp": "mai", "ex_jp": "タオルを<span class=\"sent-hl-num\">八枚</span>洗いました。", "ex_ro": "Taoru o hachimai arawaimashita.", "ex_id": "Mencuci delapan helai handuk."},
+      {"k": "九枚", "r": "きゅうまい", "ro": "kyuumai", "a": "9 lembar/helai", "grp": "mai", "ex_jp": "封筒を<span class=\"sent-hl-num\">九枚</span>使いました。", "ex_ro": "Fuutou o kyuumai tsukaimashita.", "ex_id": "Menggunakan sembilan lembar amplop."},
+      {"k": "十枚", "r": "じゅうまい", "ro": "juumai", "a": "10 lembar/helai", "grp": "mai", "ex_jp": "コピーを<span class=\"sent-hl-num\">十枚</span>取りました。", "ex_ro": "Kopii o juumai torimashita.", "ex_id": "Membuat sepuluh lembar fotokopi."},
+      {"k": "何枚", "r": "なんまい", "ro": "nanmai", "a": "Berapa lembar/helai?", "grp": "mai", "ex_jp": "切符は<span class=\"sent-hl-num\">何枚</span>いりますか。", "ex_ro": "Kippu wa nanmai irimasu ka.", "ex_id": "Perlu berapa lembar tiket?"},
+      {"k": "一番", "r": "いちばん", "ro": "ichiban", "a": "Nomor 1 / paling / pertama", "grp": "ban", "ex_jp": "日本語の勉強が<span class=\"sent-hl-num\">一番</span>好きです。", "ex_ro": "Nihongo no benkyou ga ichiban suki desu.", "ex_id": "Paling suka belajar bahasa Jepang."},
+      {"k": "二番", "r": "にばん", "ro": "niban", "a": "Nomor 2 / kedua", "grp": "ban", "ex_jp": "電車は<span class=\"sent-hl-num\">二番</span>ホームに来ます。", "ex_ro": "Densha wa niban hoomu ni kimasu.", "ex_id": "Kereta tiba di peron nomor 2."},
+      {"k": "三番", "r": "さんばん", "ro": "sanban", "a": "Nomor 3 / ketiga", "grp": "ban", "ex_jp": "<span class=\"sent-hl-num\">三番</span>の窓口へお進みください。", "ex_ro": "Sanban no madoguchi e osusumi kudasai.", "ex_id": "Silakan menuju ke loket nomor 3."},
+      {"k": "四番", "r": "よんばん", "ro": "yonban", "a": "Nomor 4 / keempat", "grp": "ban", "ex_jp": "私の好きな数字は<span class=\"sent-hl-num\">四番</span>です。", "ex_ro": "Watashi no sukina suuji wa yonban desu.", "ex_id": "Angka favorit saya adalah nomor 4."},
+      {"k": "五番", "r": "ごばん", "ro": "goban", "a": "Nomor 5 / kelima", "grp": "ban", "ex_jp": "<span class=\"sent-hl-num\">五番</span>のバスに乗ってください。", "ex_ro": "Goban no basu ni notte kudasai.", "ex_id": "Silakan naik bus nomor 5."},
+      {"k": "六番", "r": "ろくばん", "ro": "rokuban", "a": "Nomor 6 / keenam", "grp": "ban", "ex_jp": "テストの問題<span class=\"sent-hl-num\">六番</span>は難しかったです。", "ex_ro": "Tesuto no mondai rokuban wa muzukashikatta desu.", "ex_id": "Soal ujian nomor 6 tadi sulit."},
+      {"k": "七番", "r": "ななばん", "ro": "nanaban", "a": "Nomor 7 / ketujuh", "grp": "ban", "ex_jp": "背番号<span class=\"sent-hl-num\">七番</span>の選手を応援します。", "ex_ro": "Sebangou nanaban no senshu o ouen shimasu.", "ex_id": "Mendukung pemain bernomor punggung 7."},
+      {"k": "八番", "r": "はちばん", "ro": "hachiban", "a": "Nomor 8 / kedelapan", "grp": "ban", "ex_jp": "<span class=\"sent-hl-num\">八番</span>線の列車が出発します。", "ex_ro": "Hachibansen no ressha ga shuppatsu shimasu.", "ex_id": "Kereta di jalur nomor 8 sedang berangkat."},
+      {"k": "九番", "r": "きゅうばん", "ro": "kyuuban", "a": "Nomor 9 / kesembilan", "grp": "ban", "ex_jp": "受付で<span class=\"sent-hl-num\">九番</span>の札をもらいました。", "ex_ro": "Uketsuke de kyuuban no fuda o moraimashita.", "ex_id": "Mendapatkan nomor antrean 9 di resepsionis."},
+      {"k": "十番", "r": "じゅうばん", "ro": "juuban", "a": "Nomor 10 / kesepuluh", "grp": "ban", "ex_jp": "この本は<span class=\"sent-hl-num\">十番</span>目の棚にあります。", "ex_ro": "Kono hon wa juuban-me no tana ni arimasu.", "ex_id": "Buku ini ada di rak nomor 10."},
+      {"k": "何番", "r": "なんばん", "ro": "nanban", "a": "Nomor berapa?", "grp": "ban", "ex_jp": "電話番号は<span class=\"sent-hl-num\">何番</span>ですか。", "ex_ro": "Denwa bangou wa nanban desu ka.", "ex_id": "Berapa nomor teleponnya?"},
+      {"k": "一匹", "r": "いっぴき", "ro": "ippiki", "a": "1 ekor", "grp": "hiki", "alert": "Bunyi berubah menjadi -piki", "ex_jp": "庭に黒い猫が<span class=\"sent-hl-num\">一匹</span>います。", "ex_ro": "Niwa ni kuroi neko ga ippiki imasu.", "ex_id": "Ada seekor kucing hitam di halaman."},
+      {"k": "二匹", "r": "にひき", "ro": "nihiki", "a": "2 ekor", "grp": "hiki", "ex_jp": "犬を<span class=\"sent-hl-num\">二匹</span>飼っています。", "ex_ro": "Inu o nihiki katte imasu.", "ex_id": "Saya memelihara dua ekor anjing."},
+      {"k": "三匹", "r": "さんびき", "ro": "sanbiki", "a": "3 ekor", "grp": "hiki", "alert": "Rendaku: Berubah menjadi -biki!", "ex_jp": "小川に魚が<span class=\"sent-hl-num\">三匹</span>泳いでいます。", "ex_ro": "Ogawa ni sakana ga sanbiki oyoide imasu.", "ex_id": "Ada tiga ekor ikan berenang di anak sungai."},
+      {"k": "四匹", "r": "よんひき", "ro": "yonhiki", "a": "4 ekor", "grp": "hiki", "ex_jp": "子犬が<span class=\"sent-hl-num\">四匹</span>生まれました。", "ex_ro": "Koinu ga yonhiki umaremashita.", "ex_id": "Empat ekor anak anjing telah lahir."},
+      {"k": "五匹", "r": "ごひき", "ro": "gohiki", "a": "5 ekor", "grp": "hiki", "ex_jp": "池に金魚が<span class=\"sent-hl-num\">五匹</span>います。", "ex_ro": "Ike ni kingyo ga gohiki imasu.", "ex_id": "Ada lima ekor ikan mas koki di kolam."},
+      {"k": "六匹", "r": "ろっぴき", "ro": "roppiki", "a": "6 ekor", "grp": "hiki", "alert": "Bunyi berubah menjadi -piki", "ex_jp": "アリが<span class=\"sent-hl-num\">六匹</span>歩いています。", "ex_ro": "Ari ga roppiki aruite imasu.", "ex_id": "Enam ekor semut sedang berjalan."},
+      {"k": "七匹", "r": "ななひき", "ro": "nanahiki", "a": "7 ekor", "grp": "hiki", "ex_jp": "ハムスターが<span class=\"sent-hl-num\">七匹</span>遊んでいます。", "ex_ro": "Hamusutaa ga nanahiki asonde imasu.", "ex_id": "Tujuh ekor hamster sedang bermain."},
+      {"k": "八匹", "r": "はっぴき", "ro": "happiki", "a": "8 ekor", "grp": "hiki", "alert": "Bunyi berubah menjadi -piki", "ex_jp": "水槽にエビが<span class=\"sent-hl-num\">八匹</span>います。", "ex_ro": "Suisou ni ebi ga happiki imasu.", "ex_id": "Ada delapan ekor udang di dalam akuarium."},
+      {"k": "九匹", "r": "きゅうひき", "ro": "kyuuhiki", "a": "9 ekor", "grp": "hiki", "ex_jp": "子猫が<span class=\"sent-hl-num\">九匹</span>寝ています。", "ex_ro": "Koneko ga kyuuhiki nete imasu.", "ex_id": "Sembilan ekor anak kucing sedang tidur."},
+      {"k": "十匹", "r": "じゅっぴき", "alt": "じっぴき", "ro": "juppiki", "a": "10 ekor", "grp": "hiki", "alert": "Bunyi berubah menjadi -piki", "ex_jp": "川でカエルを<span class=\"sent-hl-num\">十匹</span>見つけました。", "ex_ro": "Kawa de kaeru o juppiki mitsukemashita.", "ex_id": "Menemukan sepuluh ekor katak di sungai."},
+      {"k": "何匹", "r": "なんびき", "ro": "nanbiki", "a": "Berapa ekor?", "grp": "hiki", "alert": "Rendaku: Dibaca nan-biki!", "ex_jp": "ペットショップに猫が<span class=\"sent-hl-num\">何匹</span>いますか。", "ex_ro": "Pettoshoppu ni neko ga nanbiki imasu ka.", "ex_id": "Ada berapa ekor kucing di pet shop?"},
+      {"k": "一羽", "r": "いちわ", "ro": "ichiwa", "a": "1 ekor (burung/unggas)", "grp": "wa", "ex_jp": "木の上に小鳥が<span class=\"sent-hl-num\">一羽</span>とまっています。", "ex_ro": "Ki no ue ni kotori ga ichiwa tomatte imasu.", "ex_id": "Seekor burung kecil hinggap di atas pohon."},
+      {"k": "二羽", "r": "にわ", "ro": "niwa", "a": "2 ekor (burung/unggas)", "grp": "wa", "ex_jp": "公園にハトが<span class=\"sent-hl-num\">二羽</span>います。", "ex_ro": "Kouen ni hato ga niwa imasu.", "ex_id": "Ada dua ekor merpati di taman."},
+      {"k": "三羽", "r": "さんわ", "alt": "さんば", "ro": "sanwa", "a": "3 ekor (burung/unggas)", "grp": "wa", "note": "Bisa dibaca sanwa atau sanba", "ex_jp": "空をツバメが<span class=\"sent-hl-num\">三羽</span>飛んでいます。", "ex_ro": "Sora o tsubame ga sanwa tonde imasu.", "ex_id": "Tiga ekor burung layang-layang terbang di langit."},
+      {"k": "四羽", "r": "よんわ", "ro": "yonwa", "a": "4 ekor (burung/unggas)", "grp": "wa", "ex_jp": "庭にニワトリが<span class=\"sent-hl-num\">四羽</span>います。", "ex_ro": "Niwa ni niwatori ga yonwa imasu.", "ex_id": "Ada empat ekor ayam di pekarangan."},
+      {"k": "五羽", "r": "ごわ", "ro": "gowa", "a": "5 ekor (burung/unggas)", "grp": "wa", "ex_jp": "カモが池に<span class=\"sent-hl-num\">五羽</span>浮いています。", "ex_ro": "Kamo ga ike ni gowa uite imasu.", "ex_id": "Lima ekor bebek mengapung di kolam."},
+      {"k": "六羽", "r": "ろくわ", "alt": "ろっぱ", "ro": "rokuwa", "a": "6 ekor (burung/unggas)", "grp": "wa", "ex_jp": "カラスが<span class=\"sent-hl-num\">六羽</span>電線にいます。", "ex_ro": "Karasu ga rokuwa densen ni imasu.", "ex_id": "Enam ekor gagak bertengger di kabel listrik."},
+      {"k": "七羽", "r": "ななわ", "ro": "nanawa", "a": "7 ekor (burung/unggas)", "grp": "wa", "ex_jp": "スズメが<span class=\"sent-hl-num\">七羽</span>エサを食べています。", "ex_ro": "Suzume ga nanawa esa o tabete imasu.", "ex_id": "Tujuh ekor burung gereja sedang makan umpan."},
+      {"k": "八羽", "r": "はちわ", "alt": "はっぱ", "ro": "hachiwa", "a": "8 ekor (burung/unggas)", "grp": "wa", "ex_jp": "ウサギが<span class=\"sent-hl-num\">八羽</span>元気に跳ねています。", "ex_ro": "Usagi ga hachiwa genki ni hanete imasu.", "ex_id": "Delapan ekor kelinci melompat lincah (kelinci memakai satuan wa)."},
+      {"k": "九羽", "r": "きゅうわ", "ro": "kyuuwa", "a": "9 ekor (burung/unggas)", "grp": "wa", "ex_jp": "ペンギンが<span class=\"sent-hl-num\">九羽</span>並んでいます。", "ex_ro": "Pengin ga kyuuwa narande imasu.", "ex_id": "Sembilan ekor penguin berbaris rapi."},
+      {"k": "十羽", "r": "じゅうわ", "alt": "じっぱ", "ro": "juuwa", "a": "10 ekor (burung/unggas)", "grp": "wa", "ex_jp": "白鳥が湖に<span class=\"sent-hl-num\">十羽</span>やって来ました。", "ex_ro": "Hakuchou ga mizuumi ni juuwa yatte kimashita.", "ex_id": "Sepuluh ekor angsa putih datang ke danau."},
+      {"k": "何羽", "r": "なんわ", "alt": "なんば", "ro": "nanwa", "a": "Berapa ekor burung?", "grp": "wa", "ex_jp": "ニワトリは小屋に<span class=\"sent-hl-num\">何羽</span>いますか。", "ex_ro": "Niwatori wa koya ni nanwa imasu ka.", "ex_id": "Ada berapa ekor ayam di dalam kandang?"},
+      {"k": "一足", "r": "いっそく", "ro": "issoku", "a": "1 pasang (alas kaki)", "grp": "soku", "alert": "Bunyi geminate: is-soku", "ex_jp": "新しいスニーカーを<span class=\"sent-hl-num\">一足</span>買いました。", "ex_ro": "Atarashii suniikaa o issoku kaimashita.", "ex_id": "Saya membeli sepasang sepatu kets baru."},
+      {"k": "二足", "r": "にそく", "ro": "nisoku", "a": "2 pasang (alas kaki)", "grp": "soku", "ex_jp": "靴下を<span class=\"sent-hl-num\">二足</span>持って行きます。", "ex_ro": "Kutsushita o nisoku motte ikimasu.", "ex_id": "Membawa dua pasang kaus kaki."},
+      {"k": "三足", "r": "さんぞく", "ro": "sanzoku", "a": "3 pasang (alas kaki)", "grp": "soku", "alert": "Rendaku: Dibaca san-zoku!", "ex_jp": "革靴が玄関に<span class=\"sent-hl-num\">三足</span>並んでいます。", "ex_ro": "Kawagutsu ga genkan ni sanzoku narande imasu.", "ex_id": "Ada tiga pasang sepatu kulit berjejer di pintu masuk."},
+      {"k": "四足", "r": "よんそく", "ro": "yonsoku", "a": "4 pasang (alas kaki)", "grp": "soku", "ex_jp": "サンダルを<span class=\"sent-hl-num\">四足</span>揃えました。", "ex_ro": "Sandaru o yonsoku soroemashita.", "ex_id": "Menyiapkan empat pasang sandal."},
+      {"k": "五足", "r": "ごそく", "ro": "gosoku", "a": "5 pasang (alas kaki)", "grp": "soku", "ex_jp": "来客用のスリッパを<span class=\"sent-hl-num\">五足</span>出しました。", "ex_ro": "Raikyakuyou no surippa o gosoku dashimashita.", "ex_id": "Mengeluarkan lima pasang sandal selop untuk tamu."},
+      {"k": "六足", "r": "ろくそく", "ro": "rokusoku", "a": "6 pasang (alas kaki)", "grp": "soku", "ex_jp": "靴箱に靴が<span class=\"sent-hl-num\">六足</span>入っています。", "ex_ro": "Kutsubako ni kutsu ga rokusoku haitte imasu.", "ex_id": "Ada enam pasang sepatu di dalam rak sepatu."},
+      {"k": "七足", "r": "ななそく", "ro": "nanasoku", "a": "7 pasang (alas kaki)", "grp": "soku", "ex_jp": "一週間のために靴下を<span class=\"sent-hl-num\">七足</span>用意しました。", "ex_ro": "Isshuukan no tame ni kutsushita o nanasoku youi shimashita.", "ex_id": "Menyiapkan tujuh pasang kaus kaki untuk satu minggu."},
+      {"k": "八足", "r": "はっそく", "ro": "hassoku", "a": "8 pasang (alas kaki)", "grp": "soku", "alert": "Bunyi geminate: has-soku", "ex_jp": "セールで靴下を<span class=\"sent-hl-num\">八足</span>まとめ買いしました。", "ex_ro": "Seeru de kutsushita o hassoku matome-gai shimashita.", "ex_id": "Membeli delapan pasang kaus kaki saat promo obral."},
+      {"k": "九足", "r": "きゅうそく", "ro": "kyuusoku", "a": "9 pasang (alas kaki)", "grp": "soku", "ex_jp": "下駄箱に草履が<span class=\"sent-hl-num\">九足</span>あります。", "ex_ro": "Getabako ni zouri ga kyuusoku arimasu.", "ex_id": "Ada sembilan pasang sandal tradisional (zouri) di rak."},
+      {"k": "十足", "r": "じゅっそく", "alt": "じっそく", "ro": "jussoku", "a": "10 pasang (alas kaki)", "grp": "soku", "alert": "Bunyi geminate: jus-soku", "ex_jp": "ホテルにスリッパが<span class=\"sent-hl-num\">十足</span>届きました。", "ex_ro": "Hoteru ni surippa ga jussoku todokimashita.", "ex_id": "Sepuluh pasang sandal hotel telah sampai."},
+      {"k": "何足", "r": "なんぞく", "ro": "nanzoku", "a": "Berapa pasang?", "grp": "soku", "alert": "Rendaku: Dibaca nan-zoku!", "ex_jp": "靴は<span class=\"sent-hl-num\">何足</span>持っていますか。", "ex_ro": "Kutsu wa nanzoku motte imasu ka.", "ex_id": "Berapa pasang sepatu yang kamu miliki?"},
+      {"k": "一本", "r": "いっぽん", "ro": "ippon", "a": "1 batang/botol", "grp": "hon", "alert": "Bunyi berubah menjadi -pon", "ex_jp": "水を<span class=\"sent-hl-num\">一本</span>買いました。", "ex_ro": "Mizu o ippon kaimashita.", "ex_id": "Membeli satu botol air mineral."},
+      {"k": "二本", "r": "にほん", "ro": "nihon", "a": "2 batang/botol", "grp": "hon", "ex_jp": "ペンを<span class=\"sent-hl-num\">二本</span>持っています。", "ex_ro": "Pen o nihon motte imasu.", "ex_id": "Saya memiliki dua batang pulpen."},
+      {"k": "三本", "r": "さんぼん", "ro": "sanbon", "a": "3 batang/botol", "grp": "hon", "alert": "Rendaku: Berubah menjadi -bon!", "ex_jp": "傘を<span class=\"sent-hl-num\">三本</span>持って出かけました。", "ex_ro": "Kasa o sanbon motte dekakemashita.", "ex_id": "Membawa tiga batang payung saat bepergian."},
+      {"k": "四本", "r": "よんほん", "ro": "yonhon", "a": "4 batang/botol", "grp": "hon", "ex_jp": "鉛筆を<span class=\"sent-hl-num\">四本</span>削りました。", "ex_ro": "Enpitsu o yonhon kezurimashita.", "ex_id": "Meraut empat batang pensil."},
+      {"k": "五本", "r": "ごほん", "ro": "gohon", "a": "5 batang/botol", "grp": "hon", "ex_jp": "ジュースを<span class=\"sent-hl-num\">五本</span>注文しました。", "ex_ro": "Juusu o gohon chuumon shimashita.", "ex_id": "Memesan lima botol jus."},
+      {"k": "六本", "r": "ろっぽん", "ro": "roppon", "a": "6 batang/botol", "grp": "hon", "alert": "Bunyi berubah menjadi -pon", "ex_jp": "ビールを<span class=\"sent-hl-num\">六本</span>冷蔵庫に入れました。", "ex_ro": "Biiru o roppon reizouko ni iremashita.", "ex_id": "Memasukkan enam botol bir ke dalam kulkas."},
+      {"k": "七本", "r": "ななほん", "ro": "nanahon", "a": "7 batang/botol", "grp": "hon", "ex_jp": "庭に桜の木が<span class=\"sent-hl-num\">七本</span>あります。", "ex_ro": "Niwa ni sakura no ki ga nanahon arimasu.", "ex_id": "Ada tujuh batang pohon sakura di halaman."},
+      {"k": "八本", "r": "はっぽん", "ro": "happon", "a": "8 batang/botol", "grp": "hon", "alert": "Bunyi berubah menjadi -pon", "ex_jp": "映画を月に<span class=\"sent-hl-num\">八本</span>見ます。", "ex_ro": "Eiga o tsuki ni happon mimasu.", "ex_id": "Menonton delapan judul film dalam sebulan (film memakai hitungan hon)."},
+      {"k": "九本", "r": "きゅうほん", "ro": "kyuuhon", "a": "9 batang/botol", "grp": "hon", "ex_jp": "バナナが<span class=\"sent-hl-num\">九本</span>房についています。", "ex_ro": "Banana ga kyuuhon fusa ni tsuite imasu.", "ex_id": "Ada sembilan buah pisang dalam satu sisir."},
+      {"k": "十本", "r": "じゅっぽん", "alt": "じっぽん", "ro": "juppon", "a": "10 batang/botol", "grp": "hon", "alert": "Bunyi berubah menjadi -pon", "ex_jp": "両手で指が<span class=\"sent-hl-num\">十本</span>あります。", "ex_ro": "Ryoute de yubi ga juppon arimasu.", "ex_id": "Kedua tangan memiliki sepuluh jari."},
+      {"k": "何本", "r": "なんぼん", "ro": "nanbon", "a": "Berapa batang/botol?", "grp": "hon", "alert": "Rendaku: Dibaca nan-bon!", "ex_jp": "傘が<span class=\"sent-hl-num\">何本</span>ありますか。", "ex_ro": "Kasa ga nanbon arimasu ka.", "ex_id": "Ada berapa batang payung?"},
+      {"k": "一台", "r": "いちだい", "ro": "ichidai", "a": "1 unit (kendaraan/mesin)", "grp": "dai", "ex_jp": "車を<span class=\"sent-hl-num\">一台</span>買いました。", "ex_ro": "Kuruma o ichidai kaimashita.", "ex_id": "Saya membeli satu unit mobil."},
+      {"k": "二台", "r": "にだい", "ro": "nidai", "a": "2 unit (kendaraan/mesin)", "grp": "dai", "ex_jp": "自転車が<span class=\"sent-hl-num\">二台</span>あります。", "ex_ro": "Jitensha ga nidai arimasu.", "ex_id": "Ada dua unit sepeda."},
+      {"k": "三台", "r": "さんだい", "ro": "sandai", "a": "3 unit (kendaraan/mesin)", "grp": "dai", "ex_jp": "パソコンが<span class=\"sent-hl-num\">三台</span>並んでいます。", "ex_ro": "Pasokon ga sandai narande imasu.", "ex_id": "Ada tiga unit komputer berjejer."},
+      {"k": "四台", "r": "よんだい", "ro": "yondai", "a": "4 unit (kendaraan/mesin)", "grp": "dai", "ex_jp": "タクシーが<span class=\"sent-hl-num\">四台</span>待っています。", "ex_ro": "Takushii ga yondai matte imasu.", "ex_id": "Empat unit taksi sedang menunggu."},
+      {"k": "五台", "r": "ごだい", "ro": "godai", "a": "5 unit (kendaraan/mesin)", "grp": "dai", "ex_jp": "オフィスにプリンターが<span class=\"sent-hl-num\">五台</span>あります。", "ex_ro": "Ofisu ni purintaa ga godai arimasu.", "ex_id": "Ada lima unit printer di kantor."},
+      {"k": "六台", "r": "ろくだい", "ro": "rokudai", "a": "6 unit (kendaraan/mesin)", "grp": "dai", "ex_jp": "駐車場にトラックが<span class=\"sent-hl-num\">六台</span>止まっています。", "ex_ro": "Chuushajou ni torakku ga rokudai tomatte imasu.", "ex_id": "Enam unit truk terparkir di area parkir."},
+      {"k": "七台", "r": "ななだい", "ro": "nanadai", "a": "7 unit (kendaraan/mesin)", "grp": "dai", "ex_jp": "テレビが店に<span class=\"sent-hl-num\">七台</span>展示されています。", "ex_ro": "Terebi ga mise ni nanadai tenji sarete imasu.", "ex_id": "Tujuh unit televisi dipajang di toko."},
+      {"k": "八台", "r": "はちだい", "ro": "hachidai", "a": "8 unit (kendaraan/mesin)", "grp": "dai", "ex_jp": "バイクが<span class=\"sent-hl-num\">八台</span>走って行きました。", "ex_ro": "Baiku ga hachidai hashitte ikimashita.", "ex_id": "Delapan unit sepeda motor melaju lewat."},
+      {"k": "九台", "r": "きゅうだい", "ro": "kyuudai", "a": "9 unit (kendaraan/mesin)", "grp": "dai", "ex_jp": "バスが<span class=\"sent-hl-num\">九台</span>車庫にあります。", "ex_ro": "Basu ga kyuudai shako ni arimasu.", "ex_id": "Ada sembilan unit bus di garasi pool."},
+      {"k": "十台", "r": "じゅうだい", "ro": "juudai", "a": "10 unit (kendaraan/mesin)", "grp": "dai", "ex_jp": "教室にパソコンが<span class=\"sent-hl-num\">十台</span>あります。", "ex_ro": "Kyoushitsu ni pasokon ga juudai arimasu.", "ex_id": "Ada sepuluh unit komputer di ruang kelas."},
+      {"k": "何台", "r": "なんだい", "ro": "nandai", "a": "Berapa unit?", "grp": "dai", "ex_jp": "車は家に<span class=\"sent-hl-num\">何台</span>ありますか。", "ex_ro": "Kuruma wa ie ni nandai arimasu ka.", "ex_id": "Ada berapa unit mobil di rumah?"}
+    ];
+
     const DB_Waktu = [
       {
         "k": "何時",
@@ -3819,6 +4134,68 @@
         "key": "5"
       }
     ];
+
+    const Pages_Hitung = [
+      {
+        "title": "Sesi 1: Barang Umum (〜つ Tsu)",
+        "narasi": "Satuan hitung asli Jepang (Wago) untuk benda umum tak beraturan, buah, atau barang kecil (1-10 buah). Perhatikan angka 1-10 yang berakhiran -tsu, kecuali 10 (とお too).",
+        "groups": [
+                "tsu"
+        ]
+},
+      {
+        "title": "Sesi 2: Orang (〜人 Nin) & Umur (〜歳 Sai)",
+        "narasi": "Hitungan orang: 1 orang (ひとり), 2 orang (ふたり), dan 4 orang (よにん - bukan yon-nin!). Umur menggunakan 〜歳 (さい): 1 tahun (いっさい), 8 tahun (はっさい), 10 tahun (じゅっさい), dan 20 tahun (はたち - usia kedewasaan di Jepang!).",
+        "groups": [
+                "nin",
+                "sai"
+        ]
+},
+      {
+        "title": "Sesi 3: Benda Pipih & Lembaran (〜枚 Mai)",
+        "narasi": "Digunakan untuk kertas, foto, baju/kemeja, piring, tiket, dan prangko. Semua angka dibaca secara teratur (Angka + まい) tanpa anomali bunyi.",
+        "groups": [
+                "mai"
+        ]
+},
+      {
+        "title": "Sesi 4: Nomor Urutan & Peringkat (〜番 Ban)",
+        "narasi": "Menyatakan nomor antrean, nomor urut, jalur kereta/peron, atau peringkat (nomor 1, juara kedua, dsb). Pola baca sangat teratur (Angka + ばん).",
+        "groups": [
+                "ban"
+        ]
+},
+      {
+        "title": "Sesi 5: Hewan Kecil (〜匹 Hiki) & Unggas (〜羽 Wa)",
+        "narasi": "Hewan kecil (kucing, anjing, ikan) menggunakan 匹 (ひき) dengan perubahan bunyi di 1 (いっぴき), 3 (さんびき - rendaku!), 6 (ろっぴき), 8 (はっぴき), 10 (じゅっぴき), dan pertanyaan (なんびき?). Unggas & burung menggunakan 羽 (わ).",
+        "groups": [
+                "hiki",
+                "wa"
+        ]
+},
+      {
+        "title": "Sesi 6: Benda Berpasangan (〜足 Soku)",
+        "narasi": "Digunakan untuk sepasang alas kaki (sepatu, kaus kaki, sandal). Perhatikan 1 pasang (いっそく), 3 pasang (さんぞく - rendaku!), 8 pasang (はっそく), 10 pasang (じゅっそく), dan pertanyaan (なんぞく?).",
+        "groups": [
+                "soku"
+        ]
+},
+      {
+        "title": "Sesi 7: Benda Panjang & Silinder (〜本 Hon)",
+        "narasi": "Digunakan untuk pensil, pulpen, botol, payung, pohon, sungai, dan film. Perhatikan perubahan bunyi: 1, 6, 8, 10 berbunyi -pon (ぽん); 3 dan pertanyaan berbunyi -bon (ぼん).",
+        "groups": [
+                "hon"
+        ]
+},
+      {
+        "title": "Sesi 8: Mesin, Kendaraan & Elektronik (〜台 Dai)",
+        "narasi": "Digunakan untuk mobil, motor, sepeda, komputer, TV, mesin cuci, dan perkakas elektronik. Semua angka dibaca secara teratur (Angka + だい).",
+        "groups": [
+                "dai"
+        ]
+}
+    ];
+
     const Pages_Waktu = [
       {
         "title": "BAB 1: Pukul / Jam (〜時)",
@@ -4075,11 +4452,26 @@
         this.switchMainMode('fc');
       },
 
+      getTotalVocabCount: function () {
+        let total = 0;
+        for (const k in DB_Angka) { total += DB_Angka[k].length; }
+        if (typeof DB_Hitung !== 'undefined') total += DB_Hitung.length;
+        total += DB_Waktu.length;
+        total += DB_Kalender.length;
+        total += DB_Relatif.length;
+        return total;
+      },
+
       getCategoryData: function (catKey = this.activeCategory, sesiIdx = this.activeSesi) {
         if (catKey === 'angka') {
           const page = Pages_Angka[sesiIdx] || Pages_Angka[0];
           const items = DB_Angka[page.key] || [];
           return { pages: Pages_Angka, items, icon: '🔢', name: 'Bilangan', key: 'angka' };
+        }
+        if (catKey === 'hitung') {
+          const page = Pages_Hitung[sesiIdx] || Pages_Hitung[0];
+          const items = DB_Hitung.filter(i => page.groups.includes(i.grp));
+          return { pages: Pages_Hitung, items, icon: '📦', name: 'Satuan Hitung', key: 'hitung' };
         }
         if (catKey === 'waktu') {
           const page = Pages_Waktu[sesiIdx] || Pages_Waktu[0];
@@ -4135,12 +4527,38 @@
         }
       },
 
+      sidebarExpandedCategories: null,
+
+      toggleCategoryAccordion: function (catKey) {
+        this.playSfx('tap');
+        if (!this.sidebarExpandedCategories) {
+          this.sidebarExpandedCategories = { [this.activeCategory]: true };
+        }
+        if (typeof this.sidebarExpandedCategories[catKey] === 'undefined') {
+          this.sidebarExpandedCategories[catKey] = (catKey === this.activeCategory);
+        }
+        this.sidebarExpandedCategories[catKey] = !this.sidebarExpandedCategories[catKey];
+        const isOpen = this.sidebarExpandedCategories[catKey];
+        const sec = document.getElementById('sd-section-' + catKey);
+        if (sec) {
+          sec.classList.toggle('is-open', isOpen);
+          sec.classList.toggle('is-collapsed', !isOpen);
+          const arrow = sec.querySelector('.sd-acc-arrow');
+          if (arrow) arrow.innerText = isOpen ? '▾' : '▸';
+        }
+      },
+
       renderSidebarContent: function () {
         const container = document.getElementById('sd-body-content');
         if (!container) return;
 
+        if (!this.sidebarExpandedCategories) {
+          this.sidebarExpandedCategories = { [this.activeCategory]: true };
+        }
+
         const categories = [
           { key: 'angka', name: 'Bilangan (Angka)', icon: '🔢', pages: Pages_Angka, titleCls: '' },
+          { key: 'hitung', name: 'Satuan Hitung (Josuushi)', icon: '📦', pages: Pages_Hitung, titleCls: 'title-hitung' },
           { key: 'waktu', name: 'Jam, Menit & Detik', icon: '⏰', pages: Pages_Waktu, titleCls: 'title-waktu' },
           { key: 'kalender', name: 'Hari, Tanggal, Bulan & Tahun', icon: '📅', pages: Pages_Kalender, titleCls: 'title-kalender' },
           { key: 'relatif', name: 'Keterangan Waktu Relatif', icon: '⏳', pages: Pages_Relatif, titleCls: 'title-relatif' }
@@ -4155,6 +4573,7 @@
           const sessionData = cat.pages.map((p, idx) => {
             let items = [];
             if (cat.key === 'angka') items = DB_Angka[p.key] || [];
+            else if (cat.key === 'hitung') items = DB_Hitung.filter(i => p.groups.includes(i.grp));
             else if (cat.key === 'waktu') items = DB_Waktu.filter(i => p.groups.includes(i.grp));
             else if (cat.key === 'kalender') items = DB_Kalender.filter(i => p.groups.includes(i.grp));
             else if (cat.key === 'relatif') items = DB_Relatif.filter(i => p.groups.includes(i.grp));
@@ -4168,13 +4587,20 @@
             return { title: p.title, items, mCount, samples, isActive, idx };
           });
 
+          const isOpen = typeof this.sidebarExpandedCategories[cat.key] !== 'undefined'
+            ? this.sidebarExpandedCategories[cat.key]
+            : (cat.key === this.activeCategory);
+
           html += `
-          <div class="sd-section">
-            <div class="sd-section-title ${cat.titleCls}">
-              <span>${cat.icon} ${cat.name}</span>
-              <span style="font-size:10px; color:var(--text-sub); font-weight:700;">${catMastered}/${catTotal}</span>
+          <div class="sd-section ${isOpen ? 'is-open' : 'is-collapsed'}" id="sd-section-${cat.key}">
+            <div class="sd-section-title ${cat.titleCls}" onclick="Modul.toggleCategoryAccordion('${cat.key}')" title="Klik untuk membuka/menutup ${cat.name}">
+              <div class="sd-title-left">
+                <span class="sd-acc-arrow">${isOpen ? '▾' : '▸'}</span>
+                <span>${cat.icon} ${cat.name}</span>
+              </div>
+              <span class="sd-title-badge">${catMastered}/${catTotal}</span>
             </div>
-            <div class="sd-session-list">
+            <div class="sd-session-list" id="sd-session-list-${cat.key}">
               ${sessionData.map(s => `
                 <div class="sd-item ${s.isActive ? 'active' : ''}" onclick="Modul.selectSessionFromSidebar('${cat.key}', ${s.idx})">
                   <div class="sd-item-left">
@@ -4200,6 +4626,8 @@
         this.activeCategory = catKey;
         this.activeSesi = idx;
         this.cardIdx = 0;
+        if (!this.sidebarExpandedCategories) this.sidebarExpandedCategories = {};
+        this.sidebarExpandedCategories[catKey] = true;
         this.loadActiveArray();
         this.updateActiveSessionUI();
         this.renderSidebarContent();
@@ -4217,6 +4645,230 @@
           if (btn) btn.classList.toggle('active', t === tool);
           if (content) content.classList.toggle('hidden', t !== tool);
         });
+      },
+
+      sentencesMap: {
+        // Relatif items without ex
+        '日': { jp: '今日はいい<span class="sent-hl-num">日</span>ですね。', ro: 'Kyou wa ii hi desu ne.', id: 'Hari ini hari yang menyenangkan ya.' },
+        '週': { jp: '一<span class="sent-hl-num">週</span>間に二回運動します。', ro: 'Isshuukan ni ni-kai undou shimasu.', id: 'Berolahraga dua kali dalam seminggu.' },
+        '月': { jp: '一ヶ<span class="sent-hl-num">月</span>に一度映画を見ます。', ro: 'Ikkagetsu ni ichido eiga o mimasu.', id: 'Menonton film satu kali dalam sebulan.' },
+        '年': { jp: '三<span class="sent-hl-num">年</span>間日本語を勉強しました。', ro: 'San-nen-kan Nihongo o benkyou shimashita.', id: 'Belajar bahasa Jepang selama tiga tahun.' },
+        '朝': { jp: '<span class="sent-hl-num">朝</span>七時に起きて散歩します。', ro: 'Asa shichi-ji ni okite sanpo shimasu.', id: 'Bangun jam 7 pagi lalu jalan-jalan santai.' },
+        '夜': { jp: '<span class="sent-hl-num">夜</span>十時に部屋で本を読みます。', ro: 'Yoru juu-ji ni heya de hon o yomimasu.', id: 'Membaca buku di kamar pada jam 10 malam.' },
+        '晩': { jp: '<span class="sent-hl-num">晩</span>ご飯を一緒に食べましょう。', ro: 'Bangohan o issho ni tabemashou.', id: 'Ayo makan malam bersama-sama.' },
+        'いつ': { jp: '日本へ<span class="sent-hl-num">いつ</span>行きますか。', ro: 'Nihon e itsu ikimasu ka.', id: 'Kapan kamu pergi ke Jepang?' },
+
+        // Nama Hari
+        '日曜日': { jp: '<span class="sent-hl-num">日曜日</span>は学校が休みです。', ro: 'Nichiyoubi wa gakkou ga yasumi desu.', id: 'Hari Minggu sekolah libur.' },
+        '月曜日': { jp: '<span class="sent-hl-num">月曜日</span>からまた仕事が始まります。', ro: 'Getsuyoubi kara mata shigoto ga hajimarimasu.', id: 'Mulai hari Senin pekerjaan dimulai kembali.' },
+        '火曜日': { jp: '<span class="sent-hl-num">火曜日</span>に日本語のテストがあります。', ro: 'Kayoubi ni Nihongo no tesuto ga arimasu.', id: 'Hari Selasa ada ujian bahasa Jepang.' },
+        '水曜日': { jp: '<span class="sent-hl-num">水曜日</span>の午後は図書館へ行きます。', ro: 'Suiyoubi no gogo wa toshokan e ikimasu.', id: 'Rabu siang pergi ke perpustakaan.' },
+        '木曜日': { jp: '<span class="sent-hl-num">木曜日</span>は友達と晩ご飯を食べます。', ro: 'Mokuyoubi wa tomodachi to bangohan o tabemasu.', id: 'Hari Kamis makan malam bersama teman.' },
+        '金曜日': { jp: '<span class="sent-hl-num">金曜日</span>の夜に映画を見ます。', ro: 'Kinyoubi no yoru ni eiga o mimasu.', id: 'Malam Jumat menonton bioskop / film.' },
+        '土曜日': { jp: '<span class="sent-hl-num">土曜日</span>にデパートで買い物をします。', ro: 'Doyoubi ni depaato de kaimono o shimasu.', id: 'Hari Sabtu berbelanja di department store.' },
+        '何曜日': { jp: '今日は<span class="sent-hl-num">何曜日</span>ですか。', ro: 'Kyou wa nan-youbi desu ka.', id: 'Hari ini hari apa?' },
+
+        // Angka Dasar
+        '零': { jp: '外の気温は<span class="sent-hl-num">零</span>度です。', ro: 'Soto no kion wa zero-do desu.', id: 'Suhu udara di luar 0 derajat.' },
+        '一': { jp: 'リンゴを<span class="sent-hl-num">一つ</span>買いました。', ro: 'Ringo o hitotsu kaimashita.', id: 'Membeli satu buah apel.' },
+        '二': { jp: 'チケットが<span class="sent-hl-num">二枚</span>あります。', ro: 'Chiketto ga ni-mai arimasu.', id: 'Ada dua lembar tiket.' },
+        '三': { jp: '<span class="sent-hl-num">三人</span>でご飯を食べました。', ro: 'San-nin de gohan o tabemashita.', id: 'Makan bersama bertiga.' },
+        '四': { jp: 'ペンが<span class="sent-hl-num">四本</span>あります。', ro: 'Pen ga yon-hon arimasu.', id: 'Ada empat batang pulpen.' },
+        '五': { jp: '<span class="sent-hl-num">五人</span>のグループで作りました。', ro: 'Go-nin no guruupu de tsukurimashita.', id: 'Dibuat dalam kelompok beranggotakan lima orang.' },
+        '六': { jp: '卵が<span class="sent-hl-num">六個</span>あります。', ro: 'Tamago ga rok-ko arimasu.', id: 'Ada enam butir telur.' },
+        '七': { jp: '一週間は<span class="sent-hl-num">七日</span>です。', ro: 'Isshuukan wa nanoka desu.', id: 'Satu minggu adalah tujuh hari.' },
+        '八': { jp: '庭に猫が<span class="sent-hl-num">八匹</span>います。', ro: 'Niwa ni neko ga hap-piki imasu.', id: 'Ada delapan ekor kucing di halaman.' },
+        '九': { jp: '本を<span class="sent-hl-num">九冊</span>読みました。', ro: 'Hon o kyuu-satsu yomimashita.', id: 'Membaca sembilan buah buku.' },
+        '十': { jp: '<span class="sent-hl-num">十人</span>の学生が教室にいます。', ro: 'Juu-nin no gakusei ga kyoushitsu ni imasu.', id: 'Ada sepuluh orang siswa di dalam kelas.' },
+        '百': { jp: 'この消しゴムは<span class="sent-hl-num">百</span>円です。', ro: 'Kono keshigomu wa hyaku-en desu.', id: 'Penghapus ini seharga 100 yen.' },
+        '千': { jp: '<span class="sent-hl-num">千</span>円札を出しました。', ro: 'Sen-en satsu o dashimashita.', id: 'Mengeluarkan selembar uang seribu yen.' },
+        '一万': { jp: '財布に<span class="sent-hl-num">一万</span>円入っています。', ro: 'Saifu ni ichiman-en haitte imasu.', id: 'Ada sepuluh ribu yen di dalam dompet.' },
+        '十万': { jp: 'アパートの家賃は<span class="sent-hl-num">十万</span>円です。', ro: 'Apaato no yachin wa juuman-en desu.', id: 'Sewa apartemen adalah 100.000 yen.' },
+        '百万': { jp: 'このバイクは<span class="sent-hl-num">百万</span>円でした。', ro: 'Kono baiku wa hyakuman-en deshita.', id: 'Sepeda motor ini harganya satu juta yen.' },
+        '一億': { jp: '日本の人口は約<span class="sent-hl-num">一億</span>二千万人です。', ro: 'Nihon no jinkou wa yaku ichi-oku ni-sen-man-nin desu.', id: 'Populasi Jepang sekitar 120 juta orang.' },
+        '一兆': { jp: '国家予算は百<span class="sent-hl-num">兆</span>円を超えています。', ro: 'Kokka yosan wa hyakuchou-en o koete imasu.', id: 'Anggaran negara melampaui seratus triliun yen.' },
+
+        // Tanya & Format Khusus
+        '何時': { jp: 'すみません、今<span class="sent-hl-num">何時</span>ですか。', ro: 'Sumimasen, ima nan-ji desu ka.', id: 'Permisi, sekarang jam berapa?' },
+        '何分': { jp: 'あと<span class="sent-hl-num">何分</span>で電車が来ますか。', ro: 'Ato nan-pun de densha ga kimasu ka.', id: 'Berapa menit lagi keretanya datang?' },
+        '何秒': { jp: 'あと<span class="sent-hl-num">何秒</span>で始まりますか。', ro: 'Ato nan-byou de hajimarimasu ka.', id: 'Berapa detik lagi acara akan dimulai?' },
+        '何日': { jp: '今日は<span class="sent-hl-num">何日</span>ですか。', ro: 'Kyou wa nan-nichi desu ka.', id: 'Hari ini tanggal berapa?' },
+        '何月': { jp: 'あなたの誕生日は<span class="sent-hl-num">何月</span>ですか。', ro: 'Anata no tanjoubi wa nan-gatsu desu ka.', id: 'Ulang tahunmu bulan apa?' },
+        '何年': { jp: '日本に<span class="sent-hl-num">何年</span>住んでいますか。', ro: 'Nihon ni nan-nen sunde imasu ka.', id: 'Sudah berapa tahun tinggal di Jepang?' },
+        '何時間': { jp: '毎日<span class="sent-hl-num">何時間</span>寝ますか。', ro: 'Mainichi nan-jikan nemasu ka.', id: 'Setiap hari tidur berapa jam?' },
+
+        // Jam Khusus
+        '一時': { jp: '<span class="sent-hl-num">一時</span>ちょうどにロビーで会いましょう。', ro: 'Ichi-ji choudo ni robii de aimashou.', id: 'Mari bertemu di lobi tepat pukul 1.' },
+        '四時': { jp: '午後<span class="sent-hl-num">四時</span>に授業が終わります。', ro: 'Gogo yo-ji ni jugyou ga owarimasu.', id: 'Pelajaran selesai pukul 4 sore.' },
+        '七時': { jp: '毎朝<span class="sent-hl-num">七時</span>に朝ご飯を食べます。', ro: 'Maiasa shichi-ji ni asagohan o tabemasu.', id: 'Setiap pagi makan sarapan pukul 7.' },
+        '九時': { jp: '夜<span class="sent-hl-num">九時</span>に勉強を始めます。', ro: 'Yoru ku-ji ni benkyou o hajimemasu.', id: 'Mulai belajar pada pukul 9 malam.' },
+        '半': { jp: '今は七時<span class="sent-hl-num">半</span>です。', ro: 'Ima wa shichi-ji han desu.', id: 'Sekarang pukul setengah delapan (07:30).' },
+        '午前': { jp: '<span class="sent-hl-num">午前</span>中に小包が届きます。', ro: 'Gozenchuu ni kozutsumi ga todokimasu.', id: 'Paket kiriman akan tiba di pagi hari (AM).' },
+        '午後': { jp: '<span class="sent-hl-num">午後</span>から雨が降るそうです。', ro: 'Gogo kara ame ga furu sou desu.', id: 'Katanya mulai siang/sore (PM) akan turun hujan.' },
+
+        // Tanggal Khusus N5
+        '一日': { jp: '<span class="sent-hl-num">一日</span>は新しい月の始まりです。', ro: 'Tsuitachi wa atarashii tsuki no hajimari desu.', id: 'Tanggal 1 adalah awal bulan baru.' },
+        '二日': { jp: '<span class="sent-hl-num">二日</span>に日本へ出発します。', ro: 'Futsuka ni Nihon e shuppatsu shimasu.', id: 'Berangkat ke Jepang pada tanggal 2.' },
+        '三日': { jp: '<span class="sent-hl-num">三日</span>間旅行に行きました。', ro: 'Mikka-kan ryokou ni ikimashita.', id: 'Pergi berwisata selama 3 hari.' },
+        '四日': { jp: '<span class="sent-hl-num">四日</span>に荷物が届きます。', ro: 'Yokka ni nimotsu ga todokimasu.', id: 'Barang kiriman akan sampai pada tanggal 4.' },
+        '五日': { jp: '<span class="sent-hl-num">五日</span>待ってください。', ro: 'Itsuka matte kudasai.', id: 'Tolong tunggu selama lima hari.' },
+        '六日': { jp: '<span class="sent-hl-num">六日</span>に会議があります。', ro: 'Muika ni kaigi ga arimasu.', id: 'Ada rapat pertemuan pada tanggal 6.' },
+        '七日': { jp: '<span class="sent-hl-num">七日</span>は友達の誕生日です。', ro: 'Nanoka wa tomodachi no tanjoubi desu.', id: 'Tanggal 7 adalah ulang tahun teman.' },
+        '八日': { jp: '<span class="sent-hl-num">八日</span>に病院へ行きます。', ro: 'Youka ni byouin e ikimasu.', id: 'Pergi ke rumah sakit pada tanggal 8.' },
+        '九日': { jp: '<span class="sent-hl-num">九日</span>にレポートを出します。', ro: 'Kokonoka ni repooto o dashimasu.', id: 'Mengumpulkan laporan pada tanggal 9.' },
+        '十日': { jp: '<span class="sent-hl-num">十日</span>間休みをもらいました。', ro: 'Tooka-kan yasumi o moraimashita.', id: 'Mendapatkan jatah libur selama 10 hari.' },
+        '十四日': { jp: '<span class="sent-hl-num">十四日</span>はバレンタインデーです。', ro: 'Juuyokka wa barentain dee desu.', id: 'Tanggal 14 adalah Hari Valentine.' },
+        '二十日': { jp: '<span class="sent-hl-num">二十日</span>に給料をもらいます。', ro: 'Hatsuka ni kyuuryou o moraimasu.', id: 'Mendapatkan gaji pada tanggal 20.' },
+        '二十四日': { jp: '<span class="sent-hl-num">二十四日</span>の夜にパーティーがあります。', ro: 'Nijuuyokka no yoru ni paatii ga arimasu.', id: 'Ada pesta pada malam tanggal 24.' },
+
+        // Bulan Khusus
+        '四月': { jp: '<span class="sent-hl-num">四月</span>に桜が美しく咲きます。', ro: 'Shi-gatsu ni sakura ga utsukushiku sakimasu.', id: 'Bunga sakura mekar indah di bulan April.' },
+        '七月': { jp: '<span class="sent-hl-num">七月</span>に楽しい夏休みが始まります。', ro: 'Shichi-gatsu ni tanoshii natsuyasumi ga hajimarimasu.', id: 'Liburan musim panas menyenangkan mulai di bulan Juli.' },
+        '九月': { jp: '<span class="sent-hl-num">九月</span>になると秋の風が吹きます。', ro: 'Ku-gatsu ni naru to aki no kaze ga fukimasu.', id: 'Memasuki bulan September hembusan angin musim gugur bertiup.' },
+
+        // Tahun
+        '今年': { jp: '<span class="sent-hl-num">今年</span>は日本へ行きたいです。', ro: 'Kotoshi wa Nihon e ikitai desu.', id: 'Tahun ini saya ingin pergi ke Jepang.' },
+        '去年': { jp: '<span class="sent-hl-num">去年</span>高校を卒業しました。', ro: 'Kyonen koukou o sotsugyou shimashita.', id: 'Tahun lalu saya lulus dari SMA.' },
+        '来年': { jp: '<span class="sent-hl-num">来年</span>また会いましょう。', ro: 'Rainen mata aimashou.', id: 'Mari kita berjumpa lagi tahun depan.' }
+      },
+
+      getGroupTag: function (item) {
+        if (!item) return 'Konteks N5';
+        if (item.grp === 'tsu') return 'Satuan Barang (〜つ)';
+        if (item.grp === 'nin') return 'Satuan Orang (〜人)';
+        if (item.grp === 'sai') return 'Satuan Umur (〜歳)';
+        if (item.grp === 'mai') return 'Satuan Lembaran (〜枚)';
+        if (item.grp === 'ban') return 'Nomor & Urutan (〜番)';
+        if (item.grp === 'hiki') return 'Hewan Kecil (〜匹)';
+        if (item.grp === 'wa') return 'Unggas & Kelinci (〜羽)';
+        if (item.grp === 'soku') return 'Alas Kaki (〜足)';
+        if (item.grp === 'hon') return 'Benda Panjang (〜本)';
+        if (item.grp === 'dai') return 'Kendaraan & Mesin (〜台)';
+        if (item.grp === 'jam') return 'Format Jam (〜時)';
+        if (item.grp === 'menit') return 'Format Menit (〜分)';
+        if (item.grp === 'detik') return 'Format Detik (〜秒)';
+        if (item.grp === 'komb') return 'Format Waktu Lengkap';
+        if (item.grp === 'hari') return 'Nama Hari (〜曜日)';
+        if (item.grp === 'tgl') return 'Penanggalan (〜日)';
+        if (item.grp === 'bln') return 'Nama Bulan (〜月)';
+        if (item.grp === 'thn') return 'Tahun & Durasi (〜年)';
+        if (this.activeCategory === 'angka') return 'Bilangan & Nominal';
+        if (this.activeCategory === 'relatif') return 'Waktu Relatif';
+        return 'Konteks N5';
+      },
+
+      getSentenceForItem: function (item) {
+        if (!item) return { jp: '', ro: '', id: '', tag: 'Konteks N5' };
+        if (item.ex_jp) {
+          return {
+            jp: item.ex_jp,
+            ro: item.ex_ro || '',
+            id: item.ex_id || '',
+            tag: this.getGroupTag(item)
+          };
+        }
+        const k = item.k;
+        if (this.sentencesMap && this.sentencesMap[k]) {
+          const res = Object.assign({}, this.sentencesMap[k]);
+          res.tag = this.getGroupTag(item);
+          return res;
+        }
+
+        // If item has ex (e.g. from DB_Relatif)
+        if (item.ex) {
+          const m = item.ex.match(/^(.*?)[（\(](.*?)[）\)]/);
+          if (m) {
+            const rawJp = m[1].trim();
+            const idText = m[2].trim();
+            const hlJp = (k && rawJp.includes(k))
+              ? rawJp.replace(k, `<span class="sent-hl-num">${k}</span>`)
+              : rawJp;
+            return {
+              jp: hlJp,
+              ro: item.ro || hiraToRomaji(item.r || ''),
+              id: idText,
+              tag: this.getGroupTag(item)
+            };
+          }
+        }
+
+        const grp = item.grp || '';
+        const cat = this.activeCategory || '';
+        const a = item.a || '';
+        const r = item.r || '';
+        const ro = item.ro || hiraToRomaji(r);
+
+        if (cat === 'angka') {
+          return {
+            jp: `このノートは<span class="sent-hl-num">${k}</span>円です。`,
+            ro: `Kono nooto wa ${ro}-en desu.`,
+            id: `Buku catatan ini seharga ${a} yen.`,
+            tag: 'Bilangan & Nominal'
+          };
+        }
+        if (grp === 'jam') {
+          return {
+            jp: `<span class="sent-hl-num">${k}</span>に友達と会います。`,
+            ro: `${ro} ni tomodachi to aimasu.`,
+            id: `Bertemu teman pada ${a}.`,
+            tag: 'Format Jam (〜時)'
+          };
+        }
+        if (grp === 'menit') {
+          return {
+            jp: `あと<span class="sent-hl-num">${k}</span>で出発します。`,
+            ro: `Ato ${ro} de shuppatsu shimasu.`,
+            id: `Berangkat dalam waktu ${a} lagi.`,
+            tag: 'Format Menit (〜分)'
+          };
+        }
+        if (grp === 'detik') {
+          return {
+            jp: `あと<span class="sent-hl-num">${k}</span>待ってください。`,
+            ro: `Ato ${ro} matte kudasai.`,
+            id: `Tolong tunggu ${a} lagi.`,
+            tag: 'Format Detik (〜秒)'
+          };
+        }
+        if (grp === 'komb') {
+          return {
+            jp: `今、<span class="sent-hl-num">${k}</span>です。`,
+            ro: `Ima, ${ro} desu.`,
+            id: `Sekarang pukul ${a}.`,
+            tag: 'Format Waktu Lengkap'
+          };
+        }
+        if (grp === 'tgl') {
+          return {
+            jp: `<span class="sent-hl-num">${k}</span>にテストがあります。`,
+            ro: `${ro} ni tesuto ga arimasu.`,
+            id: `Ada ujian pada ${a}.`,
+            tag: 'Penanggalan (〜日)'
+          };
+        }
+        if (grp === 'bln') {
+          return {
+            jp: `<span class="sent-hl-num">${k}</span>に日本へ旅行に行きます。`,
+            ro: `${ro} ni Nihon e ryokou ni ikimasu.`,
+            id: `Pergi berwisata ke Jepang pada ${a}.`,
+            tag: 'Nama Bulan (〜月)'
+          };
+        }
+        if (grp === 'thn') {
+          return {
+            jp: `<span class="sent-hl-num">${k}</span>間、日本語を勉強しました。`,
+            ro: `${ro}-kan, Nihongo o benkyou shimashita.`,
+            id: `Belajar bahasa Jepang selama ${a}.`,
+            tag: 'Tahun & Durasi (〜年)'
+          };
+        }
+
+        return {
+          jp: `<span class="sent-hl-num">${k}</span>の例文です。`,
+          ro: ro,
+          id: `Contoh penggunaan ${a}.`,
+          tag: 'Konteks N5'
+        };
       },
 
       renderFC: function (anim = 'next') {
@@ -4250,6 +4902,24 @@
           noteEl.innerHTML = '💡 ' + item.note;
         } else {
           noteEl.classList.add('hidden');
+        }
+
+        // Live Context Sentence Shelf update (Dihapus/disembunyikan untuk bilangan angka murni)
+        const shelfEl = document.getElementById('fc-sentence-shelf');
+        if (this.activeCategory === 'angka') {
+          if (shelfEl) shelfEl.classList.add('hidden');
+        } else {
+          if (shelfEl) shelfEl.classList.remove('hidden');
+          const sentence = this.getSentenceForItem(item);
+          const fssJp = document.getElementById('fss-jp-text');
+          const fssRo = document.getElementById('fss-ro-text');
+          const fssId = document.getElementById('fss-id-text');
+          const fssPill = document.getElementById('fss-form-pill');
+
+          if (fssJp && sentence) fssJp.innerHTML = sentence.jp;
+          if (fssRo && sentence) fssRo.innerText = sentence.ro ? `(${sentence.ro})` : '';
+          if (fssId && sentence) fssId.innerText = sentence.id;
+          if (fssPill && sentence) fssPill.innerText = sentence.tag || this.getGroupTag(item);
         }
 
         const starBtn = document.getElementById('btn-star-card');
@@ -4307,8 +4977,19 @@
       },
 
       updateMasteryCounter: function () {
+        const total = this.getTotalVocabCount();
+        const count = this.masteredList.length;
         const el = document.getElementById('mastery-count-text');
-        if (el) el.innerText = this.masteredList.length;
+        if (el) el.innerText = count;
+        const totEl = document.getElementById('mastery-total-text');
+        if (totEl) totEl.innerText = total;
+        const subTot = document.getElementById('sd-total-subtitle');
+        if (subTot) subTot.innerText = `${total} Kosakata Bilangan, Satuan & Waktu`;
+        const fill = document.getElementById('mastery-progress-fill');
+        if (fill) {
+          const pct = Math.min(100, Math.round((count / (total || 1)) * 100));
+          fill.style.width = pct + '%';
+        }
       },
 
       speakText: function (text) {
@@ -4325,6 +5006,17 @@
       speakCurrent: function () {
         const item = this.activeArray[this.cardIdx];
         if (item) this.speakText(item.k || item.r);
+      },
+
+      speakCurrentSentence: function () {
+        if (this.activeCategory === 'angka') return;
+        const item = this.activeArray[this.cardIdx];
+        if (!item) return;
+        const sentence = this.getSentenceForItem(item);
+        if (sentence && sentence.jp) {
+          const cleanJp = sentence.jp.replace(/<[^>]*>/g, '');
+          this.speakText(cleanJp);
+        }
       },
 
       toggleSound: function () {
@@ -4797,7 +5489,7 @@
       switchCSTab: function (t) {
         this.playSfx('tap');
         this.csActiveTab = t;
-        ['angka', 'waktu', 'kalender', 'relatif'].forEach(tab => {
+        ['angka', 'hitung', 'waktu', 'kalender', 'relatif'].forEach(tab => {
           const btn = document.getElementById('cstab-' + tab);
           if (btn) btn.classList.toggle('active', tab === t);
         });
@@ -4807,36 +5499,53 @@
         const body = document.getElementById('cs-body-content');
         if (!body) return;
 
-        if (this.csActiveTab === 'angka') {
+                if (this.csActiveTab === 'angka') {
           body.innerHTML = `
         <div class="cs-item-card">
           <div class="cs-item-title">⚠️ Jebakan Ratusan (百 Hyaku)</div>
           <div class="cs-item-desc">
             • <b>300:</b> <span style="color:var(--danger)">さんびゃく (sanbyaku)</span> - bunyi menjadi 'byaku'<br>
-            • <b>600:</b> <span style="color:var(--danger)">ろっぴゃく (roppyaku)</span> - bunyi menjadi 'pyaku'<br>
-            • <b>800:</b> <span style="color:var(--danger)">はっぴゃく (happyaku)</span> - bunyi menjadi 'pyaku'
+            • <b>600:</b> <span style="color:var(--danger)">ろっぴゃく (roppyaku)</span> - bunyi menjadi 'ppyaku'<br>
+            • <b>800:</b> <span style="color:var(--danger)">はっぴゃく (happyaku)</span> - bunyi menjadi 'ppyaku'
           </div>
         </div>
         <div class="cs-item-card">
           <div class="cs-item-title">⚠️ Jebakan Ribuan (千 Sen)</div>
           <div class="cs-item-desc">
-            • <b>3.000:</b> <span style="color:var(--danger)">さんぜん (sanzen)</span> - bunyi menjadi 'zen'<br>
-            • <b>8.000:</b> <span style="color:var(--danger)">はっせん (hassen)</span> - bunyi menjadi 'has-sen'
+            • <b>3.000:</b> <span style="color:var(--danger)">さんぜん (sanzen)</span> - bunyi bergetar 'zen'<br>
+            • <b>8.000:</b> <span style="color:var(--danger)">はっせん (hassen)</span> - bunyi konsonan ganda 'ssen'
           </div>
         </div>
         <div class="cs-item-card">
-          <div class="cs-item-title">💡 Sistem 4 Digit (万 Man)</div>
+          <div class="cs-item-title">💡 Sistem 4-Digit Jepang (万 Man)</div>
           <div class="cs-item-desc">
-            Di Jepang, angka dikelompokkan per 4 digit (0000):<br>
-            • 10.000 = <b>一万 (ichiman)</b><br>
-            • 100.000 = <b>十万 (juuman)</b><br>
-            • 1.000.000 = <b>百万 (hyakuman)</b><br>
-            • 10.000.000 = <b>一千万 (issenman)</b><br>
-            • 100.000.000 = <b>一億 (ichioku)</b>
+            Hitungan angka besar di Jepang dikelompokkan per <b>4 angka nol (10.000 = 1 Man)</b>.<br>
+            • 10.000 = 一万 (Ichiman)<br>
+            • 100.000 = 十万 (Juuman = 10 Man)<br>
+            • 1.000.000 = 百万 (Hyakuman = 100 Man)<br>
+            • 10.000.000 = 一千万 (Issenman = 1.000 Man)<br>
+            • 100.000.000 = 一億 (Ichioku = 1 Oku)
           </div>
         </div>
       `;
-        } else if (this.csActiveTab === 'waktu') {
+        } else if (this.csActiveTab === 'hitung') {
+          body.innerHTML = `
+        <div class="cs-item-card">
+          <div class="cs-item-title">📦 Satuan Hitung Utama (Josuushi 助数詞)</div>
+          <div class="cs-item-desc">
+            • <b>Barang Umum (〜つ):</b> ひとつ, ふたつ, みっつ, よっつ, いつつ, むっつ, ななつ, やっつ, ここのつ, <span style="color:var(--danger)">とお (Tanpa -tsu!)</span>. Pertanyaan: <span style="color:var(--gold)">いくつ?</span><br>
+            • <b>Orang (〜人):</b> ひとり, ふたり, さんにん, <span style="color:var(--danger)">よにん (Bukan yon-nin!)</span>. Pertanyaan: <span style="color:var(--gold)">なんにん?</span><br>
+            • <b>Umur (〜歳):</b> いっさい, はっさい, じゅっさい, <span style="color:var(--danger)">はたち (20 tahun - istimewa!)</span>. Pertanyaan: <span style="color:var(--gold)">なんさい?</span><br>
+            • <b>Benda Pipih/Lembar (〜枚):</b> いちまい, にまい, さんまい... Pertanyaan: <span style="color:var(--gold)">なんまい?</span><br>
+            • <b>Urutan & Peringkat (〜番):</b> いちばん, にばん, さんばん... Pertanyaan: <span style="color:var(--gold)">なんばん?</span><br>
+            • <b>Hewan Kecil (〜匹):</b> <span style="color:var(--danger)">いっぴき</span>, にひき, <span style="color:var(--primary)">さんびき</span>, <span style="color:var(--danger)">ろっぴき</span>, <span style="color:var(--danger)">はっぴき</span>, <span style="color:var(--danger)">じゅっぴき</span>. Pertanyaan: <span style="color:var(--primary)">なんびき?</span><br>
+            • <b>Unggas/Kelinci (〜羽):</b> いちわ, にわ, さんわ/さんば... Pertanyaan: <span style="color:var(--gold)">なんわ?</span><br>
+            • <b>Benda Berpasangan (〜足):</b> <span style="color:var(--danger)">いっそく</span>, にそく, <span style="color:var(--primary)">さんぞく</span>, <span style="color:var(--danger)">はっそく</span>, <span style="color:var(--danger)">じゅっそく</span>. Pertanyaan: <span style="color:var(--primary)">なんぞく?</span><br>
+            • <b>Benda Panjang/Silinder (〜本):</b> <span style="color:var(--danger)">いっぽん</span>, にほん, <span style="color:var(--primary)">さんぼん</span>, <span style="color:var(--danger)">ろっぽん</span>, <span style="color:var(--danger)">はっぽん</span>, <span style="color:var(--danger)">じゅっぽん</span>. Pertanyaan: <span style="color:var(--primary)">なんぼん?</span><br>
+            • <b>Mesin/Kendaraan (〜台):</b> いちだい, にだい, さんだい... Pertanyaan: <span style="color:var(--gold)">なんだい?</span>
+          </div>
+        </div>
+      `;} else if (this.csActiveTab === 'waktu') {
           body.innerHTML = `
         <div class="cs-item-card">
           <div class="cs-item-title">⏰ Anomali Jam (〜時 Ji)</div>
@@ -4908,14 +5617,33 @@
         }
       },
 
+      toggleSidebar: function () {
+        const drawer = document.getElementById('sidebar-drawer');
+        const isOpen = drawer && drawer.classList.contains('active');
+        if (isOpen) {
+          this.closeSidebar();
+        } else {
+          this.openSidebar();
+        }
+      },
+
       openSidebar: function () {
         this.playSfx('tap');
-        document.getElementById('sidebar-overlay').classList.add('active');
-        document.getElementById('sidebar-drawer').classList.add('active');
+        const overlay = document.getElementById('sidebar-overlay');
+        const drawer = document.getElementById('sidebar-drawer');
+        const caret = document.getElementById('active-session-caret');
+        if (overlay) overlay.classList.add('active');
+        if (drawer) drawer.classList.add('active');
+        if (caret) caret.style.transform = 'rotate(180deg)';
       },
+
       closeSidebar: function () {
-        document.getElementById('sidebar-overlay').classList.remove('active');
-        document.getElementById('sidebar-drawer').classList.remove('active');
+        const overlay = document.getElementById('sidebar-overlay');
+        const drawer = document.getElementById('sidebar-drawer');
+        const caret = document.getElementById('active-session-caret');
+        if (overlay) overlay.classList.remove('active');
+        if (drawer) drawer.classList.remove('active');
+        if (caret) caret.style.transform = 'rotate(0deg)';
       },
 
       bindKeyboardShortcuts: function () {
