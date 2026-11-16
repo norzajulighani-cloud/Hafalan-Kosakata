@@ -1931,7 +1931,7 @@
         <a class="btn-nav-icon" href="index.html" title="Kembali ke Beranda">🏠</a>
         <div class="mastery-counter-pill" id="nav-mastery-pill">
           <span>⭐</span>
-          <span>Dikuasai: <b id="mastery-count-text">0</b> / <span id="mastery-total-text">389</span></span>
+          <span>Dikuasai: <b id="mastery-count-text">0</b> / <span id="mastery-total-text">412</span></span>
         </div>
       </div>
       <div class="nav-right-group">
@@ -1995,7 +1995,7 @@
           </div>
 
           <!-- Interactive Sentence & Context Shelf (Identik Kata Kerja) -->
-          <div class="fc-sentence-shelf" id="fc-sentence-shelf">
+          <div class="fc-sentence-shelf hidden" id="fc-sentence-shelf">
             <div class="fss-top">
               <span class="fss-badge">💬 CONTOH PENGGUNAAN</span>
               <button type="button" class="btn-sentence-audio" id="btn-sentence-audio" onclick="Modul.speakCurrentSentence()" title="Dengarkan Contoh Kalimat">🔊</button>
@@ -2297,7 +2297,7 @@
         <span class="sd-icon">📚</span>
         <div>
           <div class="sd-title">Daftar Sesi & Materi</div>
-          <div class="sd-subtitle" id="sd-total-subtitle">389 Kosakata Bilangan, Satuan & Waktu</div>
+          <div class="sd-subtitle" id="sd-total-subtitle">412 Kosakata Bilangan, Satuan & Waktu</div>
         </div>
       </div>
       <button type="button" class="btn-sd-close" onclick="Modul.closeSidebar()" title="Tutup">✕</button>
@@ -2309,7 +2309,7 @@
   </div>
 
   <script>
-    // DATABASES KOSAKATA (278 KOSAKATA LENGKAP)
+    // DATABASES KOSAKATA (412 KOSAKATA LENGKAP)
     const DB_Angka = {
       "1": [
         {
@@ -3887,272 +3887,617 @@
       }
     ];
     const DB_Relatif = [
-      {
-        "k": "日",
-        "r": "にち",
-        "a": "hari",
-        "grp": "nichi"
-      },
-      {
-        "k": "一昨日",
-        "r": "おととい",
-        "a": "2 hari lalu",
-        "ex": "一昨日は雨でした。(Dua hari lalu hujan.)",
-        "grp": "nichi"
-      },
-      {
-        "k": "昨日",
-        "r": "きのう",
-        "a": "kemarin",
-        "ex": "昨日は忙しかったです。(Kemarin sibuk.)",
-        "grp": "nichi"
-      },
-      {
-        "k": "今日",
-        "r": "きょう",
-        "a": "hari ini",
-        "ex": "今日は月曜日です。(Hari ini hari Senin.)",
-        "grp": "nichi"
-      },
-      {
-        "k": "明日",
-        "r": "あす",
-        "alt": "あした",
-        "a": "besok",
-        "note": "Biasa dibaca あした (ashita)",
-        "ex": "明日は学校へ行きます。(Besok pergi ke sekolah.)",
-        "grp": "nichi"
-      },
-      {
-        "k": "明後日",
-        "r": "あさって",
-        "a": "2 hari lagi",
-        "ex": "明後日は休みです。(Dua hari lagi libur.)",
-        "grp": "nichi"
-      },
-      {
-        "k": "毎日",
-        "r": "まいにち",
-        "a": "setiap hari",
-        "ex": "毎日日本語を勉強します。(Setiap hari belajar bahasa Jepang.)",
-        "grp": "nichi"
-      },
-      {
-        "k": "週",
-        "r": "しゅう",
-        "a": "minggu",
-        "grp": "shuu"
-      },
-      {
-        "k": "先々週",
-        "r": "せんせんしゅう",
-        "a": "2 minggu lalu",
-        "ex": "先々週、映画を見ました。(Dua minggu lalu menonton film.)",
-        "grp": "shuu"
-      },
-      {
-        "k": "先週",
-        "r": "せんしゅう",
-        "a": "minggu lalu",
-        "ex": "先週は暇でした。(Minggu lalu senggang.)",
-        "grp": "shuu"
-      },
-      {
-        "k": "今週",
-        "r": "こんしゅう",
-        "a": "minggu ini",
-        "ex": "今週はテストがあります。(Minggu ini ada ujian.)",
-        "grp": "shuu"
-      },
-      {
-        "k": "来週",
-        "r": "らいしゅう",
-        "a": "minggu depan",
-        "ex": "来週、日本へ行きます。(Minggu depan pergi ke Jepang.)",
-        "grp": "shuu"
-      },
-      {
-        "k": "再来週",
-        "r": "さらいしゅう",
-        "a": "2 minggu lagi",
-        "ex": "再来週のパーティーが楽しみです。(Menantikan pesta 2 minggu lagi.)",
-        "grp": "shuu"
-      },
-      {
-        "k": "毎週",
-        "r": "まいしゅう",
-        "a": "setiap minggu",
-        "ex": "毎週土曜日に買い物をします。(Setiap minggu hari Sabtu berbelanja.)",
-        "grp": "shuu"
-      },
-      {
-        "k": "月",
-        "r": "げつ",
-        "alt": "つき",
-        "a": "bulan",
-        "note": "Dalam konteks ini biasa dibaca つき (tsuki)",
-        "grp": "getsu"
-      },
-      {
-        "k": "先々月",
-        "r": "せんせんげつ",
-        "a": "2 bulan lalu",
-        "ex": "先々月、車を買いました。(Dua bulan lalu membeli mobil.)",
-        "grp": "getsu"
-      },
-      {
-        "k": "先月",
-        "r": "せんげつ",
-        "a": "bulan lalu",
-        "ex": "先月は暑かったです。(Bulan lalu panas.)",
-        "grp": "getsu"
-      },
-      {
-        "k": "今月",
-        "r": "こんげつ",
-        "a": "bulan ini",
-        "ex": "今月はお金がありません。(Bulan ini tidak ada uang.)",
-        "grp": "getsu"
-      },
-      {
-        "k": "来月",
-        "r": "らいげつ",
-        "a": "bulan depan",
-        "ex": "来月、友達が来ます。(Bulan depan teman akan datang.)",
-        "grp": "getsu"
-      },
-      {
-        "k": "再来月",
-        "r": "さらいげつ",
-        "a": "2 bulan lagi",
-        "ex": "再来月に旅行します。(Akan jalan-jalan 2 bulan lagi.)",
-        "grp": "getsu"
-      },
-      {
-        "k": "毎月",
-        "r": "まいつき",
-        "a": "setiap bulan",
-        "ex": "毎月本を三冊読みます。(Setiap bulan membaca 3 buku.)",
-        "grp": "getsu"
-      },
-      {
-        "k": "年",
-        "r": "ねん",
-        "alt": "とし",
-        "a": "tahun",
-        "note": "Dalam konteks ini biasa dibaca とし (toshi)",
-        "grp": "nen"
-      },
-      {
-        "k": "一昨年",
-        "r": "おととし",
-        "a": "2 tahun lalu",
-        "ex": "一昨年に大学を卒業しました。(Dua tahun lalu lulus universitas.)",
-        "grp": "nen"
-      },
-      {
-        "k": "去年",
-        "r": "きょねん",
-        "a": "tahun lalu",
-        "ex": "去年、京都へ行きました。(Tahun lalu pergi ke Kyoto.)",
-        "grp": "nen"
-      },
-      {
-        "k": "今年",
-        "r": "ことし",
-        "a": "tahun ini",
-        "ex": "今年は二千二十六年です。(Tahun ini adalah tahun 2026.)",
-        "grp": "nen"
-      },
-      {
-        "k": "来年",
-        "r": "らいねん",
-        "a": "tahun depan",
-        "ex": "来年、仕事を辞めます。(Tahun depan akan berhenti kerja.)",
-        "grp": "nen"
-      },
-      {
-        "k": "再来年",
-        "r": "さらいねん",
-        "a": "2 tahun lagi",
-        "ex": "再来年、結婚します。(Dua tahun lagi akan menikah.)",
-        "grp": "nen"
-      },
-      {
-        "k": "毎年",
-        "r": "まいとし",
-        "a": "setiap tahun",
-        "ex": "毎年バリ島へ行きます。(Setiap tahun pergi ke Bali.)",
-        "grp": "nen"
-      },
-      {
-        "k": "朝",
-        "r": "あさ",
-        "a": "pagi",
-        "grp": "asa"
-      },
-      {
-        "k": "今朝",
-        "r": "けさ",
-        "a": "pagi ini",
-        "ex": "今朝、コーヒーを飲みました。(Pagi ini minum kopi.)",
-        "grp": "asa"
-      },
-      {
-        "k": "明朝",
-        "r": "みょうちょう",
-        "a": "besok pagi",
-        "ex": "明朝、会議があります。(Besok pagi ada rapat.)",
-        "grp": "asa"
-      },
-      {
-        "k": "毎朝",
-        "r": "まいあさ",
-        "a": "setiap pagi",
-        "ex": "毎朝六時に起きます。(Setiap pagi bangun jam 6.)",
-        "grp": "asa"
-      },
-      {
-        "k": "夜",
-        "r": "よる",
-        "a": "malam",
-        "grp": "ban"
-      },
-      {
-        "k": "晩",
-        "r": "ばん",
-        "a": "malam / petang",
-        "grp": "ban"
-      },
-      {
-        "k": "昨夜",
-        "r": "さくや",
-        "a": "malam lalu",
-        "ex": "昨夜はよく眠れました。(Malam lalu bisa tidur nyenyak.)",
-        "grp": "ban"
-      },
-      {
-        "k": "今晩",
-        "r": "こんばん",
-        "a": "malam ini",
-        "ex": "今晩、レストランで食べます。(Malam ini akan makan di restoran.)",
-        "grp": "ban"
-      },
-      {
-        "k": "明晩",
-        "r": "みょうばん",
-        "a": "besok malam",
-        "ex": "明晩、電話します。(Besok malam akan menelepon.)",
-        "grp": "ban"
-      },
-      {
-        "k": "毎晩",
-        "r": "まいばん",
-        "a": "setiap malam",
-        "ex": "毎晩テレビを見ます。(Setiap malam menonton TV.)",
-        "grp": "ban"
-      }
-    ];
+  {
+    "k": "日",
+    "r": "にち",
+    "ro": "nichi",
+    "a": "hari",
+    "grp": "nichi",
+    "ex_jp": "今日はいい<span class=\"sent-hl-num\">日</span>ですね。",
+    "ex_ro": "Kyou wa ii hi desu ne.",
+    "ex_id": "Hari ini hari yang menyenangkan ya."
+  },
+  {
+    "k": "一昨日",
+    "r": "おととい",
+    "ro": "ototoi",
+    "a": "2 hari lalu",
+    "grp": "nichi",
+    "ex_jp": "<span class=\"sent-hl-num\">一昨日</span>は雨でした。",
+    "ex_ro": "Ototoi wa ame deshita.",
+    "ex_id": "Dua hari lalu hujan."
+  },
+  {
+    "k": "昨日",
+    "r": "きのう",
+    "ro": "kinou",
+    "a": "kemarin",
+    "grp": "nichi",
+    "ex_jp": "<span class=\"sent-hl-num\">昨日</span>はとても忙しかったです。",
+    "ex_ro": "Kinou wa totemo isogashikatta desu.",
+    "ex_id": "Kemarin saya sangat sibuk."
+  },
+  {
+    "k": "今日",
+    "r": "きょう",
+    "ro": "kyou",
+    "a": "hari ini",
+    "grp": "nichi",
+    "ex_jp": "<span class=\"sent-hl-num\">今日</span>は月曜日です。",
+    "ex_ro": "Kyou wa getsuyoubi desu.",
+    "ex_id": "Hari ini adalah hari Senin."
+  },
+  {
+    "k": "明日",
+    "r": "あした",
+    "ro": "ashita",
+    "a": "besok",
+    "grp": "nichi",
+    "ex_jp": "<span class=\"sent-hl-num\">明日</span>は学校へ行きます。",
+    "ex_ro": "Ashita wa gakkou e ikimasu.",
+    "ex_id": "Besok saya pergi ke sekolah."
+  },
+  {
+    "k": "明後日",
+    "r": "あさって",
+    "ro": "asatte",
+    "a": "2 hari lagi / lusa",
+    "grp": "nichi",
+    "ex_jp": "<span class=\"sent-hl-num\">明後日</span>はテストがあります。",
+    "ex_ro": "Asatte wa tesuto ga arimasu.",
+    "ex_id": "Dua hari lagi ada ujian."
+  },
+  {
+    "k": "毎日",
+    "r": "まいにち",
+    "ro": "mainichi",
+    "a": "setiap hari",
+    "grp": "nichi",
+    "ex_jp": "<span class=\"sent-hl-num\">毎日</span>日本語を勉強します。",
+    "ex_ro": "Mainichi Nihongo o benkyou shimasu.",
+    "ex_id": "Setiap hari saya belajar bahasa Jepang."
+  },
+  {
+    "k": "週",
+    "r": "しゅう",
+    "ro": "shuu",
+    "a": "minggu",
+    "grp": "shuu",
+    "ex_jp": "一<span class=\"sent-hl-num\">週</span>間日本に滞在しました。",
+    "ex_ro": "Isshuukan Nihon ni taizai shimashita.",
+    "ex_id": "Tinggal di Jepang selama satu minggu."
+  },
+  {
+    "k": "先々週",
+    "r": "せんせんしゅう",
+    "ro": "sensenshuu",
+    "a": "2 minggu lalu",
+    "grp": "shuu",
+    "ex_jp": "<span class=\"sent-hl-num\">先々週</span>、映画を見ました。",
+    "ex_ro": "Sensenshuu, eiga o mimashita.",
+    "ex_id": "Dua minggu lalu, saya menonton film."
+  },
+  {
+    "k": "先週",
+    "r": "せんしゅう",
+    "ro": "senshuu",
+    "a": "minggu lalu",
+    "grp": "shuu",
+    "ex_jp": "<span class=\"sent-hl-num\">先週</span>は仕事が暇でした。",
+    "ex_ro": "Senshuu wa shigoto ga hima deshita.",
+    "ex_id": "Minggu lalu pekerjaan saya senggang."
+  },
+  {
+    "k": "今週",
+    "r": "こんしゅう",
+    "ro": "konshuu",
+    "a": "minggu ini",
+    "grp": "shuu",
+    "ex_jp": "<span class=\"sent-hl-num\">今週</span>はレポートを提出します。",
+    "ex_ro": "Konshuu wa repooto o teishutsu shimasu.",
+    "ex_id": "Minggu ini saya mengumpulkan laporan."
+  },
+  {
+    "k": "来週",
+    "r": "らいしゅう",
+    "ro": "raishuu",
+    "a": "minggu depan",
+    "grp": "shuu",
+    "ex_jp": "<span class=\"sent-hl-num\">来週</span>、日本へ旅行に行きます。",
+    "ex_ro": "Raishuu, Nihon e ryokou ni ikimasu.",
+    "ex_id": "Minggu depan saya akan berwisata ke Jepang."
+  },
+  {
+    "k": "再来週",
+    "r": "さらいしゅう",
+    "ro": "saraishuu",
+    "a": "2 minggu lagi",
+    "grp": "shuu",
+    "ex_jp": "<span class=\"sent-hl-num\">再来週</span>のパーティーが楽しみです。",
+    "ex_ro": "Saraishuu no paatii ga tanoshimi desu.",
+    "ex_id": "Saya menantikan pesta dua minggu lagi."
+  },
+  {
+    "k": "毎週",
+    "r": "まいしゅう",
+    "ro": "maishuu",
+    "a": "setiap minggu",
+    "grp": "shuu",
+    "ex_jp": "<span class=\"sent-hl-num\">毎週</span>土曜日に買い物をします。",
+    "ex_ro": "Maishuu doyoubi ni kaimono o shimasu.",
+    "ex_id": "Setiap hari Sabtu saya berbelanja."
+  },
+  {
+    "k": "週末",
+    "r": "しゅうまつ",
+    "ro": "shuumatsu",
+    "a": "akhir pekan / weekend",
+    "grp": "shuu",
+    "ex_jp": "<span class=\"sent-hl-num\">週末</span>は何をしますか。",
+    "ex_ro": "Shuumatsu wa nani o shimasu ka.",
+    "ex_id": "Akhir pekan ini mau melakukan apa?"
+  },
+  {
+    "k": "平日",
+    "r": "へいじつ",
+    "ro": "heijitsu",
+    "a": "hari kerja / weekdays",
+    "grp": "shuu",
+    "ex_jp": "<span class=\"sent-hl-num\">平日</span>は会社で働きます。",
+    "ex_ro": "Heijitsu wa kaisha de hatarakimasu.",
+    "ex_id": "Pada hari kerja saya bekerja di kantor."
+  },
+  {
+    "k": "休日",
+    "r": "きゅうじつ",
+    "ro": "kyuujitsu",
+    "a": "hari libur / istirahat",
+    "grp": "shuu",
+    "ex_jp": "<span class=\"sent-hl-num\">休日</span>は家でゆっくり休みます。",
+    "ex_ro": "Kyuujitsu wa ie de yukkuri yasumimasu.",
+    "ex_id": "Pada hari libur saya beristirahat santai di rumah."
+  },
+  {
+    "k": "月",
+    "r": "げつ",
+    "ro": "getsu",
+    "a": "bulan",
+    "grp": "getsu",
+    "ex_jp": "今夜は<span class=\"sent-hl-num\">月</span>がとても綺麗です。",
+    "ex_ro": "Kon'ya wa tsuki ga totemo kirei desu.",
+    "ex_id": "Malam ini bulannya sangat indah."
+  },
+  {
+    "k": "先々月",
+    "r": "せんせんげつ",
+    "ro": "sensengetsu",
+    "a": "2 bulan lalu",
+    "grp": "getsu",
+    "ex_jp": "<span class=\"sent-hl-num\">先々月</span>、新しい車を買いました。",
+    "ex_ro": "Sensengetsu, atarashii kuruma o kaimashita.",
+    "ex_id": "Dua bulan lalu saya membeli mobil baru."
+  },
+  {
+    "k": "先月",
+    "r": "せんげつ",
+    "ro": "sengetsu",
+    "a": "bulan lalu",
+    "grp": "getsu",
+    "ex_jp": "<span class=\"sent-hl-num\">先月</span>はとても暑かったです。",
+    "ex_ro": "Sengetsu wa totemo atsukatta desu.",
+    "ex_id": "Bulan lalu cuacanya sangat panas."
+  },
+  {
+    "k": "今月",
+    "r": "こんげつ",
+    "ro": "kongetsu",
+    "a": "bulan ini",
+    "grp": "getsu",
+    "ex_jp": "<span class=\"sent-hl-num\">今月</span>は私の誕生日があります。",
+    "ex_ro": "Kongetsu wa watashi no tanjoubi ga arimasu.",
+    "ex_id": "Bulan ini ada hari ulang tahun saya."
+  },
+  {
+    "k": "来月",
+    "r": "らいげつ",
+    "ro": "raigetsu",
+    "a": "bulan depan",
+    "grp": "getsu",
+    "ex_jp": "<span class=\"sent-hl-num\">来月</span>、日本の友達が来ます。",
+    "ex_ro": "Raigetsu, Nihon no tomodachi ga kimasu.",
+    "ex_id": "Bulan depan teman dari Jepang akan datang."
+  },
+  {
+    "k": "再来月",
+    "r": "さらいげつ",
+    "ro": "saraigetsu",
+    "a": "2 bulan lagi",
+    "grp": "getsu",
+    "ex_jp": "<span class=\"sent-hl-num\">再来月</span>に家族で旅行します。",
+    "ex_ro": "Saraigetsu ni kazoku de ryokou shimasu.",
+    "ex_id": "Dua bulan lagi kami sekeluarga akan jalan-jalan."
+  },
+  {
+    "k": "毎月",
+    "r": "まいつき",
+    "ro": "maitsuki",
+    "a": "setiap bulan",
+    "grp": "getsu",
+    "ex_jp": "<span class=\"sent-hl-num\">毎月</span>本を三冊読みます。",
+    "ex_ro": "Maitsuki hon o sansatsu yomimasu.",
+    "ex_id": "Setiap bulan saya membaca tiga buku."
+  },
+  {
+    "k": "年",
+    "r": "ねん",
+    "ro": "nen",
+    "a": "tahun",
+    "grp": "nen",
+    "ex_jp": "一<span class=\"sent-hl-num\">年</span>はあっという間です。",
+    "ex_ro": "Ichinen wa atto iu ma desu.",
+    "ex_id": "Satu tahun berlalu begitu cepat."
+  },
+  {
+    "k": "一昨年",
+    "r": "おととし",
+    "ro": "ototoshi",
+    "a": "2 tahun lalu",
+    "grp": "nen",
+    "ex_jp": "<span class=\"sent-hl-num\">一昨年</span>に大学を卒業しました。",
+    "ex_ro": "Ototoshi ni daigaku o sotsugyou shimashita.",
+    "ex_id": "Dua tahun lalu saya lulus dari universitas."
+  },
+  {
+    "k": "去年",
+    "r": "きょねん",
+    "ro": "kyonen",
+    "a": "tahun lalu",
+    "grp": "nen",
+    "ex_jp": "<span class=\"sent-hl-num\">去年</span>、京都へ行きました。",
+    "ex_ro": "Kyonen, Kyouto e ikimashita.",
+    "ex_id": "Tahun lalu saya pergi ke Kyoto."
+  },
+  {
+    "k": "今年",
+    "r": "ことし",
+    "ro": "kotoshi",
+    "a": "tahun ini",
+    "grp": "nen",
+    "ex_jp": "<span class=\"sent-hl-num\">今年</span>は日本語能力試験を受けます。",
+    "ex_ro": "Kotoshi wa Nihongo nouryoku shiken o ukemasu.",
+    "ex_id": "Tahun ini saya akan mengikuti ujian JLPT."
+  },
+  {
+    "k": "来年",
+    "r": "らいねん",
+    "ro": "rainen",
+    "a": "tahun depan",
+    "grp": "nen",
+    "ex_jp": "<span class=\"sent-hl-num\">来年</span>、日本で働きたいです。",
+    "ex_ro": "Rainen, Nihon de hatarakitai desu.",
+    "ex_id": "Tahun depan saya ingin bekerja di Jepang."
+  },
+  {
+    "k": "再来年",
+    "r": "さらいねん",
+    "ro": "sarainen",
+    "a": "2 tahun lagi",
+    "grp": "nen",
+    "ex_jp": "<span class=\"sent-hl-num\">再来年</span>、新しい家を建てます。",
+    "ex_ro": "Sarainen, atarashii ie o tatemasu.",
+    "ex_id": "Dua tahun lagi saya akan membangun rumah baru."
+  },
+  {
+    "k": "毎年",
+    "r": "まいとし",
+    "ro": "maitoshi",
+    "a": "setiap tahun",
+    "grp": "nen",
+    "ex_jp": "<span class=\"sent-hl-num\">毎年</span>ふるさとへ帰ります。",
+    "ex_ro": "Maitoshi furusato e kaerimasu.",
+    "ex_id": "Setiap tahun saya pulang ke kampung halaman."
+  },
+  {
+    "k": "朝",
+    "r": "あさ",
+    "ro": "asa",
+    "a": "pagi",
+    "grp": "asa",
+    "ex_jp": "<span class=\"sent-hl-num\">朝</span>ごはんをしっかり食べます。",
+    "ex_ro": "Asagohan o shikkari tabemasu.",
+    "ex_id": "Saya sarapan pagi dengan baik."
+  },
+  {
+    "k": "今朝",
+    "r": "けさ",
+    "ro": "kesa",
+    "a": "pagi ini",
+    "grp": "asa",
+    "ex_jp": "<span class=\"sent-hl-num\">今朝</span>、温かいコーヒーを飲みました。",
+    "ex_ro": "Kesa, atatakai koohii o nomimashita.",
+    "ex_id": "Pagi ini saya minum kopi hangat."
+  },
+  {
+    "k": "明朝",
+    "r": "みょうちょう",
+    "ro": "myouchou",
+    "a": "besok pagi (formal)",
+    "grp": "asa",
+    "ex_jp": "<span class=\"sent-hl-num\">明朝</span>八時に出発します。",
+    "ex_ro": "Myouchou hachiji ni shuppatsu shimasu.",
+    "ex_id": "Besok pagi jam 8 kita berangkat."
+  },
+  {
+    "k": "明日の朝",
+    "r": "あしたのあさ",
+    "ro": "ashita no asa",
+    "a": "besok pagi",
+    "grp": "asa",
+    "ex_jp": "<span class=\"sent-hl-num\">明日の朝</span>、電話をかけますね。",
+    "ex_ro": "Ashita no asa, denwa o kakemasu ne.",
+    "ex_id": "Besok pagi saya akan menelepon ya."
+  },
+  {
+    "k": "毎朝",
+    "r": "まいあさ",
+    "ro": "maiasa",
+    "a": "setiap pagi",
+    "grp": "asa",
+    "ex_jp": "<span class=\"sent-hl-num\">毎朝</span>六時にジョギングします。",
+    "ex_ro": "Maiasa rokuji ni jogingu shimasu.",
+    "ex_id": "Setiap pagi jam 6 saya jogging."
+  },
+  {
+    "k": "昼",
+    "r": "ひる",
+    "ro": "hiru",
+    "a": "siang hari",
+    "grp": "asa",
+    "ex_jp": "<span class=\"sent-hl-num\">昼</span>ごはんはラーメンを食べました。",
+    "ex_ro": "Hirugohan wa raamen o tabemashita.",
+    "ex_id": "Makan siang saya makan ramen."
+  },
+  {
+    "k": "昼間",
+    "r": "ひるま",
+    "ro": "hiruma",
+    "a": "siang hari / waktu siang",
+    "grp": "asa",
+    "ex_jp": "<span class=\"sent-hl-num\">昼間</span>はとても暖かいです。",
+    "ex_ro": "Hiruma wa totemo atatakai desu.",
+    "ex_id": "Pada siang hari cuacanya sangat hangat."
+  },
+  {
+    "k": "夕方",
+    "r": "ゆうがた",
+    "ro": "yuugata",
+    "a": "sore hari / petang",
+    "grp": "asa",
+    "ex_jp": "<span class=\"sent-hl-num\">夕方</span>公園を散歩しました。",
+    "ex_ro": "Yuugata kouen o sanpo shimashita.",
+    "ex_id": "Sore hari saya berjalan-jalan di taman."
+  },
+  {
+    "k": "夜",
+    "r": "よる",
+    "ro": "yoru",
+    "a": "malam",
+    "grp": "ban",
+    "ex_jp": "<span class=\"sent-hl-num\">夜</span>遅くまで勉強しました。",
+    "ex_ro": "Yoru osoku made benkyou shimashita.",
+    "ex_id": "Saya belajar sampai larut malam."
+  },
+  {
+    "k": "晩",
+    "r": "ばん",
+    "ro": "ban",
+    "a": "malam / petang",
+    "grp": "ban",
+    "ex_jp": "<span class=\"sent-hl-num\">晩</span>ごはんを一緒に食べましょう。",
+    "ex_ro": "Bangohan o issho ni tabemashou.",
+    "ex_id": "Mari kita makan malam bersama."
+  },
+  {
+    "k": "昨夜",
+    "r": "さくや",
+    "ro": "sakuya",
+    "a": "malam lalu (formal)",
+    "grp": "ban",
+    "ex_jp": "<span class=\"sent-hl-num\">昨夜</span>は強い風が吹きました。",
+    "ex_ro": "Sakuya wa tsuyoi kaze ga fukimashita.",
+    "ex_id": "Malam lalu angin kencang bertiup."
+  },
+  {
+    "k": "ゆうべ",
+    "r": "ゆうべ",
+    "ro": "yuube",
+    "a": "tadi malam / semalam",
+    "grp": "ban",
+    "ex_jp": "<span class=\"sent-hl-num\">ゆうべ</span>はよく眠れました。",
+    "ex_ro": "Yuube wa yoku nemuremashita.",
+    "ex_id": "Tadi malam saya tidur nyenyak."
+  },
+  {
+    "k": "今晩",
+    "r": "こんばん",
+    "ro": "konban",
+    "a": "malam ini",
+    "grp": "ban",
+    "ex_jp": "<span class=\"sent-hl-num\">今晩</span>、レストランで食事します。",
+    "ex_ro": "Konban, resutoran de shokuji shimasu.",
+    "ex_id": "Malam ini saya makan di restoran."
+  },
+  {
+    "k": "明晩",
+    "r": "みょうばん",
+    "ro": "myouban",
+    "a": "besok malam",
+    "grp": "ban",
+    "ex_jp": "<span class=\"sent-hl-num\">明晩</span>七時に会いましょう。",
+    "ex_ro": "Myouban shichiji ni aimashou.",
+    "ex_id": "Mari bertemu besok malam jam 7."
+  },
+  {
+    "k": "毎晩",
+    "r": "まいばん",
+    "ro": "maiban",
+    "a": "setiap malam",
+    "grp": "ban",
+    "ex_jp": "<span class=\"sent-hl-num\">毎晩</span>温かいお風呂に入ります。",
+    "ex_ro": "Maiban atatakai ofuro ni hairimasu.",
+    "ex_id": "Setiap malam saya berendam air hangat."
+  },
+  {
+    "k": "今",
+    "r": "いま",
+    "ro": "ima",
+    "a": "sekarang",
+    "grp": "momen",
+    "ex_jp": "<span class=\"sent-hl-num\">今</span>何時ですか。",
+    "ex_ro": "Ima nanji desu ka.",
+    "ex_id": "Sekarang jam berapa?"
+  },
+  {
+    "k": "ちょうど今",
+    "r": "ちょうどいま",
+    "ro": "choudo ima",
+    "a": "tepat sekarang / baru saja",
+    "grp": "momen",
+    "ex_jp": "<span class=\"sent-hl-num\">ちょうど今</span>着いたところです。",
+    "ex_ro": "Choudo ima tsuita tokoro desu.",
+    "ex_id": "Saya tepat baru saja tiba."
+  },
+  {
+    "k": "さっき",
+    "r": "さっき",
+    "ro": "sakki",
+    "a": "tadi / barusan",
+    "grp": "momen",
+    "ex_jp": "<span class=\"sent-hl-num\">さっき</span>田中さんが来ましたよ。",
+    "ex_ro": "Sakki Tanaka-san ga kimashita yo.",
+    "ex_id": "Tadi tuan Tanaka datang loh."
+  },
+  {
+    "k": "後で",
+    "r": "あとで",
+    "ro": "ato de",
+    "a": "nanti / setelah ini",
+    "grp": "momen",
+    "ex_jp": "<span class=\"sent-hl-num\">後で</span>電話で連絡しますね。",
+    "ex_ro": "Ato de denwa de renraku shimasu ne.",
+    "ex_id": "Nanti saya hubungi lewat telepon ya."
+  },
+  {
+    "k": "もうすぐ",
+    "r": "もうすぐ",
+    "ro": "mousugu",
+    "a": "sebentar lagi / segera",
+    "grp": "momen",
+    "ex_jp": "<span class=\"sent-hl-num\">もうすぐ</span>電車が来ます。",
+    "ex_ro": "Mousugu densha ga kimasu.",
+    "ex_id": "Sebentar lagi kereta akan datang."
+  },
+  {
+    "k": "すぐに",
+    "r": "すぐに",
+    "ro": "sugu ni",
+    "a": "langsung / segera",
+    "grp": "momen",
+    "ex_jp": "<span class=\"sent-hl-num\">すぐに</span>戻りますので待ってください。",
+    "ex_ro": "Sugu ni modorimasu node matte kudasai.",
+    "ex_id": "Saya akan segera kembali, tolong tunggu ya."
+  },
+  {
+    "k": "これから",
+    "r": "これから",
+    "ro": "kore kara",
+    "a": "mulai sekarang / sesudah ini",
+    "grp": "momen",
+    "ex_jp": "<span class=\"sent-hl-num\">これから</span>会議が始まります。",
+    "ex_ro": "Kore kara kaigi ga hajimarimasu.",
+    "ex_id": "Mulai sekarang rapat akan dimulai."
+  },
+  {
+    "k": "この間",
+    "r": "このあいだ",
+    "ro": "kono aida",
+    "a": "beberapa hari lalu / baru-baru ini",
+    "grp": "momen",
+    "ex_jp": "<span class=\"sent-hl-num\">この間</span>はお世話になりました。",
+    "ex_ro": "Kono aida wa osewa ni narimashita.",
+    "ex_id": "Terima kasih atas bantuannya beberapa hari lalu."
+  },
+  {
+    "k": "いつも",
+    "r": "いつも",
+    "ro": "itsumo",
+    "a": "selalu",
+    "grp": "frek",
+    "ex_jp": "<span class=\"sent-hl-num\">いつも</span>ここでコーヒーを買います。",
+    "ex_ro": "Itsumo koko de koohii o kaimasu.",
+    "ex_id": "Saya selalu membeli kopi di sini."
+  },
+  {
+    "k": "時々",
+    "r": "ときどき",
+    "ro": "tokidoki",
+    "a": "kadang-kadang",
+    "grp": "frek",
+    "ex_jp": "<span class=\"sent-hl-num\">時々</span>友達とサッカーをします。",
+    "ex_ro": "Tokidoki tomodachi to sakkaa o shimasu.",
+    "ex_id": "Kadang-kadang saya bermain sepak bola bersama teman."
+  },
+  {
+    "k": "たまに",
+    "r": "たまに",
+    "ro": "tama ni",
+    "a": "sesekali / jarang-jarang",
+    "grp": "frek",
+    "ex_jp": "<span class=\"sent-hl-num\">たまに</span>家族と外で食事をします。",
+    "ex_ro": "Tama ni kazoku to soto de shokuji o shimasu.",
+    "ex_id": "Sesekali saya makan di luar bersama keluarga."
+  },
+  {
+    "k": "最近",
+    "r": "さいきん",
+    "ro": "saikin",
+    "a": "akhir-akhir ini / belakangan ini",
+    "grp": "frek",
+    "ex_jp": "<span class=\"sent-hl-num\">最近</span>仕事がとても忙しいです。",
+    "ex_ro": "Saikin shigoto ga totemo isogashii desu.",
+    "ex_id": "Akhir-akhir ini pekerjaan saya sangat sibuk."
+  },
+  {
+    "k": "今度",
+    "r": "こんど",
+    "ro": "kondo",
+    "a": "lain kali / kali ini",
+    "grp": "frek",
+    "ex_jp": "<span class=\"sent-hl-num\">今度</span>一緒に遊びに行きましょう。",
+    "ex_ro": "Kondo issho ni asobi ni ikimashou.",
+    "ex_id": "Lain kali mari kita pergi main bersama."
+  },
+  {
+    "k": "祝日",
+    "r": "しゅくじつ",
+    "ro": "shukujitsu",
+    "a": "hari libur nasional",
+    "grp": "frek",
+    "ex_jp": "明日は<span class=\"sent-hl-num\">祝日</span>なので学校が休みです。",
+    "ex_ro": "Ashita wa shukujitsu na node gakkou ga yasumi desu.",
+    "ex_id": "Besok adalah hari libur nasional sehingga sekolah libur."
+  },
+  {
+    "k": "いつ",
+    "r": "いつ",
+    "ro": "itsu",
+    "a": "kapan?",
+    "grp": "frek",
+    "ex_jp": "日本へ<span class=\"sent-hl-num\">いつ</span>行きますか。",
+    "ex_ro": "Nihon e itsu ikimasu ka.",
+    "ex_id": "Kapan Anda akan pergi ke Jepang?"
+  }
+];
 
     const Pages_Angka = [
       {
@@ -4273,6 +4618,7 @@
         ]
       }
     ];
+
     const Pages_Kalender = [
       {
         "title": "BAB 1: Nama Hari",
@@ -4303,52 +4649,67 @@
         ]
       }
     ];
-    const Pages_Relatif = [
-      {
-        "title": "BAB 1: Keterangan Hari",
-        "narasi": "Perhatikan pola emas kanji waktu:<br>• <b style='color:var(--danger)'>先 (Sen)</b> untuk Masa Lalu<br>• <b style='color:var(--primary)'>今 (Kon/Ima)</b> untuk Sekarang<br>• <b style='color:var(--success)'>来 (Rai)</b> untuk Masa Depan",
-        "groups": [
-          "nichi"
-        ]
-      },
-      {
-        "title": "BAB 2: Keterangan Minggu",
-        "narasi": "Pola <i>Sen-Kon-Rai</i> berlaku secara berurutan: 先週 (senshuu) → 今週 (konshuu) → 来週 (raishuu).",
-        "groups": [
-          "shuu"
-        ]
-      },
-      {
-        "title": "BAB 3: Keterangan Bulan",
-        "narasi": "Penyebutan bulan relatif sangat teratur mengikuti pola dasar: 先月 (sengetsu) → 今月 (kongetsu) → 来月 (raigetsu).",
-        "groups": [
-          "getsu"
-        ]
-      },
-      {
-        "title": "BAB 4: Keterangan Tahun",
-        "narasi": "Pola <i>Sen-Kon-Rai</i> tetap berlaku. Namun, untuk <b>Tahun (年)</b> ada anomali! 'Tahun ini' dibaca <b style='color:var(--gold)'>今年 (kotoshi)</b>. 'Tahun lalu' dibaca <b style='color:var(--warning)'>去年 (kyonen)</b>.",
-        "groups": [
-          "nen"
-        ]
-      },
-      {
-        "title": "BAB 5: Keterangan Pagi",
-        "narasi": "Hati-hati dengan anomali pembacaan! 'Pagi ini' dibaca <b style='color:var(--gold)'>今朝 (kesa)</b>, 'Setiap pagi' dibaca <b style='color:var(--primary)'>毎朝 (maiasa)</b>.",
-        "groups": [
-          "asa"
-        ]
-      },
-      {
-        "title": "BAB 6: Keterangan Malam",
-        "narasi": "<i>Ban</i> (晩) adalah waktu aktif malam hari, sedangkan <i>Yoru</i> (夜) mencakup seluruh malam.",
-        "groups": [
-          "ban"
-        ]
-      }
-    ];
 
-    function hiraToRomaji(str) {
+    const Pages_Relatif = [
+  {
+    "title": "BAB 1: Keterangan Hari",
+    "narasi": "Perhatikan pola emas kanji waktu:<br>• <b style='color:var(--danger)'>先 (Sen)</b> untuk Masa Lalu<br>• <b style='color:var(--primary)'>今 (Kon/Ima)</b> untuk Sekarang<br>• <b style='color:var(--success)'>来 (Rai)</b> untuk Masa Depan",
+    "groups": [
+      "nichi"
+    ]
+  },
+  {
+    "title": "BAB 2: Keterangan Minggu & Akhir Pekan",
+    "narasi": "Pola <i>Sen-Kon-Rai</i> berurutan: 先週 (senshuu) → 今週 (konshuu) → 来週 (raishuu), ditambah istilah akhir pekan (週末) dan hari kerja (平日).",
+    "groups": [
+      "shuu"
+    ]
+  },
+  {
+    "title": "BAB 3: Keterangan Bulan",
+    "narasi": "Penyebutan bulan relatif sangat teratur mengikuti pola dasar: 先月 (sengetsu) → 今月 (kongetsu) → 来月 (raigetsu).",
+    "groups": [
+      "getsu"
+    ]
+  },
+  {
+    "title": "BAB 4: Keterangan Tahun",
+    "narasi": "Pola <i>Sen-Kon-Rai</i> tetap berlaku. Namun, untuk <b>Tahun (年)</b> ada anomali! 'Tahun ini' dibaca <b style='color:var(--gold)'>今年 (kotoshi)</b>. 'Tahun lalu' dibaca <b style='color:var(--warning)'>去年 (kyonen)</b>.",
+    "groups": [
+      "nen"
+    ]
+  },
+  {
+    "title": "BAB 5: Bagian Waktu Sehari (Pagi, Siang & Sore)",
+    "narasi": "Rentang waktu dalam satu hari: Mulai dari pagi (朝), siang (昼), sore (夕方), hingga anomali 'pagi ini' yang dibaca <b style='color:var(--gold)'>今朝 (kesa)</b>.",
+    "groups": [
+      "asa"
+    ]
+  },
+  {
+    "title": "BAB 6: Keterangan Malam",
+    "narasi": "<i>Ban</i> (晩) adalah waktu malam aktif/makan malam, sedangkan <i>Yoru</i> (夜) mencakup malam keseluruhan. Perhatikan kata <b style='color:var(--gold)'>ゆうべ (yuube)</b> untuk 'tadi malam'.",
+    "groups": [
+      "ban"
+    ]
+  },
+  {
+    "title": "BAB 7: Titik Waktu & Momen (Sekarang, Nanti, Tadi)",
+    "narasi": "Kosakata acuan waktu penting N5: mulai dari masa kini <b style='color:var(--primary)'>今 (ima)</b>, baru saja (さっき), nanti (後で), hingga segera (もうすぐ).",
+    "groups": [
+      "momen"
+    ]
+  },
+  {
+    "title": "BAB 8: Frekuensi & Kata Tanya Waktu",
+    "narasi": "Tingkat keseringan suatu kegiatan: mulai dari selalu (いつも), kadang-kadang (時々), sesekali (たまに), hingga kata tanya waktu utama <b style='color:var(--gold)'>いつ (itsu / kapan)</b>.",
+    "groups": [
+      "frek"
+    ]
+  }
+];
+
+        function hiraToRomaji(str) {
       if (!str) return '';
       const map = {
         'きゃ': 'kya', 'きゅ': 'kyu', 'きょ': 'kyo', 'しゃ': 'sha', 'しゅ': 'shu', 'しょ': 'sho',
@@ -4781,6 +5142,17 @@
 
       getGroupTag: function (item) {
         if (!item) return 'Konteks N5';
+        if (this.activeCategory === 'relatif') {
+          if (item.grp === 'nichi') return 'Keterangan Hari';
+          if (item.grp === 'shuu') return 'Keterangan Minggu';
+          if (item.grp === 'getsu') return 'Keterangan Bulan';
+          if (item.grp === 'nen') return 'Keterangan Tahun';
+          if (item.grp === 'asa') return 'Pagi, Siang & Sore';
+          if (item.grp === 'ban') return 'Keterangan Malam';
+          if (item.grp === 'momen') return 'Titik Waktu & Momen';
+          if (item.grp === 'frek') return 'Frekuensi Waktu';
+          return 'Waktu Relatif';
+        }
         if (item.grp === 'tsu') return 'Satuan Barang (〜つ)';
         if (item.grp === 'nin') return 'Satuan Orang (〜人)';
         if (item.grp === 'sai') return 'Satuan Umur (〜歳)';
@@ -4800,7 +5172,6 @@
         if (item.grp === 'bln') return 'Nama Bulan (〜月)';
         if (item.grp === 'thn') return 'Tahun & Durasi (〜年)';
         if (this.activeCategory === 'angka') return 'Bilangan & Nominal';
-        if (this.activeCategory === 'relatif') return 'Waktu Relatif';
         return 'Konteks N5';
       },
 
@@ -5656,6 +6027,15 @@
             • <b>Tadi pagi:</b> 今朝 (けさ / kesa)<br>
             • <b>Malam ini:</b> 今晩 (こんばん / konban)<br>
             • <b>Tadi malam:</b> 昨夜 / 夕べ (ゆうべ / yuube)
+          </div>
+        </div>
+        <div class="cs-item-card">
+          <div class="cs-item-title">⚡ Titik Acuan & Frekuensi Penting</div>
+          <div class="cs-item-desc">
+            • <b>今 (ima):</b> Sekarang | <b>後で (ato de):</b> Nanti<br>
+            • <b>さっき (sakki):</b> Tadi/barusan | <b>もうすぐ (mousugu):</b> Sebentar lagi<br>
+            • <b>いつも (itsumo):</b> Selalu | <b>時々 (tokidoki):</b> Kadang-kadang<br>
+            • <b>いつ (itsu):</b> Kapan? (Kata tanya waktu)
           </div>
         </div>
       `;
