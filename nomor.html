@@ -1997,10 +1997,7 @@
           <!-- Interactive Sentence & Context Shelf (Identik Kata Kerja) -->
           <div class="fc-sentence-shelf" id="fc-sentence-shelf">
             <div class="fss-top">
-              <div class="fss-badge-wrap">
-                <span class="fss-badge">💬 CONTOH PENGGUNAAN</span>
-                <span class="fss-form-pill" id="fss-form-pill">Konteks N5</span>
-              </div>
+              <span class="fss-badge">💬 CONTOH PENGGUNAAN</span>
               <button type="button" class="btn-sentence-audio" id="btn-sentence-audio" onclick="Modul.speakCurrentSentence()" title="Dengarkan Contoh Kalimat">🔊</button>
             </div>
             <div class="fss-jp" id="fss-jp-text">...</div>
@@ -4964,12 +4961,10 @@
           const fssJp = document.getElementById('fss-jp-text');
           const fssRo = document.getElementById('fss-ro-text');
           const fssId = document.getElementById('fss-id-text');
-          const fssPill = document.getElementById('fss-form-pill');
 
           if (fssJp && sentence) fssJp.innerHTML = sentence.jp;
           if (fssRo && sentence) fssRo.innerText = sentence.ro ? `(${sentence.ro})` : '';
           if (fssId && sentence) fssId.innerText = sentence.id;
-          if (fssPill && sentence) fssPill.innerText = sentence.tag || this.getGroupTag(item);
         }
 
         const starBtn = document.getElementById('btn-star-card');
