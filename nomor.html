@@ -5727,7 +5727,8 @@
         let targetIcon = '🎯';
         if (this.quizTargetMode === 'all') {
           targetIcon = '🔥';
-          targetLabel = pool.length > 0 ? `Target: Semua (${pool.length * 2})` : 'Target: Semua';
+          const count = (this.drillSubtype === 'time' && ['angka', 'hitung'].includes(this.activeCategory)) ? 20 : pool.length * 2;
+          targetLabel = pool.length > 0 ? `Target: Semua (${count})` : 'Target: Semua';
         } else if (this.quizTargetMode === '10') {
           targetIcon = '⚡';
           targetLabel = 'Target: 10 Soal';
@@ -5762,20 +5763,46 @@
 
       generateQuizQuestions: function () {
         const useMastered = (this.quizSourceMode === 'mastered');
-        let pool = useMastered ? this.activeArray.filter(i => this.masteredList.includes(i.k)) : [...this.activeArray];
+        const shuffle = arr => arr.slice().sort(() => Math.random() - 0.5);
+
+        let pool = [];
+        let distractorPool = [];
+        const allTimePool = (typeof DB_Waktu !== 'undefined' && typeof DB_Kalender !== 'undefined' && typeof DB_Relatif !== 'undefined')
+          ? [...DB_Waktu, ...DB_Kalender, ...DB_Relatif]
+          : [];
+
+        if (this.drillSubtype === 'time') {
+          // Khusus mode Tebak Jam & Tanggal: Selalu bersumber dari kosakata waktu & kalender murni!
+          if (['waktu', 'kalender', 'relatif'].includes(this.activeCategory)) {
+            pool = useMastered ? this.activeArray.filter(i => this.masteredList.includes(i.k)) : [...this.activeArray];
+            if (pool.length === 0) pool = [...this.activeArray];
+            distractorPool = allTimePool.length > 0 ? allTimePool : [...this.activeArray];
+          } else {
+            // Jika user memilih Tebak Jam & Tanggal saat berada di Angka atau Satuan Hitung, gunakan kumpulan waktu & tanggal lengkap
+            pool = useMastered ? allTimePool.filter(i => this.masteredList.includes(i.k)) : allTimePool;
+            if (pool.length === 0) pool = allTimePool;
+            distractorPool = allTimePool;
+          }
+        } else {
+          pool = useMastered ? this.activeArray.filter(i => this.masteredList.includes(i.k)) : [...this.activeArray];
+          distractorPool = [...this.activeArray];
+        }
+
         if (pool.length === 0) return [];
 
         let targetCount = pool.length * 2;
+        if (this.drillSubtype === 'time' && ['angka', 'hitung'].includes(this.activeCategory)) {
+          if (this.quizTargetMode === 'all') targetCount = 20;
+        }
         if (this.quizTargetMode === '10') targetCount = 10;
         else if (this.quizTargetMode === '25') targetCount = 25;
         else if (this.quizTargetMode === 'custom') targetCount = Math.max(5, Math.min(this.quizCustomCount, 250));
 
-        const shuffle = arr => arr.slice().sort(() => Math.random() - 0.5);
-        const sessionDb = [...this.activeArray];
         const generated = [];
+        const pickedPool = shuffle(pool);
 
         for (let i = 0; i < targetCount; i++) {
-          const item = pool[i % pool.length];
+          const item = pickedPool[i % pickedPool.length];
 
           if (this.drillSubtype === 'isian') {
             generated.push({
@@ -5790,7 +5817,7 @@
             const isGuessKanji = (i % 2 === 0);
             if (isGuessKanji) {
               const distractors = [item.k];
-              const others = shuffle(sessionDb.filter(x => x.k !== item.k));
+              const others = shuffle(distractorPool.filter(x => x.k !== item.k));
               for (let o of others) {
                 if (distractors.length >= 4) break;
                 if (!distractors.includes(o.k)) distractors.push(o.k);
@@ -5805,7 +5832,7 @@
               });
             } else {
               const distractors = [item.r];
-              const others = shuffle(sessionDb.filter(x => x.k !== item.k));
+              const others = shuffle(distractorPool.filter(x => x.k !== item.k));
               for (let o of others) {
                 if (distractors.length >= 4) break;
                 if (!distractors.includes(o.r)) distractors.push(o.r);
@@ -5822,7 +5849,7 @@
           } else if (this.drillSubtype === 'meaning') {
             // 100% Tebak Arti Indonesia (Tidak ada tebak kanji)
             const distractors = [item.a];
-            const others = shuffle(sessionDb.filter(x => x.k !== item.k));
+            const others = shuffle(distractorPool.filter(x => x.k !== item.k));
             for (let o of others) {
               if (distractors.length >= 4) break;
               if (!distractors.includes(o.a)) distractors.push(o.a);
@@ -5836,45 +5863,74 @@
               audio: item.k
             });
           } else if (this.drillSubtype === 'time') {
-            // Mode Tebak Jam & Tanggal
-            const isFormatToKanji = (i % 2 === 0);
-            if (isFormatToKanji) {
-              const distractors = [item.k];
-              const others = shuffle(sessionDb.filter(x => x.k !== item.k));
-              for (let o of others) {
-                if (distractors.length >= 4) break;
-                if (!distractors.includes(o.k)) distractors.push(o.k);
+            // 100% Mode Tebak Waktu & Penanggalan Murni (Tidak ada angka biasa)
+            const sameGroup = distractorPool.filter(x => x.grp === item.grp && x.k !== item.k);
+            const otherGroup = distractorPool.filter(x => x.k !== item.k);
+
+            let badge = '⏰ TEBAK WAKTU';
+            let qText = '';
+            const isKanjiAnswer = (i % 2 === 0);
+
+            if (['jam', 'menit', 'detik', 'komb'].includes(item.grp)) {
+              badge = '⏰ TEBAK JAM & WAKTU';
+              if (isKanjiAnswer) {
+                qText = `Pilih penulisan waktu untuk:<br><span style="font-size:28px; font-weight:800; color:var(--primary);">${item.a}</span> (${item.r})`;
+              } else {
+                qText = `Berapa waktu dari:<br><span style="font-size:34px; font-weight:900; color:#fff;">${item.k}</span> <span style="font-size:16px; color:var(--gold);">(${item.r})</span>?`;
               }
-              generated.push({
-                type: 'mc',
-                badge: '⏰ TEBAK JAM & TANGGAL',
-                q: `Bagaimana penulisan Jepang dari:<br><span style="font-size:28px; font-weight:800; color:var(--gold);">${item.a}</span>?`,
-                ans: item.k,
-                opts: shuffle(distractors),
-                audio: item.k
-              });
+            } else if (item.grp === 'hari') {
+              badge = '📅 NAMA HARI';
+              if (isKanjiAnswer) {
+                qText = `Pilih kanji nama hari untuk:<br><span style="font-size:28px; font-weight:800; color:var(--primary);">${item.a}</span>`;
+              } else {
+                qText = `Hari apa penulisan:<br><span style="font-size:34px; font-weight:900; color:#fff;">${item.k}</span> <span style="font-size:16px; color:var(--gold);">(${item.r})</span>?`;
+              }
+            } else if (item.grp === 'tgl') {
+              badge = '📅 PENANGGALAN';
+              if (isKanjiAnswer) {
+                qText = `Pilih penulisan tanggal untuk:<br><span style="font-size:28px; font-weight:800; color:var(--primary);">${item.a}</span> <span style="font-size:16px; color:var(--gold);">(${item.r})</span>`;
+              } else {
+                qText = `Tanggal berapa penulisan:<br><span style="font-size:34px; font-weight:900; color:#fff;">${item.k}</span> <span style="font-size:16px; color:var(--gold);">(${item.r})</span>?`;
+              }
+            } else if (item.grp === 'bln') {
+              badge = '📅 NAMA BULAN';
+              if (isKanjiAnswer) {
+                qText = `Pilih penulisan bulan untuk:<br><span style="font-size:28px; font-weight:800; color:var(--primary);">${item.a}</span>`;
+              } else {
+                qText = `Bulan apa penulisan:<br><span style="font-size:34px; font-weight:900; color:#fff;">${item.k}</span> <span style="font-size:16px; color:var(--gold);">(${item.r})</span>?`;
+              }
             } else {
-              const distractors = [item.a];
-              const others = shuffle(sessionDb.filter(x => x.k !== item.k));
-              for (let o of others) {
-                if (distractors.length >= 4) break;
-                if (!distractors.includes(o.a)) distractors.push(o.a);
+              badge = '⏳ WAKTU RELATIF';
+              if (isKanjiAnswer) {
+                qText = `Pilih penulisan kata waktu untuk:<br><span style="font-size:28px; font-weight:800; color:var(--primary);">${item.a}</span>`;
+              } else {
+                qText = `Kapan waktu dari:<br><span style="font-size:34px; font-weight:900; color:#fff;">${item.k}</span> <span style="font-size:16px; color:var(--gold);">(${item.r})</span>?`;
               }
-              generated.push({
-                type: 'mc',
-                badge: '⏰ TEBAK JAM & TANGGAL',
-                q: `Berapa waktu / arti dari:<br><span style="font-size:34px; font-weight:900; color:#fff;">${item.k}</span> <span style="font-size:18px; color:var(--primary);">(${item.r})</span>?`,
-                ans: item.a,
-                opts: shuffle(distractors),
-                audio: item.k
-              });
             }
+
+            const ans = isKanjiAnswer ? item.k : item.a;
+            const distractors = [ans];
+            const poolForDistractors = sameGroup.length >= 3 ? sameGroup : [...sameGroup, ...otherGroup];
+            for (let o of shuffle(poolForDistractors)) {
+              if (distractors.length >= 4) break;
+              const val = isKanjiAnswer ? o.k : o.a;
+              if (!distractors.includes(val)) distractors.push(val);
+            }
+
+            generated.push({
+              type: 'mc',
+              badge,
+              q: qText,
+              ans,
+              opts: shuffle(distractors),
+              audio: item.k
+            });
           } else {
             // 'mix' (Acak Campuran) -> rotasi seimbang: Tebak Kanji, Tebak Bacaan, Tebak Arti
             const mode = i % 3;
             if (mode === 0) {
               const distractors = [item.k];
-              const others = shuffle(sessionDb.filter(x => x.k !== item.k));
+              const others = shuffle(distractorPool.filter(x => x.k !== item.k));
               for (let o of others) {
                 if (distractors.length >= 4) break;
                 if (!distractors.includes(o.k)) distractors.push(o.k);
@@ -5889,7 +5945,7 @@
               });
             } else if (mode === 1) {
               const distractors = [item.r];
-              const others = shuffle(sessionDb.filter(x => x.k !== item.k));
+              const others = shuffle(distractorPool.filter(x => x.k !== item.k));
               for (let o of others) {
                 if (distractors.length >= 4) break;
                 if (!distractors.includes(o.r)) distractors.push(o.r);
@@ -5904,7 +5960,7 @@
               });
             } else {
               const distractors = [item.a];
-              const others = shuffle(sessionDb.filter(x => x.k !== item.k));
+              const others = shuffle(distractorPool.filter(x => x.k !== item.k));
               for (let o of others) {
                 if (distractors.length >= 4) break;
                 if (!distractors.includes(o.a)) distractors.push(o.a);
