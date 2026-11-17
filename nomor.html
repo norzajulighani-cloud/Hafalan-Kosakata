@@ -449,7 +449,18 @@
       background: rgba(251, 191, 36, 0.18);
       border-color: var(--gold);
       color: var(--gold);
-      box-shadow: 0 0 12px var(--gold-glow);
+      box-shadow: 0 0 14px var(--gold-glow);
+    }
+
+    .btn-star-mark.star-pop-anim {
+      animation: starPop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes starPop {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.35) rotate(15deg); }
+      75% { transform: scale(0.92) rotate(-5deg); }
+      100% { transform: scale(1) rotate(0deg); }
     }
 
     .fc-stage-box {
@@ -3932,6 +3943,7 @@
     "r": "あした",
     "ro": "ashita",
     "a": "besok",
+    "note": "Bisa juga dibaca あす (asu).",
     "grp": "nichi",
     "ex_jp": "<span class=\"sent-hl-num\">明日</span>は学校へ行きます。",
     "ex_ro": "Ashita wa gakkou e ikimasu.",
@@ -4062,6 +4074,7 @@
     "r": "げつ",
     "ro": "getsu",
     "a": "bulan",
+    "note": "Bisa juga dibaca つき (tsuki).",
     "grp": "getsu",
     "ex_jp": "今夜は<span class=\"sent-hl-num\">月</span>がとても綺麗です。",
     "ex_ro": "Kon'ya wa tsuki ga totemo kirei desu.",
@@ -4132,6 +4145,7 @@
     "r": "ねん",
     "ro": "nen",
     "a": "tahun",
+    "note": "Bisa juga dibaca とし (toshi).",
     "grp": "nen",
     "ex_jp": "一<span class=\"sent-hl-num\">年</span>はあっという間です。",
     "ex_ro": "Ichinen wa atto iu ma desu.",
@@ -5347,8 +5361,13 @@
 
         const card = document.getElementById('fc-arena-card');
         card.classList.remove('slide-in-right', 'slide-in-left');
-        void card.offsetWidth;
-        card.classList.add(anim === 'prev' ? 'slide-in-left' : 'slide-in-right');
+        if (anim === 'prev') {
+          void card.offsetWidth;
+          card.classList.add('slide-in-left');
+        } else if (anim === 'next') {
+          void card.offsetWidth;
+          card.classList.add('slide-in-right');
+        }
       },
 
       nextCard: function () {
@@ -5372,13 +5391,26 @@
         if (!item) return;
         this.playSfx('tap');
         const idx = this.masteredList.indexOf(item.k);
+        let isMasteredNow = false;
         if (idx > -1) {
           this.masteredList.splice(idx, 1);
+          isMasteredNow = false;
         } else {
           this.masteredList.push(item.k);
+          isMasteredNow = true;
         }
         localStorage.setItem('yk_suji_mastered', JSON.stringify(this.masteredList));
-        this.renderFC('none');
+
+        const starBtn = document.getElementById('btn-star-card');
+        if (starBtn) {
+          starBtn.classList.toggle('is-mastered', isMasteredNow);
+          if (isMasteredNow) {
+            starBtn.classList.remove('star-pop-anim');
+            void starBtn.offsetWidth;
+            starBtn.classList.add('star-pop-anim');
+          }
+        }
+
         this.updateMasteryCounter();
         this.renderSidebarContent();
       },
