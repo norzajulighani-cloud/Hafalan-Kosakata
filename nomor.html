@@ -4850,6 +4850,7 @@
       // Quiz state
       idxQuiz: 0,
       scoreQuiz: 0,
+      quizCorrectCount: 0,
       drillSubtype: 'mix',
       quizSourceMode: 'mastered',
       quizTargetMode: 'all',
@@ -4934,6 +4935,7 @@
           this.activeQuizData = this.generateQuizQuestions();
           this.idxQuiz = 0;
           this.scoreQuiz = 0;
+          this.quizCorrectCount = 0;
           this.renderQuiz(true);
         } else if (mode === 'fc') {
           this.renderFC();
@@ -5713,6 +5715,7 @@
         this.activeQuizData = this.generateQuizQuestions();
         this.idxQuiz = 0;
         this.scoreQuiz = 0;
+        this.quizCorrectCount = 0;
         this.renderQuiz(true);
       },
       updateQuizConfigButtonLabel: function () {
@@ -5753,6 +5756,7 @@
         this.activeQuizData = this.generateQuizQuestions();
         this.idxQuiz = 0;
         this.scoreQuiz = 0;
+        this.quizCorrectCount = 0;
         this.renderQuiz(true);
       },
 
@@ -5766,42 +5770,154 @@
         else if (this.quizTargetMode === '25') targetCount = 25;
         else if (this.quizTargetMode === 'custom') targetCount = Math.max(5, Math.min(this.quizCustomCount, 250));
 
-        const shuffle = arr => arr.sort(() => Math.random() - 0.5);
+        const shuffle = arr => arr.slice().sort(() => Math.random() - 0.5);
         const sessionDb = [...this.activeArray];
         const generated = [];
 
         for (let i = 0; i < targetCount; i++) {
           const item = pool[i % pool.length];
-          const isKanjiQ = (i % 2 === 0);
 
           if (this.drillSubtype === 'isian') {
-            const isArti = (i % 2 === 0);
             generated.push({
               type: 'isian',
-              badge: isArti ? '✍️ ISIAN ARTI' : '✍️ ISIAN HIRAGANA',
-              q: isArti ? `Ketik arti dari:<br><span style="font-size:32px; font-weight:800; color:var(--gold);">${item.k}</span>` :
-                `Ketik Hiragana dari:<br><span style="font-size:32px; font-weight:800; color:#fff;">${item.k}</span>`,
-              ans: isArti ? [item.a.toLowerCase().replace(/[s-]/g, '')] : [item.r.replace(/[s]/g, '')],
+              badge: '✍️ ISIAN HIRAGANA',
+              q: `Ketik Hiragana dari:<br><span style="font-size:32px; font-weight:800; color:#fff;">${item.k}</span> <span style="font-size:16px; color:var(--gold);">(${item.a})</span>`,
+              ans: [item.r.toLowerCase().replace(/[\s-]/g, '')],
               audio: item.k
             });
-          } else {
-            const distractors = [isKanjiQ ? item.k : item.a];
+          } else if (this.drillSubtype === 'kanji') {
+            // 100% Tebak Kanji & Cara Baca (Tidak ada bocor arti Indonesia)
+            const isGuessKanji = (i % 2 === 0);
+            if (isGuessKanji) {
+              const distractors = [item.k];
+              const others = shuffle(sessionDb.filter(x => x.k !== item.k));
+              for (let o of others) {
+                if (distractors.length >= 4) break;
+                if (!distractors.includes(o.k)) distractors.push(o.k);
+              }
+              generated.push({
+                type: 'mc',
+                badge: '🈶 TEBAK KANJI',
+                q: `Pilih kanji yang tepat untuk:<br><span style="font-size:28px; font-weight:800; color:var(--primary);">${item.r}</span> <span style="font-size:16px; color:var(--text-sub);">(${item.a})</span>`,
+                ans: item.k,
+                opts: shuffle(distractors),
+                audio: item.k
+              });
+            } else {
+              const distractors = [item.r];
+              const others = shuffle(sessionDb.filter(x => x.k !== item.k));
+              for (let o of others) {
+                if (distractors.length >= 4) break;
+                if (!distractors.includes(o.r)) distractors.push(o.r);
+              }
+              generated.push({
+                type: 'mc',
+                badge: '🗣️ TEBAK BACAAN',
+                q: `Bagaimana cara membaca kanji:<br><span style="font-size:34px; font-weight:900; color:#fff;">${item.k}</span> <span style="font-size:16px; color:var(--text-sub);">(${item.a})</span>?`,
+                ans: item.r,
+                opts: shuffle(distractors),
+                audio: item.k
+              });
+            }
+          } else if (this.drillSubtype === 'meaning') {
+            // 100% Tebak Arti Indonesia (Tidak ada tebak kanji)
+            const distractors = [item.a];
             const others = shuffle(sessionDb.filter(x => x.k !== item.k));
             for (let o of others) {
               if (distractors.length >= 4) break;
-              const val = isKanjiQ ? o.k : o.a;
-              if (!distractors.includes(val)) distractors.push(val);
+              if (!distractors.includes(o.a)) distractors.push(o.a);
             }
-
             generated.push({
               type: 'mc',
-              badge: isKanjiQ ? '🈶 TEBAK KANJI' : '📖 TEBAK ARTI',
-              q: isKanjiQ ? `Pilih kanji yang tepat untuk:<br><span style="font-size:28px; font-weight:800; color:var(--primary);">${item.r}</span> (${item.a})` :
-                `Apa arti dari:<br><span style="font-size:34px; font-weight:900; color:#fff;">${item.k}</span> (${item.r})?`,
-              ans: isKanjiQ ? item.k : item.a,
+              badge: '📖 TEBAK ARTI',
+              q: `Apa arti bahasa Indonesia dari:<br><span style="font-size:34px; font-weight:900; color:#fff;">${item.k}</span> <span style="font-size:18px; color:var(--primary);">(${item.r})</span>?`,
+              ans: item.a,
               opts: shuffle(distractors),
               audio: item.k
             });
+          } else if (this.drillSubtype === 'time') {
+            // Mode Tebak Jam & Tanggal
+            const isFormatToKanji = (i % 2 === 0);
+            if (isFormatToKanji) {
+              const distractors = [item.k];
+              const others = shuffle(sessionDb.filter(x => x.k !== item.k));
+              for (let o of others) {
+                if (distractors.length >= 4) break;
+                if (!distractors.includes(o.k)) distractors.push(o.k);
+              }
+              generated.push({
+                type: 'mc',
+                badge: '⏰ TEBAK JAM & TANGGAL',
+                q: `Bagaimana penulisan Jepang dari:<br><span style="font-size:28px; font-weight:800; color:var(--gold);">${item.a}</span>?`,
+                ans: item.k,
+                opts: shuffle(distractors),
+                audio: item.k
+              });
+            } else {
+              const distractors = [item.a];
+              const others = shuffle(sessionDb.filter(x => x.k !== item.k));
+              for (let o of others) {
+                if (distractors.length >= 4) break;
+                if (!distractors.includes(o.a)) distractors.push(o.a);
+              }
+              generated.push({
+                type: 'mc',
+                badge: '⏰ TEBAK JAM & TANGGAL',
+                q: `Berapa waktu / arti dari:<br><span style="font-size:34px; font-weight:900; color:#fff;">${item.k}</span> <span style="font-size:18px; color:var(--primary);">(${item.r})</span>?`,
+                ans: item.a,
+                opts: shuffle(distractors),
+                audio: item.k
+              });
+            }
+          } else {
+            // 'mix' (Acak Campuran) -> rotasi seimbang: Tebak Kanji, Tebak Bacaan, Tebak Arti
+            const mode = i % 3;
+            if (mode === 0) {
+              const distractors = [item.k];
+              const others = shuffle(sessionDb.filter(x => x.k !== item.k));
+              for (let o of others) {
+                if (distractors.length >= 4) break;
+                if (!distractors.includes(o.k)) distractors.push(o.k);
+              }
+              generated.push({
+                type: 'mc',
+                badge: '🈶 TEBAK KANJI',
+                q: `Pilih kanji yang tepat untuk:<br><span style="font-size:28px; font-weight:800; color:var(--primary);">${item.r}</span> <span style="font-size:16px; color:var(--text-sub);">(${item.a})</span>`,
+                ans: item.k,
+                opts: shuffle(distractors),
+                audio: item.k
+              });
+            } else if (mode === 1) {
+              const distractors = [item.r];
+              const others = shuffle(sessionDb.filter(x => x.k !== item.k));
+              for (let o of others) {
+                if (distractors.length >= 4) break;
+                if (!distractors.includes(o.r)) distractors.push(o.r);
+              }
+              generated.push({
+                type: 'mc',
+                badge: '🗣️ TEBAK BACAAN',
+                q: `Bagaimana cara membaca kanji:<br><span style="font-size:34px; font-weight:900; color:#fff;">${item.k}</span> <span style="font-size:16px; color:var(--text-sub);">(${item.a})</span>?`,
+                ans: item.r,
+                opts: shuffle(distractors),
+                audio: item.k
+              });
+            } else {
+              const distractors = [item.a];
+              const others = shuffle(sessionDb.filter(x => x.k !== item.k));
+              for (let o of others) {
+                if (distractors.length >= 4) break;
+                if (!distractors.includes(o.a)) distractors.push(o.a);
+              }
+              generated.push({
+                type: 'mc',
+                badge: '📖 TEBAK ARTI',
+                q: `Apa arti dari:<br><span style="font-size:34px; font-weight:900; color:#fff;">${item.k}</span> <span style="font-size:18px; color:var(--primary);">(${item.r})</span>?`,
+                ans: item.a,
+                opts: shuffle(distractors),
+                audio: item.k
+              });
+            }
           }
         }
         return shuffle(generated).slice(0, targetCount);
@@ -5838,12 +5954,12 @@
 
         if (this.idxQuiz >= pool.length) {
           if (progEl) progEl.innerHTML = '<b>🎉 SELESAI</b>';
-          const pct = Math.round((this.scoreQuiz / Math.max(1, pool.length)) * 100);
+          const pct = Math.round((this.quizCorrectCount / Math.max(1, pool.length)) * 100);
           qBadgeEl.innerText = 'HASIL LATIHAN';
           qTextEl.innerHTML = `
         <div style="padding: 14px 0;">
           <div style="font-size: 38px; font-weight:900; color:var(--gold);">${pct}%</div>
-          <div style="font-size:14px; color:#fff; margin-top:4px;">Benar ${this.scoreQuiz} dari ${pool.length} Soal</div>
+          <div style="font-size:14px; color:#fff; margin-top:4px;">Benar ${this.quizCorrectCount} dari ${pool.length} Soal (Skor: ${this.scoreQuiz})</div>
           <button type="button" class="btn-qc-apply" style="margin-top:14px;" onclick="Modul.applyQuizConfig()">🔄 Main Lagi</button>
         </div>
       `;
@@ -5881,6 +5997,7 @@
 
         if (isCorrect) {
           this.playSfx('correct');
+          this.quizCorrectCount++;
           this.scoreQuiz += 10;
           btnEl.classList.add('correct');
         } else {
@@ -5909,6 +6026,7 @@
 
         if (isCorrect) {
           this.playSfx('correct');
+          this.quizCorrectCount++;
           this.scoreQuiz += 10;
           fb.classList.add('correct');
           fb.innerText = '✅ Benar! ' + input.value;
