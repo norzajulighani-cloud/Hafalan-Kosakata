@@ -1242,21 +1242,29 @@
       border: 1px solid var(--border-accent);
       border-radius: 20px;
       width: 100%;
-      max-width: 500px;
+      max-width: min(660px, 94vw);
       max-height: 88vh;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75);
       overflow: hidden;
     }
 
-    .qc-header,
-    .cs-header {
+    .qc-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 14px 18px;
       border-bottom: 1px solid var(--border-glass);
+    }
+
+    .cs-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 22px;
+      border-bottom: 1px solid var(--border-glass);
+      flex-shrink: 0;
     }
 
     .qc-title,
@@ -1279,13 +1287,23 @@
       color: #fff;
     }
 
-    .qc-body,
-    .cs-body {
+    .qc-body {
       padding: 16px 18px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
       gap: 16px;
+    }
+
+    .cs-body {
+      padding: 18px 22px 24px 22px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      flex: 1 1 auto;
+      min-height: 0;
+      -webkit-overflow-scrolling: touch;
     }
 
     .qc-group-label {
@@ -1388,9 +1406,12 @@
     .cs-tab-row {
       display: flex;
       gap: 6px;
-      padding: 10px 18px 0 18px;
+      padding: 10px 22px 0 22px;
       overflow-x: auto;
       scrollbar-width: none;
+      flex-shrink: 0;
+      border-bottom: 1px solid var(--border-glass);
+      background: rgba(10, 18, 40, 0.4);
     }
 
     .cs-tab-row::-webkit-scrollbar {
@@ -1401,12 +1422,15 @@
       background: transparent;
       border: none;
       color: var(--text-sub);
-      padding: 6px 12px;
-      border-bottom: 2px solid transparent;
-      font-size: 12px;
+      padding: 8px 14px 10px 14px;
+      border-bottom: 2.5px solid transparent;
+      margin-bottom: -1px;
+      font-size: 13px;
       font-weight: 700;
       cursor: pointer;
       white-space: nowrap;
+      transition: all 0.2s;
+      flex-shrink: 0;
     }
 
     .cs-tab-btn.active {
@@ -1414,26 +1438,169 @@
       border-bottom-color: var(--gold);
     }
 
-    .cs-item-card {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--border-glass);
-      border-radius: 12px;
-      padding: 12px;
+    /* SPACIOUS CS STYLING (LEGA, BERNAFAS & BEBAS KOTAK DALAM KOTAK) */
+    .cs-section {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .cs-section:hover {
+      background: transparent;
+    }
+
+    .cs-section-title {
+      font-size: 14.5px;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: 0.2px;
+    }
+
+    .cs-section-desc {
+      font-size: 12.5px;
+      color: var(--text-sub);
+      line-height: 1.5;
+      margin-bottom: 2px;
+    }
+
+    /* Clean Key-Value Row untuk materi terstruktur yang tidak sesak */
+    .cs-clean-row {
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .cs-clean-row:hover {
+      background: rgba(255, 255, 255, 0.045);
+      border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .cs-clean-row-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .cs-clean-label {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .cs-clean-q {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--gold);
+      background: rgba(251, 191, 36, 0.1);
+      padding: 2px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(251, 191, 36, 0.2);
+    }
+
+    .cs-clean-content {
+      font-size: 13px;
+      color: #cbd5e1;
+      line-height: 1.65;
+    }
+
+    .cs-txt-danger { color: #f87171; font-weight: 800; }
+    .cs-txt-primary { color: #38bdf8; font-weight: 800; }
+    .cs-txt-gold { color: #fbbf24; font-weight: 800; }
+    .cs-txt-sub { color: var(--text-sub); font-size: 12px; margin-left: 4px; }
+
+    .cs-chip {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 12px;
+      margin: 1px 2px;
+      line-height: 1.35;
+    }
+
+    .cs-chip-gold {
+      background: rgba(251, 191, 36, 0.12);
+      color: var(--gold);
+      border: 1px solid rgba(251, 191, 36, 0.25);
+    }
+
+    .cs-chip-danger {
+      background: rgba(239, 68, 68, 0.12);
+      color: var(--danger);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+    }
+
+    .cs-chip-cyan {
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--primary);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+    }
+
+    .cs-chip-purple {
+      background: rgba(192, 132, 252, 0.12);
+      color: var(--purple);
+      border: 1px solid rgba(192, 132, 252, 0.25);
+    }
+
+    .cs-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-left: 2px;
+    }
+
+    .cs-list-item {
+      font-size: 13px;
+      color: #e2e8f0;
+      line-height: 1.65;
+    }
+
+    .cs-list-item b {
+      color: #fff;
+    }
+
+    .cs-note {
+      color: var(--text-sub);
+      font-size: 12px;
+      margin-left: 3px;
+    }
+
+    /* Fallback/kompatibilitas jika kelas lama terpanggil */
+    .cs-item-card {
+      position: relative;
+      padding-left: 16px;
+      border-left: 3px solid var(--primary);
+      background: transparent;
+      border-top: none;
+      border-right: none;
+      border-bottom: none;
+      border-radius: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
 
     .cs-item-title {
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 800;
       color: #fff;
     }
 
     .cs-item-desc {
-      font-size: 12px;
+      font-size: 12.5px;
       color: var(--text-sub);
-      line-height: 1.45;
+      line-height: 1.6;
     }
 
     /* SIDEBAR DRAWER */
@@ -1898,11 +2065,19 @@
       .cs-header,
       .qc-header {
         padding: 12px 14px 10px !important;
+        flex-shrink: 0 !important;
+      }
+
+      .cs-tab-row {
+        padding: 8px 14px 0 14px !important;
+        flex-shrink: 0 !important;
       }
 
       .cs-body,
       .qc-body {
         padding: 12px 14px 18px !important;
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
         -webkit-overflow-scrolling: touch;
       }
     }
@@ -6121,127 +6296,257 @@
         const body = document.getElementById('cs-body-content');
         if (!body) return;
 
-                if (this.csActiveTab === 'angka') {
+        if (this.csActiveTab === 'angka') {
           body.innerHTML = `
-        <div class="cs-item-card">
-          <div class="cs-item-title">⚠️ Jebakan Ratusan (百 Hyaku)</div>
-          <div class="cs-item-desc">
-            • <b>300:</b> <span style="color:var(--danger)">さんびゃく (sanbyaku)</span> - bunyi menjadi 'byaku'<br>
-            • <b>600:</b> <span style="color:var(--danger)">ろっぴゃく (roppyaku)</span> - bunyi menjadi 'ppyaku'<br>
-            • <b>800:</b> <span style="color:var(--danger)">はっぴゃく (happyaku)</span> - bunyi menjadi 'ppyaku'
+        <div class="cs-section danger">
+          <div class="cs-section-title">⚠️ Jebakan Ratusan (百 Hyaku)</div>
+          <div class="cs-section-desc">Pengecualian perubahan bunyi fonetik menjadi 'byaku' dan 'ppyaku':</div>
+          <div class="cs-clean-row">
+            <div class="cs-clean-content" style="display:flex; flex-direction:column; gap:6px;">
+              <div>• <b>300:</b> <b class="cs-txt-danger">さんびゃく (sanbyaku)</b> <span class="cs-txt-sub">- bunyi berubah menjadi 'byaku'</span></div>
+              <div>• <b>600:</b> <b class="cs-txt-danger">ろっぴゃく (roppyaku)</b> <span class="cs-txt-sub">- konsonan ganda 'ppyaku'</span></div>
+              <div>• <b>800:</b> <b class="cs-txt-danger">はっぴゃく (happyaku)</b> <span class="cs-txt-sub">- konsonan ganda 'ppyaku'</span></div>
+            </div>
           </div>
         </div>
-        <div class="cs-item-card">
-          <div class="cs-item-title">⚠️ Jebakan Ribuan (千 Sen)</div>
-          <div class="cs-item-desc">
-            • <b>3.000:</b> <span style="color:var(--danger)">さんぜん (sanzen)</span> - bunyi bergetar 'zen'<br>
-            • <b>8.000:</b> <span style="color:var(--danger)">はっせん (hassen)</span> - bunyi konsonan ganda 'ssen'
+
+        <div class="cs-section warning">
+          <div class="cs-section-title">⚠️ Jebakan Ribuan (千 Sen)</div>
+          <div class="cs-section-desc">Pengecualian pengucapan ribuan:</div>
+          <div class="cs-clean-row">
+            <div class="cs-clean-content" style="display:flex; flex-direction:column; gap:6px;">
+              <div>• <b>3.000:</b> <b class="cs-txt-gold">さんぜん (sanzen)</b> <span class="cs-txt-sub">- bunyi bergetar 'zen'</span></div>
+              <div>• <b>8.000:</b> <b class="cs-txt-gold">はっせん (hassen)</b> <span class="cs-txt-sub">- konsonan ganda 'ssen'</span></div>
+            </div>
           </div>
         </div>
-        <div class="cs-item-card">
-          <div class="cs-item-title">💡 Sistem 4-Digit Jepang (万 Man)</div>
-          <div class="cs-item-desc">
-            Hitungan angka besar di Jepang dikelompokkan per <b>4 angka nol (10.000 = 1 Man)</b>.<br>
-            • 10.000 = 一万 (Ichiman)<br>
-            • 100.000 = 十万 (Juuman = 10 Man)<br>
-            • 1.000.000 = 百万 (Hyakuman = 100 Man)<br>
-            • 10.000.000 = 一千万 (Issenman = 1.000 Man)<br>
-            • 100.000.000 = 一億 (Ichioku = 1 Oku)
+
+        <div class="cs-section info">
+          <div class="cs-section-title">💡 Sistem 4-Digit Jepang (万 Man)</div>
+          <div class="cs-section-desc">Hitungan angka besar di Jepang dikelompokkan per <b>4 angka nol (10.000 = 1 Man)</b>:</div>
+          <div class="cs-clean-row">
+            <div class="cs-clean-content" style="display:flex; flex-direction:column; gap:6px;">
+              <div>• <b>10.000</b> = <b class="cs-txt-primary">一万 (Ichiman)</b></div>
+              <div>• <b>100.000</b> = <b class="cs-txt-primary">十万 (Juuman = 10 Man)</b></div>
+              <div>• <b>1.000.000</b> = <b class="cs-txt-primary">百万 (Hyakuman = 100 Man)</b></div>
+              <div>• <b>10.000.000</b> = <b class="cs-txt-primary">一千万 (Issenman = 1.000 Man)</b></div>
+              <div>• <b>100.000.000</b> = <b class="cs-txt-primary">一億 (Ichioku = 1 Oku)</b></div>
+            </div>
           </div>
         </div>
       `;
         } else if (this.csActiveTab === 'hitung') {
           body.innerHTML = `
-        <div class="cs-item-card">
-          <div class="cs-item-title">📦 Satuan Hitung Utama (Josuushi 助数詞)</div>
-          <div class="cs-item-desc">
-            • <b>Barang Umum (〜つ):</b> ひとつ, ふたつ, みっつ, よっつ, いつつ, むっつ, ななつ, やっつ, ここのつ, <span style="color:var(--danger)">とお (Tanpa -tsu!)</span>. Pertanyaan: <span style="color:var(--gold)">いくつ?</span><br>
-            • <b>Orang (〜人):</b> ひとり, ふたり, さんにん, <span style="color:var(--danger)">よにん (Bukan yon-nin!)</span>. Pertanyaan: <span style="color:var(--gold)">なんにん?</span><br>
-            • <b>Umur (〜歳):</b> いっさい, はっさい, じゅっさい, <span style="color:var(--danger)">はたち (20 tahun - istimewa!)</span>. Pertanyaan: <span style="color:var(--gold)">なんさい?</span><br>
-            • <b>Benda Pipih/Lembar (〜枚):</b> いちまい, にまい, さんまい... Pertanyaan: <span style="color:var(--gold)">なんまい?</span><br>
-            • <b>Urutan & Peringkat (〜番):</b> いちばん, にばん, さんばん... Pertanyaan: <span style="color:var(--gold)">なんばん?</span><br>
-            • <b>Hewan Kecil (〜匹):</b> <span style="color:var(--danger)">いっぴき</span>, にひき, <span style="color:var(--primary)">さんびき</span>, <span style="color:var(--danger)">ろっぴき</span>, <span style="color:var(--danger)">はっぴき</span>, <span style="color:var(--danger)">じゅっぴき</span>. Pertanyaan: <span style="color:var(--primary)">なんびき?</span><br>
-            • <b>Unggas/Kelinci (〜羽):</b> いちわ, にわ, さんわ/さんば... Pertanyaan: <span style="color:var(--gold)">なんわ?</span><br>
-            • <b>Benda Berpasangan (〜足):</b> <span style="color:var(--danger)">いっそく</span>, にそく, <span style="color:var(--primary)">さんぞく</span>, <span style="color:var(--danger)">はっそく</span>, <span style="color:var(--danger)">じゅっそく</span>. Pertanyaan: <span style="color:var(--primary)">なんぞく?</span><br>
-            • <b>Benda Panjang/Silinder (〜本):</b> <span style="color:var(--danger)">いっぽん</span>, にほん, <span style="color:var(--primary)">さんぼん</span>, <span style="color:var(--danger)">ろっぽん</span>, <span style="color:var(--danger)">はっぽん</span>, <span style="color:var(--danger)">じゅっぽん</span>. Pertanyaan: <span style="color:var(--primary)">なんぼん?</span><br>
-            • <b>Mesin/Kendaraan (〜台):</b> いちだい, にだい, さんだい... Pertanyaan: <span style="color:var(--gold)">なんだい?</span>
+        <div class="cs-section warning">
+          <div>
+            <div class="cs-section-title">📦 Satuan Hitung Barang, Orang & Umur</div>
+            <div class="cs-section-desc">Kelompok hitungan paling sering digunakan dalam percakapan sehari-hari:</div>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <div class="cs-clean-row">
+              <div class="cs-clean-row-top">
+                <span class="cs-clean-label">Barang Umum (〜つ / tsu)</span>
+                <span class="cs-clean-q">Tanya: <b>いくつ？</b></span>
+              </div>
+              <div class="cs-clean-content">
+                ひとつ, ふたつ, みっつ, よっつ, いつつ, むっつ, ななつ, やっつ, ここのつ, <b class="cs-txt-danger">とお</b> <span class="cs-txt-sub">(Angka 10 tanpa akhiran -tsu)</span>
+              </div>
+            </div>
+
+            <div class="cs-clean-row">
+              <div class="cs-clean-row-top">
+                <span class="cs-clean-label">Orang (〜人 / nin)</span>
+                <span class="cs-clean-q">Tanya: <b>なんにん？</b></span>
+              </div>
+              <div class="cs-clean-content">
+                <b class="cs-txt-danger">ひとり</b> (1), <b class="cs-txt-danger">ふたり</b> (2), さんにん (3), <b class="cs-txt-danger">よにん</b> <span class="cs-txt-sub">(4 orang, bukan yon-nin)</span>
+              </div>
+            </div>
+
+            <div class="cs-clean-row">
+              <div class="cs-clean-row-top">
+                <span class="cs-clean-label">Umur (〜歳 / sai)</span>
+                <span class="cs-clean-q">Tanya: <b>なんさい？</b></span>
+              </div>
+              <div class="cs-clean-content">
+                <b class="cs-txt-danger">いっさい</b> (1), <b class="cs-txt-danger">はっさい</b> (8), <b class="cs-txt-danger">じゅっさい</b> (10), <b class="cs-txt-danger">はたち</b> <span class="cs-txt-sub">(20 th - sebutan istimewa)</span>
+              </div>
+            </div>
+
+            <div class="cs-clean-row">
+              <div class="cs-clean-row-top">
+                <span class="cs-clean-label">Benda Pipih/Lembar (〜枚 / mai)</span>
+                <span class="cs-clean-q">Tanya: <b>なんまい？</b></span>
+              </div>
+              <div class="cs-clean-content">
+                いちまい, にまい, さんまい... <span class="cs-txt-sub">(Kertas, foto, piring, tiket - bacaan teratur)</span>
+              </div>
+            </div>
+
+            <div class="cs-clean-row">
+              <div class="cs-clean-row-top">
+                <span class="cs-clean-label">Urutan & Peringkat (〜番 / ban)</span>
+                <span class="cs-clean-q">Tanya: <b>なんばん？</b></span>
+              </div>
+              <div class="cs-clean-content">
+                いちばん, にばん, さんばん... <span class="cs-txt-sub">(Nomor kamar, bus, juara - bacaan teratur)</span>
+              </div>
+            </div>
           </div>
         </div>
-      `;} else if (this.csActiveTab === 'waktu') {
+
+        <div class="cs-section info">
+          <div>
+            <div class="cs-section-title">🐾 Satuan Makhluk Hidup & Benda Berpola Bunyi</div>
+            <div class="cs-section-desc">Pola perubahan fonetik (konsonan ganda keras & sengau bergetar):</div>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <div class="cs-clean-row">
+              <div class="cs-clean-row-top">
+                <span class="cs-clean-label">Hewan Kecil (〜匹 / hiki)</span>
+                <span class="cs-clean-q">Tanya: <b>なんびき？</b></span>
+              </div>
+              <div class="cs-clean-content">
+                • 1, 6, 8, 10: <b class="cs-txt-danger">いっぴき, ろっぴき, はっぴき, じゅっぴき</b> (-ppiki)<br>
+                • 3 & Tanya: <b class="cs-txt-primary">さんびき, なんびき？</b> (-biki) | Sisanya teratur: にひき, よんひき...
+              </div>
+            </div>
+
+            <div class="cs-clean-row">
+              <div class="cs-clean-row-top">
+                <span class="cs-clean-label">Benda Panjang / Silinder (〜本 / hon)</span>
+                <span class="cs-clean-q">Tanya: <b>なんぼん？</b></span>
+              </div>
+              <div class="cs-clean-content">
+                • 1, 6, 8, 10: <b class="cs-txt-danger">いっぽん, ろっぽん, はっぽん, じゅっぽん</b> (-ppon)<br>
+                • 3 & Tanya: <b class="cs-txt-primary">さんぼん, なんぼん？</b> (-bon) | Sisanya teratur: にほん, よんほん...
+              </div>
+            </div>
+
+            <div class="cs-clean-row">
+              <div class="cs-clean-row-top">
+                <span class="cs-clean-label">Benda Berpasangan / Kaki (〜足 / soku)</span>
+                <span class="cs-clean-q">Tanya: <b>なんぞく？</b></span>
+              </div>
+              <div class="cs-clean-content">
+                • 1, 8, 10: <b class="cs-txt-danger">いっそく, はっそく, じゅっそく</b> (-ssoku)<br>
+                • 3 & Tanya: <b class="cs-txt-primary">さんぞく, なんぞく？</b> (-zoku) | Sisanya teratur: にそく, よんそく...
+              </div>
+            </div>
+
+            <div class="cs-clean-row">
+              <div class="cs-clean-row-top">
+                <span class="cs-clean-label">Unggas & Kelinci (〜羽 / wa)</span>
+                <span class="cs-clean-q">Tanya: <b>なんわ？</b></span>
+              </div>
+              <div class="cs-clean-content">
+                いちわ, にわ, <b class="cs-txt-primary">さんわ / さんば</b>, よんわ... <span class="cs-txt-sub">(Burung & kelinci)</span>
+              </div>
+            </div>
+
+            <div class="cs-clean-row">
+              <div class="cs-clean-row-top">
+                <span class="cs-clean-label">Mesin & Kendaraan (〜台 / dai)</span>
+                <span class="cs-clean-q">Tanya: <b>なんだい？</b></span>
+              </div>
+              <div class="cs-clean-content">
+                いちだい, にだい, さんだい... <span class="cs-txt-sub">(Mobil, motor, komputer, TV - bacaan teratur)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+        } else if (this.csActiveTab === 'waktu') {
           body.innerHTML = `
-        <div class="cs-item-card">
-          <div class="cs-item-title">⏰ Anomali Jam (〜時 Ji)</div>
-          <div class="cs-item-desc">
-            • <b>Jam 4:</b> <span style="color:var(--danger)">よじ (yoji)</span> (Bukan yonji/shiji)<br>
-            • <b>Jam 7:</b> <span style="color:var(--danger)">しちじ (shichiji)</span> (Bukan nanaji)<br>
-            • <b>Jam 9:</b> <span style="color:var(--danger)">くじ (kuji)</span> (Bukan kyuuji)
+        <div class="cs-section danger">
+          <div class="cs-section-title">⏰ Anomali Jam (〜時 Ji)</div>
+          <div class="cs-section-desc">Tiga jam penting yang bunyinya menyimpang dari angka dasar:</div>
+          <div class="cs-clean-row">
+            <div class="cs-clean-content" style="display:flex; flex-direction:column; gap:6px;">
+              <div>• <b>Jam 4:</b> <b class="cs-txt-danger">よじ (yoji)</b> <span class="cs-txt-sub">(Bukan yonji / shiji)</span></div>
+              <div>• <b>Jam 7:</b> <b class="cs-txt-danger">しちじ (shichiji)</b> <span class="cs-txt-sub">(Bukan nanaji)</span></div>
+              <div>• <b>Jam 9:</b> <b class="cs-txt-danger">くじ (kuji)</b> <span class="cs-txt-sub">(Bukan kyuuji)</span></div>
+            </div>
           </div>
         </div>
-        <div class="cs-item-card">
-          <div class="cs-item-title">💡 Trik PIN 2579 Menit (〜分)</div>
-          <div class="cs-item-desc">
-            Hanya angka <b>2, 5, 7, 9</b> yang berakhiran <span style="color:var(--primary)">〜ふん (fun)</span>.<br>
-            Semua angka sisanya (1, 3, 4, 6, 8, 10, dll) berakhiran <span style="color:var(--danger)">〜ぷん (pun)</span>!<br>
-            30 menit = <b>半 (はん / han)</b>.
+
+        <div class="cs-section info">
+          <div class="cs-section-title">💡 Trik PIN 2579 Menit (〜分)</div>
+          <div class="cs-section-desc">Rumus praktis membedakan akhiran <b>-fun</b> vs <b>-pun</b>:</div>
+          <div class="cs-clean-row">
+            <div class="cs-clean-content" style="display:flex; flex-direction:column; gap:6px;">
+              <div>• <b>PIN 2, 5, 7, 9:</b> Hanya 4 angka ini yang berakhiran <b class="cs-txt-primary">〜ふん (fun)</b></div>
+              <div>• <b>Sisanya (1, 3, 4, 6, 8, 10):</b> Selalu berakhiran <b class="cs-txt-danger">〜ぷん (pun)</b> dengan konsonan ganda/keras</div>
+              <div>• <b>30 Menit:</b> <b class="cs-txt-gold">半 (はん / han)</b> <span class="cs-txt-sub">(Dapat juga diucapkan さんじゅっぷん)</span></div>
+            </div>
           </div>
         </div>
       `;
         } else if (this.csActiveTab === 'kalender') {
           body.innerHTML = `
-        <div class="cs-item-card">
-          <div class="cs-item-title">📅 Tanggal 1-10 & 20 (Sistem Kun'yomi)</div>
-          <div class="cs-item-desc">
-            1: ついたち (tsuitachi)<br>
-            2: ふつか (futsuka)<br>
-            3: みっか (mikka)<br>
-            4: よっか (yokka)<br>
-            5: いつか (itsuka)<br>
-            6: むいか (muika)<br>
-            7: なのか (nanoka)<br>
-            8: ようか (youka)<br>
-            9: ここのか (kokonoka)<br>
-            10: とおか (tooka)<br>
-            14: じゅうよっか (juuyokka)<br>
-            20: はつか (hatsuka)<br>
-            24: にじゅうよっか (nijuuyokka)
+        <div class="cs-section warning">
+          <div class="cs-section-title">📅 Tanggal 1 - 10 & 20 (Sistem Kun'yomi)</div>
+          <div class="cs-section-desc">Wajib dihafal khusus karena tidak memakai pola -nichi standar:</div>
+          <div class="cs-clean-row">
+            <div class="cs-clean-content" style="display:flex; flex-direction:column; gap:8px;">
+              <div>• <b>Tgl 1 - 5:</b> ついたち, ふつか, みっか, よっか, いつか</div>
+              <div>• <b>Tgl 6 - 10:</b> むいか, なのか, ようか, ここのか, とおか</div>
+              <div>• <b>Tgl 14 & 24:</b> <b class="cs-txt-gold">じゅうよっか, にじゅうよっか</b> <span class="cs-txt-sub">(Pola gabungan yokka)</span></div>
+              <div>• <b>Tgl 20:</b> <b class="cs-txt-danger">はつか (hatsuka)</b> <span class="cs-txt-sub">(Bukan ni-jyuu-nichi)</span></div>
+            </div>
           </div>
         </div>
-        <div class="cs-item-card">
-          <div class="cs-item-title">🌕 Anomali Bulan (〜月 Gatsu)</div>
-          <div class="cs-item-desc">
-            • <b>April:</b> <span style="color:var(--danger)">しがつ (shigatsu)</span> (Bukan yongatsu)<br>
-            • <b>Juli:</b> <span style="color:var(--danger)">しちがつ (shichigatsu)</span> (Bukan nanagatsu)<br>
-            • <b>September:</b> <span style="color:var(--danger)">くがつ (kugatsu)</span> (Bukan kyuugatsu)
+
+        <div class="cs-section danger">
+          <div class="cs-section-title">🌕 Anomali Bulan (〜月 Gatsu)</div>
+          <div class="cs-section-desc">Tiga bulan dalam kalender dengan pelafalan istimewa:</div>
+          <div class="cs-clean-row">
+            <div class="cs-clean-content" style="display:flex; flex-direction:column; gap:6px;">
+              <div>• <b>April (Bulan 4):</b> <b class="cs-txt-danger">しがつ (shigatsu)</b> <span class="cs-txt-sub">(Bukan yongatsu)</span></div>
+              <div>• <b>Juli (Bulan 7):</b> <b class="cs-txt-danger">しちがつ (shichigatsu)</b> <span class="cs-txt-sub">(Bukan nanagatsu)</span></div>
+              <div>• <b>September (Bulan 9):</b> <b class="cs-txt-danger">くがつ (kugatsu)</b> <span class="cs-txt-sub">(Bukan kyuugatsu)</span></div>
+            </div>
           </div>
         </div>
       `;
         } else if (this.csActiveTab === 'relatif') {
           body.innerHTML = `
-        <div class="cs-item-card">
-          <div class="cs-item-title">⏳ Pola Emas Sen - Kon - Rai</div>
-          <div class="cs-item-desc">
-            • <b>先 (Sen):</b> Masa lalu (先週 senshuu, 先月 sengetsu)<br>
-            • <b>今 (Kon):</b> Masa kini (今週 konshuu, 今月 kongetsu)<br>
-            • <b>来 (Rai):</b> Masa depan (来週 raishuu, 来月 raigetsu)
+        <div class="cs-section info">
+          <div class="cs-section-title">⏳ Pola Emas Sen - Kon - Rai</div>
+          <div class="cs-section-desc">Rumus sumbu 3 dimensi waktu bahasa Jepang:</div>
+          <div class="cs-clean-row">
+            <div class="cs-clean-content" style="display:flex; flex-direction:column; gap:6px;">
+              <div>• <b>先 (Sen):</b> <b class="cs-txt-primary">Masa Lalu</b> <span class="cs-txt-sub">先週 (senshuu - minggu lalu), 先月 (sengetsu - bulan lalu)</span></div>
+              <div>• <b>今 (Kon):</b> <b class="cs-txt-primary">Masa Kini</b> <span class="cs-txt-sub">今週 (konshuu - minggu ini), 今月 (kongetsu - bulan ini)</span></div>
+              <div>• <b>来 (Rai):</b> <b class="cs-txt-primary">Masa Depan</b> <span class="cs-txt-sub">来週 (raishuu - minggu depan), 来月 (raigetsu - bulan depan)</span></div>
+            </div>
           </div>
         </div>
-        <div class="cs-item-card">
-          <div class="cs-item-title">⚠️ Anomali Waktu Relatif</div>
-          <div class="cs-item-desc">
-            • <b>Tahun lalu:</b> 去年 (きょねん / kyonen)<br>
-            • <b>Tahun ini:</b> 今年 (ことし / kotoshi)<br>
-            • <b>Tadi pagi:</b> 今朝 (けさ / kesa)<br>
-            • <b>Malam ini:</b> 今晩 (こんばん / konban)<br>
-            • <b>Tadi malam:</b> 昨夜 / 夕べ (ゆうべ / yuube)
+
+        <div class="cs-section danger">
+          <div class="cs-section-title">⚠️ Anomali Waktu Relatif</div>
+          <div class="cs-section-desc">Keterangan waktu yang berubah bunyi total dan wajib dihafal:</div>
+          <div class="cs-clean-row">
+            <div class="cs-clean-content" style="display:flex; flex-direction:column; gap:6px;">
+              <div>• <b>Tahun Lalu:</b> <b class="cs-txt-danger">去年 (きょねん / kyonen)</b> <span class="cs-txt-sub">(Bukan sen-nen)</span></div>
+              <div>• <b>Tahun Ini:</b> <b class="cs-txt-danger">今年 (ことし / kotoshi)</b> <span class="cs-txt-sub">(Bukan kon-nen)</span></div>
+              <div>• <b>Tadi Pagi:</b> <b class="cs-txt-danger">今朝 (けさ / kesa)</b> <span class="cs-txt-sub">(Bukan kon-asa)</span></div>
+              <div>• <b>Malam Ini:</b> <b class="cs-txt-gold">今晩 (こんばん / konban)</b></div>
+              <div>• <b>Tadi Malam:</b> <b class="cs-txt-danger">昨夜 / 夕べ (ゆうべ / yuube)</b></div>
+            </div>
           </div>
         </div>
-        <div class="cs-item-card">
-          <div class="cs-item-title">⚡ Titik Acuan & Frekuensi Penting</div>
-          <div class="cs-item-desc">
-            • <b>今 (ima):</b> Sekarang | <b>後で (ato de):</b> Nanti<br>
-            • <b>さっき (sakki):</b> Tadi/barusan | <b>もうすぐ (mousugu):</b> Sebentar lagi<br>
-            • <b>いつも (itsumo):</b> Selalu | <b>時々 (tokidoki):</b> Kadang-kadang<br>
-            • <b>いつ (itsu):</b> Kapan? (Kata tanya waktu)
+
+        <div class="cs-section warning">
+          <div class="cs-section-title">⚡ Titik Acuan & Frekuensi Waktu</div>
+          <div class="cs-section-desc">Kosakata penunjuk momen kejadian:</div>
+          <div class="cs-clean-row">
+            <div class="cs-clean-content" style="display:flex; flex-direction:column; gap:6px;">
+              <div>• <b>Sekarang & Nanti:</b> 今 (ima) | 後で (ato de)</div>
+              <div>• <b>Barusan & Sebentar Lagi:</b> さっき (sakki) | もうすぐ (mousugu)</div>
+              <div>• <b>Frekuensi:</b> <b class="cs-txt-gold">いつも (selalu)</b> | <b class="cs-txt-gold">時々 (kadang-kadang)</b></div>
+              <div>• <b>Kata Tanya:</b> <b class="cs-txt-gold">いつ (itsu = kapan?)</b></div>
+            </div>
           </div>
         </div>
       `;
