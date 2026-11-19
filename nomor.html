@@ -332,10 +332,21 @@
     /* LAB ALAT INTERAKTIF SEGMENTED BAR */
     .tools-segmented-bar {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 5px;
       width: 100%;
       margin: 4px 0 12px 0;
+    }
+
+    @media (max-width: 420px) {
+      .tools-segmented-bar {
+        gap: 3px;
+      }
+      .tool-seg-btn {
+        padding: 7px 2px;
+        font-size: 10.5px;
+        gap: 3px;
+      }
     }
 
     .tool-seg-btn {
@@ -957,6 +968,282 @@
       display: flex;
       flex-direction: column;
       gap: 6px;
+    }
+
+    /* ==============================================================
+       TOOL 4: LAB JOSUUSHI (KALKULATOR SATUAN HITUNG)
+       ============================================================== */
+    .josuushi-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+      max-width: 650px;
+      margin: 0 auto;
+    }
+
+    .josuushi-stage-card {
+      background: linear-gradient(170deg, rgba(20, 32, 64, 0.95) 0%, rgba(8, 14, 32, 0.98) 100%);
+      border: 1px solid var(--border-accent);
+      border-radius: 20px;
+      padding: 18px 20px 16px 20px;
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.6), 0 0 16px rgba(56, 189, 248, 0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .jos-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .jos-chips-scroll {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: thin;
+    }
+    .jos-chips-scroll::-webkit-scrollbar {
+      height: 4px;
+    }
+    .jos-chips-scroll::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 4px;
+    }
+
+    .jos-unit-chip {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-glass);
+      color: var(--text-sub);
+      border-radius: 8px;
+      padding: 6px 11px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.18s ease;
+      touch-action: manipulation;
+    }
+    .jos-unit-chip:hover {
+      background: rgba(255, 255, 255, 0.07);
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+    .jos-unit-chip.active {
+      background: rgba(251, 191, 36, 0.15);
+      border-color: var(--gold);
+      color: var(--gold);
+      box-shadow: 0 0 10px var(--gold-glow);
+    }
+
+    .jos-display-hero {
+      text-align: center;
+      padding: 8px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .jos-kanji-big {
+      font-family: 'Noto Serif JP', serif;
+      font-size: clamp(38px, 9vw, 56px);
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: 2px;
+      margin: 2px 0;
+      line-height: 1.1;
+    }
+
+    .jos-hira-mid {
+      font-size: clamp(18px, 4.5vw, 24px);
+      font-weight: 800;
+      color: var(--primary);
+      margin-top: 4px;
+    }
+
+    .jos-ro-small {
+      font-size: 13px;
+      color: var(--text-sub);
+      font-style: italic;
+      margin-top: 2px;
+    }
+
+    .jos-anomaly-badge {
+      margin-top: 8px;
+      font-size: 11.5px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-weight: 800;
+      display: inline-block;
+      transition: all 0.2s;
+    }
+    .jos-anomaly-red {
+      background: rgba(127, 29, 29, 0.45);
+      border: 1px solid rgba(239, 68, 68, 0.5);
+      color: #fca5a5;
+    }
+    .jos-anomaly-gold {
+      background: rgba(120, 53, 15, 0.45);
+      border: 1px solid rgba(251, 191, 36, 0.5);
+      color: #fef08a;
+    }
+    .jos-anomaly-sky {
+      background: rgba(12, 74, 110, 0.45);
+      border: 1px solid rgba(56, 189, 248, 0.5);
+      color: #bae6fd;
+    }
+
+    .jos-stepper-box {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .jos-stepper-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .jos-step-ctrls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .jos-btn-step {
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid var(--border-glass);
+      color: #fff;
+      font-weight: 800;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s;
+    }
+    .jos-btn-step:hover {
+      background: rgba(51, 65, 85, 0.9);
+    }
+
+    .jos-slider-track {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.12);
+      outline: none;
+      cursor: pointer;
+    }
+    .jos-slider-track::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--primary);
+      box-shadow: 0 0 10px var(--primary-glow);
+      cursor: pointer;
+      border: 2px solid #fff;
+      transition: transform 0.1s;
+    }
+    .jos-slider-track::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+    }
+
+    .jos-presets-scroll {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      overflow-x: auto;
+      padding-top: 2px;
+      scrollbar-width: thin;
+    }
+    .jos-presets-scroll::-webkit-scrollbar {
+      height: 3px;
+    }
+    .jos-presets-scroll::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .jos-preset-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-glass);
+      color: var(--text-sub);
+      border-radius: 7px;
+      padding: 4px 9px;
+      font-size: 11.5px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+      touch-action: manipulation;
+    }
+    .jos-preset-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+    }
+    .jos-preset-btn.active {
+      background: rgba(56, 189, 248, 0.2);
+      border-color: var(--primary);
+      color: #fff;
+    }
+    .jos-preset-btn.trap {
+      border-color: rgba(239, 68, 68, 0.35);
+      color: #fca5a5;
+    }
+    .jos-preset-btn.trap:hover {
+      background: rgba(239, 68, 68, 0.15);
+    }
+
+    .jos-example-shelf {
+      background: rgba(10, 18, 40, 0.85);
+      border: 1px solid var(--border-glass);
+      border-radius: 14px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      position: relative;
+    }
+
+    .jos-sound-icon-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-glass);
+      color: var(--text-sub);
+      border-radius: 8px;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s;
+      touch-action: manipulation;
+    }
+    .jos-sound-icon-btn:hover {
+      background: rgba(56, 189, 248, 0.2);
+      border-color: var(--primary);
+      color: var(--primary);
+      box-shadow: 0 0 10px var(--primary-glow);
     }
 
     /* ==============================================================
@@ -2201,7 +2488,7 @@
 
     <!-- SECTION 2: LAB ALAT INTERAKTIF -->
     <div id="sec-tools" class="hidden">
-      <!-- 3 Segmented Tool Buttons -->
+      <!-- 4 Segmented Tool Buttons -->
       <div class="tools-segmented-bar">
         <button type="button" class="tool-seg-btn active" id="tab-tool-clock" onclick="Modul.switchTool('clock')">
           <span>⏰</span>
@@ -2214,6 +2501,10 @@
         <button type="button" class="tool-seg-btn" id="tab-tool-conv" onclick="Modul.switchTool('conv')">
           <span>🔢</span>
           <span>Konverter</span>
+        </button>
+        <button type="button" class="tool-seg-btn" id="tab-tool-josuushi" onclick="Modul.switchTool('josuushi')">
+          <span>📦</span>
+          <span>Satuan Hitung</span>
         </button>
       </div>
 
@@ -2302,6 +2593,74 @@
                   gohyaku</div>
                 <button type="button" class="btn-nav-icon" style="margin: 4px auto 0 auto;"
                   onclick="Modul.speakConvCurrent()" title="Dengarkan Angka">🔊</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- TOOL 4: JOSUUSHI CALCULATOR (SATUAN HITUNG) -->
+          <div id="tool-josuushi-content" class="hidden">
+            <div class="josuushi-container">
+              <div class="josuushi-stage-card">
+
+                <!-- 1. KATEGORI SATUAN (BEBAS EMOTIKON, BERSIH & RAPI) -->
+                <div>
+                  <div class="jos-header-row">
+                    <span style="font-size:11.5px; font-weight:800; color:var(--text-sub); text-transform:uppercase; letter-spacing:0.5px;">Pilih Satuan Hitung:</span>
+                    <span style="font-size:12px; font-weight:800; color:var(--gold);" id="jos-q-badge">Tanya: いくつ？</span>
+                  </div>
+                  <div class="jos-chips-scroll">
+                    <button type="button" class="jos-unit-chip active" onclick="Modul.selectJosuushiUnit('tsu', this)">Barang (〜つ)</button>
+                    <button type="button" class="jos-unit-chip" onclick="Modul.selectJosuushiUnit('nin', this)">Orang (〜人)</button>
+                    <button type="button" class="jos-unit-chip" onclick="Modul.selectJosuushiUnit('sai', this)">Umur (〜歳)</button>
+                    <button type="button" class="jos-unit-chip" onclick="Modul.selectJosuushiUnit('hiki', this)">Hewan (〜匹)</button>
+                    <button type="button" class="jos-unit-chip" onclick="Modul.selectJosuushiUnit('hon', this)">Benda Panjang (〜本)</button>
+                    <button type="button" class="jos-unit-chip" onclick="Modul.selectJosuushiUnit('soku', this)">Alas Kaki (〜足)</button>
+                    <button type="button" class="jos-unit-chip" onclick="Modul.selectJosuushiUnit('mai', this)">Lembar (〜枚)</button>
+                    <button type="button" class="jos-unit-chip" onclick="Modul.selectJosuushiUnit('dai', this)">Mesin (〜台)</button>
+                    <button type="button" class="jos-unit-chip" onclick="Modul.selectJosuushiUnit('wa', this)">Unggas (〜羽)</button>
+                    <button type="button" class="jos-unit-chip" onclick="Modul.selectJosuushiUnit('ban', this)">Urutan (〜番)</button>
+                  </div>
+                </div>
+
+                <!-- 2. HASIL UTAMA (KANJI BESAR, HIRAGANA, ROMAJI) -->
+                <div class="jos-display-hero">
+                  <div class="jos-kanji-big" id="jos-kanji-out">一つ</div>
+                  <div class="jos-hira-mid" id="jos-hira-out">ひとつ</div>
+                  <div class="jos-ro-small" id="jos-ro-out">(hitotsu)</div>
+                  <div class="jos-anomaly-badge hidden" id="jos-anomaly-badge"></div>
+                </div>
+
+                <!-- 3. SLIDER & STEPPER -->
+                <div class="jos-stepper-box">
+                  <div class="jos-stepper-top">
+                    <span style="color:var(--text-sub);">Jumlah / Angka:</span>
+                    <div class="jos-step-ctrls">
+                      <button type="button" class="jos-btn-step" onclick="Modul.stepJosuushiCount(-1)">−</button>
+                      <span style="font-size:16px; font-weight:900; color:var(--primary); min-width:32px; text-align:center;" id="jos-count-val">1</span>
+                      <button type="button" class="jos-btn-step" onclick="Modul.stepJosuushiCount(1)">+</button>
+                    </div>
+                  </div>
+                  <input type="range" class="jos-slider-track" id="jos-slider-count" min="1" max="25" value="1" oninput="Modul.setJosuushiCount(this.value)">
+                  <!-- Preset Buttons -->
+                  <div class="jos-presets-scroll" id="jos-preset-box">
+                    <!-- Populated via JS -->
+                  </div>
+                </div>
+
+                <!-- 4. CONTOH PENGGUNAAN (3 BARIS + TOMBOL SUARA DI KANAN ATAS) -->
+                <div class="jos-example-shelf">
+                  <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;">
+                    <span style="font-size:11px; font-weight:800; color:var(--primary); letter-spacing:0.5px; display:flex; align-items:center; gap:6px;">
+                      <span>💬</span>
+                      <span>CONTOH PENGGUNAAN</span>
+                    </span>
+                    <button type="button" class="jos-sound-icon-btn" onclick="Modul.speakJosuushiCurrent()" title="Dengarkan Contoh Percakapan">🔊</button>
+                  </div>
+                  <div style="font-size:13.5px; font-weight:800; color:#fff; line-height:1.5;" id="jos-ex-kanji">リンゴを一つください。</div>
+                  <div style="font-size:12px; color:rgba(56, 189, 248, 0.85); font-style:italic; line-height:1.4;" id="jos-ex-ro">(Ringo o hitotsu kudasai.)</div>
+                  <div style="font-size:12px; color:var(--text-sub); line-height:1.4;" id="jos-ex-id">Tolong beri saya satu buah apel.</div>
+                </div>
+
               </div>
             </div>
           </div>
@@ -5045,6 +5404,7 @@
         this.renderFC();
         this.initCalendarTool();
         this.updateClockWidget();
+        this.initJosuushiTool();
         this.bindKeyboardShortcuts();
         this.updateMasteryCounter();
         this.switchMainMode('fc');
@@ -5238,12 +5598,15 @@
       switchTool: function (tool) {
         this.playSfx('tap');
         this.activeTool = tool;
-        ['clock', 'cal', 'conv'].forEach(t => {
+        ['clock', 'cal', 'conv', 'josuushi'].forEach(t => {
           const btn = document.getElementById('tab-tool-' + t);
           const content = document.getElementById('tool-' + t + '-content');
           if (btn) btn.classList.toggle('active', t === tool);
           if (content) content.classList.toggle('hidden', t !== tool);
         });
+        if (tool === 'josuushi') {
+          this.renderJosuushi();
+        }
       },
 
       sentencesMap: {
@@ -5826,6 +6189,271 @@
       speakConvCurrent: function () {
         const text = document.getElementById('conv-res-kanji').innerText;
         this.speakText(text);
+      },
+
+      // JOSUUSHI TOOL METHODS (KALKULATOR SATUAN HITUNG)
+      currentJosuushiUnit: 'tsu',
+      currentJosuushiCount: 1,
+
+      josuushiDB: {
+        tsu: {
+          name: 'Barang (〜つ)',
+          question: 'いくつ？ (ikutsu?)',
+          examples: {
+            1: { jp: 'リンゴを一つください。', ro: '(Ringo o hitotsu kudasai.)', id: 'Tolong beri saya satu buah apel.' },
+            2: { jp: '質問が二つあります。', ro: '(Shitsumon ga futatsu arimasu.)', id: 'Saya punya dua pertanyaan.' },
+            3: { jp: 'パンを三つ買いました。', ro: '(Pan o mittsu kaimashita.)', id: 'Membeli tiga buah roti.' },
+            4: { jp: 'ケーキを四つ食べました。', ro: '(Keeki o yottsu tabemashita.)', id: 'Makan empat potong kue.' },
+            5: { jp: 'みかんを五つください。', ro: '(Mikan o itsutsu kudasai.)', id: 'Tolong beri saya lima buah jeruk.' },
+            10: { jp: '卵を十買いました。', ro: '(Tamago o too kaimashita.)', id: 'Membeli sepuluh butir telur.' },
+            def: (n, k) => ({ jp: `リンゴを${k}ください。`, ro: `(Ringo o ${k} kudasai.)`, id: `Tolong beri saya ${n} buah apel.` })
+          },
+          getWord: (n) => {
+            const map = {
+              1: { kanji: '一つ', hira: 'ひとつ', ro: 'hitotsu', trap: null },
+              2: { kanji: '二つ', hira: 'ふたつ', ro: 'futatsu', trap: null },
+              3: { kanji: '三つ', hira: 'みっつ', ro: 'mittsu', trap: null },
+              4: { kanji: '四つ', hira: 'よっつ', ro: 'yottsu', trap: null },
+              5: { kanji: '五つ', hira: 'いつつ', ro: 'itsutsu', trap: null },
+              6: { kanji: '六つ', hira: 'むっつ', ro: 'muttsu', trap: null },
+              7: { kanji: '七つ', hira: 'ななつ', ro: 'nanatsu', trap: null },
+              8: { kanji: '八つ', hira: 'やっつ', ro: 'yattsu', trap: null },
+              9: { kanji: '九つ', hira: 'ここのつ', ro: 'kokonotsu', trap: null },
+              10: { kanji: '十', hira: 'とお', ro: 'too', trap: '⚠️ Angka 10 dibaca "TOO" tanpa akhiran -tsu!' }
+            };
+            if (map[n]) return map[n];
+            return { kanji: n + '個', hira: n + 'こ', ro: n + '-ko', trap: null };
+          },
+          presets: [1, 2, 3, 4, 5, 8, 10]
+        },
+        nin: {
+          name: 'Orang (〜人)',
+          question: 'なんにん？ (nannin?)',
+          examples: {
+            1: { jp: '教室に学生が一人います。', ro: '(Kyoushitsu ni gakusei ga hitori imasu.)', id: 'Ada satu orang siswa di dalam kelas.' },
+            2: { jp: '二人で映画を見に行きます。', ro: '(Futari de eiga o mi ni ikimasu.)', id: 'Pergi menonton film berdua.' },
+            4: { jp: '家族は四人です。', ro: '(Kazoku wa yonin desu.)', id: 'Keluarga saya ada empat orang.' },
+            def: (n, k) => ({ jp: `会議室に${k}います。`, ro: `(Kaigishitsu ni ${k} imasu.)`, id: `Ada ${n} orang di ruang rapat.` })
+          },
+          getWord: (n) => {
+            if (n === 1) return { kanji: '一人', hira: 'ひとり', ro: 'hitori', trap: '⚠️ Anomali: Dibaca "hitori" (bukan ichi-nin)' };
+            if (n === 2) return { kanji: '二人', hira: 'ふたり', ro: 'futari', trap: '⚠️ Anomali: Dibaca "futari" (bukan ni-nin)' };
+            if (n === 4) return { kanji: '四人', hira: 'よにん', ro: 'yonin', trap: '⚠️ Jebakan N5: "YONIN" (bukan yon-nin / shi-nin)' };
+            if (n === 7) return { kanji: '七人', hira: 'ななにん', ro: 'nananin', trap: null };
+            return { kanji: n + '人', hira: n + 'にん', ro: n + '-nin', trap: null };
+          },
+          presets: [1, 2, 3, 4, 7, 10]
+        },
+        sai: {
+          name: 'Umur (〜歳)',
+          question: 'なんさい？ (nansai?)',
+          examples: {
+            1: { jp: '妹は今年一歳です。', ro: '(Imouto wa kotoshi issai desu.)', id: 'Adik perempuan tahun ini berusia satu tahun.' },
+            20: { jp: '来年二十歳になります。', ro: '(Rainen hatachi ni narimasu.)', id: 'Tahun depan saya berusia dua puluh tahun.' },
+            def: (n, k) => ({ jp: `弟は${k}になりました。`, ro: `(Otouto wa ${k} ni narimashita.)`, id: `Adik berusia ${n} tahun.` })
+          },
+          getWord: (n) => {
+            if (n === 1) return { kanji: '一歳', hira: 'いっさい', ro: 'issai', trap: '⚠️ Konsonan Ganda: "issai" (bukan ichisai)' };
+            if (n === 8) return { kanji: '八歳', hira: 'はっさい', ro: 'hassai', trap: '⚠️ Konsonan Ganda: "hassai" (bukan hachisai)' };
+            if (n === 10) return { kanji: '十歳', hira: 'じゅっさい', ro: 'jussai', trap: '⚠️ Konsonan Ganda: "jussai"' };
+            if (n === 20) return { kanji: '二十歳', hira: 'はたち', ro: 'hatachi', trap: '🌟 Istimewa 20 Tahun: Dibaca "HATACHI"!' };
+            return { kanji: n + '歳', hira: n + 'さい', ro: n + '-sai', trap: null };
+          },
+          presets: [1, 8, 10, 18, 20]
+        },
+        hiki: {
+          name: 'Hewan (〜匹)',
+          question: 'なんびき？ (nanbiki?)',
+          examples: {
+            1: { jp: '庭に猫が一匹います。', ro: '(Niwa ni neko ga ippiki imasu.)', id: 'Ada seekor kucing di halaman.' },
+            3: { jp: '犬が三匹走っています。', ro: '(Inu ga sanbiki hashitte imasu.)', id: 'Tiga ekor anjing sedang berlari.' },
+            def: (n, k) => ({ jp: `池に魚が${k}泳いでいます。`, ro: `(Ike ni sakana ga ${k} oyoide imasu.)`, id: `Ada ${n} ekor ikan berenang di kolam.` })
+          },
+          getWord: (n) => {
+            const d = n % 10;
+            if (n === 1 || d === 1) return { kanji: n + '匹', hira: (n===1?'':Math.floor(n/10)+'じゅう') + 'いっぴき', ro: 'ippiki', trap: '⚠️ Konsonan Ganda: "-ppiki"' };
+            if (n === 3 || d === 3) return { kanji: n + '匹', hira: (n===3?'':Math.floor(n/10)+'じゅう') + 'さんびき', ro: 'sanbiki', trap: '⚠️ Bunyi Sengau: "-biki"' };
+            if (n === 6 || d === 6) return { kanji: n + '匹', hira: (n===6?'':Math.floor(n/10)+'じゅう') + 'ろっぴき', ro: 'roppiki', trap: '⚠️ Konsonan Ganda: "-ppiki"' };
+            if (n === 8 || d === 8) return { kanji: n + '匹', hira: (n===8?'':Math.floor(n/10)+'じゅう') + 'はっぴき', ro: 'happiki', trap: '⚠️ Konsonan Ganda: "-ppiki"' };
+            if (n === 10 || (n > 0 && d === 0)) return { kanji: n + '匹', hira: (n===10?'':Math.floor(n/10)) + 'じゅっぴき', ro: 'juppiki', trap: '⚠️ Konsonan Ganda: "-ppiki"' };
+            return { kanji: n + '匹', hira: n + 'ひき', ro: n + '-hiki', trap: null };
+          },
+          presets: [1, 2, 3, 6, 8, 10]
+        },
+        hon: {
+          name: 'Benda Panjang (〜本)',
+          question: 'なんぼん？ (nanbon?)',
+          examples: {
+            1: { jp: 'ペンを一本貸してください。', ro: '(Pen o ippon kashite kudasai.)', id: 'Tolong pinjami saya satu buah pena.' },
+            3: { jp: 'ビールを三本飲みました。', ro: '(Biiru o sanbon nomimashita.)', id: 'Minum tiga botol bir.' },
+            def: (n, k) => ({ jp: `傘を${k}持っています。`, ro: `(Kasa o ${k} motte imasu.)`, id: `Membawa ${n} batang payung.` })
+          },
+          getWord: (n) => {
+            const d = n % 10;
+            if (n === 1 || d === 1) return { kanji: n + '本', hira: (n===1?'':Math.floor(n/10)+'じゅう') + 'いっぽん', ro: 'ippon', trap: '⚠️ Konsonan Ganda: "-ppon"' };
+            if (n === 3 || d === 3) return { kanji: n + '本', hira: (n===3?'':Math.floor(n/10)+'じゅう') + 'さんぼん', ro: 'sanbon', trap: '⚠️ Bunyi Sengau: "-bon"' };
+            if (n === 6 || d === 6) return { kanji: n + '本', hira: (n===6?'':Math.floor(n/10)+'じゅう') + 'ろっぽん', ro: 'roppon', trap: '⚠️ Konsonan Ganda: "-ppon"' };
+            if (n === 8 || d === 8) return { kanji: n + '本', hira: (n===8?'':Math.floor(n/10)+'じゅう') + 'はっぽん', ro: 'happon', trap: '⚠️ Konsonan Ganda: "-ppon"' };
+            if (n === 10 || (n > 0 && d === 0)) return { kanji: n + '本', hira: (n===10?'':Math.floor(n/10)) + 'じゅっぽん', ro: 'juppon', trap: '⚠️ Konsonan Ganda: "-ppon"' };
+            return { kanji: n + '本', hira: n + 'ほん', ro: n + '-hon', trap: null };
+          },
+          presets: [1, 2, 3, 6, 8, 10]
+        },
+        soku: {
+          name: 'Alas Kaki (〜足)',
+          question: 'なんぞく？ (nanzoku?)',
+          examples: {
+            1: { jp: '新しい靴を一足買いました。', ro: '(Atarashii kutsu o issoku kaimashita.)', id: 'Membeli satu pasang sepatu baru.' },
+            3: { jp: '靴下が三足あります。', ro: '(Kutsushita ga sanzoku arimasu.)', id: 'Ada tiga pasang kaus kaki.' },
+            def: (n, k) => ({ jp: `靴を${k}洗いました。`, ro: `(Kutsu o ${k} araimashita.)`, id: `Mencuci ${n} pasang sepatu.` })
+          },
+          getWord: (n) => {
+            if (n === 1) return { kanji: '一足', hira: 'いっそく', ro: 'issoku', trap: '⚠️ Konsonan Ganda: "-ssoku"' };
+            if (n === 3) return { kanji: '三足', hira: 'さんぞく', ro: 'sanzoku', trap: '⚠️ Bunyi Bergetar: "-zoku"' };
+            if (n === 8) return { kanji: '八足', hira: 'はっそく', ro: 'hassoku', trap: '⚠️ Konsonan Ganda: "-ssoku"' };
+            if (n === 10) return { kanji: '十足', hira: 'じゅっそく', ro: 'jussoku', trap: '⚠️ Konsonan Ganda: "-ssoku"' };
+            return { kanji: n + '足', hira: n + 'そく', ro: n + '-soku', trap: null };
+          },
+          presets: [1, 2, 3, 5, 8, 10]
+        },
+        mai: {
+          name: 'Lembar (〜枚)',
+          question: 'なんまい？ (nanmai?)',
+          examples: {
+            1: { jp: '紙を一枚取ってください。', ro: '(Kami o ichimai totte kudasai.)', id: 'Tolong ambilkan selembar kertas.' },
+            def: (n, k) => ({ jp: `切符を${k}買いました。`, ro: `(Kippu o ${k} kaimashita.)`, id: `Membeli ${n} lembar tiket.` })
+          },
+          getWord: (n) => ({ kanji: n + '枚', hira: n + 'まい', ro: n + '-mai', trap: null }),
+          presets: [1, 2, 3, 5, 10]
+        },
+        dai: {
+          name: 'Mesin (〜台)',
+          question: 'なんだい？ (nandai?)',
+          examples: {
+            1: { jp: '車を一台持っています。', ro: '(Kuruma o ichidai motte imasu.)', id: 'Saya memiliki satu unit mobil.' },
+            def: (n, k) => ({ jp: `パソコンが${k}あります。`, ro: `(Pasokon ga ${k} arimasu.)`, id: `Ada ${n} unit komputer.` })
+          },
+          getWord: (n) => ({ kanji: n + '台', hira: n + 'だい', ro: n + '-dai', trap: null }),
+          presets: [1, 2, 3, 5, 10]
+        },
+        wa: {
+          name: 'Unggas (〜羽)',
+          question: 'なんわ？ (nanwa?)',
+          examples: {
+            1: { jp: '庭に鳥が一羽います。', ro: '(Niwa ni tori ga ichiwa imasu.)', id: 'Ada seekor burung di halaman.' },
+            3: { jp: 'うさぎが三羽跳んでいます。', ro: '(Usagi ga sanwa tonde imasu.)', id: 'Tiga ekor kelinci sedang melompat.' },
+            def: (n, k) => ({ jp: `鳥が${k}います。`, ro: `(Tori ga ${k} imasu.)`, id: `Ada ${n} ekor burung.` })
+          },
+          getWord: (n) => {
+            if (n === 3) return { kanji: '三羽', hira: 'さんわ / さんば', ro: 'sanwa / sanba', trap: '💡 Angka 3 bisa dibaca "sanwa" atau "sanba"' };
+            return { kanji: n + '羽', hira: n + 'わ', ro: n + '-wa', trap: null };
+          },
+          presets: [1, 2, 3, 5, 10]
+        },
+        ban: {
+          name: 'Urutan (〜番)',
+          question: 'なんばん？ (nanban?)',
+          examples: {
+            1: { jp: '山田さんは一番です。', ro: '(Yamada-san wa ichiban desu.)', id: 'Tuan Yamada adalah nomor satu.' },
+            def: (n, k) => ({ jp: `私の部屋は${k}です。`, ro: `(Watashi no heya wa ${k} desu.)`, id: `Kamar saya adalah nomor ${n}.` })
+          },
+          getWord: (n) => ({ kanji: n + '番', hira: n + 'ばん', ro: n + '-ban', trap: null }),
+          presets: [1, 2, 3, 5, 10]
+        }
+      },
+
+      initJosuushiTool: function () {
+        this.renderJosuushi();
+      },
+
+      selectJosuushiUnit: function (key, btnEl) {
+        this.playSfx('tap');
+        this.currentJosuushiUnit = key;
+        document.querySelectorAll('.jos-unit-chip').forEach(b => b.classList.remove('active'));
+        if (btnEl) btnEl.classList.add('active');
+        this.renderJosuushi();
+      },
+
+      setJosuushiCount: function (val) {
+        this.currentJosuushiCount = parseInt(val, 10) || 1;
+        const slider = document.getElementById('jos-slider-count');
+        const countTxt = document.getElementById('jos-count-val');
+        if (slider) slider.value = this.currentJosuushiCount;
+        if (countTxt) countTxt.innerText = this.currentJosuushiCount;
+        this.renderJosuushi();
+      },
+
+      stepJosuushiCount: function (delta) {
+        this.playSfx('tap');
+        let next = this.currentJosuushiCount + delta;
+        if (next < 1) next = 1;
+        if (next > 25) next = 25;
+        this.setJosuushiCount(next);
+      },
+
+      renderJosuushi: function () {
+        const u = this.josuushiDB[this.currentJosuushiUnit];
+        if (!u) return;
+        const data = u.getWord(this.currentJosuushiCount);
+
+        const qBadge = document.getElementById('jos-q-badge');
+        if (qBadge) qBadge.innerText = 'Tanya: ' + u.question;
+
+        const kOut = document.getElementById('jos-kanji-out');
+        const hOut = document.getElementById('jos-hira-out');
+        const rOut = document.getElementById('jos-ro-out');
+        if (kOut) kOut.innerText = data.kanji;
+        if (hOut) hOut.innerText = data.hira;
+        if (rOut) rOut.innerText = '(' + data.ro + ')';
+
+        const pill = document.getElementById('jos-anomaly-badge');
+        if (pill) {
+          if (data.trap) {
+            pill.classList.remove('hidden');
+            if (data.trap.includes('⚠️')) {
+              pill.className = 'jos-anomaly-badge jos-anomaly-red';
+            } else if (data.trap.includes('🌟')) {
+              pill.className = 'jos-anomaly-badge jos-anomaly-gold';
+            } else {
+              pill.className = 'jos-anomaly-badge jos-anomaly-sky';
+            }
+            pill.innerText = data.trap;
+          } else {
+            pill.classList.add('hidden');
+          }
+        }
+
+        const exObj = (u.examples && u.examples[this.currentJosuushiCount])
+          ? u.examples[this.currentJosuushiCount]
+          : u.examples.def(this.currentJosuushiCount, data.kanji);
+
+        const exK = document.getElementById('jos-ex-kanji');
+        const exR = document.getElementById('jos-ex-ro');
+        const exI = document.getElementById('jos-ex-id');
+        if (exK) exK.innerText = exObj.jp;
+        if (exR) exR.innerText = exObj.ro;
+        if (exI) exI.innerText = exObj.id;
+
+        const presetBox = document.getElementById('jos-preset-box');
+        if (presetBox) {
+          presetBox.innerHTML = u.presets.map(n => {
+            const item = u.getWord(n);
+            const isTrap = !!item.trap;
+            const isCurrent = (n === this.currentJosuushiCount);
+            return `
+              <button type="button" class="jos-preset-btn ${isTrap ? 'trap' : ''} ${isCurrent ? 'active' : ''}" onclick="Modul.setJosuushiCount(${n})">
+                ${n} ${isTrap ? '⚠️' : ''}
+              </button>
+            `;
+          }).join('');
+        }
+      },
+
+      speakJosuushiCurrent: function () {
+        const exK = document.getElementById('jos-ex-kanji');
+        if (exK && exK.innerText) {
+          this.speakText(exK.innerText);
+        }
       },
 
       // QUIZ ENGINE
