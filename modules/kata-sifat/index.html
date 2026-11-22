@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Modul Kata Sifat Kensei (Keiyoushi) - YOMIKATA N5</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Serif+JP:wght@600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+</head>
+<body>
+
+<div class="container">
+  
+  <!-- 1. TOP NAVBAR & TELEMETRY -->
+  <header class="top-navbar">
+    <div class="nav-left">
+      <a href="../../index.html" class="btn-back" title="Kembali ke Yomikata Utama">
+        <span>←</span>
+        <span>Yomikata</span>
+      </a>
+    </div>
+    <div class="nav-title-group">
+      <h1 class="nav-title">🏷️ KATA SIFAT KENSEI</h1>
+      <span class="nav-master-badge" id="nav-mastered-text">⭐ Dikuasai: 0 / 165</span>
+    </div>
+    <div class="nav-right">
+      <button type="button" class="btn-rumus-toggle" onclick="Modul.openCheatsheet()" title="Panduan Rumus 4 Bentuk Infleksi">
+        <span>📜</span>
+        <span>Rumus</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mastery Progress Fill Bar -->
+  <div class="mastery-progress-track">
+    <div class="mastery-progress-fill" id="mastery-progress-fill"></div>
+  </div>
+
+  <!-- 2. MAIN MODE TABS (2 Clean Focused Tabs) -->
+  <nav class="main-nav-tabs">
+    <button type="button" class="tab-main-btn active" id="btn-tab-flashcard" onclick="Modul.switchTab('flashcard')">
+      <span>🎴</span>
+      <span>Flashcard & Infleksi</span>
+    </button>
+    <button type="button" class="tab-main-btn" id="btn-tab-quiz" onclick="Modul.switchTab('quiz')">
+      <span>🎯</span>
+      <span>Arena Kuis</span>
+    </button>
+  </nav>
+
+  <!-- 3. UNIFIED HORIZONTAL FILTER CHIP STREAM (Category + Sesi) -->
+  <div class="filter-stream-bar">
+    <div class="filter-chip-group">
+      <button type="button" class="filter-pill active" id="chip-cat-i" onclick="Modul.switchCategory('sifati')">
+        <span>い</span>
+        <span>Sifat-i (97)</span>
+      </button>
+      <button type="button" class="filter-pill" id="chip-cat-na" onclick="Modul.switchCategory('sifatna')">
+        <span>な</span>
+        <span>Sifat-na (68)</span>
+      </button>
+    </div>
+    <div class="filter-divider"></div>
+    <div class="filter-chip-group" id="sesi-chips-wrap">
+      <!-- Generated dynamically -->
+    </div>
+  </div>
+
+  <!-- 4. FLASHCARD STAGE (UNBOXED RPG STAGE) -->
+  <div id="sec-flashcard" class="dojo-arena-card fade-in-up">
+    <!-- Diisi via renderFC -->
+  </div>
+
+  <!-- 5. ARENA KUIS STAGE -->
+  <div id="sec-quiz" class="dojo-arena-card hidden fade-in-up">
+    <!-- Top Bar inside Quiz (2-Row Bulletproof Zero-Clip Layout) -->
+    <div class="quiz-top-bar">
+      <!-- Top Row: Mode selector & Drill dropdown -->
+      <div class="quiz-bar-top-row">
+        <button type="button" class="quiz-badge-target" id="quiz-mode-pill" onclick="Modul.toggleQuizSourceMode()" title="Klik untuk beralih mode kuis">
+          <span>⭐</span>
+          <span id="quiz-mode-text">0 DIKUASAI</span>
+        </button>
+
+        <div class="drill-mode-dropdown-wrap">
+          <button type="button" class="btn-drill-dropdown" id="btn-drill-dropdown" onclick="Modul.toggleDrillDropdown(event)">
+            <span id="drill-label-icon">🔀</span>
+            <span id="drill-label-text">Acak</span>
+            <span class="dropdown-caret">▾</span>
+          </button>
+
+        <div class="drill-dropdown-menu hidden" id="drill-dropdown-menu" onclick="event.stopPropagation()">
+          <div class="dd-header">MODE LATIHAN KUIS</div>
+          <div class="dd-item active" data-qtype="mix" onclick="Modul.selectDrillSubtype('mix', '🔀', 'Acak')">
+            <div class="dd-icon">🔀</div>
+            <div class="dd-text">
+              <div class="dd-title">Acak / Campuran</div>
+              <div class="dd-desc">Kombinasi infleksi, lawan kata, dan arti</div>
+            </div>
+          </div>
+          <div class="dd-item" data-qtype="inflection" onclick="Modul.selectDrillSubtype('inflection', '🔄', 'Infleksi')">
+            <div class="dd-icon">🔄</div>
+            <div class="dd-text">
+              <div class="dd-title">4 Perubahan Bentuk</div>
+              <div class="dd-desc">Latihan rumus sekarang, lampau, & negatif</div>
+            </div>
+          </div>
+          <div class="dd-item" data-qtype="antonym" onclick="Modul.selectDrillSubtype('antonym', '⚖️', 'Lawan Kata')">
+            <div class="dd-icon">⚖️</div>
+            <div class="dd-text">
+              <div class="dd-title">Lawan Kata (Antonym)</div>
+              <div class="dd-desc">Tebak pasangan antonim bahasa Jepang</div>
+            </div>
+          </div>
+          <div class="dd-item" data-qtype="meaning" onclick="Modul.selectDrillSubtype('meaning', '🎯', 'Arti & Baca')">
+            <div class="dd-icon">🎯</div>
+            <div class="dd-text">
+              <div class="dd-title">Arti & Cara Baca</div>
+              <div class="dd-desc">Tebak hiragana dan makna bahasa Indonesia</div>
+            </div>
+          </div>
+          <div class="dd-item" data-qtype="isian" onclick="Modul.selectDrillSubtype('isian', '✍️', 'Isian')">
+            <div class="dd-icon">✍️</div>
+            <div class="dd-text">
+              <div class="dd-title">Tantangan Isian Bebas</div>
+              <div class="dd-desc">Ketik langsung tanpa bantuan pilihan ganda</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Row: Telemetry Progress & Score (Never clipped!) -->
+    <div class="quiz-bar-bottom-row">
+      <div class="quiz-telemetry-badge">
+        <span>🎯</span>
+        <span class="quiz-counter-text" id="quiz-progress-pill">SOAL <b>1</b> / 10</span>
+      </div>
+      <div class="quiz-telemetry-badge score-badge">
+        <span>⭐</span>
+        <span class="quiz-score-text" id="quiz-score-pill">SKOR <b>0</b></span>
+      </div>
+    </div>
+  </div>
+
+    <!-- Question Stage -->
+    <div class="quiz-stage-box" id="quiz-stage-box">
+      <div id="quiz-content-wrapper" style="width:100%; display:flex; flex-direction:column; align-items:center;">
+        <div class="quiz-q-text" id="quiz-q-text">Memuat soal...</div>
+        <div class="quiz-options-grid" id="quiz-options-container"></div>
+        <div id="quiz-isian-container" class="hidden" style="width:100%; display:flex; flex-direction:column; align-items:center;">
+          <input type="text" id="quiz-isian-input" class="isian-input-box" placeholder="Ketik jawabanmu..." autocomplete="off" onkeypress="if(event.key==='Enter') Modul.checkIsianSubmit()">
+          <button type="button" class="btn-isian-submit" id="btn-submit-isian" onclick="Modul.checkIsianSubmit()">Kirim Jawaban</button>
+        </div>
+      </div>
+      <div class="quiz-feedback-bar" id="quiz-feedback-bar"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- 7. MODAL CHEATSHEET RUMUS 4 BENTUK INFLEKSI -->
+<div id="cheatsheet-modal" class="modal-overlay hidden" onclick="if(event.target === this) Modul.closeCheatsheet()">
+  <div class="cheatsheet-card">
+    <div class="cs-header">
+      <div class="cs-title-group">
+        <span class="cs-title-icon">📜</span>
+        <span class="cs-title">Rumus 4 Bentuk Kata Sifat</span>
+      </div>
+      <button type="button" class="btn-cs-close" onclick="Modul.closeCheatsheet()" title="Tutup">✕</button>
+    </div>
+
+    <div class="cs-tab-row">
+      <button type="button" class="cs-tab-btn active i-tab" id="cs-tab-i" onclick="Modul.switchCheatsheetTab('i')">Sifat-i (い-Keiyoushi)</button>
+      <button type="button" class="cs-tab-btn na-tab" id="cs-tab-na" onclick="Modul.switchCheatsheetTab('na')">Sifat-na (な-Keiyoushi)</button>
+    </div>
+
+    <div class="cs-body" id="cs-body-content">
+      <!-- Diisi secara dinamis -->
+    </div>
+  </div>
+</div>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>
