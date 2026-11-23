@@ -1662,51 +1662,116 @@ body::before {
    6. RESPONSIVE MOBILE ADJUSTMENTS (MAKSIMALKAN CAKRAWALA & SAMA DENGAN DESKTOP)
    ========================================================================== */
 @media (max-width: 640px) {
+  /* ========================================================================
+     1. TURBO OPTIMISASI PERFORMA MOBILE (BEBAS DROP FPS / SILKY SMOOTH 60FPS)
+     ======================================================================== */
   body {
-    /* Margin luar yang pas dan rapi (10px), nyaman dipegang satu tangan */
-    padding: 8px 10px 55px 10px;
+    background-attachment: scroll !important;
+    padding: 6px 8px 45px 8px !important;
+  }
+
+  /* Nonaktifkan render tekstur SVG dan kaligrafi raksasa di mobile untuk hemat GPU */
+  body::before {
+    display: none !important;
+  }
+  .bg-kanji-watermark {
+    display: none !important;
+  }
+
+  /* Nonaktifkan filter blur (backdrop-filter) yang bikin drop FPS di GPU ponsel */
+  .top-nav-bar,
+  .page-nav-bar,
+  .iqra-sheet-card,
+  .exam-section-card,
+  .custom-dropdown-menu,
+  .custom-dropdown-overlay {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(9, 15, 34, 0.98) !important;
+  }
+
+  /* Sederhanakan bayangan multi-pass menjadi single-pass ringan */
+  .top-nav-bar,
+  .page-nav-bar,
+  .iqra-sheet-card,
+  .exam-section-card {
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45) !important;
   }
 
   .kana-container {
-    gap: 8px;
+    gap: 6px;
     width: 100%;
     max-width: 100%;
   }
 
-  /* 1. Top Navbar: Ramping, ergonomis, bebas sesak */
+  /* ========================================================================
+     2. TOP NAVBAR: SINGLE-ROW ULTRA SLIM (ANTI PATAH BARIS / TINGGI ~38px)
+     ======================================================================== */
   .top-nav-bar {
-    padding: 6px 10px;
-    border-radius: 12px;
-    gap: 8px;
+    padding: 4px 8px;
+    border-radius: 10px;
+    gap: 4px;
+    min-height: 38px;
+    align-items: center;
+  }
+
+  .nav-left-group {
+    gap: 5px;
+    flex-shrink: 1;
+    min-width: 0;
+    align-items: center;
+    white-space: nowrap;
   }
 
   .btn-nav-icon {
-    width: 32px;
-    height: 32px;
-    font-size: 15px;
-    border-radius: 8px;
+    width: 26px;
+    height: 26px;
+    font-size: 13px;
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+
+  .nav-title-box {
+    min-width: 0;
   }
 
   .nav-title-main {
-    font-size: 13px;
-    gap: 5px;
+    font-size: 11.5px;
+    font-weight: 800;
+    gap: 4px;
+    white-space: nowrap;
+    flex-wrap: nowrap;
+    overflow: hidden;
+  }
+
+  .title-desktop-prefix {
+    display: none !important;
   }
 
   .nav-stage-badge {
-    font-size: 9px;
-    padding: 2px 5px;
-    border-radius: 5px;
+    font-size: 8px;
+    padding: 1px 4px;
+    border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
 
-  /* Sembunyikan slogan panjang di layar ponsel agar tidak memakan ruang tinggi */
   .nav-title-sub {
     display: none !important;
   }
 
+  .nav-right-group {
+    gap: 4px;
+    flex-shrink: 0;
+    white-space: nowrap;
+    align-items: center;
+  }
+
   .btn-speed-toggle {
-    padding: 4px 6px;
-    font-size: 11px;
-    border-radius: 7px;
+    padding: 3px 5px;
+    font-size: 10px;
+    border-radius: 6px;
+    white-space: nowrap;
   }
 
   .speed-text-full {
@@ -1714,131 +1779,162 @@ body::before {
   }
 
   .progress-pill {
-    padding: 4px 6px;
-    font-size: 11px;
-    border-radius: 7px;
+    padding: 3px 5px;
+    font-size: 10px;
+    border-radius: 6px;
+    white-space: nowrap;
   }
 
-  /* 2. Page Navigation Bar: Ringkas & seimbang */
+  #nav-progress-text {
+    white-space: nowrap;
+  }
+
+  /* ========================================================================
+     3. PAGE NAVIGATION BAR: ULTRA SLIM (ICON BUTTONS + CLEAN DROPDOWN)
+     ======================================================================== */
   .page-nav-bar {
-    padding: 5px 8px;
-    gap: 6px;
-    border-radius: 12px;
+    padding: 3px 6px;
+    gap: 4px;
+    border-radius: 10px;
+    min-height: 30px;
   }
 
   .btn-page-step {
-    padding: 6px 8px;
-    font-size: 11px;
-    border-radius: 8px;
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+
+  .step-label-text {
+    display: none !important;
   }
 
   .custom-select-trigger {
-    padding: 6px 8px;
-    font-size: 11.5px;
-    border-radius: 8px;
+    padding: 3px 6px;
+    font-size: 10.5px;
+    font-weight: 700;
+    border-radius: 6px;
+    min-height: 26px;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
-  /* 3. Header Cards: Proporsional, tidak menyita tinggi layar */
+  /* ========================================================================
+     4. HEADER CARDS: SLIM & BERDAMPINGAN (TINGGI ~55px)
+     ======================================================================== */
   .iqra-header-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 6px;
+    gap: 4px;
   }
 
   .iqra-header-card {
-    padding: 8px 6px 7px 6px;
-    border-radius: 12px;
-    gap: 3px;
+    padding: 5px 4px 4px 4px;
+    border-radius: 10px;
+    gap: 2px;
   }
 
   .iqra-script-tags {
-    font-size: 8px;
-    gap: 4px;
-    opacity: 0.8;
+    font-size: 7px;
+    gap: 3px;
+    opacity: 0.7;
+    margin-bottom: 0;
   }
 
   .iqra-hira {
-    font-size: clamp(28px, 7vw, 36px);
+    font-size: clamp(22px, 6vw, 26px);
   }
 
   .iqra-dot {
-    font-size: 12px;
+    font-size: 9px;
   }
 
   .iqra-kata {
-    font-size: clamp(25px, 6.5vw, 32px);
+    font-size: clamp(20px, 5.5vw, 24px);
   }
 
   .iqra-romaji-pill {
-    padding: 2px 8px;
-    margin-top: 1px;
+    padding: 1px 6px;
+    margin-top: 0;
   }
 
   .iqra-romaji-text {
-    font-size: 11.5px;
+    font-size: 10px;
   }
 
-  /* 4. Lembar Latihan: Format 3 Kolom x 5 Baris yang Bernapas & Lega */
+  /* ========================================================================
+     5. LEMBAR LATIHAN 15 KOTAK: KOMPAK, SHARP, & BEBAS LAG
+     ======================================================================== */
   .iqra-sheet-card {
-    padding: 10px 8px 12px 8px;
-    border-radius: 14px;
-    gap: 8px;
+    padding: 8px 6px 10px 6px;
+    border-radius: 12px;
+    gap: 6px;
   }
 
   .sheet-header-row {
-    flex-wrap: wrap;
-    gap: 6px;
-    padding-bottom: 4px;
+    padding-bottom: 2px;
+    gap: 4px;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
   }
 
   .sheet-title {
-    font-size: 11.5px;
+    font-size: 11px;
+    white-space: nowrap;
   }
 
-  /* Sembunyikan kanji tambahan di judul latihan agar tidak wrap */
   .sheet-jp-sub {
     display: none !important;
   }
 
   .sheet-actions-group {
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 5px;
+    width: auto;
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
   }
 
   .btn-autoplay-drill,
   .btn-shuffle-drill {
     justify-content: center;
-    padding: 6px 4px;
-    font-size: 11px;
-    border-radius: 7px;
+    padding: 3px 6px;
+    font-size: 10px;
+    border-radius: 6px;
+    min-height: 24px;
   }
 
   .drills-iqra-grid {
-    gap: 5px;
+    gap: 4px;
   }
 
   .iqra-3char-box {
-    padding: 9px 2px 7px 2px;
-    gap: 3px;
-    border-radius: 9px;
-    min-height: 42px;
+    padding: 7px 2px 5px 2px;
+    gap: 2px;
+    border-radius: 7px;
+    min-height: 38px;
   }
 
-  /* Nomor Petak Micro (01 - 15) di Pojok Kiri Atas yang halus */
   .iqra-3char-box::before {
-    top: 2px;
-    left: 4px;
-    font-size: 7.5px;
-    opacity: 0.2;
+    top: 1px;
+    left: 3px;
+    font-size: 6.5px;
+    opacity: 0.18;
   }
 
   .k-char-hira {
-    font-size: clamp(19px, 5.2vw, 23px);
+    font-size: clamp(17px, 4.6vw, 21px);
   }
 
   .k-char-kata {
-    font-size: clamp(17px, 4.8vw, 21px);
+    font-size: clamp(15px, 4.2vw, 19px);
   }
 
   /* 5. Dojo Arena / Exam Card: Proporsional & Nyaman Ditap */

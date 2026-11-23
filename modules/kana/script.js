@@ -1320,7 +1320,7 @@ const KanaApp = {
       stageBadge.textContent = 'PLACEMENT';
       stageBadge.className = 'nav-stage-badge placement-badge';
     }
-    const titleMain = document.querySelector('.nav-title-main span:first-child');
+    const titleMain = document.querySelector('.nav-title-text') || document.querySelector('.nav-title-main span:first-child');
     if (titleMain) {
       titleMain.textContent = 'Ujian Lompat Gerbang N5';
     }
@@ -1340,6 +1340,9 @@ const KanaApp = {
       homeBtn.href = '../../index.html?portal=1';
       homeBtn.title = 'Kembali ke Gerbang Utama';
     }
+    try {
+      window.scrollTo(0, 0);
+    } catch (e) {}
   },
 
   getAllMasterLetters: function () {

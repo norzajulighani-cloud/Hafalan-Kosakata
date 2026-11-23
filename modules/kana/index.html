@@ -13,7 +13,7 @@
     href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@700;800;900&family=Noto+Serif+JP:wght@700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap"
     rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=10.7">
 </head>
 
 <body>
@@ -35,7 +35,7 @@
         <a class="btn-nav-icon" href="../../index.html?portal=1" title="Kembali ke Halaman Awal (Portal Utama)">🏠</a>
         <div class="nav-title-box">
           <div class="nav-title-main">
-            <span>Penguasaan Huruf Kana</span>
+            <span class="nav-title-text"><span class="title-desktop-prefix">Penguasaan </span>Kana</span>
             <span id="nav-stage-badge" class="nav-stage-badge">TAHAP 01</span>
           </div>
           <span class="nav-title-sub">METODE DRILL FONETIK BERJENJANG • 音読道場</span>
@@ -59,7 +59,7 @@
     <!-- 2. PAGE NAVIGATION BAR (‹ HAL X / 25 › DENGAN CUSTOM POPOVER) -->
     <nav class="page-nav-bar">
       <button type="button" class="btn-page-step" id="btn-prev-page" onclick="KanaApp.stepPage(-1)" title="Halaman Sebelumnya">
-        <span>‹</span> <span>Sebelumnya</span>
+        <span>‹</span> <span class="step-label-text">Sebelumnya</span>
       </button>
 
       <!-- Custom Dropdown Trigger (Non-browser popover) -->
@@ -69,7 +69,7 @@
       </div>
 
       <button type="button" class="btn-page-step" id="btn-next-page" onclick="KanaApp.stepPage(1)" title="Halaman Selanjutnya">
-        <span>Selanjutnya</span> <span>›</span>
+        <span class="step-label-text">Selanjutnya </span><span>›</span>
       </button>
     </nav>
 
@@ -127,8 +127,8 @@
   </div>
 
   <!-- SCRIPTS -->
-  <script src="data.js"></script>
-  <script src="script.js"></script>
+  <script src="data.js?v=10.7"></script>
+  <script src="script.js?v=10.7"></script>
 </body>
 
 </html>
