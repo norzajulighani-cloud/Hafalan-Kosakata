@@ -1,0 +1,1969 @@
+/* ==========================================================================
+   YOMIKATA: PENGUASAAN HURUF KANA (METODE IQRA' KANA)
+   Desain Edisi Masterclass Obsidian Dojo: Mewah, Berirama, & Nyaman Digunakan
+   ========================================================================== */
+
+:root {
+  --bg-base: #030712;
+  --bg-surface: rgba(11, 18, 38, 0.88);
+  --bg-surface-elevated: rgba(16, 27, 56, 0.94);
+  --bg-card: rgba(14, 23, 49, 0.9);
+  --bg-card-hover: rgba(22, 36, 74, 0.98);
+
+  --border-glass: rgba(56, 189, 248, 0.16);
+  --border-glass-subtle: rgba(255, 255, 255, 0.08);
+  --border-accent: rgba(56, 189, 248, 0.45);
+  --border-gold: rgba(251, 191, 36, 0.45);
+
+  /* Dual Accent: Cyan for Hiragana, Imperial Gold for Katakana */
+  --hira-color: #38bdf8;
+  --hira-glow: rgba(56, 189, 248, 0.45);
+  --hira-deep: #0284c7;
+
+  --kata-color: #fbbf24;
+  --kata-glow: rgba(251, 191, 36, 0.45);
+  --kata-deep: #d97706;
+
+  --text-main: #f8fafc;
+  --text-sub: #94a3b8;
+  --text-dim: #64748b;
+  --success: #22c55e;
+  --success-glow: rgba(34, 197, 94, 0.45);
+  --danger: #ef4444;
+  --danger-glow: rgba(239, 68, 68, 0.4);
+
+  --font-jp-serif: 'Noto Serif JP', serif;
+  --font-jp-sans: 'Noto Sans JP', sans-serif;
+  --font-ui: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* ==========================================================================
+   RESET & DASAR HALAMAN
+   ========================================================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+::selection {
+  background: var(--hira-deep);
+  color: #fff;
+}
+
+body {
+  background-color: var(--bg-base);
+  color: var(--text-main);
+  font-family: var(--font-ui);
+  min-height: 100vh;
+  padding: 12px 14px 60px 14px;
+  overflow-x: hidden;
+  position: relative;
+  background-image: 
+    radial-gradient(circle at 10% 5%, rgba(56, 189, 248, 0.12) 0%, transparent 42%),
+    radial-gradient(circle at 90% 95%, rgba(251, 191, 36, 0.09) 0%, transparent 45%),
+    radial-gradient(circle at 50% 50%, rgba(236, 72, 153, 0.04) 0%, transparent 60%);
+  background-attachment: fixed;
+}
+
+/* Latar Belakang Tekstur Geometris Tradisional Jepang (Asanoha Pattern) */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0l20 20-20 20L0 20zM0 0l40 40M40 0L0 40' fill='none' stroke='%2338bdf8' stroke-width='0.5' stroke-opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Watermark Kaligrafi Jepang di Latar */
+.bg-kanji-watermark {
+  position: fixed;
+  font-family: var(--font-jp-serif);
+  font-size: clamp(140px, 22vw, 260px);
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.016);
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+  line-height: 1;
+}
+
+.bg-kanji-watermark.left {
+  top: 15%;
+  left: -20px;
+}
+
+.bg-kanji-watermark.right {
+  bottom: 10%;
+  right: -20px;
+}
+
+.kana-container {
+  max-width: 860px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ==========================================================================
+   1. TOP NAVBAR MASTERCLASS (DENGAN PROGRESS TRACK & SPEED CONTROL)
+   ========================================================================== */
+.top-nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-glass);
+  border-radius: 18px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Progress Bar Hairline di Dasar Navbar */
+.nav-progress-track {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.nav-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--hira-color) 0%, var(--kata-color) 100%);
+  box-shadow: 0 0 10px var(--hira-glow);
+  transition: width 0.4s ease;
+}
+
+.nav-left-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-nav-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-glass);
+  border-radius: 12px;
+  color: #fff;
+  font-size: 18px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-nav-icon:hover {
+  background: rgba(56, 189, 248, 0.18);
+  border-color: var(--hira-color);
+  box-shadow: 0 0 14px var(--hira-glow);
+  transform: translateY(-2px);
+}
+
+.btn-nav-icon:active {
+  transform: scale(0.94);
+}
+
+.nav-title-box {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.nav-title-main {
+  font-size: 15px;
+  font-weight: 800;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: -0.2px;
+}
+
+.nav-stage-badge {
+  font-size: 10px;
+  font-weight: 900;
+  background: rgba(56, 189, 248, 0.15);
+  color: var(--hira-color);
+  padding: 2px 7px;
+  border-radius: 6px;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.2);
+  letter-spacing: 0.5px;
+}
+
+.nav-title-sub {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--hira-color);
+  letter-spacing: 0.8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.nav-right-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Tombol Pengatur Kecepatan Suara */
+.btn-speed-toggle {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-glass);
+  color: var(--text-sub);
+  padding: 5px 10px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.btn-speed-toggle:hover {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: var(--hira-color);
+  color: #fff;
+}
+
+.progress-pill {
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  color: var(--success);
+  font-size: 11px;
+  font-weight: 800;
+  padding: 5px 10px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.15);
+}
+
+/* ==========================================================================
+   2. CUSTOM PAGE STEPPER & NON-BROWSER DROPDOWN
+   ========================================================================== */
+.page-nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-glass);
+  border-radius: 16px;
+  padding: 7px 10px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+}
+
+.btn-page-step {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-glass);
+  color: #fff;
+  padding: 9px 14px;
+  border-radius: 11px;
+  font-size: 12.5px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  touch-action: manipulation;
+  flex-shrink: 0;
+}
+
+.btn-page-step:hover:not(:disabled) {
+  background: rgba(56, 189, 248, 0.18);
+  border-color: var(--hira-color);
+  box-shadow: 0 0 14px var(--hira-glow);
+  transform: translateY(-1px);
+}
+
+.btn-page-step:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.btn-page-step:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+  border-color: transparent;
+}
+
+/* Custom Dropdown Trigger */
+.custom-select-trigger {
+  flex: 1;
+  background: linear-gradient(135deg, rgba(14, 24, 52, 0.95) 0%, rgba(8, 14, 32, 0.98) 100%);
+  border: 1.5px solid var(--border-accent);
+  color: var(--kata-color);
+  padding: 9px 14px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 800;
+  transition: all 0.2s ease;
+  user-select: none;
+  min-width: 0;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.custom-select-trigger:hover {
+  background: rgba(18, 32, 68, 0.98);
+  border-color: var(--kata-color);
+  box-shadow: 0 0 16px rgba(251, 191, 36, 0.25);
+  transform: translateY(-1px);
+}
+
+.trigger-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.trigger-caret {
+  font-size: 12px;
+  color: var(--kata-color);
+  transition: transform 0.2s ease;
+}
+
+/* Custom Popover Modal Overlay */
+.custom-dropdown-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(3, 7, 18, 0.78);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+.custom-dropdown-overlay.hidden {
+  display: none;
+  opacity: 0;
+}
+
+.custom-dropdown-menu {
+  background: linear-gradient(170deg, #0e1a38 0%, #060c1c 100%);
+  border: 1.5px solid var(--border-accent);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), 0 0 30px rgba(56, 189, 248, 0.25);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 460px;
+  max-height: 82vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: popoverSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes popoverSlideUp {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.dropdown-header-bar {
+  padding: 14px 18px;
+  background: rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid var(--border-glass);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dropdown-title {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dropdown-close-btn {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid var(--border-glass-subtle);
+  color: #fff;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.dropdown-close-btn:hover {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: var(--danger);
+  transform: rotate(90deg);
+}
+
+.dropdown-scroll-body {
+  padding: 12px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-glass) transparent;
+}
+
+.stage-group-box {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-glass-subtle);
+  border-radius: 14px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.stage-group-label {
+  font-size: 11px;
+  font-weight: 900;
+  color: var(--hira-color);
+  padding: 4px 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dropdown-item-btn {
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid transparent;
+  color: var(--text-sub);
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.15s ease;
+}
+
+.dropdown-item-btn:hover:not(.locked) {
+  background: rgba(56, 189, 248, 0.16);
+  border-color: var(--hira-color);
+  color: #fff;
+  transform: translateX(3px);
+}
+
+.dropdown-item-btn.active {
+  background: rgba(251, 191, 36, 0.18);
+  border-color: var(--kata-color);
+  color: var(--kata-color);
+  font-weight: 900;
+  box-shadow: 0 0 12px rgba(251, 191, 36, 0.2);
+}
+
+.dropdown-item-btn.locked {
+  opacity: 0.45;
+  cursor: not-allowed;
+  background: rgba(255, 255, 255, 0.015);
+}
+
+/* ==========================================================================
+   3. HEADER PENGENALAN HURUF (2 ATAU 3 HURUF BESAR: KANA + ROMAJI SAJA)
+   ========================================================================== */
+.iqra-header-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.iqra-header-card {
+  background: linear-gradient(160deg, rgba(20, 34, 68, 0.95) 0%, rgba(10, 18, 42, 0.98) 100%);
+  border: 1.5px solid var(--border-glass);
+  border-radius: 20px;
+  padding: 18px 14px 16px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  touch-action: manipulation;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Kilauan diagonal halus pada hover */
+.iqra-header-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.iqra-header-card:hover {
+  border-color: var(--hira-color);
+  box-shadow: 0 12px 35px rgba(56, 189, 248, 0.25), 0 0 20px rgba(56, 189, 248, 0.2);
+  transform: translateY(-3px);
+}
+
+.iqra-header-card:active {
+  transform: scale(0.97);
+}
+
+/* Tag kecil penanda Hiragana (Cyan) & Katakana (Gold) */
+.iqra-script-tags {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: -2px;
+}
+
+.tag-hira {
+  color: var(--hira-color);
+  opacity: 0.85;
+}
+
+.tag-dot {
+  font-size: 8px;
+  color: var(--text-dim);
+}
+
+.tag-kata {
+  color: var(--kata-color);
+  opacity: 0.85;
+}
+
+.iqra-glyph-pair {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 14px;
+  position: relative;
+}
+
+.iqra-hira {
+  font-family: var(--font-jp-serif);
+  font-size: clamp(40px, 9.5vw, 56px);
+  font-weight: 900;
+  color: var(--hira-color);
+  line-height: 1;
+  text-shadow: 0 0 14px var(--hira-glow);
+  transition: transform 0.2s ease;
+}
+
+.iqra-dot {
+  font-size: 18px;
+  color: var(--text-dim);
+}
+
+.iqra-kata {
+  font-family: var(--font-jp-sans);
+  font-size: clamp(36px, 8.5vw, 50px);
+  font-weight: 800;
+  color: var(--kata-color);
+  line-height: 1;
+  text-shadow: 0 0 14px var(--kata-glow);
+  transition: transform 0.2s ease;
+}
+
+.iqra-header-card:hover .iqra-hira,
+.iqra-header-card:hover .iqra-kata {
+  transform: scale(1.05);
+}
+
+/* Romaji Pill yang elegan */
+.iqra-romaji-pill {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--border-glass-subtle);
+  border-radius: 20px;
+  padding: 3px 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.iqra-romaji-text {
+  font-size: 14px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: 1.2px;
+}
+
+/* Indikator Animasi Gelombang Suara (Audio Wave Bars) */
+.audio-wave-bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
+}
+
+.audio-wave-bars span {
+  width: 2.5px;
+  background: var(--hira-color);
+  border-radius: 1px;
+  height: 4px;
+  transition: height 0.2s ease;
+}
+
+.iqra-header-card.sounding .audio-wave-bars span:nth-child(1) {
+  animation: waveAnim 0.35s infinite alternate ease-in-out;
+}
+.iqra-header-card.sounding .audio-wave-bars span:nth-child(2) {
+  animation: waveAnim 0.35s 0.12s infinite alternate ease-in-out;
+}
+.iqra-header-card.sounding .audio-wave-bars span:nth-child(3) {
+  animation: waveAnim 0.35s 0.24s infinite alternate ease-in-out;
+}
+
+@keyframes waveAnim {
+  from { height: 3px; }
+  to { height: 12px; }
+}
+
+/* ==========================================================================
+   4. LEMBAR LATIHAN MEMBACA NYARING (5 BARIS x 3 KOLOM • 15 KOTAK GENKOUYOUSHI)
+   ========================================================================== */
+.iqra-sheet-card {
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border-glass);
+  border-radius: 22px;
+  padding: 16px 18px 22px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.sheet-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  gap: 10px;
+}
+
+.sheet-title-box {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.sheet-title {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.sheet-jp-sub {
+  font-family: var(--font-jp-serif);
+  font-size: 11px;
+  color: var(--hira-color);
+  opacity: 0.85;
+}
+
+.sheet-actions-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Tombol Putar Otomatis (Auto-Play Read-Along) */
+.btn-autoplay-drill {
+  background: rgba(251, 191, 36, 0.12);
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  color: var(--kata-color);
+  padding: 5px 11px;
+  border-radius: 9px;
+  font-size: 11.5px;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.18s ease;
+  user-select: none;
+}
+
+.btn-autoplay-drill:hover {
+  background: rgba(251, 191, 36, 0.22);
+  border-color: var(--kata-color);
+  box-shadow: 0 0 12px rgba(251, 191, 36, 0.3);
+}
+
+.btn-autoplay-drill.playing {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: var(--danger);
+  color: #fca5a5;
+}
+
+/* Tombol Acak Ulang */
+.btn-shuffle-drill {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-glass);
+  color: var(--hira-color);
+  padding: 5px 11px;
+  border-radius: 9px;
+  font-size: 11.5px;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.18s ease;
+  user-select: none;
+}
+
+.btn-shuffle-drill:hover {
+  background: rgba(56, 189, 248, 0.18);
+  border-color: var(--hira-color);
+  color: #fff;
+  box-shadow: 0 0 12px var(--hira-glow);
+}
+
+.btn-shuffle-drill:hover span:first-child {
+  transform: rotate(180deg);
+  transition: transform 0.3s ease;
+}
+
+/* Grid 5 Baris ke Bawah x 3 Kolom ke Samping (15 Kotak Total) */
+.drills-iqra-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.iqra-3char-box {
+  background: linear-gradient(150deg, rgba(10, 18, 40, 0.92) 0%, rgba(6, 11, 26, 0.96) 100%);
+  border: 1.5px solid var(--border-glass-subtle);
+  border-radius: 14px;
+  padding: 16px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  touch-action: manipulation;
+  user-select: none;
+  position: relative;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+}
+
+/* Nomor Petak Micro (01 - 15) di Pojok Kiri Atas Tile ala Lembaran Kerja */
+.iqra-3char-box::before {
+  content: attr(data-tile-num);
+  position: absolute;
+  top: 4px;
+  left: 6px;
+  font-size: 9px;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.18);
+  font-family: monospace;
+  pointer-events: none;
+}
+
+.iqra-3char-box:hover {
+  background: rgba(56, 189, 248, 0.12);
+  border-color: var(--hira-color);
+  box-shadow: 0 0 18px rgba(56, 189, 248, 0.28);
+  transform: translateY(-2px);
+}
+
+.iqra-3char-box:active {
+  transform: scale(0.96);
+}
+
+/* Efek Saat Kotak Bersuara (Sounding / Auto-play) */
+.iqra-3char-box.sounding {
+  background: rgba(56, 189, 248, 0.25) !important;
+  border-color: var(--hira-color) !important;
+  box-shadow: 0 0 25px var(--hira-glow), inset 0 0 15px rgba(56, 189, 248, 0.25) !important;
+  transform: scale(1.02);
+}
+
+.k-char-hira {
+  font-family: var(--font-jp-serif);
+  font-size: clamp(23px, 5.5vw, 29px);
+  font-weight: 900;
+  color: var(--hira-color);
+  line-height: 1;
+  text-shadow: 0 0 10px rgba(56, 189, 248, 0.35);
+}
+
+.k-char-kata {
+  font-family: var(--font-jp-sans);
+  font-size: clamp(21px, 5vw, 27px);
+  font-weight: 800;
+  color: var(--kata-color);
+  line-height: 1;
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.35);
+}
+
+/* ==========================================================================
+   5. MINI TES & UJIAN KELANCARAN KELULUSAN (DOJO ARENA)
+   ========================================================================== */
+.exam-section-card {
+  background: linear-gradient(160deg, rgba(14, 25, 54, 0.95) 0%, rgba(6, 12, 28, 0.98) 100%);
+  border: 1.5px solid var(--border-glass);
+  border-radius: 22px;
+  padding: 22px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  text-align: center;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.exam-section-card.is-stage-final {
+  border-color: var(--border-gold);
+  box-shadow: 0 0 35px rgba(251, 191, 36, 0.25), inset 0 1px 0 rgba(251, 191, 36, 0.2);
+}
+
+.exam-banner-idle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.exam-badge-icon {
+  font-size: 38px;
+  filter: drop-shadow(0 0 12px rgba(251, 191, 36, 0.4));
+  animation: pulseIcon 2.5s infinite ease-in-out;
+}
+
+@keyframes pulseIcon {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+.exam-title-text {
+  font-size: 17px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -0.2px;
+}
+
+.exam-desc-text {
+  font-size: 13px;
+  color: var(--text-sub);
+  max-width: 480px;
+  line-height: 1.5;
+}
+
+.btn-start-exam {
+  background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+  color: #030712;
+  font-size: 14.5px;
+  font-weight: 900;
+  padding: 12px 28px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  margin-top: 8px;
+  box-shadow: 0 6px 20px rgba(56, 189, 248, 0.35);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  touch-action: manipulation;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-start-exam.gold {
+  background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
+}
+
+.btn-start-exam:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+}
+
+.btn-start-exam:active {
+  transform: scale(0.97);
+}
+
+/* Exam Active Panel State */
+.exam-active-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  animation: examPanelEnter 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes examPanelEnter {
+  0% { opacity: 0; transform: translateY(8px) scale(0.99); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.exam-meta-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 420px;
+  font-size: 11.5px;
+  font-weight: 800;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.exam-model-badge {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-sub);
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+.exam-streak-pill {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.3) 0%, rgba(245, 158, 11, 0.38) 100%);
+  border: 1px solid rgba(245, 158, 11, 0.7);
+  color: #fde047;
+  font-size: 10.5px;
+  font-weight: 900;
+  padding: 2px 9px;
+  border-radius: 999px;
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.4);
+  animation: streakFire 0.6s infinite alternate ease-in-out;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  white-space: nowrap;
+}
+
+@keyframes streakFire {
+  0% { transform: scale(0.96); box-shadow: 0 0 8px rgba(245, 158, 11, 0.3); }
+  100% { transform: scale(1.05); box-shadow: 0 0 18px rgba(245, 158, 11, 0.65); }
+}
+
+/* Script Target Badges (Hiragana vs Katakana Indicator) */
+.script-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: 999px;
+  letter-spacing: 0.5px;
+  user-select: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.script-badge.hira-badge {
+  background: rgba(56, 189, 248, 0.15);
+  border: 1.5px solid rgba(56, 189, 248, 0.55);
+  color: var(--hira-color);
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.25);
+}
+
+.script-badge.kata-badge {
+  background: rgba(251, 191, 36, 0.15);
+  border: 1.5px solid rgba(251, 191, 36, 0.55);
+  color: var(--kata-color);
+  box-shadow: 0 0 14px rgba(251, 191, 36, 0.25);
+}
+
+/* Floating Praise Toast */
+.praise-toast {
+  position: fixed;
+  z-index: 100000;
+  pointer-events: none;
+  font-size: 13.5px;
+  font-weight: 900;
+  padding: 6px 14px;
+  border-radius: 999px;
+  letter-spacing: 0.4px;
+  transform: translate(-50%, -50%);
+  animation: praiseFloat 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  white-space: nowrap;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55);
+}
+
+.praise-toast.toast-correct {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.96), rgba(5, 150, 105, 0.98));
+  border: 1.5px solid rgba(110, 231, 183, 0.85);
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+}
+
+.praise-toast.toast-wrong {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.96), rgba(185, 28, 28, 0.98));
+  border: 1.5px solid rgba(252, 165, 165, 0.85);
+  color: #ffffff;
+}
+
+@keyframes praiseFloat {
+  0% { opacity: 0; transform: translate(-50%, 6px) scale(0.85); }
+  22% { opacity: 1; transform: translate(-50%, -18px) scale(1.08); }
+  72% { opacity: 1; transform: translate(-50%, -28px) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -44px) scale(0.95); }
+}
+
+.exam-progress-bar-wrap {
+  width: 100%;
+  max-width: 420px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.exam-progress-fill {
+  height: 100%;
+  background: var(--hira-color);
+  box-shadow: 0 0 10px var(--hira-glow);
+  transition: width 0.35s ease;
+}
+
+.exam-progress-fill.gold {
+  background: var(--kata-color);
+  box-shadow: 0 0 10px var(--kata-glow);
+}
+
+/* Pedestal Huruf Soal Kombinasi */
+.exam-question-glyph {
+  min-height: 90px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.exam-combo-row {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 16px;
+  padding: 8px 24px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border-glass);
+  border-radius: 18px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+.exam-combo-row .k-char-hira {
+  font-family: var(--font-jp-serif);
+  font-size: clamp(42px, 10vw, 58px);
+  color: var(--hira-color);
+  text-shadow: 0 0 16px var(--hira-glow);
+}
+
+.exam-combo-row .k-char-kata {
+  font-family: var(--font-jp-sans);
+  font-size: clamp(38px, 9vw, 52px);
+  color: var(--kata-color);
+  text-shadow: 0 0 16px var(--kata-glow);
+}
+
+.exam-combo-gap {
+  display: inline-block;
+  width: 4px;
+}
+
+.exam-options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: 100%;
+  max-width: 420px;
+}
+
+.exam-opt-btn {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
+  border: 1.5px solid var(--border-glass-subtle);
+  color: #fff;
+  padding: 14px 10px;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.16s ease;
+  touch-action: manipulation;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.exam-opt-btn .key-hint {
+  font-size: 10px;
+  color: var(--text-dim);
+  background: rgba(255, 255, 255, 0.08);
+  padding: 2px 6px;
+  border-radius: 5px;
+  position: absolute;
+  left: 10px;
+}
+
+.exam-opt-btn:hover:not(:disabled) {
+  background: rgba(56, 189, 248, 0.18);
+  border-color: var(--hira-color);
+  box-shadow: 0 0 16px var(--hira-glow);
+  transform: translateY(-2px);
+}
+
+.exam-opt-btn.correct {
+  background: rgba(34, 197, 94, 0.35) !important;
+  border-color: var(--success) !important;
+  color: #86efac !important;
+  box-shadow: 0 0 20px var(--success-glow) !important;
+  animation: correctBounce 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.exam-opt-btn.wrong {
+  background: rgba(239, 68, 68, 0.35) !important;
+  border-color: var(--danger) !important;
+  color: #fca5a5 !important;
+  animation: shakeWrong 0.4s ease-in-out;
+}
+
+@keyframes correctBounce {
+  0% { transform: scale(0.95); }
+  45% { transform: scale(1.08); filter: brightness(1.25); }
+  100% { transform: scale(1); }
+}
+
+@keyframes shakeWrong {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  50% { transform: translateX(6px); }
+  75% { transform: translateX(-4px); }
+}
+
+/* ==========================================================================
+   MODEL 2: BENAR ATAU SALAH (TRUE / FALSE)
+   ========================================================================== */
+.tf-options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+  max-width: 420px;
+}
+
+.btn-tf {
+  padding: 16px 12px;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 900;
+  cursor: pointer;
+  border: 1.5px solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.18s ease;
+  touch-action: manipulation;
+}
+
+.btn-tf.true-opt {
+  background: rgba(34, 197, 94, 0.15);
+  border-color: rgba(34, 197, 94, 0.4);
+  color: #86efac;
+}
+
+.btn-tf.true-opt:hover:not(:disabled) {
+  background: rgba(34, 197, 94, 0.3);
+  box-shadow: 0 0 20px var(--success-glow);
+  transform: translateY(-2px);
+}
+
+.btn-tf.false-opt {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+}
+
+.btn-tf.false-opt:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.3);
+  box-shadow: 0 0 20px var(--danger-glow);
+  transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   MODEL 3: MATCH PAIRS KEMBAR
+   ========================================================================== */
+.match-pairs-arena {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 440px;
+}
+
+.match-pairs-grid {
+  display: grid;
+  gap: 10px;
+  width: 100%;
+}
+
+.match-pairs-grid.grid-cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+  max-width: 440px;
+}
+
+.match-pairs-grid.grid-cols-4 {
+  grid-template-columns: repeat(4, 1fr);
+  max-width: 480px;
+  gap: 8px;
+}
+
+@media (max-width: 480px) {
+  .match-pairs-grid.grid-cols-4 {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+  .match-pairs-grid.grid-cols-4 .match-pair-card {
+    padding: 10px 4px;
+    min-height: 60px;
+  }
+  .match-pairs-grid.grid-cols-4 .match-pair-card span {
+    font-size: 26px !important;
+  }
+}
+
+.match-pair-card {
+  background: linear-gradient(150deg, rgba(16, 28, 58, 0.95) 0%, rgba(8, 14, 32, 0.98) 100%);
+  border: 1.5px solid var(--border-glass);
+  border-radius: 14px;
+  padding: 16px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  user-select: none;
+  min-height: 72px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+}
+
+.match-pair-card:hover:not(.matched):not(.selected) {
+  border-color: var(--hira-color);
+  transform: translateY(-2px);
+}
+
+.match-pair-card.selected {
+  background: rgba(251, 191, 36, 0.22) !important;
+  border-color: var(--kata-color) !important;
+  box-shadow: 0 0 20px var(--kata-glow) !important;
+  transform: scale(1.04);
+}
+
+.match-pair-card.matched {
+  border-color: var(--success);
+  pointer-events: none;
+  animation: matchCardPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes matchCardPop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.15); border-color: var(--success); box-shadow: 0 0 24px rgba(52, 211, 153, 0.8); }
+  100% { transform: scale(0.92); opacity: 0.28; border-color: var(--success); }
+}
+
+/* ==========================================================================
+   MODEL 4: SORTIR KERANJANG (HIRAGANA VS KATAKANA)
+   ========================================================================== */
+.basket-sort-arena {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  max-width: 440px;
+}
+
+.basket-item-display {
+  padding: 16px 32px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1.5px solid var(--border-glass);
+  border-radius: 18px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  font-size: clamp(38px, 9vw, 54px);
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.baskets-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+}
+
+.basket-btn {
+  padding: 16px 10px;
+  border-radius: 16px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  font-size: 14.5px;
+  font-weight: 900;
+  transition: all 0.2s ease;
+  touch-action: manipulation;
+  border: 1.5px solid transparent;
+}
+
+.basket-btn.hira-basket {
+  background: rgba(56, 189, 248, 0.12);
+  border-color: rgba(56, 189, 248, 0.35);
+  color: var(--hira-color);
+}
+
+.basket-btn.hira-basket:hover {
+  background: rgba(56, 189, 248, 0.24);
+  box-shadow: 0 0 20px var(--hira-glow);
+  transform: translateY(-2px);
+}
+
+.basket-btn.kata-basket {
+  background: rgba(251, 191, 36, 0.12);
+  border-color: rgba(251, 191, 36, 0.35);
+  color: var(--kata-color);
+}
+
+.basket-btn.kata-basket:hover {
+  background: rgba(251, 191, 36, 0.24);
+  box-shadow: 0 0 20px var(--kata-glow);
+  transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   MODEL 5: TEBAK DENGAR SUARA
+   ========================================================================== */
+.audio-play-prompt-btn {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.25) 0%, rgba(2, 132, 199, 0.35) 100%);
+  border: 1.5px solid var(--hira-color);
+  color: #fff;
+  padding: 14px 28px;
+  border-radius: 16px;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+  transition: all 0.2s ease;
+  margin-bottom: 6px;
+}
+
+.audio-play-prompt-btn:hover {
+  transform: scale(1.03);
+  background: rgba(56, 189, 248, 0.4);
+}
+
+/* ==========================================================================
+   MODEL 6: SUSUN BALOK KATA (WORD SCRAMBLE)
+   ========================================================================== */
+.scramble-arena {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  max-width: 440px;
+}
+
+.scramble-word-hint {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--text-sub);
+}
+
+.scramble-slots-row {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  min-height: 60px;
+}
+
+.scramble-slot {
+  width: 58px;
+  height: 58px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 2px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  font-weight: 900;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.scramble-slot.filled {
+  border-style: solid;
+  border-color: var(--hira-color);
+  background: rgba(56, 189, 248, 0.15);
+  box-shadow: 0 0 14px var(--hira-glow);
+}
+
+.scramble-tiles-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.scramble-tile {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(145deg, rgba(20, 34, 68, 0.95) 0%, rgba(10, 18, 40, 0.98) 100%);
+  border: 1.5px solid var(--border-glass);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 900;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  touch-action: manipulation;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+.scramble-tile:hover {
+  border-color: var(--kata-color);
+  transform: translateY(-2px);
+}
+
+.scramble-tile.used {
+  opacity: 0.25;
+  pointer-events: none;
+  transform: scale(0.92);
+}
+
+/* ==========================================================================
+   MODEL 7: LENGKAPI HURUF YANG HILANG (FILL IN THE BLANK)
+   ========================================================================== */
+.fill-word-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1.5px solid var(--border-glass);
+  border-radius: 18px;
+  font-size: 36px;
+  font-weight: 900;
+}
+
+.fill-blank-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border: 2px dashed var(--kata-color);
+  border-radius: 12px;
+  color: var(--kata-color);
+  background: rgba(251, 191, 36, 0.1);
+  animation: pulseBlank 1.5s infinite ease-in-out;
+}
+
+@keyframes pulseBlank {
+  0%, 100% { border-color: var(--kata-color); }
+  50% { border-color: rgba(251, 191, 36, 0.4); }
+}
+
+/* ==========================================================================
+   MODEL 8: TIME ATTACK (KETUK KILAT BERWAKTU)
+   ========================================================================== */
+.time-attack-arena {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 440px;
+}
+
+.time-attack-timer-track {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.time-attack-timer-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ef4444 0%, #fbbf24 60%, #22c55e 100%);
+  transition: width 0.1s linear;
+}
+
+.time-attack-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  width: 100%;
+}
+
+.time-attack-card {
+  background: rgba(16, 28, 58, 0.95);
+  border: 1.5px solid var(--border-glass);
+  border-radius: 14px;
+  padding: 18px 8px;
+  font-size: 32px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.time-attack-card:hover {
+  transform: scale(1.05);
+}
+
+.time-attack-card.popped {
+  background: rgba(34, 197, 94, 0.3) !important;
+  border-color: var(--success) !important;
+  color: #86efac !important;
+  pointer-events: none;
+  transform: scale(0.94);
+}
+
+/* Exam Result Panel */
+.exam-result-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+}
+
+.result-stars-row {
+  display: flex;
+  gap: 6px;
+  font-size: 26px;
+}
+
+.result-badge-text {
+  font-size: 22px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -0.3px;
+}
+
+.result-score-val {
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--kata-color);
+  text-shadow: 0 0 20px rgba(251, 191, 36, 0.4);
+}
+
+.btn-next-page-gate {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  color: #030712;
+  font-size: 14.5px;
+  font-weight: 900;
+  padding: 13px 28px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  touch-action: manipulation;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-next-page-gate:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+}
+
+/* ==========================================================================
+   6. RESPONSIVE MOBILE ADJUSTMENTS (MAKSIMALKAN CAKRAWALA & SAMA DENGAN DESKTOP)
+   ========================================================================== */
+@media (max-width: 640px) {
+  body {
+    /* Margin luar yang pas dan rapi (10px), nyaman dipegang satu tangan */
+    padding: 8px 10px 55px 10px;
+  }
+
+  .kana-container {
+    gap: 8px;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* 1. Top Navbar: Ramping, ergonomis, bebas sesak */
+  .top-nav-bar {
+    padding: 6px 10px;
+    border-radius: 12px;
+    gap: 8px;
+  }
+
+  .btn-nav-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 15px;
+    border-radius: 8px;
+  }
+
+  .nav-title-main {
+    font-size: 13px;
+    gap: 5px;
+  }
+
+  .nav-stage-badge {
+    font-size: 9px;
+    padding: 2px 5px;
+    border-radius: 5px;
+  }
+
+  /* Sembunyikan slogan panjang di layar ponsel agar tidak memakan ruang tinggi */
+  .nav-title-sub {
+    display: none !important;
+  }
+
+  .btn-speed-toggle {
+    padding: 4px 6px;
+    font-size: 11px;
+    border-radius: 7px;
+  }
+
+  .speed-text-full {
+    display: none;
+  }
+
+  .progress-pill {
+    padding: 4px 6px;
+    font-size: 11px;
+    border-radius: 7px;
+  }
+
+  /* 2. Page Navigation Bar: Ringkas & seimbang */
+  .page-nav-bar {
+    padding: 5px 8px;
+    gap: 6px;
+    border-radius: 12px;
+  }
+
+  .btn-page-step {
+    padding: 6px 8px;
+    font-size: 11px;
+    border-radius: 8px;
+  }
+
+  .custom-select-trigger {
+    padding: 6px 8px;
+    font-size: 11.5px;
+    border-radius: 8px;
+  }
+
+  /* 3. Header Cards: Proporsional, tidak menyita tinggi layar */
+  .iqra-header-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+
+  .iqra-header-card {
+    padding: 8px 6px 7px 6px;
+    border-radius: 12px;
+    gap: 3px;
+  }
+
+  .iqra-script-tags {
+    font-size: 8px;
+    gap: 4px;
+    opacity: 0.8;
+  }
+
+  .iqra-hira {
+    font-size: clamp(28px, 7vw, 36px);
+  }
+
+  .iqra-dot {
+    font-size: 12px;
+  }
+
+  .iqra-kata {
+    font-size: clamp(25px, 6.5vw, 32px);
+  }
+
+  .iqra-romaji-pill {
+    padding: 2px 8px;
+    margin-top: 1px;
+  }
+
+  .iqra-romaji-text {
+    font-size: 11.5px;
+  }
+
+  /* 4. Lembar Latihan: Format 3 Kolom x 5 Baris yang Bernapas & Lega */
+  .iqra-sheet-card {
+    padding: 10px 8px 12px 8px;
+    border-radius: 14px;
+    gap: 8px;
+  }
+
+  .sheet-header-row {
+    flex-wrap: wrap;
+    gap: 6px;
+    padding-bottom: 4px;
+  }
+
+  .sheet-title {
+    font-size: 11.5px;
+  }
+
+  /* Sembunyikan kanji tambahan di judul latihan agar tidak wrap */
+  .sheet-jp-sub {
+    display: none !important;
+  }
+
+  .sheet-actions-group {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+  }
+
+  .btn-autoplay-drill,
+  .btn-shuffle-drill {
+    justify-content: center;
+    padding: 6px 4px;
+    font-size: 11px;
+    border-radius: 7px;
+  }
+
+  .drills-iqra-grid {
+    gap: 5px;
+  }
+
+  .iqra-3char-box {
+    padding: 9px 2px 7px 2px;
+    gap: 3px;
+    border-radius: 9px;
+    min-height: 42px;
+  }
+
+  /* Nomor Petak Micro (01 - 15) di Pojok Kiri Atas yang halus */
+  .iqra-3char-box::before {
+    top: 2px;
+    left: 4px;
+    font-size: 7.5px;
+    opacity: 0.2;
+  }
+
+  .k-char-hira {
+    font-size: clamp(19px, 5.2vw, 23px);
+  }
+
+  .k-char-kata {
+    font-size: clamp(17px, 4.8vw, 21px);
+  }
+
+  /* 5. Dojo Arena / Exam Card: Proporsional & Nyaman Ditap */
+  .exam-section-card {
+    padding: 14px 10px;
+    border-radius: 14px;
+    gap: 10px;
+  }
+
+  .exam-badge-icon {
+    font-size: 32px;
+  }
+
+  .exam-title-text {
+    font-size: 15.5px;
+  }
+
+  .exam-desc-text {
+    font-size: 12px;
+  }
+
+  .exam-combo-row {
+    padding: 6px 18px;
+    gap: 12px;
+  }
+
+  .exam-combo-row .k-char-hira {
+    font-size: clamp(36px, 9vw, 50px);
+  }
+
+  .exam-combo-row .k-char-kata {
+    font-family: var(--font-jp-sans);
+    font-size: clamp(32px, 8vw, 44px);
+  }
+
+  .exam-options-grid {
+    gap: 8px;
+  }
+
+  .exam-opt-btn {
+    padding: 13px 8px;
+    font-size: 15.5px;
+    border-radius: 12px;
+  }
+
+  /* Pertahankan Key Hint [1] [2] [3] [4] di mobile agar jelas nomor opsinya */
+  .exam-opt-btn .key-hint {
+    font-size: 9px;
+    padding: 1px 5px;
+    left: 8px;
+  }
+}
+
+/* ==========================================================================
+   PLACEMENT TEST MODE (UJIAN LOMPAT LEVEL GERBANG N5)
+   ========================================================================== */
+.placement-badge {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.25) 0%, rgba(217, 119, 6, 0.35) 100%) !important;
+  color: #fbbf24 !important;
+  border-color: rgba(251, 191, 36, 0.5) !important;
+  font-weight: 900;
+  letter-spacing: 0.8px;
+}
+
+.placement-intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+  padding: 24px 16px;
+}
+
+.placement-target-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 14px;
+  border-radius: 20px;
+  background: rgba(251, 191, 36, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  font-size: 12.5px;
+  font-weight: 800;
+}
+
+.placement-specs-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 6px;
+}
+
+.p-spec-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 8px;
+  background: rgba(56, 189, 248, 0.1);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  font-size: 11.5px;
+  font-weight: 700;
+}
+
+.placement-unlock-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 20px;
+  margin: 14px auto;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.18) 0%, rgba(56, 189, 248, 0.18) 100%);
+  border: 1.5px solid rgba(34, 197, 94, 0.45);
+  color: #4ade80;
+  font-size: 13.5px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  box-shadow: 0 0 25px rgba(34, 197, 94, 0.2);
+}
+
+.placement-unlock-banner .unlock-icon {
+  font-size: 22px;
+}
+

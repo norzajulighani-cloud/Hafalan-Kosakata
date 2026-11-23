@@ -115,19 +115,20 @@
           </div>
         </div>
 
-        <!-- Node 1: HERO GATE - JLPT N5 (Aktif) -->
-        <div class="pathway-node node-hero-n5" onclick="Game.init('pemula')">
-          <div class="node-marker marker-n5 active">
+        <!-- Node 1: HERO GATE - JLPT N5 (Dinamis: Terkunci / Terbuka) -->
+        <div class="pathway-node node-hero-n5" id="portal-node-n5" onclick="UI.handleN5GateClick()">
+          <div class="node-marker marker-n5 active" id="portal-marker-n5">
             <span class="node-num">01</span>
-            <div class="node-pulse-active"></div>
+            <div class="node-pulse-active" id="portal-pulse-n5"></div>
+            <div class="node-lock-icon hidden" id="portal-lock-n5">🔒</div>
           </div>
-          <div class="node-body hero-body">
+          <div class="node-body hero-body" id="portal-body-n5">
             <!-- Ambient Watermark Glyph inside N5 Gate -->
             <div class="hero-gate-watermark">伍</div>
 
             <div class="hero-gate-top">
-              <span class="hero-gate-badge">⛩️ GERBANG UTAMA • EKSPEDISI AKTIF</span>
-              <span class="hero-status-pill">● SIAP DIMASUKI</span>
+              <span class="hero-gate-badge" id="portal-badge-n5">⛩️ GERBANG UTAMA • EKSPEDISI AKTIF</span>
+              <span class="hero-status-pill" id="portal-status-n5">● SIAP DIMASUKI</span>
             </div>
 
             <div class="hero-title-row">
@@ -148,9 +149,9 @@
             </div>
 
             <div class="hero-cta-row">
-              <button type="button" class="btn-torii-enter" onclick="event.stopPropagation(); Game.init('pemula');">
+              <button type="button" class="btn-torii-enter" id="portal-btn-n5" onclick="event.stopPropagation(); UI.handleN5GateClick();">
                 <span class="cta-jp">進入</span>
-                <span class="cta-main">MASUKI GERBANG N5</span>
+                <span class="cta-main" id="portal-cta-text-n5">MASUKI GERBANG N5</span>
                 <span class="cta-arrow">➔</span>
               </button>
             </div>
@@ -189,6 +190,56 @@
   <div id="cooldown-screen" class="hidden">
     <h2>SISTEM TERKUNCI ☠️</h2>
     <div style="font-size: 64px; color: var(--danger); font-weight: bold; margin: 20px 0;" id="cd-timer">15:00</div>
+  </div>
+
+  <!-- Modal Gerbang N5 Terkunci (Pilihan: Belajar Fondasi vs Ujian Lompat) -->
+  <div id="n5-lock-modal" class="hidden" onclick="if(event.target === this) UI.closeModal('n5-lock-modal')">
+    <div class="lock-modal-card">
+      <div class="lock-modal-header">
+        <div class="lock-header-top">
+          <span class="lock-header-badge">🔒 PERSYARATAN GERBANG N5</span>
+          <button type="button" class="lock-close-btn" onclick="UI.closeModal('n5-lock-modal')" title="Tutup">✕</button>
+        </div>
+        <h2 class="lock-modal-title">Gerbang Ekspedisi N5 Terkunci</h2>
+        <p class="lock-modal-subtitle">Penguasaan huruf Kana (Pra-N5) adalah fondasi wajib sebelum memasuki kurikulum kosakata & tata bahasa N5.</p>
+      </div>
+
+      <div class="lock-modal-content">
+        <!-- Opsi 1: Rekomendasi Pemula -->
+        <div class="lock-option-card opt-starter" onclick="window.location.href='modules/kana/index.html'">
+          <div class="lock-opt-icon">📖</div>
+          <div class="lock-opt-info">
+            <div class="lock-opt-tag">JALUR UTAMA • SANGAT DIREKOMENDASIKAN</div>
+            <h3 class="lock-opt-title">Mulai dari Fondasi Pra-N5</h3>
+            <p class="lock-opt-desc">Pelajari Hiragana & Katakana secara bertahap lewat 25 halaman latihan membaca nyaring fonetik dan kuis penguatan refleks.</p>
+            <div class="lock-opt-action">
+              <span>Buka Modul Huruf Kana (Tahap 00)</span> ➔
+            </div>
+          </div>
+        </div>
+
+        <!-- Opsi 2: Jalur Pintas Veteran -->
+        <div class="lock-option-card opt-bypass" onclick="window.location.href='modules/kana/index.html?mode=placement'">
+          <div class="lock-opt-icon">⚡</div>
+          <div class="lock-opt-info">
+            <div class="lock-opt-tag gold">JALUR PINTAS VETERAN • PLACEMENT TEST</div>
+            <h3 class="lock-opt-title">Ujian Lompat Gerbang N5</h3>
+            <p class="lock-opt-desc">Sudah menguasai Hiragana & Katakana? Buktikan kemampuan membaca Anda dalam 30 soal komprehensif untuk langsung membuka gerbang N5!</p>
+            <div class="lock-opt-meta">
+              <span class="target-pill">🎯 Syarat Lulus: ≥ 25 dari 30 Benar</span>
+              <span class="target-pill">⚔️ 8 Model Soal Interaktif</span>
+            </div>
+            <div class="lock-opt-action gold">
+              <span>Ikuti Ujian 30 Soal Sekarang</span> ➔
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lock-modal-footer">
+        <button type="button" class="btn btn-alt" style="max-width:220px; margin:0;" onclick="UI.closeModal('n5-lock-modal')">Tutup & Pilih Jalur Lain</button>
+      </div>
+    </div>
   </div>
 
   <div id="level-modal" class="hidden" onclick="if(event.target === this) UI.closeModal('level-modal')">
@@ -892,11 +943,12 @@
           <div class="sidebar-tile-arrow">›</div>
         </div>
 
-        <div class="sidebar-tile" onclick="UI.toggleSidebar(); UI.openSetupScreen();">
-          <div class="sidebar-tile-icon icon-cyan">⚙️</div>
+        <div class="sidebar-tile" onclick="UI.toggleSidebar(); UI.openSetupScreen();"
+          style="border-left: 3px solid var(--primary); background: rgba(56, 189, 248, 0.06);">
+          <div class="sidebar-tile-icon icon-cyan">⛩️</div>
           <div class="sidebar-tile-info">
-            <div class="sidebar-tile-title">Menu Awal</div>
-            <div class="sidebar-tile-desc">Ganti gaya & mode pembelajaran</div>
+            <div class="sidebar-tile-title" style="color:var(--primary); font-weight:800;">Gerbang Utama (Portal)</div>
+            <div class="sidebar-tile-desc">Pilihan Jalur: Kana (Pra-N5), N5 & N4</div>
           </div>
           <div class="sidebar-tile-arrow">›</div>
         </div>
@@ -973,15 +1025,6 @@
       <!-- Group 2: Buku Saku Referensi -->
       <div class="sidebar-group">
         <div class="sidebar-group-label">📚 REFERENSI BUKU SAKU N5</div>
-
-        <a class="sidebar-tile" href="modules/kana/index.html">
-          <div class="sidebar-tile-icon icon-cyan">🔤</div>
-          <div class="sidebar-tile-info">
-            <div class="sidebar-tile-title">Penguasaan Huruf Kana</div>
-            <div class="sidebar-tile-desc">Hiragana & Katakana 6 tahap fonetik</div>
-          </div>
-          <div class="sidebar-tile-arrow">›</div>
-        </a>
 
         <a class="sidebar-tile" href="modules/kanji/index.html">
           <div class="sidebar-tile-icon icon-cyan">⛩️</div>

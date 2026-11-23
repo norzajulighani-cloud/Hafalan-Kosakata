@@ -2529,12 +2529,22 @@ const Game = {
   },
 
   checkStoredMode: () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('portal') === '1' || urlParams.has('portal') || window.location.hash === '#portal') {
+      UI.openSetupScreen();
+      return;
+    }
     let saved = localStorage.getItem('yk_mode');
-    if (saved === 'pemula') { Game.init(saved); } else { UI.openSetupScreen(); }
+    if (saved === 'pemula' && UI.isN5Unlocked()) { Game.init(saved); } else { UI.openSetupScreen(); }
   },
   init: (mode) => {
     if(Cooldown.check()) return;
     Game.mode = mode; localStorage.setItem('yk_mode', mode); document.getElementById('setup-screen').classList.add('hidden');
+    try {
+      if (window.location.search.includes('portal')) {
+        window.history.replaceState({}, '', window.location.pathname);
+      }
+    } catch(e) {}
     document.getElementById('tab-hafalan').classList.remove('pro-hidden'); document.getElementById('tab-belajar').classList.remove('pro-hidden');
     document.getElementById('tab-partikel').classList.add('locked'); document.getElementById('tab-arti').classList.add('locked');
 
@@ -2978,8 +2988,72 @@ nextDayFromResult: () => {
       returnBtnWrap.style.display = (typeof Game !== 'undefined' && Game.dayData && Game.dayData.length > 0) ? 'block' : 'none';
     }
 
+    // Perbarui status gerbang ekspedisi (N5 terkunci/terbuka)
+    UI.updatePortalGatesUI();
+
     if (mainApp) mainApp.classList.add('hidden');
     setup.classList.remove('hidden');
+    try {
+      if (!window.location.search.includes('portal=1')) {
+        window.history.replaceState({}, '', '?portal=1');
+      }
+    } catch(e) {}
+  },
+
+  isN5Unlocked: () => {
+    if (localStorage.getItem('yk_n5_unlocked') === 'true') return true;
+    let unlockedDay = parseInt(localStorage.getItem('yk_unlocked_day')) || 0;
+    let hasKanaDone = localStorage.getItem('YOMIKATA_KANA_DONE') === 'true' || localStorage.getItem('YOMIKATA_KANA_PASSED_STAGE_6') === 'true';
+    if (unlockedDay > 1 || hasKanaDone) {
+      localStorage.setItem('yk_n5_unlocked', 'true');
+      return true;
+    }
+    return false;
+  },
+
+  handleN5GateClick: () => {
+    if (UI.isN5Unlocked()) {
+      Game.init('pemula');
+    } else {
+      UI.openModal('n5-lock-modal');
+    }
+  },
+
+  updatePortalGatesUI: () => {
+    const isUnlocked = UI.isN5Unlocked();
+    const nodeEl = document.getElementById('portal-node-n5');
+    const markerEl = document.getElementById('portal-marker-n5');
+    const pulseEl = document.getElementById('portal-pulse-n5');
+    const lockEl = document.getElementById('portal-lock-n5');
+    const badgeEl = document.getElementById('portal-badge-n5');
+    const statusEl = document.getElementById('portal-status-n5');
+    const ctaTextEl = document.getElementById('portal-cta-text-n5');
+
+    if (!nodeEl) return;
+
+    if (isUnlocked) {
+      nodeEl.classList.remove('locked');
+      if (markerEl) markerEl.classList.add('active');
+      if (pulseEl) pulseEl.style.display = 'block';
+      if (lockEl) lockEl.classList.add('hidden');
+      if (badgeEl) badgeEl.innerHTML = '⛩️ GERBANG UTAMA • EKSPEDISI AKTIF';
+      if (statusEl) {
+        statusEl.innerHTML = '● SIAP DIMASUKI';
+        statusEl.className = 'hero-status-pill';
+      }
+      if (ctaTextEl) ctaTextEl.textContent = 'MASUKI GERBANG N5';
+    } else {
+      nodeEl.classList.add('locked');
+      if (markerEl) markerEl.classList.remove('active');
+      if (pulseEl) pulseEl.style.display = 'none';
+      if (lockEl) lockEl.classList.remove('hidden');
+      if (badgeEl) badgeEl.innerHTML = '⛩️ GERBANG EKSPEDISI • TAHAP 1';
+      if (statusEl) {
+        statusEl.innerHTML = '🔒 TERKUNCI (FONDASI PRA-N5)';
+        statusEl.className = 'hero-status-pill status-locked';
+      }
+      if (ctaTextEl) ctaTextEl.textContent = 'BUKA GERBANG N5 (LOMPAT LEVEL)';
+    }
   },
 
   closeSetupScreen: () => {
