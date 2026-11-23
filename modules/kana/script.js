@@ -48,6 +48,7 @@ const KanaApp = {
   scrambleSlots: [],
   timeAttackTimer: null,
   timeAttackSeconds: 7,
+  isPlacementMode: false,
 
   // -------------------------------------------------------------------------
   // 1. INISIALISASI UTAMA
@@ -57,6 +58,23 @@ const KanaApp = {
     this.loadProgress();
     this.loadSpeedPreference();
     this.renderCustomDropdown();
+
+    let isPlacement = false;
+    try {
+      if (typeof window !== 'undefined' && window.location && window.location.search) {
+        const urlParams = new URLSearchParams(window.location.search);
+        isPlacement = urlParams.get('mode') === 'placement' || urlParams.has('placement');
+      }
+    } catch(e) {}
+
+    if (isPlacement) {
+      this.isPlacementMode = true;
+      this.setupPlacementModeUI();
+      this.startPlacementExam();
+      this.setupKeyboardEvents();
+      return;
+    }
+
     this.loadCurrentView();
     this.setupKeyboardEvents();
   },
@@ -103,7 +121,9 @@ const KanaApp = {
   updateSpeedUI: function () {
     const label = document.getElementById('speed-label');
     if (label) {
-      label.textContent = this.speechRate === 0.82 ? 'Normal (0.8x)' : 'Lambat (0.65x)';
+      const mode = this.speechRate === 0.82 ? 'Normal' : 'Lambat';
+      const rate = this.speechRate === 0.82 ? '0.8x' : '0.65x';
+      label.innerHTML = `<span class="speed-text-full">${mode} </span>(${rate})`;
     }
   },
 
@@ -1292,6 +1312,167 @@ const KanaApp = {
   },
 
   // -------------------------------------------------------------------------
+  // PLACEMENT TEST ENGINE (UJIAN LOMPAT LEVEL GERBANG N5 - 30 SOAL)
+  // -------------------------------------------------------------------------
+  setupPlacementModeUI: function () {
+    const stageBadge = document.getElementById('nav-stage-badge');
+    if (stageBadge) {
+      stageBadge.textContent = 'PLACEMENT';
+      stageBadge.className = 'nav-stage-badge placement-badge';
+    }
+    const titleMain = document.querySelector('.nav-title-main span:first-child');
+    if (titleMain) {
+      titleMain.textContent = 'Ujian Lompat Gerbang N5';
+    }
+    const progText = document.getElementById('nav-progress-text');
+    if (progText) {
+      progText.textContent = 'Tes 30 Soal';
+    }
+    const pageNav = document.querySelector('.page-nav-bar');
+    if (pageNav) pageNav.style.display = 'none';
+    const headerGrid = document.getElementById('iqra-header-grid');
+    if (headerGrid) headerGrid.style.display = 'none';
+    const sheetCard = document.querySelector('.iqra-sheet-card');
+    if (sheetCard) sheetCard.style.display = 'none';
+
+    const homeBtn = document.querySelector('.btn-nav-icon');
+    if (homeBtn) {
+      homeBtn.href = '../../index.html?portal=1';
+      homeBtn.title = 'Kembali ke Gerbang Utama';
+    }
+  },
+
+  getAllMasterLetters: function () {
+    const letters = [];
+    if (typeof KANA_STAGES !== 'undefined') {
+      KANA_STAGES.forEach(s => {
+        if (s.allLetters) {
+          s.allLetters.forEach(l => {
+            if (!letters.some(existing => existing.h === l.h && existing.k === l.k)) {
+              letters.push(l);
+            }
+          });
+        }
+      });
+    }
+    return letters.length > 0 ? letters : (this.getCurrentStage().allLetters || []);
+  },
+
+  getAllMasterWords: function () {
+    const words = [];
+    if (typeof KANA_STAGE_WORDS !== 'undefined') {
+      Object.values(KANA_STAGE_WORDS).forEach(list => {
+        if (Array.isArray(list)) {
+          list.forEach(w => words.push(w));
+        }
+      });
+    }
+    return words.length > 0 ? words : (KANA_STAGE_WORDS[1] || []);
+  },
+
+  renderPlacementIntro: function () {
+    const container = document.getElementById('exam-section-card');
+    if (!container) return;
+
+    this.examActive = false;
+    container.innerHTML = `
+      <div class="exam-intro-content placement-intro">
+        <div class="exam-badge-icon" style="font-size:38px;">⚡⛩️</div>
+        <h2 class="exam-title-text" style="font-size:20px; color:var(--kata-color);">Ujian Lompat Gerbang N5 (Placement Test)</h2>
+        <div class="placement-target-chip">🎯 Target Kelulusan: ≥ 25 dari 30 Soal Benar</div>
+        <p class="exam-desc-text" style="max-width:540px; margin:0 auto; line-height:1.5;">
+          Ujian penempatan komprehensif ini menguji penguasaan aksara <b>Hiragana & Katakana</b> (Vokal, Konsonan Tulen, Dakuten, Sokuon & Yōon) menggunakan <b>8 model soal interaktif</b>.<br>
+          Bila Anda berhasil lulus, <b>Gerbang Ekspedisi JLPT N5 akan langsung terbuka secara permanen!</b>
+        </p>
+        <div class="placement-specs-grid">
+          <div class="p-spec-pill"><span>⚡</span> 30 Soal</div>
+          <div class="p-spec-pill"><span>⚔️</span> 8 Model Soal Interaktif</div>
+          <div class="p-spec-pill"><span>🏆</span> Aksara Lengkap</div>
+          <div class="p-spec-pill"><span>🔓</span> Buka Gerbang N5</div>
+        </div>
+        <div style="margin-top:14px;">
+          <button type="button" class="btn-start-exam gold" style="font-size:15px; padding:13px 28px;" onclick="KanaApp.startPlacementExam()">
+            <span>⚔️</span> <span>Mulai Ujian 30 Soal Sekarang</span>
+          </button>
+        </div>
+      </div>
+    `;
+  },
+
+  startPlacementExam: function () {
+    this.stopAutoPlay();
+    if (this.timeAttackTimer) {
+      window.clearTimeout(this.timeAttackTimer);
+      this.timeAttackTimer = null;
+    }
+
+    this.examActive = true;
+    this.examIsFinal = true;
+    this.examIdx = 0;
+    this.examScore = 0;
+    this.examStreak = 0;
+    this.matchFirstCardIdx = null;
+
+    this.examRequiredScore = 25; // Target: >= 25 benar dari 30 soal
+    const totalQuestions = 30;
+    this.examActiveModels = [1, 2, 3, 4, 5, 6, 7, 8];
+
+    const masterLetters = this.getAllMasterLetters();
+
+    // Distribusikan ke-8 model secara merata dalam 30 soal
+    const modelSequence = [];
+    for (let i = 0; i < totalQuestions; i++) {
+      modelSequence.push((i % 8) + 1);
+    }
+    // Acak urutan model agar dinamis
+    for (let i = modelSequence.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [modelSequence[i], modelSequence[j]] = [modelSequence[j], modelSequence[i]];
+    }
+
+    this.examQuestions = [];
+
+    for (let i = 0; i < totalQuestions; i++) {
+      const modelType = modelSequence[i];
+      let q = null;
+      const randomStageId = Math.floor(Math.random() * (KANA_STAGES.length || 12)) + 1;
+
+      switch (modelType) {
+        case 1:
+          q = this.generateQ1_Reflex(masterLetters, masterLetters);
+          break;
+        case 2:
+          q = this.generateQ2_TrueFalse(masterLetters, masterLetters);
+          break;
+        case 3:
+          q = this.generateQ3_MatchPairs(masterLetters, masterLetters);
+          break;
+        case 4:
+          q = this.generateQ4_BasketSort(masterLetters, masterLetters);
+          break;
+        case 5:
+          q = this.generateQ5_AudioKana(masterLetters, masterLetters);
+          break;
+        case 6:
+          q = this.generateQ6_WordScramble(randomStageId);
+          break;
+        case 7:
+          q = this.generateQ7_FillBlank(randomStageId, masterLetters);
+          break;
+        case 8:
+          q = this.generateQ8_TimeAttack(masterLetters, masterLetters);
+          break;
+        default:
+          q = this.generateQ1_Reflex(masterLetters, masterLetters);
+      }
+
+      this.examQuestions.push(q);
+    }
+
+    this.renderExamQuestion();
+  },
+
+  // -------------------------------------------------------------------------
   // GENERATE SOAL UTAMA
   // -------------------------------------------------------------------------
   startExam: function (isFinal) {
@@ -2034,6 +2215,65 @@ const KanaApp = {
     const stars = isPerfect ? '⭐⭐⭐' : (passed ? '⭐⭐' : '⭐');
     const rankTitle = isPerfect ? 'Sempurna! (100% Akurat)' : (passed ? 'Lolos Kriteria Kelancaran' : 'Belum Mencapai Target');
 
+    // JALUR 1: HASIL UJIAN LOMPAT LEVEL (PLACEMENT TEST)
+    if (this.isPlacementMode) {
+      if (passed) {
+        try {
+          localStorage.setItem('yk_n5_unlocked', 'true');
+        } catch(e) {}
+        this.playSFX('win');
+        this.triggerConfetti(4500);
+
+        container.innerHTML = `
+          <div class="exam-result-panel placement-result-panel">
+            <div class="result-stars-row" style="font-size:36px;">⭐⭐⭐</div>
+            <div class="result-badge-text" style="color:var(--kata-color); font-size:22px;">🎉 UJIAN LOMPAT LEVEL LULUS! 🎉</div>
+            <div class="result-score-val" style="font-size:38px; color:var(--success);">${this.examScore} / ${totalQ} Benar</div>
+            <div class="placement-unlock-banner">
+              <span class="unlock-icon">🔓</span>
+              <span class="unlock-text">GERBANG EKSPEDISI JLPT N5 RESMI TERBUKA!</span>
+            </div>
+            <p class="exam-desc-text" style="max-width:520px; margin:0 auto; line-height:1.5;">
+              Luar biasa! Anda telah membuktikan penguasaan komprehensif aksara Hiragana & Katakana. Pintu gerbang kurikulum N5 kini terbuka penuh untuk Anda masuki!
+            </p>
+            <div style="display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:16px;">
+              <a href="../../index.html" class="btn-next-page-gate" style="text-decoration:none; padding:14px 24px; font-size:15px; font-weight:900;">
+                ⛩️ Masuk ke Ekspedisi N5 Sekarang ›
+              </a>
+              <button type="button" class="btn-start-exam" style="padding:12px 20px;" onclick="window.location.href='index.html'">
+                📖 Buka Latihan Reguler Kana
+              </button>
+            </div>
+          </div>
+        `;
+      } else {
+        this.playSFX('wrong');
+        container.innerHTML = `
+          <div class="exam-result-panel placement-result-panel">
+            <div class="result-badge-text" style="color:var(--danger); font-size:20px;">Belum Memenuhi Syarat Kelulusan</div>
+            <div class="result-score-val" style="color:var(--text-sub); font-size:34px;">${this.examScore} / ${totalQ} Benar</div>
+            <div style="font-size:12px; color:var(--kata-color); font-weight:800; margin-bottom:8px;">(Syarat Kelulusan: Minimal 25 Benar)</div>
+            <p class="exam-desc-text" style="max-width:520px; margin:0 auto; line-height:1.5;">
+              Jangan berkecil hati! Mulai dari awal lewat 25 halaman latihan fonetik berjenjang adalah langkah terbaik untuk membangun refleks membaca spontan tanpa mengeja.
+            </p>
+            <div style="display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:16px;">
+              <button type="button" class="btn-next-page-gate" onclick="window.location.href='index.html'" style="padding:13px 22px; font-weight:800;">
+                📖 Mulai Belajar Fondasi Kana (Rekomendasi)
+              </button>
+              <button type="button" class="btn-start-exam gold" onclick="KanaApp.startPlacementExam()" style="padding:12px 18px;">
+                🔄 Coba Ulang Ujian 30 Soal
+              </button>
+              <a href="../../index.html?portal=1" class="btn-start-exam" style="text-decoration:none; padding:12px 16px;">
+                🏠 Kembali ke Gerbang Utama
+              </a>
+            </div>
+          </div>
+        `;
+      }
+      return;
+    }
+
+    // JALUR 2: HASIL UJIAN REGULER TAHAP
     if (passed) {
       this.playSFX('win');
       this.triggerConfetti(this.examIsFinal ? 3200 : 2000);
@@ -2042,6 +2282,12 @@ const KanaApp = {
         const nextStage = KANA_STAGES.find(s => s.stageId === this.currentStageId + 1);
         if (nextStage) {
           this.unlockPage(nextStage.stageId, 1);
+        } else {
+          // Tamat seluruh kurikulum Kana -> Buka N5!
+          try {
+            localStorage.setItem('yk_n5_unlocked', 'true');
+            localStorage.setItem('YOMIKATA_KANA_DONE', 'true');
+          } catch(e) {}
         }
 
         container.innerHTML = `
@@ -2052,14 +2298,24 @@ const KanaApp = {
             <div style="font-size:12.5px; color:var(--success); font-weight:800;">${rankTitle}</div>
             <p class="exam-desc-text">
               Luar biasa! Seluruh tantangan pada <b>${stage.stageName}</b> telah Anda tuntaskan dengan lancar!
-              ${nextStage ? `Tahap berikutnya (${nextStage.stageShort}) sekarang telah terbuka.` : 'Selamat! Anda telah menuntaskan seluruh silabus Kana!'}
+              ${nextStage ? `Tahap berikutnya (${nextStage.stageShort}) sekarang telah terbuka.` : 'Selamat! Anda telah menuntaskan seluruh silabus Kana! Gerbang Ekspedisi JLPT N5 kini telah TERBUKA PERMANEN!'}
             </p>
+            ${!nextStage ? `
+              <div class="placement-unlock-banner">
+                <span class="unlock-icon">🔓</span>
+                <span class="unlock-text">GERBANG EKSPEDISI JLPT N5 RESMI TERBUKA!</span>
+              </div>
+            ` : ''}
             <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:8px;">
               ${nextStage ? `
                 <button type="button" class="btn-next-page-gate" onclick="KanaApp.goToStagePage(${nextStage.stageId}, 1)">
                   🚀 Masuk ke ${nextStage.stageShort} ›
                 </button>
-              ` : ''}
+              ` : `
+                <a href="../../index.html" class="btn-next-page-gate" style="text-decoration:none; padding:12px 22px; font-weight:900;">
+                  ⛩️ Masuki Ekspedisi N5 Sekarang ›
+                </a>
+              `}
               <button type="button" class="btn-start-exam gold" onclick="KanaApp.startExam(true)">
                 🔄 Ulangi Ujian (Paket Soal Baru)
               </button>
