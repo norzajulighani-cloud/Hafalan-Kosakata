@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Penguasaan Huruf Kana - YOMIKATA N5</title>
+
+  <!-- Google Fonts: Noto Serif JP, Noto Sans JP, Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@700;800;900&family=Noto+Serif+JP:wght@700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- Watermark Kaligrafi Jepang di Latar Belakang -->
+  <div class="bg-kanji-watermark left">仮名</div>
+  <div class="bg-kanji-watermark right">道</div>
+
+  <div class="kana-container">
+
+    <!-- 1. TOP NAVBAR MASTERCLASS -->
+    <header class="top-nav-bar">
+      <!-- Hairline Progress Track -->
+      <div class="nav-progress-track">
+        <div class="nav-progress-fill" id="nav-progress-fill" style="width: 4%;"></div>
+      </div>
+
+      <div class="nav-left-group">
+        <a class="btn-nav-icon" href="../../index.html" title="Kembali ke Beranda Yomikata">🏠</a>
+        <div class="nav-title-box">
+          <div class="nav-title-main">
+            <span>Penguasaan Huruf Kana</span>
+            <span id="nav-stage-badge" class="nav-stage-badge">TAHAP 01</span>
+          </div>
+          <span class="nav-title-sub">METODE DRILL FONETIK BERJENJANG • 音読道場</span>
+        </div>
+      </div>
+
+      <div class="nav-right-group">
+        <!-- Pengatur Tempo Lafal -->
+        <button type="button" class="btn-speed-toggle" id="btn-speed-toggle" onclick="KanaApp.toggleSpeed()" title="Ubah Kecepatan Suara">
+          <span>🔊</span> <span id="speed-label">Normal (0.8x)</span>
+        </button>
+
+        <!-- Progress Counter -->
+        <div class="progress-pill">
+          <span>🏆</span>
+          <span id="nav-progress-text">1 / 25</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- 2. PAGE NAVIGATION BAR (‹ HAL X / 25 › DENGAN CUSTOM POPOVER) -->
+    <nav class="page-nav-bar">
+      <button type="button" class="btn-page-step" id="btn-prev-page" onclick="KanaApp.stepPage(-1)" title="Halaman Sebelumnya">
+        <span>‹</span> <span>Sebelumnya</span>
+      </button>
+
+      <!-- Custom Dropdown Trigger (Non-browser popover) -->
+      <div class="custom-select-trigger" id="custom-select-btn" onclick="KanaApp.toggleDropdown()" title="Pilih Tahap & Halaman">
+        <span class="trigger-label" id="custom-select-label">Tahap 1 • Hal 1: あ い</span>
+        <span class="trigger-caret" id="custom-select-caret">▾</span>
+      </div>
+
+      <button type="button" class="btn-page-step" id="btn-next-page" onclick="KanaApp.stepPage(1)" title="Halaman Selanjutnya">
+        <span>Selanjutnya</span> <span>›</span>
+      </button>
+    </nav>
+
+    <!-- 3. HEADER PENGENALAN HURUF (KANA BESAR + ROMAJI SAJA) -->
+    <section class="iqra-header-grid" id="iqra-header-grid">
+      <!-- Diisi otomatis oleh KanaApp.renderHeaderLetters() -->
+    </section>
+
+    <!-- 4. LEMBAR LATIHAN MEMBACA NYARING (15 KOTAK GENKOUYOUSHI • TANPA ROMAJI) -->
+    <main class="iqra-sheet-card">
+      <div class="sheet-header-row">
+        <div class="sheet-title-box">
+          <h2 class="sheet-title">
+            <span>📖</span> Latihan Membaca Nyaring
+          </h2>
+          <span class="sheet-jp-sub">音読演習</span>
+        </div>
+
+        <div class="sheet-actions-group">
+          <!-- Tombol Putar Otomatis Berurutan (Read-Along) -->
+          <button type="button" class="btn-autoplay-drill" id="btn-autoplay-drill" onclick="KanaApp.toggleAutoPlay()" title="Putar Seluruh Kotak Berurutan">
+            <span id="autoplay-icon">▶️</span> <span id="autoplay-text">Putar Otomatis</span>
+          </button>
+
+          <!-- Tombol Acak Ulang Huruf Baru -->
+          <button type="button" class="btn-shuffle-drill" onclick="KanaApp.refreshDrillBoxes()" title="Acak Huruf Latihan Baru">
+            <span>🔄</span> <span>Acak Baru</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="drills-iqra-grid" id="drills-iqra-grid">
+        <!-- 15 kotak dinamis (5 baris x 3 kolom) diisi oleh KanaApp.renderDrills() -->
+      </div>
+    </main>
+
+    <!-- 5. MINI TES / UJIAN KELANCARAN KELULUSAN (DOJO ARENA) -->
+    <section class="exam-section-card" id="exam-section-card">
+      <!-- Diisi otomatis oleh KanaApp.renderExamCard() -->
+    </section>
+
+  </div>
+
+  <!-- 6. CUSTOM POPOVER DROPDOWN OVERLAY -->
+  <div class="custom-dropdown-overlay hidden" id="custom-dropdown-overlay" onclick="KanaApp.closeDropdown(event)">
+    <div class="custom-dropdown-menu" onclick="event.stopPropagation()">
+      <div class="dropdown-header-bar">
+        <span class="dropdown-title">📑 Daftar Tahap & Halaman</span>
+        <button type="button" class="dropdown-close-btn" onclick="KanaApp.toggleDropdown(false)" title="Tutup">✕</button>
+      </div>
+      <div class="dropdown-scroll-body" id="dropdown-scroll-body">
+        <!-- Diisi otomatis oleh KanaApp.renderCustomDropdown() -->
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Pasar & Dojo Kanji Kensei - YOMIKATA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Serif+JP:wght@600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+</head>
+<body>
+
+<div id="toast"></div>
+
+<!-- ==========================================
+     SIDEBAR DRAWER: PUSAT KELOLA DOJO
+     ========================================== -->
+<div id="sidebar-overlay" class="sidebar-overlay" onclick="DojoEngine.closeSidebar()"></div>
+<aside id="dojo-sidebar" class="dojo-sidebar-drawer">
+  <div class="sidebar-header">
+    <div class="sidebar-title-group">
+      <div class="sidebar-icon">⛩️</div>
+      <div>
+        <div class="sidebar-title">PUSAT KELOLA DOJO</div>
+        <div class="sidebar-subtitle">Kelola ruang, statistik & materi</div>
+      </div>
+    </div>
+    <button type="button" class="btn-sidebar-close" onclick="DojoEngine.closeSidebar()">✕</button>
+  </div>
+
+  <div class="sidebar-body">
+    <!-- Section 1: Ringkasan Status Belajar & Penguasaan -->
+    <div class="sidebar-card">
+      <div class="sc-label">⛩️ STATUS LATIHAN & PENGUASAAN</div>
+      <div class="sidebar-deck-overview">
+        <div class="sdo-item">
+          <span class="sdo-label">Sedang Dilatih</span>
+          <span class="sdo-val" id="sidebar-learning-count">0</span>
+        </div>
+        <div class="sdo-item sdo-mastered">
+          <span class="sdo-label">Telah Dikuasai ⭐</span>
+          <span class="sdo-val" id="sidebar-mastered-count">0</span>
+        </div>
+      </div>
+      
+      <div class="sidebar-progress-container" style="margin-top:10px;">
+        <div class="sidebar-progress-meta">
+          <span>Progres dari 240 Kanji N5/N4</span>
+          <span id="dojo-progress-text">0% Dikuasai</span>
+        </div>
+        <div class="dojo-progress-track">
+          <div class="dojo-progress-fill" id="dojo-progress-fill" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <button type="button" class="btn-sidebar-action" style="width:100%; margin-top:12px;" onclick="DojoEngine.openMasteredGallery(); DojoEngine.closeSidebar();">
+        <span>⭐ Buka Galeri Kanji Dikuasai ➔</span>
+      </button>
+    </div>
+
+    <!-- Section 3: Pusat Edukasi & Bantuan -->
+    <div class="sidebar-card">
+      <div class="sc-label">💡 PANDUAN PENTING</div>
+      <button type="button" class="btn-sidebar-guide" onclick="DojoEngine.openGuide(); DojoEngine.closeSidebar();">
+        <div class="guide-item-icon">📜</div>
+        <div class="guide-item-info">
+          <div class="guide-item-title">Rahasia Onyomi & Kunyomi</div>
+          <div class="guide-item-desc">Rumus Sakti 80/20 & tips mudah menghafal</div>
+        </div>
+        <span class="guide-arrow">➔</span>
+      </button>
+    </div>
+
+
+  </div>
+</aside>
+
+<!-- ==========================================
+     MODAL 1: PANDUAN EDUKATIF ONYOMI & KUNYOMI
+     ========================================== -->
+<div id="guide-modal" class="modal-overlay hidden" onclick="if(event.target === this) DojoEngine.closeGuide()">
+  <div class="guide-modal-card">
+    <div class="guide-header-row">
+      <div>
+        <div class="guide-title">
+          <span>💡</span>
+          <span>Rahasia Onyomi & Kunyomi</span>
+        </div>
+        <div class="guide-sub">Panduan praktis agar tidak bingung cara membaca kanji</div>
+      </div>
+      <button type="button" class="btn-modal-close" onclick="DojoEngine.closeGuide()">✕</button>
+    </div>
+
+    <!-- Onyomi Concept -->
+    <div class="guide-concept-card purple-accent">
+      <div class="gcc-title">
+        <span class="gcc-badge-orig">🇨🇳 ASAL CINA</span>
+        <span>1. Onyomi (音読み) • Cara Baca Cina</span>
+      </div>
+      <div class="gcc-desc">
+        Ditulis dengan huruf <b>Katakana</b> di kamus. Ini adalah pelafalan serapan dari bahasa Tiongkok kuno saat aksara kanji pertama kali masuk ke Jepang.
+        <br><b>Kapan digunakan?</b> Hampir selalu dipakai saat kanji <b>bergabung dengan kanji lain</b> membentuk kata majemuk (<i>Jukugo</i>).
+      </div>
+      <div class="gcc-example">
+        <div class="gcce-header"><b>Contoh Kanji 水 (Air):</b> Onyomi = <b style="color:#f472b6;">スイ (SUI)</b></div>
+        <div class="gcce-row">
+          <span>• Kata Majemuk: <b>水曜日</b> = <i>Sui-youbi</i> (Hari Rabu)</span>
+          <button type="button" class="btn-mini-audio" onclick="DojoEngine.speakText('すいようび')" title="Dengarkan Suara">🔊</button>
+        </div>
+        <div class="gcce-row">
+          <span>• Kata Majemuk: <b>水泳</b> = <i>Sui-ei</i> (Berenang)</span>
+          <button type="button" class="btn-mini-audio" onclick="DojoEngine.speakText('すいえい')" title="Dengarkan Suara">🔊</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Kunyomi Concept -->
+    <div class="guide-concept-card cyan-accent">
+      <div class="gcc-title">
+        <span class="gcc-badge-orig cyan">🇯🇵 ASLI JEPANG</span>
+        <span>2. Kunyomi (訓読み) • Cara Baca Asli Jepang</span>
+      </div>
+      <div class="gcc-desc">
+        Ditulis dengan huruf <b>Hiragana</b> di kamus. Ini adalah kata asli dari peradaban Jepang kuno yang dipasangkan maknanya ke lambang kanji.
+        <br><b>Kapan digunakan?</b> Umumnya dipakai saat kanji <b>berdiri sendirian</b> sebagai kata tunggal, atau ditemani huruf hiragana pelengkap (<i>okurigana</i>).
+      </div>
+      <div class="gcc-example">
+        <div class="gcce-header"><b>Contoh Kanji 水 (Air):</b> Kunyomi = <b style="color:#38bdf8;">みず (mizu)</b></div>
+        <div class="gcce-row">
+          <span>• Berdiri Sendiri: <b>水</b> = <i>mizu</i> (air biasa/air minum)</span>
+          <button type="button" class="btn-mini-audio" onclick="DojoEngine.speakText('みず')" title="Dengarkan Suara">🔊</button>
+        </div>
+        <div class="gcce-row">
+          <span>• Berdiri Sendiri: <b>山</b> = <i>yama</i> (gunung)</span>
+          <button type="button" class="btn-mini-audio" onclick="DojoEngine.speakText('やま')" title="Dengarkan Suara">🔊</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- The 80/20 Golden Rule -->
+    <div class="golden-rule-banner">
+      <div class="grb-badge">⚡ RUMUS SAKTI 80/20 KENSEI</div>
+      <div class="grb-text">"Sendirian = <b>Kunyomi (Hiragana)</b><br>Gandeng Dua Kanji = <b>Onyomi (Katakana)</b>"</div>
+      <div class="grb-sub">Ada sedikit pengecualian (seperti nama orang/tempat), namun rumus 80% ini menyelamatkan ingatanmu!</div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  
+  <!-- MASTER TOP NAVBAR -->
+  <div class="top-navbar">
+    <div class="nav-left">
+      <a href="../../index.html" class="btn-back" title="Kembali ke Ekspedisi Yomikata">
+        <span>←</span>
+        <span>Yomikata</span>
+      </a>
+    </div>
+
+    <div class="nav-title-group">
+      <h1 class="nav-title">KANJI KENSEI</h1>
+    </div>
+
+    <div class="nav-right">
+      <button type="button" class="btn-sidebar-toggle" onclick="DojoEngine.toggleSidebar()" title="Buka Pusat Kelola Dojo">
+        <span class="torii-icon">⛩️</span>
+        <span class="sidebar-btn-label">Pusat Belajar</span>
+        <span class="sidebar-badge-count" id="nav-mastered-badge" title="Kanji Dikuasai">⭐ 0</span>
+        <span class="hamburger-bars">☰</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- MAIN MODE SWITCHER (Pasar, Flashcard, Kuis Drill) -->
+  <div class="main-nav-tabs">
+    <button type="button" class="tab-main-btn active" id="tab-market" onclick="DojoEngine.switchMainTab('market')">
+      <span>🛒</span>
+      <span>Pasar Kanji</span>
+    </button>
+    <button type="button" class="tab-main-btn" id="tab-flashcard" onclick="DojoEngine.switchMainTab('flashcard')">
+      <span>🎴</span>
+      <span>Flashcard</span>
+    </button>
+    <button type="button" class="tab-main-btn" id="tab-quiz" onclick="DojoEngine.switchMainTab('quiz')">
+      <span>🎯</span>
+      <span>Kuis Drill</span>
+    </button>
+  </div>
+
+  <!-- ==========================================
+       TAB 1: PASAR BELANJA KANJI (KATALOG)
+       ========================================== -->
+  <div id="section-market">
+    <div class="market-toolbar">
+      <div class="search-wrapper">
+        <span>🔍</span>
+        <input type="text" class="search-input" id="market-search" placeholder="Cari kanji, arti, onyomi, atau kunyomi..." oninput="DojoEngine.onSearch(this.value)">
+        <button type="button" class="search-clear hidden" id="market-search-clear" onclick="DojoEngine.clearSearch()">✕</button>
+      </div>
+
+      <div class="filter-chips-stream">
+        <button type="button" class="filter-chip active" id="fchip-all" onclick="DojoEngine.setFilter('all')">Semua Kanji (240)</button>
+        <button type="button" class="filter-chip" id="fchip-unlocked" onclick="DojoEngine.setFilter('unlocked')">⛩️ Dari Ekspedisi</button>
+        <button type="button" class="filter-chip" id="fchip-n5" onclick="DojoEngine.setFilter('n5')">🔰 Level N5</button>
+        <button type="button" class="filter-chip" id="fchip-n4" onclick="DojoEngine.setFilter('n4')">⚔️ Level N4</button>
+        <button type="button" class="filter-chip" id="fchip-in-dojo" onclick="DojoEngine.setFilter('in-dojo')">🎒 Sedang Dilatih</button>
+        <button type="button" class="filter-chip filter-chip-mastered" id="fchip-mastered" onclick="DojoEngine.setFilter('mastered')">⭐ Sudah Dikuasai</button>
+      </div>
+    </div>
+
+    <!-- Kanji Catalog Grid -->
+    <div class="market-grid" id="market-grid-container">
+      <!-- Generated dynamically -->
+    </div>
+  </div>
+
+  <!-- ==========================================
+       TAB 2: RUANG DOJO LATIHAN (FLASHCARD & KUIS)
+       ========================================== -->
+  <div id="section-training" class="hidden">
+    <div class="dojo-arena-card">
+      <!-- Flashcard Header Bar (Minimal, No nested tabs) -->
+      <div class="fc-header-bar" id="dojo-fc-header">
+        <div class="fc-room-tag">
+          <span class="fc-tag-icon">⛩️</span>
+          <span id="fc-room-name-display">Ruang Latihan</span>
+        </div>
+        <div class="fc-counter-badge">
+          <span id="dojo-curr-index">1</span> / <span id="dojo-total-index">0</span>
+        </div>
+      </div>
+
+      <!-- State A: Flashcard Mode -->
+      <div id="dojo-fc-container" class="fc-body-box" onclick="DojoEngine.toggleFcReveal()">
+        <div class="fc-kanji-big" id="dojo-fc-kanji">一</div>
+        <div style="font-size:11.5px; color:var(--text-sub); margin-bottom:14px;" id="dojo-fc-hint">👆 Ketuk untuk membuka bacaan & arti</div>
+
+        <div class="fc-reveal-wrap shield-blur" id="dojo-fc-shield">
+          <div class="fc-grid-two">
+            <div class="reading-cell rc-onyomi">
+              <div class="rc-label">ONYOMI (Cina)</div>
+              <div class="rc-val" id="dojo-fc-on">イチ, イツ</div>
+              <div class="rc-romaji" id="dojo-fc-on-romaji">ichi, itsu</div>
+            </div>
+            <div class="reading-cell rc-kunyomi">
+              <div class="rc-label">KUNYOMI (Jepang)</div>
+              <div class="rc-val" id="dojo-fc-kun">ひと, ひと・つ</div>
+              <div class="rc-romaji" id="dojo-fc-kun-romaji">hito, hito.tsu</div>
+            </div>
+          </div>
+
+          <div class="fc-meaning-banner">
+            <div class="fmb-label">ARTI BAHASA INDONESIA</div>
+            <div class="fmb-text" id="dojo-fc-arti">Satu</div>
+          </div>
+
+          <div class="fc-jukugo-shelf" id="dojo-fc-jukugo-shelf">
+            <!-- Jukugo list -->
+          </div>
+
+          <div class="fc-sentence-shelf" id="dojo-fc-sentence-shelf">
+            <div class="fss-top">
+              <span class="fss-badge">📝 Contoh Kalimat</span>
+              <button type="button" class="btn-card-audio" id="btn-fc-sentence-audio" onclick="event.stopPropagation(); DojoEngine.speakCurrentSentence()" title="Dengarkan Contoh Kalimat">🔊</button>
+            </div>
+            <div class="fss-jp" id="dojo-fc-sen-jp">あの人はだれですか。</div>
+            <div class="fss-romaji" id="dojo-fc-sen-romaji">Ano hito wa dare desu ka.</div>
+            <div class="fss-id" id="dojo-fc-sen-id">Orang itu siapa?</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- State B: Quiz Drill Mode -->
+      <div id="dojo-quiz-container" class="quiz-area-container hidden">
+        <!-- Quiz Control & Telemetry Bar (Single Row, No tab bloat) -->
+        <div class="quiz-top-bar">
+          <div class="quiz-telemetry-cluster">
+            <span class="quiz-stat-pill" id="quiz-streak-pill">🔥 Combo: 0</span>
+            <span class="quiz-stat-pill score-pill" id="quiz-score-pill">⭐ Benar: 0</span>
+          </div>
+
+          <div class="drill-mode-dropdown-wrap">
+            <button type="button" class="btn-drill-dropdown" id="btn-drill-dropdown" onclick="DojoEngine.toggleDrillDropdown(event)" title="Ganti Tipe Soal">
+              <span id="drill-mode-current-label">🔀 Acak / Mix</span>
+              <span class="dropdown-caret">▾</span>
+            </button>
+            <div class="drill-dropdown-menu hidden" id="drill-dropdown-menu">
+              <div class="dd-header">PILIH VARIASI DRILL</div>
+              <button type="button" class="dd-item active" data-type="mix" onclick="DojoEngine.selectDrillType('mix')">
+                <span class="dd-icon">🔀</span>
+                <div class="dd-text">
+                  <div class="dd-title">Acak / Mix</div>
+                  <div class="dd-desc">Kombinasi semua tipe soal (Rekomendasi)</div>
+                </div>
+              </button>
+              <button type="button" class="dd-item" data-type="meaning" onclick="DojoEngine.selectDrillType('meaning')">
+                <span class="dd-icon">🎯</span>
+                <div class="dd-text">
+                  <div class="dd-title">Tebak Arti</div>
+                  <div class="dd-desc">Pilih arti bahasa Indonesia dari kanji</div>
+                </div>
+              </button>
+              <button type="button" class="dd-item" data-type="reading" onclick="DojoEngine.selectDrillType('reading')">
+                <span class="dd-icon">🗣️</span>
+                <div class="dd-text">
+                  <div class="dd-title">Tebak Bacaan</div>
+                  <div class="dd-desc">Tebak bacaan kunyomi / onyomi secara cerdas</div>
+                </div>
+              </button>
+              <button type="button" class="dd-item" data-type="kanji" onclick="DojoEngine.selectDrillType('kanji')">
+                <span class="dd-icon">🈴</span>
+                <div class="dd-text">
+                  <div class="dd-title">Tebak Bentuk</div>
+                  <div class="dd-desc">Pilih karakter kanji yang tepat</div>
+                </div>
+              </button>
+              <button type="button" class="dd-item" data-type="blitz" onclick="DojoEngine.selectDrillType('blitz')">
+                <span class="dd-icon">⚡</span>
+                <div class="dd-text">
+                  <div class="dd-title">Benar / Salah</div>
+                  <div class="dd-desc">Uji kecepatan verifikasi pasangan kanji</div>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question Type Label -->
+        <div class="quiz-question-type-badge" id="dojo-quiz-type-label">DOJO DRILL • TEBAK ARTI:</div>
+
+        <!-- Prompt Area -->
+        <div class="quiz-prompt-box" id="dojo-quiz-prompt-box">
+          <div class="quiz-kanji-big" id="dojo-quiz-kanji">一</div>
+          <div class="quiz-prompt-sub hidden" id="dojo-quiz-sub"></div>
+        </div>
+
+        <!-- Choices Grid -->
+        <div class="quiz-grid-choices" id="dojo-quiz-choices">
+          <!-- Choices rendered dynamically -->
+        </div>
+
+        <!-- Feedback & Next Action -->
+        <div id="dojo-quiz-feedback" class="quiz-feedback-box"></div>
+        <button type="button" class="btn-quiz-next hidden" id="btn-quiz-next" onclick="DojoEngine.triggerNextQuestionWithAnim()">Soal Berikutnya ➔</button>
+      </div>
+
+      <!-- Dojo Navigation Bottom Strip -->
+      <div class="dojo-nav-controls" id="dojo-nav-strip">
+        <button type="button" class="btn-dn" onclick="DojoEngine.prevDojoCard()">⬅️ Sblm</button>
+        <button type="button" class="btn-mark-master" id="btn-master-toggle" onclick="DojoEngine.toggleMasterCurrent()" title="Tandai Sudah Dikuasai (⭐)">⭐</button>
+        <button type="button" class="btn-dn" onclick="DojoEngine.speakCurrent()" title="Dengarkan Suara">🔊</button>
+        <button type="button" class="btn-dn btn-dn-next" onclick="DojoEngine.nextDojoCard()">Lanjut ➔</button>
+      </div>
+
+      <!-- Empty State / Victory State in Dojo -->
+      <div id="dojo-empty-state" class="empty-dojo-box hidden">
+        <div class="empty-icon" id="empty-state-icon">🎒</div>
+        <div class="empty-title" id="empty-state-title">Antrean Belajar Kosong!</div>
+        <div class="empty-desc" id="empty-state-desc">Belum ada kanji yang kamu pilih untuk dilatih. Buka <b>Pasar Belanja Kanji</b> untuk memilih kanji-kanji yang ingin kamu kuasai.</div>
+        <div id="empty-state-actions" style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:14px;">
+          <button type="button" class="btn-jump-market" onclick="DojoEngine.switchMainTab('market')">🛒 Pergi Belanja Kanji ➔</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>

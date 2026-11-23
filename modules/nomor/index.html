@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Modul Bilangan, Waktu & Kalender - YOMIKATA N5</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@700;800;900&family=Noto+Serif+JP:wght@700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+</head>
+
+<body>
+
+  <div class="container">
+    <!-- TOP HEADER NAVBAR -->
+    <div class="top-nav-bar">
+      <div class="nav-left-group">
+        <a class="btn-nav-icon" href="../../index.html" title="Kembali ke Beranda">🏠</a>
+        <div class="mastery-counter-pill" id="nav-mastery-pill">
+          <span>⭐</span>
+          <span>Dikuasai: <b id="mastery-count-text">0</b> / <span id="mastery-total-text">412</span></span>
+        </div>
+      </div>
+      <div class="nav-right-group">
+        <button type="button" class="btn-nav-icon" onclick="Modul.openCheatsheet()" title="Panduan Rumus">💡</button>
+      </div>
+    </div>
+
+    <!-- REAL-TIME MASTERY PROGRESS TRACK -->
+    <div class="mastery-progress-track">
+      <div class="mastery-progress-fill" id="mastery-progress-fill"></div>
+    </div>
+
+    <!-- MASTER THREE-TAB HEADER (OPSI 2A: ZERO SUB-TABS) -->
+    <div class="master-tab-bar">
+      <button type="button" class="master-tab-btn active" id="btn-tab-fc" onclick="Modul.switchMainMode('fc')">
+        <span class="tab-icon">🎴</span>
+        <span class="tab-label">Flashcard</span>
+      </button>
+      <button type="button" class="master-tab-btn" id="btn-tab-tools" onclick="Modul.switchMainMode('tools')">
+        <span class="tab-icon">🛠️</span>
+        <span class="tab-label">Lab Alat</span>
+      </button>
+      <button type="button" class="master-tab-btn" id="btn-tab-quiz" onclick="Modul.switchMainMode('quiz')">
+        <span class="tab-icon">🎯</span>
+        <span class="tab-label">Arena Kuis</span>
+      </button>
+    </div>
+
+    <!-- SECTION 1: FLASHCARD KATA (HERO STAGE) -->
+    <div id="sec-fc">
+      <!-- Clean Single Session Control Bar (Identik Kata Kerja) -->
+      <div class="session-nav-bar">
+        <button type="button" class="active-session-indicator" id="active-session-indicator" onclick="Modul.toggleSidebar()" title="Klik untuk membuka/menutup daftar sesi materi">
+          <span class="asi-menu-icon">☰</span>
+          <span class="asi-dot"></span>
+          <span class="asi-title" id="active-session-label">🔢 Sesi 1: 0 ~ 10 (Angka Dasar)</span>
+          <span class="asi-caret" id="active-session-caret">▾</span>
+        </button>
+      </div>
+        <div class="dojo-arena-card" id="fc-arena-card">
+          <div class="fc-header-bar">
+            <span class="fc-counter-label">KATA <b id="fc-counter-current">1</b> / <span
+                id="fc-counter-total">11</span></span>
+            <div class="fc-header-right">
+              <button type="button" class="btn-star-mark" id="btn-star-card" onclick="Modul.toggleCurrentMastery()"
+                title="Tandai Dikuasai (Kuis)">⭐</button>
+              <button type="button" class="btn-star-mark" onclick="Modul.speakCurrent()"
+                title="Dengarkan Suara">🔊</button>
+            </div>
+          </div>
+
+          <div class="fc-stage-box">
+            <div class="fc-kanji-big" id="fc-kanji-text" onclick="Modul.speakCurrent()">一</div>
+            <div class="fc-word-meta">
+              <span class="fc-hira-text" id="fc-hira-text">いち</span>
+              <span class="fc-ro-text" id="fc-ro-text">(ichi)</span>
+            </div>
+            <div class="fc-arti-main" id="fc-arti-text">1 (Satu)</div>
+            <div class="fc-alert-box hidden" id="fc-alert-box"></div>
+            <div class="fc-note-box hidden" id="fc-note-box"></div>
+          </div>
+
+          <!-- Interactive Sentence & Context Shelf (Identik Kata Kerja) -->
+          <div class="fc-sentence-shelf hidden" id="fc-sentence-shelf">
+            <div class="fss-top">
+              <span class="fss-badge">💬 CONTOH PENGGUNAAN</span>
+              <button type="button" class="btn-sentence-audio" id="btn-sentence-audio" onclick="Modul.speakCurrentSentence()" title="Dengarkan Contoh Kalimat">🔊</button>
+            </div>
+            <div class="fss-jp" id="fss-jp-text">...</div>
+            <div class="fss-romaji" id="fss-ro-text">...</div>
+            <div class="fss-id" id="fss-id-text">...</div>
+          </div>
+
+          <div class="dojo-nav-controls">
+            <button type="button" class="btn-dn" id="btn-prev-card" onclick="Modul.prevCard()">← Sebelumnya</button>
+            <button type="button" class="btn-dn btn-dn-next" id="btn-next-card" onclick="Modul.nextCard()">Selanjutnya
+              →</button>
+          </div>
+        </div>
+      </div>
+
+    <!-- SECTION 2: LAB ALAT INTERAKTIF -->
+    <div id="sec-tools" class="hidden">
+      <!-- 4 Segmented Tool Buttons -->
+      <div class="tools-segmented-bar">
+        <button type="button" class="tool-seg-btn active" id="tab-tool-clock" onclick="Modul.switchTool('clock')">
+          <span>⏰</span>
+          <span class="tsb-text-full">Jam & Menit</span>
+          <span class="tsb-text-short">Jam</span>
+        </button>
+        <button type="button" class="tool-seg-btn" id="tab-tool-cal" onclick="Modul.switchTool('cal')">
+          <span>📅</span>
+          <span class="tsb-text-full">Kalender</span>
+          <span class="tsb-text-short">Kalender</span>
+        </button>
+        <button type="button" class="tool-seg-btn" id="tab-tool-conv" onclick="Modul.switchTool('conv')">
+          <span>🔢</span>
+          <span class="tsb-text-full">Konverter</span>
+          <span class="tsb-text-short">Angka</span>
+        </button>
+        <button type="button" class="tool-seg-btn" id="tab-tool-josuushi" onclick="Modul.switchTool('josuushi')">
+          <span>📦</span>
+          <span class="tsb-text-full">Satuan Hitung</span>
+          <span class="tsb-text-short">Satuan</span>
+        </button>
+      </div>
+
+          <!-- TOOL 1: CLOCK BUILDER -->
+          <div id="tool-clock-content">
+            <div class="clock-widget-container">
+              <div class="clock-display-card">
+                <div class="clock-kanji-output" id="clock-kanji-out">午前七時三十分</div>
+                <div class="clock-hira-output" id="clock-hira-out">ごぜん しちじ さんじゅっぷん (はん)</div>
+                <div class="clock-ro-output" id="clock-ro-out">gozen shichiji sanjuppun (shichijihan)</div>
+                <div class="clock-alert-output hidden" id="clock-alert-out"></div>
+                <button type="button" class="btn-nav-icon" style="margin: 6px auto 0 auto;"
+                  onclick="Modul.speakClockCurrent()" title="Dengarkan Suara Jam">🔊</button>
+              </div>
+
+              <div class="clock-controls-box">
+                <div class="time-slider-row">
+                  <span class="time-slider-label">AM / PM</span>
+                  <div style="display: flex; gap: 6px;">
+                    <button type="button" class="cqp-btn active" id="btn-ampm-am" onclick="Modul.setClockAMPM('AM')">午前
+                      (AM)</button>
+                    <button type="button" class="cqp-btn" id="btn-ampm-pm" onclick="Modul.setClockAMPM('PM')">午後
+                      (PM)</button>
+                  </div>
+                </div>
+                <div class="time-slider-row">
+                  <span class="time-slider-label">Jam (時)</span>
+                  <input type="range" class="time-slider-input" id="clock-slider-hour" min="1" max="12" value="7"
+                    oninput="Modul.onClockHourChange(this.value)">
+                  <span class="time-slider-val" id="clock-val-hour">7:00</span>
+                </div>
+                <div class="time-slider-row">
+                  <span class="time-slider-label">Menit (分)</span>
+                  <input type="range" class="time-slider-input" id="clock-slider-min" min="0" max="59" value="30"
+                    oninput="Modul.onClockMinChange(this.value)">
+                  <span class="time-slider-val" id="clock-val-min">30</span>
+                </div>
+                <div class="clock-quick-pills">
+                  <button type="button" class="cqp-btn" onclick="Modul.setClockQuick(4, 0)">04:00 (Jebakan よじ)</button>
+                  <button type="button" class="cqp-btn" onclick="Modul.setClockQuick(7, 0)">07:00 (しちじ)</button>
+                  <button type="button" class="cqp-btn" onclick="Modul.setClockQuick(9, 0)">09:00 (くじ)</button>
+                  <button type="button" class="cqp-btn" onclick="Modul.setClockQuick(12, 30)">12:30 (半 Han)</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TOOL 2: CALENDAR MATRIX 1-31 -->
+          <div id="tool-cal-content" class="hidden">
+            <div style="font-size:12px; color:var(--text-sub); margin-bottom:6px; text-align:center;">
+              Ketuk tanggal untuk melihat kanji, furigana & peringatan Kun'yomi:
+            </div>
+            <div class="calendar-matrix-grid" id="calendar-matrix-grid">
+              <!-- Populated via JS -->
+            </div>
+            <div class="cal-inspector-card" id="cal-inspector-card">
+              <div style="font-size:11px; color:var(--gold); font-weight:800;" id="cal-ins-badge">TANGGAL 1</div>
+              <div style="font-family:'Noto Serif JP',serif; font-size:32px; font-weight:900; color:#fff;"
+                id="cal-ins-kanji">一日</div>
+              <div style="font-size:16px; font-weight:800; color:var(--primary);" id="cal-ins-hira">ついたち (tsuitachi)
+              </div>
+              <div style="font-size:12px; color:var(--text-sub);" id="cal-ins-note">Sistem Jepang Asli (Kun'yomi)</div>
+              <button type="button" class="btn-nav-icon" style="margin: 4px auto 0 auto;"
+                onclick="Modul.speakCalCurrent()" title="Dengarkan Tanggal">🔊</button>
+            </div>
+          </div>
+
+          <!-- TOOL 3: NUMBER CONVERTER -->
+          <div id="tool-conv-content" class="hidden">
+            <div class="converter-container">
+              <div style="font-size:12px; color:var(--text-sub); text-align:center;">
+                Ketik angka berapa saja (0 - 999.999.999) untuk membedah kanjinya:
+              </div>
+              <div class="converter-input-wrap">
+                <input type="number" class="conv-input" id="conv-input-field" placeholder="Ketik angka (misal: 14500)"
+                  value="14500" oninput="Modul.onConvertNumber(this.value)">
+              </div>
+              <div class="conv-result-card">
+                <div style="font-size:11px; color:var(--gold); font-weight:800;">HASIL KANJI JEPANG:</div>
+                <div
+                  style="font-family:'Noto Serif JP',serif; font-size:clamp(26px, 6vw, 36px); font-weight:900; color:#fff;"
+                  id="conv-res-kanji">一万四千五百</div>
+                <div style="font-size:16px; font-weight:800; color:var(--primary);" id="conv-res-hira">いちまん よんせん ごひゃく
+                </div>
+                <div style="font-size:12.5px; color:var(--text-sub); font-style:italic;" id="conv-res-ro">ichiman yonsen
+                  gohyaku</div>
+                <button type="button" class="btn-nav-icon" style="margin: 4px auto 0 auto;"
+                  onclick="Modul.speakConvCurrent()" title="Dengarkan Angka">🔊</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- TOOL 4: JOSUUSHI CALCULATOR (SATUAN HITUNG) -->
+          <div id="tool-josuushi-content" class="hidden">
+            <div class="josuushi-container">
+              <div class="josuushi-stage-card">
+
+                <!-- 1. KATEGORI SATUAN (ADAPTIF: DROPDOWN LEGA DI MOBILE, CHIPS DI DESKTOP) -->
+                <div>
+                  <!-- BARIS 1: JUDUL & TANYA BADGE (LEGA & TIDAK SESAK) -->
+                  <div class="jos-header-row">
+                    <span style="font-size:11px; font-weight:800; color:var(--text-sub); text-transform:uppercase; letter-spacing:0.5px;">Pilih Satuan Hitung:</span>
+                    <span class="jos-q-badge" id="jos-q-badge">Tanya: いくつ？</span>
+                    <span id="jos-q-badge-dt" style="display:none;"></span>
+                  </div>
+
+                  <!-- BARIS 2A (MOBILE): DROPDOWN PENUH & PANAH (LEBAR LEGA, BEBAS TERPOTONG) -->
+                  <div class="jos-mobile-picker">
+                    <button type="button" class="jos-nav-arrow" onclick="Modul.stepJosuushiUnit(-1)" title="Satuan Sebelumnya">‹</button>
+                    <div class="jos-select-shell">
+                      <select id="jos-mobile-unit-select" class="jos-select-input" onchange="Modul.selectJosuushiUnit(this.value)">
+                        <option value="tsu" selected>Barang (〜つ)</option>
+                        <option value="nin">Orang (〜人)</option>
+                        <option value="sai">Umur (〜歳)</option>
+                        <option value="hiki">Hewan (〜匹)</option>
+                        <option value="hon">Benda Panjang (〜本)</option>
+                        <option value="soku">Alas Kaki (〜足)</option>
+                        <option value="mai">Lembar (〜枚)</option>
+                        <option value="dai">Mesin (〜台)</option>
+                        <option value="wa">Unggas (〜羽)</option>
+                        <option value="ban">Urutan (〜番)</option>
+                      </select>
+                      <span class="jos-select-caret">▾</span>
+                    </div>
+                    <button type="button" class="jos-nav-arrow" onclick="Modul.stepJosuushiUnit(1)" title="Satuan Selanjutnya">›</button>
+                  </div>
+
+                  <!-- BARIS 2B (DESKTOP): DERETAN CHIPS LENGKAP -->
+                  <div class="jos-desktop-chips">
+                    <div class="jos-chips-wrap">
+                      <button type="button" class="jos-unit-chip active" data-unit="tsu" onclick="Modul.selectJosuushiUnit('tsu')">Barang (〜つ)</button>
+                      <button type="button" class="jos-unit-chip" data-unit="nin" onclick="Modul.selectJosuushiUnit('nin')">Orang (〜人)</button>
+                      <button type="button" class="jos-unit-chip" data-unit="sai" onclick="Modul.selectJosuushiUnit('sai')">Umur (〜歳)</button>
+                      <button type="button" class="jos-unit-chip" data-unit="hiki" onclick="Modul.selectJosuushiUnit('hiki')">Hewan (〜匹)</button>
+                      <button type="button" class="jos-unit-chip" data-unit="hon" onclick="Modul.selectJosuushiUnit('hon')">Benda Panjang (〜本)</button>
+                      <button type="button" class="jos-unit-chip" data-unit="soku" onclick="Modul.selectJosuushiUnit('soku')">Alas Kaki (〜足)</button>
+                      <button type="button" class="jos-unit-chip" data-unit="mai" onclick="Modul.selectJosuushiUnit('mai')">Lembar (〜枚)</button>
+                      <button type="button" class="jos-unit-chip" data-unit="dai" onclick="Modul.selectJosuushiUnit('dai')">Mesin (〜台)</button>
+                      <button type="button" class="jos-unit-chip" data-unit="wa" onclick="Modul.selectJosuushiUnit('wa')">Unggas (〜羽)</button>
+                      <button type="button" class="jos-unit-chip" data-unit="ban" onclick="Modul.selectJosuushiUnit('ban')">Urutan (〜番)</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 2. HASIL UTAMA (KANJI BESAR, HIRAGANA, ROMAJI) -->
+                <div class="jos-display-hero">
+                  <div class="jos-kanji-big" id="jos-kanji-out">一つ</div>
+                  <div class="jos-hira-mid" id="jos-hira-out">ひとつ</div>
+                  <div class="jos-ro-small" id="jos-ro-out">(hitotsu)</div>
+                  <div class="jos-anomaly-badge hidden" id="jos-anomaly-badge"></div>
+                </div>
+
+                <!-- 3. SLIDER & STEPPER -->
+                <div class="jos-stepper-box">
+                  <div class="jos-stepper-top">
+                    <span style="color:var(--text-sub);">Jumlah / Angka:</span>
+                    <div class="jos-step-ctrls">
+                      <button type="button" class="jos-btn-step" onclick="Modul.stepJosuushiCount(-1)">−</button>
+                      <span style="font-size:16px; font-weight:900; color:var(--primary); min-width:32px; text-align:center;" id="jos-count-val">1</span>
+                      <button type="button" class="jos-btn-step" onclick="Modul.stepJosuushiCount(1)">+</button>
+                    </div>
+                  </div>
+                  <input type="range" class="jos-slider-track" id="jos-slider-count" min="1" max="25" value="1" oninput="Modul.setJosuushiCount(this.value)">
+                  <!-- Preset Buttons -->
+                  <div class="jos-presets-scroll" id="jos-preset-box">
+                    <!-- Populated via JS -->
+                  </div>
+                </div>
+
+                <!-- 4. CONTOH PENGGUNAAN (3 BARIS + TOMBOL SUARA DI KANAN ATAS) -->
+                <div class="jos-example-shelf">
+                  <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;">
+                    <span style="font-size:11px; font-weight:800; color:var(--primary); letter-spacing:0.5px; display:flex; align-items:center; gap:6px;">
+                      <span>💬</span>
+                      <span>CONTOH PENGGUNAAN</span>
+                    </span>
+                    <button type="button" class="jos-sound-icon-btn" onclick="Modul.speakJosuushiCurrent()" title="Dengarkan Contoh Percakapan">🔊</button>
+                  </div>
+                  <div style="font-size:13.5px; font-weight:800; color:#fff; line-height:1.5;" id="jos-ex-kanji">リンゴを一つください。</div>
+                  <div style="font-size:12px; color:rgba(56, 189, 248, 0.85); font-style:italic; line-height:1.4;" id="jos-ex-ro">(Ringo o hitotsu kudasai.)</div>
+                  <div style="font-size:12px; color:var(--text-sub); line-height:1.4;" id="jos-ex-id">Tolong beri saya satu buah apel.</div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+    <!-- SECTION 3: ARENA KUIS -->
+    <div id="sec-quiz" class="hidden">
+      <div class="dojo-arena-card">
+        <div class="quiz-top-bar">
+          <div class="quiz-bar-top-row">
+            <button type="button" class="btn-quiz-config" id="btn-quiz-config" onclick="Modul.openQuizConfigModal()">
+              <span id="quiz-config-icon">🔥</span>
+              <span id="quiz-config-label">Target: Semua</span>
+              <span>▾</span>
+            </button>
+            <div class="drill-mode-dropdown-wrap">
+              <button type="button" class="btn-drill-dropdown" id="btn-drill-dropdown"
+                onclick="Modul.toggleDrillDropdown(event)">
+                <span id="drill-label-icon">🔀</span>
+                <span id="drill-label-text">Acak</span>
+                <span>▾</span>
+              </button>
+              <div class="drill-dropdown-menu hidden" id="drill-dropdown-menu" onclick="event.stopPropagation()">
+                <div class="dd-item active" data-qtype="mix"
+                  onclick="Modul.selectDrillSubtype('mix', '🔀', 'Acak Campuran')">🔀 Acak Campuran</div>
+                <div class="dd-item" data-qtype="kanji"
+                  onclick="Modul.selectDrillSubtype('kanji', '🈶', 'Tebak Kanji/Bacaan')">🈶 Tebak Kanji / Bacaan</div>
+                <div class="dd-item" data-qtype="meaning"
+                  onclick="Modul.selectDrillSubtype('meaning', '📖', 'Tebak Arti Indonesia')">📖 Tebak Arti Indonesia
+                </div>
+                <div class="dd-item" data-qtype="time"
+                  onclick="Modul.selectDrillSubtype('time', '⏰', 'Tebak Waktu/Tanggal')">⏰ Tebak Jam & Tanggal</div>
+                <div class="dd-item" data-qtype="isian"
+                  onclick="Modul.selectDrillSubtype('isian', '✍️', 'Isian Hiragana')">✍️ Isian Hiragana</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="quiz-bar-bottom-row">
+            <span class="quiz-progress-text" id="quiz-progress-pill">SOAL <b>1</b> / 10</span>
+            <span class="quiz-score-badge" id="quiz-score-pill">SKOR 0</span>
+          </div>
+        </div>
+
+        <div class="quiz-stage-box">
+          <span class="quiz-badge-kind" id="quiz-badge-kind">TEBAK KANJI</span>
+          <div class="quiz-q-main" id="quiz-q-text">Pertanyaan Kuis</div>
+        </div>
+
+        <div class="quiz-options-grid" id="quiz-options-container">
+          <!-- Multiple choice options populated via JS -->
+        </div>
+
+        <div class="quiz-isian-box hidden" id="quiz-isian-container">
+          <div class="isian-input-wrap">
+            <input type="text" class="isian-input" id="quiz-isian-input" placeholder="Ketik jawaban..."
+              onkeydown="if(event.key==='Enter') Modul.submitIsianAnswer()">
+            <button type="button" class="btn-isian-submit" onclick="Modul.submitIsianAnswer()">CEK</button>
+          </div>
+        </div>
+
+        <div class="quiz-feedback-banner hidden" id="quiz-feedback-bar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL PENGATURAN TARGET & SUMBER KUIS -->
+  <div id="quiz-config-modal" class="modal-overlay hidden"
+    onclick="if(event.target === this) Modul.closeQuizConfigModal()">
+    <div class="qc-card">
+      <div class="qc-header">
+        <span class="qc-title">⚙️ Pengaturan Latihan Kuis</span>
+        <button type="button" class="btn-cs-close" onclick="Modul.closeQuizConfigModal()">✕</button>
+      </div>
+      <div class="qc-body">
+        <div>
+          <div class="qc-group-label"><span>🎯</span> Target Jumlah Butir Soal</div>
+          <div class="qc-opt-row active" id="qc-target-all" onclick="Modul.selectQuizTargetMode('all')">
+            <div class="qc-opt-left">
+              <div class="qc-radio-dot"></div>
+              <div>
+                <div class="qc-opt-title">🔥 Semua Kata Bolak-Balik</div>
+                <div style="font-size:11px; color:var(--text-sub);">Uji seluruh kosakata dari dua arah</div>
+              </div>
+            </div>
+            <span class="qc-opt-badge" id="qc-count-badge-all">0 Soal</span>
+          </div>
+          <div class="qc-opt-row" id="qc-target-10" onclick="Modul.selectQuizTargetMode('10')">
+            <div class="qc-opt-left">
+              <div class="qc-radio-dot"></div>
+              <div>
+                <div class="qc-opt-title">⚡ 10 Soal (Latihan Kilat)</div>
+                <div style="font-size:11px; color:var(--text-sub);">Review harian cepat 1-2 menit</div>
+              </div>
+            </div>
+            <span class="qc-opt-badge">10 Soal</span>
+          </div>
+          <div class="qc-opt-row" id="qc-target-25" onclick="Modul.selectQuizTargetMode('25')">
+            <div class="qc-opt-left">
+              <div class="qc-radio-dot"></div>
+              <div>
+                <div class="qc-opt-title">🏃 25 Soal (Maraton)</div>
+                <div style="font-size:11px; color:var(--text-sub);">Latihan mendalam menguji daya ingat</div>
+              </div>
+            </div>
+            <span class="qc-opt-badge">25 Soal</span>
+          </div>
+          <div class="qc-opt-row" id="qc-target-custom" onclick="Modul.selectQuizTargetMode('custom')">
+            <div class="qc-opt-left">
+              <div class="qc-radio-dot"></div>
+              <div>
+                <div class="qc-opt-title">✏️ Kustomisasi Jumlah</div>
+                <div style="font-size:11px; color:var(--text-sub);">Tentukan sendiri jumlah butir soal</div>
+              </div>
+            </div>
+            <span class="qc-opt-badge" id="qc-count-badge-custom">20 Soal</span>
+          </div>
+          <div class="hidden" id="qc-custom-input-box" style="margin-top: 6px; text-align:right;">
+            <input type="number" class="qc-custom-input" id="qc-custom-count-input" value="20" min="5" max="250"
+              oninput="Modul.onCustomCountInput(this.value)">
+          </div>
+        </div>
+
+        <div>
+          <div class="qc-group-label"><span>📚</span> Sumber Kosakata Soal</div>
+          <div class="qc-opt-row active" id="qc-src-mastered" onclick="Modul.selectQuizSourceMode('mastered')">
+            <div class="qc-opt-left">
+              <div class="qc-radio-dot"></div>
+              <div>
+                <div class="qc-opt-title">⭐ Hanya Kata yang Dikuasai</div>
+                <div style="font-size:11px; color:var(--text-sub);">Menguji kata-kata berbintang di sesi ini</div>
+              </div>
+            </div>
+            <span class="qc-opt-badge" id="qc-src-badge-mastered">0 Kata</span>
+          </div>
+          <div class="qc-opt-row" id="qc-src-session" onclick="Modul.selectQuizSourceMode('session')">
+            <div class="qc-opt-left">
+              <div class="qc-radio-dot"></div>
+              <div>
+                <div class="qc-opt-title">📚 Seluruh Kata Sesi Ini</div>
+                <div style="font-size:11px; color:var(--text-sub);">Menguji seluruh kata pada sesi aktif</div>
+              </div>
+            </div>
+            <span class="qc-opt-badge" id="qc-src-badge-session">0 Kata</span>
+          </div>
+        </div>
+      </div>
+      <div style="padding: 0 18px 16px 18px;">
+        <button type="button" class="btn-qc-apply" onclick="Modul.applyQuizConfig()">🚀 Terapkan & Mulai Kuis</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL CHEATSHEET / TIPS RUMUS -->
+  <div id="cheatsheet-modal" class="modal-overlay hidden" onclick="if(event.target === this) Modul.closeCheatsheet()">
+    <div class="cheatsheet-card">
+      <div class="cs-header">
+        <span class="cs-title">💡 Panduan Rumus & Anomali</span>
+        <button type="button" class="btn-cs-close" onclick="Modul.closeCheatsheet()">✕</button>
+      </div>
+      <div class="cs-tab-row">
+        <button type="button" class="cs-tab-btn active" id="cstab-angka" onclick="Modul.switchCSTab('angka')">🔢 Bilangan</button>
+        <button type="button" class="cs-tab-btn" id="cstab-hitung" onclick="Modul.switchCSTab('hitung')">📦 Satuan Hitung</button>
+        <button type="button" class="cs-tab-btn" id="cstab-waktu" onclick="Modul.switchCSTab('waktu')">⏰ Jam & Menit</button>
+        <button type="button" class="cs-tab-btn" id="cstab-kalender" onclick="Modul.switchCSTab('kalender')">📅 Tanggal</button>
+        <button type="button" class="cs-tab-btn" id="cstab-relatif" onclick="Modul.switchCSTab('relatif')">⏳ Waktu Relatif</button>
+      </div>
+      <div class="cs-body" id="cs-body-content">
+        <!-- Populated via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR DRAWER (DAFTAR SESI & MATERI) -->
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="Modul.closeSidebar()"></div>
+  <div class="sidebar-drawer" id="sidebar-drawer">
+    <div class="sd-header">
+      <div class="sd-title-wrap">
+        <span class="sd-icon">📚</span>
+        <div>
+          <div class="sd-title">Daftar Sesi & Materi</div>
+          <div class="sd-subtitle" id="sd-total-subtitle">412 Kosakata Bilangan, Satuan & Waktu</div>
+        </div>
+      </div>
+      <button type="button" class="btn-sd-close" onclick="Modul.closeSidebar()" title="Tutup">✕</button>
+    </div>
+
+    <div class="sd-body" id="sd-body-content">
+      <!-- Generated dynamically via renderSidebarContent -->
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>

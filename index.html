@@ -97,21 +97,21 @@
         <div class="pathway-conduit-line"></div>
 
         <!-- Node 0: Kana (Fondasi) -->
-        <div class="pathway-node node-kana" onclick="UI.showKanaModuleNotice()">
-          <div class="node-marker marker-kana">
+        <div class="pathway-node node-kana" onclick="window.location.href='modules/kana/index.html'">
+          <div class="node-marker marker-kana active">
             <span class="node-num">00</span>
-            <div class="node-pulse"></div>
+            <div class="node-pulse-active"></div>
           </div>
           <div class="node-body">
             <div class="node-meta">
               <span class="node-stage-tag">TAHAP 0 • FONDASI DASAR</span>
-              <span class="node-status-pill status-dev">● SEGERA DIBUKA</span>
+              <span class="node-status-pill" style="color:var(--success); background:rgba(34,197,94,0.15); border:1px solid rgba(34,197,94,0.3);">● SIAP DIMASUKI</span>
             </div>
             <div class="node-title-row">
               <h2 class="node-title">Penguasaan Huruf Kana</h2>
               <span class="node-kanji-glyph">仮名</span>
             </div>
-            <p class="node-desc">Hiragana & Katakana dasar, dakuten, handakuten, serta kombinasi bunyi yoon.</p>
+            <p class="node-desc">Hiragana & Katakana 6 tahap fonetik: vokal, konsonan tulen, dakuten, sokuon & yōon.</p>
           </div>
         </div>
 
@@ -974,7 +974,16 @@
       <div class="sidebar-group">
         <div class="sidebar-group-label">📚 REFERENSI BUKU SAKU N5</div>
 
-        <a class="sidebar-tile" href="kanji.html">
+        <a class="sidebar-tile" href="modules/kana/index.html">
+          <div class="sidebar-tile-icon icon-cyan">🔤</div>
+          <div class="sidebar-tile-info">
+            <div class="sidebar-tile-title">Penguasaan Huruf Kana</div>
+            <div class="sidebar-tile-desc">Hiragana & Katakana 6 tahap fonetik</div>
+          </div>
+          <div class="sidebar-tile-arrow">›</div>
+        </a>
+
+        <a class="sidebar-tile" href="modules/kanji/index.html">
           <div class="sidebar-tile-icon icon-cyan">⛩️</div>
           <div class="sidebar-tile-info">
             <div class="sidebar-tile-title">Pasar & Dojo Kanji</div>
@@ -983,7 +992,7 @@
           <div class="sidebar-tile-arrow">›</div>
         </a>
 
-        <a class="sidebar-tile" href="kata sifat.html">
+        <a class="sidebar-tile" href="modules/kata-sifat/index.html">
           <div class="sidebar-tile-icon icon-cyan">🏷️</div>
           <div class="sidebar-tile-info">
             <div class="sidebar-tile-title">Kata Sifat</div>
@@ -992,7 +1001,7 @@
           <div class="sidebar-tile-arrow">›</div>
         </a>
 
-        <a class="sidebar-tile" href="kata kerja.html">
+        <a class="sidebar-tile" href="modules/kata-kerja/index.html">
           <div class="sidebar-tile-icon icon-cyan">🏃🏻‍♂️</div>
           <div class="sidebar-tile-info">
             <div class="sidebar-tile-title">Kata Kerja</div>
@@ -1001,7 +1010,7 @@
           <div class="sidebar-tile-arrow">›</div>
         </a>
 
-        <a class="sidebar-tile" href="nomor.html">
+        <a class="sidebar-tile" href="modules/nomor/index.html">
           <div class="sidebar-tile-icon icon-cyan">🕒</div>
           <div class="sidebar-tile-info">
             <div class="sidebar-tile-title">Bilangan, Waktu & Kalender</div>
