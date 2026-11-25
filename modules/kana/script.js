@@ -543,24 +543,125 @@ const KanaApp = {
     container.innerHTML = html;
   },
 
+  /** Mengumpulkan pool huruf tahap/halaman aktif serta huruf kumulatif tahap sebelumnya untuk penguatan. */
+  getCumulativePools: function () {
+    const stage = this.getCurrentStage();
+    const page = this.getCurrentPage();
+    const isModifierToken = l => l.h === 'っ' || l.h === 'ー';
+
+    const dedupeByRo = (list) => {
+      const map = new Map();
+      (list || []).forEach(l => {
+        if (l && l.ro && !map.has(l.ro)) map.set(l.ro, l);
+      });
+      return Array.from(map.values());
+    };
+
+    const sameStageSoFar = [];
+    if (stage && Array.isArray(stage.pages)) {
+      for (const p of stage.pages) {
+        (p.letters || []).forEach(l => sameStageSoFar.push(l));
+        if (p.pageId === page.pageId) break;
+      }
+    }
+
+    const currentStageFull = dedupeByRo([
+      ...(stage && stage.allLetters ? stage.allLetters : []),
+      ...((stage && Array.isArray(stage.pages)) ? stage.pages.flatMap(p => p.letters || []) : [])
+    ]);
+
+    const priorStages = [];
+    if (typeof KANA_STAGES !== 'undefined' && Array.isArray(KANA_STAGES)) {
+      KANA_STAGES.forEach(s => {
+        if (s.stageId < this.currentStageId) {
+          (s.allLetters || []).forEach(l => {
+            if (!isModifierToken(l)) priorStages.push(l);
+          });
+          (s.pages || []).forEach(p => {
+            (p.letters || []).forEach(l => {
+              if (!isModifierToken(l)) priorStages.push(l);
+            });
+          });
+        }
+      });
+    }
+
+    const activeSet = new Set((page.letters || []).map(l => l.ro));
+    const sameStagePrior = dedupeByRo(sameStageSoFar.filter(l => !activeSet.has(l.ro) && !isModifierToken(l)));
+    const priorStageReview = dedupeByRo(priorStages);
+
+    const isStage11 = this.currentStageId === 11;
+    const pageFocusPool = isStage11
+      ? dedupeByRo(page.availablePool || page.letters)
+      : dedupeByRo(page.letters);
+
+    const stageFocusPool = isStage11
+      ? dedupeByRo((stage.pages || []).flatMap(p => p.availablePool || []))
+      : currentStageFull;
+
+    return {
+      pageLetters: pageFocusPool,
+      sameStageSoFar: isStage11 ? pageFocusPool : dedupeByRo(sameStageSoFar),
+      sameStagePrior: sameStagePrior,
+      stageAll: stageFocusPool,
+      priorStages: priorStageReview,
+      allPriorLearned: dedupeByRo([...sameStagePrior, ...priorStageReview])
+    };
+  },
+
   renderDrills: function () {
     const container = document.getElementById('drills-iqra-grid');
     if (!container) return;
 
     this.stopAutoPlay();
     const page = this.getCurrentPage();
-    const pool = page.availablePool && page.availablePool.length > 0 ? page.availablePool : page.letters;
+    const pools = this.getCumulativePools();
 
     const TOTAL_BOXES = 15;
+    const hasPriorStages = pools.priorStages.length > 0;
+    const focusStagePool = (this.currentStageId === 11)
+      ? (page.availablePool && page.availablePool.length > 0 ? page.availablePool : pools.pageLetters)
+      : (pools.sameStageSoFar.length > 0 ? pools.sameStageSoFar : pools.pageLetters);
+    const newLetters = pools.pageLetters;
+
+    // Tidak setiap kotak memuat tahap lalu: ~10 kotak fokus materi aktif, ~5 kotak menyelipkan penguatan
+    const reviewBoxFlags = new Array(TOTAL_BOXES).fill(false);
+    if (hasPriorStages) {
+      for (let i = 0; i < 5; i++) reviewBoxFlags[i] = true;
+    } else if (pools.sameStagePrior.length > 0 && newLetters.length >= 2) {
+      for (let i = 0; i < 6; i++) reviewBoxFlags[i] = true;
+    }
+    const shuffledReviewFlags = this.shuffleArray(reviewBoxFlags);
+
+    const pickFrom = (arr) => arr[Math.floor(Math.random() * arr.length)];
+    const pickStageChar = () => {
+      const bias = newLetters.length >= 2 ? 0.65 : 0.45;
+      if (newLetters.length > 0 && (Math.random() < bias || focusStagePool.length === 0)) {
+        return pickFrom(newLetters);
+      }
+      return pickFrom(focusStagePool);
+    };
+
+    const reviewSource = hasPriorStages ? pools.priorStages : pools.sameStagePrior;
+
     this.activeDrillData = [];
     let html = '';
 
     for (let b = 0; b < TOTAL_BOXES; b++) {
       const chars = [];
       const ttsParts = [];
+      const includeReview = shuffledReviewFlags[b] && reviewSource.length > 0;
+      const reviewCharPositions = new Set();
+
+      if (includeReview) {
+        const count = Math.random() < 0.6 ? 1 : 2;
+        while (reviewCharPositions.size < count) {
+          reviewCharPositions.add(Math.floor(Math.random() * 3));
+        }
+      }
 
       for (let c = 0; c < 3; c++) {
-        const randLetter = pool[Math.floor(Math.random() * pool.length)];
+        const randLetter = reviewCharPositions.has(c) ? pickFrom(reviewSource) : pickStageChar();
         const isHira = Math.random() >= 0.5;
         const glyph = isHira ? randLetter.h : randLetter.k;
         const cssClass = isHira ? 'k-char-hira' : 'k-char-kata';
@@ -1175,29 +1276,43 @@ const KanaApp = {
 
   /** MODEL 3: Match Pairs Kembar */
   generateQ3_MatchPairs: function (primaryPool, secondaryPool) {
-    const pool = (secondaryPool && secondaryPool.length > 0) ? secondaryPool : primaryPool;
-    const uniqueMap = new Map();
-    pool.forEach(l => {
-      if (!uniqueMap.has(l.ro)) uniqueMap.set(l.ro, l);
-    });
-    const uniqueLetters = Array.from(uniqueMap.values());
-    this.shuffleArray(uniqueLetters);
+    const canPair = l => l && l.ro && l.h !== l.k;
+    const dedupe = (list) => {
+      const map = new Map();
+      (list || []).forEach(l => {
+        if (canPair(l) && !map.has(l.ro)) map.set(l.ro, l);
+      });
+      return Array.from(map.values());
+    };
+
+    const primaryUnique = this.shuffleArray(dedupe(primaryPool));
+    const primaryRoSet = new Set(primaryUnique.map(l => l.ro));
+    const secondaryUnique = this.shuffleArray(
+      dedupe(secondaryPool).filter(l => !primaryRoSet.has(l.ro))
+    );
 
     // Konfigurasi jumlah pasangan:
     // Tahap 1: 3 pasang (6 kotak dalam format 3x2 grid)
-    // Tahap 2 ke atas: 4 pasang (8 kotak dalam format 4x2 grid)
-    const targetPairs = (this.currentStageId === 1) ? 3 : 4;
+    // Tahap 2 ke atas / Placement: 4 pasang (8 kotak dalam format 4x2 grid)
+    const targetPairs = (this.currentStageId === 1 && !this.isPlacementMode) ? 3 : 4;
 
     const selectedLetters = [];
-    // Prioritaskan huruf-huruf unik terlebih dahulu
-    for (let i = 0; i < Math.min(targetPairs, uniqueLetters.length); i++) {
-      selectedLetters.push(uniqueLetters[i]);
+    const maxFromPrimary = secondaryUnique.length > 0
+      ? Math.max(1, targetPairs - Math.min(2, secondaryUnique.length))
+      : targetPairs;
+
+    for (let i = 0; i < Math.min(maxFromPrimary, primaryUnique.length); i++) {
+      selectedLetters.push(primaryUnique[i]);
     }
-    // Jika jumlah huruf unik masih kurang dari target (misal Hal 1 baru ada 2 vokal: a dan i),
-    // tambahkan huruf dari pool yang ada sampai mencapai targetPairs (3 pasang = 6 kartu)
-    while (selectedLetters.length < targetPairs && uniqueLetters.length > 0) {
-      const extra = uniqueLetters[Math.floor(Math.random() * uniqueLetters.length)];
-      selectedLetters.push(extra);
+    for (let i = 0; i < secondaryUnique.length && selectedLetters.length < targetPairs; i++) {
+      selectedLetters.push(secondaryUnique[i]);
+    }
+    for (let i = maxFromPrimary; i < primaryUnique.length && selectedLetters.length < targetPairs; i++) {
+      selectedLetters.push(primaryUnique[i]);
+    }
+    const combinedUnique = [...primaryUnique, ...secondaryUnique];
+    while (selectedLetters.length < targetPairs && combinedUnique.length > 0) {
+      selectedLetters.push(combinedUnique[Math.floor(Math.random() * combinedUnique.length)]);
     }
 
     const cards = [];
@@ -1378,8 +1493,7 @@ const KanaApp = {
   /** MODEL 8: Time Attack (Ketuk Kilat Berwaktu) */
   generateQ8_TimeAttack: function (primaryPool, secondaryPool) {
     const targetLetter = primaryPool[Math.floor(Math.random() * primaryPool.length)];
-    const distractorLetters = secondaryPool.filter(l => l.ro !== targetLetter.ro);
-    this.shuffleArray(distractorLetters);
+    const distractorLetters = this.shuffleArray(secondaryPool.filter(l => l.ro !== targetLetter.ro));
 
     // 3 kartu target (kombinasi Hiragana dan Katakana)
     const targetCards = [
@@ -1595,11 +1709,18 @@ const KanaApp = {
     const totalQuestions = config.totalQuestions;
     this.examActiveModels = config.activeModels;
 
-    const stage = this.getCurrentStage();
-    const page = this.getCurrentPage();
+    const pools = this.getCumulativePools();
+    const activePool = isFinal ? pools.stageAll : pools.pageLetters;
+    const reviewPool = isFinal ? pools.priorStages : pools.allPriorLearned;
+    const combinedPool = [...activePool, ...reviewPool];
 
-    const primaryPool = isFinal ? stage.allLetters : page.letters;
-    const secondaryPool = isFinal ? stage.allLetters : (page.availablePool || page.letters);
+    // Distribusikan ~70% fokus materi aktif & ~30% penguatan dari materi sebelumnya
+    const isReviewSlot = new Array(totalQuestions).fill(false);
+    if (reviewPool.length > 0) {
+      const reviewCount = Math.max(1, Math.floor(totalQuestions * 0.3));
+      for (let r = 0; r < reviewCount; r++) isReviewSlot[r] = true;
+    }
+    const reviewFlags = this.shuffleArray(isReviewSlot);
 
     this.examQuestions = [];
 
@@ -1624,35 +1745,42 @@ const KanaApp = {
         ? singleSessionModel 
         : this.examActiveModels[i % this.examActiveModels.length];
 
+      const useReviewFocus = reviewFlags[i] && reviewPool.length > 0;
+      const qPrimary = useReviewFocus ? reviewPool : activePool;
+      const qSecondary = combinedPool.length > 0 ? combinedPool : activePool;
+      const wordStageId = (useReviewFocus && this.currentStageId > 1)
+        ? Math.floor(Math.random() * (this.currentStageId - 1)) + 1
+        : this.currentStageId;
+
       let q = null;
 
       switch (modelType) {
         case 1:
-          q = this.generateQ1_Reflex(primaryPool, secondaryPool);
+          q = this.generateQ1_Reflex(qPrimary, qSecondary);
           break;
         case 2:
-          q = this.generateQ2_TrueFalse(primaryPool, secondaryPool);
+          q = this.generateQ2_TrueFalse(qPrimary, qSecondary);
           break;
         case 3:
-          q = this.generateQ3_MatchPairs(primaryPool, secondaryPool);
+          q = this.generateQ3_MatchPairs(qPrimary, qSecondary);
           break;
         case 4:
-          q = this.generateQ4_BasketSort(primaryPool, secondaryPool);
+          q = this.generateQ4_BasketSort(qPrimary, qSecondary);
           break;
         case 5:
-          q = this.generateQ5_AudioKana(primaryPool, secondaryPool);
+          q = this.generateQ5_AudioKana(qPrimary, qSecondary);
           break;
         case 6:
-          q = this.generateQ6_WordScramble(this.currentStageId);
+          q = this.generateQ6_WordScramble(wordStageId);
           break;
         case 7:
-          q = this.generateQ7_FillBlank(this.currentStageId, secondaryPool);
+          q = this.generateQ7_FillBlank(wordStageId, qSecondary);
           break;
         case 8:
-          q = this.generateQ8_TimeAttack(primaryPool, secondaryPool);
+          q = this.generateQ8_TimeAttack(qPrimary, qSecondary);
           break;
         default:
-          q = this.generateQ1_Reflex(primaryPool, secondaryPool);
+          q = this.generateQ1_Reflex(qPrimary, qSecondary);
       }
 
       this.examQuestions.push(q);
