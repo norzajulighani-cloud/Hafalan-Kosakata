@@ -975,6 +975,35 @@ const KanaApp = {
   // GENERATOR 8 MODEL SOAL
   // -------------------------------------------------------------------------
 
+  hasHiraganaChar: function (str) {
+    return /[\u3041-\u3096]/.test(String(str || ''));
+  },
+
+  hasKatakanaChar: function (str) {
+    return /[\u30A1-\u30FA]/.test(String(str || ''));
+  },
+
+  /** Memeriksa apakah terdapat campuran aksara Hiragana dan Katakana pada teks soal/jawaban. */
+  hasMixedKanaScript: function (texts) {
+    let foundHira = false;
+    let foundKata = false;
+    (texts || []).forEach(t => {
+      if (this.hasHiraganaChar(t)) foundHira = true;
+      if (this.hasKatakanaChar(t)) foundKata = true;
+    });
+    return foundHira && foundKata;
+  },
+
+  buildScriptBadgeHtml: function (isHira) {
+    return `
+      <div style="margin-top:8px;">
+        <span class="script-badge ${isHira ? 'hira-badge' : 'kata-badge'}">
+          ${isHira ? '🔵 CARI: AKSARA HIRAGANA' : '🟡 CARI: AKSARA KATAKANA'}
+        </span>
+      </div>
+    `;
+  },
+
   /** MODEL 1: Refleks Tebak Cepat (Kana ↔ Romaji) */
   generateQ1_Reflex: function (primaryPool, secondaryPool) {
     const isKanaToRo = Math.random() >= 0.5; // 50% Kana -> Romaji, 50% Romaji -> Kana
@@ -1011,26 +1040,45 @@ const KanaApp = {
       };
     } else {
       // Romaji -> Kana: Pengguna melihat Romaji, memilih aksara Kana yang tepat
-      // Tentukan secara tegas aksara mana yang dicari: Hiragana atau Katakana murni
-      const targetScript = Math.random() < 0.5 ? 'hira' : 'kata';
-      const isHira = targetScript === 'hira';
+      const isHira = Math.random() < 0.5;
+      const canBeDistinctScript = (l1.h !== l1.k) || (l2.h !== l2.k);
+      // Variasikan 50% opsi campuran Hiragana+Katakana vs 50% murni 1 jenis aksara
+      const wantMixedOptions = canBeDistinctScript && (Math.random() < 0.5);
 
       const targetGlyph1 = isHira ? l1.h : l1.k;
       const targetGlyph2 = isHira ? l2.h : l2.k;
-      const correctKana = `${targetGlyph1} ${targetGlyph2}`;
+      const oppGlyph1 = isHira ? l1.k : l1.h;
+      const oppGlyph2 = isHira ? l2.k : l2.h;
 
-      // Buat 4 opsi pengecoh murni dalam alfabet target yang sama agar 100% tidak ambigu
+      const correctKana = `${targetGlyph1} ${targetGlyph2}`;
+      const oppKana = `${oppGlyph1} ${oppGlyph2}`;
+
       const pool = (secondaryPool && secondaryPool.length > 0) ? secondaryPool : primaryPool;
       const optionsSet = new Set([correctKana]);
 
+      if (wantMixedOptions && oppKana !== correctKana) {
+        optionsSet.add(oppKana);
+      }
+
       // Pengecoh 1: Posisi dibalik jika l1 != l2
       if (l1.ro !== l2.ro) {
-        optionsSet.add(`${targetGlyph2} ${targetGlyph1}`);
+        const useOppSwap = wantMixedOptions && Math.random() < 0.5;
+        const swapCand = useOppSwap ? `${oppGlyph2} ${oppGlyph1}` : `${targetGlyph2} ${targetGlyph1}`;
+        if (swapCand !== correctKana) {
+          optionsSet.add(swapCand);
+        }
       }
 
       // Pengecoh 2 & 3: Kombinasi kembar
-      optionsSet.add(`${targetGlyph1} ${targetGlyph1}`);
-      optionsSet.add(`${targetGlyph2} ${targetGlyph2}`);
+      if (wantMixedOptions) {
+        if (`${oppGlyph1} ${oppGlyph1}` !== correctKana) optionsSet.add(`${oppGlyph1} ${oppGlyph1}`);
+        if (`${targetGlyph1} ${targetGlyph1}` !== correctKana && optionsSet.size < 4) {
+          optionsSet.add(`${targetGlyph1} ${targetGlyph1}`);
+        }
+      } else {
+        optionsSet.add(`${targetGlyph1} ${targetGlyph1}`);
+        optionsSet.add(`${targetGlyph2} ${targetGlyph2}`);
+      }
 
       // Lengkapi hingga 4 opsi unik menggunakan huruf-huruf dari pool yang sama
       let attempts = 0;
@@ -1038,44 +1086,49 @@ const KanaApp = {
         attempts++;
         const r1 = pool[Math.floor(Math.random() * pool.length)];
         const r2 = pool[Math.floor(Math.random() * pool.length)];
-        const cand = isHira ? `${r1.h} ${r2.h}` : `${r1.k} ${r2.k}`;
-        if (cand !== correctKana) {
+        const useHiraOpt = wantMixedOptions ? (optionsSet.size % 2 === 1 ? !isHira : isHira) : isHira;
+        const cand = useHiraOpt ? `${r1.h} ${r2.h}` : `${r1.k} ${r2.k}`;
+        const sameTargetSound = (r1.ro === l1.ro && r2.ro === l2.ro);
+        if (cand !== correctKana && !(sameTargetSound && useHiraOpt === isHira)) {
           optionsSet.add(cand);
         }
       }
 
       // Fallback jika huruf unik di tahap awal masih terbatas (misal Halaman 1 cuma 'a' dan 'i')
       const fallbackLetters = [
-        { h: 'あ', k: 'ア' }, { h: 'い', k: 'イ' }, { h: 'う', k: 'ウ' }, 
-        { h: 'え', k: 'エ' }, { h: 'お', k: 'オ' }
+        { h: 'あ', k: 'ア', ro: 'a' }, { h: 'い', k: 'イ', ro: 'i' }, { h: 'う', k: 'ウ', ro: 'u' },
+        { h: 'え', k: 'エ', ro: 'e' }, { h: 'お', k: 'オ', ro: 'o' }
       ];
       while (optionsSet.size < 4) {
         const r1 = fallbackLetters[Math.floor(Math.random() * fallbackLetters.length)];
         const r2 = fallbackLetters[Math.floor(Math.random() * fallbackLetters.length)];
-        const cand = isHira ? `${r1.h} ${r2.h}` : `${r1.k} ${r2.k}`;
-        optionsSet.add(cand);
+        const useHiraOpt = wantMixedOptions ? (optionsSet.size % 2 === 1 ? !isHira : isHira) : isHira;
+        const cand = useHiraOpt ? `${r1.h} ${r2.h}` : `${r1.k} ${r2.k}`;
+        const sameTargetSound = (r1.ro === l1.ro && r2.ro === l2.ro);
+        if (cand !== correctKana && !(sameTargetSound && useHiraOpt === isHira)) {
+          optionsSet.add(cand);
+        }
       }
 
-      const options = Array.from(optionsSet).slice(0, 4);
+      const options = this.shuffleArray(Array.from(optionsSet).slice(0, 4));
+      // Hanya tampilkan perintah Hiragana/Katakana jika soal atau jawaban memuat campuran keduanya
+      const showScriptDirective = canBeDistinctScript && this.hasMixedKanaScript([correctRo, ...options]);
 
       return {
         modelType: 1,
         subType: 'ro2kana',
-        instruction: isHira 
-          ? 'PILIH KARTU HIRAGANA YANG TEPAT:' 
-          : 'PILIH KARTU KATAKANA YANG TEPAT:',
+        instruction: showScriptDirective
+          ? (isHira ? 'PILIH KARTU HIRAGANA YANG TEPAT:' : 'PILIH KARTU KATAKANA YANG TEPAT:')
+          : 'PILIH KARTU KANA YANG TEPAT:',
         displayHtml: `
           <div class="exam-combo-row" style="font-size:32px; font-weight:900; color:#fff; letter-spacing:1.5px;">
             ( ${correctRo} )
           </div>
-          <div style="margin-top:8px;">
-            <span class="script-badge ${isHira ? 'hira-badge' : 'kata-badge'}">
-              ${isHira ? '🔵 CARI: AKSARA HIRAGANA' : '🟡 CARI: AKSARA KATAKANA'}
-            </span>
-          </div>
+          ${showScriptDirective ? this.buildScriptBadgeHtml(isHira) : ''}
         `,
-        options: this.shuffleArray(options),
-        correctAnswer: correctKana
+        options: options,
+        correctAnswer: correctKana,
+        showScriptDirective: showScriptDirective
       };
     }
   },
@@ -1199,17 +1252,47 @@ const KanaApp = {
     const target = primaryPool[Math.floor(Math.random() * primaryPool.length)];
     const isHira = Math.random() >= 0.5;
     const glyph = isHira ? target.h : target.k;
+    const canBeDistinctScript = target.h !== target.k;
+    const wantMixed = canBeDistinctScript && (Math.random() < 0.5);
 
-    // 3 pengecoh
-    const distractorList = secondaryPool.filter(l => l.ro !== target.ro);
-    this.shuffleArray(distractorList);
-    const distractors = distractorList.slice(0, 3).map(l => (isHira ? l.h : l.k));
+    const poolSource = (secondaryPool && secondaryPool.length > 0) ? secondaryPool : primaryPool;
+    const distractorList = this.shuffleArray(poolSource.filter(l => l.ro !== target.ro));
 
-    const options = this.shuffleArray([glyph, ...distractors]);
+    const optionsSet = new Set([glyph]);
+    if (wantMixed) {
+      const oppGlyph = isHira ? target.k : target.h;
+      if (oppGlyph !== glyph) optionsSet.add(oppGlyph);
+    }
+
+    for (let i = 0; i < distractorList.length && optionsSet.size < 4; i++) {
+      const l = distractorList[i];
+      const useHiraOpt = wantMixed ? (optionsSet.size % 2 === 1 ? !isHira : isHira) : isHira;
+      const cand = useHiraOpt ? l.h : l.k;
+      if (cand !== glyph) optionsSet.add(cand);
+    }
+
+    const fallbackLetters = [
+      { h: 'あ', k: 'ア', ro: 'a' }, { h: 'い', k: 'イ', ro: 'i' }, { h: 'う', k: 'ウ', ro: 'u' },
+      { h: 'え', k: 'エ', ro: 'e' }, { h: 'お', k: 'オ', ro: 'o' }
+    ];
+    for (let i = 0; i < fallbackLetters.length && optionsSet.size < 4; i++) {
+      const fl = fallbackLetters[i];
+      if (fl.ro === target.ro) continue;
+      const useHiraOpt = wantMixed ? (optionsSet.size % 2 === 1 ? !isHira : isHira) : isHira;
+      const cand = useHiraOpt ? fl.h : fl.k;
+      if (cand !== glyph) optionsSet.add(cand);
+    }
+
+    const options = this.shuffleArray(Array.from(optionsSet).slice(0, 4));
+    const showScriptDirective = canBeDistinctScript && this.hasMixedKanaScript(options);
 
     return {
       modelType: 5,
-      instruction: 'DENGARKAN SUARA & PILIH HURUF KANA YANG COCOK:',
+      instruction: showScriptDirective
+        ? (isHira ? 'DENGARKAN SUARA & PILIH HURUF HIRAGANA YANG COCOK:' : 'DENGARKAN SUARA & PILIH HURUF KATAKANA YANG COCOK:')
+        : 'DENGARKAN SUARA & PILIH HURUF KANA YANG COCOK:',
+      isHira: isHira,
+      showScriptDirective: showScriptDirective,
       audioText: target.h,
       glyph: glyph,
       options: options,
@@ -1254,16 +1337,31 @@ const KanaApp = {
       ro: "ie", h: "いえ", k: "イエ", meaning: "Rumah", chars: ["い", "え"]
     };
 
-    const chars = word.h.split('');
+    const chars = (word.chars && word.chars.length > 0) ? [...word.chars] : word.h.split('');
     const blankIdx = Math.floor(Math.random() * chars.length);
     const correctChar = chars[blankIdx];
 
-    const distractors = secondaryPool
-      .filter(l => l.h !== correctChar)
-      .slice(0, 3)
-      .map(l => l.h);
+    const isWordKata = this.hasKatakanaChar(chars.join('')) && !this.hasHiraganaChar(chars.join(''));
+    const pool = this.shuffleArray((secondaryPool && secondaryPool.length > 0) ? secondaryPool : []);
 
-    const options = this.shuffleArray([correctChar, ...distractors]);
+    const optionsSet = new Set([correctChar]);
+    for (let i = 0; i < pool.length && optionsSet.size < 4; i++) {
+      const cand = isWordKata ? pool[i].k : pool[i].h;
+      if (cand && cand !== correctChar) {
+        optionsSet.add(cand);
+      }
+    }
+
+    const fallbackLetters = [
+      { h: 'あ', k: 'ア' }, { h: 'い', k: 'イ' }, { h: 'う', k: 'ウ' },
+      { h: 'え', k: 'エ' }, { h: 'お', k: 'オ' }
+    ];
+    for (let i = 0; i < fallbackLetters.length && optionsSet.size < 4; i++) {
+      const cand = isWordKata ? fallbackLetters[i].k : fallbackLetters[i].h;
+      if (cand !== correctChar) optionsSet.add(cand);
+    }
+
+    const options = this.shuffleArray(Array.from(optionsSet).slice(0, 4));
 
     return {
       modelType: 7,
@@ -1893,6 +1991,7 @@ const KanaApp = {
         <button type="button" class="audio-play-prompt-btn" onclick="KanaApp.speakSingle('${q.audioText}')">
           <span>🔊</span> <span>Putar Ulang Suara</span>
         </button>
+        ${q.showScriptDirective ? this.buildScriptBadgeHtml(q.isHira) : ''}
       </div>
 
       <div class="exam-options-grid" id="exam-options-grid">
@@ -2038,7 +2137,7 @@ const KanaApp = {
         <div class="fill-word-display">
           ${q.chars.map((c, i) => i === q.blankIdx 
             ? `<span class="fill-blank-box">❓</span>` 
-            : `<span class="k-char-hira">${c}</span>`
+            : `<span class="${this.hasKatakanaChar(c) ? 'k-char-kata' : 'k-char-hira'}">${c}</span>`
           ).join('')}
         </div>
         <div style="font-size:13px; font-weight:800; color:var(--text-sub);">
