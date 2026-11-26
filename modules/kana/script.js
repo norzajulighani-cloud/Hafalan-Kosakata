@@ -1241,7 +1241,7 @@ const KanaApp = {
     return `
       <div style="margin-top:8px;">
         <span class="script-badge ${isHira ? 'hira-badge' : 'kata-badge'}">
-          ${isHira ? '🔵 CARI: AKSARA HIRAGANA' : '🟡 CARI: AKSARA KATAKANA'}
+          ${isHira ? '🔵 HIRAGANA' : '🟡 KATAKANA'}
         </span>
       </div>
     `;
@@ -1270,7 +1270,7 @@ const KanaApp = {
       return {
         modelType: 1,
         subType: 'kana2ro',
-        instruction: 'TEBAK BACAAN ROMAJI:',
+        instruction: 'BACAAN ROMAJI:',
         displayHtml: `
           <div class="exam-combo-row">
             <span class="${isHira1 ? 'k-char-hira' : 'k-char-kata'}">${g1}</span>
@@ -1360,9 +1360,7 @@ const KanaApp = {
       return {
         modelType: 1,
         subType: 'ro2kana',
-        instruction: showScriptDirective
-          ? (isHira ? 'PILIH KARTU HIRAGANA YANG TEPAT:' : 'PILIH KARTU KATAKANA YANG TEPAT:')
-          : 'PILIH KARTU KANA YANG TEPAT:',
+        instruction: 'PILIH KARTU KANA:',
         displayHtml: `
           <div class="exam-combo-row" style="font-size:32px; font-weight:900; color:#fff; letter-spacing:1.5px;">
             ( ${correctRo} )
@@ -1401,7 +1399,7 @@ const KanaApp = {
 
     return {
       modelType: 2,
-      instruction: 'APAKAH BACAAN INI BENAR ATAU SALAH?',
+      instruction: 'CEK BACAAN:',
       displayHtml: `
         <div class="exam-combo-row">
           <span class="${isHira1 ? 'k-char-hira' : 'k-char-kata'}">${g1}</span>
@@ -1484,7 +1482,7 @@ const KanaApp = {
 
     return {
       modelType: 3,
-      instruction: `PASANGKAN ${totalPairs} PASANG KEMBAR (${totalCards} KARTU):`,
+      instruction: `COCOKKAN ${totalPairs} PASANG:`,
       cards: this.shuffleArray(cards),
       totalPairs: totalPairs,
       matchedPairsCount: 0,
@@ -1500,7 +1498,7 @@ const KanaApp = {
 
     return {
       modelType: 4,
-      instruction: 'MASUKKAN HURUF INI KE KERANJANG YANG TEPAT:',
+      instruction: 'TERMASUK AKSARA APA?',
       glyph: glyph,
       isHira: isHira,
       correctBasket: isHira ? 'hira' : 'kata'
@@ -1548,9 +1546,7 @@ const KanaApp = {
 
     return {
       modelType: 5,
-      instruction: showScriptDirective
-        ? (isHira ? 'DENGARKAN SUARA & PILIH HURUF HIRAGANA YANG COCOK:' : 'DENGARKAN SUARA & PILIH HURUF KATAKANA YANG COCOK:')
-        : 'DENGARKAN SUARA & PILIH HURUF KANA YANG COCOK:',
+      instruction: 'PILIH HURUFNYA:',
       isHira: isHira,
       showScriptDirective: showScriptDirective,
       audioText: target.h,
@@ -1637,7 +1633,7 @@ const KanaApp = {
 
     return {
       modelType: 6,
-      instruction: 'KETUK BALOK UNTUK MENYUSUN KATA:',
+      instruction: 'SUSUN HURUFNYA:',
       wordRo: word.ro,
       meaning: word.meaning,
       targetKana: targetKana,
@@ -1679,7 +1675,7 @@ const KanaApp = {
 
     return {
       modelType: 7,
-      instruction: 'PILIH HURUF UNTUK MELENGKAPI KATA:',
+      instruction: 'ISI YANG KOSONG:',
       chars: chars,
       blankIdx: blankIdx,
       meaning: word.meaning,
@@ -1712,7 +1708,7 @@ const KanaApp = {
 
     return {
       modelType: 8,
-      instruction: 'TIME ATTACK! KETUK SEMUA KARTU DENGAN BUNYI TARGET:',
+      instruction: '',
       targetRo: targetLetter.ro,
       targetHira: targetLetter.h,
       targetKata: targetLetter.k,
@@ -2010,15 +2006,15 @@ const KanaApp = {
 
   getModelName: function (modelType) {
     switch (modelType) {
-      case 1: return "Refleks Tebak Cepat";
-      case 2: return "Benar atau Salah (True/False)";
-      case 3: return "Pasang Kembar (Hira ↔ Kata)";
-      case 4: return "Sortir Keranjang (Hira vs Kata)";
-      case 5: return "Tebak Dengar Suara";
-      case 6: return "Susun Balok Kata";
-      case 7: return "Lengkapi Huruf yang Hilang";
+      case 1: return "Refleks Cepat";
+      case 2: return "Benar / Salah";
+      case 3: return "Pasang Kembar";
+      case 4: return "Sortir Aksara";
+      case 5: return "Tebak Suara";
+      case 6: return "Susun Kata";
+      case 7: return "Lengkapi Kata";
       case 8: return "Time Attack!";
-      default: return "Latihan Interaktif";
+      default: return "Latihan";
     }
   },
 
@@ -2093,24 +2089,26 @@ const KanaApp = {
 
         <div class="exam-meta-bar">
           <span style="color: ${isGold ? 'var(--kata-color)' : 'var(--hira-color)'};">
-            SOAL ${this.examIdx + 1} DARI ${totalQ}
+            SOAL ${this.examIdx + 1} / ${totalQ}
           </span>
           <span class="exam-model-badge">
-            Model: ${this.getModelName(q.modelType)}
+            ${this.getModelName(q.modelType)}
           </span>
           ${this.examStreak >= 2 ? `
             <span class="exam-streak-pill">
-              🔥 ${this.examStreak} COMBO!
+              🔥 ${this.examStreak} COMBO
             </span>
           ` : ''}
           <span style="color: var(--text-dim); font-size: 11px;">
-            Target: ≥ ${this.examRequiredScore} Benar
+            Lulus: ≥ ${this.examRequiredScore}
           </span>
         </div>
 
-        <div style="font-size: 12px; font-weight: 800; color: #fff; letter-spacing: 0.5px;">
-          ${q.instruction}
-        </div>
+        ${q.instruction ? `
+          <div style="font-size: 12px; font-weight: 800; color: #fff; letter-spacing: 0.5px;">
+            ${q.instruction}
+          </div>
+        ` : ''}
     `;
 
     // DISPATCH CONTENT BERDASARKAN MODEL
@@ -2370,11 +2368,11 @@ const KanaApp = {
         <div class="baskets-row" id="baskets-row">
           <button type="button" class="basket-btn hira-basket" onclick="KanaApp.submitAnswerQ4('hira', this)">
             <span style="font-size:24px;">🔵</span>
-            <span>Keranjang HIRAGANA</span>
+            <span>HIRAGANA</span>
           </button>
           <button type="button" class="basket-btn kata-basket" onclick="KanaApp.submitAnswerQ4('kata', this)">
             <span style="font-size:24px;">🟡</span>
-            <span>Keranjang KATAKANA</span>
+            <span>KATAKANA</span>
           </button>
         </div>
       </div>
@@ -2392,7 +2390,7 @@ const KanaApp = {
     return `
       <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
         <button type="button" class="audio-play-prompt-btn" onclick="KanaApp.speakSingle('${q.audioText}')">
-          <span>🔊</span> <span>Putar Ulang Suara</span>
+          <span>🔊</span> <span>Putar Ulang</span>
         </button>
         ${q.showScriptDirective ? this.buildScriptBadgeHtml(q.isHira) : ''}
       </div>
@@ -2425,7 +2423,7 @@ const KanaApp = {
     return `
       <div class="scramble-arena">
         <div class="scramble-word-hint">
-          Kata: "<b>${q.wordRo.toUpperCase()}</b>" (${q.meaning})
+          "<b>${q.wordRo.toUpperCase()}</b>" • ${q.meaning}
         </div>
 
         <div class="scramble-slots-row" id="scramble-slots-row">
@@ -2435,8 +2433,6 @@ const KanaApp = {
             </div>
           `).join('')}
         </div>
-
-        <div style="font-size:11px; color:var(--text-dim);">Ketuk balok di bawah untuk menyusun:</div>
 
         <div class="scramble-tiles-row" id="scramble-tiles-row">
           ${q.scrambledTiles.map((tile, idx) => `
@@ -2544,7 +2540,7 @@ const KanaApp = {
           ).join('')}
         </div>
         <div style="font-size:13px; font-weight:800; color:var(--text-sub);">
-          Kata: "<b>${q.wordRo.toUpperCase()}</b>" (${q.meaning})
+          "<b>${q.wordRo.toUpperCase()}</b>" • ${q.meaning}
         </div>
       </div>
 
@@ -2579,8 +2575,8 @@ const KanaApp = {
           <div class="time-attack-timer-fill" id="ta-timer-fill" style="width: 100%;"></div>
         </div>
 
-        <div style="font-size:13px; font-weight:900; color:var(--kata-color);">
-          ⚡ Ketuk SEMUA huruf <b>"${q.targetRo.toUpperCase()}"</b> (${q.targetHira} / ${q.targetKata})! Target: 3 kartu
+        <div style="font-size:14px; font-weight:900; color:var(--kata-color);">
+          ⚡ KETUK 3 HURUF: <b>"${q.targetRo.toUpperCase()}"</b> (${q.targetHira} / ${q.targetKata})
         </div>
 
         <div class="time-attack-grid" id="time-attack-grid">
