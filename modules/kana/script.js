@@ -38,6 +38,7 @@ const KanaApp = {
   examRequiredScore: 4,
   examActiveModels: [],
   lastPenguatanModel: null,
+  lastPenguatanModels: [],
 
   // Audio FX (Synthesizer Web Audio) & Canvas Particle States
   audioCtx: null,
@@ -1074,9 +1075,50 @@ const KanaApp = {
 
   /**
    * Mengatur jumlah soal, syarat kelulusan, dan daftar model soal yang aktif:
-   * - Tahap 1 & 2: Penguatan = 5 soal (min 4), Ujian = 10 soal (min 8). Menggunakan 3 model awal.
-   * - Tahap 3+: Penguatan = 10 soal (min 8) dengan 3 model acak dari 8 model. Ujian = 20 soal dengan 8 model komprehensif.
+   * - Tahap 1 & 2: Penguatan = 5 soal (1 model dari 3 model awal), Ujian = 10 soal (3 model awal).
+   * - Tahap 3+: Penguatan = 10 soal (2 model acak bergantian dari 8 model), Ujian = 20 soal (seluruh 8 model).
    */
+  loadLastPenguatanModels: function (isEarly) {
+    if (isEarly) {
+      if (this.lastPenguatanModel) return [this.lastPenguatanModel];
+      try {
+        const saved = localStorage.getItem('YOMIKATA_KANA_LAST_PENGUATAN_EARLY');
+        const parsed = saved ? parseInt(saved, 10) : null;
+        if (parsed) {
+          this.lastPenguatanModel = parsed;
+          return [parsed];
+        }
+      } catch (e) {}
+      return [];
+    }
+    if (Array.isArray(this.lastPenguatanModels) && this.lastPenguatanModels.length > 0) {
+      return this.lastPenguatanModels;
+    }
+    try {
+      const saved = localStorage.getItem('YOMIKATA_KANA_LAST_PENGUATAN_PAIR');
+      const parsed = saved ? JSON.parse(saved) : null;
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        this.lastPenguatanModels = parsed.map(n => parseInt(n, 10)).filter(n => n >= 1 && n <= 8);
+        return this.lastPenguatanModels;
+      }
+    } catch (e) {}
+    return [];
+  },
+
+  saveLastPenguatanModels: function (isEarly, models) {
+    if (isEarly) {
+      this.lastPenguatanModel = models[0] || null;
+      try {
+        localStorage.setItem('YOMIKATA_KANA_LAST_PENGUATAN_EARLY', String(this.lastPenguatanModel || ''));
+      } catch (e) {}
+    } else {
+      this.lastPenguatanModels = [...models];
+      try {
+        localStorage.setItem('YOMIKATA_KANA_LAST_PENGUATAN_PAIR', JSON.stringify(this.lastPenguatanModels));
+      } catch (e) {}
+    }
+  },
+
   getExamConfig: function (isFinal) {
     const isEarlyStage = this.currentStageId <= 2;
 
@@ -1091,10 +1133,11 @@ const KanaApp = {
         // Tahap 1 & 2: Menggunakan 3 model awal
         activeModels = [1, 2, 3];
       } else {
-        // Tahap 3+: Ambil 3 model acak dari 8 model yang ada
-        const all8 = [1, 2, 3, 4, 5, 6, 7, 8];
-        const shuffled = this.shuffleArray(all8);
-        activeModels = shuffled.slice(0, 3);
+        // Tahap 3+: Ambil 2 model acak dari 8 model (hindari 2 model sesi sebelumnya agar selalu berganti)
+        const prevSet = new Set(this.loadLastPenguatanModels(false));
+        const freshPool = [1, 2, 3, 4, 5, 6, 7, 8].filter(m => !prevSet.has(m));
+        const sourcePool = freshPool.length >= 2 ? freshPool : [1, 2, 3, 4, 5, 6, 7, 8];
+        activeModels = this.shuffleArray(sourcePool).slice(0, 2);
       }
 
       return {
@@ -1885,24 +1928,36 @@ const KanaApp = {
     const sessionUsedWords = new Set();
 
     // Tentukan model untuk sesi ini:
-    // Pada Tes Penguatan (!isFinal): SATU sesi HANYA menggunakan 1 model secara konsisten (5 soal di Tahap 1-2, 10 soal di Tahap 3+)
-    // Model akan berganti secara dinamis saat berpindah halaman atau mengulang tes
-    let singleSessionModel = null;
+    // - Tahap 1-2 (!isFinal): 1 model tunggal per 5 soal, berganti tiap mengulang/refresh
+    // - Tahap 3+ (!isFinal): 2 model acak (5 soal per model, diacak urutannya) & keduanya selalu berganti tiap mengulang/refresh
+    let sessionModelSequence = null;
     if (!isFinal) {
-      let candidatePool = [...this.examActiveModels];
-      if (this.lastPenguatanModel && candidatePool.length > 1) {
-        const filtered = candidatePool.filter(m => m !== this.lastPenguatanModel);
-        if (filtered.length > 0) candidatePool = filtered;
+      const isEarlyStage = this.currentStageId <= 2;
+      if (isEarlyStage) {
+        const prevEarly = this.loadLastPenguatanModels(true)[0];
+        let candidatePool = [...this.examActiveModels];
+        if (prevEarly && candidatePool.length > 1) {
+          const filtered = candidatePool.filter(m => m !== prevEarly);
+          if (filtered.length > 0) candidatePool = filtered;
+        }
+        const picked = candidatePool[Math.floor(Math.random() * candidatePool.length)];
+        this.saveLastPenguatanModels(true, [picked]);
+        sessionModelSequence = new Array(totalQuestions).fill(picked);
+      } else {
+        const chosenPair = this.examActiveModels.slice(0, 2);
+        this.saveLastPenguatanModels(false, chosenPair);
+        const balanced = [];
+        for (let qIdx = 0; qIdx < totalQuestions; qIdx++) {
+          balanced.push(chosenPair[qIdx % chosenPair.length]);
+        }
+        sessionModelSequence = this.shuffleArray(balanced);
       }
-      singleSessionModel = candidatePool[Math.floor(Math.random() * candidatePool.length)];
-      this.lastPenguatanModel = singleSessionModel;
     }
 
     for (let i = 0; i < totalQuestions; i++) {
-      // Jika Penguatan: pakai singleSessionModel untuk semua soal dalam sesi ini
-      // Jika Ujian Naik Tahap: distribusikan model bergantian sepanjang ujian
-      const modelType = !isFinal 
-        ? singleSessionModel 
+      // Jika Penguatan: pakai urutan model sesi; Jika Ujian Naik Tahap: distribusikan semua model aktif
+      const modelType = !isFinal
+        ? sessionModelSequence[i]
         : this.examActiveModels[i % this.examActiveModels.length];
 
       const useReviewFocus = reviewFlags[i] && reviewPool.length > 0;
