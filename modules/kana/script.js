@@ -45,6 +45,7 @@ const KanaApp = {
 
   // Sub-game States for Interactive Models
   matchFirstCardIdx: null,
+  matchLocked: false,
   scrambleSlots: [],
   timeAttackTimer: null,
   timeAttackSeconds: 7,
@@ -929,7 +930,7 @@ const KanaApp = {
     }
   },
 
-  showPraiseToast: function (isCorrect, targetEl) {
+  showPraiseToast: function (isCorrect, targetEl, customText) {
     if (typeof document === 'undefined' || !document.createElement) return;
     const praises = [
       "Sugoi! (すごい) 🌟",
@@ -946,9 +947,9 @@ const KanaApp = {
       "Ayo lanjut, pasti bisa! 💪"
     ];
 
-    const text = isCorrect 
+    const text = customText || (isCorrect
       ? praises[Math.floor(Math.random() * praises.length)]
-      : corrections[Math.floor(Math.random() * corrections.length)];
+      : corrections[Math.floor(Math.random() * corrections.length)]);
 
     const toast = document.createElement('div');
     toast.className = `praise-toast ${isCorrect ? 'toast-correct' : 'toast-wrong'}`;
@@ -1323,7 +1324,8 @@ const KanaApp = {
         ro: letter.ro,
         glyph: letter.h,
         type: 'hira',
-        matched: false
+        matched: false,
+        missed: false
       });
       // Kartu Katakana
       cards.push({
@@ -1331,7 +1333,8 @@ const KanaApp = {
         ro: letter.ro,
         glyph: letter.k,
         type: 'kata',
-        matched: false
+        matched: false,
+        missed: false
       });
     });
 
@@ -1343,7 +1346,8 @@ const KanaApp = {
       instruction: `PASANGKAN ${totalPairs} PASANG KEMBAR (${totalCards} KARTU):`,
       cards: this.shuffleArray(cards),
       totalPairs: totalPairs,
-      matchedPairsCount: 0
+      matchedPairsCount: 0,
+      hadMistake: false
     };
   },
 
@@ -1627,6 +1631,7 @@ const KanaApp = {
     this.examScore = 0;
     this.examStreak = 0;
     this.matchFirstCardIdx = null;
+    this.matchLocked = false;
 
     this.examRequiredScore = 25; // Target: >= 25 benar dari 30 soal
     const totalQuestions = 30;
@@ -1703,6 +1708,7 @@ const KanaApp = {
     this.examScore = 0;
     this.examStreak = 0;
     this.matchFirstCardIdx = null;
+    this.matchLocked = false;
 
     const config = this.getExamConfig(isFinal);
     this.examRequiredScore = config.requiredScore;
@@ -1991,12 +1997,13 @@ const KanaApp = {
   // 3. CONTENT MODEL 3: MATCH PAIRS
   renderContentQ3: function (q) {
     this.matchFirstCardIdx = null;
+    this.matchLocked = false;
     const is8Cards = q.cards.length >= 8;
     return `
       <div class="match-pairs-arena">
         <div class="match-pairs-grid ${is8Cards ? 'grid-cols-4' : 'grid-cols-3'}" id="match-pairs-grid">
           ${q.cards.map((card, idx) => `
-            <div class="match-pair-card ${card.matched ? 'matched' : ''}" 
+            <div class="match-pair-card ${card.missed ? 'missed' : (card.matched ? 'matched' : '')}" 
                  id="match-card-${idx}" 
                  onclick="KanaApp.tapMatchCard(${idx})">
               <span class="${card.type === 'hira' ? 'k-char-hira' : 'k-char-kata'}" style="font-size:34px;">
@@ -2011,77 +2018,132 @@ const KanaApp = {
 
   tapMatchCard: function (cardIdx) {
     const q = this.examQuestions[this.examIdx];
-    const card = q.cards[cardIdx];
-    if (card.matched) return;
+    const card = q && q.cards ? q.cards[cardIdx] : null;
+    if (this.matchLocked || !card || card.matched) return;
 
     const el = document.getElementById(`match-card-${cardIdx}`);
 
     if (this.matchFirstCardIdx === null) {
       // Pilih kartu pertama
       this.matchFirstCardIdx = cardIdx;
-      el.classList.add('selected');
+      if (el) el.classList.add('selected');
+      return;
+    }
+
+    if (this.matchFirstCardIdx === cardIdx) {
+      // Batal pilih kartu yang sama jika diklik ulang
+      if (el) el.classList.remove('selected');
+      this.matchFirstCardIdx = null;
+      return;
+    }
+
+    const firstIdx = this.matchFirstCardIdx;
+    const firstCard = q.cards[firstIdx];
+    const firstEl = document.getElementById(`match-card-${firstIdx}`);
+
+    // Jika pemain mengetuk kartu bertipe sama (misal sama-sama Hiragana atau sama-sama Katakana),
+    // ganti kartu terpilih ke kartu baru secara halus tanpa menghukum salah
+    if (firstCard.type === card.type) {
+      if (firstEl) firstEl.classList.remove('selected');
+      this.matchFirstCardIdx = cardIdx;
+      if (el) el.classList.add('selected');
+      return;
+    }
+
+    // Verifikasi pasangan: tipe berlawanan (Hiragana <-> Katakana) dan bunyi romaji sama
+    const isMatch = (firstCard.ro === card.ro) && (firstCard.type !== card.type);
+
+    if (isMatch) {
+      firstCard.matched = true;
+      card.matched = true;
+      if (firstEl) {
+        firstEl.classList.remove('selected');
+        firstEl.classList.add('matched');
+      }
+      if (el) el.classList.add('matched');
+      this.matchFirstCardIdx = null;
+      q.matchedPairsCount++;
+
+      this.playSFX('pop');
+      const rect = el && el.getBoundingClientRect ? el.getBoundingClientRect() : null;
+      if (rect) {
+        this.triggerFXBurst(rect.left + rect.width / 2, rect.top + rect.height / 2, 18, ['#34d399', '#6ee7b7', '#fbbf24', '#ffffff']);
+      }
+
+      if (q.matchedPairsCount >= q.totalPairs) {
+        this.finishMatchPairsBoard(q, el, false);
+      }
     } else {
-      if (this.matchFirstCardIdx === cardIdx) {
-        // Batal pilih kartu yang sama jika diklik ulang
-        el.classList.remove('selected');
-        this.matchFirstCardIdx = null;
-        return;
+      // Salah: sorot kartu pilihan pertama bersama kembaran sejatinya lalu hilangkan keduanya
+      const trueTwinIdx = q.cards.findIndex((c, idx) =>
+        idx !== firstIdx && !c.matched && c.ro === firstCard.ro && c.type !== firstCard.type
+      );
+      const trueTwinCard = trueTwinIdx !== -1 ? q.cards[trueTwinIdx] : null;
+      const trueTwinEl = trueTwinIdx !== -1 ? document.getElementById(`match-card-${trueTwinIdx}`) : null;
+
+      q.hadMistake = true;
+      this.examStreak = 0;
+      const streakPill = typeof document !== 'undefined' && document.querySelector ? document.querySelector('.exam-streak-pill') : null;
+      if (streakPill) streakPill.style.display = 'none';
+
+      firstCard.matched = true;
+      firstCard.missed = true;
+      if (trueTwinCard) {
+        trueTwinCard.matched = true;
+        trueTwinCard.missed = true;
+      }
+      q.matchedPairsCount++;
+      this.matchFirstCardIdx = null;
+      this.matchLocked = true;
+
+      this.playSFX('wrong');
+      const hintMsg = trueTwinCard
+        ? `Pasangan ${firstCard.glyph} ↔ ${trueTwinCard.glyph}`
+        : `Salah pasang (${firstCard.ro})`;
+      this.showPraiseToast(false, trueTwinEl || el, hintMsg);
+
+      if (el) el.classList.add('wrong');
+      if (firstEl) {
+        firstEl.classList.remove('selected');
+        firstEl.classList.add('missed-reveal');
+      }
+      if (trueTwinEl) {
+        trueTwinEl.classList.remove('selected');
+        trueTwinEl.classList.add('missed-reveal');
       }
 
-      const firstCard = q.cards[this.matchFirstCardIdx];
-      const firstEl = document.getElementById(`match-card-${this.matchFirstCardIdx}`);
-
-      // Jika pemain mengetuk kartu bertipe sama (misal sama-sama Hiragana atau sama-sama Katakana),
-      // ganti kartu terpilih ke kartu baru secara halus tanpa menghukum salah
-      if (firstCard.type === card.type) {
-        if (firstEl) firstEl.classList.remove('selected');
-        this.matchFirstCardIdx = cardIdx;
-        el.classList.add('selected');
-        return;
-      }
-
-      // Verifikasi pasangan: tipe berlawanan (Hiragana <-> Katakana) dan bunyi romaji sama
-      const isMatch = (firstCard.ro === card.ro) && (firstCard.type !== card.type);
-
-      if (isMatch) {
-        // Cocok!
-        firstCard.matched = true;
-        card.matched = true;
+      window.setTimeout(() => {
+        if (el) el.classList.remove('wrong', 'selected');
         if (firstEl) {
-          firstEl.classList.remove('selected');
-          firstEl.classList.add('matched');
+          firstEl.classList.remove('missed-reveal');
+          firstEl.classList.add('missed');
         }
-        el.classList.add('matched');
-        this.matchFirstCardIdx = null;
-        q.matchedPairsCount++;
-
-        // Audio & Particle FX
-        this.playSFX('pop');
-        const rect = el.getBoundingClientRect ? el.getBoundingClientRect() : null;
-        if (rect) {
-          this.triggerFXBurst(rect.left + rect.width / 2, rect.top + rect.height / 2, 18, ['#34d399', '#6ee7b7', '#fbbf24', '#ffffff']);
+        if (trueTwinEl) {
+          trueTwinEl.classList.remove('missed-reveal');
+          trueTwinEl.classList.add('missed');
         }
+        this.matchLocked = false;
 
-        // Jika semua pasangan telah cocok -> Lanjut ke soal berikutnya
         if (q.matchedPairsCount >= q.totalPairs) {
-          this.examScore++;
-          this.examStreak++;
-          this.playSFX('correct', this.examStreak);
-          this.showPraiseToast(true, el);
-          window.setTimeout(() => this.advanceToNextQuestion(), 650);
+          this.finishMatchPairsBoard(q, trueTwinEl || el, true);
         }
-      } else {
-        // Salah
-        this.playSFX('wrong');
-        el.classList.add('wrong');
-        if (firstEl) firstEl.classList.add('wrong');
-        window.setTimeout(() => {
-          el.classList.remove('wrong', 'selected');
-          if (firstEl) firstEl.classList.remove('wrong', 'selected');
-          this.matchFirstCardIdx = null;
-        }, 400);
+      }, 650);
+    }
+  },
+
+  finishMatchPairsBoard: function (q, targetEl, endedByMiss) {
+    if (!q.hadMistake) {
+      this.examScore++;
+      this.examStreak++;
+      this.playSFX('correct', this.examStreak);
+      this.showPraiseToast(true, targetEl);
+    } else {
+      this.examStreak = 0;
+      if (!endedByMiss) {
+        this.showPraiseToast(false, targetEl, 'Selesai (tercatat salah 1+ pasang) 📝');
       }
     }
+    window.setTimeout(() => this.advanceToNextQuestion(), endedByMiss ? 450 : 650);
   },
 
   // 4. CONTENT MODEL 4: SORTIR KERANJANG
