@@ -839,6 +839,15 @@ body::before {
   transform: scale(1.02);
 }
 
+.iqra-3char-box span {
+  display: inline-block;
+  transition: transform 0.14s ease;
+}
+
+.iqra-3char-box span.char-speaking {
+  transform: scale(1.22);
+}
+
 .k-char-hira {
   font-family: var(--font-jp-serif);
   font-size: clamp(23px, 5.5vw, 29px);

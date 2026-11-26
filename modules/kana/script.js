@@ -17,6 +17,10 @@ const KanaApp = {
   speechSynth: null,
   speechVoice: null,
   speechRate: 0.82, // Default: 0.82 (Normal), 0.65 (Lambat)
+  drillPlaybackToken: 0,
+  drillStepTimer: null,
+  drillWatchdogTimer: null,
+  activeUtterance: null,
 
   // Auto-Play Read-Along State
   isAutoPlaying: false,
@@ -128,8 +132,43 @@ const KanaApp = {
     }
   },
 
+  /** Menghentikan antrean audio & timer lafal drill yang sedang berjalan. Mengembalikan true jika synth aktif dibatalkan. */
+  abortAudioQueue: function () {
+    this.drillPlaybackToken++;
+    if (typeof window !== 'undefined' && window.clearTimeout) {
+      if (this.drillStepTimer) {
+        window.clearTimeout(this.drillStepTimer);
+        this.drillStepTimer = null;
+      }
+      if (this.drillWatchdogTimer) {
+        window.clearTimeout(this.drillWatchdogTimer);
+        this.drillWatchdogTimer = null;
+      }
+      if (this.autoPlayTimer) {
+        window.clearTimeout(this.autoPlayTimer);
+        this.autoPlayTimer = null;
+      }
+    }
+    this.activeUtterance = null;
+
+    let wasActive = false;
+    if (this.speechSynth) {
+      wasActive = !!(this.speechSynth.speaking || this.speechSynth.pending);
+      if (this.speechSynth.cancel) this.speechSynth.cancel();
+    }
+
+    if (typeof document !== 'undefined' && document.querySelectorAll) {
+      document.querySelectorAll('.iqra-3char-box.sounding').forEach(box => box.classList.remove('sounding'));
+      document.querySelectorAll('.iqra-3char-box span.char-speaking').forEach(sp => sp.classList.remove('char-speaking'));
+    }
+
+    return wasActive;
+  },
+
   speakSingle: function (text, el) {
     if (!text || !this.speechSynth || typeof window === 'undefined' || !window.SpeechSynthesisUtterance) return;
+
+    this.abortAudioQueue();
 
     if (el) {
       el.classList.add('sounding');
@@ -137,11 +176,17 @@ const KanaApp = {
     }
 
     try {
-      this.speechSynth.cancel();
       const utter = new window.SpeechSynthesisUtterance(text.trim());
       utter.lang = 'ja-JP';
       utter.rate = this.speechRate;
       if (this.speechVoice) utter.voice = this.speechVoice;
+      this.activeUtterance = utter;
+      utter.onend = () => {
+        if (this.activeUtterance === utter) this.activeUtterance = null;
+      };
+      utter.onerror = () => {
+        if (this.activeUtterance === utter) this.activeUtterance = null;
+      };
       this.speechSynth.speak(utter);
     } catch (e) {
       console.warn('Speech error:', e);
@@ -149,30 +194,95 @@ const KanaApp = {
   },
 
   speakDrill: function (parts, el, onEndCallback) {
-    if (!parts || !this.speechSynth || typeof window === 'undefined' || !window.SpeechSynthesisUtterance) return;
+    const cleanParts = Array.isArray(parts)
+      ? parts.map(p => String(p || '').trim()).filter(Boolean)
+      : [];
+
+    if (cleanParts.length === 0 || !this.speechSynth || typeof window === 'undefined' || !window.SpeechSynthesisUtterance) {
+      if (onEndCallback) onEndCallback();
+      return;
+    }
+
+    // Jika user mengetuk kotak manual saat Putar Otomatis sedang aktif, hentikan dulu mode otomatisnya
+    if (!onEndCallback && this.isAutoPlaying) {
+      this.isAutoPlaying = false;
+      this.updateAutoPlayUI(false);
+    }
+
+    const wasActive = this.abortAudioQueue();
+    const token = this.drillPlaybackToken;
 
     if (el) {
       el.classList.add('sounding');
-      window.setTimeout(() => el.classList.remove('sounding'), 500);
     }
 
-    try {
-      this.speechSynth.cancel();
-      const textToSpeak = parts.join('、 ') + '。';
-      const utter = new window.SpeechSynthesisUtterance(textToSpeak);
-      utter.lang = 'ja-JP';
-      utter.rate = this.speechRate;
-      if (this.speechVoice) utter.voice = this.speechVoice;
+    const setActiveCharHighlight = (idx) => {
+      if (!el || !el.querySelectorAll) return;
+      const spans = el.querySelectorAll('span');
+      spans.forEach((sp, sIdx) => {
+        if (sIdx === idx) sp.classList.add('char-speaking');
+        else sp.classList.remove('char-speaking');
+      });
+    };
 
-      if (onEndCallback) {
-        utter.onend = onEndCallback;
-        utter.onerror = onEndCallback;
+    const playPart = (idx) => {
+      if (token !== this.drillPlaybackToken) return;
+
+      if (idx >= cleanParts.length) {
+        setActiveCharHighlight(-1);
+        if (el) el.classList.remove('sounding');
+        this.activeUtterance = null;
+        if (onEndCallback) onEndCallback();
+        return;
       }
 
-      this.speechSynth.speak(utter);
-    } catch (e) {
-      console.warn('Speech error:', e);
-      if (onEndCallback) onEndCallback();
+      setActiveCharHighlight(idx);
+
+      try {
+        // Ucapkan 1 huruf/suku kata per utterance agar TTS Jepang tidak pernah menggabungkan 2 huruf menjadi kata/vokal panjang (misal こ+お+い -> kooi)
+        const utter = new window.SpeechSynthesisUtterance(cleanParts[idx]);
+        utter.lang = 'ja-JP';
+        utter.rate = this.speechRate;
+        if (this.speechVoice) utter.voice = this.speechVoice;
+        this.activeUtterance = utter;
+
+        let settled = false;
+        const proceedNext = () => {
+          if (settled) return;
+          settled = true;
+          if (this.drillWatchdogTimer) {
+            window.clearTimeout(this.drillWatchdogTimer);
+            this.drillWatchdogTimer = null;
+          }
+          if (token !== this.drillPlaybackToken) return;
+
+          const gapMs = this.speechRate < 0.75 ? 320 : 210;
+          if (idx + 1 < cleanParts.length) {
+            this.drillStepTimer = window.setTimeout(() => playPart(idx + 1), gapMs);
+          } else {
+            playPart(idx + 1);
+          }
+        };
+
+        utter.onend = proceedNext;
+        utter.onerror = proceedNext;
+
+        // Pengaman jika engine TTS browser gagal memicu onend pada 1 suku kata
+        this.drillWatchdogTimer = window.setTimeout(proceedNext, 2400);
+        this.speechSynth.speak(utter);
+      } catch (e) {
+        console.warn('Speech error:', e);
+        setActiveCharHighlight(-1);
+        if (el) el.classList.remove('sounding');
+        if (onEndCallback) onEndCallback();
+      }
+    };
+
+    // Beri jeda micro 40ms bila sebelumnya baru membatalkan audio aktif untuk menghindari race condition cancel()+speak() Chromium
+    if (wasActive) {
+      this.drillStepTimer = window.setTimeout(() => playPart(0), 40);
+    } else {
+      playPart(0);
     }
   },
 
@@ -198,17 +308,7 @@ const KanaApp = {
 
   stopAutoPlay: function () {
     this.isAutoPlaying = false;
-    if (typeof window !== 'undefined' && window.clearTimeout) {
-      window.clearTimeout(this.autoPlayTimer);
-    }
-    if (this.speechSynth) this.speechSynth.cancel();
-
-    if (typeof document !== 'undefined' && document.querySelectorAll) {
-      document.querySelectorAll('.iqra-3char-box.sounding').forEach(el => {
-        el.classList.remove('sounding');
-      });
-    }
-
+    this.abortAudioQueue();
     this.updateAutoPlayUI(false);
   },
 
@@ -240,20 +340,15 @@ const KanaApp = {
 
     const currentItem = this.activeDrillData[this.autoPlayIdx];
     const el = document.getElementById(`drill-tile-${this.autoPlayIdx}`);
+    const tokenAfterStart = this.drillPlaybackToken + 1;
 
-    document.querySelectorAll('.iqra-3char-box.sounding').forEach(box => box.classList.remove('sounding'));
-
-    if (el) {
-      el.classList.add('sounding');
-    }
-
-    this.speakDrill(currentItem.ttsParts, null, () => {
+    this.speakDrill(currentItem.ttsParts, el, () => {
+      if (!this.isAutoPlaying || tokenAfterStart !== this.drillPlaybackToken) return;
       this.autoPlayTimer = window.setTimeout(() => {
         if (!this.isAutoPlaying) return;
-        if (el) el.classList.remove('sounding');
         this.autoPlayIdx++;
         this.playNextDrillStep();
-      }, 700);
+      }, 550);
     });
   },
 
