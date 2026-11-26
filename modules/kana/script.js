@@ -1517,15 +1517,75 @@ const KanaApp = {
     };
   },
 
-  /** MODEL 6: Susun Balok Kata (Word Scramble) */
-  generateQ6_WordScramble: function (stageId) {
-    const wordsList = (typeof KANA_STAGE_WORDS !== 'undefined' && KANA_STAGE_WORDS[stageId]) 
-      ? KANA_STAGE_WORDS[stageId] 
+  getUnlockedWordCharsSet: function (stageId, maxPageId) {
+    const set = new Set();
+    if (typeof KANA_STAGES === 'undefined' || !Array.isArray(KANA_STAGES)) return set;
+    for (const s of KANA_STAGES) {
+      if (s.stageId < stageId) {
+        (s.allLetters || []).forEach(l => { set.add(l.h); set.add(l.k); });
+        (s.pages || []).forEach(p => (p.letters || []).forEach(l => { set.add(l.h); set.add(l.k); }));
+      } else if (s.stageId === stageId) {
+        for (const p of (s.pages || [])) {
+          (p.letters || []).forEach(l => { set.add(l.h); set.add(l.k); });
+          if (maxPageId && p.pageId >= maxPageId) break;
+        }
+      }
+    }
+    return set;
+  },
+
+  pickStageWord: function (stageId, opts) {
+    const allWords = (typeof KANA_STAGE_WORDS !== 'undefined' && KANA_STAGE_WORDS[stageId])
+      ? KANA_STAGE_WORDS[stageId]
       : (typeof KANA_STAGE_WORDS !== 'undefined' ? KANA_STAGE_WORDS[1] : []);
 
-    const word = wordsList[Math.floor(Math.random() * wordsList.length)] || {
-      ro: "ai", h: "あい", k: "アイ", meaning: "Cinta", chars: ["あ", "い"]
+    const maxPageId = opts && opts.maxPageId ? opts.maxPageId : null;
+    const usedWords = opts && opts.usedWords ? opts.usedWords : null;
+
+    let eligible = allWords.filter(w => {
+      if (!w || !w.ro) return false;
+      if (maxPageId && w.minPage && w.minPage > maxPageId) return false;
+      return true;
+    });
+
+    // Untuk Tahap 1-9 (46 huruf dasar), pastikan tidak membocorkan huruf halaman berikutnya
+    if (maxPageId && stageId <= 9) {
+      const unlockedChars = this.getUnlockedWordCharsSet(stageId, maxPageId);
+      const strictEligible = eligible.filter(w => {
+        const unitChars = (w.chars && w.chars.length > 0) ? w.chars : w.h.split('');
+        return unitChars.every(ch => unlockedChars.has(ch));
+      });
+      if (strictEligible.length > 0) eligible = strictEligible;
+    }
+
+    if (eligible.length === 0) eligible = allWords;
+
+    let candidates = eligible;
+    if (usedWords && usedWords.size > 0) {
+      const unused = eligible.filter(w => !usedWords.has(w.ro));
+      if (unused.length > 0) {
+        candidates = unused;
+      } else {
+        eligible.forEach(w => {
+          if (w.ro !== this.lastPickedWordRo) usedWords.delete(w.ro);
+        });
+        const afterReset = eligible.filter(w => !usedWords.has(w.ro));
+        if (afterReset.length > 0) candidates = afterReset;
+      }
+    }
+
+    const chosen = candidates[Math.floor(Math.random() * candidates.length)] || {
+      ro: "ai", h: "あい", k: "アイ", meaning: "Cinta / Kasih", chars: ["あ", "い"]
     };
+
+    if (usedWords) usedWords.add(chosen.ro);
+    this.lastPickedWordRo = chosen.ro;
+    return chosen;
+  },
+
+  /** MODEL 6: Susun Balok Kata (Word Scramble) */
+  generateQ6_WordScramble: function (stageId, opts) {
+    const word = this.pickStageWord(stageId, opts);
 
     const isHira = Math.random() >= 0.5;
     const targetKana = isHira ? word.h : word.k;
@@ -1545,14 +1605,8 @@ const KanaApp = {
   },
 
   /** MODEL 7: Lengkapi Huruf yang Hilang (Fill in the Blank) */
-  generateQ7_FillBlank: function (stageId, secondaryPool) {
-    const wordsList = (typeof KANA_STAGE_WORDS !== 'undefined' && KANA_STAGE_WORDS[stageId]) 
-      ? KANA_STAGE_WORDS[stageId] 
-      : (typeof KANA_STAGE_WORDS !== 'undefined' ? KANA_STAGE_WORDS[1] : []);
-
-    const word = wordsList[Math.floor(Math.random() * wordsList.length)] || {
-      ro: "ie", h: "いえ", k: "イエ", meaning: "Rumah", chars: ["い", "え"]
-    };
+  generateQ7_FillBlank: function (stageId, secondaryPool, opts) {
+    const word = this.pickStageWord(stageId, opts);
 
     const chars = (word.chars && word.chars.length > 0) ? [...word.chars] : word.h.split('');
     const blankIdx = Math.floor(Math.random() * chars.length);
@@ -1749,6 +1803,7 @@ const KanaApp = {
     }
 
     this.examQuestions = [];
+    const sessionUsedWords = new Set();
 
     for (let i = 0; i < totalQuestions; i++) {
       const modelType = modelSequence[i];
@@ -1772,10 +1827,10 @@ const KanaApp = {
           q = this.generateQ5_AudioKana(masterLetters, masterLetters);
           break;
         case 6:
-          q = this.generateQ6_WordScramble(randomStageId);
+          q = this.generateQ6_WordScramble(randomStageId, { usedWords: sessionUsedWords });
           break;
         case 7:
-          q = this.generateQ7_FillBlank(randomStageId, masterLetters);
+          q = this.generateQ7_FillBlank(randomStageId, masterLetters, { usedWords: sessionUsedWords });
           break;
         case 8:
           q = this.generateQ8_TimeAttack(masterLetters, masterLetters);
@@ -1827,6 +1882,7 @@ const KanaApp = {
     const reviewFlags = this.shuffleArray(isReviewSlot);
 
     this.examQuestions = [];
+    const sessionUsedWords = new Set();
 
     // Tentukan model untuk sesi ini:
     // Pada Tes Penguatan (!isFinal): SATU sesi HANYA menggunakan 1 model secara konsisten (5 soal di Tahap 1-2, 10 soal di Tahap 3+)
@@ -1855,6 +1911,10 @@ const KanaApp = {
       const wordStageId = (useReviewFocus && this.currentStageId > 1)
         ? Math.floor(Math.random() * (this.currentStageId - 1)) + 1
         : this.currentStageId;
+      const wordOpts = {
+        maxPageId: (!isFinal && wordStageId === this.currentStageId) ? this.currentPageId : null,
+        usedWords: sessionUsedWords
+      };
 
       let q = null;
 
@@ -1875,10 +1935,10 @@ const KanaApp = {
           q = this.generateQ5_AudioKana(qPrimary, qSecondary);
           break;
         case 6:
-          q = this.generateQ6_WordScramble(wordStageId);
+          q = this.generateQ6_WordScramble(wordStageId, wordOpts);
           break;
         case 7:
-          q = this.generateQ7_FillBlank(wordStageId, qSecondary);
+          q = this.generateQ7_FillBlank(wordStageId, qSecondary, wordOpts);
           break;
         case 8:
           q = this.generateQ8_TimeAttack(qPrimary, qSecondary);
