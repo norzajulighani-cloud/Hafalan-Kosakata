@@ -16,7 +16,7 @@ const KanaApp = {
   // Audio Engine & Speed
   speechSynth: null,
   speechVoice: null,
-  speechRate: 0.82, // Default: 0.82 (Normal), 0.65 (Lambat)
+  speechRate: 1.0, // Default: 1.0 (Normal), 0.75 (Lambat)
   drillPlaybackToken: 0,
   drillStepTimer: null,
   drillWatchdogTimer: null,
@@ -106,9 +106,10 @@ const KanaApp = {
     try {
       const savedRate = localStorage.getItem('YOMIKATA_KANA_SPEED_RATE');
       if (savedRate) {
-        const parsed = parseFloat(savedRate);
-        if (parsed === 0.82 || parsed === 0.65) {
-          this.speechRate = parsed;
+        if (savedRate === 'lambat' || parseFloat(savedRate) === 0.65 || parseFloat(savedRate) === 0.75) {
+          this.speechRate = 0.75;
+        } else {
+          this.speechRate = 1.0;
         }
       }
       this.updateSpeedUI();
@@ -116,9 +117,9 @@ const KanaApp = {
   },
 
   toggleSpeed: function () {
-    this.speechRate = this.speechRate === 0.82 ? 0.65 : 0.82;
+    this.speechRate = this.speechRate >= 0.9 ? 0.75 : 1.0;
     try {
-      localStorage.setItem('YOMIKATA_KANA_SPEED_RATE', this.speechRate.toString());
+      localStorage.setItem('YOMIKATA_KANA_SPEED_RATE', this.speechRate < 0.9 ? 'lambat' : 'normal');
     } catch (e) {}
     this.updateSpeedUI();
   },
@@ -126,8 +127,9 @@ const KanaApp = {
   updateSpeedUI: function () {
     const label = document.getElementById('speed-label');
     if (label) {
-      const mode = this.speechRate === 0.82 ? 'Normal' : 'Lambat';
-      const rate = this.speechRate === 0.82 ? '0.8x' : '0.65x';
+      const isNormal = this.speechRate >= 0.9;
+      const mode = isNormal ? 'Normal' : 'Lambat';
+      const rate = isNormal ? '1.0x' : '0.75x';
       label.innerHTML = `<span class="speed-text-full">${mode} </span>(${rate})`;
     }
   },
@@ -256,7 +258,7 @@ const KanaApp = {
           }
           if (token !== this.drillPlaybackToken) return;
 
-          const gapMs = this.speechRate < 0.75 ? 320 : 210;
+          const gapMs = this.speechRate < 0.9 ? 150 : 50;
           if (idx + 1 < cleanParts.length) {
             this.drillStepTimer = window.setTimeout(() => playPart(idx + 1), gapMs);
           } else {
@@ -278,9 +280,9 @@ const KanaApp = {
       }
     };
 
-    // Beri jeda micro 40ms bila sebelumnya baru membatalkan audio aktif untuk menghindari race condition cancel()+speak() Chromium
+    // Beri jeda micro 25ms bila sebelumnya baru membatalkan audio aktif untuk menghindari race condition cancel()+speak() Chromium
     if (wasActive) {
-      this.drillStepTimer = window.setTimeout(() => playPart(0), 40);
+      this.drillStepTimer = window.setTimeout(() => playPart(0), 25);
     } else {
       playPart(0);
     }
@@ -344,11 +346,12 @@ const KanaApp = {
 
     this.speakDrill(currentItem.ttsParts, el, () => {
       if (!this.isAutoPlaying || tokenAfterStart !== this.drillPlaybackToken) return;
+      const boxGapMs = this.speechRate < 0.9 ? 520 : 360;
       this.autoPlayTimer = window.setTimeout(() => {
         if (!this.isAutoPlaying) return;
         this.autoPlayIdx++;
         this.playNextDrillStep();
-      }, 550);
+      }, boxGapMs);
     });
   },
 
