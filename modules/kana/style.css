@@ -1478,9 +1478,19 @@ body::before {
 }
 
 .scramble-word-hint {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   font-size: 13.5px;
   font-weight: 800;
   color: var(--text-sub);
+}
+
+.scramble-word-hint .script-badge {
+  font-size: 10px;
+  padding: 2px 9px;
 }
 
 .scramble-slots-row {
@@ -1510,6 +1520,30 @@ body::before {
   border-color: var(--hira-color);
   background: rgba(56, 189, 248, 0.15);
   box-shadow: 0 0 14px var(--hira-glow);
+}
+
+.scramble-arena.is-kata .scramble-slot.filled {
+  border-color: var(--kata-color);
+  background: rgba(251, 191, 36, 0.15);
+  box-shadow: 0 0 14px var(--kata-glow);
+}
+
+.scramble-arena .scramble-slot.correct {
+  border-style: solid;
+  border-color: var(--success);
+  background: rgba(34, 197, 94, 0.28);
+  color: #86efac;
+  box-shadow: 0 0 18px var(--success-glow);
+  animation: correctBounce 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.scramble-arena .scramble-slot.wrong {
+  border-style: solid;
+  border-color: var(--danger);
+  background: rgba(239, 68, 68, 0.28);
+  color: #fca5a5;
+  box-shadow: 0 0 16px var(--danger-glow);
+  animation: shakeWrong 0.4s ease-in-out;
 }
 
 .scramble-tiles-row {
@@ -2020,6 +2054,29 @@ body::before {
     font-size: 9px;
     padding: 1px 5px;
     left: 8px;
+  }
+
+  /* Model 6 (Susun Kata): rapatkan balok agar 5 pilihan pas 1 baris di ponsel */
+  .scramble-slots-row {
+    min-height: 50px;
+  }
+
+  .scramble-slot {
+    width: 50px;
+    height: 50px;
+    font-size: 25px;
+    border-radius: 12px;
+  }
+
+  .scramble-tiles-row {
+    gap: 7px;
+  }
+
+  .scramble-tile {
+    width: 48px;
+    height: 48px;
+    font-size: 24px;
+    border-radius: 11px;
   }
 }
 

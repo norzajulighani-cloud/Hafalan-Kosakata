@@ -52,6 +52,7 @@ const KanaApp = {
   matchFirstCardIdx: null,
   matchLocked: false,
   scrambleSlots: [],
+  lastScrambleIsHira: null,
   timeAttackTimer: null,
   timeAttackSeconds: 7,
   isPlacementMode: false,
@@ -1622,24 +1623,144 @@ const KanaApp = {
     return chosen;
   },
 
+  /** Memecah kata Kana menjadi unit mora/suku kata utuh (menjaga bunyi rangkap ゃ/ゅ/ょ tetap menyatu). */
+  splitKanaUnits: function (str) {
+    const s = String(str || '');
+    const tokens = s.match(/[^\u3083\u3085\u3087\u30E3\u30E5\u30E7\u3041\u3043\u3045\u3047\u3049\u30A1\u30A3\u30A5\u30A7\u30A9][\u3083\u3085\u3087\u30E3\u30E5\u30E7\u3041\u3043\u3045\u3047\u3049\u30A1\u30A3\u30A5\u30A7\u30A9]?/g);
+    return (tokens && tokens.length > 0) ? tokens : s.split('');
+  },
+
+  /** Membangun daftar huruf yang sudah dipelajari hingga tahap/halaman saat ini untuk pengecoh soal kata. */
+  buildLearnedDistractorPool: function (stageId, maxPageId, extraPool) {
+    const pool = [];
+    const seen = new Set();
+    const pushItem = (l) => {
+      if (!l || (!l.h && !l.k)) return;
+      const key = `${l.h}|${l.k}`;
+      if (!seen.has(key)) {
+        seen.add(key);
+        pool.push(l);
+      }
+    };
+
+    (extraPool || []).forEach(pushItem);
+
+    if (typeof KANA_STAGES !== 'undefined' && Array.isArray(KANA_STAGES)) {
+      for (const s of KANA_STAGES) {
+        if (s.stageId < stageId) {
+          (s.allLetters || []).forEach(pushItem);
+          (s.pages || []).forEach(p => (p.letters || []).forEach(pushItem));
+        } else if (s.stageId === stageId) {
+          if (maxPageId) {
+            for (const p of (s.pages || [])) {
+              (p.letters || []).forEach(pushItem);
+              if (p.pageId >= maxPageId) break;
+            }
+          } else {
+            (s.allLetters || []).forEach(pushItem);
+            (s.pages || []).forEach(p => (p.letters || []).forEach(pushItem));
+          }
+        }
+      }
+    }
+
+    return pool;
+  },
+
+  /** Menyiapkan urutan seimbang Hiragana (true) dan Katakana (false) untuk soal Susun Kata dalam satu sesi. */
+  buildBalancedScrambleScripts: function (count) {
+    if (count <= 0) return [];
+    const startHira = this.lastScrambleIsHira === null ? (Math.random() >= 0.5) : !this.lastScrambleIsHira;
+    const flags = [];
+    for (let i = 0; i < count; i++) {
+      flags.push(i % 2 === 0 ? startHira : !startHira);
+    }
+    return this.shuffleArray(flags);
+  },
+
   /** MODEL 6: Susun Balok Kata (Word Scramble) */
   generateQ6_WordScramble: function (stageId, opts) {
     const word = this.pickStageWord(stageId, opts);
 
-    const isHira = Math.random() >= 0.5;
-    const targetKana = isHira ? word.h : word.k;
-    const chars = targetKana.split('');
-    const scrambled = this.shuffleArray([...chars]);
+    let isHira = (opts && typeof opts.isHira === 'boolean')
+      ? opts.isHira
+      : (this.lastScrambleIsHira === null ? Math.random() >= 0.5 : !this.lastScrambleIsHira);
+    let targetKana = isHira ? word.h : word.k;
+
+    // Jika kata memang eksklusif Katakana/Hiragana (mis. kata serapan コーヒー, シャツ), kunci aksaranya agar pengecoh konsisten
+    if (this.hasKatakanaChar(targetKana) && !this.hasHiraganaChar(targetKana)) {
+      isHira = false;
+    } else if (this.hasHiraganaChar(targetKana) && !this.hasKatakanaChar(targetKana)) {
+      isHira = true;
+    }
+    this.lastScrambleIsHira = isHira;
+
+    const chars = (word.chars && word.chars.join('') === targetKana)
+      ? [...word.chars]
+      : this.splitKanaUnits(targetKana);
+
+    // Minimal 5 balok pilihan di bawah (sekaligus menjamin selalu ada >= 1 huruf pengecoh)
+    const minTotalTiles = Math.max(5, chars.length + 1);
+    const neededDistractors = Math.max(1, minTotalTiles - chars.length);
+
+    const maxPageId = opts && opts.maxPageId ? opts.maxPageId : null;
+    const extraPool = opts && Array.isArray(opts.distractorPool) ? opts.distractorPool : [];
+    const learnedPool = this.shuffleArray(this.buildLearnedDistractorPool(stageId, maxPageId, extraPool));
+
+    const fallbackPool = this.shuffleArray([
+      { h: 'あ', k: 'ア' }, { h: 'い', k: 'イ' }, { h: 'う', k: 'ウ' },
+      { h: 'え', k: 'エ' }, { h: 'お', k: 'オ' }, { h: 'か', k: 'カ' },
+      { h: 'き', k: 'キ' }, { h: 'く', k: 'ク' }, { h: 'け', k: 'ケ' },
+      { h: 'こ', k: 'コ' }
+    ]);
+
+    const targetCharSet = new Set(chars);
+    const distractorSet = new Set();
+    const matchesScript = (ch) => {
+      if (!ch || ch === 'っ' || ch === 'ッ' || ch === 'ー') return false;
+      return isHira
+        ? (this.hasHiraganaChar(ch) && !this.hasKatakanaChar(ch))
+        : (this.hasKatakanaChar(ch) && !this.hasHiraganaChar(ch));
+    };
+
+    const fillDistractors = (sourcePool, allowTargetReuse) => {
+      for (let i = 0; i < sourcePool.length && distractorSet.size < neededDistractors; i++) {
+        const item = sourcePool[i];
+        const cand = isHira ? item.h : item.k;
+        if (!matchesScript(cand)) continue;
+        if (!allowTargetReuse && targetCharSet.has(cand)) continue;
+        if (!distractorSet.has(cand)) {
+          distractorSet.add(cand);
+        }
+      }
+    };
+
+    fillDistractors(learnedPool, false);
+    fillDistractors(fallbackPool, false);
+    if (distractorSet.size < neededDistractors) {
+      fillDistractors(learnedPool, true);
+      fillDistractors(fallbackPool, true);
+    }
+
+    const combinedTiles = [...chars, ...Array.from(distractorSet).slice(0, neededDistractors)];
+    let scrambled = this.shuffleArray(combinedTiles);
+    for (let attempt = 0; attempt < 12; attempt++) {
+      const startsWithAnswer = scrambled.slice(0, chars.length).join('') === targetKana;
+      if (!startsWithAnswer) break;
+      scrambled = this.shuffleArray(combinedTiles);
+    }
 
     return {
       modelType: 6,
       instruction: 'SUSUN HURUFNYA:',
+      isHira: isHira,
       wordRo: word.ro,
       meaning: word.meaning,
       targetKana: targetKana,
       targetChars: chars,
       scrambledTiles: scrambled.map((c, i) => ({ id: i, char: c, used: false })),
-      slots: new Array(chars.length).fill(null)
+      slots: new Array(chars.length).fill(null),
+      locked: false
     };
   },
 
@@ -1843,6 +1964,10 @@ const KanaApp = {
 
     this.examQuestions = [];
     const sessionUsedWords = new Set();
+    const placementScrambleScripts = this.buildBalancedScrambleScripts(
+      modelSequence.filter(m => m === 6).length
+    );
+    let placementScrambleIdx = 0;
 
     for (let i = 0; i < totalQuestions; i++) {
       const modelType = modelSequence[i];
@@ -1865,9 +1990,15 @@ const KanaApp = {
         case 5:
           q = this.generateQ5_AudioKana(masterLetters, masterLetters);
           break;
-        case 6:
-          q = this.generateQ6_WordScramble(randomStageId, { usedWords: sessionUsedWords });
+        case 6: {
+          const scrambleIsHira = placementScrambleScripts[placementScrambleIdx++];
+          q = this.generateQ6_WordScramble(randomStageId, {
+            usedWords: sessionUsedWords,
+            distractorPool: masterLetters,
+            isHira: scrambleIsHira
+          });
           break;
+        }
         case 7:
           q = this.generateQ7_FillBlank(randomStageId, masterLetters, { usedWords: sessionUsedWords });
           break;
@@ -1950,6 +2081,12 @@ const KanaApp = {
       }
     }
 
+    const totalQ6Count = !isFinal
+      ? sessionModelSequence.filter(m => m === 6).length
+      : Array.from({ length: totalQuestions }, (_, idx) => this.examActiveModels[idx % this.examActiveModels.length]).filter(m => m === 6).length;
+    const examScrambleScripts = this.buildBalancedScrambleScripts(totalQ6Count);
+    let examScrambleIdx = 0;
+
     for (let i = 0; i < totalQuestions; i++) {
       // Jika Penguatan: pakai urutan model sesi; Jika Ujian Naik Tahap: distribusikan semua model aktif
       const modelType = !isFinal
@@ -1986,7 +2123,11 @@ const KanaApp = {
           q = this.generateQ5_AudioKana(qPrimary, qSecondary);
           break;
         case 6:
-          q = this.generateQ6_WordScramble(wordStageId, wordOpts);
+          q = this.generateQ6_WordScramble(wordStageId, {
+            ...wordOpts,
+            distractorPool: qSecondary,
+            isHira: examScrambleScripts[examScrambleIdx++]
+          });
           break;
         case 7:
           q = this.generateQ7_FillBlank(wordStageId, qSecondary, wordOpts);
@@ -2421,9 +2562,12 @@ const KanaApp = {
   // 6. CONTENT MODEL 6: SUSUN BALOK KATA
   renderContentQ6: function (q) {
     return `
-      <div class="scramble-arena">
+      <div class="scramble-arena ${q.isHira ? 'is-hira' : 'is-kata'}">
         <div class="scramble-word-hint">
           "<b>${q.wordRo.toUpperCase()}</b>" • ${q.meaning}
+          <span class="script-badge ${q.isHira ? 'hira-badge' : 'kata-badge'}">
+            ${q.isHira ? '🔵 HIRAGANA' : '🟡 KATAKANA'}
+          </span>
         </div>
 
         <div class="scramble-slots-row" id="scramble-slots-row">
@@ -2449,6 +2593,7 @@ const KanaApp = {
 
   tapScrambleTile: function (tileId) {
     const q = this.examQuestions[this.examIdx];
+    if (!q || q.locked) return;
     const tile = q.scrambledTiles.find(t => t.id === tileId);
     if (!tile || tile.used) return;
 
@@ -2463,6 +2608,7 @@ const KanaApp = {
 
     // Jika seluruh slot telah terisi -> Cek jawaban
     if (q.slots.every(s => s !== null)) {
+      q.locked = true;
       const spelled = q.slots.map(s => s.char).join('');
       const isCorrect = spelled === q.targetKana;
 
@@ -2487,6 +2633,7 @@ const KanaApp = {
           // Reset balok
           q.slots = new Array(q.targetChars.length).fill(null);
           q.scrambledTiles.forEach(t => t.used = false);
+          q.locked = false;
           this.updateScrambleUI();
         }, 600);
       }
@@ -2495,6 +2642,7 @@ const KanaApp = {
 
   tapScrambleSlot: function (slotIdx) {
     const q = this.examQuestions[this.examIdx];
+    if (!q || q.locked) return;
     const item = q.slots[slotIdx];
     if (!item) return;
 
