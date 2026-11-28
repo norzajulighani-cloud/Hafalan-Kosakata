@@ -380,6 +380,25 @@ const KanaApp = {
     if (!this.progress.unlocked.includes("1-1")) {
       this.progress.unlocked.push("1-1");
     }
+
+    // Migrasi aman pengguna lama (tahap 3-8 dari 2 halaman menjadi 3 halaman):
+    // Jika pengguna sudah menuntaskan tahap tertentu (halaman pada tahap lebih tinggi sudah terbuka),
+    // pastikan halaman 3 tahap tersebut ikut terbuka agar tidak tertinggal terkunci.
+    let migrated = false;
+    const unlockedStageIds = this.progress.unlocked
+      .map(key => parseInt(String(key).split('-')[0], 10))
+      .filter(n => !isNaN(n));
+    const maxUnlockedStage = unlockedStageIds.length > 0 ? Math.max(...unlockedStageIds) : 1;
+
+    for (let stId = 3; stId <= 8; stId++) {
+      if (maxUnlockedStage > stId && this.progress.unlocked.includes(`${stId}-2`) && !this.progress.unlocked.includes(`${stId}-3`)) {
+        this.progress.unlocked.push(`${stId}-3`);
+        migrated = true;
+      }
+    }
+    if (migrated) {
+      this.saveProgress();
+    }
   },
 
   saveProgress: function () {
@@ -408,12 +427,19 @@ const KanaApp = {
   },
 
   getTotalPagesCount: function () {
-    if (typeof KANA_STAGES === 'undefined') return 25;
+    if (typeof KANA_STAGES === 'undefined') return 31;
     return KANA_STAGES.reduce((acc, st) => acc + (st.pages ? st.pages.length : 0), 0);
   },
 
   getTotalUnlockedCount: function () {
-    return this.progress.unlocked.length;
+    if (typeof KANA_STAGES === 'undefined') return this.progress.unlocked.length;
+    let count = 0;
+    KANA_STAGES.forEach(st => {
+      (st.pages || []).forEach(pg => {
+        if (this.isPageUnlocked(st.stageId, pg.pageId)) count++;
+      });
+    });
+    return count;
   },
 
   getCurrentStage: function () {
@@ -2903,7 +2929,7 @@ const KanaApp = {
             <div class="result-score-val" style="color:var(--text-sub); font-size:34px;">${this.examScore} / ${totalQ} Benar</div>
             <div style="font-size:12px; color:var(--kata-color); font-weight:800; margin-bottom:8px;">(Syarat Kelulusan: Minimal 25 Benar)</div>
             <p class="exam-desc-text" style="max-width:520px; margin:0 auto; line-height:1.5;">
-              Jangan berkecil hati! Mulai dari awal lewat 25 halaman latihan fonetik berjenjang adalah langkah terbaik untuk membangun refleks membaca spontan tanpa mengeja.
+              Jangan berkecil hati! Mulai dari awal lewat ${this.getTotalPagesCount()} halaman latihan fonetik berjenjang adalah langkah terbaik untuk membangun refleks membaca spontan tanpa mengeja.
             </p>
             <div style="display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:16px;">
               <button type="button" class="btn-next-page-gate" onclick="window.location.href='index.html'" style="padding:13px 22px; font-weight:800;">

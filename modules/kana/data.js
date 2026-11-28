@@ -160,10 +160,23 @@ const KANA_STAGES = [
       },
       {
         pageId: 2,
-        title: "Hal 2: Huruf Su, Se, So (Tuntas Baris S)",
+        title: "Hal 2: Huruf Su & Se",
         letters: [
           { h: "す", k: "ス", ro: "su" },
-          { h: "せ", k: "セ", ro: "se" },
+          { h: "せ", k: "セ", ro: "se" }
+        ],
+        availablePool: [
+          { h: "さ", k: "サ", ro: "sa" },
+          { h: "し", k: "シ", ro: "shi" },
+          { h: "す", k: "ス", ro: "su" },
+          { h: "せ", k: "セ", ro: "se" }
+        ],
+        isFinalPage: false
+      },
+      {
+        pageId: 3,
+        title: "Hal 3: Huruf So (Tuntas Baris S)",
+        letters: [
           { h: "そ", k: "ソ", ro: "so" }
         ],
         availablePool: [
@@ -210,10 +223,23 @@ const KANA_STAGES = [
       },
       {
         pageId: 2,
-        title: "Hal 2: Huruf Tsu, Te, To (Tuntas Baris T)",
+        title: "Hal 2: Huruf Tsu & Te",
         letters: [
           { h: "つ", k: "ツ", ro: "tsu" },
-          { h: "て", k: "テ", ro: "te" },
+          { h: "て", k: "テ", ro: "te" }
+        ],
+        availablePool: [
+          { h: "た", k: "タ", ro: "ta" },
+          { h: "ち", k: "チ", ro: "chi" },
+          { h: "つ", k: "ツ", ro: "tsu" },
+          { h: "て", k: "テ", ro: "te" }
+        ],
+        isFinalPage: false
+      },
+      {
+        pageId: 3,
+        title: "Hal 3: Huruf To (Tuntas Baris T)",
+        letters: [
           { h: "と", k: "ト", ro: "to" }
         ],
         availablePool: [
@@ -260,10 +286,23 @@ const KANA_STAGES = [
       },
       {
         pageId: 2,
-        title: "Hal 2: Huruf Nu, Ne, No (Tuntas Baris N)",
+        title: "Hal 2: Huruf Nu & Ne",
         letters: [
           { h: "ぬ", k: "ヌ", ro: "nu" },
-          { h: "ね", k: "ネ", ro: "ne" },
+          { h: "ね", k: "ネ", ro: "ne" }
+        ],
+        availablePool: [
+          { h: "な", k: "ナ", ro: "na" },
+          { h: "に", k: "ニ", ro: "ni" },
+          { h: "ぬ", k: "ヌ", ro: "nu" },
+          { h: "ね", k: "ネ", ro: "ne" }
+        ],
+        isFinalPage: false
+      },
+      {
+        pageId: 3,
+        title: "Hal 3: Huruf No (Tuntas Baris N)",
+        letters: [
           { h: "の", k: "ノ", ro: "no" }
         ],
         availablePool: [
@@ -310,10 +349,23 @@ const KANA_STAGES = [
       },
       {
         pageId: 2,
-        title: "Hal 2: Huruf Fu, He, Ho (Tuntas Baris H)",
+        title: "Hal 2: Huruf Fu & He",
         letters: [
           { h: "ふ", k: "フ", ro: "fu" },
-          { h: "へ", k: "ヘ", ro: "he" },
+          { h: "へ", k: "ヘ", ro: "he" }
+        ],
+        availablePool: [
+          { h: "は", k: "ハ", ro: "ha" },
+          { h: "ひ", k: "ヒ", ro: "hi" },
+          { h: "ふ", k: "フ", ro: "fu" },
+          { h: "へ", k: "ヘ", ro: "he" }
+        ],
+        isFinalPage: false
+      },
+      {
+        pageId: 3,
+        title: "Hal 3: Huruf Ho (Tuntas Baris H)",
+        letters: [
           { h: "ほ", k: "ホ", ro: "ho" }
         ],
         availablePool: [
@@ -345,25 +397,38 @@ const KANA_STAGES = [
     pages: [
       {
         pageId: 1,
-        title: "Hal 1: Huruf Ma, Mi, Mu",
+        title: "Hal 1: Huruf Ma & Mi",
         letters: [
           { h: "ま", k: "マ", ro: "ma" },
-          { h: "み", k: "ミ", ro: "mi" },
-          { h: "む", k: "ム", ro: "mu" }
+          { h: "み", k: "ミ", ro: "mi" }
         ],
         availablePool: [
           { h: "ま", k: "マ", ro: "ma" },
           { h: "み", k: "ミ", ro: "mi" },
-          { h: "む", k: "ム", ro: "mu" },
-          { h: "あ", k: "ア", ro: "a" }
+          { h: "あ", k: "ア", ro: "a" },
+          { h: "は", k: "ハ", ro: "ha" }
         ],
         isFinalPage: false
       },
       {
         pageId: 2,
-        title: "Hal 2: Huruf Me & Mo (Tuntas Baris M)",
+        title: "Hal 2: Huruf Mu & Me",
         letters: [
-          { h: "め", k: "メ", ro: "me" },
+          { h: "む", k: "ム", ro: "mu" },
+          { h: "め", k: "メ", ro: "me" }
+        ],
+        availablePool: [
+          { h: "ま", k: "マ", ro: "ma" },
+          { h: "み", k: "ミ", ro: "mi" },
+          { h: "む", k: "ム", ro: "mu" },
+          { h: "め", k: "メ", ro: "me" }
+        ],
+        isFinalPage: false
+      },
+      {
+        pageId: 3,
+        title: "Hal 3: Huruf Mo (Tuntas Baris M)",
+        letters: [
           { h: "も", k: "モ", ro: "mo" }
         ],
         availablePool: [
@@ -414,11 +479,24 @@ const KANA_STAGES = [
       },
       {
         pageId: 2,
-        title: "Hal 2: Huruf Ra, Ri, Ru, Re, Ro",
+        title: "Hal 2: Huruf Ra, Ri, Ru",
         letters: [
           { h: "ら", k: "ラ", ro: "ra" },
           { h: "り", k: "リ", ro: "ri" },
+          { h: "る", k: "ル", ro: "ru" }
+        ],
+        availablePool: [
+          { h: "ら", k: "ラ", ro: "ra" },
+          { h: "り", k: "リ", ro: "ri" },
           { h: "る", k: "ル", ro: "ru" },
+          { h: "よ", k: "ヨ", ro: "yo" }
+        ],
+        isFinalPage: false
+      },
+      {
+        pageId: 3,
+        title: "Hal 3: Huruf Re & Ro (Tuntas Baris Y & R)",
+        letters: [
           { h: "れ", k: "レ", ro: "re" },
           { h: "ろ", k: "ロ", ro: "ro" }
         ],
@@ -663,11 +741,11 @@ const KANA_STAGE_WORDS = {
     { ro: "kushi", h: "くし", k: "クシ", meaning: "Sisir / Sate", chars: ["く", "し"], minPage: 1 },
     { ro: "saki", h: "さき", k: "サキ", meaning: "Ujung / Duluan", chars: ["さ", "き"], minPage: 1 },
     { ro: "sushi", h: "すし", k: "スシ", meaning: "Sushi", chars: ["す", "し"], minPage: 2 },
-    { ro: "soko", h: "そこ", k: "ソコ", meaning: "Di Sana", chars: ["そ", "こ"], minPage: 2 },
+    { ro: "soko", h: "そこ", k: "ソコ", meaning: "Di Sana", chars: ["そ", "こ"], minPage: 3 },
     { ro: "isu", h: "いす", k: "イス", meaning: "Kursi", chars: ["い", "す"], minPage: 2 },
     { ro: "ase", h: "あせ", k: "アセ", meaning: "Keringat", chars: ["あ", "せ"], minPage: 2 },
-    { ro: "uso", h: "うそ", k: "ウソ", meaning: "Bohong", chars: ["う", "そ"], minPage: 2 },
-    { ro: "osoi", h: "おそい", k: "オソイ", meaning: "Lambat", chars: ["お", "そ", "い"], minPage: 2 },
+    { ro: "uso", h: "うそ", k: "ウソ", meaning: "Bohong", chars: ["う", "そ"], minPage: 3 },
+    { ro: "osoi", h: "おそい", k: "オソイ", meaning: "Lambat", chars: ["お", "そ", "い"], minPage: 3 },
     { ro: "sekai", h: "せかい", k: "セカイ", meaning: "Dunia", chars: ["せ", "か", "い"], minPage: 2 },
     { ro: "kisu", h: "きす", k: "キス", meaning: "Cium / Ikan Kisu", chars: ["き", "す"], minPage: 2 }
   ],
@@ -681,13 +759,13 @@ const KANA_STAGE_WORDS = {
     { ro: "ashita", h: "あした", k: "アシタ", meaning: "Besok", chars: ["あ", "し", "た"], minPage: 1 },
     { ro: "chikai", h: "ちかい", k: "チカイ", meaning: "Dekat", chars: ["ち", "か", "い"], minPage: 1 },
     { ro: "tsuki", h: "つき", k: "ツキ", meaning: "Bulan", chars: ["つ", "き"], minPage: 2 },
-    { ro: "oto", h: "おと", k: "オト", meaning: "Suara / Bunyi", chars: ["お", "と"], minPage: 2 },
+    { ro: "oto", h: "おと", k: "オト", meaning: "Suara / Bunyi", chars: ["お", "と"], minPage: 3 },
     { ro: "kutsu", h: "くつ", k: "クツ", meaning: "Sepatu", chars: ["く", "つ"], minPage: 2 },
     { ro: "tsukue", h: "つくえ", k: "ツクエ", meaning: "Meja Belajar", chars: ["つ", "く", "え"], minPage: 2 },
-    { ro: "tokei", h: "とけい", k: "トケイ", meaning: "Jam", chars: ["と", "け", "い"], minPage: 2 },
-    { ro: "koto", h: "こと", k: "コト", meaning: "Hal / Alat Musik Koto", chars: ["こ", "と"], minPage: 2 },
+    { ro: "tokei", h: "とけい", k: "トケイ", meaning: "Jam", chars: ["と", "け", "い"], minPage: 3 },
+    { ro: "koto", h: "こと", k: "コト", meaning: "Hal / Alat Musik Koto", chars: ["こ", "と"], minPage: 3 },
     { ro: "chikatetsu", h: "ちかてつ", k: "チカテツ", meaning: "Kereta Bawah Tanah", chars: ["ち", "か", "て", "つ"], minPage: 2 },
-    { ro: "soto", h: "そと", k: "ソト", meaning: "Luar", chars: ["そ", "と"], minPage: 2 }
+    { ro: "soto", h: "そと", k: "ソト", meaning: "Luar", chars: ["そ", "と"], minPage: 3 }
   ],
   5: [
     { ro: "sakana", h: "さかな", k: "サカナ", meaning: "Ikan", chars: ["さ", "か", "な"], minPage: 1 },
@@ -702,9 +780,9 @@ const KANA_STAGE_WORDS = {
     { ro: "neko", h: "ねこ", k: "ネコ", meaning: "Kucing", chars: ["ね", "こ"], minPage: 2 },
     { ro: "okane", h: "おかね", k: "オカネ", meaning: "Uang", chars: ["お", "か", "ね"], minPage: 2 },
     { ro: "ane", h: "あね", k: "アネ", meaning: "Kakak Perempuan", chars: ["あ", "ね"], minPage: 2 },
-    { ro: "kinou", h: "きのう", k: "キノウ", meaning: "Kemarin", chars: ["き", "の", "う"], minPage: 2 },
-    { ro: "nuno", h: "ぬの", k: "ヌノ", meaning: "Kain", chars: ["ぬ", "の"], minPage: 2 },
-    { ro: "tanoshii", h: "たのしい", k: "タノシイ", meaning: "Menyenangkan", chars: ["た", "の", "し", "い"], minPage: 2 }
+    { ro: "kinou", h: "きのう", k: "キノウ", meaning: "Kemarin", chars: ["き", "の", "う"], minPage: 3 },
+    { ro: "nuno", h: "ぬの", k: "ヌノ", meaning: "Kain", chars: ["ぬ", "の"], minPage: 3 },
+    { ro: "tanoshii", h: "たのしい", k: "タノシイ", meaning: "Menyenangkan", chars: ["た", "の", "し", "い"], minPage: 3 }
   ],
   6: [
     { ro: "hana", h: "はな", k: "ハナ", meaning: "Bunga / Hidung", chars: ["は", "な"], minPage: 1 },
@@ -716,29 +794,29 @@ const KANA_STAGE_WORDS = {
     { ro: "hikui", h: "ひくい", k: "ヒクイ", meaning: "Rendah / Pendek", chars: ["ひ", "く", "い"], minPage: 1 },
     { ro: "haha", h: "はは", k: "ハハ", meaning: "Ibu (Sendiri)", chars: ["は", "は"], minPage: 1 },
     { ro: "fune", h: "ふね", k: "フネ", meaning: "Perahu / Kapal", chars: ["ふ", "ね"], minPage: 2 },
-    { ro: "hoshi", h: "ほし", k: "ホシ", meaning: "Bintang", chars: ["ほ", "し"], minPage: 2 },
+    { ro: "hoshi", h: "ほし", k: "ホシ", meaning: "Bintang", chars: ["ほ", "し"], minPage: 3 },
     { ro: "fuku", h: "ふく", k: "フク", meaning: "Baju / Pakaian", chars: ["ふ", "く"], minPage: 2 },
-    { ro: "hoka", h: "ほか", k: "ホカ", meaning: "Lainnya", chars: ["ほ", "か"], minPage: 2 },
+    { ro: "hoka", h: "ほか", k: "ホカ", meaning: "Lainnya", chars: ["ほ", "か"], minPage: 3 },
     { ro: "heta", h: "へた", k: "ヘタ", meaning: "Kurang Mahir", chars: ["へ", "た"], minPage: 2 },
-    { ro: "hosoi", h: "ほそい", k: "ホソイ", meaning: "Tipis / Ramping", chars: ["ほ", "そ", "い"], minPage: 2 },
+    { ro: "hosoi", h: "ほそい", k: "ホソイ", meaning: "Tipis / Ramping", chars: ["ほ", "そ", "い"], minPage: 3 },
     { ro: "futoi", h: "ふとい", k: "フトイ", meaning: "Tebal / Gemuk", chars: ["ふ", "と", "い"], minPage: 2 }
   ],
   7: [
     { ro: "machi", h: "まち", k: "マチ", meaning: "Kota", chars: ["ま", "ち"], minPage: 1 },
     { ro: "mimi", h: "みみ", k: "ミミ", meaning: "Telinga", chars: ["み", "み"], minPage: 1 },
     { ro: "umi", h: "うみ", k: "ウミ", meaning: "Laut", chars: ["う", "み"], minPage: 1 },
-    { ro: "mushi", h: "むし", k: "ムシ", meaning: "Serangga", chars: ["む", "し"], minPage: 1 },
+    { ro: "mushi", h: "むし", k: "ムシ", meaning: "Serangga", chars: ["む", "し"], minPage: 2 },
     { ro: "kuma", h: "くま", k: "クマ", meaning: "Beruang", chars: ["く", "ま"], minPage: 1 },
     { ro: "atama", h: "あたま", k: "アタマ", meaning: "Kepala", chars: ["あ", "た", "ま"], minPage: 1 },
-    { ro: "nomu", h: "のむ", k: "ノム", meaning: "Minum", chars: ["の", "む"], minPage: 1 },
+    { ro: "nomu", h: "のむ", k: "ノム", meaning: "Minum", chars: ["の", "む"], minPage: 2 },
     { ro: "kami", h: "かみ", k: "カミ", meaning: "Kertas / Rambut", chars: ["か", "み"], minPage: 1 },
     { ro: "ame", h: "あめ", k: "アメ", meaning: "Hujan / Permen", chars: ["あ", "め"], minPage: 2 },
-    { ro: "kumo", h: "くも", k: "クモ", meaning: "Awan / Laba-laba", chars: ["く", "も"], minPage: 2 },
-    { ro: "nomimono", h: "のみもの", k: "ノミモノ", meaning: "Minuman", chars: ["の", "み", "も", "の"], minPage: 2 },
-    { ro: "kimono", h: "きもの", k: "キモノ", meaning: "Kimono", chars: ["き", "も", "の"], minPage: 2 },
-    { ro: "momo", h: "もも", k: "モモ", meaning: "Buah Persik", chars: ["も", "も"], minPage: 2 },
+    { ro: "kumo", h: "くも", k: "クモ", meaning: "Awan / Laba-laba", chars: ["く", "も"], minPage: 3 },
+    { ro: "nomimono", h: "のみもの", k: "ノミモノ", meaning: "Minuman", chars: ["の", "み", "も", "の"], minPage: 3 },
+    { ro: "kimono", h: "きもの", k: "キモノ", meaning: "Kimono", chars: ["き", "も", "の"], minPage: 3 },
+    { ro: "momo", h: "もも", k: "モモ", meaning: "Buah Persik", chars: ["も", "も"], minPage: 3 },
     { ro: "kame", h: "かめ", k: "カメ", meaning: "Kura-kura", chars: ["か", "め"], minPage: 2 },
-    { ro: "omoi", h: "おもい", k: "オモイ", meaning: "Berat", chars: ["お", "も", "い"], minPage: 2 }
+    { ro: "omoi", h: "おもい", k: "オモイ", meaning: "Berat", chars: ["お", "も", "い"], minPage: 3 }
   ],
   8: [
     { ro: "yama", h: "やま", k: "ヤマ", meaning: "Gunung", chars: ["や", "ま"], minPage: 1 },
@@ -754,9 +832,9 @@ const KANA_STAGE_WORDS = {
     { ro: "tori", h: "とり", k: "トリ", meaning: "Burung", chars: ["と", "り"], minPage: 2 },
     { ro: "sora", h: "そら", k: "ソラ", meaning: "Langit", chars: ["そ", "ら"], minPage: 2 },
     { ro: "kuruma", h: "くるま", k: "クルマ", meaning: "Mobil", chars: ["く", "る", "ま"], minPage: 2 },
-    { ro: "kirei", h: "きれい", k: "キレイ", meaning: "Cantik / Bersih", chars: ["き", "れ", "い"], minPage: 2 },
-    { ro: "iro", h: "いろ", k: "イロ", meaning: "Warna", chars: ["い", "ろ"], minPage: 2 },
-    { ro: "shiroi", h: "しろい", k: "シロイ", meaning: "Putih", chars: ["し", "ろ", "い"], minPage: 2 }
+    { ro: "kirei", h: "きれい", k: "キレイ", meaning: "Cantik / Bersih", chars: ["き", "れ", "い"], minPage: 3 },
+    { ro: "iro", h: "いろ", k: "イロ", meaning: "Warna", chars: ["い", "ろ"], minPage: 3 },
+    { ro: "shiroi", h: "しろい", k: "シロイ", meaning: "Putih", chars: ["し", "ろ", "い"], minPage: 3 }
   ],
   9: [
     { ro: "watashi", h: "わたし", k: "ワタシ", meaning: "Saya", chars: ["わ", "た", "し"], minPage: 1 },
